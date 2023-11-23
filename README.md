@@ -1,61 +1,25 @@
-# An Incremental Static Regeneration Blog Example Using Next.js and WordPress
+# Curate Health
 
-This example showcases Next.js's [Incremental Static Regeneration](https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration) feature using [WordPress](https://wordpress.org) as the data source.
+## Live Site
 
-## Demo
-
-### [https://next-blog-wordpress.vercel.app](https://next-blog-wordpress.vercel.app)
-
-## Deploy your own
-
-Once you have access to [the environment variables you'll need](#step-3-set-up-environment-variables), deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/cms-wordpress&project-name=cms-wordpress&repository-name=cms-wordpress&env=WORDPRESS_API_URL&envDescription=Required%20to%20connect%20the%20app%20with%20WordPress&envLink=https://vercel.link/cms-wordpress-env)
-
-### Related examples
-
-- [AgilityCMS](/examples/cms-agilitycms)
-- [Builder.io](/examples/cms-builder-io)
-- [ButterCMS](/examples/cms-buttercms)
-- [Contentful](/examples/cms-contentful)
-- [Cosmic](/examples/cms-cosmic)
-- [DatoCMS](/examples/cms-datocms)
-- [DotCMS](/examples/cms-dotcms)
-- [Drupal](/examples/cms-drupal)
-- [Enterspeed](/examples/cms-enterspeed)
-- [Ghost](/examples/cms-ghost)
-- [GraphCMS](/examples/cms-graphcms)
-- [Kontent](/examples/cms-kontent-ai)
-- [Prepr](/examples/cms-prepr)
-- [Prismic](/examples/cms-prismic)
-- [Sanity](/examples/cms-sanity)
-- [Sitefinity](/examples/cms-sitefinity)
-- [Storyblok](/examples/cms-storyblok)
-- [TakeShape](/examples/cms-takeshape)
-- [Umbraco heartcore](/examples/cms-umbraco-heartcore)
-- [Webiny](/examples/cms-webiny)
-- [Blog Starter](/examples/blog-starter)
-- [WordPress](/examples/cms-wordpress)
+### [https://curate-health.vercel.app/](https://curate-health.vercel.app/)
 
 ## How to use
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
 ```bash
-npx create-next-app --example cms-wordpress cms-wordpress-app
+git clone https://github.com/seangray-dev/curate-health.git
+cd curate-health
+npm install
+npm run dev
 ```
 
-```bash
-yarn create next-app --example cms-wordpress cms-wordpress-app
-```
-
-```bash
-pnpm create next-app --example cms-wordpress cms-wordpress-app
-```
+- This repo uses [shadcn](https://ui.shadcn.com/) for UI components. When installing a new component they will be added to the `components/ui` folder.
+- The `pages` folder contains folders which belong to a page. For example, the `pages/products` folder contains all the files for the products page, where `index.tsx` inside the folder serves as the page.
+- Use the `layout` component when creating new pages. This component contains the `Nav` & `Footer` components.
 
 ## Configuration
 
-### Step 1. Prepare your WordPress site
+### Step 1. Prepare your WordPress site (Already Done - Ignore this step ✅)
 
 First, you need a WordPress site. There are many solutions for WordPress hosting, such as [WP Engine](https://wpengine.com/) and [WordPress.com](https://wordpress.com/).
 
@@ -74,13 +38,13 @@ Once the site is ready, you'll need to install the [WPGraphQL](https://www.wpgra
 
 ![WPGraphQL installed](./docs/plugin-installed.png)
 
-#### GraphiQL
+#### GraphQL
 
 The [WPGraphQL](https://www.wpgraphql.com/) plugin also gives you access to a GraphQL IDE directly from your WordPress Admin, allowing you to inspect and play around with the GraphQL API.
 
 ![WPGraphiQL page](./docs/wp-graphiql.png)
 
-### Step 2. Populate Content
+### Step 2. Populate Content (These posts will show up on the /blog page)
 
 Inside your WordPress admin, go to **Posts** and start adding new posts:
 
@@ -121,16 +85,11 @@ WORDPRESS_API_URL=...
 ```bash
 npm install
 npm run dev
-
-# or
-
-yarn install
-yarn dev
 ```
 
 Your blog should be up and running on [http://localhost:3000](http://localhost:3000)! If it doesn't work, post on [GitHub discussions](https://github.com/vercel/next.js/discussions).
 
-### Step 5. Add authentication for Preview Mode (Optional)
+### Step 5. Add authentication for Preview Mode (Optional - Need to do)
 
 **This step is optional.** By default, the blog will work with public posts from your WordPress site. Private content such as unpublished posts and private fields cannot be retrieved. To have access to unpublished posts you'll need to set up authentication.
 
@@ -151,7 +110,7 @@ define( 'GRAPHQL_JWT_AUTH_SECRET_KEY', 'YOUR_STRONG_SECRET' );
 
 > You can read more about this in the documentation for [WPGraphQL JWT Authentication](https://docs.wpgraphql.com/extensions/wpgraphql-jwt-authentication/).
 
-Now, you need to get a **refresh token** to make authenticated requests with GraphQL. Make the following GraphQL mutation to your WordPress site from the GraphQL IDE (See notes about WPGraphiQL from earlier). Replace `your_username` with the **username** of a user with the `Administrator` role, and `your_password` with the user's password.
+Now, you need to get a **refresh token** to make authenticated requests with GraphQL. Make the following GraphQL mutation to your WordPress site from the GraphQL IDE (See notes about WPGraphQL from earlier). Replace `your_username` with the **username** of a user with the `Administrator` role, and `your_password` with the user's password.
 
 ```graphql
 mutation Login {
@@ -211,9 +170,3 @@ You can deploy this app to the cloud with [Vercel](https://vercel.com?utm_source
 To deploy your local project to Vercel, push it to GitHub/GitLab/Bitbucket and [import to Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example).
 
 **Important**: When you import your project on Vercel, make sure to click on **Environment Variables** and set them to match your `.env.local` file.
-
-#### Deploy from Our Template
-
-Alternatively, you can deploy using our template by clicking on the Deploy button below.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/cms-wordpress&project-name=cms-wordpress&repository-name=cms-wordpress&env=WORDPRESS_API_URL&envDescription=Required%20to%20connect%20the%20app%20with%20WordPress&envLink=https://vercel.link/cms-wordpress-env)

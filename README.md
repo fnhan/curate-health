@@ -4,6 +4,10 @@
 
 ### [https://curate-health.vercel.app/](https://curate-health.vercel.app/)
 
+## How to contribute
+
+- Refer to the [Contributing Guideline](./CONTRIBUTING.md) for more information.
+
 ## How to use
 
 ```bash

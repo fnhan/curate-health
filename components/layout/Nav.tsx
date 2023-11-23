@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Link from 'next/link';
-import Container from '../container';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,72 +8,76 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from '../ui/navigation-menu';
+} from 'components/ui/navigation-menu';
+import Link from 'next/link';
+
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from 'components/ui/sheet';
+import { Menu } from 'lucide-react';
+
+const NavItem = ({ href, label }) => (
+  <Link href={href} legacyBehavior passHref>
+    <a
+      className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
+      {label}
+    </a>
+  </Link>
+);
+
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About Us' },
+  { href: '/services', label: 'Services' },
+  { href: '/products', label: 'Products' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/booking', label: 'Appointment Booking' },
+];
 
 const Nav = () => {
   return (
     <nav className='bg-primary'>
+      {/* Desktop Menu */}
       <div className='hidden md:block container border-b'>
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link href='/' legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
-                  Home
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href='/about' legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
-                  About Us
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href='/services' legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
-                  Services
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href='/products' legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
-                  Products
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href='/blog' legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
-                  Blog
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href='/contact' legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
-                  Contact
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href='/booking' legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
-                  Appointment Booking
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            {navItems.map((item) => (
+              <NavigationMenuItem key={item.href}>
+                <NavItem href={item.href} label={item.label} />
+              </NavigationMenuItem>
+            ))}
           </NavigationMenuList>
         </NavigationMenu>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className='md:hidden container flex justify-end py-6'>
+        <Sheet>
+          <SheetTrigger>
+            <Menu />
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle className='mb-2 border-b'>Menu</SheetTitle>
+              <div className='flex flex-col gap-6'>
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    legacyBehavior
+                    passHref>
+                    <a>{item.label}</a>
+                  </Link>
+                ))}
+              </div>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
       </div>
     </nav>
   );

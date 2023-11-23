@@ -23,7 +23,7 @@ export default function Post({ post, posts, preview }) {
   }
 
   return (
-    <Layout title={`${post.title}`}>
+    <Layout title={`${post?.title}`}>
       <Container>
         <Header />
         {router.isFallback ? (

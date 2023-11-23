@@ -12,10 +12,7 @@ export default function Index({ allPosts: { edges } }) {
   const morePosts = edges.slice(1);
 
   return (
-    <Layout>
-      <Head>
-        <title>{`Next.js Blog Example with ${CMS_NAME}`}</title>
-      </Head>
+    <Layout title={'Blog'}>
       <div>
         <Intro />
         {heroPost && (

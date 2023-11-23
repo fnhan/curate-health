@@ -1,8 +1,6 @@
 import Footer from './Footer';
-import Meta from './meta';
+import Meta from './Meta';
 import Nav from './Nav';
-
-import React from 'react';
 
 const Layout = ({ title, children }) => {
   return (

@@ -1,11 +1,11 @@
-import Meta from '../meta';
 import Footer from './Footer';
+import Meta from './Meta';
 import Nav from './Nav';
 
-export default function Layout({ children }) {
+const Layout = ({ title, children }) => {
   return (
     <>
-      <Meta />
+      <Meta title={title} />
       <div className='flex flex-col min-h-screen'>
         <div className='flex-1 bg-primary text-white'>
           <Nav />
@@ -15,4 +15,6 @@ export default function Layout({ children }) {
       </div>
     </>
   );
-}
+};
+
+export default Layout;

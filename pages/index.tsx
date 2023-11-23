@@ -1,14 +1,10 @@
-import Head from 'next/head';
+import Layout from 'components/layout/layout';
 import Container from '../components/container';
 import Intro from '../components/intro';
-import Layout from '../components/layout/layout';
 
 export default function Index() {
   return (
-    <Layout>
-      <Head>
-        <title>Curate Health</title>
-      </Head>
+    <Layout title={'Home'}>
       <Container>
         <Intro />
       </Container>

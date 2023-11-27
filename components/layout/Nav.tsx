@@ -42,42 +42,43 @@ const navItems = [
 const Nav = () => {
   return (
     <nav className='bg-primary'>
-      {/* Desktop Menu */}
-      <div className='hidden md:block container border-b'>
-        <NavigationMenu>
-          <NavigationMenuList>
-            {navItems.map((item) => (
-              <NavigationMenuItem key={item.href}>
-                <NavItem href={item.href} label={item.label} />
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
-
-      {/* Mobile Menu */}
-      <div className='md:hidden container flex justify-end py-6'>
-        <Sheet>
-          <SheetTrigger>
-            <Menu />
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle className='mb-2 border-b'>Menu</SheetTitle>
-              <div className='flex flex-col gap-6'>
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    legacyBehavior
-                    passHref>
-                    <a>{item.label}</a>
-                  </Link>
-                ))}
-              </div>
-            </SheetHeader>
-          </SheetContent>
-        </Sheet>
+      <div className='container flex items-center'>
+        <div className='hidden md:block'>
+          <NavigationMenu>
+            <NavigationMenuList>
+              {navItems.map((item) => (
+                <NavigationMenuItem key={item.href}>
+                  <NavItem href={item.href} label={item.label} />
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+        <div
+          className='container flex justify-end py-10'
+          aria-label='menu toggle'>
+          <Sheet>
+            <SheetTrigger>
+              <Menu className='hover:text-black duration-300 transition-all' />
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle className='mb-2 border-b'>Menu</SheetTitle>
+                <div className='flex flex-col gap-6'>
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      legacyBehavior
+                      passHref>
+                      <a>{item.label}</a>
+                    </Link>
+                  ))}
+                </div>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </nav>
   );

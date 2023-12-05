@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        'hero-image': "url('/images/leaf-background.png')",
+      },
       fontFamily: {
         avenir: ['Avenir'],
         denton: ['Denton'],

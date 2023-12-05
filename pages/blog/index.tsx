@@ -1,5 +1,5 @@
 import HeroPost from 'components/hero-post';
-import Intro from 'components/intro';
+import Intro from 'components/layout/Home/Hero';
 import Layout from 'components/layout/layout';
 import MoreStories from 'components/more-stories';
 import { getAllPostsForHome } from 'lib/api';

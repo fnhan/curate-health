@@ -1,16 +1,3 @@
-import React from 'react';
-
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from 'components/ui/navigation-menu';
-import Link from 'next/link';
-
 import {
   Sheet,
   SheetContent,
@@ -19,15 +6,9 @@ import {
   SheetTrigger,
 } from 'components/ui/sheet';
 import { Menu } from 'lucide-react';
-
-const NavItem = ({ href, label }) => (
-  <Link href={href} legacyBehavior passHref>
-    <a
-      className={`${navigationMenuTriggerStyle()} bg-transparent hover:bg-transparent hover:text-white/75 transition-all duration-300`}>
-      {label}
-    </a>
-  </Link>
-);
+import Image from 'next/image';
+import Link from 'next/link';
+import logo from 'public/images/logo_white.png';
 
 const navItems = [
   { href: '/', label: 'Home' },
@@ -41,43 +22,45 @@ const navItems = [
 
 const Nav = () => {
   return (
-    <nav className='bg-primary'>
-      <div className='container flex items-center'>
-        <div className='hidden md:block'>
-          <NavigationMenu>
-            <NavigationMenuList>
-              {navItems.map((item) => (
-                <NavigationMenuItem key={item.href}>
-                  <NavItem href={item.href} label={item.label} />
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
+    <nav className='text-white'>
+      <div className='container flex items-center justify-between'>
+        <div className='flex-1 flex items-center'>
+          <div className='flex py-10' aria-label='menu toggle'>
+            <Sheet>
+              <SheetTrigger>
+                <Menu className='hover:text-black duration-300 transition-all' />
+              </SheetTrigger>
+              <SheetContent
+                side='left'
+                className='bg-primary text-white border-none pt-[142px] sm:pl-[86px] max-w-[300px] md:max-w-[416px]'>
+                <SheetHeader>
+                  <SheetTitle className='mb-2 text-white'>
+                    Curate Health
+                  </SheetTitle>
+                  <div className='flex flex-col gap-6'>
+                    {navItems.map((item) => (
+                      <Link
+                        className='hover:underline'
+                        key={item.href}
+                        href={item.href}>
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
-        <div
-          className='container flex justify-end py-10'
-          aria-label='menu toggle'>
-          <Sheet>
-            <SheetTrigger>
-              <Menu className='hover:text-black duration-300 transition-all' />
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle className='mb-2 border-b'>Menu</SheetTitle>
-                <div className='flex flex-col gap-6'>
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      legacyBehavior
-                      passHref>
-                      <a>{item.label}</a>
-                    </Link>
-                  ))}
-                </div>
-              </SheetHeader>
-            </SheetContent>
-          </Sheet>
+        <div className='hidden flex-1 sm:flex justify-center'>
+          <Link href={'/'}>
+            <Image src={logo} width={48} height={48} alt='Curate Health Logo' />
+          </Link>
+        </div>
+        <div className='flex-1 flex justify-end'>
+          <Link className='hover:underline font-denton' href={'/booking'}>
+            Make An Appointment
+          </Link>
         </div>
       </div>
     </nav>

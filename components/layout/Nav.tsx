@@ -15,14 +15,15 @@ const navItems = [
   { href: '/about', label: 'About Us' },
   { href: '/services', label: 'Services' },
   { href: '/products', label: 'Products' },
+  { href: '/cafe', label: 'Curate Cafe' },
   { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
   { href: '/booking', label: 'Appointment Booking' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 const Nav = () => {
   return (
-    <nav className='text-white'>
+    <nav className='text-white bg-primary/25'>
       <div className='container flex items-center justify-between'>
         <div className='flex-1 flex items-center'>
           <div className='flex py-10' aria-label='menu toggle'>
@@ -32,15 +33,12 @@ const Nav = () => {
               </SheetTrigger>
               <SheetContent
                 side='left'
-                className='bg-primary text-white border-none pt-[142px] sm:pl-[86px] max-w-[300px] md:max-w-[416px]'>
+                className='text-white border-none pt-[142px] sm:pl-[86px] max-w-[300px] md:max-w-[416px]'>
                 <SheetHeader>
-                  <SheetTitle className='mb-2 text-white'>
-                    Curate Health
-                  </SheetTitle>
-                  <div className='flex flex-col gap-6'>
+                  <div className='flex flex-col gap-6 text-left'>
                     {navItems.map((item) => (
                       <Link
-                        className='hover:underline'
+                        className='hover:underline text-2xl'
                         key={item.href}
                         href={item.href}>
                         {item.label}
@@ -52,13 +50,21 @@ const Nav = () => {
             </Sheet>
           </div>
         </div>
-        <div className='hidden flex-1 sm:flex justify-center'>
+        <div className='flex flex-1 justify-center'>
           <Link href={'/'}>
-            <Image src={logo} width={48} height={48} alt='Curate Health Logo' />
+            <Image
+              src={logo}
+              width={48}
+              height={48}
+              alt='Curate Health Logo'
+              className='w-10 h-10 md:w-12 md:h-12'
+            />
           </Link>
         </div>
         <div className='flex-1 flex justify-end'>
-          <Link className='hover:underline font-denton' href={'/booking'}>
+          <Link
+            className='hover:underline font-denton text-[10px] md:text-base text-center'
+            href={'/booking'}>
             Make An Appointment
           </Link>
         </div>

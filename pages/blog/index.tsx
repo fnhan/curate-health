@@ -1,7 +1,7 @@
-import HeroPost from 'components/hero-post';
+import HeroPost from 'components/layout/Blog-Page/hero-post';
+import MoreStories from 'components/layout/Blog-Page/more-stories';
 import Intro from 'components/layout/Home/Hero';
 import Layout from 'components/layout/layout';
-import MoreStories from 'components/more-stories';
 import { getAllPostsForHome } from 'lib/api';
 import { CMS_NAME } from 'lib/constants';
 import { GetStaticProps } from 'next';

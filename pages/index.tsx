@@ -5,6 +5,7 @@ import Highlight from 'components/layout/Home/Highlight';
 import HomeLayout from 'components/layout/Home/HomeLayout';
 import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
+import Sustainability from 'components/layout/Home/Sustainability';
 import { getTwoMostRecentPosts } from 'lib/api';
 import { GetStaticProps } from 'next';
 
@@ -17,6 +18,7 @@ export default function Index({ mostRecentPosts }) {
       <Products />
       <CurateCafe />
       <Blog posts={mostRecentPosts} />
+      <Sustainability />
     </HomeLayout>
   );
 }

@@ -3,6 +3,7 @@ import Clinic from 'components/layout/Home/Clinic';
 import CurateCafe from 'components/layout/Home/CurateCafe';
 import Highlight from 'components/layout/Home/Highlight';
 import HomeLayout from 'components/layout/Home/HomeLayout';
+import Newsletter from 'components/layout/Home/Newsletter';
 import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
 import Survey from 'components/layout/Home/Survey';
@@ -21,6 +22,7 @@ export default function Index({ mostRecentPosts }) {
       <Blog posts={mostRecentPosts} />
       <Sustainability />
       <Survey />
+      <Newsletter />
     </HomeLayout>
   );
 }

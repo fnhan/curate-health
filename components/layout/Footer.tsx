@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className='flex flex-col pt-14 pb-8 w-full'>
       <div className='container text-white flex flex-col gap-10'>
-        <div className='text-sm'>
+        <div className='text-sm md:text-base'>
           <h5>Contact</h5>
           <div>
             <p>647-123-5678</p>
@@ -14,7 +14,7 @@ export default function Footer() {
         </div>
         <div>
           <FooterMobileAccordion />
-          <div className='hidden md:flex flex-col gap-2 md:flex-row md:justify-end md:gap-10 text-sm'>
+          <div className='hidden md:flex flex-col gap-2 md:flex-row md:justify-end md:gap-10 text-sm md:text-base'>
             <div className='border-b border-white md:border-none pb-2'>
               <h6 className='md:font-denton pl-3 md:mb-3'>Services</h6>
               <div className='hidden md:flex flex-col gap-1 pl-3'>

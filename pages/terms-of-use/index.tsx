@@ -15,7 +15,7 @@ export default function index() {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Use of Webssite</h2>
+              <h2 className='font-bold font-denton text-lg'>Use of Website</h2>
               <p>
                 Curate Health grants you a non-exclusive, non-transferable,
                 limited right to access, use and display the site and the

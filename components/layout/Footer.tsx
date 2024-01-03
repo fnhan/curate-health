@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FooterMobileAccordion } from './Home/Footer-Mobile-Accordion';
 
 export default function Footer() {
   return (
@@ -12,7 +13,8 @@ export default function Footer() {
           </div>
         </div>
         <div>
-          <div className='flex flex-col gap-2 md:flex-row md:justify-between text-sm'>
+          <FooterMobileAccordion />
+          <div className='hidden md:flex flex-col gap-2 md:flex-row md:justify-end md:gap-10 text-sm'>
             <div className='border-b border-white md:border-none pb-2'>
               <h6 className='md:font-denton pl-3 md:mb-3'>Services</h6>
               <div className='hidden md:flex flex-col gap-1 pl-3'>
@@ -91,11 +93,11 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className='flex flex-col gap-6'>
+        <div className='flex flex-col md:flex-row justify-between gap-6'>
           <div className='text-xs'>
             &copy; {new Date().getFullYear()} Curate Health
           </div>
-          <div className='flex justify-between text-xs'>
+          <div className='flex justify-between md:justify-end md:gap-10 text-xs'>
             <Link className='hover:underline' href={'/terms-of-use'}>
               Terms of Use
             </Link>

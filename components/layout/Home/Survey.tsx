@@ -17,7 +17,7 @@ export default function Survey() {
       <div className='absolute inset-0 flex items-center justify-center p-4'>
         <Link
           href={'/survey'}
-          className='bg-platinum hover:bg-white/50 transition-all duration-300 text-black text-center border border-white rounded-full p-5 flex items-center justify-center flex-col gap-3 h-72 w-72'>
+          className='bg-white hover:bg-white/50 transition-all duration-300 text-black text-center rounded-full p-5 flex items-center justify-center flex-col gap-3 h-72 w-72'>
           <h4 className='text-lg md:text-xl font-semibold capitalize'>
             Start your journey
           </h4>

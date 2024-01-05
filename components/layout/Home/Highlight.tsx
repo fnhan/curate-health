@@ -7,7 +7,7 @@ import highlightImage from 'public/images/HighlightImage.png';
 
 export default function Highlight() {
   const { scrollYProgress } = useScroll();
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 360]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 540]);
 
   return (
     <section className='w-full bg-primary'>
@@ -25,7 +25,7 @@ export default function Highlight() {
               height={536}
               alt=''
               src={highlightImage}
-              className='w-[200px] md:w-[310px] 2xl:w-[536px]'
+              className='w-[250px] md:w-[375px] 2xl:w-[536px]'
             />
             <motion.div
               className='absolute -top-5 -right-10 md:-right-20 2xl:-right-32'
@@ -41,7 +41,7 @@ export default function Highlight() {
           </div>
         </div>
         <div className='flex justify-end'>
-          <h3 className='max-w-[177px] text-sm md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
+          <h3 className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
             Explore our comprehensive services and embark on a journey to a
             healthier you.
           </h3>

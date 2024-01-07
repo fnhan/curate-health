@@ -65,7 +65,7 @@ const Nav = () => {
           <Link
             className='hover:underline font-denton text-[10px] md:text-base text-center'
             href={'/booking'}>
-            Make An Appointment
+            Book Appointment
           </Link>
         </div>
       </div>

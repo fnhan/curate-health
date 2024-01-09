@@ -22,7 +22,7 @@ export default function Blog({ posts = [] }) {
         </div>
       </div>
       <Link className='w-full' href={'/about'}>
-        <div className='container border-t duration-300 transition-all hover:bg-secondary  hover:text-white py-5 text-right block font-denton'>
+        <div className='container border-t duration-300 transition-all hover:bg-secondary  hover:text-white py-5 text-right block font-denton-condesnsed italic'>
           <div className='flex items-center gap-2 hover:gap-4 transition-all duration-300 justify-end'>
             <span className=''>Explore more</span>
             <ChevronRight className='w-5' />

@@ -63,7 +63,7 @@ const Nav = () => {
         </div>
         <div className='flex-1 flex justify-end'>
           <Link
-            className='hover:underline font-denton text-[10px] md:text-base text-center'
+            className='hover:underline font-denton-condesnsed text-[10px] md:text-base text-center'
             href={'/booking'}>
             Book Appointment
           </Link>

@@ -29,6 +29,7 @@ module.exports = {
       fontFamily: {
         avenir: ['Avenir'],
         denton: ['Denton'],
+        'denton-condesnsed': ['Denton-Consensed'],
       },
       colors: {
         border: 'hsl(var(--border))',

@@ -4,13 +4,21 @@
 
 @font-face {
   font-family: Avenir, 'Helvetica Neue', Helvetica, Arial;
-  src: url('/public/fonts/Avenir-Next/AvenirNextLTPro-Regular.woff')
-    format('woff');
+  src: url('/fonts/Avenir-Next/AvenirNextLTPro-Regular.woff') format('woff');
 }
 
 @font-face {
-  font-family: Denton, Georgia, 'Times New Roman', Times, serif;
-  src: url('/public/fonts/Denton/Denton-Bold.woff');
+  font-family: 'Denton-Condensed';
+  src: url('/fonts/Denton/DentonCondensed-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Denton', Georgia, 'Times New Roman', Times, serif;
+  src: url('/public/fonts/Denton/Denton-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
 }
 
 @layer base {

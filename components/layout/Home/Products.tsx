@@ -5,12 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from 'components/ui/card';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ProductExample from 'public/images/product-example.png';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { SwipeCarousel } from './Carousel';
 
 export default function Products() {
@@ -30,7 +29,7 @@ export default function Products() {
     {
       title: 'Tens Machines',
       description:
-        'Reduce the pain signals going to the spinal cord and brain, which amy help relieve pain and relax muscles',
+        'Reduce the pain signals going to the spinal cord and brain, which may help relieve pain and relax muscles',
       image: ProductExample,
     },
   ];
@@ -52,6 +51,7 @@ export default function Products() {
         <h2 className='mb-8 text-black md:text-xl'>Products</h2>
       </div>
       <SwipeCarousel />
+
       <Link className='w-full' href={'/products'}>
         <div className='container border-t duration-300 transition-all hover:bg-secondary text-black hover:text-white py-5 text-right block font-denton-condesnsed italic'>
           <div className='flex items-center gap-2 hover:gap-4 transition-all duration-300 justify-end'>

@@ -1,7 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import highlightCircleText from 'public/images/CircleText.png';
 import highlightImage from 'public/images/HighlightImage.png';
 import HoverLink from './HoverLink';
@@ -48,9 +46,7 @@ export default function Highlight() {
           </h3>
         </div>
       </div>
-      <Link className='w-full' href={'/about'}>
-        <HoverLink text="More About Us" />
-      </Link>
+      <HoverLink href='/about' text='More About Us' />
     </section>
   );
 }

@@ -1,6 +1,5 @@
-import HoverLink from './HoverLink';
-import Link from 'next/link';
 import PostPreview from '../Blog-Home/PostPreview';
+import HoverLink from './HoverLink';
 
 export default function Blog({ posts = [] }) {
   return (
@@ -21,9 +20,7 @@ export default function Blog({ posts = [] }) {
           ))}
         </div>
       </div>
-      <Link className='w-full' href={'/about'}>
-        <HoverLink text="Explore More" />
-      </Link>
+      <HoverLink href='/blog' text='Explore More' />
     </section>
   );
 }

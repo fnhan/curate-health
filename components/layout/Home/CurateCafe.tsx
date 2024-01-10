@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import CurateCafeBg from 'public/images/curate-cafe.png';
+import CurateCafeBg from 'public/images/curate-cafe2.png';
 
 export default function CurateCafe() {
   return (

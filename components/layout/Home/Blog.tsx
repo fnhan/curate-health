@@ -1,6 +1,7 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import PostPreview from '../Blog-Home/PostPreview';
+import HoverLink from './HoverLink';
 
 export default function Blog({ posts = [] }) {
   return (
@@ -21,14 +22,7 @@ export default function Blog({ posts = [] }) {
           ))}
         </div>
       </div>
-      <Link className='w-full' href={'/about'}>
-        <div className='container border-t duration-300 transition-all hover:bg-secondary  hover:text-white py-5 text-right block font-denton-condesnsed italic'>
-          <div className='flex items-center gap-2 hover:gap-4 transition-all duration-300 justify-end'>
-            <span className=''>Explore more</span>
-            <ChevronRight className='w-5' />
-          </div>
-        </div>
-      </Link>
+      <HoverLink href='/blog' text='Explore More' />
     </section>
   );
 }

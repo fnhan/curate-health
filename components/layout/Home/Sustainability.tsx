@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import SustainabilityBg from 'public/images/sustainability.jpeg';
+import SustainabilityBg from 'public/images/sustainability.jpg';
 
 export default function Sustainability() {
   return (

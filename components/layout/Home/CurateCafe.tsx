@@ -1,7 +1,7 @@
 import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import CurateCafeBg from 'public/images/curate-cafe.png';
+import CurateCafeBg from 'public/images/curate-cafe2.png';
 
 export default function CurateCafe() {
   return (

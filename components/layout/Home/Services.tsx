@@ -51,9 +51,7 @@ export default function Services() {
           </li>
         </ul>
       </div>
-      <Link className='w-full' href={'/about'}>
-        <HoverLink text="More About Our Services" />
-      </Link>
+      <HoverLink href='/services' text='More About Our Services' />
     </section>
   );
 }

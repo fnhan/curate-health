@@ -154,8 +154,26 @@ const Cards = ({ imgIndex }) => {
 };
 
 const Dots = ({ imgIndex, setImgIndex }) => {
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    // Initial window width
+    setWindowWidth(window.innerWidth);
+
+    // Event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // Determine the number of dots based on screen size
-  const windowWidth = window.innerWidth;
   let dotsNumber;
 
   if (windowWidth >= 1400) {

@@ -159,6 +159,8 @@ const Dots = ({ imgIndex, setImgIndex }) => {
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
+      // Automatically set the image index to the first dot when the screen size changes
+      setImgIndex(0);
     };
 
     // Initial window width
@@ -171,7 +173,7 @@ const Dots = ({ imgIndex, setImgIndex }) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [setImgIndex]); // Include setImgIndex in the dependency array
 
   // Determine the number of dots based on screen size
   let dotsNumber;

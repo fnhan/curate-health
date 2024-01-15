@@ -78,15 +78,18 @@ export const SwipeCarousel = () => {
     return () => clearInterval(intervalRef);
   }, []);
 
-  const onDragEnd = () => {
-    const x = dragX.get();
+const onDragEnd = () => {
+  const x = dragX.get();
 
-    if (x <= -DRAG_BUFFER && imgIndex < products.length - 1) {
-      setImgIndex((pv) => pv + 1);
-    } else if (x >= DRAG_BUFFER && imgIndex > 0) {
-      setImgIndex((pv) => pv - 1);
-    }
-  };
+  if (x <= -DRAG_BUFFER && imgIndex < products.length - 1) {
+    setImgIndex((pv) => pv + 1);
+  } else if (x >= DRAG_BUFFER && imgIndex > 0) {
+    setImgIndex((pv) => pv - 1);
+  } else if (x <= -DRAG_BUFFER && imgIndex === products.length - 1) {
+    // If at the last image, loop back to the first image
+    setImgIndex(0);
+  }
+};
 
   return (
     <div className='container relative overflow-hidden'>

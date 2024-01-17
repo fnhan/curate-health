@@ -1,8 +1,5 @@
-import React from 'react';
 import Layout from '../../components/layout/layout';
 
-const Booking = () => {
+export default function Booking() {
   return <Layout title={'Booking'}>Booking</Layout>;
-};
-
-export default Booking;
+}

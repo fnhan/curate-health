@@ -1,6 +1,6 @@
 import Layout from 'components/layout/layout';
 
-export default function index() {
+export default function Privacy() {
   return (
     <Layout title={'Privacy & Cookies'}>
       <section className='bg-white py-10 md:py-20'>

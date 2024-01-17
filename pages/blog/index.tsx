@@ -3,11 +3,9 @@ import MoreStories from 'components/layout/Blog-Page/more-stories';
 import Intro from 'components/layout/Home/Hero';
 import Layout from 'components/layout/layout';
 import { getAllPostsForHome } from 'lib/api';
-import { CMS_NAME } from 'lib/constants';
 import { GetStaticProps } from 'next';
-import Head from 'next/head';
 
-export default function Index({ allPosts: { edges } }) {
+export default function Blog({ allPosts: { edges } }) {
   const heroPost = edges[0]?.node;
   const morePosts = edges.slice(1);
 

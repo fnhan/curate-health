@@ -1,6 +1,6 @@
 import Layout from 'components/layout/layout';
 
-export default function index() {
+export default function Accessibility() {
   return (
     <Layout title={'Accessibility'}>
       <section className='bg-white py-10 md:py-20'>

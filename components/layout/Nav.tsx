@@ -21,7 +21,7 @@ const navItems = [
   { href: '/contact', label: 'Contact' },
 ];
 
-const Nav = () => {
+export default function Nav() {
   return (
     <nav className='text-white bg-primary/25'>
       <div className='container flex items-center justify-between'>
@@ -71,6 +71,4 @@ const Nav = () => {
       </div>
     </nav>
   );
-};
-
-export default Nav;
+}

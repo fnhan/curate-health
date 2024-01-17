@@ -5,14 +5,10 @@ import ShapesBG from 'public/images/Shapes.png';
 export default function Survey() {
   return (
     <section className='relative bg-platinum h-[435px] md:h-[649px]'>
-      {' '}
-      {/* Adjust height as needed */}
       <Image
         src={ShapesBG}
         alt='Decorative background'
-        layout='fill'
-        objectFit='cover'
-        className='w-full h-full'
+        className='w-full h-full object-cover'
       />
       <div className='absolute inset-0 flex items-center justify-center p-4'>
         <Link

@@ -99,18 +99,18 @@ export const SwipeCarousel = () => {
     return () => clearInterval(intervalRef);
   }, [dragX, dotsNumber]);
 
-const onDragEnd = () => {
-  const x = dragX.get();
+  const onDragEnd = () => {
+    const x = dragX.get();
 
-  if (x <= -DRAG_BUFFER && imgIndex < products.length - 1) {
-    setImgIndex((pv) => pv + 1);
-  } else if (x >= DRAG_BUFFER && imgIndex > 0) {
-    setImgIndex((pv) => pv - 1);
-  } else if (x <= -DRAG_BUFFER && imgIndex === products.length - 1) {
-    // If at the last image, loop back to the first image
-    setImgIndex(0);
-  }
-};
+    if (x <= -DRAG_BUFFER && imgIndex < products.length - 1) {
+      setImgIndex((pv) => pv + 1);
+    } else if (x >= DRAG_BUFFER && imgIndex > 0) {
+      setImgIndex((pv) => pv - 1);
+    } else if (x <= -DRAG_BUFFER && imgIndex === products.length - 1) {
+      // If at the last image, loop back to the first image
+      setImgIndex(0);
+    }
+  };
 
   return (
     <div className='container relative overflow-hidden'>
@@ -128,7 +128,7 @@ const onDragEnd = () => {
         }}
         transition={SPRING_OPTIONS}
         onDragEnd={onDragEnd}
-        className='flex cursor-grab active:cursor-grabbing'>
+        className='flex cursor-grab active:cursor-grabbing gap-5'>
         <Cards imgIndex={imgIndex} />
       </motion.div>
       <Dots imgIndex={imgIndex} setImgIndex={setImgIndex} />;
@@ -153,12 +153,9 @@ const Cards = ({ imgIndex }) => {
         return (
           <motion.div
             key={idx}
-            // animate={{
-            //   scale: imgIndex === idx ? 0.95 : 0.85,
-            // }}
             transition={SPRING_OPTIONS}
-            className='w-full shrink-0 md:w-1/2 2xl:w-1/3'>
-            <Card className='w-full bg-secondary text-white rounded-none flex flex-col h-[350px] py-5'>
+            className='shrink-0 md:w-1/2 2xl:w-1/3 w-full'>
+            <Card className='w-full border-black rounded-none flex flex-col h-[350px] py-5'>
               <CardContent className='flex justify-center items-center pb-0'>
                 <Image
                   className='mx-auto pt-6'
@@ -169,10 +166,10 @@ const Cards = ({ imgIndex }) => {
                 />
               </CardContent>
               <CardHeader className='flex-1 pb-0 w-2/3 mx-auto'>
-                <CardTitle className='text-center font-denton mb-3'>
+                <CardTitle className='text-center font-denton mb-3 font-light'>
                   {product.title}
                 </CardTitle>
-                <CardDescription className='text-center text-white text-xs'>
+                <CardDescription className='text-center text-xs'>
                   {product.description}
                 </CardDescription>
               </CardHeader>

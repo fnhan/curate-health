@@ -3,7 +3,7 @@ import Footer from '../Footer';
 import Meta from '../Meta';
 import Nav from '../Nav';
 
-const HomeLayout = ({ title, children }) => {
+export default function HomeLayout({ title, children }) {
   return (
     <>
       <Meta title={title} />
@@ -15,6 +15,4 @@ const HomeLayout = ({ title, children }) => {
       <Footer />
     </>
   );
-};
-
-export default HomeLayout;
+}

@@ -2,6 +2,7 @@ import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import CurateCafeBg from 'public/images/curate-cafe2.png';
+import HoverLink from './HoverLink';
 
 export default function CurateCafe() {
   return (
@@ -24,14 +25,13 @@ export default function CurateCafe() {
             your individual needs.
           </p>
         </div>
-        <Link className='absolute w-full bottom-0 right-0' href={'/cafe'}>
-          <div className='container border-t duration-300 transition-all text-black py-5 text-right block font-denton-condesnsed italic'>
-            <div className='flex items-center gap-2 hover:gap-4 transition-all duration-300 justify-end'>
-              <span className=''>Visit the Cafe</span>
-              <ChevronRight className='w-5' />
-            </div>
-          </div>
-        </Link>
+        <div className='absolute bottom-0 left-0 right-0 z-10'>
+          <HoverLink
+            href='/cafe'
+            text='Visit the cafe'
+            textColor='text-black'
+          />
+        </div>
       </section>
     </>
   );

@@ -12,6 +12,7 @@ import Link from 'next/link';
 import ProductExample from 'public/images/product-example.png';
 import { useEffect, useRef, useState } from 'react';
 import { SwipeCarousel } from './Carousel';
+import HoverLink from './HoverLink';
 
 export default function Products() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -52,14 +53,11 @@ export default function Products() {
         <h2 className='mb-8 text-black md:text-xl'>Products</h2>
       </div>
       <SwipeCarousel />
-      <Link className='w-full' href={'/products'}>
-        <div className='container border-t duration-300 transition-all hover:bg-secondary text-black hover:text-white py-5 text-right block font-denton-condesnsed italic'>
-          <div className='flex items-center gap-2 hover:gap-4 transition-all duration-300 justify-end'>
-            <span className=''>More Products</span>
-            <ChevronRight className='w-5' />
-          </div>
-        </div>
-      </Link>
+      <HoverLink
+        href='/products'
+        text='View All Products'
+        textColor='text-black'
+      />
     </section>
   );
 }

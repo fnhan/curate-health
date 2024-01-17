@@ -9,7 +9,6 @@ export default function Sustainability() {
         height={1440}
         src={SustainabilityBg}
         alt='clinic'
-        layout='responsive'
         className='w-full object-cover max-h-[435px] md:max-h-[649px]'
       />
       <div className='relative 2xl:container 2xl:p-0'>

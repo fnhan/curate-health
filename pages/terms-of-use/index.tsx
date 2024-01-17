@@ -1,6 +1,6 @@
 import Layout from 'components/layout/layout';
 
-export default function index() {
+export default function TermsOfUse() {
   return (
     <Layout title={'Terms Of Use'}>
       <section className='bg-white py-10 md:py-20'>

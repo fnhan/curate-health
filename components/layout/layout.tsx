@@ -2,7 +2,7 @@ import Footer from './Footer';
 import Meta from './Meta';
 import Nav from './Nav';
 
-const Layout = ({ title, children }) => {
+export default function Layout({ title, children }) {
   return (
     <>
       <Meta title={title} />
@@ -13,6 +13,4 @@ const Layout = ({ title, children }) => {
       </div>
     </>
   );
-};
-
-export default Layout;
+}

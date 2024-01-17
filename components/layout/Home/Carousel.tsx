@@ -58,8 +58,28 @@ const SPRING_OPTIONS = {
 
 export const SwipeCarousel = () => {
   const [imgIndex, setImgIndex] = useState(0);
+  const [dotsNumber, setDotsNumber] = useState(0);
 
   const dragX = useMotionValue(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const newDotsNumber = calculateDotsNumber(window.innerWidth);
+      setDotsNumber(newDotsNumber);
+      setImgIndex(0); // Automatically set the image index to the first dot on resize
+    };
+
+    // Initial setup
+    setDotsNumber(calculateDotsNumber(window.innerWidth));
+
+    // Event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
@@ -67,8 +87,9 @@ export const SwipeCarousel = () => {
 
       if (x === 0) {
         setImgIndex((pv) => {
-          if (pv === products.length - 1) {
-            return 0;
+          if (pv === dotsNumber - 1) {
+            clearInterval(intervalRef);
+            return pv;
           }
           return pv + 1;
         });
@@ -76,7 +97,7 @@ export const SwipeCarousel = () => {
     }, AUTO_DELAY);
 
     return () => clearInterval(intervalRef);
-  }, []);
+  }, [dragX, dotsNumber]);
 
 const onDragEnd = () => {
   const x = dragX.get();
@@ -113,6 +134,16 @@ const onDragEnd = () => {
       <Dots imgIndex={imgIndex} setImgIndex={setImgIndex} />;
     </div>
   );
+};
+
+const calculateDotsNumber = (windowWidth) => {
+  if (windowWidth >= 1400) {
+    return Math.ceil(products.length / 3);
+  } else if (windowWidth >= 768) {
+    return Math.ceil(products.length / 2);
+  } else {
+    return products.length;
+  }
 };
 
 const Cards = ({ imgIndex }) => {
@@ -192,9 +223,9 @@ const Dots = ({ imgIndex, setImgIndex }) => {
         return (
           <button
             key={idx}
-            onClick={() => setImgIndex(idx)}
+            onClick={() => setImgIndex((imgIndex + 1) % dotsNumber)}
             className={`h-3 w-3 rounded-full transition-colors ${
-              idx === imgIndex ? 'bg-primary' : 'bg-secondary'
+              idx === imgIndex % dotsNumber ? 'bg-primary' : 'bg-secondary'
             }`}
           />
         );

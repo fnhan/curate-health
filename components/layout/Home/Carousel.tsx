@@ -58,8 +58,28 @@ const SPRING_OPTIONS = {
 
 export const SwipeCarousel = () => {
   const [imgIndex, setImgIndex] = useState(0);
+  const [dotsNumber, setDotsNumber] = useState(0);
 
   const dragX = useMotionValue(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const newDotsNumber = calculateDotsNumber(window.innerWidth);
+      setDotsNumber(newDotsNumber);
+      setImgIndex(0); // Automatically set the image index to the first dot on resize
+    };
+
+    // Initial setup
+    setDotsNumber(calculateDotsNumber(window.innerWidth));
+
+    // Event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
@@ -67,8 +87,9 @@ export const SwipeCarousel = () => {
 
       if (x === 0) {
         setImgIndex((pv) => {
-          if (pv === products.length - 1) {
-            return 0;
+          if (pv === dotsNumber - 1) {
+            clearInterval(intervalRef);
+            return pv;
           }
           return pv + 1;
         });
@@ -76,7 +97,7 @@ export const SwipeCarousel = () => {
     }, AUTO_DELAY);
 
     return () => clearInterval(intervalRef);
-  }, []);
+  }, [dragX, dotsNumber]);
 
   const onDragEnd = () => {
     const x = dragX.get();
@@ -85,6 +106,9 @@ export const SwipeCarousel = () => {
       setImgIndex((pv) => pv + 1);
     } else if (x >= DRAG_BUFFER && imgIndex > 0) {
       setImgIndex((pv) => pv - 1);
+    } else if (x <= -DRAG_BUFFER && imgIndex === products.length - 1) {
+      // If at the last image, loop back to the first image
+      setImgIndex(0);
     }
   };
 
@@ -104,12 +128,22 @@ export const SwipeCarousel = () => {
         }}
         transition={SPRING_OPTIONS}
         onDragEnd={onDragEnd}
-        className='flex cursor-grab active:cursor-grabbing'>
+        className='flex cursor-grab active:cursor-grabbing gap-5'>
         <Cards imgIndex={imgIndex} />
       </motion.div>
       <Dots imgIndex={imgIndex} setImgIndex={setImgIndex} />;
     </div>
   );
+};
+
+const calculateDotsNumber = (windowWidth) => {
+  if (windowWidth >= 1400) {
+    return Math.ceil(products.length / 3);
+  } else if (windowWidth >= 768) {
+    return Math.ceil(products.length / 2);
+  } else {
+    return products.length;
+  }
 };
 
 const Cards = ({ imgIndex }) => {
@@ -119,12 +153,9 @@ const Cards = ({ imgIndex }) => {
         return (
           <motion.div
             key={idx}
-            // animate={{
-            //   scale: imgIndex === idx ? 0.95 : 0.85,
-            // }}
             transition={SPRING_OPTIONS}
-            className='w-full shrink-0 md:w-1/2 2xl:w-1/3'>
-            <Card className='w-full bg-secondary text-white rounded-none flex flex-col h-[350px] py-5'>
+            className='shrink-0 md:w-1/2 2xl:w-1/3 w-full'>
+            <Card className='w-full border-black rounded-none flex flex-col h-[350px] py-5'>
               <CardContent className='flex justify-center items-center pb-0'>
                 <Image
                   className='mx-auto pt-6'
@@ -135,10 +166,10 @@ const Cards = ({ imgIndex }) => {
                 />
               </CardContent>
               <CardHeader className='flex-1 pb-0 w-2/3 mx-auto'>
-                <CardTitle className='text-center font-denton mb-3'>
+                <CardTitle className='text-center font-denton mb-3 font-light'>
                   {product.title}
                 </CardTitle>
-                <CardDescription className='text-center text-white text-xs'>
+                <CardDescription className='text-center text-xs'>
                   {product.description}
                 </CardDescription>
               </CardHeader>
@@ -151,15 +182,47 @@ const Cards = ({ imgIndex }) => {
 };
 
 const Dots = ({ imgIndex, setImgIndex }) => {
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      // Automatically set the image index to the first dot when the screen size changes
+      setImgIndex(0);
+    };
+
+    // Initial window width
+    setWindowWidth(window.innerWidth);
+
+    // Event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [setImgIndex]); // Include setImgIndex in the dependency array
+
+  // Determine the number of dots based on screen size
+  let dotsNumber;
+
+  if (windowWidth >= 1400) {
+    dotsNumber = Math.ceil(products.length / 3);
+  } else if (windowWidth >= 768) {
+    dotsNumber = Math.ceil(products.length / 2);
+  } else {
+    dotsNumber = products.length;
+  }
+
   return (
     <div className='mt-8 flex w-full justify-center gap-2'>
-      {products.map((_, idx) => {
+      {Array.from({ length: dotsNumber }).map((_, idx) => {
         return (
           <button
             key={idx}
-            onClick={() => setImgIndex(idx)}
+            onClick={() => setImgIndex((imgIndex + 1) % dotsNumber)}
             className={`h-3 w-3 rounded-full transition-colors ${
-              idx === imgIndex ? 'bg-primary' : 'bg-secondary'
+              idx === imgIndex % dotsNumber ? 'bg-primary' : 'bg-secondary'
             }`}
           />
         );

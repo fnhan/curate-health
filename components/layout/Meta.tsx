@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { CMS_NAME, HOME_OG_IMAGE_URL } from '../../lib/constants';
 
-const Meta = ({ title }) => {
+export default function Meta({ title }) {
   return (
     <Head>
       <link
@@ -34,9 +34,7 @@ const Meta = ({ title }) => {
       <link rel='alternate' type='application/rss+xml' href='/feed.xml' />
       <meta name='description' content={'Curate Health'} />
       <meta property='og:image' content={HOME_OG_IMAGE_URL} />
-      <title>{title ? `Curate Health | ${title}` : 'Curate Health'}</title>
+      <title>{title ? `${title} | Curate Health` : 'Curate Health'}</title>
     </Head>
   );
-};
-
-export default Meta;
+}

@@ -14,6 +14,7 @@ module.exports = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
+      // WordPress
       {
         protocol: protocol.slice(0, -1),
         hostname,
@@ -27,6 +28,10 @@ module.exports = {
       {
         protocol: 'https',
         hostname: 'curatehealth.ca',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
       },
     ],
   },

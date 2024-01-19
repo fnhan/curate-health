@@ -1,8 +1,31 @@
-import { AppProps } from 'next/app'
-import '../styles/index.css'
+import { AppProps } from 'next/app';
+import { lazy, Suspense } from 'react';
+import '../styles/index.css';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+export interface SharedPageProps {
+  draftMode: boolean;
+  token: string;
 }
 
-export default MyApp
+const PreviewProvider = lazy(
+  () => import('../components/sanity/PreviewProvider')
+);
+const VisualEditing = lazy(() => import('../components/sanity/VisualEditing'));
+
+export default function App({
+  Component,
+  pageProps,
+}: AppProps<SharedPageProps>) {
+  const { draftMode, token } = pageProps;
+
+  return draftMode ? (
+    <PreviewProvider token={token}>
+      <Component {...pageProps} />
+      <Suspense>
+        <VisualEditing />
+      </Suspense>
+    </PreviewProvider>
+  ) : (
+    <Component {...pageProps} />
+  );
+}

@@ -1,4 +1,5 @@
 const API_URL = process.env.WORDPRESS_API_URL;
+const SITE_URL = process.env.SITE_URL;
 
 async function fetchAPI(query = '', { variables }: Record<string, any> = {}) {
   const headers = { 'Content-Type': 'application/json' };
@@ -248,5 +249,14 @@ export async function getPostAndMorePosts(slug, preview, previewData) {
   // If there are still 3 posts, remove the last one
   if (data.posts.edges.length > 2) data.posts.edges.pop();
 
+  return data;
+}
+
+export async function fetchServices() {
+  const response = await fetch(
+    `https://curatehealth.ca/wp-json/acf/v3/options/services-home-page`
+  );
+  const data = await response.json();
+  console.log(data);
   return data;
 }

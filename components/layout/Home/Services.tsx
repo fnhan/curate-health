@@ -1,17 +1,56 @@
-import { fetchServices } from 'lib/api';
 import Image from 'next/image';
 import Link from 'next/link';
+import PerformanceTraining from 'public/images/service/Performance Training.jpg';
+import LifestyleMedicine from 'public/images/service/lifestyle-medicine.png';
+import MentalHealth from 'public/images/service/mental-health.jpg';
+import Recovery from 'public/images/service/recovery-sanctuary.jpg';
+import Regenerative from 'public/images/service/regenerative-medicine.jpg';
+import SurgicalConsultation from 'public/images/service/surgical-consultation.jpg';
 import HoverLink from './HoverLink';
 
-export default function Services({ servicesList }) {
-  console.log(fetchServices());
+export default function Services() {
+  const servicesList = [
+    {
+      title: 'Lifestyle Medicine',
+      href: '/services#lifestyle-medicine',
+      image: LifestyleMedicine,
+    },
+    {
+      title: 'Performance Training',
+      href: '/services#performance-training',
+      image: PerformanceTraining,
+    },
+    {
+      title: 'Recovery Sanctuary',
+      href: '/services#recovery-sancturary',
+      image: Recovery,
+    },
+    {
+      title: 'Regenarative Medicine',
+      href: '/services#regenerative-medicine',
+      image: Regenerative,
+    },
+    {
+      title: 'Mental Health',
+      href: '/services#mental-health',
+      image: MentalHealth,
+    },
+    {
+      title: 'Surgical Consultation',
+      href: '/services#surgical-consultation',
+      image: SurgicalConsultation,
+    },
+  ];
 
   return (
     <section>
-      <div className='container flex flex-col gap-10 py-9'>
-        <div>
-          <h2 className='mb-12 text-secondary md:text-xl'>Sevices</h2>
-          <p>
+      <div className='container flex flex-col gap-10 md:gap-20 pt-[90px] pb-[60px]'>
+        <div className='flex flex-col md:flex-row justify-between md:gap-20'>
+          <h2 className='mb-12 text-3xl md:text-5xl'>
+            Our <br />
+            Services
+          </h2>
+          <p className='md:max-w-[736px]'>
             Our services are designed to address the physical, mental, and
             emotional aspects of your health, ensuring a well-rounded and
             individualized care plan. Whether you seek routine check-ups,
@@ -22,7 +61,7 @@ export default function Services({ servicesList }) {
             a healthier and happier you.
           </p>
         </div>
-        {/* <div className='md:flex justify-between grid grid-cols-3 gap-y-6 gap-x-2'>
+        <div className='md:flex justify-between grid grid-cols-3 gap-y-6 gap-x-2'>
           {servicesList.map((service) => (
             <div key={service.title}>
               <Link className='flex flex-col gap-7 group' href={service.href}>
@@ -39,20 +78,9 @@ export default function Services({ servicesList }) {
               </Link>
             </div>
           ))}
-        </div> */}
+        </div>
       </div>
       <HoverLink href='/services' text='More About Our Services' />
     </section>
   );
-}
-
-export async function getStaticProps() {
-  const servicesList = await fetchServices();
-
-  return {
-    props: {
-      servicesList,
-    },
-    revalidate: 60,
-  };
 }

@@ -8,10 +8,8 @@ import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
 import Survey from 'components/layout/Home/Survey';
 import Sustainability from 'components/layout/Home/Sustainability';
-import { getTwoMostRecentPosts } from 'lib/api';
-import { GetStaticProps } from 'next';
 
-export default function Index({ mostRecentPosts }) {
+export default function Index() {
   return (
     <HomeLayout title={'Home'}>
       <Highlight />
@@ -19,20 +17,10 @@ export default function Index({ mostRecentPosts }) {
       <Services />
       <Products />
       <CurateCafe />
-      <Blog posts={mostRecentPosts} />
+      <Blog />
       <Sustainability />
       <Survey />
       <Newsletter />
     </HomeLayout>
   );
 }
-
-export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
-  const mostRecentPostsData = await getTwoMostRecentPosts(preview);
-  const mostRecentPosts = mostRecentPostsData.edges; // Make sure this matches the expected structure
-
-  return {
-    props: { mostRecentPosts, preview },
-    revalidate: 10,
-  };
-};

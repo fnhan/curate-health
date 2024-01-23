@@ -9,6 +9,10 @@ const builder = imageUrlBuilder({ projectId, dataset });
 export default function Post({ post }: { post: SanityDocument }) {
   const { title, mainImage, body } = post;
 
+  if (!post) {
+    return <div>Loading or no post found...</div>;
+  }
+
   return (
     <main className='container mx-auto prose p-4 text-white'>
       {title ? <h1 className='text-white'>{title}</h1> : null}

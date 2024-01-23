@@ -5,6 +5,7 @@ import LifestyleMedicine from 'public/images/service/lifestyle-medicine.png';
 import MentalHealth from 'public/images/service/mental-health.jpg';
 import Recovery from 'public/images/service/recovery-sanctuary.jpg';
 import Regenerative from 'public/images/service/regenerative-medicine.jpg';
+import Rehab from 'public/images/service/rehab.jpg';
 import SurgicalConsultation from 'public/images/service/surgical-consultation.jpg';
 import HoverLink from './HoverLink';
 
@@ -16,30 +17,35 @@ export default function Services() {
       image: LifestyleMedicine,
     },
     {
+      title: 'Rehabilitation',
+      href: '/services#rehabilitation',
+      image: Rehab,
+    },
+    {
       title: 'Performance Training',
       href: '/services#performance-training',
       image: PerformanceTraining,
     },
-    {
-      title: 'Recovery Sanctuary',
-      href: '/services#recovery-sancturary',
-      image: Recovery,
-    },
-    {
-      title: 'Regenarative Medicine',
-      href: '/services#regenerative-medicine',
-      image: Regenerative,
-    },
+    // {
+    //   title: 'Recovery Sanctuary',
+    //   href: '/services#recovery-sancturary',
+    //   image: Recovery,
+    // },
+    // {
+    //   title: 'Regenerative Medicine',
+    //   href: '/services#regenerative-medicine',
+    //   image: Regenerative,
+    // },
     {
       title: 'Mental Health',
       href: '/services#mental-health',
       image: MentalHealth,
     },
-    {
-      title: 'Surgical Consultation',
-      href: '/services#surgical-consultation',
-      image: SurgicalConsultation,
-    },
+    // {
+    //   title: 'Surgical Consultation',
+    //   href: '/services#surgical-consultation',
+    //   image: SurgicalConsultation,
+    // },
   ];
 
   return (
@@ -67,12 +73,12 @@ export default function Services() {
               <Link className='flex flex-col gap-7 group' href={service.href}>
                 <Image
                   src={service.image}
-                  width={142}
-                  height={142}
+                  width={175}
+                  height={175}
                   alt=''
-                  className='rounded-full w-[85px] h-[85px] 2xl:w-[142px] 2xl:h-[142px] object-cover mx-auto group-hover:-translate-y-2 transition-all duration-300'
+                  className='rounded-full w-[85px] h-[85px] 2xl:w-[175px] 2xl:h-[175px] object-cover mx-auto group-hover:-translate-y-3 transition-all duration-300'
                 />
-                <h6 className='font-denton text-center text-sm border-b border-transparent md:text-base group-hover:underline duration-300 transition-all'>
+                <h6 className='font-denton text-center text-md border-b border-transparent md:text-base group-hover:underline duration-300 transition-all'>
                   {service.title}
                 </h6>
               </Link>
@@ -80,7 +86,7 @@ export default function Services() {
           ))}
         </div>
       </div>
-      <HoverLink href='/services' text='More About Our Services' />
+      <HoverLink href='/services' text='About Our Services' />
     </section>
   );
 }

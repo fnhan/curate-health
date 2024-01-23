@@ -76,7 +76,7 @@ export default function Services() {
                   width={175}
                   height={175}
                   alt=''
-                  className='rounded-full w-[100px] h-[100px] 2xl:w-[175px] 2xl:h-[175px] object-cover mx-auto group-hover:-translate-y-3 transition-all duration-300'
+                  className='rounded-full w-[85px] h-[85px] 2xl:w-[175px] 2xl:h-[175px] object-cover mx-auto group-hover:-translate-y-3 transition-all duration-300'
                 />
                 <h6 className='font-denton text-center text-md border-b border-transparent md:text-base group-hover:underline duration-300 transition-all'>
                   {service.title}
@@ -86,7 +86,7 @@ export default function Services() {
           ))}
         </div>
       </div>
-      <HoverLink href='/survey' text='Take Our Survey' />
+      <HoverLink href='/services' text='About Our Services' />
     </section>
   );
 }

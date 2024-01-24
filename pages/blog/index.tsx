@@ -1,39 +1,42 @@
-import HeroPost from 'components/layout/Blog-Page/hero-post';
-import MoreStories from 'components/layout/Blog-Page/more-stories';
-import Intro from 'components/layout/Home/Hero';
+import Posts from 'components/layout/Blog-Page/Posts';
 import Layout from 'components/layout/layout';
-import { getAllPostsForHome } from 'lib/api';
-import { GetStaticProps } from 'next';
+import { SanityDocument } from 'next-sanity';
+import dynamic from 'next/dynamic';
+import { getClient } from '../../sanity/lib/client';
+import { POSTS_QUERY } from '../../sanity/lib/queries';
+import { token } from '../../sanity/lib/token';
 
-export default function Blog({ allPosts: { edges } }) {
-  const heroPost = edges[0]?.node;
-  const morePosts = edges.slice(1);
+const PostsPreview = dynamic(
+  () => import('../../components/layout/Blog-Page/PostsPreview')
+);
 
+type PageProps = {
+  posts: SanityDocument[];
+  draftMode: boolean;
+  token: string;
+};
+
+export default function Home(props: PageProps) {
   return (
     <Layout title={'Blog'}>
-      <div>
-        <Intro />
-        {heroPost && (
-          <HeroPost
-            title={heroPost.title}
-            coverImage={heroPost.featuredImage}
-            date={heroPost.date}
-            author={heroPost.author}
-            slug={heroPost.slug}
-            excerpt={heroPost.excerpt}
-          />
-        )}
-        {morePosts.length > 0 && <MoreStories posts={morePosts} />}
-      </div>
+      {props.draftMode ? (
+        <PostsPreview posts={props.posts} />
+      ) : (
+        <Posts posts={props.posts} />
+      )}
     </Layout>
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
-  const allPosts = await getAllPostsForHome(preview);
+export const getStaticProps = async ({ draftMode = false }) => {
+  const client = getClient(draftMode ? token : undefined);
+  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY);
 
   return {
-    props: { allPosts, preview },
-    revalidate: 10,
+    props: {
+      posts,
+      draftMode,
+      token: draftMode ? token : '',
+    },
   };
 };

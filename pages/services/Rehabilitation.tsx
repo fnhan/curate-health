@@ -26,7 +26,7 @@ export default function Rehabilitation() {
         src={rehab}
         alt='Lifestyle Medicine'
         style={{ marginTop: '400px', marginBottom: '50px'}}
-        className='w-full object-cover max-h-[235px] md:max-h-[449px]'
+        className='w-full object-cover max-h-[235px] md:max-h-[525px]'
       />
 
       <div className="w-[732px] h-[185px] left-[162px] top-[<adjust-top-value>] absolute">

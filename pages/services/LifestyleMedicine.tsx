@@ -23,7 +23,7 @@ export default function LifestyleMedicine() {
         src={lifestyleMedicine}
         alt='Lifestyle Medicine'
         style={{marginBottom: '50px'}}
-        className='w-full object-cover max-h-[235px] md:max-h-[449px]'
+        className='w-full object-cover max-h-[235px] md:max-h-[525px]'
       />
      
      <div className="w-[732px] h-[185px] left-[162px] top-[<adjust-top-value>] absolute">

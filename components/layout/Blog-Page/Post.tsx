@@ -7,6 +7,7 @@ import { dataset, projectId } from '../../../sanity/env';
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function Post({ post }: { post: SanityDocument }) {
+  // Temporary
   if (!post) {
     return <div>Loading or no post found...</div>;
   }

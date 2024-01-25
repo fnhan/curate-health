@@ -14,9 +14,9 @@
     }
   ],
   "theme_color": "#29361c",
-  "description": "Health, Curated for you",
   "background_color": "#29361c",
   "display": "standalone",
+  "description": "Health, Curated for you",
   "start_url": "/",
   "scope": "/"
 }

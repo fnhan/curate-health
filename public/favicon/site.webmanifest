@@ -1,22 +1,19 @@
 {
-  "name": "CurateHealth",
-  "short_name": "CurateHealth",
+  "name": "Next.js",
+  "short_name": "Next.js",
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "/favicons/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/android-chrome-512x512.png",
+      "src": "/favicons/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ],
-  "theme_color": "#29361c",
-  "background_color": "#29361c",
-  "display": "standalone",
-  "description": "Health, Curated for you",
-  "start_url": "/",
-  "scope": "/"
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone"
 }

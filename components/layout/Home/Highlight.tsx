@@ -11,7 +11,7 @@ export default function Highlight() {
   return (
     <section className='w-full bg-primary'>
       <div className='container py-12 md:py-40 flex flex-col gap-20 text-left'>
-        <div className='max-w-prose md:sticky md:top-0 z-10 md:pt-10'>
+        <div className='max-w-prose md:sticky md:top-28 z-20 md:pt-2'>
           <h3 className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
             Discover a unique approach to health and wellness, tailored to meet
             your individual needs

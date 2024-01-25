@@ -12,12 +12,12 @@ export default function Rehabilitation() {
   ];
 
   return (
-    <section>
+    <section id='rehabilitation'>
 
-      <div className='w-[194px] h-5 left-[1086px] top-[<adjust-top-value>] absolute text-right text-zinc-300 text-2xl font-normal font-["Denton"] leading-loose tracking-widest' style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>
+      {/* <div className='w-[194px] h-5 left-[1086px] top-[<adjust-top-value>] absolute text-right text-zinc-300 text-2xl font-normal font-["Denton"] leading-loose tracking-widest' style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>
         Rehabilitation
       </div>
-      <div className="w-5 h-5 left-[162px] top-[<adjust-top-value>] absolute text-zinc-300 text-2xl font-normal font-['Denton'] leading-loose tracking-widest" style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>2.</div>
+      <div className="w-5 h-5 left-[162px] top-[<adjust-top-value>] absolute text-zinc-300 text-2xl font-normal font-['Denton'] leading-loose tracking-widest" style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>2.</div> */}
 
 
       <Image
@@ -26,7 +26,7 @@ export default function Rehabilitation() {
         src={rehab}
         alt='Lifestyle Medicine'
         style={{ marginTop: '400px', marginBottom: '50px'}}
-        className='w-full object-cover max-h-[235px] md:max-h-[525px]'
+        className='w-full object-cover max-h-[235px] md:max-h-[625px]'
       />
 
       <div className="w-[732px] h-[185px] left-[162px] top-[<adjust-top-value>] absolute">

@@ -12,12 +12,12 @@ export default function MentalHealth() {
   ];
 
   return (
-    <section>
-
+    <section id='mental-health'>
+{/* 
       <div className='w-[194px] h-5 left-[1086px] top-[<adjust-top-value>] absolute text-right text-zinc-300 text-2xl font-normal font-["Denton"] leading-loose tracking-widest' style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>
       MentalHealth
       </div>
-      <div className="w-5 h-5 left-[162px] top-[<adjust-top-value>] absolute text-zinc-300 text-2xl font-normal font-['Denton'] leading-loose tracking-widest" style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>4.</div>
+      <div className="w-5 h-5 left-[162px] top-[<adjust-top-value>] absolute text-zinc-300 text-2xl font-normal font-['Denton'] leading-loose tracking-widest" style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>4.</div> */}
 
 
       <Image
@@ -26,7 +26,7 @@ export default function MentalHealth() {
         src={mentalHealth}
         alt='Mental Health'
         style={{ marginTop: '400px', marginBottom: '50px'}}
-        className='w-full object-cover max-h-[235px] md:max-h-[525px]'
+        className='w-full object-cover max-h-[235px] md:max-h-[625px]'
       />
       <div className="w-[732px] h-[185px] left-[162px] top-[<adjust-top-value>] absolute">
         <div className="w-[346px] h-[285px] left-0 top-0 absolute text-white text-base font-normal font-['Avenir Next'] leading-relaxed">Ut ultricies nulla metus, sit amet convallis lectus suscipit sit amet. Sed non est purus. Duis condimentum, nisi vitae elementum lacinia, neque leo pharetra lacus, vitae iaculis dui odio eget neque. <br/><br/>Ut ultricies nulla metus, sit amet convallis lectus suscipit sit amet. Sed non est purus. Duis condimentum, nisi vitae elementum lacinia, neque leo pharetra lacus, vitae iaculis dui odio eget neque.</div>

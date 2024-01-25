@@ -6,7 +6,7 @@ import MentalHealth from './MentalHealth'
 
 export default function Index() {
   return (
-    <Layout title="service page">
+    <Layout title="Services">
       <LifestyleMedicine />
       <Rehabilitation />
       <PerformanceTraining />

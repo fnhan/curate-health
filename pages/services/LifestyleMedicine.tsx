@@ -12,18 +12,18 @@ export default function LifestyleMedicine() {
   ];
 
   return (
-    <section>
-      <div className='w-[194px] h-5 left-[1086px] top-[<adjust-top-value>] absolute text-right text-zinc-300 text-2xl font-normal font-["Denton"] leading-loose tracking-widest' style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>
+    <section id='lifestyle-medicine'>
+      {/* <div className='w-[194px] h-5 left-[1086px] top-[<adjust-top-value>] absolute text-right text-zinc-300 text-2xl font-normal font-["Denton"] leading-loose tracking-widest' style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>
       Lifestyle Medicine
       </div>
-      <div className="w-5 h-5 left-[162px] top-[<adjust-top-value>] absolute text-zinc-300 text-2xl font-normal font-['Denton'] leading-loose tracking-widest" style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>1.</div>
+      <div className="w-5 h-5 left-[162px] top-[<adjust-top-value>] absolute text-zinc-300 text-2xl font-normal font-['Denton'] leading-loose tracking-widest" style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>1.</div> */}
       <Image
         width={1080}
         height={1440}
         src={lifestyleMedicine}
         alt='Lifestyle Medicine'
         style={{marginBottom: '50px'}}
-        className='w-full object-cover max-h-[235px] md:max-h-[525px]'
+        className='w-full object-cover max-h-[235px] md:max-h-[625px]'
       />
      
      <div className="w-[732px] h-[185px] left-[162px] top-[<adjust-top-value>] absolute">

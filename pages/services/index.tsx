@@ -1,7 +1,7 @@
 import Newsletter from '../../components/layout/Home/Newsletter';
 import Layout from '../../components/layout/layout';
 import ServiceDetails from './ServiceDetails';
-import { servicesList } from './data';
+import { servicesList } from '../../public/data/serviceList';
 
 export default function Index() {
   return (

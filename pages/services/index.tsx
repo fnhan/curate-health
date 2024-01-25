@@ -6,7 +6,7 @@ import { servicesList } from './data';
 export default function Index() {
   return (
     <Layout title='Services'>
-      <div className='flex flex-col gap-20 pb-20'>
+      <div className='flex flex-col gap-20 pb-20 pt-10'>
         {servicesList.map((service) => (
           <ServiceDetails key={service.id} service={service} />
         ))}

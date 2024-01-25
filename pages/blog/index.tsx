@@ -16,7 +16,7 @@ type PageProps = {
   token: string;
 };
 
-export default function Home(props: PageProps) {
+export default function BlogPage(props: PageProps) {
   return (
     <Layout title={'Blog'}>
       {props.draftMode ? (

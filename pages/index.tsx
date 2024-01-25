@@ -1,3 +1,4 @@
+import Posts from 'components/layout/Blog-Page/Posts';
 import Blog from 'components/layout/Home/Blog';
 import Clinic from 'components/layout/Home/Clinic';
 import CurateCafe from 'components/layout/Home/CurateCafe';
@@ -8,10 +9,19 @@ import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
 import Survey from 'components/layout/Home/Survey';
 import Sustainability from 'components/layout/Home/Sustainability';
-import { getTwoMostRecentPosts } from 'lib/api';
-import { GetStaticProps } from 'next';
+import { SanityDocument } from 'next-sanity';
+import dynamic from 'next/dynamic';
+import { getClient } from '../sanity/lib/client';
+import { POSTS_QUERY } from '../sanity/lib/queries';
+import { token } from '../sanity/lib/token';
 
-export default function Index({ mostRecentPosts }) {
+type PageProps = {
+  posts: SanityDocument[];
+  draftMode: boolean;
+  token: string;
+};
+
+export default function Index({ posts, draftMode, token }: PageProps) {
   return (
     <HomeLayout title={'Home'}>
       <Highlight />
@@ -19,7 +29,7 @@ export default function Index({ mostRecentPosts }) {
       <Services />
       <Products />
       <CurateCafe />
-      <Blog posts={mostRecentPosts} />
+      <Blog posts={posts} draftMode={draftMode} token={token} />
       <Sustainability />
       <Survey />
       <Newsletter />
@@ -27,12 +37,15 @@ export default function Index({ mostRecentPosts }) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
-  const mostRecentPostsData = await getTwoMostRecentPosts(preview);
-  const mostRecentPosts = mostRecentPostsData.edges; // Make sure this matches the expected structure
+export const getStaticProps = async ({ draftMode = false }) => {
+  const client = getClient(draftMode ? token : undefined);
+  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY);
 
   return {
-    props: { mostRecentPosts, preview },
-    revalidate: 10,
+    props: {
+      posts,
+      draftMode,
+      token: draftMode ? token : '',
+    },
   };
 };

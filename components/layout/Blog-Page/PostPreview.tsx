@@ -12,5 +12,5 @@ export default function PostPreview({
 }) {
   const [data] = useLiveQuery<SanityDocument>(post, POST_QUERY, params);
 
-  return <Post post={data} />;
+  return data ? <Post post={data} /> : <div>Loading...</div>;
 }

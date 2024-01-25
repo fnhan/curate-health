@@ -1,5 +1,3 @@
-// ./sanity/lib/client.ts
-
 import { createClient } from '@sanity/client/stega';
 import type { SanityClient } from 'next-sanity';
 

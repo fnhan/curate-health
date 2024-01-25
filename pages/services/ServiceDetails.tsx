@@ -11,6 +11,11 @@ export default function ServiceDetails({ service }) {
 
   const excerptLength = 300;
 
+  // temporarily
+  if (!service) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <section className='text-white' id={service.id}>
       <div className='container text-2xl font-denton tracking-widest flex justify-center md:justify-start mb-2'>

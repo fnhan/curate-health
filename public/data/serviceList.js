@@ -30,28 +30,28 @@ export const servicesList = [
     image: PerformanceTraining,
     body: body,
   },
-  {
-    title: 'Recovery Sanctuary',
-    id: 'recovery-sancturary',
-    image: Recovery,
-    body: body,
-  },
-  {
-    title: 'Regenerative Medicine',
-    id: 'regenerative-medicine',
-    image: Regenerative,
-    body: body,
-  },
+  // {
+  //   title: 'Recovery Sanctuary',
+  //   id: 'recovery-sancturary',
+  //   image: Recovery,
+  //   body: body,
+  // },
+  // {
+  //   title: 'Regenerative Medicine',
+  //   id: 'regenerative-medicine',
+  //   image: Regenerative,
+  //   body: body,
+  // },
   {
     title: 'Mental Health',
     id: 'mental-health',
     image: MentalHealth,
     body: body,
   },
-  {
-    title: 'Surgical Consultation',
-    id: 'surgical-consultation',
-    image: SurgicalConsultation,
-    body: body,
-  },
+  // {
+  //   title: 'Surgical Consultation',
+  //   id: 'surgical-consultation',
+  //   image: SurgicalConsultation,
+  //   body: body,
+  // },
 ];

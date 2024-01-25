@@ -19,7 +19,7 @@ export default function ServiceDetails({ service }) {
   return (
     <section className='text-white' id={service.id}>
       <div className='container text-2xl font-denton tracking-widest flex justify-center md:justify-start mb-2'>
-        <h2 className='border-b'>{service.title}</h2>
+        <h2 className=''>{service.title}</h2>
       </div>
       <Image
         loading='lazy'

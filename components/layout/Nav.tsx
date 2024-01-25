@@ -23,7 +23,7 @@ const navItems = [
 
 export default function Nav() {
   return (
-    <nav className='text-white bg-primary sticky top-0 z-50 border-b'>
+    <nav className='text-white bg-primary/25 backdrop-blur-3xl sticky top-0 z-50 border-b'>
       <div className='container flex items-center justify-between'>
         <div className='flex-1 flex items-center'>
           <div className='flex py-10' aria-label='menu toggle'>

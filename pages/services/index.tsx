@@ -1,17 +1,16 @@
-import Layout from '../../components/layout/layout';
-import LifestyleMedicine from './LifestyleMedicine';
-import Rehabilitation from './Rehabilitation';
-import PerformanceTraining from './PerformanceTraining';
-import MentalHealth from './MentalHealth'
 import Newsletter from '../../components/layout/Home/Newsletter';
+import Layout from '../../components/layout/layout';
+import ServiceDetails from './ServiceDetails';
+import { servicesList } from './data';
 
 export default function Index() {
   return (
-    <Layout title="Services">
-      <LifestyleMedicine />
-      <Rehabilitation />
-      <PerformanceTraining />
-      <MentalHealth/>
+    <Layout title='Services'>
+      <div className='flex flex-col gap-20 pb-20'>
+        {servicesList.map((service) => (
+          <ServiceDetails key={service.id} service={service} />
+        ))}
+      </div>
       <Newsletter />
     </Layout>
   );

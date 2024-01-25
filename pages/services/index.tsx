@@ -3,6 +3,7 @@ import LifestyleMedicine from './LifestyleMedicine';
 import Rehabilitation from './Rehabilitation';
 import PerformanceTraining from './PerformanceTraining';
 import MentalHealth from './MentalHealth'
+import Newsletter from '../../components/layout/Home/Newsletter';
 
 export default function Index() {
   return (
@@ -11,6 +12,7 @@ export default function Index() {
       <Rehabilitation />
       <PerformanceTraining />
       <MentalHealth/>
+      <Newsletter />
     </Layout>
   );
 }

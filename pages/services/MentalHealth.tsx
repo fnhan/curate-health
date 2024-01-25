@@ -12,7 +12,7 @@ export default function MentalHealth() {
   ];
 
   return (
-    <section id='mental-health'>
+    <section id='mental-health' style={{ marginBottom: '350px' }}>
 {/* 
       <div className='w-[194px] h-5 left-[1086px] top-[<adjust-top-value>] absolute text-right text-zinc-300 text-2xl font-normal font-["Denton"] leading-loose tracking-widest' style={{ whiteSpace: 'nowrap', fontStyle: 'italic' }}>
       MentalHealth

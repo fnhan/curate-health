@@ -7,7 +7,7 @@ export default function Hero({ heroSection }) {
   return (
     <section
       style={{ backgroundImage: `url(${bgImageUrl})` }}
-      className='bg-cover bg-fixed flex justify-center items-center flex-col min-h-screen text-white container'>
+      className='bg-cover bg-fixed flex justify-center items-center flex-col min-h-screen text-white'>
       <h1 className='text-[32px] md:text-[42px] 2xl:text-[72px] text-center mb-6'>
         <PortableText value={heroSection.heroText} />
       </h1>

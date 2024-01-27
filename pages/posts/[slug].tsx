@@ -1,4 +1,3 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
 import ErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -11,8 +10,6 @@ import PostTitle from '../../components/layout/Blog-Page/post-title';
 import SectionSeparator from '../../components/layout/Blog-Page/section-separator';
 import Tags from '../../components/layout/Blog-Page/tags';
 import Layout from '../../components/layout/layout';
-import { getAllPostsWithSlug, getPostAndMorePosts } from '../../lib/api';
-import { CMS_NAME } from '../../lib/constants';
 
 export default function Post({ post, posts, preview }) {
   const router = useRouter();
@@ -58,29 +55,3 @@ export default function Post({ post, posts, preview }) {
     </Layout>
   );
 }
-
-export const getStaticProps: GetStaticProps = async ({
-  params,
-  preview = false,
-  previewData,
-}) => {
-  const data = await getPostAndMorePosts(params?.slug, preview, previewData);
-
-  return {
-    props: {
-      preview,
-      post: data.post,
-      posts: data.posts,
-    },
-    revalidate: 10,
-  };
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const allPosts = await getAllPostsWithSlug();
-
-  return {
-    paths: allPosts.edges.map(({ node }) => `/posts/${node.slug}`) || [],
-    fallback: true,
-  };
-};

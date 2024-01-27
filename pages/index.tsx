@@ -1,38 +1,59 @@
 import Blog from 'components/layout/Home/Blog';
 import Clinic from 'components/layout/Home/Clinic';
 import CurateCafe from 'components/layout/Home/CurateCafe';
+import Hero from 'components/layout/Home/Hero';
 import Highlight from 'components/layout/Home/Highlight';
-import HomeLayout from 'components/layout/Home/HomeLayout';
 import Newsletter from 'components/layout/Home/Newsletter';
 import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
 import Survey from 'components/layout/Home/Survey';
 import Sustainability from 'components/layout/Home/Sustainability';
-import { getTwoMostRecentPosts } from 'lib/api';
-import { GetStaticProps } from 'next';
+import Layout from 'components/layout/layout';
+import { SanityDocument } from 'next-sanity';
+import { getClient } from '../sanity/lib/client';
+import { POSTS_QUERY, heroSectionQuery } from '../sanity/lib/queries';
+import { token } from '../sanity/lib/token';
 
-export default function Index({ mostRecentPosts }) {
+type PageProps = {
+  posts: SanityDocument[];
+  heroSection: SanityDocument[];
+  draftMode: boolean;
+  token: string;
+};
+
+export default function Index({
+  posts,
+  draftMode,
+  token,
+  heroSection,
+}: PageProps) {
   return (
-    <HomeLayout title={'Home'}>
+    <Layout title={'Home'}>
+      <Hero heroSection={heroSection} />
       <Highlight />
       <Clinic />
       <Services />
       <Products />
       <CurateCafe />
-      <Blog posts={mostRecentPosts} />
+      <Blog posts={posts} draftMode={draftMode} token={token} />
       <Sustainability />
       <Survey />
       <Newsletter />
-    </HomeLayout>
+    </Layout>
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
-  const mostRecentPostsData = await getTwoMostRecentPosts(preview);
-  const mostRecentPosts = mostRecentPostsData.edges; // Make sure this matches the expected structure
+export const getStaticProps = async ({ draftMode = false }) => {
+  const client = getClient(draftMode ? token : undefined);
+  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY);
+  const heroSection = await client.fetch<SanityDocument[]>(heroSectionQuery);
 
   return {
-    props: { mostRecentPosts, preview },
-    revalidate: 10,
+    props: {
+      posts,
+      heroSection,
+      draftMode,
+      token: draftMode ? token : '',
+    },
   };
 };

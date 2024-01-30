@@ -13,7 +13,7 @@ export default async function handle(
   try {
     // Configure your Systeme.io API endpoint and payload
     const SYSTEME_ENDPOINT =
-      'https://systeme.io/embedded/12083593/subscription';
+      'https://systeme.io/embedded/14262515/subscription';
     const payload = { email };
 
     // Send the data to Systeme.io

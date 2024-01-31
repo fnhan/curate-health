@@ -1,3 +1,4 @@
+import { Toaster } from 'components/ui/toaster';
 import { AppProps } from 'next/app';
 import { lazy, Suspense } from 'react';
 import '../styles/index.css';
@@ -18,14 +19,19 @@ export default function App({
 }: AppProps<SharedPageProps>) {
   const { draftMode, token } = pageProps;
 
-  return draftMode ? (
-    <PreviewProvider token={token}>
-      <Component {...pageProps} />
-      <Suspense>
-        <VisualEditing />
-      </Suspense>
-    </PreviewProvider>
-  ) : (
-    <Component {...pageProps} />
+  return (
+    <>
+      <Toaster />
+      {draftMode ? (
+        <PreviewProvider token={token}>
+          <Component {...pageProps} />
+          <Suspense fallback={<div>Loading visual editing...</div>}>
+            <VisualEditing />
+          </Suspense>
+        </PreviewProvider>
+      ) : (
+        <Component {...pageProps} />
+      )}
+    </>
   );
 }

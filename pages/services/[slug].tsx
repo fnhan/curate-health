@@ -1,3 +1,4 @@
+import { CarouselNav } from 'components/layout/Services/CarouselNav';
 import ServiceDetails from 'components/layout/Services/ServiceDetails';
 import { useRouter } from 'next/router';
 import Newsletter from '../../components/layout/Home/Newsletter';
@@ -12,7 +13,9 @@ const ServicePage = () => {
 
   return (
     <Layout title={service?.title || 'Services'}>
-      <div className='container pt-10'></div>
+      <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
+        <CarouselNav />
+      </div>
       <div className='py-10'>
         {service ? <ServiceDetails service={service} /> : <p>Loading...</p>}
       </div>

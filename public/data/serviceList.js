@@ -16,18 +16,21 @@ export const servicesList = [
     title: 'Lifestyle Medicine',
     id: 'lifestyle-medicine',
     image: LifestyleMedicine,
+    href: '/services/lifestyle-medicine',
     body: body,
   },
   {
     title: 'Rehabilitation',
     id: 'rehabilitation',
     image: Rehab,
+    href: '/services/rehabilitation',
     body: body,
   },
   {
     title: 'Performance Training',
     id: 'performance-training',
     image: PerformanceTraining,
+    href: '/services/performance-training',
     body: body,
   },
   // {
@@ -46,6 +49,7 @@ export const servicesList = [
     title: 'Mental Health',
     id: 'mental-health',
     image: MentalHealth,
+    href: '/services/mental-health',
     body: body,
   },
   // {

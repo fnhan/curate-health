@@ -17,3 +17,14 @@ export const heroSectionQuery = `*[_type == "heroSection"][0]{
   },
   heroText
 }`;
+
+export const homePageQuery = groq`{
+  "heroSection": ${heroSectionQuery},
+  "posts": ${POSTS_QUERY}{
+    mainImage,
+    title,
+    excerpt,
+    slug,
+    publishedAt,
+  }
+}`;

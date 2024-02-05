@@ -4,8 +4,6 @@ import HoverLink from './HoverLink';
 
 type PageProps = {
   posts: SanityDocument[];
-  draftMode: boolean;
-  token: string;
 };
 
 export default function Blog(props: PageProps) {

@@ -10,8 +10,6 @@ export default function PostPreview({ post }: { post: SanityDocument }) {
 
   const { title, mainImage, excerpt, slug, publishedAt } = post;
 
-  console.log(post);
-
   return (
     <div className='border-l pl-4 flex flex-col gap-6 md:gap-8 2xl:gap-16'>
       <h3 className='text-2xl md:text-4xl flex-grow'>

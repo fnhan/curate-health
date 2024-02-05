@@ -1,5 +1,5 @@
-import ServicesList from '../Services/ServicesList';
 import HoverLink from './HoverLink';
+import ServicesList from './ServicesList';
 
 export default function Services() {
   return (

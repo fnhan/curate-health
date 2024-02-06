@@ -27,10 +27,9 @@ export default defineType({
       heroText: 'heroText.0.children.0.text',
     },
     prepare(selection) {
-      const { bgImage, heroText } = selection;
+      const { bgImage } = selection;
       return {
-        title: heroText || 'No hero text',
-        subtitle: 'Hero Section',
+        title: 'Hero Section',
         media: bgImage,
       };
     },

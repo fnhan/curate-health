@@ -1,27 +1,71 @@
+import { Loading } from 'components/Loading';
 import { CarouselNav } from 'components/layout/Services/CarouselNav';
 import ServiceDetails from 'components/layout/Services/ServiceDetails';
-import { useRouter } from 'next/router';
+import { GetStaticPaths } from 'next';
+import { SanityDocument } from 'next-sanity';
+import dynamic from 'next/dynamic';
 import Newsletter from '../../components/layout/Home/Newsletter';
 import Layout from '../../components/layout/layout';
-import { servicesList } from '../../public/data/serviceList';
+import { getClient } from '../../sanity/lib/client';
+import {
+  SERVICES_QUERY,
+  SERVICES_SLUG_QUERY,
+  SERVICE_BY_SLUG_QUERY,
+} from '../../sanity/lib/queries';
+import { token } from '../../sanity/lib/token';
 
-const ServicePage = () => {
-  const router = useRouter();
-  const { slug } = router.query;
+type PageProps = {
+  draftMode: boolean;
+  token: string;
+  services: SanityDocument[];
+  service: SanityDocument;
+};
 
-  const service = servicesList.find((service) => service.id === slug);
+export default function ServicesPage(props: PageProps) {
+  const ServicesPreview = dynamic(
+    () => import('../../components/layout/Services/ServicesPreview')
+  );
+
+  if (props.draftMode) {
+    return <ServicesPreview />;
+  }
+
+  if (!props.service) {
+    return <Loading />;
+  }
 
   return (
-    <Layout title={service?.title || 'Services'}>
+    <Layout title={props.service?.title || 'Services'}>
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
-        <CarouselNav />
+        <CarouselNav services={props.services} />
       </div>
       <div className='py-10'>
-        {service ? <ServiceDetails service={service} /> : <p>Loading...</p>}
+        <ServiceDetails service={props.service} />
       </div>
       <Newsletter />
     </Layout>
   );
+}
+
+export const getStaticProps = async ({ params, preview = false }) => {
+  const client = getClient(preview ? token : undefined);
+  const services = await client.fetch(SERVICES_QUERY);
+  const service = await client.fetch(SERVICE_BY_SLUG_QUERY, {
+    slug: params.slug,
+  });
+
+  return {
+    props: {
+      service,
+      services,
+      draftMode: preview,
+      token: preview ? token : '',
+    },
+  };
 };
 
-export default ServicePage;
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = await getClient().fetch(SERVICES_SLUG_QUERY);
+
+  return { paths, fallback: true };
+};

@@ -1,59 +1,25 @@
+import imageUrlBuilder from '@sanity/image-url';
 import Image from 'next/image';
 import Link from 'next/link';
-import PerformanceTraining from 'public/images/service/Performance Training.jpg';
-import LifestyleMedicine from 'public/images/service/lifestyle-medicine.png';
-import MentalHealth from 'public/images/service/mental-health.jpg';
-import Recovery from 'public/images/service/recovery-sanctuary.jpg';
-import Regenerative from 'public/images/service/regenerative-medicine.jpg';
-import Rehab from 'public/images/service/rehab.jpg';
-import SurgicalConsultation from 'public/images/service/surgical-consultation.jpg';
+import { dataset, projectId } from '../../../sanity/env';
 
-export default function ServicesList() {
-  const servicesList = [
-    {
-      title: 'Lifestyle Medicine',
-      href: '/services/lifestyle-medicine',
-      image: LifestyleMedicine,
-    },
-    {
-      title: 'Rehabilitation',
-      href: '/services/rehabilitation',
-      image: Rehab,
-    },
-    {
-      title: 'Performance Training',
-      href: '/services/performance-training',
-      image: PerformanceTraining,
-    },
-    // {
-    //   title: 'Recovery Sanctuary',
-    //   href: '/services#recovery-sancturary',
-    //   image: Recovery,
-    // },
-    // {
-    //   title: 'Regenerative Medicine',
-    //   href: '/services#regenerative-medicine',
-    //   image: Regenerative,
-    // },
-    {
-      title: 'Mental Health',
-      href: '/services/mental-health',
-      image: MentalHealth,
-    },
-    // {
-    //   title: 'Surgical Consultation',
-    //   href: '/services#surgical-consultation',
-    //   image: SurgicalConsultation,
-    // },
-  ];
+const builder = imageUrlBuilder({ projectId, dataset });
 
+export default function ServicesList({ services }) {
   return (
     <div className='md:flex justify-between grid grid-cols-2 gap-y-6 gap-x-2'>
-      {servicesList.map((service) => (
+      {services.map((service) => (
         <div key={service.title}>
-          <Link className='flex flex-col gap-7 group' href={service.href}>
+          <Link
+            className='flex flex-col gap-7 group'
+            href={`/services/${service.slug}`}>
             <Image
-              src={service.image}
+              src={builder
+                .image(service.image)
+                .width(175)
+                .height(175)
+                .quality(80)
+                .url()}
               width={175}
               height={175}
               alt=''

@@ -10,32 +10,39 @@ import Survey from 'components/layout/Home/Survey';
 import Sustainability from 'components/layout/Home/Sustainability';
 import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
+import dynamic from 'next/dynamic';
 import { getClient } from '../sanity/lib/client';
-import { POSTS_QUERY, heroSectionQuery } from '../sanity/lib/queries';
+import { homePageQuery } from '../sanity/lib/queries';
 import { token } from '../sanity/lib/token';
 
 type PageProps = {
   posts: SanityDocument[];
   heroSection: SanityDocument[];
+  highlightSection: SanityDocument[];
+  clinicSection: SanityDocument[];
+  services: SanityDocument[];
   draftMode: boolean;
   token: string;
 };
 
-export default function Index({
-  posts,
-  draftMode,
-  token,
-  heroSection,
-}: PageProps) {
+export default function Index(props: PageProps) {
+  const HomePreview = dynamic(
+    () => import('../components/layout/Home/HomePreview')
+  );
+
+  if (props.draftMode) {
+    return <HomePreview />;
+  }
+
   return (
     <Layout title={'Home'}>
-      <Hero heroSection={heroSection} />
-      <Highlight />
-      <Clinic />
-      <Services />
+      <Hero heroSection={props.heroSection} />
+      <Highlight highlightSection={props.highlightSection} />
+      <Clinic clinicSection={props.clinicSection} />
+      <Services services={props.services} />
       <Products />
       <CurateCafe />
-      <Blog posts={posts} draftMode={draftMode} token={token} />
+      <Blog posts={props.posts} />
       <Sustainability />
       <Survey />
       <Newsletter />
@@ -45,13 +52,11 @@ export default function Index({
 
 export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
-  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY);
-  const heroSection = await client.fetch<SanityDocument[]>(heroSectionQuery);
+  const allData = await client.fetch(homePageQuery);
 
   return {
     props: {
-      posts,
-      heroSection,
+      ...allData,
       draftMode,
       token: draftMode ? token : '',
     },

@@ -40,6 +40,13 @@ const CLINIC_QUERY = groq`*[_type == "clinic"][0]{
   content
 }`;
 
+const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
+  title,
+  "slug": slug.current,
+  "image": image.asset->url,
+  "altText": image.alt
+}`;
+
 export const homePageQuery = groq`{
   "heroSection": ${heroSectionQuery},
   "posts": ${POSTS_QUERY}{
@@ -50,5 +57,6 @@ export const homePageQuery = groq`{
     publishedAt,
   },
   "highlightSection": ${HIGHLIGHT_QUERY},
-  "clinicSection": ${CLINIC_QUERY}
+  "clinicSection": ${CLINIC_QUERY},
+  "services": ${SERVICES_QUERY}
 }`;

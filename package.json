@@ -26,6 +26,7 @@
     "classnames": "^2.3.1",
     "clsx": "^2.0.0",
     "date-fns": "^2.28.0",
+    "embla-carousel-autoplay": "^8.0.0-rc22",
     "embla-carousel-react": "^8.0.0-rc17",
     "eslint-config-next": "^14.1.0",
     "framer-motion": "^10.16.16",

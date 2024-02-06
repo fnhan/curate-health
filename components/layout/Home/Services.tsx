@@ -1,14 +1,14 @@
 import HoverLink from './HoverLink';
 import ServicesList from './ServicesList';
 
-export default function Services() {
+export default function Services({ services }) {
   return (
     <section>
       <div className='container flex flex-col gap-10 md:gap-20 pt-8 md:py-16 pb-12'>
         <div className='flex justify-center'>
           <h2 className='mb-6 text-3xl md:text-5xl'>Our Services</h2>
         </div>
-        <ServicesList />
+        <ServicesList services={services} />
       </div>
       <HoverLink href='/services' text='About Our Services' />
     </section>

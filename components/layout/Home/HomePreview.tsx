@@ -45,6 +45,7 @@ type HomePageData = {
     };
     content: string;
   };
+  services: SanityDocument[];
   posts: SanityDocument[];
 };
 
@@ -64,7 +65,7 @@ export default function HomePagePreview() {
       <Hero heroSection={data.heroSection} />
       <Highlight highlightSection={data.highlightSection} />
       <Clinic clinicSection={data.clinicSection} />
-      <Services />
+      <Services services={data.services} />
       <Products />
       <CurateCafe />
       <Blog posts={data.posts} />

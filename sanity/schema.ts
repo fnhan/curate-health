@@ -7,12 +7,14 @@ import clinicSection from './schemas/clinicSection';
 import heroSection from './schemas/heroSection';
 import highlight from './schemas/highlight';
 import post from './schemas/post';
+import services from './schemas/services';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     heroSection,
     highlight,
     clinicSection,
+    services,
     post,
     author,
     category,

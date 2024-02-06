@@ -57,8 +57,7 @@ export default defineType({
     prepare(selection) {
       const { title1, title2, highlightImage } = selection;
       return {
-        title: title1 || 'No first title',
-        subtitle: title2 || 'No second title',
+        title: 'Highlight Section',
         media: highlightImage,
       };
     },

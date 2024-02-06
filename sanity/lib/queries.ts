@@ -40,12 +40,27 @@ const CLINIC_QUERY = groq`*[_type == "clinic"][0]{
   content
 }`;
 
-const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
+export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   title,
   "slug": slug.current,
   "image": image.asset->url,
-  "altText": image.alt
+  "altText": image.alt,
+  content
 }`;
+
+export const SERVICES_SLUG_QUERY = `*[_type == "service" && isActive == true && defined(slug.current)] {
+  "params": {"slug": slug.current}
+}`;
+
+export const SERVICE_BY_SLUG_QUERY = groq`
+  *[_type == "service" && slug.current == $slug][0]{
+    title,
+    "slug": slug.current,
+    "image": image.asset->url,
+    "altText": image.alt,
+    content
+  }
+`;
 
 export const homePageQuery = groq`{
   "heroSection": ${heroSectionQuery},

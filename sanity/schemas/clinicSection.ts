@@ -19,9 +19,6 @@ export default defineType({
           type: 'string',
           description:
             'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
-          options: {
-            isHighlighted: true,
-          },
         },
       ],
     }),

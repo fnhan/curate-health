@@ -8,7 +8,11 @@ import { useRouter } from 'next/router';
 import Newsletter from '../../components/layout/Home/Newsletter';
 import Layout from '../../components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
-import { SERVICES_QUERY, SERVICES_SLUG_QUERY } from '../../sanity/lib/queries';
+import {
+  SERVICES_QUERY,
+  SERVICES_SLUG_QUERY,
+  SERVICE_BY_SLUG_QUERY,
+} from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
 type PageProps = {
@@ -49,15 +53,19 @@ export default function ServicesPage(props: PageProps) {
   );
 }
 
-export const getStaticProps = async ({ draftMode = false }) => {
-  const client = getClient(draftMode ? token : undefined);
+export const getStaticProps = async ({ params, preview = false }) => {
+  const client = getClient(preview ? token : undefined);
   const services = await client.fetch(SERVICES_QUERY);
+  const service = await client.fetch(SERVICE_BY_SLUG_QUERY, {
+    slug: params.slug,
+  });
 
   return {
     props: {
+      service,
       services,
-      draftMode,
-      token: draftMode ? token : '',
+      draftMode: preview,
+      token: preview ? token : '',
     },
   };
 };

@@ -1,3 +1,4 @@
+import { Loading } from 'components/Loading';
 import { CarouselNav } from 'components/layout/Services/CarouselNav';
 import ServiceDetails from 'components/layout/Services/ServiceDetails';
 import { GetStaticPaths } from 'next';
@@ -30,6 +31,10 @@ export default function ServicesPage(props: PageProps) {
   const { slug } = router.query;
 
   const service = props.services.find((service) => service.slug === slug);
+
+  if (!service) {
+    return <Loading />;
+  }
 
   return (
     <Layout title={service?.title || 'Services'}>

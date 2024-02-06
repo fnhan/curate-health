@@ -19,7 +19,7 @@ type PageProps = {
   draftMode: boolean;
   token: string;
   services: SanityDocument[];
-  service: SanityDocument[];
+  service: SanityDocument;
 };
 
 export default function ServicesPage(props: PageProps) {
@@ -31,17 +31,12 @@ export default function ServicesPage(props: PageProps) {
     return <ServicesPreview />;
   }
 
-  const router = useRouter();
-  const { slug } = router.query;
-
-  const service = props.services.find((service) => service.slug === slug);
-
-  if (!service) {
+  if (!props.service) {
     return <Loading />;
   }
 
   return (
-    <Layout title={service?.title || 'Services'}>
+    <Layout title={props.service?.title || 'Services'}>
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
         <CarouselNav services={props.services} />
       </div>

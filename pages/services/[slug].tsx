@@ -4,7 +4,6 @@ import ServiceDetails from 'components/layout/Services/ServiceDetails';
 import { GetStaticPaths } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 import Newsletter from '../../components/layout/Home/Newsletter';
 import Layout from '../../components/layout/layout';
 import { getClient } from '../../sanity/lib/client';

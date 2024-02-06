@@ -1,19 +1,14 @@
-import { Button } from 'components/ui/button';
+import { PortableText } from '@portabletext/react';
+import imageUrlBuilder from '@sanity/image-url';
+import { Loading } from 'components/Loading';
 import Image from 'next/image';
-import { useState } from 'react';
+import { dataset, projectId } from '../../../sanity/env';
+
+const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function ServiceDetails({ service }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const excerptLength = 300;
-
-  // temporarily
   if (!service) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -25,22 +20,17 @@ export default function ServiceDetails({ service }) {
         loading='lazy'
         width={1080}
         height={1440}
-        src={service.image}
+        src={builder
+          .image(service.image)
+          .width(1080)
+          .height(1440)
+          .quality(80)
+          .url()}
         alt={service.title}
         className='w-full object-cover object-center max-h-[280px] md:max-h-[625px] mb-12'
       />
       <div className='container'>
-        <p>
-          {isExpanded
-            ? service.body
-            : `${service.body.substring(0, excerptLength)}...`}
-        </p>
-        <Button
-          variant='ghost'
-          onClick={toggleExpanded}
-          className='p-0 hover:bg-transparent font-denton-condesnsed text-secondary hover:underline hover:text-white duration-300 transition-all'>
-          {isExpanded ? 'Show Less' : 'Read More'}
-        </Button>
+        <PortableText value={service.content} />
       </div>
     </section>
   );

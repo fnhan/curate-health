@@ -18,6 +18,20 @@ export const heroSectionQuery = `*[_type == "heroSection"][0]{
   heroText
 }`;
 
+const HIGHLIGHT_QUERY = groq`*[_type == "highlight"][0]{
+  title1,
+  title2,
+  "highlightImage": {
+    "asset": highlightImage.asset->{
+      _id,
+      url
+    },
+    "alt": highlightImage.alt
+  },
+  hoverLinkText,
+  hoverLinkHref
+}`;
+
 export const homePageQuery = groq`{
   "heroSection": ${heroSectionQuery},
   "posts": ${POSTS_QUERY}{
@@ -26,5 +40,6 @@ export const homePageQuery = groq`{
     excerpt,
     slug,
     publishedAt,
-  }
+  },
+  "highlightSection": ${HIGHLIGHT_QUERY}
 }`;

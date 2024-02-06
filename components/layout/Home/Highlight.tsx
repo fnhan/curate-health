@@ -1,10 +1,16 @@
+import imageUrlBuilder from '@sanity/image-url';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import highlightCircleText from 'public/images/CircleText.png';
-import highlightImage from 'public/images/HighlightImage.png';
+import { dataset, projectId } from '../../../sanity/env';
 import HoverLink from './HoverLink';
 
-export default function Highlight() {
+const builder = imageUrlBuilder({ projectId, dataset });
+
+export default function Highlight({ highlightSection }) {
+  const { title1, title2, highlightImage, hoverLinkText, hoverLinkHref } =
+    highlightSection;
+
   const { scrollYProgress } = useScroll();
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 540]);
 
@@ -13,8 +19,7 @@ export default function Highlight() {
       <div className='container py-12 md:py-40 flex flex-col gap-20 text-left'>
         <div className='max-w-prose md:sticky md:top-40 z-20 md:pt-2'>
           <h3 className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
-            Discover a unique approach to health and wellness, tailored to meet
-            your individual needs
+            {title1}
           </h3>
         </div>
         <div className='flex justify-center'>
@@ -22,8 +27,13 @@ export default function Highlight() {
             <Image
               width={536}
               height={536}
-              alt=''
-              src={highlightImage}
+              alt={`${highlightImage.alt}`}
+              src={builder
+                .image(highlightImage)
+                .width(536)
+                .height(536)
+                .quality(80)
+                .url()}
               className='w-[250px] md:w-[375px] 2xl:w-[536px]'
             />
             <motion.div
@@ -41,12 +51,11 @@ export default function Highlight() {
         </div>
         <div className='flex justify-end'>
           <h3 className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
-            Explore our comprehensive services and embark on a journey to a
-            healthier you.
+            {title2}
           </h3>
         </div>
       </div>
-      <HoverLink href='/about' text='More About Us' />
+      <HoverLink href={hoverLinkHref} text={hoverLinkText} />
     </section>
   );
 }

@@ -18,6 +18,7 @@ import { token } from '../sanity/lib/token';
 type PageProps = {
   posts: SanityDocument[];
   heroSection: SanityDocument[];
+  highlightSection: SanityDocument[];
   draftMode: boolean;
   token: string;
 };
@@ -34,7 +35,7 @@ export default function Index(props: PageProps) {
   return (
     <Layout title={'Home'}>
       <Hero heroSection={props.heroSection} />
-      <Highlight />
+      <Highlight highlightSection={props.highlightSection} />
       <Clinic />
       <Services />
       <Products />

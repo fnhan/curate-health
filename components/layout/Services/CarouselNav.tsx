@@ -7,18 +7,17 @@ import {
   CarouselPrevious,
 } from 'components/ui/carousel';
 import Link from 'next/link';
-import { servicesList } from 'public/data/serviceList';
 
-export function CarouselNav() {
+export function CarouselNav({ services }) {
   return (
     <Carousel className='container relative'>
       <CarouselContent className='-ml-1'>
-        {servicesList.map((service, index) => (
+        {services.map((service, index) => (
           <CarouselItem
             key={index}
             className='pl-1 md:basis-1/2 lg:basis-1/3 border-r last:border-r-0'>
             <div className='p-1 group'>
-              <Link href={service.href}>
+              <Link href={`/services/${service.slug}`}>
                 <Card className='bg-transparent border-none'>
                   <CardContent className='flex items-center justify-center p-6 font-denton text-white group-hover:underline'>
                     {service.title}

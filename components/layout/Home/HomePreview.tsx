@@ -22,7 +22,7 @@ type HomePageData = {
         url: string;
       };
     };
-    heroText: any;
+    heroText: string;
   };
   highlightSection: {
     title1: string;
@@ -34,6 +34,16 @@ type HomePageData = {
       };
       alt: string;
     };
+  };
+  clinicSection: {
+    clinicImage: {
+      asset: {
+        _id: string;
+        url: string;
+      };
+      alt: string;
+    };
+    content: string;
   };
   posts: SanityDocument[];
 };
@@ -53,7 +63,7 @@ export default function HomePagePreview() {
     <Layout title='Home'>
       <Hero heroSection={data.heroSection} />
       <Highlight highlightSection={data.highlightSection} />
-      <Clinic />
+      <Clinic clinicSection={data.clinicSection} />
       <Services />
       <Products />
       <CurateCafe />

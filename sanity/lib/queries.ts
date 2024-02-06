@@ -32,6 +32,14 @@ const HIGHLIGHT_QUERY = groq`*[_type == "highlight"][0]{
   hoverLinkHref
 }`;
 
+const CLINIC_QUERY = groq`*[_type == "clinic"][0]{
+  "clinicImage": clinicImage.asset->{
+    _id,
+    url
+  },
+  content
+}`;
+
 export const homePageQuery = groq`{
   "heroSection": ${heroSectionQuery},
   "posts": ${POSTS_QUERY}{
@@ -41,5 +49,6 @@ export const homePageQuery = groq`{
     slug,
     publishedAt,
   },
-  "highlightSection": ${HIGHLIGHT_QUERY}
+  "highlightSection": ${HIGHLIGHT_QUERY},
+  "clinicSection": ${CLINIC_QUERY}
 }`;

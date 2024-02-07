@@ -1,3 +1,4 @@
+import imageUrlBuilder from '@sanity/image-url';
 import {
   Card,
   CardContent,
@@ -15,46 +16,13 @@ import {
 } from 'components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
-import ProductExample from 'public/images/product-example.png';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { dataset, projectId } from '../../../sanity/env';
 
-const products = [
-  {
-    title: 'Custom Foot Orthotics',
-    description: 'Treat or prevent abnormal motion, or rolling of the foot',
-    image: ProductExample,
-  },
-  {
-    title: 'Compression Stockings',
-    description: 'Improve blood flow in the veins of your legs',
-    image: ProductExample,
-  },
-  {
-    title: 'Tens Machines',
-    description:
-      'Reduce the pain signals going to the spinal cord and brain, which amy help relieve pain and relax muscles',
-    image: ProductExample,
-  },
-  {
-    title: 'Custom Foot Orthotics',
-    description: 'Treat or prevent abnormal motion, or rolling of the foot',
-    image: ProductExample,
-  },
-  {
-    title: 'Compression Stockings',
-    description: 'Improve blood flow in the veins of your legs',
-    image: ProductExample,
-  },
-  {
-    title: 'Tens Machines',
-    description:
-      'Reduce the pain signals going to the spinal cord and brain, which amy help relieve pain and relax muscles',
-    image: ProductExample,
-  },
-];
+const builder = imageUrlBuilder({ projectId, dataset });
 
-export function ProductCarousel() {
+export function ProductCarousel({ products }) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -102,7 +70,7 @@ export function ProductCarousel() {
                 <CardContent className='flex justify-center items-center pb-0'>
                   <Image
                     className='mx-auto pt-6'
-                    src={product.image}
+                    src={builder.image(product.image).quality(80).url()}
                     width={236}
                     height={314}
                     alt={product.title}

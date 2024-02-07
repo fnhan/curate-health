@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FooterMobileAccordion } from './Home/Footer-Mobile-Accordion';
+import { FooterMobileAccordion } from './Footer-Mobile-Accordion';
 
 export default function Footer() {
   return (

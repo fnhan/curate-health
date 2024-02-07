@@ -8,7 +8,7 @@ export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)]
 
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
 
-export const heroSectionQuery = `*[_type == "heroSection"][0]{
+export const HERO_SECTION_QUERY = `*[_type == "heroSection"][0]{
   bgImage {
     asset->{
       _id,
@@ -62,8 +62,8 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   }
 `;
 
-export const homePageQuery = groq`{
-  "heroSection": ${heroSectionQuery},
+export const HOME_PAGE_QUERY = groq`{
+  "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
     mainImage,
     title,

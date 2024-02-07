@@ -41,7 +41,7 @@ export default defineType({
       name: 'isActive',
       title: 'Is Active',
       type: 'boolean',
-      description: 'Toggle to show/hide this service on the website.',
+      description: 'Toggle to show/hide this product on the website.',
       initialValue: true,
     }),
   ],

@@ -16,7 +16,7 @@ export default defineType({
       title: 'Slug',
       type: 'slug',
       description:
-        'Unique identifier for the post, used in creating the URL. Slugs should be URL-friendly strings. It is auto-generated from the title but can be manually edited for clarity or SEO optimization.',
+        'Unique identifier for the service, used in creating the URL. Slugs should be URL-friendly strings. It is auto-generated from the title but can be manually edited for clarity or SEO optimization.',
       options: {
         source: 'title',
         maxLength: 96,

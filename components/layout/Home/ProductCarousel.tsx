@@ -14,6 +14,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from 'components/ui/carousel';
+import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -21,7 +22,7 @@ import { dataset, projectId } from '../../../sanity/env';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-export function ProductCarousel({ products }) {
+export function ProductCarousel({ products }: { products: SanityDocument[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -56,9 +57,9 @@ export function ProductCarousel({ products }) {
         opts={{ align: 'start' }}
         className='container mx-auto relative'>
         <CarouselContent>
-          {products.map((product, idx) => (
+          {products.map((product: SanityDocument, idx: number) => (
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
-              <Card className='w-full border-black rounded-none flex flex-col py-10 h-full'>
+              <Card className='w-full border-black rounded-none flex flex-col py-8 h-full'>
                 <CardContent className='flex justify-center items-center h-64 mb-4'>
                   <Image
                     src={builder

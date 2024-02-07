@@ -14,7 +14,6 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from 'components/ui/carousel';
-import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -54,29 +53,27 @@ export function ProductCarousel({ products }) {
     <>
       <Carousel
         setApi={setApi}
-        plugins={[
-          Autoplay({
-            delay: 3000,
-          }),
-        ]}
-        opts={{
-          align: 'start',
-        }}
+        opts={{ align: 'start' }}
         className='container mx-auto relative'>
         <CarouselContent>
           {products.map((product, idx) => (
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
-              <Card className='w-full border-black rounded-none flex flex-col h-[368px] py-5'>
-                <CardContent className='flex justify-center items-center pb-0'>
+              <Card className='w-full border-black rounded-none flex flex-col py-10 h-full'>
+                <CardContent className='flex justify-center items-center h-64 mb-4'>
                   <Image
-                    className='mx-auto pt-6'
-                    src={builder.image(product.image).quality(80).url()}
-                    width={236}
-                    height={314}
+                    src={builder
+                      .image(product.image)
+                      .quality(80)
+                      .size(250, 250)
+                      .auto('format')
+                      .url()}
+                    width={250}
+                    height={250}
                     alt={product.title}
+                    className='mx-auto object-contain'
                   />
                 </CardContent>
-                <CardHeader className='flex-1 pb-0 w-2/3 mx-auto'>
+                <CardHeader className='w-2/3 mx-auto'>
                   <CardTitle className='text-center font-denton mb-3 font-light'>
                     {product.title}
                   </CardTitle>

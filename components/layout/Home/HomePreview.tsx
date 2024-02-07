@@ -46,6 +46,8 @@ type HomePageData = {
     content: string;
   };
   services: SanityDocument[];
+  productsSection: SanityDocument[];
+  products: SanityDocument[];
   posts: SanityDocument[];
 };
 
@@ -53,7 +55,11 @@ export default function HomePagePreview() {
   const [data, isLoading] = useLiveQuery<HomePageData>(null, homePageQuery);
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className='flex flex-col min-h-screen justify-center items-center'>
+        <Loading />;
+      </div>
+    );
   }
 
   if (!data) {
@@ -66,7 +72,10 @@ export default function HomePagePreview() {
       <Highlight highlightSection={data.highlightSection} />
       <Clinic clinicSection={data.clinicSection} />
       <Services services={data.services} />
-      <Products />
+      <Products
+        productsSection={data.productsSection}
+        products={data.products}
+      />
       <CurateCafe />
       <Blog posts={data.posts} />
       <Sustainability />

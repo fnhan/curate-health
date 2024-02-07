@@ -7,7 +7,7 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Product Name',
       type: 'string',
       validation: (Rule) => Rule.required().error('A title is required'),
     }),
@@ -19,8 +19,10 @@ export default defineType({
     }),
     defineField({
       name: 'image',
-      title: 'image',
+      title: 'Product Image',
       type: 'image',
+      description:
+        'For best results, please upload an image with dimensions 250px x 250px',
       validation: (Rule) => Rule.required().error('An image is required'),
       options: {
         hotspot: true,

@@ -39,7 +39,9 @@ export default function SinglePost(props: PageProps) {
 export const getStaticProps = async ({ params = {}, draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const post = await client.fetch<SanityDocument>(POST_QUERY, params);
-  const footer = await client.fetch(FOOTER_QUERY);
+  const footer = await client.fetch<SanityDocument>(FOOTER_QUERY);
+
+  console.log('footer in /blog/[slug]', footer);
 
   return {
     props: {

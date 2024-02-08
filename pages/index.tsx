@@ -20,6 +20,7 @@ type PageProps = {
   heroSection: SanityDocument[];
   highlightSection: SanityDocument[];
   clinicSection: SanityDocument[];
+  cafeSection: SanityDocument[];
   services: SanityDocument[];
   draftMode: boolean;
   token: string;
@@ -41,7 +42,7 @@ export default function Index(props: PageProps) {
       <Clinic clinicSection={props.clinicSection} />
       <Services services={props.services} />
       <Products />
-      <CurateCafe />
+      <CurateCafe cafeSection={props.cafeSection}/>
       <Blog posts={props.posts} />
       <Sustainability />
       <Survey />

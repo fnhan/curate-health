@@ -1,8 +1,10 @@
+import { Loading } from 'components/Loading';
 import Post from 'components/layout/Blog-Page/Post';
 import Layout from 'components/layout/layout';
 import { GetStaticPaths } from 'next';
 import { QueryParams, SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { getClient } from '../../sanity/lib/client';
 import {
   FOOTER_QUERY,
@@ -24,6 +26,16 @@ type PageProps = {
 };
 
 export default function SinglePost(props: PageProps) {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return (
+      <div className='min-h-screen flex justify-center'>
+        <Loading />
+      </div>
+    );
+  }
+
   const { post, params, footer, draftMode } = props;
   return (
     <Layout footer={footer} title={'Blog'}>
@@ -41,8 +53,6 @@ export const getStaticProps = async ({ params = {}, draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const post = await client.fetch<SanityDocument>(POST_QUERY, params);
   const footer = await client.fetch<SanityDocument>(FOOTER_QUERY);
-
-  console.log('footer in /blog/[slug]', footer);
 
   return {
     props: {

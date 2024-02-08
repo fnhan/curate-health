@@ -1,7 +1,7 @@
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'cafe',
+  name: 'cafeSection',
   title: 'Cafe Section',
   type: 'document',
   fields: [
@@ -12,6 +12,7 @@ export default defineType({
       options: {
         hotspot: true,
       },
+      validation: (Rule) => Rule.required(),
       fields: [
         {
           name: 'alt',
@@ -19,6 +20,7 @@ export default defineType({
           type: 'string',
           description:
             'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+          validation: (Rule) => Rule.required(),
         },
       ],
     }),
@@ -27,12 +29,28 @@ export default defineType({
       title: 'Cafe Title',
       type: 'blockContent',
       description: 'Add title for the cafe section',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'content',
       title: 'Cafe Content',
       type: 'blockContent',
       description: 'Add content paragraphs for the cafe section',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'hoverLinkText',
+      title: 'Hover Link Text',
+      type: 'string',
+      description: 'Text for the hover link (Example: More About Us)',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'hoverLinkHref',
+      title: 'Hover Link Href',
+      type: 'string',
+      description: 'URL/Link for the hover link. (Example: /about)',
+      validation: (Rule) => Rule.required(),
     }),
   ],
   preview: {

@@ -62,6 +62,43 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   }
 `;
 
+const FOOTER_QUERY = groq`
+  *[_type == "footer"][0] {
+    contactInfo {
+      sectionTitle,
+      details[] {
+        label,
+        value
+      }
+    },
+    servicesSection[]-> {
+      title,
+      "slug": slug.current,
+      image {
+        asset-> {
+          _id,
+          url
+        },
+        alt
+      }
+    },
+    sections[] {
+      title,
+      links[] {
+        text,
+        href
+      }
+    },
+    socialLinksSection {
+      title,
+      links[] {
+        platform,
+        url
+      }
+    }
+  }
+`;
+
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
@@ -73,5 +110,6 @@ export const HOME_PAGE_QUERY = groq`{
   },
   "highlightSection": ${HIGHLIGHT_QUERY},
   "clinicSection": ${CLINIC_QUERY},
-  "services": ${SERVICES_QUERY}
+  "services": ${SERVICES_QUERY},
+  "footer": ${FOOTER_QUERY}
 }`;

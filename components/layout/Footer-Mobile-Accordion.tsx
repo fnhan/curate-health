@@ -37,7 +37,7 @@ export function FooterMobileAccordion({ footer }: FooterProps) {
           <AccordionTrigger>{section.title}</AccordionTrigger>
           <AccordionContent>
             <div className='flex flex-col gap-1'>
-              {section.links.map((link, linkIndex) => (
+              {section.links?.map((link, linkIndex) => (
                 <Link
                   key={linkIndex}
                   className='hover:underline'

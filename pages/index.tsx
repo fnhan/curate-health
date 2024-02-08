@@ -12,7 +12,7 @@ import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import { getClient } from '../sanity/lib/client';
-import { homePageQuery } from '../sanity/lib/queries';
+import { HOME_PAGE_QUERY } from '../sanity/lib/queries';
 import { token } from '../sanity/lib/token';
 
 type PageProps = {
@@ -22,6 +22,9 @@ type PageProps = {
   clinicSection: SanityDocument[];
   cafeSection: SanityDocument[];
   services: SanityDocument[];
+  footer: SanityDocument[];
+  productsSection: SanityDocument[];
+  products: SanityDocument[];
   draftMode: boolean;
   token: string;
 };
@@ -36,12 +39,15 @@ export default function Index(props: PageProps) {
   }
 
   return (
-    <Layout title={'Home'}>
+    <Layout title={'Home'} footer={props.footer}>
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />
       <Clinic clinicSection={props.clinicSection} />
       <Services services={props.services} />
-      <Products />
+      <Products
+        productsSection={props.productsSection}
+        products={props.products}
+      />
       <CurateCafe cafeSection={props.cafeSection} />
       <Blog posts={props.posts} />
       <Sustainability />
@@ -53,7 +59,7 @@ export default function Index(props: PageProps) {
 
 export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
-  const allData = await client.fetch(homePageQuery);
+  const allData = await client.fetch(HOME_PAGE_QUERY);
 
   return {
     props: {

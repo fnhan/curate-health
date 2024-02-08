@@ -1,3 +1,5 @@
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'components/ui/toaster';
 import { AppProps } from 'next/app';
 import { lazy, Suspense } from 'react';
@@ -22,6 +24,8 @@ export default function App({
   return (
     <>
       <Toaster />
+      <SpeedInsights />
+      <Analytics />
       {draftMode ? (
         <PreviewProvider token={token}>
           <Component {...pageProps} />

@@ -12,7 +12,7 @@ import Sustainability from 'components/layout/Home/Sustainability';
 import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
 import { useLiveQuery } from 'next-sanity/preview';
-import { homePageQuery } from '../../../sanity/lib/queries';
+import { HOME_PAGE_QUERY } from '../../../sanity/lib/queries';
 
 type HomePageData = {
   heroSection: {
@@ -57,14 +57,21 @@ type HomePageData = {
     content: string;
   };
   services: SanityDocument[];
+  productsSection: SanityDocument[];
+  products: SanityDocument[];
   posts: SanityDocument[];
+  footer: SanityDocument;
 };
 
 export default function HomePagePreview() {
-  const [data, isLoading] = useLiveQuery<HomePageData>(null, homePageQuery);
+  const [data, isLoading] = useLiveQuery<HomePageData>(null, HOME_PAGE_QUERY);
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className='flex flex-col min-h-screen justify-center items-center'>
+        <Loading />;
+      </div>
+    );
   }
 
   if (!data) {
@@ -72,13 +79,16 @@ export default function HomePagePreview() {
   }
 
   return (
-    <Layout title='Home'>
+    <Layout title='Home' footer={data.footer}>
       <Hero heroSection={data.heroSection} />
       <Highlight highlightSection={data.highlightSection} />
       <Clinic clinicSection={data.clinicSection} />
       <Services services={data.services} />
-      <Products />
-      <CurateCafe cafeSection={data.cafeSection}/>
+      <Products
+        productsSection={data.productsSection}
+        products={data.products}
+      />
+      <CurateCafe />
       <Blog posts={data.posts} />
       <Sustainability />
       <Survey />

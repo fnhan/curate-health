@@ -18,18 +18,19 @@ const PostPreview = dynamic(
 type PageProps = {
   post: SanityDocument;
   params: QueryParams;
-  footer: SanityDocument;
+  footer?: SanityDocument;
   draftMode: boolean;
   token: string;
 };
 
 export default function SinglePost(props: PageProps) {
+  const { post, params, footer, draftMode } = props;
   return (
-    <Layout footer={props.footer} title={'Blog'}>
-      {props.draftMode ? (
-        <PostPreview post={props.post} params={props.params} />
+    <Layout footer={footer} title={'Blog'}>
+      {draftMode ? (
+        <PostPreview post={post} params={params} />
       ) : (
-        <Post post={props.post} />
+        <Post post={post} />
       )}
       ;
     </Layout>

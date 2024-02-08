@@ -62,7 +62,7 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   }
 `;
 
-const FOOTER_QUERY = groq`
+export const FOOTER_QUERY = groq`
   *[_type == "footer"][0] {
     contactInfo {
       sectionTitle,

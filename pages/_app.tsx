@@ -23,7 +23,7 @@ export default function App({
   return (
     <>
       <Toaster />
-      <SpeedInsights />
+      {/* <SpeedInsights /> */}
       {draftMode ? (
         <PreviewProvider token={token}>
           <Component {...pageProps} />

@@ -1,3 +1,4 @@
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'components/ui/toaster';
 import { AppProps } from 'next/app';
 import { lazy, Suspense } from 'react';
@@ -25,6 +26,7 @@ export default function App({
       {draftMode ? (
         <PreviewProvider token={token}>
           <Component {...pageProps} />
+          <SpeedInsights />
           <Suspense fallback={<div>Loading visual editing...</div>}>
             <VisualEditing />
           </Suspense>

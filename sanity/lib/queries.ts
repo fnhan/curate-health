@@ -40,13 +40,18 @@ const CLINIC_QUERY = groq`*[_type == "clinic"][0]{
   content
 }`;
 
-const CAFE_QUERY = groq`*[_type == "cafe"][0]{
-  "cafeImage": cafeImage.asset->{
-    _id,
-    url
+const CAFE_QUERY = groq`*[_type == "cafeSection"][0] {
+  cafeImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
   },
-  title
-  content
+  title,
+  content,
+  hoverLinkText,
+  hoverLinkHref
 }`;
 
 export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{

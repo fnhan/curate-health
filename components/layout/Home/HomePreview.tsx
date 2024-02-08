@@ -88,7 +88,7 @@ export default function HomePagePreview() {
         productsSection={data.productsSection}
         products={data.products}
       />
-      <CurateCafe />
+      <CurateCafe cafeSection={data.cafeSection}/>
       <Blog posts={data.posts} />
       <Sustainability />
       <Survey />

@@ -37,10 +37,6 @@ export type FooterProps = {
 export default function Footer({ footer }: FooterProps) {
   const { contactInfo, servicesSection, sections, socialLinksSection } = footer;
 
-  if (!footer) {
-    return <Loading />;
-  }
-
   return (
     <footer className='flex flex-col pt-14 pb-8 w-full'>
       <div className='container text-white flex flex-col gap-10'>

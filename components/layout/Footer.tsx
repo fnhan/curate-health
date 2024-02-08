@@ -1,3 +1,4 @@
+import { Loading } from 'components/Loading';
 import Link from 'next/link';
 import { FooterMobileAccordion } from './Footer-Mobile-Accordion';
 
@@ -35,6 +36,10 @@ export type FooterProps = {
 
 export default function Footer({ footer }: FooterProps) {
   const { contactInfo, servicesSection, sections, socialLinksSection } = footer;
+
+  if (!footer) {
+    return <Loading />;
+  }
 
   return (
     <footer className='flex flex-col pt-14 pb-8 w-full'>

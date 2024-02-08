@@ -2,6 +2,7 @@ import { Loading } from 'components/Loading';
 import { useLiveQuery } from 'next-sanity/preview';
 import { useRouter } from 'next/router';
 import {
+  FOOTER_QUERY,
   SERVICE_BY_SLUG_QUERY,
   SERVICES_QUERY,
 } from '../../../sanity/lib/queries';
@@ -20,13 +21,14 @@ export default function ServicesPreview() {
     { slug }
   );
   const [services, isServicesLoading] = useLiveQuery(null, SERVICES_QUERY);
+  const [footer, isFooterLoading] = useLiveQuery(null, FOOTER_QUERY);
 
-  if (isServiceLoading || isServicesLoading) {
+  if (isServiceLoading || isServicesLoading || isFooterLoading) {
     return <Loading />;
   }
 
   return (
-    <Layout title={service?.title || 'Services'}>
+    <Layout footer={footer} title={service?.title || 'Services'}>
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
         <CarouselNav services={services} />
       </div>

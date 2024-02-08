@@ -7,8 +7,8 @@ export default function FeaturedPosts({ posts }: { posts: SanityDocument[] }) {
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-20'>
-      {recentPosts.map((post) => (
-        <PostPreview key={post._id} post={post} />
+      {recentPosts.map((post, index) => (
+        <PostPreview key={index} post={post} />
       ))}
     </div>
   );

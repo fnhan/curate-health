@@ -12,7 +12,7 @@ import Sustainability from 'components/layout/Home/Sustainability';
 import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
 import { useLiveQuery } from 'next-sanity/preview';
-import { homePageQuery } from '../../../sanity/lib/queries';
+import { HOME_PAGE_QUERY } from '../../../sanity/lib/queries';
 
 type HomePageData = {
   heroSection: {
@@ -49,10 +49,11 @@ type HomePageData = {
   productsSection: SanityDocument[];
   products: SanityDocument[];
   posts: SanityDocument[];
+  footer: SanityDocument;
 };
 
 export default function HomePagePreview() {
-  const [data, isLoading] = useLiveQuery<HomePageData>(null, homePageQuery);
+  const [data, isLoading] = useLiveQuery<HomePageData>(null, HOME_PAGE_QUERY);
 
   if (isLoading) {
     return (
@@ -67,7 +68,7 @@ export default function HomePagePreview() {
   }
 
   return (
-    <Layout title='Home'>
+    <Layout title='Home' footer={data.footer}>
       <Hero heroSection={data.heroSection} />
       <Highlight highlightSection={data.highlightSection} />
       <Clinic clinicSection={data.clinicSection} />

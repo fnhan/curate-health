@@ -1,8 +1,11 @@
 import Layout from 'components/layout/layout';
+import { getClient } from '../../sanity/lib/client';
+import { FOOTER_QUERY } from '../../sanity/lib/queries';
+import { token } from '../../sanity/lib/token';
 
-export default function Accessibility() {
+export default function Accessibility({ footer }) {
   return (
-    <Layout title={'Accessibility'}>
+    <Layout footer={footer} title={'Accessibility'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
           <h1 className='font-denton font-bold text-xl mb-6'>
@@ -78,3 +81,16 @@ export default function Accessibility() {
     </Layout>
   );
 }
+
+export const getStaticProps = async ({ preview = false }) => {
+  const client = getClient(preview ? token : undefined);
+  const footer = await client.fetch(FOOTER_QUERY);
+
+  return {
+    props: {
+      footer,
+      draftMode: preview,
+      token: preview ? token : '',
+    },
+  };
+};

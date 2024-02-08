@@ -42,7 +42,7 @@ export default function Footer({ footer }: FooterProps) {
         {/* Contact Info */}
         <div className='text-sm md:text-base'>
           <h5>{contactInfo.sectionTitle}</h5>
-          {contactInfo.details.map((detail, index: number) => (
+          {contactInfo.details.map((detail, index) => (
             <div key={index}>
               <p>{detail.value}</p>
             </div>
@@ -55,7 +55,7 @@ export default function Footer({ footer }: FooterProps) {
             <div className='border-b border-white md:border-none pb-2'>
               <h6 className='md:font-denton pl-3 md:mb-3'>Services</h6>
               <div className='hidden md:flex flex-col gap-1 pl-3'>
-                {servicesSection.map((service, index: number) => (
+                {servicesSection.map((service, index) => (
                   <Link
                     key={index}
                     className='hover:underline'
@@ -66,13 +66,13 @@ export default function Footer({ footer }: FooterProps) {
               </div>
             </div>
             {/* Footer Sections */}
-            {sections.map((section, index: number) => (
+            {sections.map((section, index) => (
               <div
                 key={index}
                 className='border-b border-white md:border-none pb-2'>
                 <h6 className='md:font-denton pl-3 md:mb-3'>{section.title}</h6>
                 <div className='hidden md:flex flex-col gap-1 pl-3'>
-                  {section.links?.map((link, linkIndex: number) => (
+                  {section.links?.map((link, linkIndex) => (
                     <Link
                       key={linkIndex}
                       className='hover:underline'

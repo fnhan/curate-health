@@ -47,6 +47,7 @@ type HomePageData = {
   };
   services: SanityDocument[];
   posts: SanityDocument[];
+  footer: SanityDocument;
 };
 
 export default function HomePagePreview() {
@@ -61,7 +62,7 @@ export default function HomePagePreview() {
   }
 
   return (
-    <Layout title='Home'>
+    <Layout title='Home' footer={data.footer}>
       <Hero heroSection={data.heroSection} />
       <Highlight highlightSection={data.highlightSection} />
       <Clinic clinicSection={data.clinicSection} />

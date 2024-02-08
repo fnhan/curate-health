@@ -21,6 +21,7 @@ type PageProps = {
   highlightSection: SanityDocument[];
   clinicSection: SanityDocument[];
   services: SanityDocument[];
+  footer: SanityDocument[];
   draftMode: boolean;
   token: string;
 };
@@ -35,7 +36,7 @@ export default function Index(props: PageProps) {
   }
 
   return (
-    <Layout title={'Home'}>
+    <Layout title={'Home'} footer={props.footer}>
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />
       <Clinic clinicSection={props.clinicSection} />

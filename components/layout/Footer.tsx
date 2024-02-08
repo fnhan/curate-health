@@ -41,8 +41,8 @@ export default function Footer({ footer }: FooterProps) {
       <div className='container text-white flex flex-col gap-10'>
         {/* Contact Info */}
         <div className='text-sm md:text-base'>
-          <h5>{contactInfo.sectionTitle}</h5>
-          {contactInfo.details.map((detail, index) => (
+          <h5>{contactInfo?.sectionTitle}</h5>
+          {contactInfo?.details.map((detail, index) => (
             <div key={index}>
               <p>{detail.value}</p>
             </div>

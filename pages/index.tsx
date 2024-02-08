@@ -42,7 +42,7 @@ export default function Index(props: PageProps) {
       <Clinic clinicSection={props.clinicSection} />
       <Services services={props.services} />
       <Products />
-      <CurateCafe cafeSection={props.cafeSection}/>
+      <CurateCafe cafeSection={props.cafeSection} />
       <Blog posts={props.posts} />
       <Sustainability />
       <Survey />

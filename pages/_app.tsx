@@ -23,10 +23,10 @@ export default function App({
   return (
     <>
       <Toaster />
+      <SpeedInsights />
       {draftMode ? (
         <PreviewProvider token={token}>
           <Component {...pageProps} />
-          <SpeedInsights />
           <Suspense fallback={<div>Loading visual editing...</div>}>
             <VisualEditing />
           </Suspense>

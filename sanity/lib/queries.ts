@@ -99,6 +99,20 @@ export const FOOTER_QUERY = groq`
   }
 `;
 
+export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
+  sectionTitle,
+  hoverLinkText,
+  hoverLinkHref
+}`;
+
+export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
+  title,
+  description,
+  "image": image.asset->url,
+  "altText": image.alt
+  }
+`;
+
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
@@ -111,5 +125,7 @@ export const HOME_PAGE_QUERY = groq`{
   "highlightSection": ${HIGHLIGHT_QUERY},
   "clinicSection": ${CLINIC_QUERY},
   "services": ${SERVICES_QUERY},
-  "footer": ${FOOTER_QUERY}
+  "footer": ${FOOTER_QUERY},
+  "productsSection": ${PRODUCTS_SECTION_QUERY},
+  "products": ${PRODUCTS_QUERY}
 }`;

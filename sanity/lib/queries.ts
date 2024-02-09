@@ -107,9 +107,26 @@ export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
 
 export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
+  slug,
   description,
   "image": image.asset->url,
   "altText": image.alt
+  }
+`;
+
+export const PRODUCTS_SLUG_QUERY = groq`*[_type == "product" && isActive == true && defined(slug.current)] {
+  "params": {
+    "slug": slug.current
+  }
+}`;
+
+export const PRODUCT_BY_SLUG_QUERY = groq`
+  *[_type == "product" && slug.current == $slug][0]{
+    title,
+    description,
+    "imageUrl": image.asset->url,
+    "altText": image.alt,
+    slug
   }
 `;
 

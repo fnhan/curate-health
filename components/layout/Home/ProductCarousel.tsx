@@ -16,6 +16,7 @@ import {
 } from 'components/ui/carousel';
 import { SanityDocument } from 'next-sanity';
 import Image from 'next/image';
+import Link from 'next/link';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { dataset, projectId } from '../../../sanity/env';
@@ -59,39 +60,47 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
         <CarouselContent>
           {products.map((product: SanityDocument, idx: number) => (
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
-              <Card className='w-full border-black rounded-none flex flex-col py-8 h-full'>
-                <CardContent className='flex justify-center items-center h-64 mb-4'>
-                  <Image
-                    src={builder
-                      .image(product.image)
-                      .quality(80)
-                      .size(250, 250)
-                      .auto('format')
-                      .url()}
-                    width={250}
-                    height={250}
-                    alt={product.title}
-                    className='mx-auto object-contain'
-                  />
-                </CardContent>
-                <CardHeader className='w-2/3 mx-auto'>
-                  <CardTitle className='text-center font-denton mb-3 font-light'>
-                    {product.title}
-                  </CardTitle>
-                  <CardDescription className='text-center text-xs'>
-                    {product.description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+              <Link href={'/'}>
+                <Card className='w-full border-black rounded-none flex flex-col py-8 h-full'>
+                  <CardContent className='flex justify-center items-center h-64 mb-4'>
+                    <Image
+                      src={builder
+                        .image(product.image)
+                        .quality(80)
+                        .size(250, 250)
+                        .auto('format')
+                        .url()}
+                      width={250}
+                      height={250}
+                      alt={product.title}
+                      className='mx-auto object-contain'
+                    />
+                  </CardContent>
+                  <CardHeader className='w-2/3 mx-auto'>
+                    <CardTitle className='text-center font-denton mb-3 font-light'>
+                      {product.title}
+                    </CardTitle>
+                    <CardDescription className='text-center text-xs'>
+                      {product.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className='-left-8 ml-4' />
-        <CarouselNext className='-right-8 mr-4' />
+        {count > 1 && (
+          <>
+            <CarouselPrevious className='-left-8 ml-4' />
+            <CarouselNext className='-right-8 mr-4' />
+          </>
+        )}
       </Carousel>
-      <div className='mt-8 text-center text-sm text-muted-foreground'>
-        {current} / {count}
-      </div>
+      {count > 1 && (
+        <div className='mt-8 text-center text-sm text-muted-foreground'>
+          {current} / {count}
+        </div>
+      )}
     </>
   );
 }

@@ -60,7 +60,7 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
         <CarouselContent>
           {products.map((product: SanityDocument, idx: number) => (
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
-              <Link href={'/'}>
+              <Link href={`products/${product.slug.current}`}>
                 <Card className='w-full border-black rounded-none flex flex-col py-8 h-full'>
                   <CardContent className='flex justify-center items-center h-64 mb-4'>
                     <Image

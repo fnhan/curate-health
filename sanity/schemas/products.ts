@@ -12,6 +12,18 @@ export default defineType({
       validation: (Rule) => Rule.required().error('A title is required'),
     }),
     defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description:
+        'Unique identifier for this product, used in creating the URL. It is auto-generated from the product name but can be manually edited for clarity or SEO optimization.',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required().error('A slug is required'),
+    }),
+    defineField({
       name: 'description',
       title: 'Product Description',
       type: 'string',

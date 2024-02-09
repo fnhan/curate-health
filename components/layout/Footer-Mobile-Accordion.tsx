@@ -22,7 +22,7 @@ export function FooterMobileAccordion({ footer }: FooterProps) {
                 <Link
                   key={index}
                   className='hover:underline'
-                  href={`/services/${service.slug.current}`}>
+                  href={`/services/${service.slug}`}>
                   {service.title}
                 </Link>
               ))}

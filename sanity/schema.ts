@@ -11,12 +11,14 @@ import post from './schemas/post';
 import products from './schemas/products';
 import productsSection from './schemas/productsSection';
 import services from './schemas/services';
+import cafeSection from './schemas/cafeSection';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     heroSection,
     highlight,
     clinicSection,
+    cafeSection,
     services,
     productsSection,
     products,

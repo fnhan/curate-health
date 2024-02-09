@@ -40,6 +40,20 @@ const CLINIC_QUERY = groq`*[_type == "clinic"][0]{
   content
 }`;
 
+const CAFE_QUERY = groq`*[_type == "cafeSection"][0] {
+  cafeImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
+  },
+  title,
+  content,
+  hoverLinkText,
+  hoverLinkHref
+}`;
+
 export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   title,
   "slug": slug.current,
@@ -124,6 +138,7 @@ export const HOME_PAGE_QUERY = groq`{
   },
   "highlightSection": ${HIGHLIGHT_QUERY},
   "clinicSection": ${CLINIC_QUERY},
+  "cafeSection": ${CAFE_QUERY},
   "services": ${SERVICES_QUERY},
   "footer": ${FOOTER_QUERY},
   "productsSection": ${PRODUCTS_SECTION_QUERY},

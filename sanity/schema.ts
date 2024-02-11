@@ -11,6 +11,7 @@ import post from './schemas/post';
 import products from './schemas/products';
 import productsSection from './schemas/productsSection';
 import services from './schemas/services';
+import sustainability from './schemas/sustainability';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -25,5 +26,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     category,
     blockContent,
     footer,
+    sustainability,
   ],
 };

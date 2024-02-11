@@ -18,6 +18,16 @@ export const HERO_SECTION_QUERY = `*[_type == "heroSection"][0]{
   heroText
 }`;
 
+export const SUSTAINABILITY_SECTION_QUERY = `*[_type == "sustainabilitySection"][0]{
+  bgImage {
+    asset->{
+      _id,
+      url
+    },
+  },
+  susText
+}`;
+
 const HIGHLIGHT_QUERY = groq`*[_type == "highlight"][0]{
   title1,
   title2,
@@ -127,5 +137,6 @@ export const HOME_PAGE_QUERY = groq`{
   "services": ${SERVICES_QUERY},
   "footer": ${FOOTER_QUERY},
   "productsSection": ${PRODUCTS_SECTION_QUERY},
-  "products": ${PRODUCTS_QUERY}
+  "products": ${PRODUCTS_QUERY},
+  "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
 }`;

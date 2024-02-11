@@ -57,7 +57,7 @@ type HomePageData = {
         url: string;
       };
     };
-    susText: string;
+    sustainText: string;
   };
 };
 

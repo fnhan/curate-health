@@ -14,7 +14,7 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'susText',
+      name: 'sustainText',
       title: 'Sustainability Text',
       type: 'blockContent',
       description: 'The main text displayed for sustainability',
@@ -24,7 +24,7 @@ export default defineType({
   preview: {
     select: {
       bgImage: 'bgImage',
-      heroText: 'susText.0.children.0.text',
+      sustainText: 'sustainText.0.children.0.text',
     },
     prepare(selection) {
       const { bgImage } = selection;

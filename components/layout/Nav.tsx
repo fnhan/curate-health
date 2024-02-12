@@ -20,12 +20,17 @@ export default function Nav({ navigation }) {
           <div className='flex py-10' aria-label='menu toggle'>
             <Sheet>
               <SheetTrigger>
-                <Menu className='hover:text-black duration-300 transition-all' />
+                <Menu 
+                className='hover:text-black duration-300 transition-all' 
+                aria-label='navigation menu'  
+                aria-controls='nav-items'
+                id='nav-toggle' 
+                />
               </SheetTrigger>
               <SheetContent
                 side='left'
                 className='text-white border-none pt-[142px] sm:pl-[86px] max-w-[300px] md:max-w-[416px]'>
-                <div className='flex flex-col gap-6 text-left'>
+                <div className='flex flex-col gap-6 text-left' id='nav-items' aria-labelledby='nav-toggle'>
                   {navItems.map((item, index) => {
                     if (item.isServiceLinks) {
                       return (
@@ -39,6 +44,7 @@ export default function Nav({ navigation }) {
                             <AccordionContent className='flex flex-col gap-2 pt-6 ml-4'>
                               {serviceLinks.map((service, index) => (
                                 <Link
+                                  id='nav-item-link'
                                   key={index}
                                   className='hover:underline text-base'
                                   href={`/services/${service.slug}`}>

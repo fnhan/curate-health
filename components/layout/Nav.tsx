@@ -19,26 +19,42 @@ export default function Nav({ navigation }) {
         <div className='flex-1 flex items-center'>
           <div className='flex py-10' aria-label='menu toggle'>
             <Sheet>
-              <SheetTrigger>
-                <Menu className='hover:text-black duration-300 transition-all' />
+              <SheetTrigger
+                aria-label='navigation menu'
+                aria-controls='nav-items'
+                id='nav-menu'
+              >
+                <Menu className='hover:text-black duration-300 transition-all'/>
               </SheetTrigger>
               <SheetContent
                 side='left'
                 className='text-white border-none pt-[142px] sm:pl-[86px] max-w-[300px] md:max-w-[416px]'>
-                <div className='flex flex-col gap-6 text-left'>
+                <div 
+                className='flex flex-col gap-6 text-left'
+                id='nav-items'
+                aria-labelledby='nav-items nav-menu'
+                >
                   {navItems.map((item, index) => {
                     if (item.isServiceLinks) {
                       return (
                         <Accordion type='single' collapsible className='w-full'>
                           <AccordionItem
                             value='item-1'
-                            className='border-none text-2xl'>
-                            <AccordionTrigger className='font-normal p-0'>
+                            className='border-none text-2xl'
+                            >
+                            <AccordionTrigger 
+                            className='font-normal p-0'
+                            aria-label='services'
+                            aria-controls='service-items'
+                            id='service-menu'
+                            >
                               Services
                             </AccordionTrigger>
                             <AccordionContent className='flex flex-col gap-2 pt-6 ml-4'>
                               {serviceLinks.map((service, index) => (
                                 <Link
+                                  id='service-items' 
+                                  aria-labelledby='service-items services'
                                   key={index}
                                   className='hover:underline text-base'
                                   href={`/services/${service.slug}`}>

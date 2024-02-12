@@ -4,7 +4,7 @@ import SustainabilityBg from 'public/images/sustainability.jpg';
 
 export default function Sustainability({ sustainabilitySection }) {
   const bgImage = sustainabilitySection.bgImage?.asset?.url;
-  const altText = sustainabilitySection.imgAltText;
+  const altText = sustainabilitySection.bgImage?.alt;
   return (
     <section>
       <Image

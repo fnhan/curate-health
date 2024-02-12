@@ -12,7 +12,7 @@ import products from './schemas/products';
 import productsSection from './schemas/productsSection';
 import services from './schemas/services';
 import cafeSection from './schemas/cafeSection';
-import sustainability from './schemas/sustainability';
+import sustainabilitySection from './schemas/sustainabilitySection';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -28,6 +28,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     category,
     blockContent,
     footer,
-    sustainability,
+    sustainabilitySection,
   ],
 };

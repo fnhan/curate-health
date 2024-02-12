@@ -18,9 +18,9 @@ export default function Highlight({ highlightSection }) {
     <section className='w-full bg-primary'>
       <div className='container py-12 md:py-40 flex flex-col gap-20 text-left'>
         <div className='max-w-prose md:sticky md:top-40 z-20 md:pt-2'>
-          <h3 className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
+          <p className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
             {title1}
-          </h3>
+          </p>
         </div>
         <div className='flex justify-center'>
           <div className='relative inline-block'>
@@ -50,9 +50,9 @@ export default function Highlight({ highlightSection }) {
           </div>
         </div>
         <div className='flex justify-end'>
-          <h3 className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
+          <p className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
             {title2}
-          </h3>
+          </p>
         </div>
       </div>
       <HoverLink href={hoverLinkHref} text={hoverLinkText} />

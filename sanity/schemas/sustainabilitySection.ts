@@ -12,13 +12,15 @@ export default defineType({
       options: {
         hotspot: true,
       },
-    }),
-    defineField({
-      name: 'imgAltText',
-      title: 'Alternate Image Text',
-      type: 'string',
-      description:
-        'Provides alternative information for an image if a user uses screen reader, voice assistance or encountered an error that hinders display of image',
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alternative Text',
+          type: 'string',
+          description:
+            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+        },
+      ],
     }),
     defineField({
       name: 'sustainText',

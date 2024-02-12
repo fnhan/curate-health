@@ -4,13 +4,14 @@ import SustainabilityBg from 'public/images/sustainability.jpg';
 
 export default function Sustainability({ sustainabilitySection }) {
   const bgImage = sustainabilitySection.bgImage?.asset?.url;
+  const altText = sustainabilitySection.imgAltText;
   return (
     <section>
       <Image
         width={1080}
         height={1440}
         src={bgImage}
-        alt='clinic'
+        alt={altText}
         className='w-full object-cover max-h-[435px] md:max-h-[649px]'
       />
       <div className='relative 2xl:container 2xl:p-0'>

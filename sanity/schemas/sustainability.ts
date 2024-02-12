@@ -14,10 +14,17 @@ export default defineType({
       },
     }),
     defineField({
+      name: 'imgAltText',
+      title: 'Alternate Image Text',
+      type: 'string',
+      description:
+        'Provides alternative information for an image if a user uses screen reader, voice assistance or encountered an error that hinders display of image',
+    }),
+    defineField({
       name: 'sustainText',
       title: 'Sustainability Text',
       type: 'blockContent',
-      description: 'The main text displayed for sustainability',
+      description: 'The main text displayed for Sustainability',
     }),
   ],
 

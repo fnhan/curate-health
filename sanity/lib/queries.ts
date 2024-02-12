@@ -25,7 +25,8 @@ export const SUSTAINABILITY_SECTION_QUERY = `*[_type == "sustainabilitySection"]
       url
     },
   },
-  sustainText
+  sustainText,
+  imgAltText
 }`;
 
 const HIGHLIGHT_QUERY = groq`*[_type == "highlight"][0]{

@@ -138,6 +138,18 @@ export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   }
 `;
 
+export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
+  serviceLinks[]->{
+    title,
+    "slug": slug.current
+  },
+  navItems[]{
+    linkText,
+    href,
+    isServiceLinks
+  }
+}`;
+
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
@@ -155,4 +167,5 @@ export const HOME_PAGE_QUERY = groq`{
   "productsSection": ${PRODUCTS_SECTION_QUERY},
   "products": ${PRODUCTS_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
+  "navigation": ${NAVIGATION_QUERY}
 }`;

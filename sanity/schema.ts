@@ -11,6 +11,7 @@ import post from './schemas/post';
 import products from './schemas/products';
 import productsSection from './schemas/productsSection';
 import services from './schemas/services';
+import cafeSection from './schemas/cafeSection';
 import sustainability from './schemas/sustainability';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
@@ -18,6 +19,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     heroSection,
     highlight,
     clinicSection,
+    cafeSection,
     services,
     productsSection,
     products,

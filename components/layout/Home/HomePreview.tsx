@@ -45,6 +45,17 @@ type HomePageData = {
     };
     content: string;
   };
+  cafeSection: {
+    cafeImage: {
+      asset: {
+        _id: string;
+        url: string;
+      };
+      alt: string;
+    };
+    title: string;
+    content: string;
+  };
   services: SanityDocument[];
   productsSection: SanityDocument[];
   products: SanityDocument[];
@@ -86,7 +97,7 @@ export default function HomePagePreview() {
         productsSection={data.productsSection}
         products={data.products}
       />
-      <CurateCafe />
+      <CurateCafe cafeSection={data.cafeSection}/>
       <Blog posts={data.posts} />
       <Sustainability sustainabilitySection={data.sustainabilitySection} />
       <Survey />

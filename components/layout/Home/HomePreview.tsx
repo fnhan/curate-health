@@ -61,6 +61,7 @@ type HomePageData = {
   products: SanityDocument[];
   posts: SanityDocument[];
   footer: SanityDocument;
+  navigation: SanityDocument;
   sustainabilitySection: {
     bgImage: {
       asset: {
@@ -88,7 +89,7 @@ export default function HomePagePreview() {
   }
 
   return (
-    <Layout title='Home' footer={data.footer}>
+    <Layout title='Home' navigation={data.navigation} footer={data.footer}>
       <Hero heroSection={data.heroSection} />
       <Highlight highlightSection={data.highlightSection} />
       <Clinic clinicSection={data.clinicSection} />
@@ -97,7 +98,7 @@ export default function HomePagePreview() {
         productsSection={data.productsSection}
         products={data.products}
       />
-      <CurateCafe cafeSection={data.cafeSection}/>
+      <CurateCafe cafeSection={data.cafeSection} />
       <Blog posts={data.posts} />
       <Sustainability sustainabilitySection={data.sustainabilitySection} />
       <Survey />

@@ -9,6 +9,7 @@ import Layout from '../../components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
 import {
   FOOTER_QUERY,
+  NAVIGATION_QUERY,
   SERVICES_QUERY,
   SERVICES_SLUG_QUERY,
   SERVICE_BY_SLUG_QUERY,
@@ -20,6 +21,7 @@ type PageProps = {
   token: string;
   services: SanityDocument[];
   service: SanityDocument;
+  navigation: SanityDocument;
   footer: SanityDocument;
 };
 
@@ -37,7 +39,10 @@ export default function ServicesPage(props: PageProps) {
   }
 
   return (
-    <Layout footer={props.footer} title={props.service?.title || 'Services'}>
+    <Layout
+      navigation={props.navigation}
+      footer={props.footer}
+      title={props.service?.title || 'Services'}>
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
         <CarouselNav services={props.services} />
       </div>
@@ -55,12 +60,14 @@ export const getStaticProps = async ({ params, preview = false }) => {
   const service = await client.fetch(SERVICE_BY_SLUG_QUERY, {
     slug: params.slug,
   });
+  const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
 
   return {
     props: {
       service,
       services,
+      navigation,
       footer,
       draftMode: preview,
       token: preview ? token : '',

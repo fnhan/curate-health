@@ -1,27 +1,18 @@
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from 'components/ui/sheet';
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from 'components/ui/accordion';
+import { Sheet, SheetContent, SheetTrigger } from 'components/ui/sheet';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from 'public/images/logo_white.png';
 
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About Us' },
-  { href: '/services', label: 'Services' },
-  { href: '/products', label: 'Products' },
-  { href: '/cafe', label: 'Curate Cafe' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/booking', label: 'Appointment Booking' },
-  { href: '/contact', label: 'Contact' },
-];
+export default function Nav({ navigation }) {
+  const { serviceLinks, navItems } = navigation;
 
-export default function Nav() {
   return (
     <nav className='text-white bg-primary/25 backdrop-blur-3xl sticky top-0 z-50 border-b'>
       <div className='container flex items-center justify-between'>
@@ -34,18 +25,42 @@ export default function Nav() {
               <SheetContent
                 side='left'
                 className='text-white border-none pt-[142px] sm:pl-[86px] max-w-[300px] md:max-w-[416px]'>
-                <SheetHeader>
-                  <div className='flex flex-col gap-6 text-left'>
-                    {navItems.map((item) => (
+                <div className='flex flex-col gap-6 text-left'>
+                  {navItems.map((item, index) => {
+                    if (item.isServiceLinks) {
+                      return (
+                        <Accordion type='single' collapsible className='w-full'>
+                          <AccordionItem
+                            value='item-1'
+                            className='border-none text-2xl'>
+                            <AccordionTrigger className='font-normal p-0'>
+                              Services
+                            </AccordionTrigger>
+                            <AccordionContent className='flex flex-col gap-2 pt-6 ml-4'>
+                              {serviceLinks.map((service, index) => (
+                                <Link
+                                  key={index}
+                                  className='hover:underline text-base'
+                                  href={`/services/${service.slug}`}>
+                                  {service.title}
+                                </Link>
+                              ))}
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      );
+                    }
+
+                    return (
                       <Link
+                        key={index}
                         className='hover:underline text-2xl'
-                        key={item.href}
                         href={item.href}>
-                        {item.label}
+                        {item.linkText}
                       </Link>
-                    ))}
-                  </div>
-                </SheetHeader>
+                    );
+                  })}
+                </div>
               </SheetContent>
             </Sheet>
           </div>

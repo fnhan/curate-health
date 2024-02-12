@@ -14,7 +14,7 @@ export default function Products({ productsSection, products }) {
   }
 
   return (
-    <section className='bg-white flex flex-col gap-10'>
+    <section id='products' className='bg-white flex flex-col gap-10'>
       <div className='container pt-9'>
         <h2 className=' text-black md:text-xl'>{sectionTitle}</h2>
       </div>

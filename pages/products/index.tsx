@@ -1,11 +1,11 @@
 import Layout from '../../components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
-import { FOOTER_QUERY } from '../../sanity/lib/queries';
+import { FOOTER_QUERY, NAVIGATION_QUERY } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
-export default function Products({ footer }) {
+export default function Products({ navigation, footer }) {
   return (
-    <Layout footer={footer} title={'Products'}>
+    <Layout navigation={navigation} footer={footer} title={'Products'}>
       Products
     </Layout>
   );
@@ -13,10 +13,12 @@ export default function Products({ footer }) {
 
 export const getStaticProps = async ({ preview = false }) => {
   const client = getClient(preview ? token : undefined);
+  const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
 
   return {
     props: {
+      navigation,
       footer,
       draftMode: preview,
       token: preview ? token : '',

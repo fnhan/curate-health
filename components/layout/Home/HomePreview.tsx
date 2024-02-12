@@ -61,6 +61,7 @@ type HomePageData = {
   products: SanityDocument[];
   posts: SanityDocument[];
   footer: SanityDocument;
+  surveySection: SanityDocument;
   navigation: SanityDocument;
   sustainabilitySection: {
     bgImage: {
@@ -101,7 +102,7 @@ export default function HomePagePreview() {
       <CurateCafe cafeSection={data.cafeSection} />
       <Blog posts={data.posts} />
       <Sustainability sustainabilitySection={data.sustainabilitySection} />
-      <Survey />
+      <Survey surveySection={data.surveySection} />
       <Newsletter />
     </Layout>
   );

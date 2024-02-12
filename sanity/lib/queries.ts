@@ -150,6 +150,20 @@ export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
   }
 }`;
 
+export const SURVERY_QUERY = groq`*[_type == "survey"][0] {
+  bgImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
+  },
+  title,
+  content,
+  cta,
+  href
+}`;
+
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
@@ -167,5 +181,6 @@ export const HOME_PAGE_QUERY = groq`{
   "productsSection": ${PRODUCTS_SECTION_QUERY},
   "products": ${PRODUCTS_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
+  "surveySection": ${SURVERY_QUERY},
   "navigation": ${NAVIGATION_QUERY}
 }`;

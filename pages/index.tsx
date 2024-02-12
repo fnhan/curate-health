@@ -28,6 +28,7 @@ type PageProps = {
   draftMode: boolean;
   token: string;
   sustainabilitySection: SanityDocument[];
+  surveySection: SanityDocument[];
   navigation: SanityDocument[];
 };
 
@@ -41,7 +42,7 @@ export default function Index(props: PageProps) {
   }
 
   return (
-    <Layout title={'Home'} navigation={props.navigation} footer={props.footer} >
+    <Layout title={'Home'} navigation={props.navigation} footer={props.footer}>
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />
       <Clinic clinicSection={props.clinicSection} />
@@ -53,7 +54,7 @@ export default function Index(props: PageProps) {
       <CurateCafe cafeSection={props.cafeSection} />
       <Blog posts={props.posts} />
       <Sustainability sustainabilitySection={props.sustainabilitySection} />
-      <Survey />
+      <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>
   );

@@ -13,6 +13,7 @@ import post from './schemas/post';
 import products from './schemas/products';
 import productsSection from './schemas/productsSection';
 import services from './schemas/services';
+import surveySection from './schemas/surveySection';
 import sustainabilitySection from './schemas/sustainabilitySection';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
@@ -26,6 +27,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     products,
     post,
     sustainabilitySection,
+    surveySection,
     author,
     category,
     blockContent,

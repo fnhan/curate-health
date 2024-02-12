@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { getClient } from '../../sanity/lib/client';
 import {
   FOOTER_QUERY,
+  NAVIGATION_QUERY,
   POSTS_SLUG_QUERY,
   POST_QUERY,
 } from '../../sanity/lib/queries';
@@ -20,6 +21,7 @@ const PostPreview = dynamic(
 type PageProps = {
   post: SanityDocument;
   params: QueryParams;
+  navigation?: SanityDocument;
   footer?: SanityDocument;
   draftMode: boolean;
   token: string;
@@ -36,9 +38,9 @@ export default function SinglePost(props: PageProps) {
     );
   }
 
-  const { post, params, footer, draftMode } = props;
+  const { post, params, navigation, footer, draftMode } = props;
   return (
-    <Layout footer={footer} title={'Blog'}>
+    <Layout navigation={navigation} footer={footer} title={'Blog'}>
       {draftMode ? (
         <PostPreview post={post} params={params} />
       ) : (
@@ -52,12 +54,14 @@ export default function SinglePost(props: PageProps) {
 export const getStaticProps = async ({ params = {}, draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const post = await client.fetch<SanityDocument>(POST_QUERY, params);
+  const navigation = await client.fetch<SanityDocument>(NAVIGATION_QUERY);
   const footer = await client.fetch<SanityDocument>(FOOTER_QUERY);
 
   return {
     props: {
       post,
       params,
+      navigation,
       footer,
       draftMode,
       token: draftMode ? token : '',

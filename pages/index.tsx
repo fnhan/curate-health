@@ -27,6 +27,7 @@ type PageProps = {
   products: SanityDocument[];
   draftMode: boolean;
   token: string;
+  sustainabilitySection: SanityDocument[];
 };
 
 export default function Index(props: PageProps) {
@@ -50,7 +51,7 @@ export default function Index(props: PageProps) {
       />
       <CurateCafe cafeSection={props.cafeSection} />
       <Blog posts={props.posts} />
-      <Sustainability />
+      <Sustainability sustainabilitySection={props.sustainabilitySection} />
       <Survey />
       <Newsletter />
     </Layout>

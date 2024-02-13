@@ -9,12 +9,7 @@ export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)]
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
 
 export const HERO_SECTION_QUERY = `*[_type == "heroSection"][0]{
-  bgImage {
-    asset->{
-      _id,
-      url
-    },
-  },
+  videoID,
   heroText
 }`;
 

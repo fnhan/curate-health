@@ -22,40 +22,38 @@ export default function Nav({ navigation }) {
               <SheetTrigger
                 aria-label='navigation menu'
                 aria-controls='nav-items'
-                id='nav-menu'
-              >
-                <Menu className='hover:text-black duration-300 transition-all'/>
+                id='nav-menu'>
+                <Menu className='hover:text-black duration-300 transition-all' />
               </SheetTrigger>
               <SheetContent
                 side='left'
                 className='text-white border-none pt-[142px] sm:pl-[86px] max-w-[300px] md:max-w-[416px]'>
-                <div 
-                className='flex flex-col gap-6 text-left'
-                id='nav-items'
-                aria-labelledby='nav-items nav-menu'
-                >
+                <div
+                  className='flex flex-col gap-6 text-left'
+                  id='nav-items'
+                  aria-labelledby='nav-items nav-menu'>
                   {navItems.map((item, index) => {
                     if (item.isServiceLinks) {
                       return (
-                        <Accordion type='single' collapsible className='w-full'>
+                        <Accordion
+                          key={`service-links-${index}`}
+                          type='single'
+                          collapsible
+                          className='w-full'>
                           <AccordionItem
-                            value='item-1'
-                            className='border-none text-2xl'
-                            >
-                            <AccordionTrigger 
-                            className='font-normal p-0'
-                            aria-label='services'
-                            aria-controls='service-items'
-                            id='service-menu'
-                            >
+                            value='service-links'
+                            className='border-none text-2xl'>
+                            <AccordionTrigger
+                              className='font-normal p-0'
+                              aria-label='services'
+                              aria-controls='service-items'
+                              id='service-menu'>
                               Services
                             </AccordionTrigger>
                             <AccordionContent className='flex flex-col gap-2 pt-6 ml-4'>
-                              {serviceLinks.map((service, index) => (
+                              {serviceLinks.map((service, serviceIndex) => (
                                 <Link
-                                  id='service-items' 
-                                  aria-labelledby='service-items services'
-                                  key={index}
+                                  key={`service-link-${serviceIndex}`}
                                   className='hover:underline text-base'
                                   href={`/services/${service.slug}`}>
                                   {service.title}
@@ -69,7 +67,7 @@ export default function Nav({ navigation }) {
 
                     return (
                       <Link
-                        key={index}
+                        key={`nav-item-${index}`}
                         className='hover:underline text-2xl'
                         href={item.href}>
                         {item.linkText}

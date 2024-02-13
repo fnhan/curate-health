@@ -6,12 +6,11 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'bgImage',
-      title: 'Background image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
+      name: 'videoID',
+      title: 'Video ID',
+      type: 'string',
+      description:
+        'You can find this in the video URL on Vimeo. For example, in the URL https://vimeo.com/912438525?share=copy, the Video ID is 912438525.',
     }),
     defineField({
       name: 'heroText',
@@ -23,14 +22,11 @@ export default defineType({
 
   preview: {
     select: {
-      bgImage: 'bgImage',
       heroText: 'heroText.0.children.0.text',
     },
     prepare(selection) {
-      const { bgImage } = selection;
       return {
         title: 'Hero Section',
-        media: bgImage,
       };
     },
   },

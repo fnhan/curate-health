@@ -42,7 +42,7 @@ export default function Footer({ footer }: FooterProps) {
       <div className='container text-white flex flex-col gap-10'>
         {/* Contact Info */}
         <div className='text-sm md:text-base'>
-          <h5>{contactInfo?.sectionTitle}</h5>
+          <h2>{contactInfo?.sectionTitle}</h2>
           {contactInfo?.details.map((detail, index) => (
             <div key={index}>
               <p>{detail.value}</p>
@@ -54,7 +54,7 @@ export default function Footer({ footer }: FooterProps) {
           <div className='hidden md:flex flex-col gap-2 md:flex-row md:justify-end md:gap-10 text-sm md:text-base'>
             {/* Services Section */}
             <div className='border-b border-white md:border-none pb-2'>
-              <h6 className='md:font-denton pl-3 md:mb-3'>Services</h6>
+              <h3 className='md:font-denton pl-3 md:mb-3'>Services</h3>
               <div className='hidden md:flex flex-col gap-1 pl-3'>
                 {servicesSection.map((service, index) => (
                   <Link
@@ -71,7 +71,7 @@ export default function Footer({ footer }: FooterProps) {
               <div
                 key={index}
                 className='border-b border-white md:border-none pb-2'>
-                <h6 className='md:font-denton pl-3 md:mb-3'>{section.title}</h6>
+                <h3 className='md:font-denton pl-3 md:mb-3'>{section.title}</h3>
                 <div className='hidden md:flex flex-col gap-1 pl-3'>
                   {section.links?.map((link, linkIndex) => (
                     <Link
@@ -86,9 +86,9 @@ export default function Footer({ footer }: FooterProps) {
             ))}
             {/* Social Links Section */}
             <div>
-              <h6 className='md:font-denton pl-3 md:mb-3'>
+              <h3 className='md:font-denton pl-3 md:mb-3'>
                 {socialLinksSection.title}
-              </h6>
+              </h3>
               <div className='hidden md:flex flex-col gap-1 pl-3'>
                 {socialLinksSection.links.map((link, linkIndex) => (
                   <a

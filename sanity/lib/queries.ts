@@ -115,6 +115,12 @@ export const FOOTER_QUERY = groq`
         platform,
         url
       }
+    },
+    privacy {
+      links[] {
+        title,
+        href
+      }
     }
   }
 `;

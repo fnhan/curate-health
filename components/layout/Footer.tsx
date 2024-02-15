@@ -31,11 +31,18 @@ export type FooterProps = {
         url: string;
       }>;
     };
+    privacy: {
+      links: Array<{
+        title: string;
+        href: string;
+      }>;
+    };
   };
 };
 
 export default function Footer({ footer }: FooterProps) {
-  const { contactInfo, servicesSection, sections, socialLinksSection } = footer;
+  const { contactInfo, servicesSection, sections, socialLinksSection, privacy } = footer;
+  console.log(privacy)
 
   return (
     <footer className='flex flex-col pt-14 pb-8 w-full'>
@@ -106,17 +113,17 @@ export default function Footer({ footer }: FooterProps) {
         <div className='flex flex-col md:flex-row justify-between gap-6'>
           <div className='text-xs'>
             &copy; {new Date().getFullYear()} Curate Health
-          </div>
-          <div className='flex justify-between md:justify-end md:gap-10 text-xs'>
-            <Link className='hover:underline' href={'/terms-of-use'}>
-              Terms of Use
-            </Link>
-            <Link href={'/privacy'} className='hover:underline'>
-              Privacy + Cookies
-            </Link>
-            <Link href={'/accessibility'} className='hover:underline'>
-              Accessibility
-            </Link>
+            </div>
+            <div className='flex justify-between md:justify-end md:gap-10 text-xs'>
+            {privacy?.links?.map((link, linkIndex) => (
+              <Link
+                key={linkIndex}
+                target='_blank'
+                className='hover:underline'
+                href={link.href}>
+                {link.title}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

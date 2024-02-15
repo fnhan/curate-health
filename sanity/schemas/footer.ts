@@ -122,7 +122,29 @@ export default defineType({
         },
       ],
     }),
-  ],
+    defineField({
+      name: 'privacy',
+      title: 'Privacy Links',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              title: 'Link Title',
+              type: 'string',
+            },
+            {
+              name: 'href',
+              title: 'URL',
+              type: 'string',
+            },
+          ],
+        },
+      ],
+    }),
+],
   preview: {
     prepare() {
       return {

@@ -9,6 +9,7 @@ import footer from './schemas/footer';
 import heroSection from './schemas/heroSection';
 import highlight from './schemas/highlight';
 import navigation from './schemas/navigation';
+import newsletter from './schemas/newsletter';
 import post from './schemas/post';
 import products from './schemas/products';
 import productsSection from './schemas/productsSection';
@@ -32,6 +33,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     category,
     blockContent,
     footer,
+    newsletter,
     navigation,
   ],
 };

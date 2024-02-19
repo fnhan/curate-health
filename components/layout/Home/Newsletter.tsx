@@ -7,6 +7,7 @@ import { useState } from 'react';
 export default function Newsletter() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +31,7 @@ export default function Newsletter() {
           title: 'You are now signed up!',
           description: 'Thank you for subscribing to our newsletter.',
         });
+        setEmail('');
       } else {
         // Handle server-side validation errors or other issues
         toast({
@@ -64,6 +66,8 @@ export default function Newsletter() {
             type='email'
             name='email'
             placeholder='Email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className='bg-transparent text-white placeholder:text-white rounded-none'
             required
           />

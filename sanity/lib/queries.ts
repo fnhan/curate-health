@@ -159,6 +159,11 @@ export const SURVERY_QUERY = groq`*[_type == "survey"][0] {
   href
 }`;
 
+export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"] {
+  title,
+  content
+}`;
+
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
@@ -177,5 +182,6 @@ export const HOME_PAGE_QUERY = groq`{
   "products": ${PRODUCTS_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
   "surveySection": ${SURVERY_QUERY},
-  "navigation": ${NAVIGATION_QUERY}
+  "navigation": ${NAVIGATION_QUERY},
+  "termsOfUse": ${TERMS_OF_USE_QUERY} 
 }`;

@@ -11,7 +11,7 @@ export default function ContactDetails({ }) {
           </span>
         </div>
         <div className="container flex flex-col lg:col-start-2 lg:row-span-full pt-10 lg:pt-40 lg:mt-16">
-          <div className="grid grid-cols-2 grid-rows-7 text-primary md:h-[244px] w-[160px] md:w-[240px] lg:w-[326px] pb-4 text-[10px] md:text-[12px] lg:text-[16px]">
+          <div className="grid grid-cols-2 grid-rows-7 text-primary md:h-[244px] w-[165px] md:w-[240px] lg:w-[326px] pb-4 text-[10px] md:text-[14px] lg:text-[16px]">
             <div className="font-bold">Monday</div>
             <div>9:00 AM - 7:00 PM</div>
             <div className="font-bold">Tuesday</div>

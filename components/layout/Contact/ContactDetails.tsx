@@ -6,7 +6,6 @@ export default function ContactDetails({ }) {
     <section className='bg-white flex flex-col py-10 md:py-20'>
       <div className="flex flex-col justify-center lg:grid lg:grid-flow-col lg:grid-row-gap-2">
         <div className='container flex flex-col pt-4 lg:pt-8 text-primary lg:col-start-2 lg:row-span-full'>
-          <h5 className='font-bold text-[16px] md:text-[32px] lg:text-[40px]'>Curate Health</h5>
           <span className='text-[12px] md:text-[16px] lg:text-[24px]'>
             989 Eglinton Ave W, York, ON, M6C 2C6<br /> (Located at the West Corner Suite)
           </span>

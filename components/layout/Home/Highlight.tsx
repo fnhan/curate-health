@@ -17,7 +17,7 @@ export default function Highlight({ highlightSection }) {
   return (
     <section className='w-full bg-primary'>
       <div className='container py-12 md:py-40 flex flex-col gap-20 text-left'>
-        <div className='max-w-prose md:sticky md:top-40 z-20 md:pt-2'>
+        <div className='max-w-prose md:sticky md:top-60 z-20 md:pt-2'>
           <p className='max-w-[250px] md:text-2xl md:max-w-[350px] 2xl:max-w-[555px] font-light 2xl:text-[40px] 2xl:leading-10'>
             {title1}
           </p>

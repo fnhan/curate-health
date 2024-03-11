@@ -175,6 +175,11 @@ export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
   content
 }`;
 
+export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"] {
+  title,
+  content
+}`;
+
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
@@ -195,5 +200,6 @@ export const HOME_PAGE_QUERY = groq`{
   "surveySection": ${SURVERY_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "termsOfUse": ${TERMS_OF_USE_QUERY},
-  "privacy": ${PRIVACY_QUERY}  
+  "privacy": ${PRIVACY_QUERY}  ,
+  "accessibility": ${ACCESSIBILITY_QUERY} 
 }`;

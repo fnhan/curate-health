@@ -16,6 +16,7 @@ import services from './schemas/services';
 import surveySection from './schemas/surveySection';
 import sustainabilitySection from './schemas/sustainabilitySection';
 import termsOfUse from './schemas/termsOfUse';
+import privacy from './schemas/privacy';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -34,6 +35,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     blockContent,
     footer,
     navigation,
-    termsOfUse
+    termsOfUse,
+    privacy
   ],
 };

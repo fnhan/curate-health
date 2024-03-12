@@ -56,7 +56,7 @@ export default function Newsletter() {
   return (
     <section className='bg-secondary'>
       <div className='container py-4 md:py-8 2xl:py-9 flex flex-col md:flex-row gap-3 md:gap-16 2xl:justify-between items-center'>
-        <h2 className='font-denton italic md:text-lg 2xl:text-2xl'>
+        <h2 className='italic md:text-lg 2xl:text-2xl'>
           Sign up to our newsletter
         </h2>
         <form

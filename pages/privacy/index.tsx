@@ -8,12 +8,12 @@ export default function Privacy({ navigation, footer }) {
     <Layout navigation={navigation} footer={footer} title={'Privacy & Cookies'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
-          <h1 className='font-denton font-bold text-xl mb-6'>
+          <h1 className='font-bold text-xl mb-6'>
             Privacy & Cookies Policy
           </h1>
           <div className='flex flex-col gap-4'>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Introduction</h2>
+              <h2 className='font-bold text-lg'>Introduction</h2>
               <p>
                 At Curate Health, we respect your privacy and are committed to
                 protecting your personal data. This policy outlines our
@@ -21,7 +21,7 @@ export default function Privacy({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Information We Collect
               </h2>
               <p>
@@ -31,7 +31,7 @@ export default function Privacy({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 How We Use Your Data
               </h2>
               <p>
@@ -40,7 +40,7 @@ export default function Privacy({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Cookies</h2>
+              <h2 className='font-bold text-lg'>Cookies</h2>
               <p>
                 We use cookies to enhance your browsing experience, analyze site
                 traffic, and for marketing purposes. You can control cookies
@@ -48,7 +48,7 @@ export default function Privacy({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Data Sharing</h2>
+              <h2 className='font-bold text-lg'>Data Sharing</h2>
               <p>
                 We do not sell your data. We may share your data with service
                 providers who assist us in our business operations and with
@@ -56,14 +56,14 @@ export default function Privacy({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Your Rights</h2>
+              <h2 className='font-bold text-lg'>Your Rights</h2>
               <p>
                 You have rights over your personal data, including access,
                 correction, and deletion. Contact us to exercise these rights.
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Changes to Our Privacy Policy
               </h2>
               <p>
@@ -73,7 +73,7 @@ export default function Privacy({ navigation, footer }) {
             </div>
 
             <div>
-              <h2 className='font-bold font-denton text-lg'>Contact Us</h2>
+              <h2 className='font-bold text-lg'>Contact Us</h2>
               <p>
                 If you have any questions about this policy, please contact us
                 at{' '}

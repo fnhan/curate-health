@@ -19,7 +19,7 @@ export function CarouselNav({ services }) {
             <div className='p-1 group'>
               <Link href={`/services/${service.slug}`}>
                 <Card className='bg-transparent border-none'>
-                  <CardContent className='flex items-center justify-center p-6 font-denton text-white group-hover:underline'>
+                  <CardContent className='flex items-center justify-center p-6 text-white group-hover:underline'>
                     {service.title}
                   </CardContent>
                 </Card>

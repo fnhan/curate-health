@@ -166,7 +166,7 @@ const Cards = ({ imgIndex }) => {
                 />
               </CardContent>
               <CardHeader className='flex-1 pb-0 w-2/3 mx-auto'>
-                <CardTitle className='text-center font-denton mb-3 font-light'>
+                <CardTitle className='text-center mb-3 font-light'>
                   {product.title}
                 </CardTitle>
                 <CardDescription className='text-center text-xs'>

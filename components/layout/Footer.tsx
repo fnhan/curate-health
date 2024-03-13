@@ -31,11 +31,18 @@ export type FooterProps = {
         url: string;
       }>;
     };
+    privacy: {
+      links: Array<{
+        title: string;
+        href: string;
+      }>;
+    };
   };
 };
 
 export default function Footer({ footer }: FooterProps) {
-  const { contactInfo, servicesSection, sections, socialLinksSection } = footer;
+  const { contactInfo, servicesSection, sections, socialLinksSection, privacy } = footer;
+  console.log(privacy)
 
   return (
     <footer className='flex flex-col pt-14 pb-8 w-full'>

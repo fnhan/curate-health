@@ -32,7 +32,7 @@ export default function PostPreview({ post }: { post: SanityDocument }) {
         <div className='text-xs md:text-sm flex justify-between'>
           <Date dateString={publishedAt} />
           <Link
-            className='text-secondary italic font-denton hover:text-white hover:underline duration-300 transition-all'
+            className='text-secondary italic hover:text-white hover:underline duration-300 transition-all'
             href={`/blog/${slug.current}`}>
             Read More
           </Link>

@@ -8,12 +8,12 @@ export default function Accessibility({ navigation, footer }) {
     <Layout navigation={navigation} footer={footer} title={'Accessibility'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
-          <h1 className='font-denton font-bold text-xl mb-6'>
+          <h1 className='font-bold text-xl mb-6'>
             Accessibility Statement
           </h1>
           <div className='flex flex-col gap-4'>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Commitment to Accessibility
               </h2>
               <p>
@@ -22,7 +22,7 @@ export default function Accessibility({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Conformance Status
               </h2>
               <p>
@@ -31,7 +31,7 @@ export default function Accessibility({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Feedback</h2>
+              <h2 className='font-bold text-lg'>Feedback</h2>
               <p>
                 We welcome your feedback on the accessibility of Curate Health.
                 Please let us know if you encounter any barriers at{' '}
@@ -41,14 +41,14 @@ export default function Accessibility({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Assistance</h2>
+              <h2 className='font-bold text-lg'>Assistance</h2>
               <p>
                 If you need any assistance accessing information or services,
                 please contact us, and we will be happy to assist you.
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Accessibility Features
               </h2>
               <p>
@@ -57,7 +57,7 @@ export default function Accessibility({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Limitations and Alternatives
               </h2>
               <p>
@@ -67,7 +67,7 @@ export default function Accessibility({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Changes to Our Privacy Policy
               </h2>
               <p>

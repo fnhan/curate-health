@@ -34,7 +34,7 @@ export default function Survey({ surveySection }) {
           </h4>
           <p className='text-sm md:text-base'>{content}</p>
           <div className='flex items-center gap-1'>
-            <p className='font-denton underline'>{cta}</p>
+            <p className='underline'>{cta}</p>
             <ChevronRightIcon size={18} />
           </div>
         </Link>

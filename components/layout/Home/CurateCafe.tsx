@@ -29,7 +29,7 @@ export default function CurateCafe({ cafeSection }) {
           <h2 className='text-black md:text-xl 2xl:text-3xl'>
             <PortableText value={title} />
           </h2>
-          <div className='font-denton text-black md:text-xl max-w-[200px] md:max-w-[300px] 2xl:max-w-[544px] 2xl:text-4xl italic'>
+          <div className='text-black md:text-xl max-w-[200px] md:max-w-[300px] 2xl:max-w-[544px] 2xl:text-4xl italic'>
             <PortableText value={content} />
           </div>
         </div>

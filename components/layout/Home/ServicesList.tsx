@@ -25,7 +25,7 @@ export default function ServicesList({ services }) {
               alt=''
               className='rounded-full w-[85px] h-[85px] md:w-[128px] md:h-[128px] 2xl:w-[175px] 2xl:h-[175px] object-cover mx-auto group-hover:-translate-y-3 transition-all duration-300'
             />
-            <h3 className='font-denton text-center text-md border-b border-transparent md:text-base group-hover:underline duration-300 transition-all'>
+            <h3 className='text-center text-md border-b border-transparent md:text-base group-hover:underline duration-300 transition-all'>
               {service.title}
             </h3>
           </Link>

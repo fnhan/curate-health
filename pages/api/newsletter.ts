@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getClient } from '../../sanity/lib/client';
 
 export default async function handle(
   req: NextApiRequest,
@@ -11,18 +12,19 @@ export default async function handle(
   }
 
   try {
-    // Configure your Systeme.io API endpoint and payload
-    const SYSTEME_ENDPOINT =
-      'https://systeme.io/embedded/14262515/subscription';
-    const payload = { email };
+    const client = getClient();
+    const query = `*[_type == "newsletterSection"][0]`;
+    const { endpointUrl } = await client.fetch(query);
 
-    // Send the data to Systeme.io
-    const response = await fetch(SYSTEME_ENDPOINT, {
+    if (!endpointUrl) {
+      throw new Error('API endpoint URL not found in Sanity');
+    }
+
+    // Send the data to the fetched API endpoint
+    const response = await fetch(endpointUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
     });
 
     if (!response.ok) {

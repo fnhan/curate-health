@@ -8,7 +8,7 @@ export default function TermsOfUse({ navigation, footer, termsOfUse }) {
     <Layout navigation={navigation} footer={footer} title={'Terms Of Use'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
-          <h1 className='font-denton font-bold text-xl mb-6'>Terms Of Use</h1>
+          <h1 className='font-bold text-xl mb-6'>Terms Of Use</h1>
           <div className='flex flex-col gap-4'>
             {termsOfUse.map((term, index) => (
               <div key={index}>

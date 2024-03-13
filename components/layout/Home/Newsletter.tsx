@@ -7,6 +7,7 @@ import { useState } from 'react';
 export default function Newsletter() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,6 +31,7 @@ export default function Newsletter() {
           title: 'You are now signed up!',
           description: 'Thank you for subscribing to our newsletter.',
         });
+        setEmail('');
       } else {
         // Handle server-side validation errors or other issues
         toast({
@@ -54,7 +56,7 @@ export default function Newsletter() {
   return (
     <section className='bg-secondary'>
       <div className='container py-4 md:py-8 2xl:py-9 flex flex-col md:flex-row gap-3 md:gap-16 2xl:justify-between items-center'>
-        <h2 className='font-denton italic md:text-lg 2xl:text-2xl'>
+        <h2 className='italic md:text-lg 2xl:text-2xl'>
           Sign up to our newsletter
         </h2>
         <form
@@ -64,6 +66,8 @@ export default function Newsletter() {
             type='email'
             name='email'
             placeholder='Email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className='bg-transparent text-white placeholder:text-white rounded-none'
             required
           />

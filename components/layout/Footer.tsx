@@ -61,7 +61,7 @@ export default function Footer({ footer }: FooterProps) {
           <div className='hidden md:flex flex-col gap-2 md:flex-row md:justify-end md:gap-10 text-sm md:text-base'>
             {/* Services Section */}
             <div className='border-b border-white md:border-none pb-2'>
-              <h3 className='md:font-denton pl-3 md:mb-3'>Services</h3>
+              <h3 className='pl-3 md:mb-3'>Services</h3>
               <div className='hidden md:flex flex-col gap-1 pl-3'>
                 {servicesSection.map((service, index) => (
                   <Link
@@ -78,7 +78,7 @@ export default function Footer({ footer }: FooterProps) {
               <div
                 key={index}
                 className='border-b border-white md:border-none pb-2'>
-                <h3 className='md:font-denton pl-3 md:mb-3'>{section.title}</h3>
+                <h3 className='pl-3 md:mb-3'>{section.title}</h3>
                 <div className='hidden md:flex flex-col gap-1 pl-3'>
                   {section.links?.map((link, linkIndex) => (
                     <Link
@@ -93,7 +93,7 @@ export default function Footer({ footer }: FooterProps) {
             ))}
             {/* Social Links Section */}
             <div>
-              <h3 className='md:font-denton pl-3 md:mb-3'>
+              <h3 className='pl-3 md:mb-3'>
                 {socialLinksSection.title}
               </h3>
               <div className='hidden md:flex flex-col gap-1 pl-3'>

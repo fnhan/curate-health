@@ -75,7 +75,7 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
                   />
                 </CardContent>
                 <CardHeader className='w-2/3 mx-auto'>
-                  <CardTitle className='text-center font-denton mb-3 font-light'>
+                  <CardTitle className='text-center mb-3 font-light'>
                     {product.title}
                   </CardTitle>
                   <CardDescription className='text-center text-xs'>

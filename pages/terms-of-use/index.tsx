@@ -8,17 +8,17 @@ export default function TermsOfUse({ navigation, footer }) {
     <Layout navigation={navigation} footer={footer} title={'Terms Of Use'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
-          <h1 className='font-denton font-bold text-xl mb-6'>Terms Of Use</h1>
+          <h1 className='font-bold text-xl mb-6'>Terms Of Use</h1>
           <div className='flex flex-col gap-4'>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Introduction</h2>
+              <h2 className='font-bold text-lg'>Introduction</h2>
               <p>
                 Welcome to Curate Health. By accessing our website, you agree to
                 these terms of use. Please read them carefully.
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Use of Website</h2>
+              <h2 className='font-bold text-lg'>Use of Website</h2>
               <p>
                 Curate Health grants you a non-exclusive, non-transferable,
                 limited right to access, use and display the site and the
@@ -27,7 +27,7 @@ export default function TermsOfUse({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Intellectual Property Rights
               </h2>
               <p>
@@ -37,7 +37,7 @@ export default function TermsOfUse({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 User Obligations
               </h2>
               <p>
@@ -47,7 +47,7 @@ export default function TermsOfUse({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Disclaimers</h2>
+              <h2 className='font-bold text-lg'>Disclaimers</h2>
               <p>
                 Curate Health provides the website on an "as is" and "as
                 available" basis without any representations or warranties of
@@ -55,7 +55,7 @@ export default function TermsOfUse({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Limitation of Liability
               </h2>
               <p>
@@ -64,7 +64,7 @@ export default function TermsOfUse({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Governing Law</h2>
+              <h2 className='font-bold text-lg'>Governing Law</h2>
               <p>
                 These terms shall be governed by [Applicable Law] and any
                 disputes will be subject to the exclusive jurisdiction of the
@@ -72,7 +72,7 @@ export default function TermsOfUse({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>
+              <h2 className='font-bold text-lg'>
                 Changes to Terms
               </h2>
               <p>
@@ -82,7 +82,7 @@ export default function TermsOfUse({ navigation, footer }) {
               </p>
             </div>
             <div>
-              <h2 className='font-bold font-denton text-lg'>Contact Us</h2>
+              <h2 className='font-bold text-lg'>Contact Us</h2>
               <p>
                 For any questions or comments regarding these terms, please
                 contact us at{' '}

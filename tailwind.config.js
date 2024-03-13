@@ -27,9 +27,7 @@ module.exports = {
         'hero-image': "url('/images/leaf-background.png')",
       },
       fontFamily: {
-        avenir: ['Avenir'],
-        denton: ['Denton'],
-        'denton-condesnsed': ['Denton-Consensed'],
+        poppins: ["Poppins", "sans-serif"],
       },
       colors: {
         border: 'hsl(var(--border))',

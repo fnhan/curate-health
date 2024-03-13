@@ -24,7 +24,7 @@ export default function ContactUs({ }) {
         <div className='absolute inset-0 flex items-center justify-center pt-12'>
           <div className='container flex flex-col gap-2 md:gap-4 pt-8 md:py-16 pb-12'>
             <div className='flex justify-start'>
-              <h1 className='text-[28px] md:text-[50px] lg:text-[72px] mb-6'>Contact Info</h1>
+              <h1 className='text-[28px] md:text-[50px] lg:text-[72px] mb-6'>Contact Information</h1>
             </div>
             <address>
               <div className='flex gap-3'>

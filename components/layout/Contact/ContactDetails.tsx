@@ -9,7 +9,7 @@ export default function ContactDetails({ }) {
           <h2 className='text-[18px] md:text-[28px] lg:text-[40px]'>Opening Hours</h2>
         </div>
         <div className="container flex flex-col lg:col-start-2 lg:row-span-full pt-4 md:pt-8 lg:pt-40 lg:mt-4">
-          <div className="grid grid-cols-2 grid-rows-7 text-primary md:h-[244px] w-[160px] md:w-[240px] lg:w-[326px] pb-4 text-[10px] md:text-[12px] lg:text-[16px]">
+          <div className="leading-5 grid grid-cols-2 grid-rows-7 text-primary md:h-[244px] w-[180px] md:w-[250px] lg:w-[326px] pb-4 text-[10px] md:text-[12px] lg:text-[16px]">
             <div className="font-bold">Monday</div>
             <div>9:00 AM - 7:00 PM</div>
             <div className="font-bold">Tuesday</div>

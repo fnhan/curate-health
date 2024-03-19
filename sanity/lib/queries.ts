@@ -203,3 +203,21 @@ export const HOME_PAGE_QUERY = groq`{
   "privacy": ${PRIVACY_QUERY}  ,
   "accessibility": ${ACCESSIBILITY_QUERY} 
 }`;
+
+const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
+  streetAddress,
+  postalAddress,
+  emailAddress,
+  phoneNumber,
+  "contactInfoImage": {
+    "asset": contactInfoImage.asset->{
+      _id,
+      url
+    },
+    "alt": contactInfoImage.alt
+  },
+}`;
+
+export const CONTACT_PAGE_QUERY = groq`{
+  "contactInfo": ${CONTACT_INFO_QUERY},
+}`;

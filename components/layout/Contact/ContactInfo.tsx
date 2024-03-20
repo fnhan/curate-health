@@ -6,8 +6,10 @@ import imageUrlBuilder from '@sanity/image-url';
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function ContactInfo({ contactInfo }) {
+  console.log('contactInfo:', contactInfo)
   const { streetAddress, postalAddress, emailAddress, phoneNumber, contactInfoImage, hrefDirections } =
     contactInfo;
+    console.log('contactinfoimage', contactInfoImage)
 
   // const phNumDestructured = phoneNumber.toString().replace(/[^+\d]+/g, "");
 

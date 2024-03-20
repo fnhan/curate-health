@@ -25,7 +25,7 @@ export default defineType({
     defineField({
       name: 'streetAddress',
       title: 'Street Address',
-      type: 'blockContent',
+      type: 'string',
       description: 'The street address of Curate Health',
     }),
     defineField({
@@ -37,19 +37,19 @@ export default defineType({
     defineField({
       name: 'postalAddress',
       title: 'Postal Address',
-      type: 'blockContent',
+      type: 'string',
       description: 'The city, province, and postal code of Curate Health',
     }),
     defineField({
       name: 'emailAddress',
       title: 'Email Address',
-      type: 'blockContent',
+      type: 'string',
       description: 'The contact email address for Curate Health',
     }),
     defineField({
       name: 'phoneNumber',
       title: 'Phone Number',
-      type: 'blockContent',
+      type: 'string',
       description: 'The contact phone number for Curate Health',
     }),
   ],

@@ -9,33 +9,8 @@ import { useLiveQuery } from 'next-sanity/preview';
 import { CONTACT_PAGE_QUERY } from '../../../sanity/lib/queries';
 
 type ContactPageData = {
-  contactInfo: {
-    contactInfoImage: {
-      asset: {
-        _id: string;
-        url: string;
-      };
-      alt: string;
-    };
-    streetAddress: string;
-    postalAddress: string;
-    emailAddress: string;
-    phoneNumber: string;
-    hrefDirections: string;
-  };
-  contactDetails: {
-    title: string;
-    monHours: string;
-    tuesHours: string;
-    wedHours: string;
-    thursHours: string;
-    friHours: string;
-    satHours: string;
-    sunHours: string;
-    mapURL: string;
-    cta: string;
-    href: string;
-  };
+  contactInfo: SanityDocument;
+  contactDetails: SanityDocument;
   footer: SanityDocument;
   surveyLink: SanityDocument;
   navigation: SanityDocument;

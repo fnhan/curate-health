@@ -10,11 +10,11 @@ import { CONTACT_PAGE_QUERY } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
 type PageProps = {
-  contactInfo: SanityDocument[];
-  contactDetails: SanityDocument[];
-  surveyLink: SanityDocument[];
-  navigation: SanityDocument[];
-  footer: SanityDocument[];
+  contactInfo: SanityDocument;
+  contactDetails: SanityDocument;
+  surveyLink: SanityDocument;
+  navigation: SanityDocument;
+  footer: SanityDocument;
   draftMode: boolean;
   token: string;
 };
@@ -31,8 +31,8 @@ export default function Index(props: PageProps) {
   return (
     <Layout title={'Contact'} navigation={props.navigation} footer={props.footer}>
       <ContactInfo contactInfo={props.contactInfo} />
-      <ContactDetails contactDetails={props.contactDetails} />
-      <SurveyLink surveyLink={props.surveyLink} />
+      {/* <ContactDetails contactDetails={props.contactDetails} /> */}
+      {/* <SurveyLink surveyLink={props.surveyLink} /> */}
       <Newsletter />
     </Layout>
   );
@@ -48,7 +48,6 @@ export const getStaticProps = async ({ draftMode = false }) => {
       draftMode,
       token: draftMode ? token : '',
     },
-    revalidate: 10,
   };
 };
 

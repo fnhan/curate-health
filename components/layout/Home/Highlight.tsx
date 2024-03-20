@@ -11,6 +11,8 @@ export default function Highlight({ highlightSection }) {
   const { title1, title2, highlightImage, hoverLinkText, hoverLinkHref } =
     highlightSection;
 
+    console.log(highlightImage)
+
   const { scrollYProgress } = useScroll();
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 540]);
 

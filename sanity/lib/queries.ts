@@ -203,3 +203,52 @@ export const HOME_PAGE_QUERY = groq`{
   "privacy": ${PRIVACY_QUERY}  ,
   "accessibility": ${ACCESSIBILITY_QUERY} 
 }`;
+
+export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
+  bgImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
+  },
+  cta,
+  href
+}`;
+
+export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
+  streetAddress,
+  postalAddress,
+  emailAddress,
+  phoneNumber,
+  "contactInfoImage": {
+    "asset": contactInfoImage.asset->{
+      _id,
+      url
+    },
+    "alt": contactInfoImage.alt
+  },
+  hrefDirections
+}`;
+
+export const CONTACT_DETAILS_QUERY = groq`*[_type == "contactDetails"][0]{
+  title,
+  monHours,
+  tuesHours,
+  wedHours,
+  thursHours,
+  friHours,
+  satHours,
+  sunHours,
+  mapURL,
+  cta,
+  href
+}`;
+
+export const CONTACT_PAGE_QUERY = groq`{
+  "contactInfo": ${CONTACT_INFO_QUERY},
+  "contactDetails": ${CONTACT_DETAILS_QUERY},
+  "footer": ${FOOTER_QUERY},
+  "navigation": ${NAVIGATION_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY}
+}`;

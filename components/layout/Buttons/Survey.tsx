@@ -1,5 +1,9 @@
 import { Button } from 'components/ui/button';
 import Link from 'next/link';
+import imageUrlBuilder from '@sanity/image-url';
+import { Loading } from 'components/Loading';
+import Image from 'next/image';
+import { dataset, projectId } from '../../../sanity/env';
 
 export default function TakeSurvey() {
   return (

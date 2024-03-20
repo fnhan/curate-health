@@ -1,7 +1,7 @@
-import ContactInfo from 'components/layout/Contact/ContactInfo';
 import ContactDetails from 'components/layout/Contact/ContactDetails';
-import SurveyLink from 'components/layout/Survey/SurveyLink';
+import ContactInfo from 'components/layout/Contact/ContactInfo';
 import Newsletter from 'components/layout/Home/Newsletter';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
 import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
@@ -29,10 +29,13 @@ export default function Index(props: PageProps) {
   }
 
   return (
-    <Layout title={'Contact'} navigation={props.navigation} footer={props.footer}>
+    <Layout
+      title={'Contact'}
+      navigation={props.navigation}
+      footer={props.footer}>
       <ContactInfo contactInfo={props.contactInfo} />
-      {/* <ContactDetails contactDetails={props.contactDetails} /> */}
-      {/* <SurveyLink surveyLink={props.surveyLink} /> */}
+      <ContactDetails contactDetails={props.contactDetails} />
+      <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>
   );
@@ -50,4 +53,3 @@ export const getStaticProps = async ({ draftMode = false }) => {
     },
   };
 };
-

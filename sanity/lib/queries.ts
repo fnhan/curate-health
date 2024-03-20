@@ -204,7 +204,7 @@ export const HOME_PAGE_QUERY = groq`{
   "accessibility": ${ACCESSIBILITY_QUERY} 
 }`;
 
-export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"]{
+export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
   bgImage {
     asset-> {
       _id,
@@ -216,7 +216,7 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"]{
   href
 }`;
 
-export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"]{
+export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
   streetAddress,
   postalAddress,
   emailAddress,
@@ -231,7 +231,7 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"]{
   hrefDirections
 }`;
 
-export const CONTACT_DETAILS_QUERY = groq`*[_type == "contactDetails"]{
+export const CONTACT_DETAILS_QUERY = groq`*[_type == "contactDetails"][0]{
   title,
   monHours,
   tuesHours,

@@ -41,8 +41,13 @@ export type FooterProps = {
 };
 
 export default function Footer({ footer }: FooterProps) {
-  const { contactInfo, servicesSection, sections, socialLinksSection, privacy } = footer;
-  console.log(privacy)
+  const {
+    contactInfo,
+    servicesSection,
+    sections,
+    socialLinksSection,
+    privacy,
+  } = footer;
 
   return (
     <footer className='flex flex-col pt-14 pb-8 w-full'>
@@ -93,9 +98,7 @@ export default function Footer({ footer }: FooterProps) {
             ))}
             {/* Social Links Section */}
             <div>
-              <h3 className='pl-3 md:mb-3'>
-                {socialLinksSection.title}
-              </h3>
+              <h3 className='pl-3 md:mb-3'>{socialLinksSection.title}</h3>
               <div className='hidden md:flex flex-col gap-1 pl-3'>
                 {socialLinksSection.links.map((link, linkIndex) => (
                   <a

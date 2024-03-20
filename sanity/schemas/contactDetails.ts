@@ -86,10 +86,22 @@ export default defineType({
       sunHours: 'sunHours',
       mapURL: 'mapURL',
       cta: 'cta',
-      href: 'href'
+      href: 'href',
     },
     prepare(selection) {
-      const { title, monHours, tuesHours, wedHours, thursHours, friHours, satHours, sunHours, mapURL, cta, href } = selection;
+      const {
+        title,
+        monHours,
+        tuesHours,
+        wedHours,
+        thursHours,
+        friHours,
+        satHours,
+        sunHours,
+        mapURL,
+        cta,
+        href,
+      } = selection;
       return {
         title: 'Contact Details',
       };

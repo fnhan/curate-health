@@ -53,6 +53,25 @@ export default defineType({
       type: 'blockContent',
       description: 'The Sunday opening hours',
     }),
+    defineField({
+      name: 'cta',
+      title: 'Call to Action',
+      type: 'string',
+      description: 'Text for the CTA button',
+    }),
+    defineField({
+      name: 'href',
+      title: 'Link Href',
+      type: 'string',
+      description: 'URL/Link to Google Maps directions',
+    }),
+    defineField({
+      name: 'mapURL',
+      title: 'Map Embed Url',
+      type: 'string',
+      description:
+        'embed URL from Google Maps; search address and find embed url under Share option',
+    }),
   ],
 
   preview: {
@@ -65,10 +84,12 @@ export default defineType({
       friHours: 'friHours',
       satHours: 'satHours',
       sunHours: 'sunHours',
-
+      mapURL: 'mapURL',
+      cta: 'cta',
+      href: 'href'
     },
     prepare(selection) {
-      const { title, monHours, tuesHours, wedHours, thursHours, friHours, satHours, sunHours } = selection;
+      const { title, monHours, tuesHours, wedHours, thursHours, friHours, satHours, sunHours, mapURL, cta, href } = selection;
       return {
         title: 'Contact Details',
       };

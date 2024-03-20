@@ -1,29 +1,30 @@
 import Image from 'next/image';
-import ContactDetails from './ContactDetails';
-import Newsletter from '../Home/Newsletter';
 import { MapPin, Mail, Phone } from 'lucide-react';
-import SurveyLink from '../Survey/SurveyLink';
 import { dataset, projectId } from '../../../sanity/env';
 import imageUrlBuilder from '@sanity/image-url';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function ContactInfo({ contactInfo }) {
-  const { streetAddress, postalAddress, emailAddress, phoneNumber, contactInfoImage } =
+  const { streetAddress, postalAddress, emailAddress, phoneNumber, contactInfoImage, hrefDirections } =
     contactInfo;
+
+  // const phNumDestructured = phoneNumber.toString().replace(/[^+\d]+/g, "");
+
   return (
     <>
       <section className='relative bg-white h-[524px] md:h-[960px]'>
         <Image
           width={1440}
           height={936}
-          alt={`${contactInfoImage.alt}`}
-          src={builder
-            .image(contactInfoImage)
-            .quality(80)
-            .width(1440)
-            .height(936)
-            .url()}
+          // alt={`${contactInfoImage.alt}`}
+          alt=''
+          src={contactInfoImage}
+          // src={builder
+          //   .image(contactInfoImage)
+          //   .width(1440)
+          //   .height(936)
+          //   .url()}
           className='w-full h-full object-cover'
         />
         <div className='absolute inset-0 flex items-center justify-center pt-12'>
@@ -37,12 +38,12 @@ export default function ContactInfo({ contactInfo }) {
                 <h2 className='text-[10px] md:text-[14px] lg:text-[18px] not-italic pt-0.5 lg:pt-0 lg:-mt-0.5'>Location</h2>
               </div>
               <div className='indent-8 md:indent-9 -mb-2'>
-                <a className='text-[14px] md:text-[28px] lg:text-[32px] not-italic' target='_blank' href={'https://maps.app.goo.gl/o3Ff3JmxNKssVWRAA'}>
+                <a className='text-[14px] md:text-[28px] lg:text-[32px] not-italic' target='_blank' href={hrefDirections}>
                   {streetAddress}
                 </a>
               </div>
               <div className='indent-8 md:indent-9 pb-4'>
-                <a className='text-[14px] md:text-[28px] lg:text-[32px] not-italic' target='_blank' href={'https://maps.app.goo.gl/o3Ff3JmxNKssVWRAA'}>
+                <a className='text-[14px] md:text-[28px] lg:text-[32px] not-italic' target='_blank' href={hrefDirections}>
                   {postalAddress}
                 </a>
               </div>
@@ -51,7 +52,7 @@ export default function ContactInfo({ contactInfo }) {
                 <h3 className='text-[10px] md:text-[14px] lg:text-[18px] not-italic pt-0.5 lg:pt-0 lg:-mt-0.5'>Email</h3>
               </div>
               <div className='indent-8 md:indent-9 pb-4'>
-                <a className='text-[14px] md:text-[28px] lg:text-[32px] not-italic' target='_blank' href="mailto:hello@curatehealth.ca">
+                <a className='text-[14px] md:text-[28px] lg:text-[32px] not-italic' target='_blank' href={"mailto:" + emailAddress}>
                   {emailAddress}
                 </a>
               </div>
@@ -60,7 +61,7 @@ export default function ContactInfo({ contactInfo }) {
                 <h4 className='text-[10px] md:text-[14px] lg:text-[18px] not-italic pt-0.5 lg:pt-0 lg:-mt-0.5'>Phone</h4>
               </div>
               <div className='indent-8 md:indent-9 pb-4'>
-                <a className='text-[14px] md:text-[28px] lg:text-[32px] not-italic' target='_blank' href="tel:+17286822618">
+                <a className='text-[14px] md:text-[28px] lg:text-[32px] not-italic' target='_blank' href="tel:+7286822618">
                   {phoneNumber}
                 </a>
               </div>
@@ -68,9 +69,6 @@ export default function ContactInfo({ contactInfo }) {
           </div>
         </div>
       </section >
-      <ContactDetails />
-      <SurveyLink />
-      <Newsletter />
     </>
   )
 }

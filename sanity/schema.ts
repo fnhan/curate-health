@@ -20,6 +20,8 @@ import termsOfUse from './schemas/termsOfUse';
 import privacy from './schemas/privacy';
 import accessibility from './schemas/accessibility';
 import contactInfo from './schemas/contactInfo';
+import contactDetails from './schemas/contactDetails';
+import surveyLink from './schemas/surveyLink';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -42,6 +44,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     termsOfUse,
     privacy,
     accessibility,
-    contactInfo
+    contactInfo,
+    contactDetails,
+    surveyLink
   ],
 };

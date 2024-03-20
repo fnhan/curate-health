@@ -204,7 +204,19 @@ export const HOME_PAGE_QUERY = groq`{
   "accessibility": ${ACCESSIBILITY_QUERY} 
 }`;
 
-const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
+export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"]{
+  bgImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
+  },
+  cta,
+  href
+}`;
+
+export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"]{
   streetAddress,
   postalAddress,
   emailAddress,
@@ -216,8 +228,27 @@ const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
     },
     "alt": contactInfoImage.alt
   },
+  hrefDirections
+}`;
+
+export const CONTACT_DETAILS_QUERY = groq`*[_type == "contactDetails"]{
+  title,
+  monHours,
+  tuesHours,
+  wedHours,
+  thursHours,
+  friHours,
+  satHours,
+  sunHours,
+  mapURL,
+  cta,
+  href
 }`;
 
 export const CONTACT_PAGE_QUERY = groq`{
   "contactInfo": ${CONTACT_INFO_QUERY},
+  "contactDetails": ${CONTACT_DETAILS_QUERY},
+  "footer": ${FOOTER_QUERY},
+  "navigation": ${NAVIGATION_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY}
 }`;

@@ -29,6 +29,12 @@ export default defineType({
       description: 'The street address of Curate Health',
     }),
     defineField({
+      name: 'hrefDirections',
+      title: 'href Directions',
+      type: 'string',
+      description: 'URL/Link for actionable address (links to Google Maps when clicked)',
+    }),
+    defineField({
       name: 'postalAddress',
       title: 'Postal Address',
       type: 'blockContent',
@@ -54,10 +60,11 @@ export default defineType({
       postalAddress: 'postalAddress',
       emailAddress: 'emailAddress',
       phoneNumber: 'phoneNumber',
-      contactInfoImage: 'contactInfoImage'
+      contactInfoImage: 'contactInfoImage',
+      hrefDirections: 'hrefDirections'
     },
     prepare(selection) {
-      const { streetAddress, postalAddress, emailAddress, phoneNumber, contactInfoImage } = selection;
+      const { streetAddress, postalAddress, emailAddress, phoneNumber, contactInfoImage, hrefDirections } = selection;
       return {
         title: 'Contact Information',
         media: contactInfoImage,

@@ -21,24 +21,27 @@ type ContactPageData = {
     postalAddress: string;
     emailAddress: string;
     phoneNumber: string;
+    hrefDirections: string;
   };
   contactDetails: {
-    title1: string;
-    title2: string;
-    highlightImage: {
-      asset: {
-        _id: string;
-        url: string;
-      };
-      alt: string;
-    };
+    title: string;
+    monHours: string;
+    tuesHours: string;
+    wedHours: string;
+    thursHours: string;
+    friHours: string;
+    satHours: string;
+    sunHours: string;
+    mapURL: string;
+    cta: string;
+    href: string;
   };
   footer: SanityDocument;
   surveyLink: SanityDocument;
   navigation: SanityDocument;
 };
 
-export default function ContactPagePreview() {
+export default function ContactPreview() {
   const [data, isLoading] = useLiveQuery<ContactPageData>(null, CONTACT_PAGE_QUERY);
 
   if (isLoading) {

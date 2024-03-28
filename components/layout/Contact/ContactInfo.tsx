@@ -15,7 +15,8 @@ export default function ContactInfo({ contactInfo }) {
     hrefDirections,
   } = contactInfo;
 
-  // const phNumDestructured = phoneNumber.toString().replace(/[^+\d]+/g, "");
+  const phNumDestructured = phoneNumber.toString().replace(/[^+\d]+/g, "");
+  console.log(phNumDestructured)
 
   return (
     <>
@@ -81,7 +82,7 @@ export default function ContactInfo({ contactInfo }) {
                 <a
                   className='text-[14px] md:text-[28px] lg:text-[32px] not-italic'
                   target='_blank'
-                  href='tel:+7286822618'>
+                  href={'tel:' + phNumDestructured}>
                   {phoneNumber}
                 </a>
               </div>

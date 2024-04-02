@@ -15,7 +15,7 @@
 ### Setup
 
 ```bash
-git clone https://github.com/seangray-dev/curate-health.git
+git clone https://github.com/fnhan/curate-health.git
 cd curate-health
 npm install
 npm run dev

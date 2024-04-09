@@ -55,30 +55,30 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
       <Carousel
         setApi={setApi}
         opts={{ align: 'start' }}
-        className='container mx-auto relative'>
+        className='container mx-auto relative p-3'>
         <CarouselContent>
           {products.map((product: SanityDocument, idx: number) => (
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
-              <Card className='w-full border-black rounded-none flex flex-col py-8 h-full'>
-                <CardContent className='flex justify-center items-center h-64 mb-4'>
+              <Card className='w-full rounded-none flex flex-col h-full border-none'>
+                <CardContent className='flex justify-center items-center 2xl:h-64 mb-4 p-0'>
                   <Image
                     src={builder
                       .image(product.image)
                       .quality(80)
-                      .size(250, 250)
+                      .size(200, 200)
                       .auto('format')
                       .url()}
-                    width={250}
-                    height={250}
+                    width={200}
+                    height={200}
                     alt={product.title}
                     className='mx-auto object-contain'
                   />
                 </CardContent>
-                <CardHeader className='w-2/3 mx-auto'>
-                  <CardTitle className='text-center mb-3 font-light'>
+                <CardHeader className='w-2/3 mx-auto p-0'>
+                  <CardTitle className='text-center mb-3 font-light p-0 text-base md:text-lg'>
                     {product.title}
                   </CardTitle>
-                  <CardDescription className='text-center text-xs'>
+                  <CardDescription className='text-center text-xs pb-4'>
                     {product.description}
                   </CardDescription>
                 </CardHeader>
@@ -86,8 +86,8 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className='-left-8 ml-4' />
-        <CarouselNext className='-right-8 mr-4' />
+        <CarouselPrevious className='-left-8 ml-2 bg-transparent border-none text-black hover:bg-secondary' />
+        <CarouselNext className='-right-8 mr-2 bg-transparent border-none text-black hover:bg-secondary' />
       </Carousel>
       <div className='mt-8 text-center text-sm text-muted-foreground'>
         {current} / {count}

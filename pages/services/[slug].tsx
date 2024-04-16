@@ -5,6 +5,7 @@ import { GetStaticPaths } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import Newsletter from '../../components/layout/Home/Newsletter';
+import Survey from '../../components/layout/Home/Survey';
 import Layout from '../../components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
 import {
@@ -13,6 +14,7 @@ import {
   SERVICES_QUERY,
   SERVICES_SLUG_QUERY,
   SERVICE_BY_SLUG_QUERY,
+  SURVERY_QUERY,
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
@@ -22,6 +24,7 @@ type PageProps = {
   services: SanityDocument[];
   service: SanityDocument;
   navigation: SanityDocument;
+  surveySection: SanityDocument[];
   footer: SanityDocument;
 };
 
@@ -46,9 +49,10 @@ export default function ServicesPage(props: PageProps) {
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
         <CarouselNav services={props.services} />
       </div>
-      <div className='py-10'>
+      <div className=''>
         <ServiceDetails service={props.service} />
       </div>
+      <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>
   );
@@ -62,6 +66,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
   });
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
+  const surveySection = await client.fetch(SURVERY_QUERY);
 
   return {
     props: {
@@ -69,6 +74,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
       services,
       navigation,
       footer,
+      surveySection,
       draftMode: preview,
       token: preview ? token : '',
     },

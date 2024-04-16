@@ -12,25 +12,33 @@ export default function ServiceDetails({ service }) {
   }
 
   return (
-    <section className='text-white' id={service.id}>
-      <div className='container text-2xl tracking-widest flex justify-center md:justify-start mb-2'>
-        <h2 className=''>{service.title}</h2>
-      </div>
-      <Image
-        loading='lazy'
-        width={1080}
-        height={1440}
-        src={builder
-          .image(service.image)
-          .width(1080)
-          .height(1440)
-          .quality(80)
-          .url()}
-        alt={service.title}
-        className='w-full object-cover object-center max-h-[280px] md:max-h-[625px] mb-12'
-      />
-      <div className='container'>
-        <PortableText value={service.content} />
+    <section className='relative text-black bg-white md:h-[960px]' id={service.id}>
+      <div className='w-full flex flex-col md:flex-row'>
+        <div className='md:w-1/2 ml-20 flex flex-col justify-center'>
+          <h2 className='text-stone-800 text-[40px] font-medium font-[Poppins] text-2xl tracking-widest'>{service.title}</h2>
+          <br/>
+          <div className='text-base font-normal font-Poppins leading-[30px] tracking-tight'>
+            <PortableText value={service.content} />
+          </div>
+          <br/>
+          <br/>
+          <div className="text-stone-800 text-2xl font-light italic font-['Poppins'] leading-loose">Exercise Therapy</div>
+          <div className="text-stone-800 text-2xl font-light italic font-['Poppins'] leading-loose">Nutritional Counseling</div>
+        </div>
+        <div className='md:w-1/2 flex justify-end'>
+          <Image
+            loading='lazy'
+            width={1080}
+            height={1440}
+            src={builder
+              .image(service.image)
+              .width(1080)
+              .height(1440)
+              .quality(80)
+              .url()}
+            alt={service.title}
+            className='object-cover object-center mt-10 w-[0px] h-[0px] md:h-[515px] md:w-[290px] lg:w-[512px] lg:h-[675px] float-right'/>
+        </div>
       </div>
     </section>
   );

@@ -12,18 +12,20 @@ export default function ServiceDetails({ service }) {
   }
 
   return (
-    <section className='relative text-black bg-white md:h-[960px]' id={service.id}>
+    <section className='relative text-black bg-white md:h-[760px]' id={service.id}>
       <div className='w-full flex flex-col md:flex-row'>
-        <div className='md:w-1/2 ml-20 flex flex-col justify-center'>
-          <h2 className='text-stone-800 text-[40px] font-medium font-[Poppins] text-2xl tracking-widest'>{service.title}</h2>
+        <div className='mr-10 md:w-1/2 ml-20 flex flex-col justify-center'>
+          <h2 className='text-stone-800 text-[35px] font-medium font-[Poppins] text-2xl tracking-widest'>{service.title}</h2>
           <br/>
           <div className='text-base font-normal font-Poppins leading-[30px] tracking-tight'>
             <PortableText value={service.content} />
           </div>
           <br/>
           <br/>
-          <div className="text-stone-800 text-2xl font-light italic font-['Poppins'] leading-loose">Exercise Therapy</div>
-          <div className="text-stone-800 text-2xl font-light italic font-['Poppins'] leading-loose">Nutritional Counseling</div>
+          <br/>
+          <br/>
+          <div className="text-stone-800 text-xl font-light italic font-['Poppins'] leading-loose">Exercise Therapy</div>
+          <div className="text-stone-800 text-xl font-light italic font-['Poppins'] leading-loose">Nutritional Counseling</div>
         </div>
         <div className='md:w-1/2 flex justify-end'>
           <Image
@@ -37,7 +39,7 @@ export default function ServiceDetails({ service }) {
               .quality(80)
               .url()}
             alt={service.title}
-            className='object-cover object-center mt-10 w-[0px] h-[0px] md:h-[515px] md:w-[290px] lg:w-[512px] lg:h-[675px] float-right'/>
+            className='rounded-full w-[300px] h-[300px] md:mt-20 md:w-[300px] md:h-[300px] 2xl:w-[500px] 2xl:h-[500px] object-cover mx-auto group-hover:-translate-y-3 transition-all duration-300'/>
         </div>
       </div>
     </section>

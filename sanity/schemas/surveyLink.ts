@@ -26,13 +26,25 @@ export default defineType({
       name: 'cta',
       title: 'Call to Action',
       type: 'string',
-      description: 'Text for the CTA button',
+      description: 'CTA survey link',
     }),
     defineField({
       name: 'href',
       title: 'Link Href',
       type: 'string',
       description: 'URL/Link for the hover link. (Example: /survey)',
+    }),
+    defineField({
+      name: 'content',
+      title: 'Text Content',
+      type: 'string',
+      description: 'Text content for the survey link',
+    }),
+    defineField({
+      name: 'bold',
+      title: 'Bolded text content',
+      type: 'string',
+      description: 'Bolded text at end of text content',
     }),
   ],
   preview: {

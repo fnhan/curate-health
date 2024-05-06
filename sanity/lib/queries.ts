@@ -213,7 +213,8 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
     alt
   },
   cta,
-  href
+  href,
+  content
 }`;
 
 export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{

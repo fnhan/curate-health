@@ -1,5 +1,6 @@
 import Blog from 'components/layout/Home/Blog';
 import Clinic from 'components/layout/Home/Clinic';
+import ComingSoon from 'components/layout/Home/ComingSoon';
 import CurateCafe from 'components/layout/Home/CurateCafe';
 import Hero from 'components/layout/Home/Hero';
 import Highlight from 'components/layout/Home/Highlight';
@@ -39,6 +40,12 @@ export default function Index(props: PageProps) {
 
   if (props.draftMode) {
     return <HomePreview />;
+  }
+
+  const comingSoon = true;
+
+  if (comingSoon) {
+    return <ComingSoon />;
   }
 
   return (

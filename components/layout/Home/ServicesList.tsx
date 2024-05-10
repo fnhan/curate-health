@@ -7,27 +7,31 @@ const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function ServicesList({ services }) {
   return (
-    <div className='md:flex justify-between grid grid-cols-2 gap-y-6 gap-x-2'>
+    <div className='justify-left'>
       {services.map((service) => (
-        <div key={service.title}>
+        <div key={service.title} >
           <Link
             className='flex flex-col gap-7 group'
             href={`/services/${service.slug}`}>
-            <Image
-              src={builder
-                .image(service.image)
-                .width(175)
-                .height(175)
-                .quality(80)
-                .url()}
-              width={175}
-              height={175}
-              alt=''
-              className='rounded-full w-[85px] h-[85px] md:w-[128px] md:h-[128px] 2xl:w-[175px] 2xl:h-[175px] object-cover mx-auto group-hover:-translate-y-3 transition-all duration-300'
-            />
+            <div className='relative'>
+              <Image
+                loading='lazy'
+                width={1440}
+                height={2560}
+                src={builder
+                  .image(service.image)
+                  .width(1080)
+                  .height(1440)
+                  .quality(80)
+                  .url()}
+                alt={service.title}
+                className='object-cover w-full h-[65px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0'
+              />
+              <div className='absolute inset-0 bg-gray-900 opacity-0 group-hover:opacity-50 transition-opacity'></div>
+            </div>
             <h3 className='text-center text-md border-b border-transparent md:text-base group-hover:underline duration-300 transition-all'>
-              {service.title}
-            </h3>
+                {service.title}
+              </h3>
           </Link>
         </div>
       ))}

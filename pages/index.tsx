@@ -45,7 +45,12 @@ export default function Index(props: PageProps) {
   const comingSoon = true;
 
   if (comingSoon) {
-    return <ComingSoon />;
+    return (
+      <main className='flex flex-col min-h-screen justify-center items-center text-white gap-16'>
+        <ComingSoon />
+        <Newsletter />
+      </main>
+    );
   }
 
   return (

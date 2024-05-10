@@ -6,7 +6,7 @@ export default function Services({ services }) {
     <section>
       <div className='flex flex-col justify-start gap-10 md:gap-20 pt-8 md:py-16 pb-12'>
         <div className='flex justify-start'>
-          <h2 className='mt-10 mb-4 ml-10 text-3xl md:text-5xl'>Our Services</h2>
+          <h2 className='mt-10 ml-20 text-3xl md:text-5xl'>Our Services</h2>
         </div>
         <ServicesList services={services} />
       </div>

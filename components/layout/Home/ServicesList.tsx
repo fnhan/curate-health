@@ -9,11 +9,11 @@ export default function ServicesList({ services }) {
   return (
     <div className='justify-left'>
       {services.map((service) => (
-        <div key={service.title} >
+        <div key={service.title} className="relative"> {/* Added relative positioning */}
           <Link
             className='flex flex-col gap-7 group'
             href={`/services/${service.slug}`}>
-            <div className='relative'>
+            <div className='relative flex w-85'>
               <Image
                 loading='lazy'
                 width={1440}
@@ -25,13 +25,12 @@ export default function ServicesList({ services }) {
                   .quality(80)
                   .url()}
                 alt={service.title}
-                className='object-cover w-full h-[65px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0'
+                className='object-cover w-full h-[78px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0'
               />
-              <div className='absolute inset-0 bg-gray-900 opacity-0 group-hover:opacity-50 transition-opacity'></div>
-            </div>
-            <h3 className='text-center text-md border-b border-transparent md:text-base group-hover:underline duration-300 transition-all'>
+              <h3 className='absolute bottom-4 md:bottom-9 left-20 transform  -translate-y-1/2 text-center text-lg md:text-[29px] border-b border-transparent md:text-base group-hover:underline duration-300 '>
                 {service.title}
               </h3>
+            </div>
           </Link>
         </div>
       ))}

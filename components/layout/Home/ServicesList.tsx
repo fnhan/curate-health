@@ -27,9 +27,11 @@ export default function ServicesList({ services }) {
                 alt={service.title}
                 className='object-cover w-full h-[78px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0'
               />
-              <h3 className='absolute bottom-4 md:bottom-9 left-20 transform  -translate-y-1/2 text-center text-lg md:text-[29px] border-b border-transparent md:text-base group-hover:underline duration-300 '>
-                {service.title}
-              </h3>
+              <div className="flex items-center">
+                <h3 className='absolute bottom-4 md:bottom-9 left-20 transform -translate-y-1/2 text-center text-lg md:text-[29px] border-b border-transparent md:text-base group-hover:underline duration-300'>
+                  {service.title} 
+                </h3>
+              </div>
             </div>
           </Link>
         </div>

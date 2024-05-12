@@ -1,6 +1,7 @@
 import { Loading } from 'components/Loading';
 import { CarouselNav } from 'components/layout/Services/CarouselNav';
 import ServiceDetails from 'components/layout/Services/ServiceDetails';
+import Picture from 'components/layout/Services/Picture';
 import { GetStaticPaths } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
@@ -46,6 +47,9 @@ export default function ServicesPage(props: PageProps) {
       navigation={props.navigation}
       footer={props.footer}
       title={props.service?.title || 'Services'}>
+        <div>
+          <Picture service={props.service} />
+        </div>
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
         <CarouselNav services={props.services} currentPageTitle={props.service?.title || 'Services'} />
       </div>

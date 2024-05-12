@@ -1,4 +1,6 @@
 import imageUrlBuilder from '@sanity/image-url';
+import { Button } from 'components/ui/button';
+import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { dataset, projectId } from '../../../sanity/env';
@@ -7,9 +9,9 @@ const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function ServicesList({ services }) {
   return (
-    <div className='justify-left'>
+    <div>
       {services.map((service) => (
-        <div key={service.title} className="relative"> {/* Added relative positioning */}
+        <div key={service.title} className='relative'>
           <Link
             className='flex flex-col gap-7 group'
             href={`/services/${service.slug}`}>
@@ -27,10 +29,15 @@ export default function ServicesList({ services }) {
                 alt={service.title}
                 className='object-cover w-full h-[78px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0'
               />
-              <div className="flex items-center">
-                <h3 className='absolute bottom-4 md:bottom-9 left-20 transform -translate-y-1/2 text-center text-lg md:text-[29px] border-b border-transparent md:text-base group-hover:underline duration-300'>
-                  {service.title} 
-                </h3>
+              <div className='absolute -bottom-1 md:bottom-3 2xl:bottom-5 px-10 transform -translate-y-1/2 w-full  flex items-center'>
+                <div className='flex justify-between w-full items-center'>
+                  <div className='md:text-3xl'>{service.title}</div>
+                  <Button
+                    variant='outline'
+                    className='bg-transparent rounded-full hover:bg-transparent hover:scale-105 transition-all duration-300 border-2 md:w-[90px]'>
+                    <ArrowRight size={18} />
+                  </Button>
+                </div>
               </div>
             </div>
           </Link>

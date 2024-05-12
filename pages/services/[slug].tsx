@@ -47,7 +47,7 @@ export default function ServicesPage(props: PageProps) {
       footer={props.footer}
       title={props.service?.title || 'Services'}>
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
-        <CarouselNav services={props.services} />
+        <CarouselNav services={props.services} currentPageTitle={props.service?.title || 'Services'} />
       </div>
       <div className=''>
         <ServiceDetails service={props.service} />

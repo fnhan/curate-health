@@ -1,50 +1,45 @@
-import { Card, CardContent } from 'components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from 'components/ui/carousel';
+// import { Card, CardContent } from 'components/ui/card';
+// import {
+//   Carousel,
+//   CarouselContent,
+//   CarouselItem,
+//   CarouselNext,
+//   CarouselPrevious,
+// } from 'components/ui/carousel';
 import Link from 'next/link';
 
-export function CarouselNav({ services }) {
+export function CarouselNav({ services, currentPageTitle }) {
   return (
-    <Carousel className='container relative'>
-      <CarouselContent className='-ml-1'>
+    <div className='relative ml-10'>
+      <div className='flex'>
         {/* Render "Our Service" as the first item */}
-        <CarouselItem className='pl-1 md:basis-1/2 lg:basis-1/3 border-r last:border-r-0'>
+        <div className='pr-3 pl-10'>
           <div className='p-1 group'>
             <Link href='/services/our-services'>
-              <Card className='bg-transparent border-none'>
-                <CardContent className='flex items-center justify-center p-6 text-white group-hover:underline'>
-                  Our Services
-                </CardContent>
-              </Card>
+              <div className='bg-transparent border-none'>
+                <div className={`items-center justify-center p-6 text-black text-[12px] 2xl:text-[14px] ${currentPageTitle === "Our Services" ? 'underline text-black' : ''}`}>
+                  Our Services&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+                </div>
+              </div>
             </Link>
           </div>
-        </CarouselItem>
+        </div>
         
         {/* Render other services */}
         {services.map((service, index) => (
-          <CarouselItem
-            key={index}
-            className='pl-1 md:basis-1/2 lg:basis-1/3 border-r last:border-r-0'>
+          <div key={index}>
             <div className='p-1 group'>
               <Link href={`/services/${service.slug}`}>
-                <Card className='bg-transparent border-none'>
-                  <CardContent className='flex items-center justify-center p-6 text-white group-hover:underline'>
+                <div className={`bg-transparent border-none ${currentPageTitle === service.title ? 'underline text-black' : ''}`}>
+                  <div className='items-center justify-center p-6 text-black text-[12px] 2xl:text-[14px]'>
                     {service.title}
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </Link>
             </div>
-          </CarouselItem>
+          </div>
         ))}
-      </CarouselContent>
-
-      <CarouselPrevious className='left-0 ml-4' />
-      <CarouselNext className='right-0 mr-4' />
-    </Carousel>
+      </div>
+    </div>
   );
 }

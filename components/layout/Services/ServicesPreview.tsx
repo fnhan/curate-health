@@ -38,7 +38,7 @@ export default function ServicesPreview() {
       footer={footer}
       title={service?.title || 'Services'}>
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
-        <CarouselNav services={services} />
+        <CarouselNav services={services} currentPageTitle={service.title}/>
       </div>
       <div className='py-10'>
         <ServiceDetails service={service} />

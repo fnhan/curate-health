@@ -2,6 +2,8 @@ import { PortableText } from '@portabletext/react';
 import imageUrlBuilder from '@sanity/image-url';
 import { Loading } from 'components/Loading';
 import Image from 'next/image';
+import { Button } from 'components/ui/button';
+import { ArrowRight, ArrowRightToLine, ArrowUpRight } from 'lucide-react';
 import { dataset, projectId } from '../../../sanity/env';
 
 const builder = imageUrlBuilder({ projectId, dataset });
@@ -37,9 +39,25 @@ export default function ServiceDetails({ service }) {
     </div>
   </div>
   <div className="w-1/2 pt-20 pb-20 md:-mt-36 2xl:-mt-60 ml-20 text-stone-800 text-[16px] md:text-[18px] 2xl:text-[24px] font-light italic font-['Poppins'] leading-[30px] md:leading-[60px]">
-      <div>Exercise Therapy</div>
-      <div>Nutritional Counseling</div>
-  </div>
+    <div className="flex items-center"> 
+        <div>Exercise Therapy</div>
+        <Button 
+          variant='outline'
+          className='bg-transparent rounded-full hover:bg-transparent hover:scale-105 transition-all duration-300 border-none md:w-[90px]'>
+          <ArrowUpRight></ArrowUpRight>
+        </Button>
+      </div>
+      <div className="flex items-center">
+        <div>Nutritional Counseling</div>
+        <Button 
+          variant='outline'
+          className='bg-transparent rounded-full hover:bg-transparent hover:scale-105 transition-all duration-300 border-none md:w-[90px]'>
+          <ArrowUpRight></ArrowUpRight>
+        </Button>
+      </div>
+    </div>
+
 </section>
   );
 }
+

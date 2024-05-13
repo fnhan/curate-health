@@ -10,10 +10,9 @@ import Link from 'next/link';
 
 export function CarouselNav({ services, currentPageTitle }) {
   return (
-    <div className='relative ml-10'>
+    <div className='container relative whitespace-nowrap overflow-x-auto'>
       <div className='flex'>
-        {/* Render "Our Service" as the first item */}
-        <div className='pr-3 pl-10'>
+        <div className='pr-3'>
           <div className='p-1 group'>
             <Link href='/services/our-services'>
               <div className='bg-transparent border-none'>
@@ -25,7 +24,7 @@ export function CarouselNav({ services, currentPageTitle }) {
           </div>
         </div>
         
-        {/* Render other services */}
+
         {services.map((service, index) => (
           <div key={index}>
             <div className='p-1 group'>

@@ -47,13 +47,13 @@ export default function ServicesPage(props: PageProps) {
       navigation={props.navigation}
       footer={props.footer}
       title={props.service?.title || 'Services'}>
-        <div>
-          <Picture service={props.service} />
-        </div>
+      <div>
+        <Picture service={props.service} />
+      </div>
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
         <CarouselNav services={props.services} currentPageTitle={props.service?.title || 'Services'} />
       </div>
-      <div className=''>
+      <div>
         <ServiceDetails service={props.service} />
       </div>
       <Survey surveySection={props.surveySection} />

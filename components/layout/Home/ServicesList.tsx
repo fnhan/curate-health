@@ -9,7 +9,7 @@ const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function ServicesList({ services }) {
   return (
-    <div>
+    <div className='container'>
       {services.map((service) => (
         <div key={service.title} className='relative'>
           <Link

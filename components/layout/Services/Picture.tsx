@@ -18,9 +18,9 @@ export default function Picture({ service }) {
             width={1080}
             height={1440}
             src={builder
-              .image(service.image)
-              .width(1080)
-              .height(1440)
+              .image(service.above_image)
+              .width(1440)
+              .height(760)
               .quality(80)
               .url()}
             alt={service.title}

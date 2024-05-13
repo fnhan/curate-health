@@ -7,7 +7,7 @@ import Highlight from 'components/layout/Home/Highlight';
 import Newsletter from 'components/layout/Home/Newsletter';
 import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
-import Survey from 'components/layout/Home/Survey';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
 import Sustainability from 'components/layout/Home/Sustainability';
 import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
@@ -61,7 +61,7 @@ type HomePageData = {
   products: SanityDocument[];
   posts: SanityDocument[];
   footer: SanityDocument;
-  surveySection: SanityDocument;
+  surveyLink: SanityDocument;
   navigation: SanityDocument;
   sustainabilitySection: {
     bgImage: {
@@ -102,7 +102,7 @@ export default function HomePagePreview() {
       <CurateCafe cafeSection={data.cafeSection} />
       <Blog posts={data.posts} />
       <Sustainability sustainabilitySection={data.sustainabilitySection} />
-      <Survey surveySection={data.surveySection} />
+      <SurveyLink surveyLink={data.surveyLink} />
       <Newsletter />
     </Layout>
   );

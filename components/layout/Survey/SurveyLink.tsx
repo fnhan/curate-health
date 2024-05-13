@@ -1,6 +1,5 @@
 import imageUrlBuilder from '@sanity/image-url';
-import { Button } from 'components/ui/button';
-import { ChevronRightIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { dataset, projectId } from '../../../sanity/env';
@@ -22,12 +21,12 @@ export default function SurveyLink({ surveyLink }) {
         <Link
           href={href}
           className='border-4 border-white bg-platinum hover:bg-primary transition-all duration-300 text-primary hover:text-white text-center
-          rounded-full p-5 flex items-center justify-center flex-col gap-3 h-[175px] md:h-[250px] lg:h-[400px] w-[175px] md:w-[250px] lg:w-[400px]'>
-          <p className='text-[14px] md:text-[22px] lg:text-[36px]'>{content}</p>
-          <p className='text-[14px] md:text-[22px] lg:text-[36px] italic font-bold text-primary hover:text-white'>{bold}</p>
-          <div className='flex items-center gap-1'>
-            <p className='text-[10px] md:text-[12px] lg:text[16px]'>{cta}</p>
-            <ChevronRightIcon size={18} />
+          rounded-full p-5 flex items-center justify-center flex-col gap-3 h-[175px] md:h-[275px] lg:h-[400px] w-[175px] md:w-[275px] lg:w-[400px]'>
+          <p className='text-[14px] md:text-[22px] lg:text-[36px] pt-4'>{content}
+          <span className='text-[14px] md:text-[22px] lg:text-[36px] italic font-bold'>{bold}</span></p>
+          <div className='flex items-center'>
+            <p className='text-[10px] md:text-[14px] lg:text-[16px]'>{cta}</p>
+            <ArrowRight className='w-3 h-3 md:w-5 md:h-5 lg:w-6 lg:h-6 ml-1 md:ml-2' />
           </div>
         </Link>
       </div>

@@ -7,7 +7,7 @@ import Highlight from 'components/layout/Home/Highlight';
 import Newsletter from 'components/layout/Home/Newsletter';
 import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
-import Survey from 'components/layout/Home/Survey';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
 import Sustainability from 'components/layout/Home/Sustainability';
 import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
@@ -29,7 +29,7 @@ type PageProps = {
   draftMode: boolean;
   token: string;
   sustainabilitySection: SanityDocument[];
-  surveySection: SanityDocument[];
+  surveyLink: SanityDocument[];
   navigation: SanityDocument[];
 };
 
@@ -66,7 +66,7 @@ export default function Index(props: PageProps) {
       <CurateCafe cafeSection={props.cafeSection} />
       <Blog posts={props.posts} />
       <Sustainability sustainabilitySection={props.sustainabilitySection} />
-      <Survey surveySection={props.surveySection} />
+      <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>
   );

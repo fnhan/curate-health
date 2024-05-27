@@ -7,7 +7,7 @@ export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)]
   meta {
     title,
     description
-  },
+  }
 }`;
 
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
@@ -25,7 +25,7 @@ export const SUSTAINABILITY_SECTION_QUERY = `*[_type == "sustainabilitySection"]
     },
     alt
   },
-  sustainText,
+  sustainText
 }`;
 
 const HIGHLIGHT_QUERY = groq`*[_type == "highlight"][0]{
@@ -65,7 +65,7 @@ const CAFE_QUERY = groq`*[_type == "cafeSection"][0] {
   meta {
     title,
     description
-  },
+  }
 }`;
 
 export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
@@ -76,7 +76,7 @@ export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   content
 }`;
 
-export const SERVICES_SLUG_QUERY = `*[_type == "service" && isActive == true && defined(slug.current)] {
+export const SERVICES_SLUG_QUERY = groq`*[_type == "service" && isActive == true && defined(slug.current)] {
   "params": {"slug": slug.current}
 }`;
 
@@ -90,7 +90,7 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     meta {
       title,
       description
-    },
+    }
   }
 `;
 
@@ -147,13 +147,12 @@ export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
   description,
   "image": image.asset->url,
-  "altText": image.alt
-  }
+  "altText": image.alt,
   meta {
     title,
     description
-  },
-`;
+  }
+}`;
 
 export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
   serviceLinks[]->{
@@ -173,7 +172,7 @@ export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"] {
   meta {
     title,
     description
-  },
+  }
 }`;
 
 export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
@@ -182,7 +181,7 @@ export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
   meta {
     title,
     description
-  },
+  }
 }`;
 
 export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"] {
@@ -191,7 +190,7 @@ export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"] {
   meta {
     title,
     description
-  },
+  }
 }`;
 
 export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
@@ -209,7 +208,7 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
   meta {
     title,
     description
-  },
+  }
 }`;
 
 export const HOME_PAGE_QUERY = groq`{
@@ -219,7 +218,7 @@ export const HOME_PAGE_QUERY = groq`{
     title,
     excerpt,
     slug,
-    publishedAt,
+    publishedAt
   },
   "highlightSection": ${HIGHLIGHT_QUERY},
   "clinicSection": ${CLINIC_QUERY},
@@ -232,8 +231,8 @@ export const HOME_PAGE_QUERY = groq`{
   "surveyLink": ${SURVEY_LINK_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "termsOfUse": ${TERMS_OF_USE_QUERY},
-  "privacy": ${PRIVACY_QUERY}  ,
-  "accessibility": ${ACCESSIBILITY_QUERY} 
+  "privacy": ${PRIVACY_QUERY},
+  "accessibility": ${ACCESSIBILITY_QUERY}
 }`;
 
 export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{

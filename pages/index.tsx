@@ -42,7 +42,7 @@ export default function Index(props: PageProps) {
     return <HomePreview />;
   }
 
-  const comingSoon = true;
+  const comingSoon = false;
 
   if (comingSoon) {
     return (
@@ -54,7 +54,12 @@ export default function Index(props: PageProps) {
   }
 
   return (
-    <Layout title={'Home'} navigation={props.navigation} footer={props.footer}>
+    <Layout
+      title={'Home'}
+      navigation={props.navigation}
+      footer={props.footer}
+      description={'bla'}
+    >
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />
       <Clinic clinicSection={props.clinicSection} />

@@ -25,6 +25,7 @@ type PageProps = {
   footer?: SanityDocument;
   draftMode: boolean;
   token: string;
+  description: string;
 };
 
 export default function SinglePost(props: PageProps) {
@@ -40,7 +41,12 @@ export default function SinglePost(props: PageProps) {
 
   const { post, params, navigation, footer, draftMode } = props;
   return (
-    <Layout navigation={navigation} footer={footer} title={'Blog'}>
+    <Layout
+      navigation={navigation}
+      footer={footer}
+      title={'Blog'}
+      description={props.description}
+    >
       {draftMode ? (
         <PostPreview post={post} params={params} />
       ) : (

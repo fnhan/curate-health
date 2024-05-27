@@ -44,6 +44,23 @@ export default defineType({
       description: 'Toggle to show/hide this product on the website.',
       initialValue: true,
     }),
+
+    defineField({
+      name: 'meta',
+      type: 'object',
+      fields: [
+        {
+          title: 'Title',
+          name: 'title',
+          type: 'string',
+        },
+        {
+          title: 'Description',
+          name: 'description',
+          type: 'string',
+        },
+      ],
+    }),
   ],
 
   preview: {

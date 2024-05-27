@@ -3,7 +3,11 @@ import { groq } from 'next-sanity';
 export const POSTS_QUERY = groq`*[_type == "post" && defined(slug)]`;
 
 export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)][]{
-  "params": { "slug": slug.current }
+  "params": { "slug": slug.current },
+  meta {
+    title,
+    description
+  },
 }`;
 
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
@@ -57,7 +61,11 @@ const CAFE_QUERY = groq`*[_type == "cafeSection"][0] {
   title,
   content,
   hoverLinkText,
-  hoverLinkHref
+  hoverLinkHref,
+  meta {
+    title,
+    description
+  },
 }`;
 
 export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
@@ -78,7 +86,11 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     "slug": slug.current,
     "image": image.asset->url,
     "altText": image.alt,
-    content
+    content,
+    meta {
+      title,
+      description
+    },
   }
 `;
 
@@ -137,6 +149,10 @@ export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   "image": image.asset->url,
   "altText": image.alt
   }
+  meta {
+    title,
+    description
+  },
 `;
 
 export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
@@ -153,17 +169,29 @@ export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
 
 export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"] {
   title,
-  content
+  content,
+  meta {
+    title,
+    description
+  },
 }`;
 
 export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
   title,
-  content
+  content,
+  meta {
+    title,
+    description
+  },
 }`;
 
 export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"] {
   title,
-  content
+  content,
+  meta {
+    title,
+    description
+  },
 }`;
 
 export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
@@ -177,7 +205,11 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
   cta,
   href,
   content,
-  bold
+  bold,
+  meta {
+    title,
+    description
+  },
 }`;
 
 export const HOME_PAGE_QUERY = groq`{
@@ -215,6 +247,10 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
       url
     },
     "alt": contactInfoImage.alt
+  },
+  meta {
+    title,
+    description
   },
   hrefDirections
 }`;

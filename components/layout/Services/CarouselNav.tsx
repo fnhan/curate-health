@@ -7,10 +7,11 @@
 //   CarouselPrevious,
 // } from 'components/ui/carousel';
 import Link from 'next/link';
+import styles from '../../../styles/CarouselNav.module.css'
 
 export function CarouselNav({ services, currentPageTitle }) {
   return (
-    <div className='container relative whitespace-nowrap overflow-x-auto'>
+    <div className={`container relative whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
       <div className='flex'>
         <div className=' md:mr-20'>
           <div className='p-1 group'>

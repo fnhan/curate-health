@@ -12,12 +12,13 @@ export function CarouselNav({ services, currentPageTitle }) {
   return (
     <div className='container relative whitespace-nowrap overflow-x-auto'>
       <div className='flex'>
-        <div className='pr-3'>
+        <div className=' md:mr-20'>
           <div className='p-1 group'>
             <Link href='/services/our-services'>
               <div className='bg-transparent border-none'>
-                <div className={`items-center justify-center p-6 text-black text-[12px] 2xl:text-[14px] ${currentPageTitle === "Our Services" ? 'underline text-black' : ''}`}>
-                  Our Services&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+                <div className={`items-center justify-center p-6 text-black text-[12px] 2xl:text-[14px] group-hover:underline ${currentPageTitle === "Our Services" ? 'underline text-black' : ''}`}>
+                  Our Services
+                  <span className='-mr-6 md:ml-20 mx-3 lg:inline'>|</span>
                 </div>
               </div>
             </Link>
@@ -30,7 +31,7 @@ export function CarouselNav({ services, currentPageTitle }) {
             <div className='p-1 group'>
               <Link href={`/services/${service.slug}`}>
                 <div className={`bg-transparent border-none ${currentPageTitle === service.title ? 'underline text-black' : ''}`}>
-                  <div className='items-center justify-center p-6 text-black text-[12px] 2xl:text-[14px]'>
+                  <div className='items-center justify-center p-6 text-black text-[12px] 2xl:text-[14px] group-hover:underline'>
                     {service.title}
                   </div>
                 </div>

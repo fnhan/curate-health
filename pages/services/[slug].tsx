@@ -50,7 +50,7 @@ export default function ServicesPage(props: PageProps) {
       <div>
         <Picture service={props.service} />
       </div>
-      <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
+      <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[105px] z-50'>
         <CarouselNav services={props.services} currentPageTitle={props.service?.title || 'Services'} />
       </div>
       <div>

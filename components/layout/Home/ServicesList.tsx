@@ -11,11 +11,11 @@ export default function ServicesList({ services }) {
   return (
     <div>
       {services.map((service) => (
-        <div key={service.title} className='relative '>
+        <div key={service.title}>
           <Link
-            className='flex flex-col group'
+            className='flex flex-col group '
             href={`/services/${service.slug}`}>
-            <div className='relative flex w-85'>
+            <div className='relative'>
               <Image
                 loading='lazy'
                 width={1440}
@@ -27,14 +27,14 @@ export default function ServicesList({ services }) {
                   .quality(80)
                   .url()}
                 alt={service.title}
-                className='object-cover w-full h-[78px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0 '
+                className='object-cover h-[78px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0 group-hover:scale-105 '
               />
               <div className='absolute -bottom-1 md:bottom-3 2xl:bottom-5 px-10 transform -translate-y-1/2 w-full flex items-center'>
                 <div className='flex justify-between w-full items-center'>
                   <div className='md:text-3xl group-hover:underline'>{service.title}</div>
                   <Button
                     variant='outline'
-                    className='bg-transparent rounded-full hover:bg-transparent hover:scale-105 transition-all duration-300 border-2 md:w-[90px]'>
+                    className='bg-transparent rounded-full hover:bg-transparent group-hover:bg-black scale-105 transition-all duration-300 border-2 md:w-[90px]'>
                     <ArrowRight size={18} />
                   </Button>
                 </div>

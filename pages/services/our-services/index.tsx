@@ -1,54 +1,92 @@
-import ContactDetails from 'components/layout/Contact/ContactDetails';
-import ContactInfo from 'components/layout/Contact/ContactInfo';
-import Newsletter from 'components/layout/Home/Newsletter';
+import { Loading } from 'components/Loading';
 import { CarouselNav } from 'components/layout/Services/CarouselNav';
-import SurveyLink from 'components/layout/Survey/SurveyLink';
-import Layout from 'components/layout/layout';
+import ServiceDetails from 'components/layout/Services/ServiceDetails';
+import Picture from 'components/layout/Services/Picture';
+import { GetStaticPaths } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
-import { getClient } from '../../../sanity/lib/client';
-import { SURVERY_QUERY, CONTACT_PAGE_QUERY } from '../../../sanity/lib/queries';
-import { token } from '../../../sanity/lib/token';
+import Newsletter from '../../../components/layout/Home/Newsletter';
 import Survey from '../../../components/layout/Home/Survey';
+import Layout from '../../../components/layout/layout';
+import { getClient } from '../../../sanity/lib/client';
+import {
+  FOOTER_QUERY,
+  NAVIGATION_QUERY,
+  SERVICES_QUERY,
+  SERVICES_SLUG_QUERY,
+  SERVICE_BY_SLUG_QUERY,
+  SURVERY_QUERY,
+} from '../../../sanity/lib/queries';
+import { token } from '../../../sanity/lib/token';
 
 type PageProps = {
-  contactInfo: SanityDocument;
-  contactDetails: SanityDocument;
-  surveyLink: SanityDocument;
-  services: SanityDocument[];
-  surveySection: SanityDocument[];
-  navigation: SanityDocument;
-  footer: SanityDocument;
   draftMode: boolean;
   token: string;
+  services: SanityDocument[];
+  service: SanityDocument;
+  navigation: SanityDocument;
+  surveySection: SanityDocument[];
+  footer: SanityDocument;
 };
 
-export default function Index(props: PageProps) {
+export default function ServicesPage(props: PageProps) {
+  const ServicesPreview = dynamic(
+    () => import('../../../components/layout/Services/ServicesPreview')
+  );
+
+  if (props.draftMode) {
+    return <ServicesPreview />;
+  }
+
+  if (!props.service) {
+    return <Loading />;
+  }
+
   return (
     <Layout
-      title={'Our Services'}
       navigation={props.navigation}
-      footer={props.footer}>
-      {/* <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
-        <CarouselNav services={props.services} />
-      </div> */}
+      footer={props.footer}
+      title={props.service?.title || 'Services'}>
+      <div>
+        <Picture service={props.service} />
+      </div>
+      <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[105px] z-50'>
+        <CarouselNav services={props.services} currentPageTitle={props.service?.title || 'Services'} />
+      </div>
+      <div>
+        <ServiceDetails service={props.service} />
+      </div>
       <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>
   );
 }
 
-export const getStaticProps = async ({ draftMode = false }) => {
-  const client = getClient(draftMode ? token : undefined);
-  const allData = await client.fetch(CONTACT_PAGE_QUERY);
+export const getStaticProps = async ({ params, preview = false }) => {
+  const client = getClient(preview ? token : undefined);
+  const services = await client.fetch(SERVICES_QUERY);
+  const service = await client.fetch(SERVICE_BY_SLUG_QUERY, {
+    slug: params.slug,
+  });
+  const navigation = await client.fetch(NAVIGATION_QUERY);
+  const footer = await client.fetch(FOOTER_QUERY);
   const surveySection = await client.fetch(SURVERY_QUERY);
 
   return {
     props: {
-      ...allData,
-      draftMode,
+      service,
+      services,
+      navigation,
+      footer,
       surveySection,
-      token: draftMode ? token : '',
+      draftMode: preview,
+      token: preview ? token : '',
     },
   };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = await getClient().fetch(SERVICES_SLUG_QUERY);
+
+  return { paths, fallback: true };
 };

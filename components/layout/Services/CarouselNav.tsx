@@ -32,7 +32,7 @@ export function CarouselNav({ services, currentPageTitle }) {
             <div className='p-1 group'>
               <Link href={`/services/${service.slug}`}>
                 <div className={`bg-transparent border-none ${currentPageTitle === service.title ? 'underline text-black' : ''}`}>
-                  <div className='items-center justify-center p-6 text-black text-[12px] 2xl:text-[14px] group-hover:underline'>
+                  <div className='items-center justify-center p-6 text-black text-[12px] 2xl:text-[14px] hover:underline'>
                     {service.title}
                   </div>
                 </div>

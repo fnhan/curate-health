@@ -1,22 +1,21 @@
+import { getClient } from '../../../sanity/lib/client';
+import { SURVERY_QUERY, CONTACT_PAGE_QUERY , SERVICES_QUERY} from '../../../sanity/lib/queries';
+import { token } from '../../../sanity/lib/token';
 
-import ContactDetails from 'components/layout/Contact/ContactDetails';
-import ContactInfo from 'components/layout/Contact/ContactInfo';
+import Layout from 'components/layout/layout';
 import Newsletter from 'components/layout/Home/Newsletter';
 import { CarouselNav } from 'components/layout/Services/CarouselNav';
-import SurveyLink from 'components/layout/Survey/SurveyLink';
-import Layout from 'components/layout/layout';
-import { SanityDocument } from 'next-sanity';
-import dynamic from 'next/dynamic';
-import { getClient } from '../../../sanity/lib/client';
-import { SURVERY_QUERY, CONTACT_PAGE_QUERY } from '../../../sanity/lib/queries';
-import { token } from '../../../sanity/lib/token';
 import Survey from '../../../components/layout/Home/Survey';
+
+import { SanityDocument } from 'next-sanity';
+import OurServiceDetail from 'components/layout/Services/OurServiceDetail';
 
 type PageProps = {
   contactInfo: SanityDocument;
   contactDetails: SanityDocument;
   surveyLink: SanityDocument;
   services: SanityDocument[];
+  service: SanityDocument;
   surveySection: SanityDocument[];
   navigation: SanityDocument;
   footer: SanityDocument;
@@ -24,25 +23,37 @@ type PageProps = {
   token: string;
 };
 
-export default function Index(props: PageProps) {
+const OurService = ({
+  services = [],
+  surveySection,
+  navigation,
+  footer,
+  draftMode,
+  token,
+}: PageProps) => {
+
+
   return (
-    <Layout
-      title={'Our Services'}
-      navigation={props.navigation}
-      footer={props.footer}>
-      {/* <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
-        <CarouselNav services={props.services} />
-      </div> */}
-      <Survey surveySection={props.surveySection} />
+    <Layout title="Our Services" navigation={navigation} footer={footer}>
+      <div className="bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50">
+        <CarouselNav services={services} currentPageTitle="Our Services" />
+      </div>
+      <div className='bg-white'>
+        <OurServiceDetail services={services} />
+      </div>
+      <OurServiceDetail services={services} />
+      <Survey surveySection={surveySection} />
       <Newsletter />
     </Layout>
   );
-}
+};
 
 export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const allData = await client.fetch(CONTACT_PAGE_QUERY);
   const surveySection = await client.fetch(SURVERY_QUERY);
+  const services = await client.fetch(SERVICES_QUERY);
+
 
   return {
     props: {
@@ -50,6 +61,9 @@ export const getStaticProps = async ({ draftMode = false }) => {
       draftMode,
       surveySection,
       token: draftMode ? token : '',
+      services,
     },
   };
 };
+
+export default OurService;

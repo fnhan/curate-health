@@ -39,10 +39,11 @@ const OurService = ({
         <CarouselNav services={services} currentPageTitle="Our Services" />
       </div>
       <div className='bg-white'>
-        <OurServiceDetail services={services} />
+        <div className='mb-32'>
+          <OurServiceDetail services={services} />
+        </div>
+        <Survey surveySection={surveySection} />
       </div>
-      <OurServiceDetail services={services} />
-      <Survey surveySection={surveySection} />
       <Newsletter />
     </Layout>
   );

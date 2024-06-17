@@ -13,7 +13,7 @@ export function CarouselNav({ services, currentPageTitle }) {
                 <div className={`p-6 text-black font-light font-Poppins text-[12px] 2xl:text-[14px] group-hover:underline ${currentPageTitle === "Our Services" ? 'underline text-black' : ''}`}>
                   Our Services
                 </div>
-                <div className='text-black font-light -ml-1 p-6 mx-3 lg:inline'>|</div>
+                <div className='text-black font-light -ml-6 p-6 mx-3 lg:inline'>|</div>
               </div>
             </Link>
           </div>
@@ -25,7 +25,7 @@ export function CarouselNav({ services, currentPageTitle }) {
             <div className='p-1 group'>
               <Link href={`/services/${service.slug}`}>
                 <div className={`bg-transparent border-none ${currentPageTitle === service.title ? 'underline text-black' : ''}`}>
-                  <div className='items-center font-light font-Poppins justify-center p-6 text-black text-[12px] 2xl:text-[14px] hover:underline'>
+                  <div className='-ml-4 -mr-4 items-center font-light font-Poppins justify-center p-6 text-black text-[12px] 2xl:text-[14px] hover:underline'>
                     {service.title}
                   </div>
                 </div>

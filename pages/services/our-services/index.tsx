@@ -9,6 +9,7 @@ import Survey from '../../../components/layout/Home/Survey';
 
 import { SanityDocument } from 'next-sanity';
 import OurServiceDetail from 'components/layout/Services/OurServiceDetail';
+import OurServicePicture from 'components/layout/Services/OurServicePicture';
 
 type PageProps = {
   contactInfo: SanityDocument;
@@ -35,6 +36,9 @@ const OurService = ({
 
   return (
     <Layout title="Our Services" navigation={navigation} footer={footer}>
+      <div>
+        <OurServicePicture/>
+      </div>
       <div className="bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50">
         <CarouselNav services={services} currentPageTitle="Our Services" />
       </div>

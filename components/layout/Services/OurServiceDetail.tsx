@@ -7,15 +7,15 @@ const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function OurServiceDetail({ services }) {
   return (
-    <div className='container grid grid-cols-2 md:grid grid-cols-3'>
+    <div className='md:container grid grid-cols-2 md:grid-cols-3'>
       {services.map((service) => (
         <div key={service.title} className="group flex flex-col item-center justify-center">
           <Link href={`/services/${service.slug}`}>
             <div className="relative overflow-hidden">
               <Image
                 loading="lazy"
-                width={1600}
-                height={2000}
+                width={1440}
+                height={2560}
                 src={builder
                   .image(service.image)
                   .width(210)

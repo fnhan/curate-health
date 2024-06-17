@@ -29,10 +29,10 @@ export default defineType({
       description: 'CTA survey link',
     }),
     defineField({
-      name: 'href',
-      title: 'Link Href',
+      name: 'youformId',
+      title: 'Youform Id',
       type: 'string',
-      description: 'URL/Link for the hover link. (Example: /survey)',
+      description: 'Alphanumeric code to open Youform survey',
     }),
     defineField({
       name: 'content',

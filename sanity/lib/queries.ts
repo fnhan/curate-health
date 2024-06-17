@@ -175,7 +175,7 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
     alt
   },
   cta,
-  href,
+  youformId,
   content,
   bold
 }`;

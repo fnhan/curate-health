@@ -10,7 +10,7 @@ export default function OurServicePicture() {
         height={1440}
         src={ourServices}
         alt='Our Services'
-        className='object-cover w-full h-[400px] md:h-[300px] 2xl:h-[400px] opacity-60'
+        className='object-cover w-full h-[400px] md:h-[550px] opacity-60'
       />
       <div className='container absolute top-2/3  transform -translate-y-1/2 md:w-2/3'>
         <h1 className='container font-Poppins text-[24px] 2xl:text-[60px] md:text-[40px]'>About Our Services</h1>

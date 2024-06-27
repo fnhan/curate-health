@@ -27,14 +27,14 @@ export default function ServicesList({ services }) {
                   .quality(80)
                   .url()}
                 alt={service.title}
-                className="object-cover w-11/12 h-[78px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0 group-hover:transform group-hover:translate-x-8 md:group-hover:translate-x-20"
+                className="object-cover w-11/12 h-[78px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0 group-hover:w-full"
               />
               <div className="absolute -bottom-1 md:bottom-3 2xl:bottom-5 px-10 transform -translate-y-1/2 w-full flex items-center">
                 <div className="flex justify-between w-full items-center">
-                  <div className="2xl:container md:text-3xl group-hover:underline group-hover:translate-x-20">{service.title}</div>
+                  <div className="2xl:container md:text-3xl group-hover:underline">{service.title}</div>
                   <Button
                     variant="outline"
-                    className="bg-transparent rounded-full hover:bg-transparent group-hover:bg-black scale-105 transition-all duration-300 border-2 md:w-[90px] md:absolute right-0 -translate-x-8 md:-translate-x-40 2xl:-translate-x-44 ">
+                    className="bg-transparent rounded-full hover:bg-transparent group-hover:bg-secondary scale-105 transition-all duration-300 border-2 md:w-[90px] md:absolute right-0 -translate-x-8 md:-translate-x-40 2xl:-translate-x-44 ">
                     <ArrowRight size={18} />
                   </Button>
                 </div>

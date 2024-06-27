@@ -17,9 +17,9 @@ export default function ServiceDetails({ service }) {
 <section className='relative text-black bg-white md:h-[560px] 2xl:h-[660px]' id={service.id}>
   <div className='w-full flex flex-col md:flex-row'>
     <div className='mt-12 md:mt-32 mr-10 md:w-1/2  ml-20 flex flex-col'>
-      <h2 className='text-stone-800 text-[24px] md:text-[35px] 2xl:text-[60px] font-Poppins tracking-widest whitespace-nowrap'>{service.title}</h2>
+      <h2 className='text-stone-800 text-[24px] md:text-[35px] 2xl:text-[60px] font-Poppins whitespace-nowrap'>{service.title}</h2>
       <br/>
-      <div className='text-[12px] mb-10 md:text-[16px] md:leading-[30px] font-light font-Poppins leading-[20px] tracking-tight'>
+      <div className='text-[12px] mb-10 md:text-[16px] md:leading-[30px] font-light font-Poppins leading-[20px] '>
         <PortableText value={service.content} />
       </div>
     </div>

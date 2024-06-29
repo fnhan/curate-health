@@ -5,8 +5,6 @@ import { dataset, projectId } from '../../../sanity/env';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-// "jsx4s1rb"
-
 export default function SurveyLink({ surveyLink }) {
   const { bgImage, cta, youformId, content, bold } = surveyLink;
   return (

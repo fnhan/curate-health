@@ -20,7 +20,7 @@ export default function SurveyLink({ surveyLink }) {
       />
       <div className='absolute inset-0 flex items-center justify-center p-4'>
         <a
-          data-youform-open="jsx4s1rb"
+          data-youform-open={youformId}
           data-youform-position="center"
           className='border-4 border-white bg-platinum hover:bg-primary transition-all duration-300 text-primary hover:text-white text-center
           rounded-full p-5 flex items-center justify-center flex-col gap-3 h-[175px] md:h-[275px] lg:h-[400px] w-[175px] md:w-[275px] lg:w-[400px]

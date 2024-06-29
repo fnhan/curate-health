@@ -32,7 +32,7 @@ export default defineType({
       name: 'youformId',
       title: 'Youform Id',
       type: 'string',
-      description: 'Alphanumeric code to open Youform survey',
+      description: 'Alphanumeric code linked to Youform survey',
     }),
     defineField({
       name: 'content',

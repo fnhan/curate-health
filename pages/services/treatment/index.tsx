@@ -10,6 +10,8 @@ import Survey from '../../../components/layout/Home/Survey';
 import { SanityDocument } from 'next-sanity';
 import OurServiceDetail from 'components/layout/Services/OurServiceDetail';
 import AbovePicture from 'components/layout/Services/treatment/AbovePicture';
+import Hero from 'components/layout/Services/treatment/Hero';
+import Quote from 'components/layout/Services/treatment/Quote';
 // import StickyNav from 'components/layout/Services/treatment/StickyNav';
 
 type PageProps = {
@@ -41,14 +43,14 @@ const OurService = ({
         <AbovePicture/>
       </div>
       <div className="bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50">
-        {/* <StickyNav /> */}
       </div>
       <div className='bg-white'>
-        <div className='mb-32'>
-          <OurServiceDetail services={services} />
-        </div>
-        <Survey surveySection={surveySection} />
+        <Hero/>
       </div>
+      <div className='bg-secondary'>
+        <Quote/>
+      </div>
+        <Survey surveySection={surveySection} />
       <Newsletter />
     </Layout>
   );

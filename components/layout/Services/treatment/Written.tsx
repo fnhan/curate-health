@@ -10,7 +10,7 @@ export default function Written() {
         height={1440}
         src={ourServices}
         alt='written content'
-        className='object-cover w-full h-[660px] md:h-[827px]'
+        className='object-cover w-full h-[660px] md:h-[827px] 2xl:h-[1040px]'
       />
       <div className="absolute w-11/12 h-4/6 md:w-9/12 2xl:w-8/12 2xl:h-2/4 top-1/2 2xl:left-1/2 flex flex-col justify-center 2xl:-translate-x-1/2 -translate-y-1/2 bg-secondary px-4 2xl:text-center 2xl:px-16 2xl:leading-11 text-white">
         <div className="container  text-[16px] md:text-[32px] 2xl:text-[40px]">

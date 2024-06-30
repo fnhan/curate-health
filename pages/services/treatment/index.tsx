@@ -14,6 +14,7 @@ import Hero from 'components/layout/Services/treatment/Hero';
 import Quote from 'components/layout/Services/treatment/Quote';
 import Content  from 'components/layout/Services/treatment/Content';
 import Green  from 'components/layout/Services/treatment/Green';
+import Frame from 'components/layout/Services/treatment/Frame';
 // import StickyNav from 'components/layout/Services/treatment/StickyNav';
 
 type PageProps = {
@@ -57,6 +58,9 @@ const OurService = ({
       </div>
       <div className='container bg-primary'>
         <Green/>
+      </div>
+      <div className='bg-white'>
+        <Frame/>
       </div>
         <Survey surveySection={surveySection} />
       <Newsletter />

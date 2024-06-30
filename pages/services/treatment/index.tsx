@@ -43,7 +43,7 @@ const OurService = ({
       <div>
         <AbovePicture/>
       </div>
-      <div className="bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50">
+      <div className="bg-secondary backdrop-blur-3xl sticky top-[100px] z-50">
       </div>
       <div className='bg-white'>
         <Hero/>

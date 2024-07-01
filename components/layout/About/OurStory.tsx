@@ -41,7 +41,7 @@ export default function OurStory({ ourStory }) {
 
   return (
     <div className='flex flex-col'>
-      <section id="headerSection" className='relative bg-white h-[524px] md:h-[960px] flex justify-center font-light'>
+      <section id="headerSection" className='relative bg-white flex justify-center font-light'>
         <Image
           loading='lazy'
           width={608}
@@ -73,7 +73,7 @@ export default function OurStory({ ourStory }) {
           height={500}
           alt={`${sectionOneImage.alt}`}
           src={builder.image(sectionOneImage).width(704).height(500).url()}
-          className='hidden lg:block absolute inset-x-13 pt-14 w-[704px] h-[500px]'
+          className='hidden lg:block absolute inset-x-13 w-[704px] h-[500px]'
         />
         <div className='hidden lg:block bg-secondary w-[608px] h-[429px] top-[200px]'>
         </div>
@@ -121,7 +121,7 @@ export default function OurStory({ ourStory }) {
             .height(500)
             .url()
           }
-          className='z-10 hidden lg:block absolute right-0 pt-14 w-[704px] h-[500px]'
+          className='z-10 hidden lg:block absolute right-0 w-[704px] h-[500px]'
         />
         <div className='z-0 lg:block hidden absolute right-0 bg-secondary w-[608px] h-[429px]'>
         </div>
@@ -150,7 +150,7 @@ export default function OurStory({ ourStory }) {
           height={500}
           alt={`${sectionFiveImage.alt}`}
           src={builder.image(sectionFiveImage).width(704).height(500).url()}
-          className='hidden lg:block absolute inset-x-13 pt-14 w-[704px] h-[500px]'
+          className='hidden lg:block absolute inset-x-13 w-[704px] h-[500px]'
         />
         <div className='hidden lg:block bg-secondary w-[608px] h-[429px] top-[200px]'>
         </div>
@@ -181,7 +181,7 @@ export default function OurStory({ ourStory }) {
             .height(500)
             .url()
           }
-          className='z-10 hidden lg:block absolute right-0 pt-14 w-[704px] h-[500px]'
+          className='z-10 hidden lg:block absolute right-0 w-[704px] h-[500px]'
         />
         <div className='z-0 lg:block hidden absolute right-0 bg-secondary w-[608px] h-[429px]'>
         </div>

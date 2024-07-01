@@ -26,8 +26,8 @@ export default function MissionAndValues({ missionAndValues }) {
   } = missionAndValues;
 
   return (
-    <div className='flex flex-col'>
-      <section id="headerSection" className='relative bg-white flex justify-center font-light'>
+    <div className='flex flex-col w-full'>
+      <section id="headerSection" className='relative bg-white flex justify-center font-light w-full'>
         <Image
           loading='lazy'
           width={1440}
@@ -45,22 +45,23 @@ export default function MissionAndValues({ missionAndValues }) {
           height={500}
           alt={`${purposeImage.alt}`}
           src={builder.image(purposeImage).width(704).height(500).url()}
-          className='absolute inset-x-13 pt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
+          className='absolute mt-10 right-0 lg:left-0 lg:mt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
         />
         <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
-        <div className='flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
-          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] py-14 lg:mb-12'>{purposeTitle}</h1>
+        <div className='pt-10 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-64 py-14 lg:pt-0 lg:mb-12'>{purposeTitle}</h1>
           <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
           >
             {purposeTextContent}
           </p>
         </div>
       </section>
-      <section id="mission" className='w-full font-light bg-white flex flex-col lg:grid lg:grid-cols-2 pt-[80px] md:pt-[100px] lg:py-[200px]'>
-        <div className='lg:pl-40 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
-          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] py-14 lg:mb-12'>{missionTitle}</h1>
-          <p className='lg:col-span-1 lg:p-1 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
+      <section id="mission" className='w-full font-light bg-white flex flex-col lg:grid lg:grid-cols-2 pt-[80px] md:pt-[100px] lg:pt-[200px] 
+      lg:pb-[100px]'>
+        <div className='pt-80 mt-48 lg:pl-40 lg:pt-0 md:mt-10 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-96 py-14 lg:pt-0 lg:mb-12'>{missionTitle}</h1>
+          <p className='lg:col-span-1 lg:p-1 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm lg:w-[544px]'
           >
             {missionTextContent}
           </p>
@@ -76,9 +77,9 @@ export default function MissionAndValues({ missionAndValues }) {
             .height(500)
             .url()
           }
-          className='z-10  absolute right-0 pt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
+          className='z-10 mt-10 absolute left-0 lg:right-0 lg:left-auto lg:mt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
         />
-        <div className='z-0 lg:block hidden absolute right-0 bg-secondary w-[608px] h-[429px]'>
+        <div className='z-0 absolute right-0 bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
       </section>
       <section id="vision" className='w-full font-light bg-white flex flex-col lg:grid lg:grid-cols-2 pt-[80px] md:pt-[100px] lg:py-[200px]'>
@@ -88,13 +89,13 @@ export default function MissionAndValues({ missionAndValues }) {
           height={500}
           alt={`${visionImage.alt}`}
           src={builder.image(visionImage).width(704).height(500).url()}
-          className=' absolute inset-x-13 pt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
+          className='absolute mt-10 right-0 lg:left-0 lg:mt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
         />
-        <div className=' bg-secondary w-[608px] h-[429px] top-[200px]'>
+        <div className=' bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
-        <div className='flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
+        <div className='pt-14 md:pt-56 md:mt-2 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
           <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] py-14 lg:mb-12'>{visionTitle}</h1>
-          <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
+          <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm mb-44 lg:mb-0'
           >
             {visionTextContent}
           </p>

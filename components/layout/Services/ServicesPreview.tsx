@@ -37,7 +37,7 @@ export default function ServicesPreview() {
       navigation={navigation}
       footer={footer}
       title={service?.title || 'Services'}
-      description={service?.meta.description || ''}
+      description={service?.meta?.description || ''}
     >
       <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
         <CarouselNav services={services} />

@@ -32,7 +32,9 @@ export default function Index(props: PageProps) {
     <Layout
       title={'Contact'}
       navigation={props.navigation}
-      footer={props.footer}>
+      footer={props.footer}
+      description={''}
+    >
       <ContactInfo contactInfo={props.contactInfo} />
       <ContactDetails contactDetails={props.contactDetails} />
       <SurveyLink surveyLink={props.surveyLink} />

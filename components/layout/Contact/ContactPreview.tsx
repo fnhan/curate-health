@@ -17,7 +17,10 @@ type ContactPageData = {
 };
 
 export default function ContactPreview() {
-  const [data, isLoading] = useLiveQuery<ContactPageData>(null, CONTACT_PAGE_QUERY);
+  const [data, isLoading] = useLiveQuery<ContactPageData>(
+    null,
+    CONTACT_PAGE_QUERY
+  );
 
   if (isLoading) {
     return (
@@ -32,7 +35,12 @@ export default function ContactPreview() {
   }
 
   return (
-    <Layout title='Contact' navigation={data.navigation} footer={data.footer}>
+    <Layout
+      title='Contact'
+      navigation={data.navigation}
+      footer={data.footer}
+      description={''}
+    >
       <ContactInfo contactInfo={data.contactInfo} />
       <ContactDetails contactDetails={data.contactDetails} />
       <SurveyLink surveyLink={data.surveyLink} />

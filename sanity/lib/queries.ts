@@ -4,10 +4,6 @@ export const POSTS_QUERY = groq`*[_type == "post" && defined(slug)]`;
 
 export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)][]{
   "params": { "slug": slug.current },
-  meta {
-    title,
-    description
-  }
 }`;
 
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
@@ -146,12 +142,19 @@ export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
 export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
   description,
+  "slug" : slug.current,
   "image": image.asset->url,
   "altText": image.alt,
   meta {
     title,
     description
   }
+}`;
+
+export const PRODUCT_QUERY = groq`*[_type == "product" && slug.current == $slug][0]`;
+
+export const PRODUCT_SLUG_QUERY = groq`*[_type == "product" && isActive == true && defined(slug.current)] {
+  "params": {"slug": slug.current}
 }`;
 
 export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
@@ -232,7 +235,11 @@ export const HOME_PAGE_QUERY = groq`{
   "navigation": ${NAVIGATION_QUERY},
   "termsOfUse": ${TERMS_OF_USE_QUERY},
   "privacy": ${PRIVACY_QUERY},
-  "accessibility": ${ACCESSIBILITY_QUERY}
+  "accessibility": ${ACCESSIBILITY_QUERY},
+  meta {
+    title,
+    description
+  }
 }`;
 
 export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{

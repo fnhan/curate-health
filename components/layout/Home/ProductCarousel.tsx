@@ -19,6 +19,9 @@ import Image from 'next/image';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { dataset, projectId } from '../../../sanity/env';
+import { MoveLeft } from 'lucide-react';
+import Link from 'next/link';
+import Products from './Products';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
@@ -26,7 +29,9 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
-
+  const progress = (current / count) * 100 + '%';
+  const inverse = 100 - (current / count) * 100 + '%';
+  console.log(products);
   useEffect(() => {
     const handleResize = () => {
       if (api) {
@@ -55,7 +60,8 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
       <Carousel
         setApi={setApi}
         opts={{ align: 'start' }}
-        className='container mx-auto relative p-3'>
+        className='container mx-auto relative p-3'
+      >
         <CarouselContent>
           {products.map((product: SanityDocument, idx: number) => (
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
@@ -76,7 +82,9 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
                 </CardContent>
                 <CardHeader className='w-2/3 mx-auto p-0'>
                   <CardTitle className='text-center mb-3 font-light p-0 text-base md:text-lg'>
-                    {product.title}
+                    <Link href={`/products/${product.slug}`}>
+                      {product.title}
+                    </Link>
                   </CardTitle>
                   <CardDescription className='text-center text-xs pb-4'>
                     {product.description}
@@ -89,8 +97,21 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
         <CarouselPrevious className='-left-8 ml-2 bg-transparent border-none text-black hover:bg-secondary' />
         <CarouselNext className='-right-8 mr-2 bg-transparent border-none text-black hover:bg-secondary' />
       </Carousel>
-      <div className='mt-8 text-center text-sm text-muted-foreground'>
+      <div className='my-8 text-center text-sm text-muted-foreground'>
         {current} / {count}
+      </div>
+
+      <div className='w-full relative bg-gray-200 rounded-full h-2.5 dark:bg-gray-700'>
+        <div>
+          <div
+            className='absolute bg-neutral-600 h-2.5 rounded-full'
+            style={{
+              width: 100 / count + '%',
+              right: inverse,
+              transition: 'all 0.5s ease-out',
+            }}
+          ></div>
+        </div>
       </div>
     </>
   );

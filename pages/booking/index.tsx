@@ -5,7 +5,12 @@ import { token } from '../../sanity/lib/token';
 
 export default function Booking({ navigation, footer }) {
   return (
-    <Layout navigation={navigation} footer={footer} title={'Booking'}>
+    <Layout
+      navigation={navigation}
+      footer={footer}
+      title={'Booking'}
+      description={''}
+    >
       Booking
     </Layout>
   );

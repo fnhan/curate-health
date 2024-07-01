@@ -1,7 +1,7 @@
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'treatments',
+  name: 'treatment',
   title: 'Treatments',
   type: 'document',
   fields: [
@@ -12,7 +12,15 @@ export default defineType({
       validation: (Rule) => Rule.required().error('A title is required'),
     }),
     defineField({
-      name: 'slug',
+      name: 'service',
+      title: 'Service',
+      type: 'reference',
+      to: { type: 'service' },
+      description: 'The service to which this treatment belongs to',
+      validation: (Rule) => Rule.required().error('The service is required'),
+    }),
+    defineField({
+      name: 'treatmentSlug',
       title: 'Slug',
       type: 'slug',
       description:
@@ -24,8 +32,8 @@ export default defineType({
       validation: (Rule) => Rule.required().error('A slug is required'),
     }),
     defineField({
-      name: 'above_image',
-      title: 'above_image',
+      name: 'aboveImage',
+      title: 'Above Image',
       type: 'image',
       validation: (Rule) => Rule.required().error('An image is required'),
       options: {
@@ -43,7 +51,7 @@ export default defineType({
     }),
     defineField({
       name: 'image',
-      title: 'image',
+      title: 'Image',
       type: 'image',
       validation: (Rule) => Rule.required().error('An image is required'),
       options: {
@@ -76,14 +84,14 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
-      isActive: 'isActive',
+      service: 'service.title',
       media: 'image',
     },
     prepare(selection) {
-      const { title, isActive, media } = selection;
+      const { title, media, service } = selection;
       return {
         title: title,
-        subtitle: `Status: ${isActive ? 'Active' : 'Inactive'}`,
+        subtitle: `Service: ${service}`,
         media: media,
       };
     },

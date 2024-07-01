@@ -9,7 +9,7 @@ import {
 } from '../../../sanity/lib/queries';
 import Newsletter from '../Home/Newsletter';
 import Layout from '../layout';
-import { CarouselNav } from './CarouselNav';
+import { CarouselNav } from './ServicesNav';
 import ServiceDetails from './ServiceDetails';
 
 export default function ServicesPreview() {

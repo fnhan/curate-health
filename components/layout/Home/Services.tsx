@@ -10,7 +10,7 @@ export default function Services({ services }) {
         </div>
         <ServicesList services={services} />
       </div>
-      <HoverLink href='/services/our-services' text='About Our Services' />
+      <HoverLink href='/services' text='About Our Services' />
     </section>
   );
 }

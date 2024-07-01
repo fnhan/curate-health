@@ -12,18 +12,18 @@ export default function AbovePicture({ treatment }) {
   }
 
   return (
-        <div className=''>
-          <Image
-            loading='lazy'
-            width={1080}
-            height={1440}
-            src={builder
-              .image(treatment.above_image)
-              .width(1440)
-              .height(760)
-              .quality(80)
-              .url()}
-            alt={treatment.title}
+    <div className=''>
+      <Image
+        loading='lazy'
+        width={1080}
+        height={1440}
+        src={builder
+          .image(treatment.aboveImage)
+          .width(1440)
+          .height(760)
+          .quality(80)
+          .url()}
+        alt={treatment.title}
         className='object-cover w-full h-[200px] md:h-[300px] 2xl:h-[400px]'
       />
     </div>

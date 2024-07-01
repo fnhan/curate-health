@@ -85,21 +85,22 @@ export const SERVICE_BY_SLUG_QUERY = groq`
 
 export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]{
   title,
-  "slug": slug.current,
+  "treatmentSlug": treatmentSlug.current,
   "image": image.asset->url,
   "altText": image.alt,
   content
 }`;
 
-export const TREATMENTS_SLUG_QUERY = `*[_type == "treatment" && isActive == true && defined(slug.current)] {
-  "params": {"slug": slug.current}
+export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{
+  "slug": service->slug.current,
+  "treatmentSlug": treatmentSlug.current
 }`;
 
 export const TREATMENT_BY_SLUG_QUERY = groq`
-  *[_type == "treatment" && slug.current == $slug][0]{
+  *[_type == "treatment" && treatmentSlug.current == $treatmentSlug][0]{
     title,
-    "slug": slug.current,
-    "above_image": above_image.asset->url,
+    "treatmentSlug": treatmentSlug.current,
+    "aboveImage": aboveImage.asset->url,
     "image": image.asset->url,
     "altText": image.alt,
     content

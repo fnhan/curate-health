@@ -1,14 +1,14 @@
 import { Loading } from 'components/Loading';
-import { CarouselNav } from 'components/layout/Services/CarouselNav';
-import ServiceDetails from 'components/layout/Services/ServiceDetails';
 import Picture from 'components/layout/Services/Picture';
+import ServiceDetails from 'components/layout/Services/ServiceDetails';
+import { ServicesNav } from 'components/layout/Services/ServicesNav';
 import { GetStaticPaths } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
-import Newsletter from '../../components/layout/Home/Newsletter';
-import Survey from '../../components/layout/Home/Survey';
-import Layout from '../../components/layout/layout';
-import { getClient } from '../../sanity/lib/client';
+import Newsletter from '../../../components/layout/Home/Newsletter';
+import Survey from '../../../components/layout/Home/Survey';
+import Layout from '../../../components/layout/layout';
+import { getClient } from '../../../sanity/lib/client';
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
@@ -16,8 +16,8 @@ import {
   SERVICES_SLUG_QUERY,
   SERVICE_BY_SLUG_QUERY,
   SURVERY_QUERY,
-} from '../../sanity/lib/queries';
-import { token } from '../../sanity/lib/token';
+} from '../../../sanity/lib/queries';
+import { token } from '../../../sanity/lib/token';
 
 type PageProps = {
   draftMode: boolean;
@@ -30,32 +30,31 @@ type PageProps = {
 };
 
 export default function ServicesPage(props: PageProps) {
+  console.log('Props in ServicesPage:', props);
+
   const ServicesPreview = dynamic(
-    () => import('../../components/layout/Services/ServicesPreview')
+    () => import('../../../components/layout/Services/ServicesPreview')
   );
 
   if (props.draftMode) {
     return <ServicesPreview />;
   }
 
-  if (!props.service) {
-    return <Loading />;
-  }
+  // if (!props.service) {
+  //   return <Loading />;
+  // }
 
   return (
     <Layout
       navigation={props.navigation}
       footer={props.footer}
       title={props.service?.title || 'Services'}>
-      <div>
-        <Picture service={props.service} />
-      </div>
-      <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50'>
-        <CarouselNav services={props.services} currentPageTitle={props.service?.title || 'Services'} />
-      </div>
-      <div>
-        <ServiceDetails service={props.service} />
-      </div>
+      <Picture service={props.service} />
+      <ServicesNav
+        services={props.services}
+        currentPageTitle={props.service?.title || 'Services'}
+      />
+      <ServiceDetails service={props.service} />
       <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>
@@ -74,8 +73,8 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
   return {
     props: {
-      service,
       services,
+      service,
       navigation,
       footer,
       surveySection,
@@ -87,6 +86,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await getClient().fetch(SERVICES_SLUG_QUERY);
+  console.log('Generated paths:', paths);
 
   return { paths, fallback: true };
 };

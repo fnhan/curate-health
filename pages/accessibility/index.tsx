@@ -13,7 +13,7 @@ export default function TermsOfUse({ navigation, footer, accessibility }) {
       navigation={navigation}
       footer={footer}
       title={'Accessibility'}
-      description={''}
+      description={accessibility.meta?.description || 'Description of about'}
     >
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>

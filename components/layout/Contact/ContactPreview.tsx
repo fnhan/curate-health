@@ -39,7 +39,7 @@ export default function ContactPreview() {
       title='Contact'
       navigation={data.navigation}
       footer={data.footer}
-      description={''}
+      description={data.contactInfo.meta?.description}
     >
       <ContactInfo contactInfo={data.contactInfo} />
       <ContactDetails contactDetails={data.contactDetails} />

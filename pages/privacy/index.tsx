@@ -13,7 +13,7 @@ export default function privacy({ navigation, footer, privacy }) {
       navigation={navigation}
       footer={footer}
       title={'Privacy'}
-      description={''}
+      description={privacy.meta?.description || 'Privacy description'}
     >
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>

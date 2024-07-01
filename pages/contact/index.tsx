@@ -17,6 +17,7 @@ type PageProps = {
   footer: SanityDocument;
   draftMode: boolean;
   token: string;
+  meta: SanityDocument;
 };
 
 export default function Index(props: PageProps) {
@@ -33,7 +34,7 @@ export default function Index(props: PageProps) {
       title={'Contact'}
       navigation={props.navigation}
       footer={props.footer}
-      description={''}
+      description={props.meta?.description || 'Contact page'}
     >
       <ContactInfo contactInfo={props.contactInfo} />
       <ContactDetails contactDetails={props.contactDetails} />

@@ -9,7 +9,7 @@ export default function About({ navigation, footer }) {
       navigation={navigation}
       footer={footer}
       title={'About'}
-      description={''}
+      description={'About us'}
     >
       About
     </Layout>
@@ -25,6 +25,7 @@ export const getStaticProps = async ({ preview = false }) => {
     props: {
       navigation,
       footer,
+
       draftMode: preview,
       token: preview ? token : '',
     },

@@ -33,7 +33,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     products,
     post,
     sustainabilitySection,
-    surveyLink,
     author,
     category,
     blockContent,

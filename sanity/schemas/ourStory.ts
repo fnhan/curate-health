@@ -226,13 +226,13 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'SectionSevenTitle',
+      name: 'sectionSevenTitle',
       title: 'Section Seven Title',
       type: 'string',
       description: 'Title of section seven',
     }),
     defineField({
-      name: 'SectionSevenTextContent',
+      name: 'sectionSevenTextContent',
       title: 'Section Seven Text Content',
       type: 'string',
       description: 'Text content of section seven',

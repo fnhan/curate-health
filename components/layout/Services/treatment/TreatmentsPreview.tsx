@@ -4,8 +4,9 @@ import { useRouter } from 'next/router';
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
-  SERVICE_BY_SLUG_QUERY,
-  SERVICES_QUERY,
+  TREATMENT_BY_SLUG_QUERY,
+  SURVERY_QUERY,
+  TREATMENTS_QUERY,
 } from '../../../../sanity/lib/queries';
 import Newsletter from '../../Home/Newsletter';
 import Layout from '../../layout';
@@ -18,23 +19,23 @@ import Quote from './Quote';
 import Written from './Written';
 
 
-export default function ServicesPreview() {
+export default function TreatmentsPreview() {
   const router = useRouter();
   const { slug } = router.query;
 
-  const [service, isServiceLoading] = useLiveQuery(
+  const [treatment, isTreatmentLoading] = useLiveQuery(
     null,
-    SERVICE_BY_SLUG_QUERY,
+    TREATMENT_BY_SLUG_QUERY,
     { slug }
   );
-  const [services, isServicesLoading] = useLiveQuery(null, SERVICES_QUERY);
+  const [Treatments, isTreatmentsLoading] = useLiveQuery(null, TREATMENTS_QUERY);
   const [footer, isFooterLoading] = useLiveQuery(null, FOOTER_QUERY);
   const [navigation, isNavigationLoading] = useLiveQuery(
     null,
     NAVIGATION_QUERY
   );
 
-  if (isServiceLoading || isServicesLoading || isFooterLoading) {
+  if (isTreatmentLoading || isTreatmentsLoading || isFooterLoading) {
     return <Loading />;
   }
 
@@ -42,9 +43,9 @@ export default function ServicesPreview() {
     <Layout
       navigation={navigation}
       footer={footer}
-      title={'Services'}>
+      title={'Treatments'}>
       <div>
-        <AbovePicture/>
+        <AbovePicture treatment={treatment}/>
       </div>
       <div className="bg-secondary backdrop-blur-3xl sticky top-[100px] z-50">
       </div>

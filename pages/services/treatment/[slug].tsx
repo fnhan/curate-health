@@ -1,7 +1,4 @@
 import { Loading } from 'components/Loading';
-import { CarouselNav } from 'components/layout/Services/CarouselNav';
-import ServiceDetails from 'components/layout/Services/ServiceDetails';
-import Picture from 'components/layout/Services/Picture';
 import { GetStaticPaths } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
@@ -12,10 +9,10 @@ import { getClient } from '../../../sanity/lib/client';
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
-  SERVICES_QUERY,
-  SERVICES_SLUG_QUERY,
-  SERVICE_BY_SLUG_QUERY,
+  TREATMENTS_SLUG_QUERY,
+  TREATMENT_BY_SLUG_QUERY,
   SURVERY_QUERY,
+  TREATMENTS_QUERY,
 } from '../../../sanity/lib/queries';
 import { token } from '../../../sanity/lib/token';
 import AbovePicture from 'components/layout/Services/treatment/AbovePicture';
@@ -28,11 +25,9 @@ import Written from 'components/layout/Services/treatment/Written';
 // import StickyNav from 'components/layout/Services/treatment/StickyNav';
 
 type PageProps = {
-  contactInfo: SanityDocument;
-  contactDetails: SanityDocument;
   surveyLink: SanityDocument;
-  services: SanityDocument[];
-  service: SanityDocument;
+  treatments: SanityDocument[];
+  treatment: SanityDocument;
   surveySection: SanityDocument[];
   navigation: SanityDocument;
   footer: SanityDocument;
@@ -40,25 +35,29 @@ type PageProps = {
   token: string;
 };
 
-export default function ServicesPage(props: PageProps) {
-  const ServicesPreview = dynamic(
-    () => import('../../../components/layout/Services/ServicesPreview')
+export default function TreatmentsPage(props: PageProps) {
+  console.log('Props in TreatmentsPage:', props); 
+
+  const TreatmentsPreview = dynamic(
+    () => import('../../../components/layout/Services/treatment/TreatmentsPreview')
   );
 
   if (props.draftMode) {
-    return <ServicesPreview />;
+    return <TreatmentsPreview />;
   }
 
-  // if (!props.service) {
-  //   return <Loading />;
-  // }
+  if (!props.treatment) {
+    return <Loading />;
+  }
 
 
 
   return (
-    <Layout title="Our Services" navigation={props.navigation} footer={props.footer}>
+    <Layout title={props.treatment?.title || 'Treatments'}
+     navigation={props.navigation} 
+     footer={props.footer}>
       <div>
-        <AbovePicture/>
+        <AbovePicture treatment={props.treatment}/>
       </div>
       <div className="bg-secondary backdrop-blur-3xl sticky top-[100px] z-50">
       </div>
@@ -85,18 +84,20 @@ export default function ServicesPage(props: PageProps) {
 
 export const getStaticProps = async ({ params, preview = false }) => {
   const client = getClient(preview ? token : undefined);
-  const services = await client.fetch(SERVICES_QUERY);
-  const service = await client.fetch(SERVICE_BY_SLUG_QUERY, {
+  const treatments = await client.fetch(TREATMENTS_QUERY);
+  const treatment = await client.fetch(TREATMENT_BY_SLUG_QUERY, {
     slug: params.slug,
   });
+
+
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
   const surveySection = await client.fetch(SURVERY_QUERY);
 
   return {
     props: {
-      service,
-      services,
+      treatment,
+      treatments,
       navigation,
       footer,
       surveySection,
@@ -107,7 +108,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = await getClient().fetch(SERVICES_SLUG_QUERY);
-
+  const paths = await getClient().fetch(TREATMENTS_SLUG_QUERY);
+  console.log('Generated paths:', paths); 
   return { paths, fallback: true };
 };

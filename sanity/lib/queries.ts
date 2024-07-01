@@ -91,7 +91,7 @@ export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]
   content
 }`;
 
-export const TREATMENTS_SLUG_QUERY = `*[_type == "service" && isActive == true && defined(slug.current)] {
+export const TREATMENTS_SLUG_QUERY = `*[_type == "treatment" && isActive == true && defined(slug.current)] {
   "params": {"slug": slug.current}
 }`;
 
@@ -99,6 +99,7 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   *[_type == "treatment" && slug.current == $slug][0]{
     title,
     "slug": slug.current,
+    "above_image": above_image.asset->url,
     "image": image.asset->url,
     "altText": image.alt,
     content

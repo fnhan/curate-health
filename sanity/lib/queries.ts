@@ -83,6 +83,28 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   }
 `;
 
+export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]{
+  title,
+  "slug": slug.current,
+  "image": image.asset->url,
+  "altText": image.alt,
+  content
+}`;
+
+export const TREATMENTS_SLUG_QUERY = `*[_type == "service" && isActive == true && defined(slug.current)] {
+  "params": {"slug": slug.current}
+}`;
+
+export const TREATMENT_BY_SLUG_QUERY = groq`
+  *[_type == "treatment" && slug.current == $slug][0]{
+    title,
+    "slug": slug.current,
+    "image": image.asset->url,
+    "altText": image.alt,
+    content
+  }
+`;
+
 export const FOOTER_QUERY = groq`
   *[_type == "footer"][0] {
     contactInfo {

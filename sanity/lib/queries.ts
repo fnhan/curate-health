@@ -79,7 +79,12 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     "above_image": above_image.asset->url,
     "image": image.asset->url,
     "altText": image.alt,
-    content
+    content,
+    "treatments": *[_type == "treatment" && references(^._id)]{
+      _id,
+      title,
+      "slug": treatmentSlug.current
+    }
   }
 `;
 

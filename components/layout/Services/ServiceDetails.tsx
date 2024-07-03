@@ -43,7 +43,7 @@ export default function ServiceDetails({ service, treatments }) {
           {treatments.map((treatment) => (
             <div key={treatment._id} className="flex items-center mb-2">
               <a
-                href={`/services/${service.slug}/${treatment.treatmentSlug}`}
+                href={`/services/${service.slug}/${treatment.slug}`}
                 className="flex items-center hover:font-medium"
               >
                 <span className="mr-2">{treatment.title}</span>

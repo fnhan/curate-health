@@ -55,7 +55,7 @@ export default function ServicesPage(props: PageProps) {
         services={props.services}
         currentPageTitle={props.service?.title || 'Services'}
       />
-      <ServiceDetails service={props.service} treatments={props.treatments}/>
+      <ServiceDetails service={props.service} treatments={props.service.treatments}/>
       <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>

@@ -46,7 +46,7 @@ export default function ServicesPreview() {
       title={service?.title || 'Services'}>
       <Picture service={service} />
       <ServicesNav services={services} currentPageTitle={service.title}/>
-      <ServiceDetails service={service} treatments={treatments} />
+      <ServiceDetails service={service} treatments={service.treatments} />
       <Survey surveySection={surveySection} />
       <Newsletter />
     </Layout>

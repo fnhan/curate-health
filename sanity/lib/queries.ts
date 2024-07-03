@@ -120,7 +120,12 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     writtenTitle,
     writtenContent,
     "writtenImage": writtenImage.asset->url,
-    writtenBracketContent
+    writtenBracketContent,
+    framesTitle,
+    frames[]{
+      title,
+      content
+    }
   }
 `;
 

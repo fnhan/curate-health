@@ -60,7 +60,7 @@ export default function TreatmentsPreview() {
       <Quote treatment={treatment}/>
       <Content treatment={treatment}/>
       <Green treatment={treatment}/>
-      <Frame />
+      <Frame treatment={treatment}/>
       <Written treatment={treatment}/>
       <Survey surveySection={surveySection} />
       <Newsletter />

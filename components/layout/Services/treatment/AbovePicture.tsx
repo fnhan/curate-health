@@ -14,8 +14,8 @@ export default function AbovePicture({ treatment }) {
     <div className=''>
       <Image
         loading='lazy'
-        width={1080}
-        height={1440}
+        width={1440}
+        height={2560}
         src={builder
           .image(treatment.aboveImage)
           .width(1440)

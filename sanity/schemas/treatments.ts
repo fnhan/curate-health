@@ -131,6 +131,33 @@ export default defineType({
       type: 'blockContent',
     }),
     defineField({
+      name: 'framesTitle',
+      title: 'Frames Title',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'frames',
+      title: 'Frames',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              type: 'string',
+              title: 'Title'
+            },
+            {
+              name: 'content',
+              type: 'blockContent',
+              title: 'Content'
+            }
+          ]
+        }
+      ]
+    }),
+    defineField({
       name: 'writtenTitle',
       title: 'Written Title',
       type: 'blockContent',

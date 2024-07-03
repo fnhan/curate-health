@@ -69,7 +69,7 @@ export default function TreatmentsPage(props: PageProps) {
       <Quote treatment={props.treatment}/>
       <Content treatment={props.treatment}/>
       <Green treatment={props.treatment}/>
-      <Frame />
+      <Frame treatment={props.treatment}/>
       <Written treatment={props.treatment}/>
       <Survey surveySection={props.surveySection} />
       <Newsletter />

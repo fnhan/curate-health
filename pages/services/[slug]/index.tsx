@@ -16,6 +16,7 @@ import {
   SERVICES_SLUG_QUERY,
   SERVICE_BY_SLUG_QUERY,
   SURVERY_QUERY,
+  TREATMENTS_QUERY,
 } from '../../../sanity/lib/queries';
 import { token } from '../../../sanity/lib/token';
 
@@ -26,6 +27,7 @@ type PageProps = {
   service: SanityDocument;
   navigation: SanityDocument;
   surveySection: SanityDocument[];
+  treatments: SanityDocument[];
   footer: SanityDocument;
 };
 
@@ -53,7 +55,7 @@ export default function ServicesPage(props: PageProps) {
         services={props.services}
         currentPageTitle={props.service?.title || 'Services'}
       />
-      <ServiceDetails service={props.service} />
+      <ServiceDetails service={props.service} treatments={props.treatments}/>
       <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>
@@ -70,6 +72,11 @@ export const getStaticProps = async ({ params, preview = false }) => {
   const footer = await client.fetch(FOOTER_QUERY);
   const surveySection = await client.fetch(SURVERY_QUERY);
 
+  const treatments = await client.fetch(TREATMENTS_QUERY, {
+    serviceSlug: service?.slug.current, 
+  });
+
+
   return {
     props: {
       services,
@@ -77,6 +84,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
       navigation,
       footer,
       surveySection,
+      treatments,
       draftMode: preview,
       token: preview ? token : '',
     },

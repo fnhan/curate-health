@@ -62,14 +62,9 @@ export default function TreatmentsPage(props: PageProps) {
       <Hero treatment={props.treatment}/>
       <Quote treatment={props.treatment}/>
       <Content treatment={props.treatment}/>
-
-      <div className='container bg-primary'>
-        <Green />
-      </div>
-      <div className='bg-white'>
-        <Frame />
-      </div>
-      <Written />
+      <Green treatment={props.treatment}/>
+      <Frame />
+      <Written treatment={props.treatment}/>
       <Newsletter />
     </Layout>
   );

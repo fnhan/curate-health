@@ -110,7 +110,12 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     rightSubtitle,
     rightContent,
     "leftImage": leftImage.asset->url,
-
+    greenTitle,
+    greenContent,
+    writtenTitle,
+    writtenContent,
+    "writtenImage": writtenImage.asset->url,
+    writtenBracketContent
   }
 `;
 

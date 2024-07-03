@@ -26,15 +26,10 @@ export default function Content({treatment}) {
         </div>
         <div className="container 2xl:w-1/2 mb-20 2xl:mb-40 mt-12 2xl:mt-36">
           <div className='2xl:container text-[16px] 2xl:mt-6 md:text-[32px] pr-60 2xl:mb-12'>
-            Your Personalized Path to Strength and Vitality
+            <PortableText value={treatment.leftSubtitle} />
           </div>
           <div className='2xl:container mt-4 text-[11px] md:text-[14px] leading-5 md:leading-6'>
-            Imagine a fitness plan that’s not just about hitting the gym or counting 
-            but about creating a symphony of movements that align with your body’s 
-            unique needs and goals. Our approach to Exercise Therapy goes beyond
-            conventional exercises, focusing on personalized programs that enhance 
-            your strength, flexibility, and overall well-being, ensuring you feel better, 
-            move better, and live better.
+            <PortableText value={treatment.leftContent} />
           </div>
         </div>
       
@@ -58,15 +53,10 @@ export default function Content({treatment}) {
           </div>
         <div className="container 2xl:w-1/2 mb-40 mt-12 2xl:mb-96 2xl:mr-20 2xl:mt-28">
           <div className='text-[16px] 2xl:mt-6 md:text-[32px] pr-60 2xl:mb-12'>
-            Your Personalized Path to Strength and Vitality
+            <PortableText value={treatment.rightSubtitle} />
           </div>
           <div className='mt-4 text-[11px] md:text-[14px] leading-5 md:leading-6'>
-            Imagine a fitness plan that’s not just about hitting the gym or counting 
-            but about creating a symphony of movements that align with your body’s 
-            unique needs and goals. Our approach to Exercise Therapy goes beyond
-            conventional exercises, focusing on personalized programs that enhance 
-            your strength, flexibility, and overall well-being, ensuring you feel better, 
-            move better, and live better.
+            <PortableText value={treatment.rightContent} />
           </div>
         </div>
         

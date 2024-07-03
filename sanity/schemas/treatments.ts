@@ -121,13 +121,55 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'greenTitle',
+      title: 'Green Title',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'greenContent',
+      title: 'Green Content',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'writtenTitle',
+      title: 'Written Title',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'writtenContent',
+      title: 'Written Content',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'writtenBracketContent',
+      title: 'Written Bracket Content',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'writtenImage',
+      title: 'Written Image',
+      type: 'image',
+      validation: (Rule) => Rule.required().error('An image is required'),
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          description:
+            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+        },
+      ],
+    }),
+    defineField({
       name: 'isActive',
       title: 'Is Active',
       type: 'boolean',
       description: 'Toggle to show/hide this treatment on the website.',
       initialValue: true,
     }),
-
   ],
 
   preview: {

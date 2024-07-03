@@ -49,14 +49,9 @@ export default function TreatmentsPreview() {
       <Hero treatment={treatment}/>
       <Quote treatment={treatment}/>
       <Content treatment={treatment}/>
-
-      <div className='container bg-primary'>
-        <Green />
-      </div>
-      <div className='bg-white'>
-        <Frame />
-      </div>
-      <Written />
+      <Green treatment={treatment}/>
+      <Frame />
+      <Written treatment={treatment}/>
       <Newsletter />
     </Layout>
   );

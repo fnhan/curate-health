@@ -22,7 +22,9 @@ export function TreatmentNav({ treatments, currentPageTitle, serviceTitle, servi
               </Link>
             </div>
           </div>
-          {treatments.map((treatment, index) => (
+          {treatments
+          .filter(treatment => treatment.service.title === serviceTitle)
+          .map((treatment, index) => (
             <div key={index}>
               <div className='p-1 group'>
                 <Link href={`/services/${serviceSlug}/${treatment.treatmentSlug}`}>

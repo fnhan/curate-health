@@ -91,6 +91,10 @@ export const SERVICE_BY_SLUG_QUERY = groq`
 export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]{
   title,
   "treatmentSlug": treatmentSlug.current,
+  "service": service->{
+    title,
+    "slug": slug.current
+  },
   "image": image.asset->url,
   "altText": image.alt,
   content

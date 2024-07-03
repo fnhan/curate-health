@@ -21,10 +21,8 @@ import {
   TREATMENTS_QUERY,
   TREATMENTS_SLUG_QUERY,
   TREATMENT_BY_SLUG_QUERY,
-  SERVICE_BY_SLUG_QUERY,
 } from '../../../../sanity/lib/queries';
 import { token } from '../../../../sanity/lib/token';
-import { SlotProps } from '@radix-ui/react-slot';
 
 type PageProps = {
   surveyLink: SanityDocument;
@@ -93,7 +91,6 @@ export const getStaticProps: GetStaticProps = async ({
   
 
   const serviceSlug = treatment?.service?.slug.current || '';
-  console.log('serviceslug',serviceSlug)
   const serviceTitle = treatment?.service?.title || '';
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);

@@ -18,6 +18,7 @@ import Hero from './Hero';
 import Quote from './Quote';
 import Written from './Written';
 import Survey from '../../../../components/layout/Home/Survey';
+import { TreatmentNav } from './TreatmentNav';
 
 
 export default function TreatmentsPreview() {
@@ -29,8 +30,9 @@ export default function TreatmentsPreview() {
     TREATMENT_BY_SLUG_QUERY,
     { slug }
   );
+  
   const [surveySection, issurveySectionLoading] = useLiveQuery(null, SURVERY_QUERY);
-  const [Treatments, isTreatmentsLoading] = useLiveQuery(null, TREATMENTS_QUERY);
+  const [treatments, isTreatmentsLoading] = useLiveQuery(null, TREATMENTS_QUERY);
   const [footer, isFooterLoading] = useLiveQuery(null, FOOTER_QUERY);
   const [navigation, isNavigationLoading] = useLiveQuery(
     null,
@@ -45,8 +47,14 @@ export default function TreatmentsPreview() {
     <Layout
       title={treatment?.title || 'Treatments'}
       navigation={navigation}
-      footer={footer}>
-
+      footer={footer}
+    >
+      <TreatmentNav
+        treatments={treatments}
+        currentPageTitle={treatment?.title || 'Services'}
+        serviceTitle={treatment?.service?.title || ''}
+        serviceSlug={treatment?.service?.slug.current || ''}
+      />
       <AbovePicture treatment={treatment} />
       <Hero treatment={treatment}/>
       <Quote treatment={treatment}/>

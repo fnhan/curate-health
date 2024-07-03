@@ -57,19 +57,12 @@ export default function TreatmentsPage(props: PageProps) {
       title={props.treatment?.title || 'Treatments'}
       navigation={props.navigation}
       footer={props.footer}>
-      <div>
-        <AbovePicture treatment={props.treatment} />
-      </div>
-      <div className='bg-secondary backdrop-blur-3xl sticky top-[100px] z-50'></div>
-      <div className='bg-white'>
-        <Hero />
-      </div>
-      <div className='bg-secondary opacity-100'>
-        <Quote />
-      </div>
-      <div className='bg-white'>
-        <Content />
-      </div>
+
+      <AbovePicture treatment={props.treatment} />
+      <Hero treatment={props.treatment}/>
+      <Quote treatment={props.treatment}/>
+      <Content treatment={props.treatment}/>
+
       <div className='container bg-primary'>
         <Green />
       </div>

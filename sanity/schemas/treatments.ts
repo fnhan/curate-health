@@ -50,8 +50,61 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'image',
-      title: 'Image',
+      name: 'heroSubtitle',
+      title: 'Hero Subtitle',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'heroContent',
+      title: 'Hero Content',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'quoteContent',
+      title: 'Quote Content',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'leftSubtitle',
+      title: 'Left Subtitle',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'leftContent',
+      title: 'Left Content',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'rightImage',
+      title: 'Right Image',
+      type: 'image',
+      validation: (Rule) => Rule.required().error('An image is required'),
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          description:
+            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+        },
+      ],
+    }),
+    defineField({
+      name: 'rightSubtitle',
+      title: 'Right Subtitle',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'rightContent',
+      title: 'Right Content',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'leftImage',
+      title: 'Left Image',
       type: 'image',
       validation: (Rule) => Rule.required().error('An image is required'),
       options: {
@@ -74,11 +127,7 @@ export default defineType({
       description: 'Toggle to show/hide this treatment on the website.',
       initialValue: true,
     }),
-    defineField({
-      name: 'content',
-      title: 'Content',
-      type: 'blockContent',
-    }),
+
   ],
 
   preview: {

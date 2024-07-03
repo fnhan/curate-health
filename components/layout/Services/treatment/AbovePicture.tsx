@@ -1,4 +1,3 @@
-import { PortableText } from '@portabletext/react';
 import imageUrlBuilder from '@sanity/image-url';
 import { Loading } from 'components/Loading';
 import Image from 'next/image';

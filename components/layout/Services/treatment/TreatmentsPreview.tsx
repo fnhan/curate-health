@@ -41,30 +41,22 @@ export default function TreatmentsPreview() {
 
   return (
     <Layout
+      title={treatment?.title || 'Treatments'}
       navigation={navigation}
-      footer={footer}
-      title={'Treatments'}>
-      <div>
-        <AbovePicture treatment={treatment}/>
-      </div>
-      <div className="bg-secondary backdrop-blur-3xl sticky top-[100px] z-50">
-      </div>
-      <div className='bg-white'>
-        <Hero/>
-      </div>
-      <div className='bg-secondary opacity-100'>
-        <Quote/>
-      </div>
-      <div className='bg-white'>
-        <Content/>
-      </div>
+      footer={footer}>
+
+      <AbovePicture treatment={treatment} />
+      <Hero treatment={treatment}/>
+      <Quote treatment={treatment}/>
+      <Content treatment={treatment}/>
+
       <div className='container bg-primary'>
-        <Green/>
+        <Green />
       </div>
       <div className='bg-white'>
-        <Frame/>
+        <Frame />
       </div>
-      <Written/>
+      <Written />
       <Newsletter />
     </Layout>
   );

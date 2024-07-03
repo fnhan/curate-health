@@ -79,7 +79,6 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     "above_image": above_image.asset->url,
     "image": image.asset->url,
     "altText": image.alt,
-    content
   }
 `;
 
@@ -101,9 +100,17 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     title,
     "treatmentSlug": treatmentSlug.current,
     "aboveImage": aboveImage.asset->url,
-    "image": image.asset->url,
     "altText": image.alt,
-    content
+    heroSubtitle,
+    heroContent,
+    quoteContent,
+    leftSubtitle,
+    leftContent,
+    "rightImage": rightImage.asset->url,
+    rightSubtitle,
+    rightContent,
+    "leftImage": leftImage.asset->url,
+
   }
 `;
 

@@ -30,7 +30,6 @@ type PageProps = {
 };
 
 export default function ServicesPage(props: PageProps) {
-  console.log('Props in ServicesPage:', props);
 
   const ServicesPreview = dynamic(
     () => import('../../../components/layout/Services/ServicesPreview')
@@ -86,7 +85,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await getClient().fetch(SERVICES_SLUG_QUERY);
-  console.log('Generated paths:', paths);
+
 
   return { paths, fallback: true };
 };

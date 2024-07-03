@@ -6,12 +6,14 @@ import {
   NAVIGATION_QUERY,
   SERVICE_BY_SLUG_QUERY,
   SERVICES_QUERY,
+  SURVERY_QUERY,
 } from '../../../sanity/lib/queries';
 import Newsletter from '../Home/Newsletter';
 import Layout from '../layout';
 import { ServicesNav } from './ServicesNav';
 import Picture  from './Picture';
 import ServiceDetails from './ServiceDetails';
+import Survey from '../../../components/layout/Home/Survey';
 
 export default function ServicesPreview() {
   const router = useRouter();
@@ -22,6 +24,8 @@ export default function ServicesPreview() {
     SERVICE_BY_SLUG_QUERY,
     { slug }
   );
+
+  const [surveySection, issurveySectionLoading] = useLiveQuery(null, SURVERY_QUERY);
   const [services, isServicesLoading] = useLiveQuery(null, SERVICES_QUERY);
   const [footer, isFooterLoading] = useLiveQuery(null, FOOTER_QUERY);
   const [navigation, isNavigationLoading] = useLiveQuery(
@@ -41,6 +45,7 @@ export default function ServicesPreview() {
       <Picture service={service} />
       <ServicesNav services={services} currentPageTitle={service.title}/>
       <ServiceDetails service={service} />
+      <Survey surveySection={surveySection} />
       <Newsletter />
     </Layout>
   );

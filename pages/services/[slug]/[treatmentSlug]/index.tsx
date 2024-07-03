@@ -76,15 +76,12 @@ export const getStaticProps: GetStaticProps = async ({
 }) => {
   const client = getClient(preview ? token : undefined);
 
-  console.log('Fetching treatments');
   const treatments = await client.fetch(TREATMENTS_QUERY);
-  console.log('Fetched treatments:', treatments);
 
   console.log('Fetching treatment by slug with params:', params);
   const treatment = await client.fetch(TREATMENT_BY_SLUG_QUERY, {
     treatmentSlug: params.treatmentSlug, 
   });
-  console.log('Fetched treatment:', treatment);
 
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);

@@ -21,8 +21,10 @@ import {
   TREATMENTS_QUERY,
   TREATMENTS_SLUG_QUERY,
   TREATMENT_BY_SLUG_QUERY,
+  SERVICE_BY_SLUG_QUERY,
 } from '../../../../sanity/lib/queries';
 import { token } from '../../../../sanity/lib/token';
+import { SlotProps } from '@radix-ui/react-slot';
 
 type PageProps = {
   surveyLink: SanityDocument;
@@ -33,6 +35,8 @@ type PageProps = {
   footer: SanityDocument;
   draftMode: boolean;
   token: string;
+  serviceTitle: string;
+  serviceSlug:string;
 };
 
 export default function TreatmentsPage(props: PageProps) {
@@ -60,7 +64,9 @@ export default function TreatmentsPage(props: PageProps) {
       <AbovePicture treatment={props.treatment} />
       <TreatmentNav
         treatments={props.treatments}
-        currentPageTitle={props.treatment?.title || 'Services'} />
+        currentPageTitle={props.treatment?.title || 'Services'}
+        serviceTitle={props.serviceTitle} 
+        serviceSlug={props.serviceSlug} />
       <Hero treatment={props.treatment}/>
       <Quote treatment={props.treatment}/>
       <Content treatment={props.treatment}/>
@@ -84,7 +90,11 @@ export const getStaticProps: GetStaticProps = async ({
   const treatment = await client.fetch(TREATMENT_BY_SLUG_QUERY, {
     treatmentSlug: params.treatmentSlug, 
   });
+  
 
+  const serviceSlug = treatment?.service?.slug.current || '';
+  console.log('serviceslug',serviceSlug)
+  const serviceTitle = treatment?.service?.title || '';
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
   const surveySection = await client.fetch(SURVERY_QUERY);
@@ -93,6 +103,8 @@ export const getStaticProps: GetStaticProps = async ({
     props: {
       treatment,
       treatments,
+      serviceTitle,
+      serviceSlug,
       navigation,
       footer,
       surveySection,

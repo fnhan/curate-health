@@ -100,6 +100,10 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   *[_type == "treatment" && treatmentSlug.current == $treatmentSlug][0]{
     title,
     "treatmentSlug": treatmentSlug.current,
+    service->{
+      title,
+      slug
+    },
     "aboveImage": aboveImage.asset->url,
     "altText": image.alt,
     heroSubtitle,

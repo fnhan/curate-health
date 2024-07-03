@@ -17,6 +17,7 @@ import Green from './Green';
 import Hero from './Hero';
 import Quote from './Quote';
 import Written from './Written';
+import Survey from '../../../../components/layout/Home/Survey';
 
 
 export default function TreatmentsPreview() {
@@ -28,6 +29,7 @@ export default function TreatmentsPreview() {
     TREATMENT_BY_SLUG_QUERY,
     { slug }
   );
+  const [surveySection, issurveySectionLoading] = useLiveQuery(null, SURVERY_QUERY);
   const [Treatments, isTreatmentsLoading] = useLiveQuery(null, TREATMENTS_QUERY);
   const [footer, isFooterLoading] = useLiveQuery(null, FOOTER_QUERY);
   const [navigation, isNavigationLoading] = useLiveQuery(
@@ -52,6 +54,7 @@ export default function TreatmentsPreview() {
       <Green treatment={treatment}/>
       <Frame />
       <Written treatment={treatment}/>
+      <Survey surveySection={surveySection} />
       <Newsletter />
     </Layout>
   );

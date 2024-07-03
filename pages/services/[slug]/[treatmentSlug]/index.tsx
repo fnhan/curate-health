@@ -6,6 +6,7 @@ import Green from 'components/layout/Services/treatment/Green';
 import Hero from 'components/layout/Services/treatment/Hero';
 import Quote from 'components/layout/Services/treatment/Quote';
 import Written from 'components/layout/Services/treatment/Written';
+import { TreatmentNav } from 'components/layout/Services/treatment/TreatmentNav';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
@@ -35,7 +36,6 @@ type PageProps = {
 };
 
 export default function TreatmentsPage(props: PageProps) {
-  console.log('Props in TreatmentsPage:', props.treatment);
 
   const TreatmentsPreview = dynamic(
     () =>
@@ -57,14 +57,17 @@ export default function TreatmentsPage(props: PageProps) {
       title={props.treatment?.title || 'Treatments'}
       navigation={props.navigation}
       footer={props.footer}>
-
       <AbovePicture treatment={props.treatment} />
+      <TreatmentNav
+        treatments={props.treatments}
+        currentPageTitle={props.treatment?.title || 'Services'} />
       <Hero treatment={props.treatment}/>
       <Quote treatment={props.treatment}/>
       <Content treatment={props.treatment}/>
       <Green treatment={props.treatment}/>
       <Frame />
       <Written treatment={props.treatment}/>
+      <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>
   );
@@ -78,7 +81,6 @@ export const getStaticProps: GetStaticProps = async ({
 
   const treatments = await client.fetch(TREATMENTS_QUERY);
 
-  console.log('Fetching treatment by slug with params:', params);
   const treatment = await client.fetch(TREATMENT_BY_SLUG_QUERY, {
     treatmentSlug: params.treatmentSlug, 
   });

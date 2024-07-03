@@ -10,6 +10,7 @@ import {
 import Newsletter from '../Home/Newsletter';
 import Layout from '../layout';
 import { ServicesNav } from './ServicesNav';
+import Picture  from './Picture';
 import ServiceDetails from './ServiceDetails';
 
 export default function ServicesPreview() {
@@ -37,12 +38,9 @@ export default function ServicesPreview() {
       navigation={navigation}
       footer={footer}
       title={service?.title || 'Services'}>
-      <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
-        <ServicesNav services={services} currentPageTitle={service.title}/>
-      </div>
-      <div className='py-10'>
-        <ServiceDetails service={service} />
-      </div>
+      <Picture service={service} />
+      <ServicesNav services={services} currentPageTitle={service.title}/>
+      <ServiceDetails service={service} />
       <Newsletter />
     </Layout>
   );

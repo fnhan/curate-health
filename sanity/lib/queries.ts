@@ -79,6 +79,7 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     "above_image": above_image.asset->url,
     "image": image.asset->url,
     "altText": image.alt,
+    content
   }
 `;
 

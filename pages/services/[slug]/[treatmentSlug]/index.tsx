@@ -82,7 +82,7 @@ export const getStaticProps: GetStaticProps = async ({
 
   console.log('Fetching treatment by slug with params:', params);
   const treatment = await client.fetch(TREATMENT_BY_SLUG_QUERY, {
-    treatmentSlug: params.treatmentSlug, // Ensure this matches the query parameter
+    treatmentSlug: params.treatmentSlug, 
   });
   console.log('Fetched treatment:', treatment);
 
@@ -104,9 +104,7 @@ export const getStaticProps: GetStaticProps = async ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  console.log('Fetching paths for static generation');
   const paths = await getClient().fetch(TREATMENTS_SLUG_QUERY);
-  console.log('Generated paths:', paths);
 
   return {
     paths: paths.map((path) => ({

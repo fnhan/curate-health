@@ -5,7 +5,7 @@ export function ServicesNav({ services, currentPageTitle }) {
   return (
     <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50'>
       <div
-        className={`container whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
+        className={`container -ml-6 2xl:ml-4 whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
         <div className='flex'>
           <div className=' -mr-8'>
             <div className='p-1 group'>

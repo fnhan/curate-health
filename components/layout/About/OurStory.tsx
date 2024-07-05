@@ -51,9 +51,9 @@ export default function OurStory({ ourStory }) {
           className='object-cover w-full h-[690px] md:w-[317px] md:h-[792px] lg:w-[608px] lg:h-[997px] absolute right-0'
         />
         <div className='absolute inset-0 flex flex-col pt-12 bg-secondary 
-      h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[336px] lg:top-[250px]'>
-          <h1 className='block lg:hidden text-2xl md:text-4xl leading-8 md:leading-10 ml-[32px] md:ml-[60px] pb-4 md:pb-6'>{headerTitle}</h1>
-          <h1 className='hidden lg:block w-[798px] text-7xl ml-[160px] top-[408px] pb-8'>{headerTitleDesktop}</h1>
+      h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
+          <h1 className='block md:hidden text-2xl md:text-4xl leading-8 md:leading-10 ml-[32px] md:ml-[60px] pb-4 md:pb-6'>{headerTitle}</h1>
+          <h1 className='hidden md:block w-[798px] text-7xl ml-[160px] top-[408px] pb-8'>{headerTitleDesktop}</h1>
           <p className='hidden lg:block leading-7 text-base w-[832px] 
           ml-[160px]'
           >
@@ -66,7 +66,7 @@ export default function OurStory({ ourStory }) {
           </p>
         </div>
       </section>
-      <section id="sectionOne" className='w-full font-light bg-white pt-[200px] md:pt-0 lg:pt-[200px] grid grid-cols-2'>
+      <section id="sectionOne" className='w-full font-light bg-white pt-[200px] md:pt-0 lg:pt-[1197px] grid grid-cols-2'>
         <Image
           loading='lazy'
           width={704}
@@ -95,7 +95,7 @@ export default function OurStory({ ourStory }) {
           className='object-cover w-full h-[560px] md:w-[317px] lg:w-[448px] lg:h-[656px] md:ml-[60px] lg:ml-[160px]'
         />
         <div className='absolute inset-0 pt-[60px] mt-[200px] md:pt-[200px] md:h-[264px] h-[216px]'>
-          <p className='text-center italic text-2xl md:text-4xl lg:text-6xl text-primary leading-9 md:leading-[50px] lg:leading[66px] 
+          <p className='text-center italic text-2xl md:text-4xl lg:text-6xl text-primary leading-9 md:leading-[50px] lg:leading-[66px] 
           mx-[32px] md:mx-[60px] lg:w-[928px] lg:ml-[352px] top-48'
           >
             {sectionTwoTextContent}
@@ -136,7 +136,7 @@ export default function OurStory({ ourStory }) {
           className='object-cover w-full h-[560px] md:w-[317px] lg:w-[448px] lg:h-[656px] md:ml-[60px] lg:ml-[160px] mt-[100px]'
         />
         <div className='absolute inset-0 pt-[60px] mt-[300px] md:pt-[200px] md:h-[264px] h-[216px]'>
-          <p className='text-center italic text-2xl md:text-4xl lg:text-6xl text-primary leading-9 md:leading-[50px] lg:leading[66px] 
+          <p className='text-center italic text-2xl md:text-4xl lg:text-6xl text-primary leading-9 md:leading-[50px] lg:leading-[66px] 
           mx-[32px] md:mx-[60px] lg:w-[928px] lg:ml-[352px]'
           >
             {sectionFourTextContent}
@@ -196,8 +196,8 @@ export default function OurStory({ ourStory }) {
         />
         <div className='text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 flex flex-col bg-secondary lg:w-[928px] lg:h-[484px] 
         justify-center text-center'>
-          <h1 className='hidden lg:block text-5xl'>{sectionSevenTitle}</h1>
-          <p className='leading-5 md:leading-6 lg:leading-7 text-xs md:text-sm lg:text-base'>{sectionSevenTextContent}</p>
+          <h1 className='text-5xl text-white'>{sectionSevenTitle}</h1>
+          <p className='text-white leading-5 md:leading-6 lg:leading-7 text-xs md:text-sm lg:text-base'>{sectionSevenTextContent}</p>
           <p className='italic text-sm md:text-lg lg:text-2xl'>{sectionSevenCta}</p>
         </div>
       </section>

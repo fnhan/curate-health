@@ -143,6 +143,7 @@ export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
   description,
   "slug" : slug.current,
+  "banner": banner.asset->url,
   "image": image.asset->url,
   "altText": image.alt,
   meta {

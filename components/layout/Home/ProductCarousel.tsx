@@ -31,7 +31,7 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
   const [count, setCount] = useState(0);
   const progress = (current / count) * 100 + '%';
   const inverse = 100 - (current / count) * 100 + '%';
-  console.log(products);
+
   useEffect(() => {
     const handleResize = () => {
       if (api) {

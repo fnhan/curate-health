@@ -7,7 +7,8 @@ import dynamic from 'next/dynamic';
 import Newsletter from '../../components/layout/Home/Newsletter';
 import Layout from '../../components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
-import { SURVEY_LINK_QUERY } from '../../sanity/lib/queries';
+import Image from 'next/image';
+import { SERVICES_QUERY, SURVEY_LINK_QUERY } from '../../sanity/lib/queries';
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
@@ -44,10 +45,6 @@ export default function ServicesPage(props: PageProps) {
     return <Loading />;
   }
 
-  console.log('The stuffs are services', props.services);
-  console.log('The stuffs are service', props.service);
-  console.log('The stuffs are product', props.product);
-
   return (
     <Layout
       navigation={props.navigation}
@@ -55,12 +52,14 @@ export default function ServicesPage(props: PageProps) {
       title={props.product?.meta?.title || 'Product'}
       description={props.product?.meta?.description}
     >
-      <div className='bg-secondary/60 backdrop-blur-3xl sticky top-[105px] z-50'>
+      <div className='relative bg-secondary/60 backdrop-blur-3xl z-50'>
+        <CarouselNav services={props.services} />
+
         <Product product={props.product}></Product>
       </div>
-      <div className='py-10'>
-        {/* <ServiceDetails service={props.service} /> */}
-      </div>
+      {/* <div className='py-10'>
+        <ServiceDetails service={props.service} />
+      </div> */}
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>
@@ -81,11 +80,12 @@ export const getStaticProps = async ({ params, preview = false }) => {
   // );
   const surveyLink = await client.fetch(SURVEY_LINK_QUERY);
   const product = await client.fetch<SanityDocument>(PRODUCT_QUERY, params);
+  const services = await client.fetch<SanityDocument>(SERVICES_QUERY);
 
   return {
     props: {
       service,
-      services: products,
+      services,
       product,
       navigation,
       footer,

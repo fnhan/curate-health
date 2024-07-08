@@ -30,6 +30,26 @@ export default defineType({
       validation: (Rule) => Rule.required().error('A slug is required'),
     }),
     defineField({
+      name: 'banner',
+      title: 'Banner Image',
+      type: 'image',
+      description:
+        'For best results, please upload an image with dimensions 250px x 250px',
+
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          description:
+            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+        },
+      ],
+    }),
+    defineField({
       name: 'image',
       title: 'Product Image',
       type: 'image',

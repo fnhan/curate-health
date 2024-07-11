@@ -32,7 +32,6 @@ type PageProps = {
 };
 
 export default function ServicesPage(props: PageProps) {
-
   const ServicesPreview = dynamic(
     () => import('../../../components/layout/Services/ServicesPreview')
   );
@@ -41,9 +40,9 @@ export default function ServicesPage(props: PageProps) {
     return <ServicesPreview />;
   }
 
-  // if (!props.service) {
-  //   return <Loading />;
-  // }
+  if (!props.service) {
+    return <Loading />;
+  }
 
   return (
     <Layout
@@ -55,7 +54,10 @@ export default function ServicesPage(props: PageProps) {
         services={props.services}
         currentPageTitle={props.service?.title || 'Services'}
       />
-      <ServiceDetails service={props.service} treatments={props.service.treatments}/>
+      <ServiceDetails
+        service={props.service}
+        treatments={props.service.treatments}
+      />
       <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>
@@ -73,9 +75,8 @@ export const getStaticProps = async ({ params, preview = false }) => {
   const surveySection = await client.fetch(SURVERY_QUERY);
 
   const treatments = await client.fetch(TREATMENTS_QUERY, {
-    serviceSlug: service?.slug.current, 
+    serviceSlug: service?.slug.current,
   });
-
 
   return {
     props: {
@@ -93,7 +94,6 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await getClient().fetch(SERVICES_SLUG_QUERY);
-
 
   return { paths, fallback: true };
 };

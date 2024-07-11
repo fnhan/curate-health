@@ -5,8 +5,8 @@ import Frame from 'components/layout/Services/treatment/Frame';
 import Green from 'components/layout/Services/treatment/Green';
 import Hero from 'components/layout/Services/treatment/Hero';
 import Quote from 'components/layout/Services/treatment/Quote';
-import Written from 'components/layout/Services/treatment/Written';
 import { TreatmentNav } from 'components/layout/Services/treatment/TreatmentNav';
+import Written from 'components/layout/Services/treatment/Written';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
@@ -34,11 +34,10 @@ type PageProps = {
   draftMode: boolean;
   token: string;
   serviceTitle: string;
-  serviceSlug:string;
+  serviceSlug: string;
 };
 
 export default function TreatmentsPage(props: PageProps) {
-
   const TreatmentsPreview = dynamic(
     () =>
       import(
@@ -63,14 +62,15 @@ export default function TreatmentsPage(props: PageProps) {
       <TreatmentNav
         treatments={props.treatments}
         currentPageTitle={props.treatment?.title || 'Services'}
-        serviceTitle={props.serviceTitle} 
-        serviceSlug={props.serviceSlug} />
-      <Hero treatment={props.treatment}/>
-      <Quote treatment={props.treatment}/>
-      <Content treatment={props.treatment}/>
-      <Green treatment={props.treatment}/>
-      <Frame treatment={props.treatment}/>
-      <Written treatment={props.treatment}/>
+        serviceTitle={props.serviceTitle}
+        serviceSlug={props.serviceSlug}
+      />
+      <Hero treatment={props.treatment} />
+      <Quote treatment={props.treatment} />
+      <Content treatment={props.treatment} />
+      <Green treatment={props.treatment} />
+      <Frame treatment={props.treatment} />
+      <Written treatment={props.treatment} />
       <Survey surveySection={props.surveySection} />
       <Newsletter />
     </Layout>
@@ -86,9 +86,12 @@ export const getStaticProps: GetStaticProps = async ({
   const treatments = await client.fetch(TREATMENTS_QUERY);
 
   const treatment = await client.fetch(TREATMENT_BY_SLUG_QUERY, {
-    treatmentSlug: params.treatmentSlug, 
+    treatmentSlug: params.treatmentSlug,
   });
-  
+
+  if (!treatment) {
+    return { notFound: true };
+  }
 
   const serviceSlug = treatment?.service?.slug.current || '';
   const serviceTitle = treatment?.service?.title || '';

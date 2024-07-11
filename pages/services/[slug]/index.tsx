@@ -70,6 +70,11 @@ export const getStaticProps = async ({ params, preview = false }) => {
   const service = await client.fetch(SERVICE_BY_SLUG_QUERY, {
     slug: params.slug,
   });
+
+  if (!service) {
+    return { notFound: true };
+  }
+
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
   const surveySection = await client.fetch(SURVERY_QUERY);

@@ -35,7 +35,7 @@ type PageProps = {
   token: string;
   serviceTitle: string;
   serviceSlug: string;
-};
+};//123
 
 export default function TreatmentsPage(props: PageProps) {
   const TreatmentsPreview = dynamic(

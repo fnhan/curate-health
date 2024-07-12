@@ -12,6 +12,11 @@ export default defineType({
       validation: (Rule) => Rule.required().error('A title is required'),
     }),
     defineField({
+      name: 'indepthinfo',
+      title: 'In-depth Product information',
+      type: 'string',
+    }),
+    defineField({
       name: 'description',
       title: 'Product Description',
       type: 'string',

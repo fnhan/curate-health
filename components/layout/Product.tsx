@@ -12,7 +12,7 @@ export default function Product({ product }: { product: SanityDocument }) {
     return <div>Loading or no post found...</div>;
   }
 
-  const { title, image, description, banner } = product;
+  const { title, image, description, banner, indepthinfo } = product;
 
   return (
     <div className='w-full pb-60 bg-white'>
@@ -35,9 +35,9 @@ export default function Product({ product }: { product: SanityDocument }) {
                 {title}
               </h1>
             ) : null}
-            {description ? (
+            {indepthinfo ? (
               <p className='font-light text-[#283619] text-2xl leading-loose'>
-                {description}
+                {indepthinfo}
               </p>
             ) : null}
           </div>

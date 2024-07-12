@@ -141,6 +141,7 @@ export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
 
 export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
+  indepthinfo,
   description,
   "slug" : slug.current,
   "banner": banner.asset->url,

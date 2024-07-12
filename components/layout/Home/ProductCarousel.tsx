@@ -67,18 +67,20 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
               <Card className='w-full rounded-none flex flex-col h-full border-none'>
                 <CardContent className='flex justify-center items-center 2xl:h-64 mb-4 p-0'>
-                  <Image
-                    src={builder
-                      .image(product.image)
-                      .quality(80)
-                      .size(200, 200)
-                      .auto('format')
-                      .url()}
-                    width={200}
-                    height={200}
-                    alt={product.title}
-                    className='mx-auto object-contain'
-                  />
+                  <Link href={`/products/${product.slug}`}>
+                    <Image
+                      src={builder
+                        .image(product.image)
+                        .quality(80)
+                        .size(200, 200)
+                        .auto('format')
+                        .url()}
+                      width={200}
+                      height={200}
+                      alt={product.title}
+                      className='mx-auto object-contain'
+                    />
+                  </Link>
                 </CardContent>
                 <CardHeader className='w-2/3 mx-auto p-0'>
                   <CardTitle className='text-center mb-3 font-light p-0 text-base md:text-lg'>
@@ -87,7 +89,9 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
                     </Link>
                   </CardTitle>
                   <CardDescription className='text-center text-xs pb-4'>
-                    {product.description}
+                    <Link href={`/products/${product.slug}`}>
+                      {product.description}
+                    </Link>
                   </CardDescription>
                 </CardHeader>
               </Card>

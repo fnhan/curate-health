@@ -76,9 +76,65 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   *[_type == "service" && slug.current == $slug][0]{
     title,
     "slug": slug.current,
+    "above_image": above_image.asset->url,
     "image": image.asset->url,
     "altText": image.alt,
-    content
+    content,
+    "treatments": *[_type == "treatment" && references(^._id)]{
+      _id,
+      title,
+      "slug": treatmentSlug.current
+    }
+  }
+`;
+
+export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]{
+  title,
+  "treatmentSlug": treatmentSlug.current,
+  "service": service->{
+    title,
+    "slug": slug.current
+  },
+  "image": image.asset->url,
+  "altText": image.alt,
+  content
+}`;
+
+export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{
+  "slug": service->slug.current,
+  "treatmentSlug": treatmentSlug.current
+}`;
+
+export const TREATMENT_BY_SLUG_QUERY = groq`
+  *[_type == "treatment" && treatmentSlug.current == $treatmentSlug][0]{
+    title,
+    "treatmentSlug": treatmentSlug.current,
+    service->{
+      title,
+      slug
+    },
+    "aboveImage": aboveImage.asset->url,
+    "altText": image.alt,
+    heroSubtitle,
+    heroContent,
+    quoteContent,
+    leftSubtitle,
+    leftContent,
+    "rightImage": rightImage.asset->url,
+    rightSubtitle,
+    rightContent,
+    "leftImage": leftImage.asset->url,
+    greenTitle,
+    greenContent,
+    writtenTitle,
+    writtenContent,
+    "writtenImage": writtenImage.asset->url,
+    writtenBracketContent,
+    framesTitle,
+    frames[]{
+      title,
+      content
+    }
   }
 `;
 

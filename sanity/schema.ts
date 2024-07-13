@@ -21,6 +21,7 @@ import accessibility from './schemas/accessibility';
 import contactInfo from './schemas/contactInfo';
 import contactDetails from './schemas/contactDetails';
 import surveyLink from './schemas/surveyLink';
+import treatments from './schemas/treatments';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -44,6 +45,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     accessibility,
     contactInfo,
     contactDetails,
+    treatments,
     surveyLink
   ],
 };

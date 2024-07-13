@@ -1,4 +1,6 @@
 import imageUrlBuilder from '@sanity/image-url';
+import { Button } from 'components/ui/button';
+import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { dataset, projectId } from '../../../sanity/env';
@@ -7,27 +9,37 @@ const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function ServicesList({ services }) {
   return (
-    <div className='md:flex justify-between grid grid-cols-2 gap-y-6 gap-x-2'>
+    <div>
       {services.map((service) => (
         <div key={service.title}>
           <Link
-            className='flex flex-col gap-7 group'
+            className="flex flex-col group"
             href={`/services/${service.slug}`}>
-            <Image
-              src={builder
-                .image(service.image)
-                .width(175)
-                .height(175)
-                .quality(80)
-                .url()}
-              width={175}
-              height={175}
-              alt=''
-              className='rounded-full w-[85px] h-[85px] md:w-[128px] md:h-[128px] 2xl:w-[175px] 2xl:h-[175px] object-cover mx-auto group-hover:-translate-y-3 transition-all duration-300'
-            />
-            <h3 className='text-center text-md border-b border-transparent md:text-base group-hover:underline duration-300 transition-all'>
-              {service.title}
-            </h3>
+            <div className="relative overflow-hidden">
+              <Image
+                loading="lazy"
+                width={1440}
+                height={2560}
+                src={builder
+                  .image(service.image)
+                  .width(1080)
+                  .height(1440)
+                  .quality(80)
+                  .url()}
+                alt={service.title}
+                className="object-cover w-11/12 h-[78px] md:h-[108px] 2xl:h-[135px] grayscale transition duration-300 group-hover:grayscale-0 group-hover:w-full"
+              />
+              <div className="absolute -bottom-1 md:bottom-3 2xl:bottom-5 px-10 transform -translate-y-1/2 w-full flex items-center">
+                <div className="flex justify-between w-full items-center">
+                  <div className="2xl:container md:text-3xl group-hover:underline">{service.title}</div>
+                  <Button
+                    variant="outline"
+                    className="bg-transparent rounded-full hover:bg-transparent group-hover:bg-secondary scale-105 transition-all duration-300 border-2 md:w-[90px] md:absolute right-0 -translate-x-8 md:-translate-x-40 2xl:-translate-x-44 ">
+                    <ArrowRight size={18} />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </Link>
         </div>
       ))}

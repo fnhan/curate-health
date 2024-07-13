@@ -16,7 +16,6 @@ export default function ContactInfo({ contactInfo }) {
   } = contactInfo;
 
   const phNumDestructured = phoneNumber.toString().replace(/[^+\d]+/g, "");
-  console.log(phNumDestructured)
 
   return (
     <>

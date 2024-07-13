@@ -3,12 +3,12 @@ import { useLiveQuery } from 'next-sanity/preview';
 import { useRouter } from 'next/router';
 import Survey from '../../../components/layout/Home/Survey';
 import {
-    FOOTER_QUERY,
-    NAVIGATION_QUERY,
-    SERVICE_BY_SLUG_QUERY,
-    SERVICES_QUERY,
-    SURVEY_LINK_QUERY,
-    TREATMENTS_QUERY,
+  FOOTER_QUERY,
+  NAVIGATION_QUERY,
+  SERVICE_BY_SLUG_QUERY,
+  SERVICES_QUERY,
+  SURVEY_LINK_QUERY,
+  TREATMENTS_QUERY,
 } from '../../../sanity/lib/queries';
 import Newsletter from '../Home/Newsletter';
 import Layout from '../layout';
@@ -26,8 +26,14 @@ export default function ServicesPreview() {
     { slug }
   );
 
-  const [treatments, istreatmentsLoading] = useLiveQuery(null, TREATMENTS_QUERY);
-  const [surveySection, issurveySectionLoading] = useLiveQuery(null, SURVEY_LINK_QUERY);
+  const [treatments, istreatmentsLoading] = useLiveQuery(
+    null,
+    TREATMENTS_QUERY
+  );
+  const [surveySection, issurveySectionLoading] = useLiveQuery(
+    null,
+    SURVEY_LINK_QUERY
+  );
   const [services, isServicesLoading] = useLiveQuery(null, SERVICES_QUERY);
   const [footer, isFooterLoading] = useLiveQuery(null, FOOTER_QUERY);
   const [navigation, isNavigationLoading] = useLiveQuery(
@@ -45,9 +51,9 @@ export default function ServicesPreview() {
       footer={footer}
       title={service?.title || 'Services'}>
       <Picture service={service} />
-      <ServicesNav services={services} currentPageTitle={service.title}/>
+      <ServicesNav services={services} currentPageTitle={service.title} />
       <ServiceDetails service={service} treatments={service.treatments} />
-      <Survey surveySection={surveySection} />
+      <Survey surveyLink={surveySection} />
       <Newsletter />
     </Layout>
   );

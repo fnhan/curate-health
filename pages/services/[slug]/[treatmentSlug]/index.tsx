@@ -71,7 +71,7 @@ export default function TreatmentsPage(props: PageProps) {
       <Green treatment={props.treatment} />
       <Frame treatment={props.treatment} />
       <Written treatment={props.treatment} />
-      <Survey surveySection={props.surveySection} />
+      <Survey surveyLink={props.surveySection} />
       <Newsletter />
     </Layout>
   );
@@ -84,16 +84,15 @@ export const getStaticProps: GetStaticProps = async ({
   const client = getClient(preview ? token : undefined);
 
   const treatments = await client.fetch(TREATMENTS_QUERY);
-
   const treatment = await client.fetch(TREATMENT_BY_SLUG_QUERY, {
-    treatmentSlug: params.treatmentSlug,
+    treatmentSlug: params?.treatmentSlug || '',
   });
 
   if (!treatment) {
     return { notFound: true };
   }
 
-  const serviceSlug = treatment?.service?.slug.current || '';
+  const serviceSlug = treatment?.service?.slug?.current || '';
   const serviceTitle = treatment?.service?.title || '';
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);

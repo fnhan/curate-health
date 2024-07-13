@@ -17,7 +17,7 @@ import { getClient } from '../../../../sanity/lib/client';
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
-  SURVERY_QUERY,
+  SURVEY_LINK_QUERY,
   TREATMENTS_QUERY,
   TREATMENTS_SLUG_QUERY,
   TREATMENT_BY_SLUG_QUERY,
@@ -97,7 +97,7 @@ export const getStaticProps: GetStaticProps = async ({
   const serviceTitle = treatment?.service?.title || '';
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
-  const surveySection = await client.fetch(SURVERY_QUERY);
+  const surveySection = await client.fetch(SURVEY_LINK_QUERY);
 
   return {
     props: {

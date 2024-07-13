@@ -1,20 +1,20 @@
 import { Loading } from 'components/Loading';
 import { useLiveQuery } from 'next-sanity/preview';
 import { useRouter } from 'next/router';
+import Survey from '../../../components/layout/Home/Survey';
 import {
-  FOOTER_QUERY,
-  NAVIGATION_QUERY,
-  SERVICE_BY_SLUG_QUERY,
-  SERVICES_QUERY,
-  SURVERY_QUERY,
-  TREATMENTS_QUERY,
+    FOOTER_QUERY,
+    NAVIGATION_QUERY,
+    SERVICE_BY_SLUG_QUERY,
+    SERVICES_QUERY,
+    SURVEY_LINK_QUERY,
+    TREATMENTS_QUERY,
 } from '../../../sanity/lib/queries';
 import Newsletter from '../Home/Newsletter';
 import Layout from '../layout';
-import { ServicesNav } from './ServicesNav';
-import Picture  from './Picture';
+import Picture from './Picture';
 import ServiceDetails from './ServiceDetails';
-import Survey from '../../../components/layout/Home/Survey';
+import { ServicesNav } from './ServicesNav';
 
 export default function ServicesPreview() {
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function ServicesPreview() {
   );
 
   const [treatments, istreatmentsLoading] = useLiveQuery(null, TREATMENTS_QUERY);
-  const [surveySection, issurveySectionLoading] = useLiveQuery(null, SURVERY_QUERY);
+  const [surveySection, issurveySectionLoading] = useLiveQuery(null, SURVEY_LINK_QUERY);
   const [services, isServicesLoading] = useLiveQuery(null, SERVICES_QUERY);
   const [footer, isFooterLoading] = useLiveQuery(null, FOOTER_QUERY);
   const [navigation, isNavigationLoading] = useLiveQuery(

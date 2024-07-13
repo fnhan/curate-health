@@ -22,6 +22,7 @@ export default function ContactInfo({ contactInfo }) {
     <>
       <section className='relative bg-white h-[524px] md:h-[960px]'>
         <Image
+          priority={true}
           width={1440}
           height={936}
           alt={`${contactInfoImage.alt}`}

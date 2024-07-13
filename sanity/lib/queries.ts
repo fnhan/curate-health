@@ -207,20 +207,6 @@ export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
   }
 }`;
 
-export const SURVERY_QUERY = groq`*[_type == "survey"][0] {
-  bgImage {
-    asset-> {
-      _id,
-      url
-    },
-    alt
-  },
-  title,
-  content,
-  cta,
-  href
-}`;
-
 export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"] {
   title,
   content
@@ -234,6 +220,20 @@ export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
 export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"] {
   title,
   content
+}`;
+
+export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
+  bgImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
+  },
+  cta,
+  youformId,
+  content,
+  bold
 }`;
 
 export const HOME_PAGE_QUERY = groq`{
@@ -253,23 +253,11 @@ export const HOME_PAGE_QUERY = groq`{
   "productsSection": ${PRODUCTS_SECTION_QUERY},
   "products": ${PRODUCTS_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
-  "surveySection": ${SURVERY_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "termsOfUse": ${TERMS_OF_USE_QUERY},
   "privacy": ${PRIVACY_QUERY}  ,
   "accessibility": ${ACCESSIBILITY_QUERY} 
-}`;
-
-export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
-  bgImage {
-    asset-> {
-      _id,
-      url
-    },
-    alt
-  },
-  cta,
-  href
 }`;
 
 export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{

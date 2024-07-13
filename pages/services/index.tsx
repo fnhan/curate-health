@@ -7,9 +7,9 @@ import { SanityDocument } from 'next-sanity';
 import Survey from '../../components/layout/Home/Survey';
 import { getClient } from '../../sanity/lib/client';
 import {
-  CONTACT_PAGE_QUERY,
-  SERVICES_QUERY,
-  SURVERY_QUERY,
+    CONTACT_PAGE_QUERY,
+    SERVICES_QUERY,
+    SURVEY_LINK_QUERY,
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
@@ -56,7 +56,7 @@ const OurService = ({
 export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const allData = await client.fetch(CONTACT_PAGE_QUERY);
-  const surveySection = await client.fetch(SURVERY_QUERY);
+  const surveySection = await client.fetch(SURVEY_LINK_QUERY);
   const services = await client.fetch(SERVICES_QUERY);
 
   return {

@@ -1,13 +1,14 @@
 import Blog from 'components/layout/Home/Blog';
 import Clinic from 'components/layout/Home/Clinic';
+import ComingSoon from 'components/layout/Home/ComingSoon';
 import CurateCafe from 'components/layout/Home/CurateCafe';
 import Hero from 'components/layout/Home/Hero';
 import Highlight from 'components/layout/Home/Highlight';
-import Newsletter from 'components/layout/Home/Newsletter';
 import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
-import Survey from 'components/layout/Home/Survey';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
 import Sustainability from 'components/layout/Home/Sustainability';
+import Newsletter from 'components/layout/Home/TEMP-Newsletter';
 import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
@@ -28,7 +29,7 @@ type PageProps = {
   draftMode: boolean;
   token: string;
   sustainabilitySection: SanityDocument[];
-  surveySection: SanityDocument[];
+  surveyLink: SanityDocument[];
   navigation: SanityDocument[];
 };
 
@@ -39,6 +40,17 @@ export default function Index(props: PageProps) {
 
   if (props.draftMode) {
     return <HomePreview />;
+  }
+
+  const comingSoon = true;
+
+  if (comingSoon) {
+    return (
+      <main className='flex flex-col min-h-screen justify-center items-center text-white gap-16'>
+        <ComingSoon />
+        <Newsletter />
+      </main>
+    );
   }
 
   return (
@@ -54,7 +66,7 @@ export default function Index(props: PageProps) {
       <CurateCafe cafeSection={props.cafeSection} />
       <Blog posts={props.posts} />
       <Sustainability sustainabilitySection={props.sustainabilitySection} />
-      <Survey surveySection={props.surveySection} />
+      <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>
   );

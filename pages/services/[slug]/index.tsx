@@ -15,7 +15,7 @@ import {
   SERVICES_QUERY,
   SERVICES_SLUG_QUERY,
   SERVICE_BY_SLUG_QUERY,
-  SURVERY_QUERY,
+  SURVEY_LINK_QUERY,
   TREATMENTS_QUERY,
 } from '../../../sanity/lib/queries';
 import { token } from '../../../sanity/lib/token';
@@ -77,7 +77,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
-  const surveySection = await client.fetch(SURVERY_QUERY);
+  const surveySection = await client.fetch(SURVEY_LINK_QUERY);
 
   const treatments = await client.fetch(TREATMENTS_QUERY, {
     serviceSlug: service?.slug.current,

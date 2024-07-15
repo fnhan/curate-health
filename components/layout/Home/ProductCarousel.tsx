@@ -65,45 +65,44 @@ export function ProductCarousel({ products }: { products: SanityDocument[] }) {
         <CarouselContent>
           {products.map((product: SanityDocument, idx: number) => (
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
-              <Card className='w-full rounded-none flex flex-col h-full border-none'>
-                <CardContent className='flex justify-center items-center 2xl:h-64 mb-4 p-0'>
-                  <Link href={`/products/${product.slug}`}>
-                    <Image
-                      src={builder
-                        .image(product.image)
-                        .quality(80)
-                        .size(200, 200)
-                        .auto('format')
-                        .url()}
-                      width={200}
-                      height={200}
-                      alt={product.title}
-                      className='mx-auto object-contain'
-                    />
-                  </Link>
-                </CardContent>
-                <CardHeader className='w-2/3 mx-auto p-0'>
-                  <CardTitle className='text-center mb-3 font-light p-0 text-base md:text-lg'>
+              <Link href={`/products/${product.slug}`}>
+                <Card className='transition ease-in-out hover:hover:-translate-y-3 w-full rounded-none flex flex-col h-full border-none'>
+                  <CardContent className='flex justify-center items-center 2xl:h-64 mb-4 p-0'>
                     <Link href={`/products/${product.slug}`}>
-                      {product.title}
+                      <Image
+                        src={builder
+                          .image(product.image)
+                          .quality(80)
+                          .size(200, 200)
+                          .auto('format')
+                          .url()}
+                        width={200}
+                        height={200}
+                        alt={product.title}
+                        className=' mx-auto object-contain '
+                      />
                     </Link>
-                  </CardTitle>
-                  <CardDescription className='text-center text-xs pb-4'>
-                    <Link href={`/products/${product.slug}`}>
-                      {product.description}
-                    </Link>
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+                  </CardContent>
+                  <CardHeader className='w-2/3 mx-auto p-0'>
+                    <CardTitle className='text-center mb-3 font-light p-0 text-base md:text-2xl'>
+                      <Link href={`/products/${product.slug}`}>
+                        {product.title}
+                      </Link>
+                    </CardTitle>
+                    <CardDescription className='text-center text-sm pb-4'>
+                      <Link href={`/products/${product.slug}`}>
+                        {product.description}
+                      </Link>
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </Link>
             </CarouselItem>
           ))}
         </CarouselContent>
         <CarouselPrevious className='-left-8 ml-2 bg-transparent border-none text-black hover:bg-secondary' />
         <CarouselNext className='-right-8 mr-2 bg-transparent border-none text-black hover:bg-secondary' />
       </Carousel>
-      <div className='my-8 text-center text-sm text-muted-foreground'>
-        {current} / {count}
-      </div>
 
       <div className='w-full relative bg-gray-200 rounded-full h-2.5 dark:bg-gray-700'>
         <div>

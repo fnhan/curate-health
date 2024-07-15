@@ -1,6 +1,6 @@
 import { Loading } from 'components/Loading';
-import { CarouselNav } from 'components/layout/Services/CarouselNav';
 import ServiceDetails from 'components/layout/Services/ServiceDetails';
+
 import { GetStaticPaths } from 'next';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
@@ -20,6 +20,7 @@ import {
 import { token } from '../../sanity/lib/token';
 import Product from 'components/layout/Product';
 import SurveyLink from 'components/layout/Survey/SurveyLink';
+import { ProductsNav } from 'components/layout/ProductsNav';
 
 type PageProps = {
   draftMode: boolean;
@@ -52,8 +53,12 @@ export default function ServicesPage(props: PageProps) {
       title={props.product?.meta?.title || 'Product'}
       description={props.product?.meta?.description}
     >
+      <ProductsNav
+        products={props.service}
+        currentPageTitle={null}
+      ></ProductsNav>
       <div className='relative bg-secondary/60 backdrop-blur-3xl z-50'>
-        <CarouselNav services={props.services} />
+        {/* <ServiceDetails service={props.services} treatments={props.services.treatments} /> */}
 
         <Product product={props.product}></Product>
       </div>

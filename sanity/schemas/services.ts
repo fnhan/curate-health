@@ -24,6 +24,24 @@ export default defineType({
       validation: (Rule) => Rule.required().error('A slug is required'),
     }),
     defineField({
+      name: 'above_image',
+      title: 'above_image',
+      type: 'image',
+      validation: (Rule) => Rule.required().error('An image is required'),
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          description:
+            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+        },
+      ],
+    }),
+    defineField({
       name: 'image',
       title: 'image',
       type: 'image',

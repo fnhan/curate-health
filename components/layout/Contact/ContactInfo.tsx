@@ -16,12 +16,12 @@ export default function ContactInfo({ contactInfo }) {
   } = contactInfo;
 
   const phNumDestructured = phoneNumber.toString().replace(/[^+\d]+/g, "");
-  console.log(phNumDestructured)
 
   return (
     <>
       <section className='relative bg-white h-[524px] md:h-[960px]'>
         <Image
+          priority={true}
           width={1440}
           height={936}
           alt={`${contactInfoImage.alt}`}

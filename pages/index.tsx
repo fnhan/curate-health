@@ -4,12 +4,12 @@ import ComingSoon from 'components/layout/Home/ComingSoon';
 import CurateCafe from 'components/layout/Home/CurateCafe';
 import Hero from 'components/layout/Home/Hero';
 import Highlight from 'components/layout/Home/Highlight';
-import Newsletter from 'components/layout/Home/Newsletter';
 import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
-import SurveyLink from 'components/layout/Survey/SurveyLink';
 import Sustainability from 'components/layout/Home/Sustainability';
+import Newsletter from 'components/layout/Home/TEMP-Newsletter';
 import Layout from 'components/layout/layout';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import { getClient } from '../sanity/lib/client';
@@ -42,7 +42,11 @@ export default function Index(props: PageProps) {
     return <HomePreview />;
   }
 
+<<<<<<< HEAD
   const comingSoon = false;
+=======
+  const comingSoon = process.env.NODE_ENV === 'production';
+>>>>>>> main
 
   if (comingSoon) {
     return (

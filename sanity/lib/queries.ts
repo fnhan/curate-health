@@ -83,6 +83,10 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     "above_image": above_image.asset->url,
     "image": image.asset->url,
     "altText": image.alt,
+    meta {
+    title,
+    description
+  },
     content,
     "treatments": *[_type == "treatment" && references(^._id)]{
       _id,
@@ -101,7 +105,8 @@ export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]
   },
   "image": image.asset->url,
   "altText": image.alt,
-  content
+  content,
+
 }`;
 
 export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{

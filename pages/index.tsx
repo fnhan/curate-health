@@ -42,11 +42,7 @@ export default function Index(props: PageProps) {
     return <HomePreview />;
   }
 
-<<<<<<< HEAD
-  const comingSoon = false;
-=======
   const comingSoon = process.env.NODE_ENV === 'production';
->>>>>>> main
 
   if (comingSoon) {
     return (
@@ -62,7 +58,7 @@ export default function Index(props: PageProps) {
       title={'Home'}
       navigation={props.navigation}
       footer={props.footer}
-      description={'bla'}
+      description={'homepage'}
     >
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />

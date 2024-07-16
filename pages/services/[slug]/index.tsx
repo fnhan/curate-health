@@ -49,6 +49,7 @@ export default function ServicesPage(props: PageProps) {
       navigation={props.navigation}
       footer={props.footer}
       title={props.service?.title || 'Services'}
+      description={props.service?.meta?.description || ''}
     >
       <Picture service={props.service} />
       <ServicesNav

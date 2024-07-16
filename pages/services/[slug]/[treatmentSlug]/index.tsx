@@ -57,7 +57,9 @@ export default function TreatmentsPage(props: PageProps) {
     <Layout
       title={props.treatment?.title || 'Treatments'}
       navigation={props.navigation}
-      footer={props.footer}>
+      footer={props.footer}
+      description={props.treatment?.meta?.description || ''}
+    >
       <AbovePicture treatment={props.treatment} />
       <TreatmentNav
         treatments={props.treatments}

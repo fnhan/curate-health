@@ -52,7 +52,9 @@ export default function TreatmentsPreview() {
     <Layout
       title={treatment?.title || 'Treatments'}
       navigation={navigation}
-      footer={footer}>
+      footer={footer}
+      description={treatment?.meta?.description || ''}
+    >
       <TreatmentNav
         treatments={treatments}
         currentPageTitle={treatment?.title || 'Services'}

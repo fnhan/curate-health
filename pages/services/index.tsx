@@ -33,7 +33,9 @@ const OurService = (props: PageProps) => {
     <Layout
       title='Our Services'
       navigation={props.navigation}
-      footer={props.footer}>
+      footer={props.footer}
+      description={props.service?.meta?.description || ''}
+    >
       <OurServicePicture />
       <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50'>
         <ServicesNav

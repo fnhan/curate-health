@@ -15,7 +15,7 @@ import {
   SERVICES_QUERY,
   SERVICES_SLUG_QUERY,
   SERVICE_BY_SLUG_QUERY,
-  SURVERY_QUERY,
+  SURVEY_LINK_QUERY,
   TREATMENTS_QUERY,
 } from '../../../sanity/lib/queries';
 import { token } from '../../../sanity/lib/token';
@@ -58,7 +58,7 @@ export default function ServicesPage(props: PageProps) {
         service={props.service}
         treatments={props.service.treatments}
       />
-      <Survey surveySection={props.surveySection} />
+      <Survey surveyLink={props.surveySection} />
       <Newsletter />
     </Layout>
   );
@@ -66,9 +66,10 @@ export default function ServicesPage(props: PageProps) {
 
 export const getStaticProps = async ({ params, preview = false }) => {
   const client = getClient(preview ? token : undefined);
+
   const services = await client.fetch(SERVICES_QUERY);
   const service = await client.fetch(SERVICE_BY_SLUG_QUERY, {
-    slug: params.slug,
+    slug: params?.slug || '',
   });
 
   if (!service) {
@@ -77,10 +78,10 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
-  const surveySection = await client.fetch(SURVERY_QUERY);
+  const surveySection = await client.fetch(SURVEY_LINK_QUERY);
 
   const treatments = await client.fetch(TREATMENTS_QUERY, {
-    serviceSlug: service?.slug.current,
+    serviceSlug: service?.slug || '',
   });
 
   return {
@@ -99,6 +100,5 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await getClient().fetch(SERVICES_SLUG_QUERY);
-
   return { paths, fallback: true };
 };

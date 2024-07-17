@@ -35,6 +35,7 @@ export default function Meta({ title }) {
       <meta name='description' content={'Curate Health'} />
       <meta property='og:image' content={HOME_OG_IMAGE_URL} />
       <title>{title ? `${title} | Curate Health` : 'Curate Health'}</title>
+      <script src="https://app.youform.com/widgets/widget.js"></script>
     </Head>
   );
 }

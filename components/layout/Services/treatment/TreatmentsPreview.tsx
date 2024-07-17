@@ -1,11 +1,12 @@
 import { Loading } from 'components/Loading';
 import { useLiveQuery } from 'next-sanity/preview';
 import { useRouter } from 'next/router';
+import Survey from '../../../../components/layout/Home/Survey';
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
+  SURVEY_LINK_QUERY,
   TREATMENT_BY_SLUG_QUERY,
-  SURVERY_QUERY,
   TREATMENTS_QUERY,
 } from '../../../../sanity/lib/queries';
 import Newsletter from '../../Home/Newsletter';
@@ -16,10 +17,8 @@ import Frame from './Frame';
 import Green from './Green';
 import Hero from './Hero';
 import Quote from './Quote';
-import Written from './Written';
-import Survey from '../../../../components/layout/Home/Survey';
 import { TreatmentNav } from './TreatmentNav';
-
+import Written from './Written';
 
 export default function TreatmentsPreview() {
   const router = useRouter();
@@ -30,9 +29,15 @@ export default function TreatmentsPreview() {
     TREATMENT_BY_SLUG_QUERY,
     { slug }
   );
-  
-  const [surveySection, issurveySectionLoading] = useLiveQuery(null, SURVERY_QUERY);
-  const [treatments, isTreatmentsLoading] = useLiveQuery(null, TREATMENTS_QUERY);
+
+  const [surveySection, issurveySectionLoading] = useLiveQuery(
+    null,
+    SURVEY_LINK_QUERY
+  );
+  const [treatments, isTreatmentsLoading] = useLiveQuery(
+    null,
+    TREATMENTS_QUERY
+  );
   const [footer, isFooterLoading] = useLiveQuery(null, FOOTER_QUERY);
   const [navigation, isNavigationLoading] = useLiveQuery(
     null,
@@ -47,8 +52,7 @@ export default function TreatmentsPreview() {
     <Layout
       title={treatment?.title || 'Treatments'}
       navigation={navigation}
-      footer={footer}
-    >
+      footer={footer}>
       <TreatmentNav
         treatments={treatments}
         currentPageTitle={treatment?.title || 'Services'}
@@ -56,13 +60,13 @@ export default function TreatmentsPreview() {
         serviceSlug={treatment?.service?.slug.current || ''}
       />
       <AbovePicture treatment={treatment} />
-      <Hero treatment={treatment}/>
-      <Quote treatment={treatment}/>
-      <Content treatment={treatment}/>
-      <Green treatment={treatment}/>
-      <Frame treatment={treatment}/>
-      <Written treatment={treatment}/>
-      <Survey surveySection={surveySection} />
+      <Hero treatment={treatment} />
+      <Quote treatment={treatment} />
+      <Content treatment={treatment} />
+      <Green treatment={treatment} />
+      <Frame treatment={treatment} />
+      <Written treatment={treatment} />
+      <Survey surveyLink={surveySection} />
       <Newsletter />
     </Layout>
   );

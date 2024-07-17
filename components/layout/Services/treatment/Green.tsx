@@ -1,6 +1,10 @@
 import { PortableText } from '@portabletext/react';
 
 export default function Green({treatment}) {
+  if (!treatment.greenTitle && !treatment.greenContent) {
+    return null;
+  }
+
   return (
     <div className='container bg-primary'>
       <div className=" text-white font-thin text-[100px] 2xl:text-[120px] leading-[100px]">

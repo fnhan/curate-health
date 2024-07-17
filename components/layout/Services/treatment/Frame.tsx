@@ -1,6 +1,10 @@
 import { PortableText } from '@portabletext/react';
 
 export default function Frame({ treatment }) {
+  if (!treatment.framesTitle) {
+    return null;
+  }
+
   return (
     <div className='bg-white'>
       <div className="container 2xl:flex 2xl:text-center flex-col text-black py-24 2xl:px-40">

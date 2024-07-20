@@ -16,7 +16,9 @@ export default function Products({ productsSection, products }) {
   return (
     <section id='products' className='bg-white flex flex-col gap-10'>
       <div className='container pt-9'>
-        <h2 className=' text-black md:text-xl'>{sectionTitle}</h2>
+        <h2 className=' text-[#283619] font-light text-muted-foreground  font-poppins md:text-4xl'>
+          {sectionTitle}
+        </h2>
       </div>
       <div className='container'>
         <ProductCarousel products={products} />

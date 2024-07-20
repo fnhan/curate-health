@@ -13,7 +13,7 @@ import SurveyLink from 'components/layout/Survey/SurveyLink';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import { getClient } from '../sanity/lib/client';
-import { HOME_PAGE_QUERY } from '../sanity/lib/queries';
+import { HOME_PAGE_QUERY, METADATA_BY_SLUG_QUERY } from '../sanity/lib/queries';
 import { token } from '../sanity/lib/token';
 
 type PageProps = {
@@ -31,6 +31,7 @@ type PageProps = {
   sustainabilitySection: SanityDocument[];
   surveyLink: SanityDocument[];
   navigation: SanityDocument[];
+  meta: SanityDocument;
 };
 
 export default function Index(props: PageProps) {
@@ -58,7 +59,7 @@ export default function Index(props: PageProps) {
       title={'Home'}
       navigation={props.navigation}
       footer={props.footer}
-      description={'homepage'}
+      description={props.meta.description}
     >
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />
@@ -80,7 +81,11 @@ export default function Index(props: PageProps) {
 export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const allData = await client.fetch(HOME_PAGE_QUERY);
-
+  const meta = (
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: '/',
+    })
+  ).meta;
   return {
     props: {
       ...allData,

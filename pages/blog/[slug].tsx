@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { getClient } from '../../sanity/lib/client';
 import {
   FOOTER_QUERY,
+  METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
   POSTS_SLUG_QUERY,
   POST_QUERY,
@@ -26,6 +27,7 @@ type PageProps = {
   draftMode: boolean;
   token: string;
   description: string;
+  meta?: SanityDocument;
 };
 
 export default function SinglePost(props: PageProps) {
@@ -62,6 +64,11 @@ export const getStaticProps = async ({ params = {}, draftMode = false }) => {
   const post = await client.fetch<SanityDocument>(POST_QUERY, params);
   const navigation = await client.fetch<SanityDocument>(NAVIGATION_QUERY);
   const footer = await client.fetch<SanityDocument>(FOOTER_QUERY);
+  const meta = (
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: params,
+    })
+  ).meta;
 
   return {
     props: {
@@ -70,6 +77,7 @@ export const getStaticProps = async ({ params = {}, draftMode = false }) => {
       navigation,
       footer,
       draftMode,
+      meta,
       token: draftMode ? token : '',
     },
   };

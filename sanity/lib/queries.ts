@@ -109,6 +109,36 @@ export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]
 
 }`;
 
+export const METADATAS_QUERY = groq`*[_type == "metadatas"]{
+  datas
+}`;
+
+export const METADATASone_QUERY = groq`*[_type == "metadatas"][0]{
+  datas
+}`;
+
+export const MetaData_Slug = groq`*[_type == "metadatas" && defined(slug.current) ][0]{
+  "params": {"slug": slug.current}
+}`;
+
+// export const METADATA_BY_SLUG_QUERY = groq`
+//   *[_type == "metadatas"]{
+//     datas[slug.current == $slug]{
+//       title,
+//       description
+//     }
+//   }
+// `;
+
+export const METADATA_BY_SLUG_QUERY = groq`
+  *[_type == "metadatas"]{
+    "meta":datas[slug.current == $slug][0]{
+      title,
+      description
+    } 
+  }[0]
+`;
+
 export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{
   "slug": service->slug.current,
   "treatmentSlug": treatmentSlug.current
@@ -299,10 +329,7 @@ export const HOME_PAGE_QUERY = groq`{
   "termsOfUse": ${TERMS_OF_USE_QUERY},
   "privacy": ${PRIVACY_QUERY},
   "accessibility": ${ACCESSIBILITY_QUERY},
-  meta {
-    title,
-    description
-  }
+  "meta" : ${METADATA_BY_SLUG_QUERY}
 }`;
 
 export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{

@@ -6,9 +6,12 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'title',
+      type: 'string',
+    }),
+    defineField({
       name: 'datas',
       type: 'array',
-      filter: 'true',
       of: [
         {
           name: 'metas',
@@ -33,26 +36,10 @@ export default defineType({
         },
       ],
     }),
-    defineField({
-      name: 'meta',
-      type: 'object',
-      fields: [
-        {
-          title: 'Title',
-          name: 'title',
-          type: 'string',
-        },
-        {
-          title: 'Description',
-          name: 'description',
-          type: 'string',
-        },
-      ],
-    }),
   ],
   preview: {
     select: {
-      title: 'title.title',
+      title: 'title',
     },
   },
 });

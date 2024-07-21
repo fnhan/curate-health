@@ -8,7 +8,11 @@ import Newsletter from '../../components/layout/Home/Newsletter';
 import Layout from '../../components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
 import Image from 'next/image';
-import { SERVICES_QUERY, SURVEY_LINK_QUERY } from '../../sanity/lib/queries';
+import {
+  METADATA_BY_SLUG_QUERY,
+  SERVICES_QUERY,
+  SURVEY_LINK_QUERY,
+} from '../../sanity/lib/queries';
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
@@ -31,6 +35,7 @@ type PageProps = {
   navigation: SanityDocument;
   footer: SanityDocument;
   surveyLink: SanityDocument;
+  meta: SanityDocument;
 };
 
 export default function ServicesPage(props: PageProps) {
@@ -45,13 +50,12 @@ export default function ServicesPage(props: PageProps) {
   if (!props.product) {
     return <Loading />;
   }
-
   return (
     <Layout
       navigation={props.navigation}
       footer={props.footer}
-      title={props.product?.meta?.title || 'Product'}
-      description={props.product?.meta?.description}
+      title={props.meta?.title || 'Product'}
+      description={props.meta?.description || 'Description here'}
     >
       <ProductsNav
         products={props.service}
@@ -79,13 +83,15 @@ export const getStaticProps = async ({ params, preview = false }) => {
   });
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
-  // const product = await client.fetch<SanityDocument>(
-  //   PRODUCT_SLUG_QUERY,
-  //   params
-  // );
+
   const surveyLink = await client.fetch(SURVEY_LINK_QUERY);
   const product = await client.fetch<SanityDocument>(PRODUCT_QUERY, params);
   const services = await client.fetch<SanityDocument>(SERVICES_QUERY);
+  const meta = (
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: params.slug,
+    })
+  ).meta;
 
   return {
     props: {
@@ -96,6 +102,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
       footer,
       draftMode: preview,
       surveyLink,
+      meta,
       token: preview ? token : '',
     },
   };

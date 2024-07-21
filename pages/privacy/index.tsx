@@ -2,18 +2,27 @@ import Layout from 'components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
 import {
   FOOTER_QUERY,
+  METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
   PRIVACY_QUERY,
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
+import { SanityDocument } from 'next-sanity';
 
-export default function privacy({ navigation, footer, privacy }) {
+type PageProps = {
+  meta: SanityDocument;
+};
+
+export default function privacy(
+  props: PageProps,
+  { navigation, footer, privacy }
+) {
   return (
     <Layout
       navigation={navigation}
       footer={footer}
-      title={'Privacy'}
-      description={privacy.meta?.description || 'Privacy description'}
+      title={props.meta?.title || 'Privacy'}
+      description={props.meta?.description || 'Privacy description'}
     >
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
@@ -34,11 +43,16 @@ export default function privacy({ navigation, footer, privacy }) {
   );
 }
 
-export const getStaticProps = async ({ preview = false }) => {
+export const getStaticProps = async (params, { preview = false }) => {
   const client = getClient(preview ? token : undefined);
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
   const privacy = await client.fetch(PRIVACY_QUERY);
+  const meta = (
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: params.slug,
+    })
+  ).meta;
 
   return {
     props: {
@@ -46,6 +60,7 @@ export const getStaticProps = async ({ preview = false }) => {
       footer,
       privacy,
       draftMode: preview,
+      meta,
       token: preview ? token : '',
     },
   };

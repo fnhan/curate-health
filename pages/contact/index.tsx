@@ -6,7 +6,10 @@ import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import { getClient } from '../../sanity/lib/client';
-import { CONTACT_PAGE_QUERY } from '../../sanity/lib/queries';
+import {
+  CONTACT_PAGE_QUERY,
+  METADATA_BY_SLUG_QUERY,
+} from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
 type PageProps = {
@@ -44,14 +47,20 @@ export default function Index(props: PageProps) {
   );
 }
 
-export const getStaticProps = async ({ draftMode = false }) => {
+export const getStaticProps = async (params, { draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const allData = await client.fetch(CONTACT_PAGE_QUERY);
+  const meta = (
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: params.slug,
+    })
+  ).meta;
 
   return {
     props: {
       ...allData,
       draftMode,
+      meta,
       token: draftMode ? token : '',
     },
   };

@@ -8,30 +8,28 @@ import {
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
-type PageProps = {
-  meta: SanityDocument;
-};
+type meta = {};
 
-export default function Booking(props: PageProps, { navigation, footer }) {
+export default function Booking({ meta, navigation, footer }) {
   return (
     <Layout
       navigation={navigation}
       footer={footer}
-      title={props.meta.title || 'Booking'}
-      description={props.meta.description || ''}
+      title={meta.title || 'Booking'}
+      description={meta.description || ''}
     >
       Booking
     </Layout>
   );
 }
 
-export const getStaticProps = async (params, { preview = false }) => {
+export const getStaticProps = async ({ preview = false }) => {
   const client = getClient(preview ? token : undefined);
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: params.slug,
+      slug: '/booking',
     })
   ).meta;
 

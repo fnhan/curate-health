@@ -56,10 +56,10 @@ export default function Index(props: PageProps) {
 
   return (
     <Layout
-      title={'Home'}
+      title={props.meta?.title || 'Home'}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.meta.description}
+      description={props.meta?.description || 'Description'}
     >
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />
@@ -86,10 +86,12 @@ export const getStaticProps = async ({ draftMode = false }) => {
       slug: '/',
     })
   ).meta;
+
   return {
     props: {
       ...allData,
       draftMode,
+
       token: draftMode ? token : '',
     },
   };

@@ -9,20 +9,15 @@ import {
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
-type PageProps = {
-  meta: SanityDocument;
-};
+type meta = {};
 
-export default function TermsOfUse(
-  props: PageProps,
-  { navigation, footer, termsOfUse }
-) {
+export default function TermsOfUse({ meta, navigation, footer, termsOfUse }) {
   return (
     <Layout
       navigation={navigation}
       footer={footer}
       title={'Terms Of Use'}
-      description={props.meta?.description || 'Terms of use'}
+      description={meta?.description || 'Terms of use'}
     >
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
@@ -41,14 +36,14 @@ export default function TermsOfUse(
   );
 }
 
-export const getStaticProps = async ({ params, preview = false }) => {
+export const getStaticProps = async ({ preview = false }) => {
   const client = getClient(preview ? token : undefined);
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
   const termsOfUse = await client.fetch(TERMS_OF_USE_QUERY);
   const meta = (
-    await client.fetch(METADATA_BY_SLUG_QUERY, {
-      slug: params.slug,
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: '/term-of-use',
     })
   ).meta;
 

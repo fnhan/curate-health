@@ -9,20 +9,15 @@ import {
 import { token } from '../../sanity/lib/token';
 import { SanityDocument } from 'next-sanity';
 
-type PageProps = {
-  meta: SanityDocument;
-};
+type meta = {};
 
-export default function privacy(
-  props: PageProps,
-  { navigation, footer, privacy }
-) {
+export default function privacy({ meta, navigation, footer, privacy }) {
   return (
     <Layout
       navigation={navigation}
       footer={footer}
-      title={props.meta?.title || 'Privacy'}
-      description={props.meta?.description || 'Privacy description'}
+      title={meta?.title || 'Privacy'}
+      description={meta?.description || 'Privacy description'}
     >
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
@@ -43,14 +38,14 @@ export default function privacy(
   );
 }
 
-export const getStaticProps = async (params, { preview = false }) => {
+export const getStaticProps = async ({ preview = false }) => {
   const client = getClient(preview ? token : undefined);
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
   const privacy = await client.fetch(PRIVACY_QUERY);
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: params.slug,
+      slug: '/privacy',
     })
   ).meta;
 

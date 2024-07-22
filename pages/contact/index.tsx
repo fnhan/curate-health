@@ -47,15 +47,14 @@ export default function Index(props: PageProps) {
   );
 }
 
-export const getStaticProps = async (params, { draftMode = false }) => {
+export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const allData = await client.fetch(CONTACT_PAGE_QUERY);
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: params.slug,
+      slug: '/contact',
     })
   ).meta;
-
   return {
     props: {
       ...allData,

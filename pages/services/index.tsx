@@ -56,7 +56,7 @@ const OurService = (props: PageProps) => {
   );
 };
 
-export const getStaticProps = async (params, { draftMode = false }) => {
+export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const surveySection = await client.fetch(SURVEY_LINK_QUERY);
   const services = await client.fetch(SERVICES_QUERY);
@@ -64,9 +64,10 @@ export const getStaticProps = async (params, { draftMode = false }) => {
   const footer = await client.fetch(FOOTER_QUERY);
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: params.slug,
+      slug: '/services',
     })
   ).meta;
+  console.log(meta);
   return {
     props: {
       draftMode,

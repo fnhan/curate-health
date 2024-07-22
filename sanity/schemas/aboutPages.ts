@@ -32,4 +32,18 @@ export default defineType({
     }),
   ],
 
+  preview: {
+    select: {
+      title: 'title',
+      isActive: 'isActive',
+    },
+    prepare(selection) {
+      const { title, isActive } = selection;
+      return {
+        title: title,
+        subtitle: `Status: ${isActive ? 'Active' : 'Inactive'}`,
+      };
+    },
+  },
+
 });

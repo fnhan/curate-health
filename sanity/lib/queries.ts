@@ -399,29 +399,26 @@ export const CONTACT_PAGE_QUERY = groq`{
   "surveyLink": ${SURVEY_LINK_QUERY}
 }`;
 
-export const ABOUT_PAGES_QUERY = groq`*[_type == "aboutPage" && isActive == true]{
+export const ABOUT_PAGES_QUERY = groq`*[_type == "aboutPage" && isActive == true] | order(_createdAt desc){
   title,
   "slug": slug.current,
 }`;
 
 export const OUR_STORY_QUERY = groq`*[_type == "ourStory"][0]{
   headerTitle,
-  headerTitleDesktop,
   headerSubtitle,
-  headerSubtitleDesktop,
   sectionOneTextContent,
   sectionOneTitle,
   sectionTwoTextContent,
   sectionThreeTextContent,
   sectionThreeTitle,
-  sectionFourTextContent,
   sectionFiveTextContent,
   sectionFiveTitle,
   sectionSixTextContent,
   sectionSixTitle,
   sectionSevenCta,
-  SectionSevenTextContent,
-  SectionSevenTitle,
+  sectionSevenTextContent,
+  sectionSevenTitle,
   "headerBgImage": {
     "asset": headerBgImage.asset->{
       _id,

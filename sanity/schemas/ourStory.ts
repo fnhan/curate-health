@@ -29,22 +29,10 @@ export default defineType({
       description: 'Title of header section on page',
     }),
     defineField({
-      name: 'headerTitleDesktop',
-      title: 'Header Title Desktop',
-      type: 'string',
-      description: 'Title of header section on desktop version of page',
-    }),
-    defineField({
       name: 'headerSubtitle',
       title: 'Header Subtitle',
       type: 'string',
       description: 'Subtitle of header section on page',
-    }),
-    defineField({
-      name: 'headerSubtitleDesktop',
-      title: 'Header Subtitle Desktop',
-      type: 'string',
-      description: 'Subtitle of header section on desktop version of page',
     }),
     defineField({
       name: 'sectionOneImage',

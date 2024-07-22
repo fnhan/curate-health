@@ -18,7 +18,7 @@ export function ServicesNav({ services, currentPageTitle }) {
                     <div
                       className={`${currentPageTitle !== 'Our Services' ? '-mt-1 bg-black h-[0.5px] md:h-[1.35px] w-0 group-hover:w-full transition-all duration-500' : ''}`}></div>
                   </div>
-                  <div className='text-black font-light -ml-6 p-6 mx-3 lg:inline'>
+                  <div className='text-black font-light -ml-6 p-6 mx-3 2xl:inline'>
                     |
                   </div>
                 </div>

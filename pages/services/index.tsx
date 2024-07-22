@@ -61,8 +61,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
   const ourServices = await client.fetch(OURSERVICES_QUERY);
   const navigation = await client.fetch<SanityDocument>(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
-  console.log(ourServices)
-
+  
   return {
     props: {
       draftMode,

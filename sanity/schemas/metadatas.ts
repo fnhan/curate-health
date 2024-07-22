@@ -13,7 +13,7 @@ export default defineType({
       name: 'datas',
       type: 'array',
       of: [
-        defineType({
+        defineField({
           name: 'metas',
           type: 'object',
           fields: [

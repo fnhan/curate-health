@@ -329,7 +329,7 @@ export const HOME_PAGE_QUERY = groq`{
   "termsOfUse": ${TERMS_OF_USE_QUERY},
   "privacy": ${PRIVACY_QUERY},
   "accessibility": ${ACCESSIBILITY_QUERY},
-  "meta" : ${METADATA_BY_SLUG_QUERY}
+  
 }`;
 
 export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{

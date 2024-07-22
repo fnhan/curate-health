@@ -13,12 +13,12 @@ export default defineType({
       name: 'datas',
       type: 'array',
       of: [
-        {
+        defineType({
           name: 'metas',
           type: 'object',
           fields: [
             {
-              title: 'slug',
+              title: 'Slug',
               name: 'slug',
               type: 'slug',
             },
@@ -33,7 +33,20 @@ export default defineType({
               type: 'string',
             },
           ],
-        },
+          preview: {
+            select: {
+              title: 'slug.current', // Select the slug field
+              subtitle: 'description',
+            },
+            prepare(selection) {
+              const { title, subtitle } = selection;
+              return {
+                title: `Slug: ${title}`, // Customize the preview title
+                subtitle: `Desc: ${subtitle}`,
+              };
+            },
+          },
+        }),
       ],
     }),
   ],

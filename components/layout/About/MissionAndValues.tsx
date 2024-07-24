@@ -88,12 +88,12 @@ export default function MissionAndValues({ missionAndValues, aboutPages }) {
           height={500}
           alt={`${purposeImage.alt}`}
           src={builder.image(purposeImage).width(704).height(500).url()}
-          className='absolute mt-10 right-0 lg:left-0 lg:mt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
+          className='absolute right-0 md:left-0 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
         <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
-        <div className='pt-10 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
-          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-64 py-14 lg:pt-0 lg:mb-12'>{purposeTitle}</h1>
+        <div className='pt-10 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[84%] lg:w-[2/5] lg:h-[500px]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-64 pt-14 py-4 md:py-14 lg:pt-0 lg:mb-12'>{purposeTitle}</h1>
           <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
           >
             {purposeTextContent}
@@ -102,8 +102,8 @@ export default function MissionAndValues({ missionAndValues, aboutPages }) {
       </section>
       <section id="mission" className='w-full font-light bg-white flex flex-col lg:grid lg:grid-cols-2 pt-[80px] md:pt-[100px] lg:pt-[200px] 
       lg:pb-[100px]'>
-        <div className='pt-80 mt-48 lg:pl-40 lg:pt-0 md:mt-10 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
-          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-96 py-14 lg:pt-0 lg:mb-12'>{missionTitle}</h1>
+        <div className='pt-80 mt-48 lg:pl-40 lg:pt-0 md:mt-10 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[84%] lg:w-[2/5] lg:h-[500px]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-96 pt-14 py-4 md:py-14 lg:pt-0 lg:mb-12'>{missionTitle}</h1>
           <p className='lg:col-span-1 lg:p-1 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm lg:w-[544px]'
           >
             {missionTextContent}
@@ -120,7 +120,7 @@ export default function MissionAndValues({ missionAndValues, aboutPages }) {
             .height(500)
             .url()
           }
-          className='z-10 mt-10 absolute left-0 lg:right-0 lg:left-auto lg:mt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
+          className='z-10 absolute left-0 md:right-0 lg:left-auto w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
         <div className='z-0 absolute right-0 bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
@@ -132,12 +132,12 @@ export default function MissionAndValues({ missionAndValues, aboutPages }) {
           height={500}
           alt={`${visionImage.alt}`}
           src={builder.image(visionImage).width(704).height(500).url()}
-          className='absolute mt-10 right-0 lg:left-0 lg:mt-14 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px]'
+          className='absolute right-0 md:left-0 w-[288px] h-[460px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
         <div className=' bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
-        <div className='pt-14 md:pt-56 md:mt-2 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
-          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] py-14 lg:mb-12'>{visionTitle}</h1>
+        <div className='pt-14 md:pt-56 md:mt-2 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[84%] lg:w-[2/5] lg:h-[500px]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] pt-14 py-4 md:py-14 lg:mb-12'>{visionTitle}</h1>
           <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm mb-44 lg:mb-0'
           >
             {visionTextContent}

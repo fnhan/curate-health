@@ -8,6 +8,7 @@ import { token } from '../../sanity/lib/token';
 import Sustainability from 'components/layout/About/Sustainability';
 
 type PageProps = {
+  aboutPages: SanityDocument;
   surveyLink: SanityDocument;
   navigation: SanityDocument;
   sustainability: SanityDocument;
@@ -23,7 +24,7 @@ export default function AboutOS(props: PageProps) {
       title={'Sustainability'}
       navigation={props.navigation}
       footer={props.footer}>
-      <Sustainability sustainability={props.sustainability} />
+      <Sustainability sustainability={props.sustainability} aboutPages={props.aboutPages}/>
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>

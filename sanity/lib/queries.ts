@@ -533,9 +533,29 @@ export const MISSION_AND_VALUES_PAGE_QUERY = groq`{
 
 export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{
   headerTitle,
+  headerTitleDesktop,
   headerTextContent,
+  sectionOneTitle,
+  sectionOneTextContent,
+  sectionTwoTitle,
   sectionTwoTextContent,
+  sectionThreeTitle,
   sectionThreeTextContent,
+  sectionFourTitle,
+  sectionFourTextContent,
+  sectionFiveTitle,
+  sectionFiveTextContent,
+  sectionSixTitle,
+  sectionSixTextContent,
+  sectionSixSubtitleOne,
+  sectionSixSubtitleOneText,
+  sectionSixSubtitleTwo,
+  sectionSixSubtitleTwoText,
+  sectionSixSubtitleThree,
+  sectionSixSubtitleThreeText,
+  sectionSevenTitle,
+  sectionSevenTextContent,
+  sectionSevenCta,
   "headerTopImage": {
     "asset": headerTopImage.asset->{
       _id,
@@ -557,6 +577,13 @@ export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{
     },
     "alt": sectionFourImage.alt
   },
+        "sectionThreeImage": {
+    "asset": sectionThreeImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionThreeImage.alt
+  },
       "sectionTwoImage": {
     "asset": sectionTwoImage.asset->{
       _id,
@@ -570,6 +597,27 @@ export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{
       url
     },
     "alt": sectionOneImage.alt
+  },
+        "sectionFiveImage": {
+    "asset": sectionFiveImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionFiveImage.alt
+  },
+        "sectionSixImage": {
+    "asset": sectionSixImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionSixImage.alt
+  },
+        "sectionSevenBgImage": {
+    "asset": sectionSevenBgImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionSevenBgImage.alt
   },
 
 }`;

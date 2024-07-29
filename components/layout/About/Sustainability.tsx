@@ -37,6 +37,12 @@ export default function Sustainability({ sustainability, aboutPages }) {
     sectionSixTitle,
     sectionSixTextContent,
     sectionSixImage,
+    sectionSixSubtitleOne,
+    sectionSixSubtitleOneText,
+    sectionSixSubtitleTwo,
+    sectionSixSubtitleTwoText,
+    sectionSixSubtitleThree,
+    sectionSixSubtitleThreeText,
     sectionSevenBgImage,
     sectionSevenTitle,
     sectionSevenTextContent,
@@ -106,7 +112,7 @@ export default function Sustainability({ sustainability, aboutPages }) {
             </div>
           </div>
         </div>
-        <div className='flex flex-col pt-20 lg:pt-28 pl-8 md:pl-[60px] lg:pl-40'>
+        <div className='flex flex-col pt-20 md:pt-28 pl-8 md:pl-[60px] lg:pl-40'>
           <h1 className='block lg:hidden text-2xl md:text-5xl leading-8 md:leading-10'>
             {headerTitle}
           </h1>
@@ -118,11 +124,11 @@ export default function Sustainability({ sustainability, aboutPages }) {
           </p>
         </div>
       </section>
-      <section id="sectionOne" className='w-full font-light bg-white pt-[180px] lg:pt-[300px]
+      <section id="sectionOne" className='w-full font-light bg-white pt-[180px] lg:pt-[400px]
       flex flex-col lg:grid lg:grid-cols-2'>
-        <div className='lg:pl-40 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[90%] md:w-[85%] lg:w-[95%]'>
-          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] pt-[600px] lg:pt-20 lg:pb-12 leading-[52px]'>{sectionOneTitle}</h1>
-          <p className='pt-4 md:pt-8 lg:pt-10 lg:col-span-1 md:pl-1 lg:pl-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
+        <div className='md:pt-36 lg:pt-0 lg:pl-40 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[90%] md:w-[85%] lg:w-[95%]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] pt-[600px] lg:pt-20 md:pb-12 leading-[52px]'>{sectionOneTitle}</h1>
+          <p className='lg:pt-10 lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
           >
             {sectionOneTextContent}
           </p>
@@ -138,44 +144,150 @@ export default function Sustainability({ sustainability, aboutPages }) {
             .height(500)
             .url()
           }
-          className='z-10 absolute lg:right-0 w-[704px] h-[500px] transform translate-y-16'
+          className='z-10 absolute left-0 lg:right-0 lg:left-auto w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
-        <div className='z-0 absolute lg:right-0 bg-secondary w-[608px] h-[429px]'>
+        <div className='z-0 absolute left-0 lg:right-0 lg:left-auto bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
       </section>
-      <section id="sectionTwo" className='relative bg-white font-light h-[613px] md:h-[822px]'>
+      <section id="sectionTwo" className='w-full font-light bg-white flex flex-col lg:grid lg:grid-cols-2 pt-[180px] lg:pt-[400px]'>
         <Image
           loading='lazy'
-          width={608}
-          height={997}
+          width={704}
+          height={500}
           alt={`${sectionTwoImage.alt}`}
-          src={builder.image(sectionTwoImage).width(608).height(997).url()}
-          className='w-full h-[560px] md:w-[317px] lg:w-[448px] lg:h-[656px] md:ml-[60px] lg:ml-[160px] absolute lg:left-[160px]'
+          src={builder.image(sectionTwoImage).width(704).height(500).url()}
+          className='absolute left-0 w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
-        <div className='absolute inset-0 pt-[120px] md:h-[264px] md:pt-[150px] lg:pt-[200px] h-[216px] mx-16 md:mx-44 lg:mx-96'>
-          <p className='text-center italic text-[26px] md:text-4xl lg:text-[56px] text-primary leading-9 md:leading-[50px] lg:leading-[66px] 
-          w-[256px] md:w-[482px] lg:w-[928px]'
+        <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
+        </div>
+        <div className='pt-24 md:pt-12 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-2.5 w-[84%] lg:w-[2/5] lg:h-[500px]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-64 pt-14 py-4 md:py-14 lg:pt-0 lg:mb-12'>{sectionTwoTitle}</h1>
+          <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
           >
             {sectionTwoTextContent}
           </p>
         </div>
       </section>
-      <section id="sectionThree" className='flex justify-center bg-white font-light h-[462px] md:h-[322px] pt-[60px] md:pt-0'>
-        <div className='md:h-[264px] w-[256px] md:w-[648px] lg:w-[736px] h-[216px]'>
-          <p className='text-center italic leading-5 md:leading-7 text-xs md:text-sm lg:text-base text-primary'>
+      <section id="sectionThree" className='w-full font-light bg-white pt-[180px] lg:pt-[250px] flex flex-col lg:grid lg:grid-cols-2'>
+        <div className='md:pt-36 lg:pt-0 lg:pl-40 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[90%] md:w-[85%] lg:w-[95%]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] pt-[600px] lg:pt-20 md:mb-12 leading-[52px]'>{sectionThreeTitle}</h1>
+          <p className='lg:pt-10 lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
+          >
             {sectionThreeTextContent}
           </p>
         </div>
-      </section>
-      <section id="sectionFour" className='relative bg-white flex h-[413px] md:h-[622px] lg:mb-14'>
         <Image
           loading='lazy'
-          width={736}
-          height={352}
-          alt={`${sectionFourImage.alt}`}
-          src={builder.image(sectionFourImage).width(736).height(352).url()}
-          className='object-cover w-[222px] h-[129px] md:w-[460px] md:h-[220px] lg:w-[736px] lg:h-[352px] absolute right-0 top-[175px]'
+          width={704}
+          height={500}
+          alt={`${sectionThreeImage.alt}`}
+          src={builder
+            .image(sectionThreeImage)
+            .width(704)
+            .height(500)
+            .url()
+          }
+          className='z-10 absolute left-0 lg:right-0 lg:left-auto w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
+        <div className='z-0 absolute left-0 lg:right-0 lg:left-auto bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
+        </div>
+      </section>
+      <section id="sectionFour" className='w-full font-light bg-white flex flex-col lg:grid lg:grid-cols-2 pt-[180px] lg:pt-[400px]'>
+        <Image
+          loading='lazy'
+          width={704}
+          height={500}
+          alt={`${sectionFourImage.alt}`}
+          src={builder.image(sectionFourImage).width(704).height(500).url()}
+          className='absolute left-0 w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
+        />
+        <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
+        </div>
+        <div className='pt-24 md:pt-12 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-2.5 w-[84%] lg:w-[2/5] lg:h-[500px]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-64 pt-14 py-4 md:py-14 lg:pt-0 lg:mb-12'>{sectionFourTitle}</h1>
+          <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
+          >
+            {sectionFourTextContent}
+          </p>
+        </div>
+      </section>
+      <section id="sectionFive" className='w-full font-light bg-white pt-[180px] lg:pt-[250px] flex flex-col lg:grid lg:grid-cols-2'>
+        <div className='md:pt-36 lg:pt-0 lg:pl-40 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[90%] md:w-[85%] lg:w-[95%]'>
+          <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] pt-[600px] lg:pt-20 md:mb-12 leading-[52px]'>{sectionFiveTitle}</h1>
+          <p className='lg:pt-10 lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
+          >
+            {sectionFiveTextContent}
+          </p>
+        </div>
+        <Image
+          loading='lazy'
+          width={704}
+          height={500}
+          alt={`${sectionFiveImage.alt}`}
+          src={builder
+            .image(sectionFiveImage)
+            .width(704)
+            .height(500)
+            .url()
+          }
+          className='z-10 absolute left-0 lg:right-0 lg:left-auto w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
+        />
+        <div className='z-0 absolute left-0 lg:right-0 lg:left-auto bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
+        </div>
+      </section>
+      <section id="sectionSix" className='w-full font-light bg-white flex flex-col lg:grid lg:grid-cols-2 pt-[150px] lg:pt-[400px]'>
+        <Image
+          loading='lazy'
+          width={704}
+          height={500}
+          alt={`${sectionSixImage.alt}`}
+          src={builder.image(sectionSixImage).width(704).height(500).url()}
+          className='absolute left-0 w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
+        />
+        <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
+        </div>
+        <div className='pt-24 md:pt-12 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-2.5 w-[84%] lg:w-[70%]'>
+          <h1 className='leading-7 text-primary text-base md:text-[32px] lg:text-[40px] md:pt-64 pt-14 py-4 md:py-14 lg:pt-20 lg:mb-6'>{sectionSixTitle}</h1>
+          <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-7 text-xs lg:text-base md:text-sm'
+          >
+            {sectionSixTextContent}
+          </p>
+          <p className='pt-8 pl-4 leading-7 text-primary text-xs lg:text-base md:text-sm'>
+            <b className='font-bold'>&#x2022; {sectionSixSubtitleOne}</b>
+             {sectionSixSubtitleOneText}</p>
+          <p className='pt-8 pl-4 leading-7 text-primary text-xs lg:text-base md:text-sm'>
+            <b className='font-bold'>&#x2022; {sectionSixSubtitleTwo}</b>
+             {sectionSixSubtitleTwoText}</p>
+          <p className='pt-8 pl-4 leading-7 text-primary text-xs lg:text-base md:text-sm'>
+            <b className='font-bold'>&#x2022; {sectionSixSubtitleThree}</b>
+             {sectionSixSubtitleThreeText}</p>
+        </div>
+      </section>
+      <section id="sectionSeven" className='relative bg-white w-full font-light pt-[100px] md:pt-[160px] text-white'>
+        <Image
+          width={1440}
+          height={1040}
+          alt={`${sectionSevenBgImage.alt}`}
+          src={builder.image(sectionSevenBgImage).width(1440).height(1040).url()}
+          className='object-cover w-full h-[1040px] md:h-[792px] lg:h-[1040px]'
+        />
+        <div className='text-white absolute top-[30%] md:top-[34%] lg:top-[48%] lg:left-1/2 transform lg:-translate-x-1/2 flex flex-col bg-secondary 
+        w-3/4 lg:w-2/3 h-[413px] md:h-[487px] lg:h-[484px] 
+        justify-center text-center'>
+          <div className='flex flex-col px-2 md:px-[30px]'>
+            <h1 className='lg:text-[40px] md:text-[32px] text-base leading:6 md:leading-10 lg:leading-[52px] w-2/3 
+            self-start lg:self-center text-left lg:text-center'>
+              {sectionSevenTitle}
+            </h1>
+            <p className='leading-5 md:leading-7 text-xs md:text-sm lg:text-base w-3/4 self-start text-left lg:text-center 
+            lg:self-center py-6 md:py-8 lg:py-14 text:left'>
+              {sectionSevenTextContent}
+            </p>
+            <p className='italic text-sm md:text-lg lg:text-2xl w-3/4 self-start text:left lg:self-center text-left lg:text-center'>
+              {sectionSevenCta}
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   );

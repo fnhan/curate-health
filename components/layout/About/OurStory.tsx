@@ -48,7 +48,7 @@ export default function OurStory({ ourStory, aboutPages }) {
           className='object-cover w-full h-[690px] md:w-[317px] md:h-[792px] lg:w-[608px] lg:h-[997px] absolute md:right-0'
         />
         <div className='w-full absolute inset-0 flex flex-col pt-12 bg-secondary 
-      h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
+h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
           <h1 className='text-2xl md:text-[40px] lg:text-7xl leading-8 md:leading-10 ml-14 py-10 md:py-12 
           w-3/4 lg:w-2/3'>{headerTitle}</h1>
           <p className='leading-5 md:leading-6 text-xs text-md lg:text-base md:text-sm mx-[58px] 
@@ -106,9 +106,9 @@ export default function OurStory({ ourStory, aboutPages }) {
           height={500}
           alt={`${sectionOneImage.alt}`}
           src={builder.image(sectionOneImage).width(704).height(500).url()}
-          className='absolute left-0 w-[704px] h-[500px] transform translate-y-16'
+          className='absolute left-0 w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
-        <div className='bg-secondary w-[608px] h-[429px]'>
+        <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
         <div className='flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-8 w-[90%] md:w-[85%] lg:w-3/4 lg:h-[500px]'>
           <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] pt-44 lg:pt-0 lg:pb-20'>{sectionOneTitle}</h1>
@@ -145,9 +145,9 @@ export default function OurStory({ ourStory, aboutPages }) {
             .height(500)
             .url()
           }
-          className='z-10 absolute lg:right-0 w-[704px] h-[500px] transform translate-y-16'
+          className='z-10 absolute lg:right-0 w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
-        <div className='z-0 absolute lg:right-0 bg-secondary w-[608px] h-[429px]'>
+        <div className='z-0 absolute lg:right-0 bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
       </section>
       <section id="sectionFive" className='w-full font-light bg-white pt-[200px] lg:pt-[500px] flex flex-col lg:grid lg:grid-cols-2'>
@@ -157,9 +157,9 @@ export default function OurStory({ ourStory, aboutPages }) {
           height={500}
           alt={`${sectionFiveImage.alt}`}
           src={builder.image(sectionFiveImage).width(704).height(500).url()}
-          className='absolute w-[704px] h-[500px] transform translate-y-16'
+          className='absolute w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
-        <div className='bg-secondary w-[608px] h-[429px] top-[200px]'>
+        <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px] top-[200px]'>
         </div>
         <div className='flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-8 lg:h-[500px] w-[90%] md:w-[85%] lg:w-3/4'>
           <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] pt-44 lg:pt-0 lg:pb-12 leading-10'>{sectionFiveTitle}</h1>
@@ -190,9 +190,9 @@ export default function OurStory({ ourStory, aboutPages }) {
             .height(500)
             .url()
           }
-          className='z-10 absolute lg:right-0 w-[704px] h-[500px] transform translate-y-16'
+          className='z-10 absolute lg:right-0 w-[304px] h-[496px] md:w-[708px] md:h-[600px] lg:w-[704px] lg:h-[500px] transform translate-y-16'
         />
-        <div className='z-0 absolute lg:right-0 bg-secondary w-[608px] h-[429px]'>
+        <div className='z-0 absolute lg:right-0 bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
       </section>
       <section id="sectionSeven" className='relative bg-white w-full font-light pt-[100px] md:pt-[160px] lg:pt-[400px] text-white'>
@@ -206,7 +206,7 @@ export default function OurStory({ ourStory, aboutPages }) {
         <div className='text-white absolute top-[30%] md:top-[34%] lg:top-[48%] lg:left-1/2 transform lg:-translate-x-1/2 flex flex-col bg-secondary 
         w-3/4 lg:w-2/3 h-[413px] md:h-[487px] lg:h-[484px] 
         justify-center text-center'>
-          <div className='flex flex-col pl-4 md:pl-[60px]'>
+          <div className='flex flex-col px-2 md:px-[30px]'>
             <h1 className='lg:text-[40px] md:text-[32px] text-base leading:6 md:leading-10 lg:leading-[52px] w-2/3 
             self-start lg:self-center text-left lg:text-center'>
             {sectionSevenTitle}

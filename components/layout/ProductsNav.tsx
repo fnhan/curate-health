@@ -11,7 +11,7 @@ export function ProductsNav({ products, currentPageTitle }) {
         <div className='flex'>
           <div className=' -mr-8'>
             <div className='p-1 group'>
-              <Link href='/products'>
+              <div>
                 <div className='flex bg-transparent border-none'>
                   <div
                     className={`p-6 text-black font-light font-Poppins text-[12px] 2xl:text-[14px]  ${
@@ -24,7 +24,7 @@ export function ProductsNav({ products, currentPageTitle }) {
                     <div
                       className={`${
                         currentPageTitle !== 'Our Services'
-                          ? '-mt-1 bg-black h-[1.35px] w-0 group-hover:w-full transition-all duration-500'
+                          ? '-mt-1 bg-black h-[1.35px] w-0'
                           : ''
                       }`}
                     ></div>
@@ -33,7 +33,7 @@ export function ProductsNav({ products, currentPageTitle }) {
                     |
                   </div>
                 </div>
-              </Link>
+              </div>
             </div>
           </div>
           {products.map((product, index) => (

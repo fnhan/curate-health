@@ -60,6 +60,12 @@ const CAFE_QUERY = groq`*[_type == "cafeSection"][0] {
   hoverLinkHref
 }`;
 
+export const OURSERVICES_QUERY = groq`*[_type == "ourServices"][0]{
+  title,
+  "image": image.asset->url,
+  content
+}`;
+
 export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   title,
   "slug": slug.current,

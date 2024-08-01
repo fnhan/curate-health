@@ -12,6 +12,7 @@ import {
   NAVIGATION_QUERY,
   SERVICES_QUERY,
   SURVEY_LINK_QUERY,
+  OURSERVICES_QUERY
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
@@ -21,6 +22,7 @@ type PageProps = {
   surveyLink: SanityDocument;
   services: SanityDocument[];
   service: SanityDocument;
+  ourServices: SanityDocument;
   surveySection: SanityDocument[];
   navigation: SanityDocument;
   footer: SanityDocument;
@@ -34,7 +36,7 @@ const OurService = (props: PageProps) => {
       title='Our Services'
       navigation={props.navigation}
       footer={props.footer}>
-      <OurServicePicture />
+      <OurServicePicture ourServices={props.ourServices}/>
       <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50'>
         <ServicesNav
           services={props.services}
@@ -56,9 +58,10 @@ export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const surveySection = await client.fetch(SURVEY_LINK_QUERY);
   const services = await client.fetch(SERVICES_QUERY);
+  const ourServices = await client.fetch(OURSERVICES_QUERY);
   const navigation = await client.fetch<SanityDocument>(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
-
+  
   return {
     props: {
       draftMode,
@@ -67,6 +70,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
       surveySection,
       token: draftMode ? token : '',
       services,
+      ourServices,
     },
   };
 };

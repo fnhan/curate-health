@@ -16,7 +16,6 @@ export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
   const {
     pageTitle,
     headerBgImage,
-    mainTextContent,
     mentalHealthTitle,
     mentalHealthTextContent,
     emotionalHealthTitle,
@@ -60,8 +59,8 @@ export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
           src={builder.image(headerBgImage).width(1440).height(686).url()}
           className='object-cover w-full h-[418px] lg:h-[686px]'
         />
-        <div className='bg-[#C3C7BB]/[0.1] backdrop-blur-3xl h-[78px] transform -translate-y-20 mt-0.5'>
-          <div className='bg-[#C3C7BB]/[0.1] backdrop-blur-3xl h-[78px]'>
+        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px] transform -translate-y-20 mt-0.5'>
+          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
             <div
               className={`container whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
               <div className='flex'>
@@ -108,36 +107,34 @@ export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
           {pageTitle}
         </h1>
       </section>
-      <section id="pageContent">
-        <div className='flex justify-center pt-[90px] md:pt-[165px] lg:pt-[315px] pb-[100px] md:pb-[200px] lg:pb-[240px]'>
-          <div className='h-[237px] w-[237px] md:h-[530px] md:w-[530px] lg:h-[921px] lg:w-[921px] rounded-full border border-white'>
-            <p id='textContent' className='pt-5 text-xs md:text-base lg:text-3xl flex text-center align-middle w-1/2 md:w-2/3 lg:w-1/2
-          transform translate-x-[14.5rem] translate-y-80 leading-4 md:leading-6 lg:leading-10'>
-            </p>
-          </div>
+      <section id="pageContent" className="flex flex-col justify-center items-center py-20 md:py-40 lg:py-80 w-full">
+        <div className='static flex justify-center items-center h-[237px] md:h-[530px] lg:h-[921px] aspect-square rounded-full border border-white'>
+          <p id='textContent' className='w-[123.56px] md:w-[233px] lg:w-[344px] text-xs md:text-base lg:text-3xl 
+            leading-4 md:leading-6 lg:leading-10 flex text-center'>
+          </p>
         </div>
-        <div className='cursor-pointer h-[78px] w-[78px] md:h-[156px] md:w-[156px] lg:h-[266px] lg:w-[266px] rounded-full border border-white'>
-          <button type='button' className='hover:underline pt-5 text-xs md:text-lg lg:text-4xl flex text-center align-middle transform translate-x-[4.5rem] translate-y-[5.5rem]'
+        <div className='absolute top-[680px] md:top-[730px] lg:top-[1140px] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
             onClick={mentalText}>
             {mentalHealthTitle}</button>
         </div>
-        <div className='cursor-pointer h-[78px] w-[78px] md:h-[156px] md:w-[156px] lg:h-[266px] lg:w-[266px] rounded-full border border-white'>
-          <button type='button' className='hover:underline pt-5 text-xs md:text-lg lg:text-4xl flex text-center align-middle transform translate-x-[4.5rem] translate-y-[5.5rem]'
+        <div className='absolute top-[750px] md:top-[900px] lg:top-[1450px] transform translate-x-[6.5rem] md:translate-x-60 lg:translate-x-[405px] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
             onClick={emotionalText}>
             {emotionalHealthTitle}</button>
         </div>
-        <div className='cursor-pointer h-[78px] w-[78px] md:h-[156px] md:w-[156px] lg:h-[266px] lg:w-[266px] rounded-full border border-white'>
-          <button type='button' className='hover:underline pt-5 text-xs md:text-lg lg:text-4xl flex text-center align-middle transform translate-x-[4.5rem] translate-y-[5.5rem]'
+        <div className='absolute top-[890px] md:top-[1190px] lg:top-[1950px] transform translate-x-16 md:translate-x-[10.5rem] lg:translate-x-[17rem] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
             onClick={socialText}>
             {socialHealthTitle}</button>
         </div>
-        <div className='cursor-pointer h-[78px] w-[78px] md:h-[156px] md:w-[156px] lg:h-[266px] lg:w-[266px] rounded-full border border-white'>
-          <button type='button' className='hover:underline pt-5 text-xs md:text-lg lg:text-4xl flex text-center align-middle transform translate-x-[4.5rem] translate-y-[5.5rem]'
+        <div className='absolute top-[890px] md:top-[1190px] lg:top-[1950px] transform -translate-x-16 md:-translate-x-44 lg:-translate-x-72 bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
             onClick={spiritualText}>
             {spiritualHealthTitle}</button>
         </div>
-        <div className='cursor-pointer h-[78px] w-[78px] md:h-[156px] md:w-[156px] lg:h-[266px] lg:w-[266px] rounded-full border border-white'>
-          <button type='button' className='hover:underline pt-5 text-xs md:text-lg lg:text-4xl flex text-center align-middle transform translate-x-[4.5rem] translate-y-[5.5rem]'
+        <div className='absolute top-[750px] md:top-[900px] lg:top-[1450px] transform -translate-x-[6.5rem] md:-translate-x-60 lg:-translate-x-[405px] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
             onClick={physicalText}>
             {physicalHealthTitle}</button>
         </div>

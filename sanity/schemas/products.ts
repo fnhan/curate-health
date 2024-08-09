@@ -14,7 +14,12 @@ export default defineType({
     defineField({
       name: 'indepthinfo',
       title: 'In-depth Product information',
-      type: 'string',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'indepthblockinfo',
+      title: 'In-depth Product information',
+      type: 'blockContent',
     }),
     defineField({
       name: 'description',

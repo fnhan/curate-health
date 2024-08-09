@@ -139,6 +139,14 @@ export const METADATA_BY_SLUG_QUERY = groq`
   }[0]
 `;
 
+export const ANOTHERMETADATA_BY_SLUG_QUERY = groq`
+  *[_type == "metadatas" && datas[slug.current == $slug][0]]{
+      title,
+      description
+    } 
+  
+`;
+
 export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{
   "slug": service->slug.current,
   "treatmentSlug": treatmentSlug.current
@@ -232,7 +240,7 @@ export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
 
 export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
-  indepthinfo,
+  indepthblockinfo,
   description,
   "slug" : slug.current,
   "banner": banner.asset->url,

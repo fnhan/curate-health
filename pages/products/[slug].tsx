@@ -38,7 +38,7 @@ type PageProps = {
   meta: SanityDocument;
 };
 
-export default function ServicesPage(props: PageProps) {
+export default function ProductPage(props: PageProps) {
   const ServicesPreview = dynamic(
     () => import('../../components/layout/Services/ServicesPreview')
   );
@@ -89,7 +89,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
   const services = await client.fetch<SanityDocument>(SERVICES_QUERY);
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: params.slug,
+      slug: '/products/' + params.slug,
     })
   ).meta;
 

@@ -9,52 +9,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from 'components/ui/accordion';
+import { Console } from 'console';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-function groupBlocksByHeading(blocks) {
-  const grouped = [];
-  let currentGroup = null;
-
-  blocks.forEach((block) => {
-    if (block._type === 'block' && block.style && block.style.startsWith('h')) {
-      // If it's a heading, start a new group
-      if (currentGroup) {
-        grouped.push(currentGroup);
-      }
-      currentGroup = {
-        title: block.children.map((child) => child.text).join(' '),
-        content: [],
-      };
-    } else {
-      // Otherwise, add the block to the current group
-      if (currentGroup) {
-        currentGroup.content.push(block);
-      }
-    }
-  });
-
-  // Push the last group
-  if (currentGroup) {
-    grouped.push(currentGroup);
-  }
-
-  return grouped;
-}
-
 function PortableTextAccordion(content) {
-  const groupedBlocks = groupBlocksByHeading(content);
-
   return (
     <Accordion type='multiple'>
-      {groupedBlocks.map((group, index) => (
+      {content.map((obj, index) => (
         <AccordionItem key={index} value={`item-${index}`}>
-          <div className='font-light text-[#283619] text-2xl leading-loose'>
-            <AccordionTrigger>{group.title}</AccordionTrigger>
+          <div className='font-light text-[#283619] text-xl leading-loose'>
+            <AccordionTrigger>{obj.title}</AccordionTrigger>
           </div>
           <AccordionContent>
-            <div className='font-light text-[#283619] text-2xl leading-loose'>
-              <PortableText value={group.content} />
+            <div className='font-light text-[#283619] text-xl leading-loose'>
+              <PortableText value={obj.description} />
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -69,7 +38,8 @@ export default function Product({ product }: { product: SanityDocument }) {
     return <div>Loading or no post found...</div>;
   }
 
-  const { title, image, description, banner, indepthblockinfo } = product;
+  const { title, image, description, banner, indepthblockinfo, accordioninfo } =
+    product;
 
   return (
     <div className='w-full pb-60 bg-white'>
@@ -92,11 +62,8 @@ export default function Product({ product }: { product: SanityDocument }) {
                 {title}
               </h1>
             ) : null}
-            {indepthblockinfo ? (
-              //   <div className='font-light text-[#283619] text-2xl leading-loose'>
-              //   <PortableText value={indepthblockinfo} />
-              // </div>
-              <div>{PortableTextAccordion(indepthblockinfo)}</div>
+            {accordioninfo ? (
+              <div>{PortableTextAccordion(accordioninfo)}</div>
             ) : null}
           </div>
 

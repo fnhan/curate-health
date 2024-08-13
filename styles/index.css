@@ -36,3 +36,8 @@
     @apply bg-background text-foreground font-poppins;
   }
 }
+
+.youform-modal-overlay.as-modal {
+  /* margin-top: 80vh; */
+  z-index: 999;
+}

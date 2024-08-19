@@ -32,7 +32,7 @@ const components: Partial<PortableTextReactComponents> = {
 
 function PortableTextAccordion(content) {
   return (
-    <Accordion type='single' defaultValue='item-0'>
+    <Accordion type='single' collapsible defaultValue='item-0'>
       {content.map((obj, index) => (
         <AccordionItem key={index} value={`item-${index}`}>
           <div className='font-light text-[#283619] text-xl leading-loose '>

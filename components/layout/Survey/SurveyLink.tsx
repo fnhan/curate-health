@@ -2,7 +2,6 @@ import imageUrlBuilder from '@sanity/image-url';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { dataset, projectId } from '../../../sanity/env';
-import styles from '../../../styles/surveyLink.module.css';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
@@ -21,9 +20,9 @@ export default function SurveyLink({ surveyLink }) {
         <a
           data-youform-open={youformId}
           data-youform-position="center"
-          className={`border-4 border-white bg-platinum hover:bg-primary transition-all duration-300 text-primary hover:text-white text-center
+          className='border-4 border-white bg-platinum hover:bg-primary transition-all duration-300 text-primary hover:text-white text-center
           rounded-full p-5 flex items-center justify-center flex-col gap-3 h-[175px] md:h-[275px] lg:h-[400px] w-[175px] md:w-[275px] lg:w-[400px]
-          cursor-pointer ${styles.surveyLink}`}>
+          cursor-pointer'>
           <p className='text-[14px] md:text-[22px] lg:text-[36px] pt-4'>{content}
             <span className='text-[14px] md:text-[22px] lg:text-[36px] italic font-bold'>{bold}</span></p>
           <div className='flex items-center'>

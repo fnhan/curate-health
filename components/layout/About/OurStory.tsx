@@ -62,13 +62,13 @@ export default function OurStory({ ourStory, aboutPages }) {
               <div className='flex'>
                 <div className=' -mr-8'>
                   <div className='p-1 group'>
-                    <Link href='/about'>
+                    <Link href='/about/our-story'>
                       <div className='flex bg-transparent border-none'>
                         <div
-                          className='p-6 text-primary font-light font-Poppins text-[12px] lg:text-[14px] leading-[14px] underline'>
+                          className='p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
                           About
                           <div
-                            className='-mt-1 bg-primary h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
+                            className='mt-1 bg-primary md:h-[0.5px] lg:h-[0.75px] w-0 group-hover:w-full transition-all duration-500'></div>
                         </div>
                         <div className='text-primary font-light -ml-6 p-6 mx-3 lg:inline leading-[14px]'>
                           |
@@ -82,11 +82,11 @@ export default function OurStory({ ourStory, aboutPages }) {
                     <div className='p-1 group'>
                       <Link href={`/about/${aboutPage.slug}`}>
                         <div
-                          className='bg-transparent border-none underline text-primary'>
-                          <div className='-ml-4 -mr-4 items-center font-light font-Poppins justify-center p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
+                          className={`bg-transparent border-none ${aboutPage.title === 'Our Story' ? 'underline text-primary underline-offset-[6.5px]' : ''}`}>
+                          <div className='-ml-4 -mr-4 items-center font-light justify-center p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
                             {aboutPage.title}
                             <div
-                              className='-mt-1 bg-primary h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
+                              className={`${aboutPage.title !== 'Our Story' ? 'mt-1 bg-primary md:h-[0.5px] lg:h-[0.75px] w-0 group-hover:w-full transition-all duration-500' : ''}`}></div>
                           </div>
                         </div>
                       </Link>

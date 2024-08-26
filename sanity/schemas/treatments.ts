@@ -78,7 +78,6 @@ export default defineType({
       name: 'rightImage',
       title: 'Right Image',
       type: 'image',
-      validation: (Rule) => Rule.required().error('An image is required'),
       options: {
         hotspot: true,
       },
@@ -106,7 +105,6 @@ export default defineType({
       name: 'leftImage',
       title: 'Left Image',
       type: 'image',
-      validation: (Rule) => Rule.required().error('An image is required'),
       options: {
         hotspot: true,
       },

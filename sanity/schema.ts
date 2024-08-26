@@ -20,6 +20,7 @@ import privacy from './schemas/privacy';
 import accessibility from './schemas/accessibility';
 import contactInfo from './schemas/contactInfo';
 import contactDetails from './schemas/contactDetails';
+import ourServices from './schemas/ourServices';
 import surveyLink from './schemas/surveyLink';
 import treatments from './schemas/treatments';
 import metadatas from './schemas/metadatas';
@@ -47,6 +48,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     contactInfo,
     contactDetails,
     treatments,
+    ourServices,
     surveyLink,
     metadatas,
   ],

@@ -37,7 +37,7 @@ type PageProps = {
   serviceTitle: string;
   serviceSlug: string;
   meta: SanityDocument;
-};
+}; //123
 
 export default function TreatmentsPage(props: PageProps) {
   const TreatmentsPreview = dynamic(

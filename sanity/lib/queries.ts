@@ -82,8 +82,8 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   *[_type == "service" && slug.current == $slug][0]{
     title,
     "slug": slug.current,
-    "above_image": above_image.asset->url,
     "image": image.asset->url,
+    "hero_image": hero_image.asset->url,
     "altText": image.alt,
     content,
     "treatments": *[_type == "treatment" && references(^._id)]{

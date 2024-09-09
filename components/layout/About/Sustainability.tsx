@@ -80,7 +80,7 @@ export default function Sustainability({ sustainability, aboutPages }) {
                     <Link href='/about/our-story'>
                       <div className='flex bg-transparent border-none'>
                         <div
-                          className='p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
+                          className='-ml-6 p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
                           About
                           <div
                             className='mt-1 bg-primary md:h-[0.5px] lg:h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>

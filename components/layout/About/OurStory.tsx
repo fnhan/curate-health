@@ -41,21 +41,21 @@ export default function OurStory({ ourStory, aboutPages }) {
       <section id="headerSection" className='relative bg-white font-light w-full'>
         <Image
           loading='lazy'
-          width={608}
+          width={1440}
           height={997}
           alt={`${headerBgImage.alt}`}
-          src={builder.image(headerBgImage).width(608).height(997).url()}
-          className='object-cover w-full h-[690px] md:w-[317px] md:h-[792px] lg:w-[608px] lg:h-[997px] absolute md:right-0'
+          src={builder.image(headerBgImage).width(1440).height(997).url()}
+          className='object-cover w-full h-[217px] md:h-[336px] lg:h-[344px]'
         />
-        <div className='w-full absolute inset-0 flex flex-col pt-12 bg-secondary h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
-          <h1 className='text-2xl md:text-[40px] lg:text-7xl leading-8 md:leading-10 ml-14 py-10 md:py-12 
-          w-3/4 lg:w-2/3'>{headerTitle}</h1>
-          <p className='leading-5 md:leading-6 text-xs text-md lg:text-base md:text-sm mx-[58px] 
-          w-4/5 lg:w-3/5'>
+        <div className='absolute w-full flex flex-col pt-12 bg-secondary h-[450px] md:h-[390px] lg:h-[468px] top-[216px] md:top-[288px] lg:top-[344px]'>
+          <h1 className='text-2xl md:text-[40px] lg:text-7xl leading-8 md:leading-10 ml-20 py-10 md:py-12 
+          w-3/4 lg:w-[900px]'>{headerTitle}</h1>
+          <p className='leading-5 md:leading-6 text-xs text-md lg:text-base md:text-sm ml-20 
+          w-4/5 lg:w-[55%] text-primary'>
             {headerSubtitle}
           </p>
         </div>
-        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px] mt-[500px] md:mt-[662px] lg:mt-[770px]'>
+        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[48px] md:h-[68px] lg:h-[78px] mt-[372px] md:mt-[342px] lg:mt-[468px]'>
           <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
             <div
               className={`container whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
@@ -65,7 +65,7 @@ export default function OurStory({ ourStory, aboutPages }) {
                     <Link href='/about/our-story'>
                       <div className='flex bg-transparent border-none'>
                         <div
-                          className='p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
+                          className='-ml-6 p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
                           About
                           <div
                             className='mt-1 bg-primary md:h-[0.5px] lg:h-[0.75px] w-0 group-hover:w-full transition-all duration-500'></div>

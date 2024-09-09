@@ -29,6 +29,12 @@ export default defineType({
       description: 'Title of header section on page',
     }),
     defineField({
+      name: 'pageSubtitle',
+      title: 'Subtitle of Page',
+      type: 'string',
+      description: 'Subtitle of header section on page',
+    }),
+    defineField({
       name: 'mentalHealthTitle',
       title: 'Title of Mental Health Pillar',
       type: 'string',

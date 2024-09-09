@@ -632,6 +632,7 @@ export const SUSTAINABILITY_PAGE_QUERY = groq`{
 
 export const PILLARS_OF_HEALTH_QUERY = groq`*[_type == "pillarsOfHealth"][0]{
   pageTitle,
+  pageSubtitle,
   mentalHealthTitle,
   mentalHealthTextContent,
   emotionalHealthTitle,

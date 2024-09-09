@@ -15,6 +15,7 @@ export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
 
   const {
     pageTitle,
+    pageSubtitle,
     headerBgImage,
     mentalHealthTitle,
     mentalHealthTextContent,
@@ -106,35 +107,42 @@ export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
         <h1 className='text-white text-2xl md:text-5xl lg:text-7xl leading-8 md:leading-10 lg:leading-[72px] flex justify-center font-light'>
           {pageTitle}
         </h1>
+        <h2 className='hidden lg:block leading-10 text-center italic text:sm md:text-xl lg:text-3xl w-[928px] m-auto pl-1 pt-8'>
+          {pageSubtitle}
+        </h2>
       </section>
-      <section id="pageContent" className="flex flex-col justify-center items-center py-20 md:py-40 lg:py-80 w-full">
-        <div className='static flex justify-center items-center h-[237px] md:h-[530px] lg:h-[921px] aspect-square rounded-full border border-white'>
-          <p id='textContent' className='w-[123.56px] md:w-[233px] lg:w-[344px] text-xs md:text-base lg:text-3xl 
-            leading-4 md:leading-6 lg:leading-10 flex text-center'>
+      <section id="pageContent" className="flex flex-col justify-center items-center py-20 md:py-32 w-full">
+        <div className='static flex justify-center items-center h-[237px] md:h-[450px] aspect-square rounded-full border border-white'>
+          <p id='textContent' className='w-[123.56px] md:w-[265px] text-xs md:text-lg 
+            leading-4 md:leading-8 flex text-center'>
           </p>
         </div>
-        <div className='absolute top-[680px] md:top-[730px] lg:top-[1140px] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
-          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
+        <div className='absolute top-[680px] md:top-[1110px] bg-primary flex justify-center items-center cursor-pointer 
+        h-[78px] md:h-[145px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-2xl flex text-center'
             onClick={mentalText}>
             {mentalHealthTitle}</button>
         </div>
-        <div className='absolute top-[750px] md:top-[900px] lg:top-[1450px] transform translate-x-[6.5rem] md:translate-x-60 lg:translate-x-[405px] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
-          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
+        <div className='absolute top-[750px] md:top-[1250px] transform translate-x-[6.5rem] md:translate-x-[200px]
+         bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[145px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-2xl flex text-center'
             onClick={emotionalText}>
             {emotionalHealthTitle}</button>
         </div>
-        <div className='absolute top-[890px] md:top-[1190px] lg:top-[1950px] transform translate-x-16 md:translate-x-[10.5rem] lg:translate-x-[17rem] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
-          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
+        <div className='absolute top-[890px] md:top-[1510px] transform translate-x-16 md:translate-x-[125px] bg-primary flex justify-center items-center cursor-pointer 
+        h-[78px] md:h-[145px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-2xl flex text-center'
             onClick={socialText}>
             {socialHealthTitle}</button>
         </div>
-        <div className='absolute top-[890px] md:top-[1190px] lg:top-[1950px] transform -translate-x-16 md:-translate-x-44 lg:-translate-x-72 bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
-          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
+        <div className='absolute top-[890px] md:top-[1510px] transform -translate-x-16 md:-translate-x-[125px] bg-primary flex justify-center items-center cursor-pointer 
+        h-[78px] md:h-[145px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-2xl flex text-center'
             onClick={spiritualText}>
             {spiritualHealthTitle}</button>
         </div>
-        <div className='absolute top-[750px] md:top-[900px] lg:top-[1450px] transform -translate-x-[6.5rem] md:-translate-x-60 lg:-translate-x-[405px] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[266px] aspect-square rounded-full border border-white'>
-          <button type='button' className='hover:underline text-xs md:text-lg lg:text-4xl flex text-center'
+        <div className='absolute top-[750px] md:top-[1250px] transform -translate-x-[6.5rem] md:-translate-x-[200px] bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[156px] lg:h-[145px] aspect-square rounded-full border border-white'>
+          <button type='button' className='hover:underline text-xs md:text-2xl flex text-center'
             onClick={physicalText}>
             {physicalHealthTitle}</button>
         </div>

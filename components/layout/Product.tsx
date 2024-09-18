@@ -63,10 +63,15 @@ export default function Product({ product }: { product: SanityDocument }) {
       {banner ? (
         <Image
           loading='lazy'
-          width={1080}
+          width={2080}
           height={1440}
-          src={builder.image(banner).width(1080).height(1440).quality(80).url()}
+          src={builder
+            .image(banner)
+
+            .quality(100)
+            .url()}
           alt={banner.alt}
+          style={{ imageRendering: 'crisp-edges' }}
           className='w-full object-cover object-center max-h-[280px] md:max-h-[625px]'
         />
       ) : null}

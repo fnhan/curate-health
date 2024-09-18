@@ -17,7 +17,7 @@ export default defineType({
       title: 'Banner Image',
       type: 'image',
       description:
-        'For best results, please upload an image with dimensions 250px x 250px',
+        'For best results, please upload an image with in high quality with height of 625px and any width over 1080px.',
 
       options: {
         hotspot: true,

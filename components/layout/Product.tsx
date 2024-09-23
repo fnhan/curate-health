@@ -59,7 +59,7 @@ export default function Product({ product }: { product: SanityDocument }) {
     product;
 
   return (
-    <div className='w-full pb-60 bg-white'>
+    <div className='w-full pb-60 lg:pb-0  bg-white'>
       {banner ? (
         <Image
           loading='lazy'
@@ -77,7 +77,7 @@ export default function Product({ product }: { product: SanityDocument }) {
       ) : null}
 
       <div className='sm:w-full md:container text-black poppins'>
-        <div className='flex sm:justify-center lg:justify-between flex-col-reverse md:flex-row'>
+        <div className='flex sm:justify-center lg:justify-between flex-col-reverse md:flex-row min-h-screen max-h-[4000px]'>
           <div className='1 sm:w-full md:w-1/2 px-8 pt-28'>
             {title ? (
               <h1 className='font-light text-5xl  text-[#283619] mb-8'>
@@ -94,10 +94,7 @@ export default function Product({ product }: { product: SanityDocument }) {
             ) : null}
           </div>
 
-          <div
-            className='flex flex-col items-center justify-center p-8 sm:w-full md:w-1/2 sm:h-full lg:h-4/6'
-            style={{ background: '#F3F4F1' }}
-          >
+          <div className='flex flex-col items-center p-8 pt-28 sm:w-full md:w-1/2 '>
             {image ? (
               <Image
                 className='float-center m-0 w-100 rounded-lg mb-5'
@@ -107,7 +104,7 @@ export default function Product({ product }: { product: SanityDocument }) {
                 alt={image.alt || ''}
               />
             ) : null}
-            {/* {title ? (
+            {title ? (
               <h1 className='italic text-[#0B0014] font-light text-4xl poppins mb-8'>
                 {title}
               </h1>
@@ -116,7 +113,7 @@ export default function Product({ product }: { product: SanityDocument }) {
               <p className='text-[#0B0014] text-center font-normal leading-loose poppins text-xl'>
                 {description}
               </p>
-            ) : null} */}
+            ) : null}
           </div>
         </div>
       </div>

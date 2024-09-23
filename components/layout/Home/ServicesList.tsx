@@ -11,11 +11,11 @@ export default function ServicesList({ services }) {
   const [hoveredService, setHoveredService] = useState(null);
 
   return (
-    <div className='flex flex-col h-[400px] md:h-[680px] 2xl:h-[780px] justify-start gap-10 md:gap-20 pt-8 md:py-20 pb-12 '>
+    <div className='flex flex-col h-[400px] md:h-[680px] 2xl:h-[720px] justify-start gap-10 md:gap-20 pt-8 md:py-20 pb-12 '>
       <div className="md:flex">
         {/* Left Side: Text */}
         <div className="md:w-1/2 container flex flex-col">
-        <h2 className='2xl:container mt-8 mb-8 md:mt-16 md:mb-28 text-3xl md:text-5xl'>Our Services</h2>
+        <h2 className='2xl:container mt-8 mb-8 md:mt-16 md:mb-24 text-3xl md:text-5xl'>Our Services</h2>
           {services.map((service) => (
             <div
               key={service.title}
@@ -36,7 +36,7 @@ export default function ServicesList({ services }) {
         </div>
 
         {/* Right Side: Image */}
-        <div className="md:w-1/2 md:-mt-20 flex justify-end items-center">
+        <div className="md:w-1/2 md:mt-16 flex justify-end items-center">
           {hoveredService && (
             <Image
               loading="lazy"
@@ -49,7 +49,7 @@ export default function ServicesList({ services }) {
                 .quality(80)
                 .url()}
               alt={hoveredService.title}
-              className="object-cover transition duration-300 h-[0px] w-[0px] md:h-[680px] 2xl:h-[780px] md:w-full"
+              className="object-cover transition duration-300 h-[0px] w-[0px] md:h-[535px] 2xl:h-[575px] md:w-full"
             />
           )}
         </div>

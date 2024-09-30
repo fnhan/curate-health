@@ -213,17 +213,17 @@ export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
   }
 }`;
 
-export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"] {
+export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"][0] {
   title,
   content
 }`;
 
-export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
+export const PRIVACY_QUERY = groq`*[_type == "privacy"][0] {
   title,
   content
 }`;
 
-export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"] {
+export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"][0] {
   title,
   content
 }`;

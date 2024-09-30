@@ -1,5 +1,6 @@
 import Layout from 'components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
+import { PortableText } from '@portabletext/react';
 import { FOOTER_QUERY, NAVIGATION_QUERY, TERMS_OF_USE_QUERY } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
@@ -8,14 +9,9 @@ export default function TermsOfUse({ navigation, footer, termsOfUse }) {
     <Layout navigation={navigation} footer={footer} title={'Terms Of Use'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
-          <h1 className='font-bold text-xl mb-6'>Terms Of Use</h1>
+          <h1 className='font-bold text-xl mb-6'>{termsOfUse.title}</h1>
           <div className='flex flex-col gap-4'>
-            {termsOfUse.map((term, index) => (
-              <div key={index}>
-                <h2 className='font-bold font-denton text-lg'>{term.title}</h2>
-                <p>{term.content}</p>
-              </div>
-            ))}
+            <PortableText value={termsOfUse.content} />
           </div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 import Layout from 'components/layout/layout';
 import { getClient } from '../../sanity/lib/client';
 import { FOOTER_QUERY, NAVIGATION_QUERY, PRIVACY_QUERY} from '../../sanity/lib/queries';
+import { PortableText } from '@portabletext/react';
 import { token } from '../../sanity/lib/token';
 
 export default function privacy({ navigation, footer, privacy }) {
@@ -8,14 +9,9 @@ export default function privacy({ navigation, footer, privacy }) {
     <Layout navigation={navigation} footer={footer} title={'Privacy'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
-          <h1 className='font-denton font-bold text-xl mb-6'>Privacy & Cookies Policy</h1>
+          <h1 className='font-denton font-bold text-xl mb-6'>{privacy.title}</h1>
           <div className='flex flex-col gap-4'>
-            {privacy.map((term, index) => (
-              <div key={index}>
-                <h2 className='font-bold font-denton text-lg'>{term.title}</h2>
-                <p>{term.content}</p>
-              </div>
-            ))}
+            <PortableText value={privacy.content} />
           </div>
         </div>
       </section>

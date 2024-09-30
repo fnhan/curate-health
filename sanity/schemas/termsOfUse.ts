@@ -13,10 +13,8 @@ export default defineType({
     }),
     defineField({
       name: 'content',
-      title: 'Content',
-      type: 'text',
-      description: 'The content of the term of use',
-      validation: Rule => Rule.required(),
+      title: 'content',
+      type: 'blockContent',
     }),
   ],
   preview: {

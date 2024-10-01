@@ -16,7 +16,23 @@ export default defineType({
       title: 'Content',
       type: 'text',
       description: 'The content of accessibility',
-      validation: Rule => Rule.required(),
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'meta',
+      type: 'object',
+      fields: [
+        {
+          title: 'Title',
+          name: 'title',
+          type: 'string',
+        },
+        {
+          title: 'Description',
+          name: 'description',
+          type: 'string',
+        },
+      ],
     }),
   ],
   preview: {

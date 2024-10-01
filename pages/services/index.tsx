@@ -9,10 +9,11 @@ import Survey from '../../components/layout/Home/Survey';
 import { getClient } from '../../sanity/lib/client';
 import {
   FOOTER_QUERY,
+  METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
   SERVICES_QUERY,
   SURVEY_LINK_QUERY,
-  OURSERVICES_QUERY
+  OURSERVICES_QUERY,
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
@@ -28,15 +29,18 @@ type PageProps = {
   footer: SanityDocument;
   draftMode: boolean;
   token: string;
+  meta: SanityDocument;
 };
 
 const OurService = (props: PageProps) => {
   return (
     <Layout
-      title='Our Services'
+      title={props.meta?.title || 'Our Services'}
       navigation={props.navigation}
-      footer={props.footer}>
-      <OurServicePicture ourServices={props.ourServices}/>
+      footer={props.footer}
+      description={props.meta?.description || ''}
+    >
+      <OurServicePicture ourServices={props.ourServices} />
       <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50'>
         <ServicesNav
           services={props.services}
@@ -61,13 +65,19 @@ export const getStaticProps = async ({ draftMode = false }) => {
   const ourServices = await client.fetch(OURSERVICES_QUERY);
   const navigation = await client.fetch<SanityDocument>(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
-  
+  const meta = (
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: '/services',
+    })
+  ).meta;
+  console.log(meta);
   return {
     props: {
       draftMode,
       navigation,
       footer,
       surveySection,
+      meta,
       token: draftMode ? token : '',
       services,
       ourServices,

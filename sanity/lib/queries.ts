@@ -379,6 +379,12 @@ export const CONTACT_DETAILS_QUERY = groq`*[_type == "contactDetails"][0]{
   href
 }`;
 
+export const POPUP_CONTENT_QUERY = groq`[_type == "banner"][0]{
+    message,
+    isVisible,
+    storeHours
+  }`;
+
 export const CONTACT_PAGE_QUERY = groq`{
   "contactInfo": ${CONTACT_INFO_QUERY},
   "contactDetails": ${CONTACT_DETAILS_QUERY},

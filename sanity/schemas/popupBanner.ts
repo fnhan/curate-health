@@ -6,6 +6,13 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      description: 'Apt title that tells what the banner is about',
+      initialValue: false,
+    }),
+    defineField({
       name: 'isVisible',
       title: 'Is Active',
       type: 'boolean',

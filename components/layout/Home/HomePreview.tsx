@@ -13,6 +13,7 @@ import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
 import { useLiveQuery } from 'next-sanity/preview';
 import { HOME_PAGE_QUERY } from '../../../sanity/lib/queries';
+import PopupBanner from '../Popup-banner';
 
 type HomePageData = {
   heroSection: {
@@ -63,6 +64,7 @@ type HomePageData = {
   footer: SanityDocument;
   surveyLink: SanityDocument;
   navigation: SanityDocument;
+  popup: SanityDocument;
   description: string;
   sustainabilitySection: {
     bgImage: {
@@ -110,6 +112,7 @@ export default function HomePagePreview() {
       <Sustainability sustainabilitySection={data.sustainabilitySection} />
       <SurveyLink surveyLink={data.surveyLink} />
       <Newsletter />
+      <PopupBanner props={data.popup}></PopupBanner>
     </Layout>
   );
 }

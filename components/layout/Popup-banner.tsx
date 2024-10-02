@@ -2,10 +2,12 @@ import { Button } from 'components/ui/button';
 import Link from 'next/link';
 import { getClient } from '../../sanity/lib/client';
 import { useEffect, useState } from 'react';
+//import { POPUP_CONTENT_QUERY } from 'sanity/lib/queries';
 import { POPUP_CONTENT_QUERY } from 'sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 import { SanityDocument } from 'next-sanity';
 import { PortableText, PortableTextReactComponents } from '@portabletext/react';
+import { Dialog } from 'components/ui/dialog';
 
 type PageProps = {
   isVisible: boolean;
@@ -13,7 +15,7 @@ type PageProps = {
   content: any;
 };
 
-export default function popUp(props: PageProps) {
+export default function PopupBanner(props) {
   const [bannerData, setBannerData] = useState(null);
   const [isBannerVisible, setIsBannerVisible] = useState(false);
 
@@ -55,19 +57,18 @@ export default function popUp(props: PageProps) {
   };
 
   return (
-    <Link href=''>
+    <div>
       {props.content ? (
         <div>
+          <Dialog>
+            <PortableText components={components} value={props.content} />
+          </Dialog>
           <PortableText components={components} value={props.content} />{' '}
         </div>
       ) : null}
-      <Button className='outline outline-1 bg-transparent text-white hover:bg-primary rounded-none duration-300 transition-all w-[200px] text-[10px] md:text-[14px]'>
-        X
-      </Button>
-    </Link>
+    </div>
   );
 }
-
 export const getStaticProps = async ({ params, preview = false }) => {
   const client = getClient(preview ? token : undefined);
   const banner = await client.fetch(POPUP_CONTENT_QUERY);

@@ -321,6 +321,11 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
   }
 }`;
 
+export const POPUP_CONTENT_QUERY = groq`[_type == "popup" && isVisible == true][0]{
+  content,
+  isVisible,
+}`;
+
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
@@ -343,6 +348,7 @@ export const HOME_PAGE_QUERY = groq`{
   "termsOfUse": ${TERMS_OF_USE_QUERY},
   "privacy": ${PRIVACY_QUERY},
   "accessibility": ${ACCESSIBILITY_QUERY},
+  "popup": ${POPUP_CONTENT_QUERY},
   
 }`;
 
@@ -378,11 +384,6 @@ export const CONTACT_DETAILS_QUERY = groq`*[_type == "contactDetails"][0]{
   cta,
   href
 }`;
-
-export const POPUP_CONTENT_QUERY = groq`[_type == "popup"][0]{
-    content,
-    isVisible,
-  }`;
 
 export const CONTACT_PAGE_QUERY = groq`{
   "contactInfo": ${CONTACT_INFO_QUERY},

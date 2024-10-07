@@ -16,6 +16,7 @@ import Layout from '../../../../components/layout/layout';
 import { getClient } from '../../../../sanity/lib/client';
 import {
   FOOTER_QUERY,
+  METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
   SURVEY_LINK_QUERY,
   TREATMENTS_QUERY,
@@ -35,7 +36,8 @@ type PageProps = {
   token: string;
   serviceTitle: string;
   serviceSlug: string;
-};//123
+  meta: SanityDocument;
+}; //123
 
 export default function TreatmentsPage(props: PageProps) {
   const TreatmentsPreview = dynamic(
@@ -55,9 +57,11 @@ export default function TreatmentsPage(props: PageProps) {
 
   return (
     <Layout
-      title={props.treatment?.title || 'Treatments'}
+      title={props.meta?.title || 'Treatments'}
       navigation={props.navigation}
-      footer={props.footer}>
+      footer={props.footer}
+      description={props.meta?.description || ''}
+    >
       <AbovePicture treatment={props.treatment} />
       <TreatmentNav
         treatments={props.treatments}
@@ -97,6 +101,11 @@ export const getStaticProps: GetStaticProps = async ({
   const navigation = await client.fetch(NAVIGATION_QUERY);
   const footer = await client.fetch(FOOTER_QUERY);
   const surveySection = await client.fetch(SURVEY_LINK_QUERY);
+  const meta = (
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: params.slug,
+    })
+  ).meta;
 
   return {
     props: {
@@ -108,6 +117,7 @@ export const getStaticProps: GetStaticProps = async ({
       footer,
       surveySection,
       draftMode: preview,
+      meta,
       token: preview ? token : '',
     },
   };

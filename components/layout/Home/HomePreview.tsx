@@ -63,6 +63,7 @@ type HomePageData = {
   footer: SanityDocument;
   surveyLink: SanityDocument;
   navigation: SanityDocument;
+  description: string;
   sustainabilitySection: {
     bgImage: {
       asset: {
@@ -90,7 +91,12 @@ export default function HomePagePreview() {
   }
 
   return (
-    <Layout title='Home' navigation={data.navigation} footer={data.footer}>
+    <Layout
+      title='Home'
+      navigation={data.navigation}
+      footer={data.footer}
+      description={data.description}
+    >
       <Hero heroSection={data.heroSection} />
       <Highlight highlightSection={data.highlightSection} />
       <Clinic clinicSection={data.clinicSection} />

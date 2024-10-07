@@ -23,7 +23,7 @@ import contactDetails from './schemas/contactDetails';
 import ourServices from './schemas/ourServices';
 import surveyLink from './schemas/surveyLink';
 import treatments from './schemas/treatments';
-
+import metadatas from './schemas/metadatas';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -49,6 +49,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     contactDetails,
     treatments,
     ourServices,
-    surveyLink
+    surveyLink,
+    metadatas,
   ],
 };

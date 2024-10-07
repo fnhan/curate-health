@@ -49,7 +49,9 @@ export default function ServicesPreview() {
     <Layout
       navigation={navigation}
       footer={footer}
-      title={service?.title || 'Services'}>
+      title={service?.title || 'Services'}
+      description={service?.meta?.description || 'descp'}
+    >
       <Picture service={service} />
       <ServicesNav services={services} currentPageTitle={service.title} />
       <ServiceDetails service={service} treatments={service.treatments} />

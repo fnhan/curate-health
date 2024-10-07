@@ -41,6 +41,22 @@ export default defineType({
               description:
                 'Check this if you want to render the Service Links at this position.',
             },
+            defineField({
+              name: 'meta',
+              type: 'object',
+              fields: [
+                {
+                  title: 'Title',
+                  name: 'title',
+                  type: 'string',
+                },
+                {
+                  title: 'Description',
+                  name: 'description',
+                  type: 'string',
+                },
+              ],
+            }),
           ],
         },
       ],

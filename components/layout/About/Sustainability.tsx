@@ -14,8 +14,7 @@ export default function Sustainability({ sustainability, aboutPages }) {
   }
 
   const {
-    headerTopImage,
-    headerBottomImage,
+    headerImage,
     headerTitle,
     headerTitleDesktop,
     headerTextContent,
@@ -47,6 +46,9 @@ export default function Sustainability({ sustainability, aboutPages }) {
     sectionSevenTitle,
     sectionSevenTextContent,
     sectionSevenCta,
+    ctaUrl,
+    sectionSevenEsg,
+    esgLink,
   } = sustainability;
 
   return (
@@ -54,38 +56,28 @@ export default function Sustainability({ sustainability, aboutPages }) {
       <section id="headerSection" className='relative bg-white flex flex-col font-light h-[604px] md:h-[798px] lg:h-[915px] w-full text-primary'>
         <Image
           loading='lazy'
-          width={322}
-          height={322}
-          alt={`${headerTopImage.alt}`}
-          src={builder.image(headerTopImage).width(322).height(322).url()}
-          className='w-[124px] h-[124px] md:w-[294px] md:h-[294px] lg:w-[352px] lg:h-[322px] absolute top-[36px] md:top-[32px]
-          left-8 md:left-[60px] lg:left-1/2 lg:top-[30px]'
+          width={1440}
+          height={690}
+          alt={`${headerImage.alt}`}
+          src={builder.image(headerImage).width(1440).height(690).url()}
+          className='w-full h-[354px] md:h-[450px] lg:h-[690px]'
         />
-        <Image
-          loading='lazy'
-          width={322}
-          height={322}
-          alt={`${headerBottomImage.alt}`}
-          src={builder.image(headerBottomImage).width(322).height(322).url()}
-          className='w-[124px] h-[124px] md:w-[294px] md:h-[294px] lg:w-[322px] lg:h-[308px] absolute top-48 md:top-[315px] 
-          lg:top-[290px] right-0'
-        />
-        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px] mt-[316px] md:mt-[295px] lg:mt-[520px]'>
-          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
+        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[48px] md:h-[68px] lg:h-[78px]'>
+          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[48px] md:h-[68px] lg:h-[78px]'>
             <div
-              className={`container whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
+              className={`container whitespace-nowrap overflow-x-auto -mt-5 md:-mt-0 ${styles.customScrollbar}`}>
               <div className='flex'>
-                <div className=' -mr-8'>
+                <div className='-mr-8'>
                   <div className='p-1 group'>
                     <Link href='/about/our-story'>
                       <div className='flex bg-transparent border-none'>
                         <div
-                          className='-ml-6 p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
+                          className='-ml-4 p-4 md:-ml-6 md:p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
                           About
                           <div
                             className='mt-1 bg-primary md:h-[0.5px] lg:h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
                         </div>
-                        <div className='text-primary font-light -ml-6 p-6 mx-3 lg:inline leading-[14px]'>
+                        <div className='text-primary font-light -ml-4 p-4 md:-ml-6 md:p-6 mx-3 lg:inline leading-[14px]'>
                           |
                         </div>
                       </div>
@@ -98,7 +90,7 @@ export default function Sustainability({ sustainability, aboutPages }) {
                       <Link href={`/about/${aboutPage.slug}`}>
                         <div
                           className={`bg-transparent border-none ${aboutPage.title === 'Sustainability' ? 'underline text-primary underline-offset-[6.5px] lg:underline-offset-[7.25px]' : ''}`}>
-                          <div className='-ml-4 -mr-4 items-center font-light justify-center p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
+                          <div className='-mx-4 items-center font-light justify-center p-4 px-6 md:p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
                             {aboutPage.title}
                             <div
                               className={`${aboutPage.title !== 'Sustainability' ? 'mt-1 bg-primary md:h-[0.5px] lg:h-[1.35px] w-0 group-hover:w-full transition-all duration-500' : ''}`}></div>
@@ -254,13 +246,13 @@ export default function Sustainability({ sustainability, aboutPages }) {
           </p>
           <p className='pt-8 pl-4 leading-7 text-primary text-xs lg:text-base md:text-sm'>
             <b className='font-bold'>&#x2022; {sectionSixSubtitleOne}</b>
-             {sectionSixSubtitleOneText}</p>
+            {sectionSixSubtitleOneText}</p>
           <p className='pt-8 pl-4 leading-7 text-primary text-xs lg:text-base md:text-sm'>
             <b className='font-bold'>&#x2022; {sectionSixSubtitleTwo}</b>
-             {sectionSixSubtitleTwoText}</p>
+            {sectionSixSubtitleTwoText}</p>
           <p className='pt-8 pl-4 leading-7 text-primary text-xs lg:text-base md:text-sm'>
             <b className='font-bold'>&#x2022; {sectionSixSubtitleThree}</b>
-             {sectionSixSubtitleThreeText}</p>
+            {sectionSixSubtitleThreeText}</p>
         </div>
       </section>
       <section id="sectionSeven" className='relative bg-white w-full font-light pt-[100px] md:pt-[160px] text-white'>
@@ -283,9 +275,18 @@ export default function Sustainability({ sustainability, aboutPages }) {
             lg:self-center py-6 md:py-8 lg:py-14 text:left'>
               {sectionSevenTextContent}
             </p>
-            <p className='italic text-sm md:text-lg lg:text-2xl w-3/4 self-start text:left lg:self-center text-left lg:text-center'>
-              {sectionSevenCta}
-            </p>
+            <Link href={ctaUrl}>
+              <p className='md:hover:underline italic text-sm md:text-lg lg:text-2xl self-start text:left lg:self-center text-left lg:text-center'>
+                {sectionSevenCta}
+              </p>
+            </Link>
+            <a
+              href={esgLink}
+              target="blank"
+              className='md:hover:underline text-xs md:text-sm lg:text-base self-start text:left lg:self-center text-left lg:text-center
+              pt-4 md:pt-6 lg:pt-10'>
+              {sectionSevenEsg}
+            </a>
           </div>
         </div>
       </section>

@@ -37,10 +37,10 @@ export default function MissionAndValues({ missionAndValues, aboutPages }) {
           src={builder.image(headerImage).width(1440).height(460).url()}
           className='object-cover w-full h-[360px] md:h-[603px] lg:h-[460px]'
         />
-        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
+        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[48px] md:h-[68px] lg:h-[78px]'>
           <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
             <div
-              className={`container whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
+              className={`container whitespace-nowrap overflow-x-auto -mt-2.5 md:-mt-0 ${styles.customScrollbar}`}>
               <div className='flex'>
                 <div className=' -mr-8'>
                   <div className='p-1 group'>

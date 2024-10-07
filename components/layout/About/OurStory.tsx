@@ -58,7 +58,7 @@ export default function OurStory({ ourStory, aboutPages }) {
         <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[48px] md:h-[68px] lg:h-[78px] mt-[372px] md:mt-[342px] lg:mt-[468px]'>
           <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
             <div
-              className={`container whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
+              className={`container whitespace-nowrap overflow-x-auto -mt-2.5 md:-mt-0 ${styles.customScrollbar}`}>
               <div className='flex'>
                 <div className=' -mr-8'>
                   <div className='p-1 group'>

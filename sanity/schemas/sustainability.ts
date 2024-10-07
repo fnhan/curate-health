@@ -6,25 +6,8 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'headerTopImage',
-      title: 'Sustainability Header Top Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
-        },
-      ],
-    }),
-    defineField({
-      name: 'headerBottomImage',
-      title: 'Sustainability Header Bottom Image',
+      name: 'headerImage',
+      title: 'Sustainability Header Image',
       type: 'image',
       options: {
         hotspot: true,
@@ -302,6 +285,31 @@ export default defineType({
       type: 'string',
       description: 'Call to action statement of section seven',
     }),
+    defineField({
+      name: 'ctaUrl',
+      title: 'Call to action url',
+      type: 'url',
+      validation: Rule => Rule.uri({
+        scheme: ['http', 'https', 'mailto', 'tel']
+      }),
+      description: 'url for CTA statement'
+    }),
+    defineField({
+      name: 'sectionSevenEsg',
+      title: 'Section Seven ESG report text',
+      type: 'string',
+      description: 'ESG report text',
+    }),
+    defineField({
+      name: 'esgLink',
+      title: 'ESG report document link',
+      type: 'file',
+      options: {
+        accept: '.pdf, .docx', // Restrict file uploads to PDF files only
+      },
+      validation: (Rule) => Rule.required().error('A file (PDF or DOCX) is required'),
+      description: 'ESG report file'
+    })
 
   ],
 

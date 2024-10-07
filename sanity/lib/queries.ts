@@ -556,19 +556,15 @@ export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{
   sectionSevenTitle,
   sectionSevenTextContent,
   sectionSevenCta,
-  "headerTopImage": {
-    "asset": headerTopImage.asset->{
+  ctaUrl,
+  sectionSevenEsg,
+  "esgLink": esgLink.asset->url,
+  "headerImage": {
+    "asset": headerImage.asset->{
       _id,
       url
     },
-    "alt": headerTopImage.alt
-  },
-    "headerBottomImage": {
-    "asset": headerBottomImage.asset->{
-      _id,
-      url
-    },
-    "alt": headerBottomImage.alt
+    "alt": headerImage.alt
   },
       "sectionFourImage": {
     "asset": sectionFourImage.asset->{

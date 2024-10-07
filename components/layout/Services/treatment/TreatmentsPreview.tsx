@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Survey from '../../../../components/layout/Home/Survey';
 import {
   FOOTER_QUERY,
+  METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
   SURVEY_LINK_QUERY,
   TREATMENT_BY_SLUG_QUERY,
@@ -48,11 +49,17 @@ export default function TreatmentsPreview() {
     return <Loading />;
   }
 
+  const [meta, isMetaLoading] = useLiveQuery(null, METADATA_BY_SLUG_QUERY, {
+    slug,
+  });
+
   return (
     <Layout
       title={treatment?.title || 'Treatments'}
       navigation={navigation}
-      footer={footer}>
+      footer={footer}
+      description={meta?.description || ''}
+    >
       <TreatmentNav
         treatments={treatments}
         currentPageTitle={treatment?.title || 'Services'}

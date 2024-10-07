@@ -11,6 +11,7 @@ import Layout from '../../../components/layout/layout';
 import { getClient } from '../../../sanity/lib/client';
 import {
   FOOTER_QUERY,
+  METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
   SERVICES_QUERY,
   SERVICES_SLUG_QUERY,
@@ -29,6 +30,7 @@ type PageProps = {
   surveySection: SanityDocument[];
   treatments: SanityDocument[];
   footer: SanityDocument;
+  meta: SanityDocument;
 };
 
 export default function ServicesPage(props: PageProps) {
@@ -48,7 +50,9 @@ export default function ServicesPage(props: PageProps) {
     <Layout
       navigation={props.navigation}
       footer={props.footer}
-      title={props.service?.title || 'Services'}>
+      title={props.service?.title || 'Services'}
+      description={props.service?.meta?.description || ''}
+    >
       <Picture service={props.service} />
       <ServicesNav
         services={props.services}
@@ -84,6 +88,12 @@ export const getStaticProps = async ({ params, preview = false }) => {
     serviceSlug: service?.slug || '',
   });
 
+  const meta = (
+    await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
+      slug: params.slug,
+    })
+  ).meta;
+
   return {
     props: {
       services,
@@ -92,6 +102,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
       footer,
       surveySection,
       treatments,
+      meta,
       draftMode: preview,
       token: preview ? token : '',
     },

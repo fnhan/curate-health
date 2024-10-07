@@ -59,6 +59,22 @@ export default function PopupBanner(props) {
   if (!isBannerVisible) return null;
 
   const components: Partial<PortableTextReactComponents> = {
+    block: {
+      // Ex. 1: customizing common block types
+      h1: ({ children }) => <h1 className='text-8xl'>{children}</h1>,
+      h2: ({ children }) => <h3 className='text-6xl'>{children}</h3>,
+      h3: ({ children }) => <h3 className='text-4xl'>{children}</h3>,
+      h4: ({ children }) => <h4 className='text-2xl'>{children}</h4>,
+      p: ({ children }) => <p className='text-lg'>{children}</p>,
+      blockquote: ({ children }) => (
+        <blockquote className=''>{children}</blockquote>
+      ),
+
+      // Ex. 2: rendering custom styles
+      customHeading: ({ children }) => (
+        <h2 className='text-lg text-primary text-purple-700'>{children}</h2>
+      ),
+    },
     list: {
       // Ex. 1: customizing common list types
       bullet: ({ children }) => (
@@ -83,7 +99,7 @@ export default function PopupBanner(props) {
       >
         <div className='w-[48rem] h-[48rem] bg-[#878E76] rounded-full flex justify-center items-center'>
           <div className=''>
-            <div className='px-4 py-2'>
+            <div className='px-4 py-2 leading-loose text-center'>
               <PortableText
                 components={components}
                 value={props.props.content}

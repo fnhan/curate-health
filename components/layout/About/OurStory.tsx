@@ -4,6 +4,7 @@ import { Loading } from 'components/Loading';
 import { dataset, projectId } from '../../../sanity/env';
 import Link from 'next/link';
 import styles from '../../../styles/CarouselNav.module.css';
+import BookAppointment from '../Buttons/BookAppointment';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
@@ -18,6 +19,7 @@ export default function OurStory({ ourStory, aboutPages }) {
     headerSubtitle,
     sectionOneTextContent,
     sectionOneTitle,
+    quotationMark,
     sectionTwoTextContent,
     sectionThreeTextContent,
     sectionThreeTitle,
@@ -34,6 +36,7 @@ export default function OurStory({ ourStory, aboutPages }) {
     sectionSixImage,
     sectionSevenBgImage,
     headerBgImage,
+    ctaUrl
   } = ourStory;
 
   return (
@@ -55,22 +58,22 @@ export default function OurStory({ ourStory, aboutPages }) {
             {headerSubtitle}
           </p>
         </div>
-        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[48px] md:h-[68px] lg:h-[78px] mt-[372px] md:mt-[342px] lg:mt-[468px]'>
-          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
+        <div className='bg-[#C3C7BB] backdrop-blur-3xl'>
+          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[68px] md:h-[68px] lg:h-[78px] mt-[520px] md:mt-[342px] lg:mt-[468px]'>
             <div
-              className={`container whitespace-nowrap overflow-x-auto -mt-2.5 md:-mt-0 ${styles.customScrollbar}`}>
+              className={`container whitespace-nowrap overflow-x-auto -mt-[128px] md:-mt-0 ${styles.customScrollbar}`}>
               <div className='flex'>
                 <div className=' -mr-8'>
                   <div className='p-1 group'>
                     <Link href='/about/our-story'>
                       <div className='flex bg-transparent border-none'>
                         <div
-                          className='-ml-6 p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
+                          className='-ml-4 p-4 md:-ml-6 md:p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
                           About
                           <div
                             className='mt-1 bg-primary md:h-[0.5px] lg:h-[0.75px] w-0 group-hover:w-full transition-all duration-500'></div>
                         </div>
-                        <div className='text-primary font-light -ml-6 p-6 mx-3 lg:inline leading-[14px]'>
+                        <div className='text-primary font-light -ml-4 p-4 md:-ml-6 md:p-6 mx-3 lg:inline leading-[14px]'>
                           |
                         </div>
                       </div>
@@ -83,10 +86,10 @@ export default function OurStory({ ourStory, aboutPages }) {
                       <Link href={`/about/${aboutPage.slug}`}>
                         <div
                           className={`bg-transparent border-none ${aboutPage.title === 'Our Story' ? 'underline text-primary underline-offset-[6.5px]' : ''}`}>
-                          <div className='-ml-4 -mr-4 items-center font-light justify-center p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
+                          <div className='-mx-4 items-center font-light justify-center p-4 px-6 md:p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
                             {aboutPage.title}
                             <div
-                              className={`${aboutPage.title !== 'Our Story' ? 'mt-1 bg-primary md:h-[0.5px] lg:h-[0.75px] w-0 group-hover:w-full transition-all duration-500' : ''}`}></div>
+                              className={`${aboutPage.title !== 'Our Story' ? 'mt-1 bg-primary md:h-[0.5px] lg:h-[1.35px] w-0 group-hover:w-full transition-all duration-500' : ''}`}></div>
                           </div>
                         </div>
                       </Link>
@@ -117,7 +120,15 @@ export default function OurStory({ ourStory, aboutPages }) {
           </p>
         </div>
       </section>
-      <section id="sectionTwo" className='relative bg-white font-light pt-[160px] lg:pt-[300px] w-full flex justify-center'>
+      <Image
+      loading='lazy'
+      width={160}
+      height={134}
+      alt={`${quotationMark.alt}`}
+      src={builder.image(quotationMark).width(160).height(134).url()}
+      className='w-[60px] h-[54px] md:w-[88px] md:h-[79px] lg:w-[160px] lg:h-[134px] mt-28 md:mt-44 lg:mt-80 mx-auto'
+      />
+      <section id="sectionTwo" className='relative bg-white font-light pt-[50px] md:pt-[80px] lg:pt-[150px] w-full flex justify-center'>
         <p className='text-center italic text-2xl md:text-4xl lg:text-6xl text-primary leading-9 md:leading-[50px] lg:leading-[66px] 
         top-48 w-2/3'
         >
@@ -214,9 +225,13 @@ export default function OurStory({ ourStory, aboutPages }) {
             lg:self-center py-6 md:py-8 lg:py-14 text:left'>
               {sectionSevenTextContent}
             </p>
-            <p className='italic text-sm md:text-lg lg:text-2xl w-3/4 self-start text:left lg:self-center text-left lg:text-center'>
+            <a
+              target='blank'
+              href={ctaUrl}
+              className='md:hover:underline italic text-sm md:text-lg lg:text-2xl self-start text:left lg:self-center text-left lg:text-center'
+            >
               {sectionSevenCta}
-            </p>
+            </a>
           </div>
         </div>
       </section>

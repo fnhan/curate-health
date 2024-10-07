@@ -32,27 +32,27 @@ export default function MissionAndValues({ missionAndValues, aboutPages }) {
         <Image
           loading='lazy'
           width={1440}
-          height={460}
+          height={608}
           alt={`${headerImage.alt}`}
-          src={builder.image(headerImage).width(1440).height(460).url()}
-          className='object-cover w-full h-[360px] md:h-[603px] lg:h-[460px]'
+          src={builder.image(headerImage).width(1440).height(608).url()}
+          className='w-full h-[360px] md:h-[603px] lg:h-[608px]'
         />
-        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[48px] md:h-[68px] lg:h-[78px]'>
-          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
+        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[68px] lg:h-[78px]'>
+          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[68px] lg:h-[78px]'>
             <div
-              className={`container whitespace-nowrap overflow-x-auto -mt-2.5 md:-mt-0 ${styles.customScrollbar}`}>
+              className={`container whitespace-nowrap overflow-x-auto -mt-8 md:-mt-0 ${styles.customScrollbar}`}>
               <div className='flex'>
                 <div className=' -mr-8'>
                   <div className='p-1 group'>
                     <Link href='/about/our-story'>
                       <div className='flex bg-transparent border-none'>
                         <div
-                          className='-ml-6 p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
+                          className='-ml-4 p-4 md:-ml-6 md:p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
                           About
                           <div
                             className='mt-1 bg-primary md:h-[0.5px] lg:h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
                         </div>
-                        <div className='text-primary font-light -ml-6 p-6 mx-3 lg:inline leading-[14px]'>
+                        <div className='text-primary font-light -ml-4 p-4 md:-ml-6 md:p-6 mx-3 lg:inline leading-[14px]'>
                           |
                         </div>
                       </div>
@@ -65,7 +65,7 @@ export default function MissionAndValues({ missionAndValues, aboutPages }) {
                       <Link href={`/about/${aboutPage.slug}`}>
                       <div
                           className={`bg-transparent border-none ${aboutPage.title === 'Mission & Values' ? 'underline text-primary underline-offset-[6.5px] lg:underline-offset-[7.25px]' : ''}`}>
-                          <div className='-ml-4 -mr-4 items-center font-light justify-center p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
+                          <div className='-mx-4 items-center font-light justify-center p-4 px-6 md:p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
                             {aboutPage.title}
                             <div
                               className={`${aboutPage.title !== 'Mission & Values' ? 'mt-1 bg-primary md:h-[0.5px] lg:h-[1.35px] w-0 group-hover:w-full transition-all duration-500' : ''}`}></div>

@@ -64,6 +64,23 @@ export default defineType({
       description: 'The text content of section one',
     }),
     defineField({
+      name: 'quotationMark',
+      title: 'Quotation Mark Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          description:
+            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+        },
+      ],
+    }),
+    defineField({
       name: 'sectionTwoTextContent',
       title: 'Section Two Text Content',
       type: 'string',
@@ -190,6 +207,15 @@ export default defineType({
       title: 'Section Seven Call To Action',
       type: 'string',
       description: 'Call to action statement of section seven',
+    }),
+    defineField({
+      name: 'ctaUrl',
+      title: 'Call to action url',
+      type: 'url',
+      validation: Rule => Rule.uri({
+        scheme: ['http', 'https', 'mailto', 'tel']
+      }),
+      description: 'url for CTA statement'
     }),
 
   ],

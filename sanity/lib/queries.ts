@@ -417,8 +417,16 @@ export const OUR_STORY_QUERY = groq`*[_type == "ourStory"][0]{
   sectionSixTextContent,
   sectionSixTitle,
   sectionSevenCta,
+  ctaUrl,
   sectionSevenTextContent,
   sectionSevenTitle,
+    "quotationMark": {
+    "asset": quotationMark.asset->{
+      _id,
+      url
+    },
+    "alt": quotationMark.alt
+  },
   "headerBgImage": {
     "asset": headerBgImage.asset->{
       _id,

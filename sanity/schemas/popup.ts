@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'popup',
-  title: 'Popup-Banner',
+  title: 'popup',
   type: 'document',
   fields: [
     defineField({
@@ -10,10 +10,9 @@ export default defineType({
       title: 'Title',
       type: 'string',
       description: 'Apt title that tells what the banner is about',
-      initialValue: false,
     }),
     defineField({
-      name: 'isVisible',
+      name: 'isActive',
       title: 'Is Active',
       type: 'boolean',
       description: 'Toggle to show/hide this banner on the website.',

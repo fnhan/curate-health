@@ -112,7 +112,6 @@ export default function HomePagePreview() {
       <Sustainability sustainabilitySection={data.sustainabilitySection} />
       <SurveyLink surveyLink={data.surveyLink} />
       <Newsletter />
-      <PopupBanner props={data.popup}></PopupBanner>
     </Layout>
   );
 }

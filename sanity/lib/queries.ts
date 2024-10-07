@@ -321,9 +321,10 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
   }
 }`;
 
-export const POPUP_CONTENT_QUERY = groq`[_type == "popup" && isVisible == true][0]{
+export const POPUP_CONTENT_QUERY = groq`*[_type == "popup" && isActive == true][0]{
+  title,
   content,
-  isVisible,
+  isActive,
 }`;
 
 export const HOME_PAGE_QUERY = groq`{

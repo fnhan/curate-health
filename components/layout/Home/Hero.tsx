@@ -19,6 +19,9 @@ export default function Hero({ heroSection }) {
         <h1 className='text-[32px] md:text-[42px] 2xl:text-[72px] mb-6'>
           <PortableText value={heroText} />
         </h1>
+        <div className="flex justify-center text-white text-secondary font-thin text-[150px] h-[250px]">
+          |
+        </div>
         <BookAppointment />
       </div>
     </section>

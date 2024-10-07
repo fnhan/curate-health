@@ -5,14 +5,6 @@ import { POPUP_CONTENT_QUERY } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 import { SanityDocument } from 'next-sanity';
 import { PortableText, PortableTextReactComponents } from '@portabletext/react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'components/ui/dialog';
 
 import { useEffect, useState } from 'react';
 import preview from 'next-sanity/preview';
@@ -42,15 +34,6 @@ const getCookie = (name) => {
 
 export default function PopupBanner(props) {
   const [isBannerVisible, setIsBannerVisible] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-
-  const handleLoad = () => {
-    setLoaded(true);
-  };
-
-  const componentDidMount = () => {
-    window.addEventListener('load', this.handleLoad);
-  };
 
   useEffect(() => {
     const bannerDismissed = getCookie('bannerDismissed');
@@ -67,14 +50,22 @@ export default function PopupBanner(props) {
 
   if (!isBannerVisible) return null;
 
+  console.log(props.props.content);
+
   const components: Partial<PortableTextReactComponents> = {
     block: {
       // Ex. 1: customizing common block types
+
       h1: ({ children }) => <h1 className='text-8xl'>{children}</h1>,
       h2: ({ children }) => <h3 className='text-6xl'>{children}</h3>,
       h3: ({ children }) => <h3 className='text-4xl'>{children}</h3>,
       h4: ({ children }) => <h4 className='text-2xl'>{children}</h4>,
-      p: ({ children }) => <p className='text-lg'>{children}</p>,
+      normal: ({ children }) => <p className='text-2xl'>{children}</p>,
+      a: ({ children }) => (
+        <a className='text-lg transition-all no-underline hover:underline '>
+          {children}
+        </a>
+      ),
       blockquote: ({ children }) => (
         <blockquote className=''>{children}</blockquote>
       ),
@@ -98,6 +89,23 @@ export default function PopupBanner(props) {
         <ol className='m-auto text-lg'>{children}</ol>
       ),
     },
+    marks: {
+      link: ({ value, children }) => {
+        const target = (value?.href || '').startsWith('http')
+          ? '_blank'
+          : undefined;
+        return (
+          <a
+            className='transition-all not-italic underline hover:italic '
+            href={value?.href}
+            target={target}
+            rel={target === '_blank' && 'noindex nofollow'}
+          >
+            {children}
+          </a>
+        );
+      },
+    },
   };
 
   return (
@@ -108,7 +116,7 @@ export default function PopupBanner(props) {
       >
         <div className='w-[48rem] h-[48rem] bg-[#878E76] rounded-full flex justify-center items-center'>
           <div className=''>
-            <div className='px-4 py-2 leading-loose text-center'>
+            <div className='px-4 py-2 leading-loose  text-center'>
               <PortableText
                 components={components}
                 value={props.props.content}
@@ -126,22 +134,3 @@ export default function PopupBanner(props) {
     </div>
   );
 }
-
-// const fetchBannerData = async () => {
-//   const client = getClient(preview ? token : undefined);
-//   const data = await client.fetch(POPUP_CONTENT_QUERY);
-//   return data;
-// };
-
-// export const getStaticProps = async ({ params, preview = false }) => {
-//   const client = getClient(preview ? token : undefined);
-//   const banner = await client.fetch(POPUP_CONTENT_QUERY);
-//   const content = banner.content;
-//   const isVisible = banner.isVisible;
-//   return {
-//     props: {
-//       content,
-//       isVisible,
-//     },
-//   };
-// };

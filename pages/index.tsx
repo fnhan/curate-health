@@ -16,14 +16,6 @@ import dynamic from 'next/dynamic';
 import { getClient } from '../sanity/lib/client';
 import { HOME_PAGE_QUERY, METADATA_BY_SLUG_QUERY } from '../sanity/lib/queries';
 import { token } from '../sanity/lib/token';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'components/ui/dialog';
 
 type PageProps = {
   posts: SanityDocument[];

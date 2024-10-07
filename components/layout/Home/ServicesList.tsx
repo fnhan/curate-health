@@ -49,7 +49,7 @@ export default function ServicesList({ services }) {
                 .quality(80)
                 .url()}
               alt={hoveredService.title}
-              className="object-cover transition duration-300 h-[0px] w-[0px] md:h-[535px] 2xl:h-[575px] md:w-full"
+              className="object-cover transition duration-300 h-[0px] w-[0px] md:h-[420px] 2xl:h-[470px] md:w-full"
             />
           )}
         </div>

@@ -50,8 +50,6 @@ export default function PopupBanner(props) {
 
   if (!isBannerVisible) return null;
 
-  console.log(props.props.content);
-
   const components: Partial<PortableTextReactComponents> = {
     block: {
       // Ex. 1: customizing common block types

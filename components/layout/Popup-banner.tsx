@@ -42,6 +42,15 @@ const getCookie = (name) => {
 
 export default function PopupBanner(props) {
   const [isBannerVisible, setIsBannerVisible] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  const handleLoad = () => {
+    setLoaded(true);
+  };
+
+  const componentDidMount = () => {
+    window.addEventListener('load', this.handleLoad);
+  };
 
   useEffect(() => {
     const bannerDismissed = getCookie('bannerDismissed');
@@ -94,7 +103,7 @@ export default function PopupBanner(props) {
   return (
     <div className='clear fixed top-0 z-50'>
       <div
-        className='h-screen w-screen flex justify-center items-center bg-black bg-opacity-40'
+        className='h-screen w-screen flex justify-center items-center bg-black bg-opacity-40 animate-appear'
         onClick={closeBanner}
       >
         <div className='w-[48rem] h-[48rem] bg-[#878E76] rounded-full flex justify-center items-center'>

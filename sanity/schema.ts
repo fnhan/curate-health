@@ -23,6 +23,7 @@ import contactDetails from './schemas/contactDetails';
 import ourServices from './schemas/ourServices';
 import surveyLink from './schemas/surveyLink';
 import ourStory from './schemas/ourStory';
+import missionAndValues from './schemas/missionAndValues';
 import treatments from './schemas/treatments';
 import metadatas from './schemas/metadatas';
 import popup from './schemas/popup';
@@ -50,10 +51,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     accessibility,
     contactInfo,
     contactDetails,
-    treatments,
-    ourServices,
     surveyLink,
     ourStory,
+    missionAndValues,
     metadatas,
   ],
 };

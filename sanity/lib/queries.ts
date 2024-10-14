@@ -629,3 +629,32 @@ export const SUSTAINABILITY_PAGE_QUERY = groq`{
   "surveyLink": ${SURVEY_LINK_QUERY},
   "sustainability": ${SUSTAINABILITY_QUERY}
 }`;
+
+export const PILLARS_OF_HEALTH_QUERY = groq`*[_type == "pillarsOfHealth"][0]{
+  pageTitle,
+  mentalHealthTitle,
+  mentalHealthTextContent,
+  emotionalHealthTitle,
+  emotionalHealthTextContent,
+  socialHealthTitle,
+  socialHealthTextContent,
+  spiritualHealthTitle,
+  spiritualHealthTextContent,
+  physicalHealthTitle,
+  physicalHealthTextContent,
+    "headerBgImage": {
+    "asset": headerBgImage.asset->{
+      _id,
+      url
+    },
+    "alt": headerBgImage.alt
+  },
+  }`;
+
+export const PILLARS_OF_HEALTH_PAGE_QUERY = groq`{
+    "aboutPages": ${ABOUT_PAGES_QUERY},
+    "footer": ${FOOTER_QUERY},
+    "navigation": ${NAVIGATION_QUERY},
+    "surveyLink": ${SURVEY_LINK_QUERY},
+    "pillarsOfHealth": ${PILLARS_OF_HEALTH_QUERY}
+  }`;

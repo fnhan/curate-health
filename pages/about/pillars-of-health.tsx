@@ -1,33 +1,33 @@
 import Layout from '../../components/layout/layout';
 import SurveyLink from 'components/layout/Survey/SurveyLink';
 import Newsletter from 'components/layout/Home/Newsletter';
-import { MISSION_AND_VALUES_PAGE_QUERY, METADATA_BY_SLUG_QUERY } from '../../sanity/lib/queries';
+import { PILLARS_OF_HEALTH_PAGE_QUERY, METADATA_BY_SLUG_QUERY } from '../../sanity/lib/queries';
 import { SanityDocument } from 'next-sanity';
 import { getClient } from '../../sanity/lib/client';
 import { token } from '../../sanity/lib/token';
-import MissionAndValues from 'components/layout/About/MissionAndValues';
+import PillarsofHealth from 'components/layout/About/PillarsOfHealth';
 
 type PageProps = {
   aboutPages: SanityDocument;
   surveyLink: SanityDocument;
   navigation: SanityDocument;
-  missionAndValues: SanityDocument;
+  pillarsOfHealth: SanityDocument;
   footer: SanityDocument;
-  description: SanityDocument
+  description: SanityDocument;
   draftMode: boolean;
   token: string;
 };
 
-export default function MissionValues(props: PageProps) {
+export default function PillarsHealth(props: PageProps) {
 
   return (
     <Layout
-      title={'Mission-And-Values'}
+      title={'Pillars-of-Health'}
       navigation={props.navigation}
       footer={props.footer}
       description={props.description}
       >
-      <MissionAndValues missionAndValues={props.missionAndValues} aboutPages={props.aboutPages} />
+      <PillarsofHealth pillarsOfHealth={props.pillarsOfHealth} aboutPages={props.aboutPages} />
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>
@@ -36,11 +36,11 @@ export default function MissionValues(props: PageProps) {
 
 export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
-  const allData = await client.fetch(MISSION_AND_VALUES_PAGE_QUERY);
+  const allData = await client.fetch(PILLARS_OF_HEALTH_PAGE_QUERY);
 
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: '/about/mission-and-values',
+      slug: '/about/pillars-of-health',
     })
   ).meta;
 

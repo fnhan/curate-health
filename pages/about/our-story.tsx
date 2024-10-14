@@ -18,21 +18,16 @@ type PageProps = {
   aboutPages: SanityDocument;
 };
 
-export default function AboutOS(props: PageProps) {
+export default function OurStoryPage(props: PageProps) {
 
   return (
     <Layout
       title={'Our-Story'}
       navigation={props.navigation}
-<<<<<<< HEAD
       footer={props.footer}
       description={props.description}
       >
-      <OurStory ourStory={props.ourStory} />
-=======
-      footer={props.footer}>
       <OurStory ourStory={props.ourStory} aboutPages={props.aboutPages}/>
->>>>>>> 8b1167e (add Nav to About pages, reformat schema and layout based off Figma design changes)
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>

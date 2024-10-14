@@ -37,7 +37,7 @@ export default function OurStory({ ourStory, aboutPages }) {
   } = ourStory;
 
   return (
-    <div className='flex flex-col w-full bg-white'>
+    <div className='flex flex-col w-full bg-white font-light'>
       <section id="headerSection" className='relative bg-white font-light w-full'>
         <Image
           loading='lazy'
@@ -47,8 +47,7 @@ export default function OurStory({ ourStory, aboutPages }) {
           src={builder.image(headerBgImage).width(608).height(997).url()}
           className='object-cover w-full h-[690px] md:w-[317px] md:h-[792px] lg:w-[608px] lg:h-[997px] absolute md:right-0'
         />
-        <div className='w-full absolute inset-0 flex flex-col pt-12 bg-secondary 
-h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
+        <div className='w-full absolute inset-0 flex flex-col pt-12 bg-secondary h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
           <h1 className='text-2xl md:text-[40px] lg:text-7xl leading-8 md:leading-10 ml-14 py-10 md:py-12 
           w-3/4 lg:w-2/3'>{headerTitle}</h1>
           <p className='leading-5 md:leading-6 text-xs text-md lg:text-base md:text-sm mx-[58px] 
@@ -56,8 +55,8 @@ h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
             {headerSubtitle}
           </p>
         </div>
-        <div className='bg-[#C3C7BB] bg-opacity-50 backdrop-blur-3xl h-[78px] mt-[500px] md:mt-[662px] lg:mt-[770px]'>
-          <div className='bg-[#C3C7BB] bg-opacity-50 backdrop-blur-3xl h-[78px]'>
+        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px] mt-[500px] md:mt-[662px] lg:mt-[770px]'>
+          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px]'>
             <div
               className={`container whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
               <div className='flex'>
@@ -66,12 +65,12 @@ h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
                     <Link href='/about'>
                       <div className='flex bg-transparent border-none'>
                         <div
-                          className='p-6 text-black font-light font-Poppins text-[12px] lg:text-[14px] leading-[14px] underline'>
+                          className='p-6 text-primary font-light font-Poppins text-[12px] lg:text-[14px] leading-[14px] underline'>
                           About
                           <div
-                            className='-mt-1 bg-black h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
+                            className='-mt-1 bg-primary h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
                         </div>
-                        <div className='text-black font-light -ml-6 p-6 mx-3 lg:inline leading-[14px]'>
+                        <div className='text-primary font-light -ml-6 p-6 mx-3 lg:inline leading-[14px]'>
                           |
                         </div>
                       </div>
@@ -83,11 +82,11 @@ h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
                     <div className='p-1 group'>
                       <Link href={`/about/${aboutPage.slug}`}>
                         <div
-                          className='bg-transparent border-none underline text-black'>
-                          <div className='-ml-4 -mr-4 items-center font-light font-Poppins justify-center p-6 text-black text-[12px] lg:text-[14px] leading-[14px]'>
+                          className='bg-transparent border-none underline text-primary'>
+                          <div className='-ml-4 -mr-4 items-center font-light font-Poppins justify-center p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
                             {aboutPage.title}
                             <div
-                              className='-mt-1 bg-black h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
+                              className='-mt-1 bg-primary h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
                           </div>
                         </div>
                       </Link>
@@ -209,14 +208,14 @@ h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
           <div className='flex flex-col px-2 md:px-[30px]'>
             <h1 className='lg:text-[40px] md:text-[32px] text-base leading:6 md:leading-10 lg:leading-[52px] w-2/3 
             self-start lg:self-center text-left lg:text-center'>
-            {sectionSevenTitle}
+              {sectionSevenTitle}
             </h1>
             <p className='leading-5 md:leading-7 text-xs md:text-sm lg:text-base w-3/4 self-start text-left lg:text-center 
             lg:self-center py-6 md:py-8 lg:py-14 text:left'>
-            {sectionSevenTextContent}
+              {sectionSevenTextContent}
             </p>
             <p className='italic text-sm md:text-lg lg:text-2xl w-3/4 self-start text:left lg:self-center text-left lg:text-center'>
-            {sectionSevenCta}
+              {sectionSevenCta}
             </p>
           </div>
         </div>

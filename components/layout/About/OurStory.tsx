@@ -1,10 +1,16 @@
 import imageUrlBuilder from '@sanity/image-url';
 import Image from 'next/image';
+import { Loading } from 'components/Loading';
 import { dataset, projectId } from '../../../sanity/env';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function OurStory({ ourStory }) {
+
+  if (!ourStory) {
+    return <Loading />;
+  }
+  
   const {
     headerTitle,
     headerTitleDesktop,
@@ -45,7 +51,7 @@ export default function OurStory({ ourStory }) {
           className='object-cover w-full h-[690px] md:w-[317px] md:h-[792px] lg:w-[608px] lg:h-[997px] absolute right-0'
         />
         <div className='absolute inset-0 flex flex-col pt-12 bg-secondary 
-      h-[528px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[336px] lg:top-[250px]'>
+      h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[336px] lg:top-[250px]'>
           <h1 className='block lg:hidden text-2xl md:text-4xl leading-8 md:leading-10 ml-[32px] md:ml-[60px] pb-4 md:pb-6'>{headerTitle}</h1>
           <h1 className='hidden lg:block w-[798px] text-7xl ml-[160px] top-[408px] pb-8'>{headerTitleDesktop}</h1>
           <p className='hidden lg:block leading-7 text-base w-[832px] 

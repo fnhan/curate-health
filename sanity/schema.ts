@@ -53,7 +53,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     treatments,
     ourServices,
     surveyLink,
+    ourStory,
     metadatas,
-    surveyLink
   ],
 };

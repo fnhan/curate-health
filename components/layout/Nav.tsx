@@ -11,7 +11,7 @@ import Link from 'next/link';
 import logo from 'public/images/logo_white.png';
 
 export default function Nav({ navigation }) {
-  const { serviceLinks, navItems } = navigation;
+  const { aboutLinks, serviceLinks, navItems } = navigation;
 
   return (
     <nav className='text-white bg-primary/25 backdrop-blur-3xl sticky top-0 z-50 border-b'>
@@ -64,6 +64,37 @@ export default function Nav({ navigation }) {
                         </Accordion>
                       );
                     }
+                      if (item.isAboutLinks) {
+                        return (
+                          <Accordion
+                            key={`about-links-${index}`}
+                            type='single'
+                            collapsible
+                            className='w-full'>
+                            <AccordionItem
+                              value='about-links'
+                              className='border-none text-2xl'>
+                              <AccordionTrigger
+                                className='font-normal p-0'
+                                aria-label='about pages'
+                                aria-controls='about-items'
+                                id='about-menu'>
+                                About
+                              </AccordionTrigger>
+                              <AccordionContent className='flex flex-col gap-2 pt-6 ml-4'>
+                                {aboutLinks.map((aboutLink, aboutIndex) => (
+                                  <Link
+                                    key={`about-link-${aboutIndex}`}
+                                    className='hover:underline text-base'
+                                    href={aboutLink.href}>
+                                    {aboutLink.title}
+                                  </Link>
+                                ))}
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        );
+                      }
 
                     return (
                       <Link

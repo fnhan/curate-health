@@ -5,7 +5,7 @@ import Newsletter from '../Home/Newsletter';
 import Layout from 'components/layout/layout';
 import { SanityDocument } from 'next-sanity';
 import { useLiveQuery } from 'next-sanity/preview';
-import { ABOUT_PAGE_QUERY } from '../../../sanity/lib/queries';
+import { OUR_STORY_PAGE_QUERY } from '../../../sanity/lib/queries';
 
 type AboutPageData = {
   ourStory: SanityDocument;
@@ -15,7 +15,7 @@ type AboutPageData = {
 };
 
 export default function AboutPreview() {
-  const [data, isLoading] = useLiveQuery<AboutPageData>(null, ABOUT_PAGE_QUERY);
+  const [data, isLoading] = useLiveQuery<AboutPageData>(null, OUR_STORY_PAGE_QUERY);
 
   if (isLoading) {
     return (

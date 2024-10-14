@@ -269,10 +269,15 @@ export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
     title,
     "slug": slug.current
   },
+  aboutLinks[]{
+    title,
+    href,
+  },
   navItems[]{
     linkText,
     href,
-    isServiceLinks
+    isServiceLinks,
+    isAboutLinks
   }
 }`;
 
@@ -470,7 +475,7 @@ export const OUR_STORY_QUERY = groq`*[_type == "ourStory"][0]{
   },
 }`;
 
-export const ABOUT_PAGE_QUERY = groq`{
+export const OUR_STORY_PAGE_QUERY = groq`{
   "footer": ${FOOTER_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "surveyLink": ${SURVEY_LINK_QUERY},

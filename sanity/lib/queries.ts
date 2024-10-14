@@ -526,3 +526,53 @@ export const MISSION_AND_VALUES_PAGE_QUERY = groq`{
   "surveyLink": ${SURVEY_LINK_QUERY},
   "missionAndValues": ${MISSION_AND_VALUES_QUERY}
 }`;
+
+export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{
+  headerTitle,
+  headerTextContent,
+  sectionTwoTextContent,
+  sectionThreeTextContent,
+  "headerTopImage": {
+    "asset": headerTopImage.asset->{
+      _id,
+      url
+    },
+    "alt": headerTopImage.alt
+  },
+    "headerBottomImage": {
+    "asset": headerBottomImage.asset->{
+      _id,
+      url
+    },
+    "alt": headerBottomImage.alt
+  },
+      "sectionFourImage": {
+    "asset": sectionFourImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionFourImage.alt
+  },
+      "sectionTwoImage": {
+    "asset": sectionTwoImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionTwoImage.alt
+  },
+      "sectionOneImage": {
+    "asset": sectionOneImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionOneImage.alt
+  },
+
+}`;
+
+export const SUSTAINABILITY_PAGE_QUERY = groq`{
+  "footer": ${FOOTER_QUERY},
+  "navigation": ${NAVIGATION_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY},
+  "sustainability": ${SUSTAINABILITY_QUERY}
+}`;

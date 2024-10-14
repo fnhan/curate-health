@@ -24,6 +24,8 @@ import ourServices from './schemas/ourServices';
 import surveyLink from './schemas/surveyLink';
 import ourStory from './schemas/ourStory';
 import missionAndValues from './schemas/missionAndValues';
+import sustainability from './schemas/sustainability';
+import aboutPages from './schemas/aboutPages';
 import treatments from './schemas/treatments';
 import metadatas from './schemas/metadatas';
 import popup from './schemas/popup';
@@ -54,6 +56,11 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     surveyLink,
     ourStory,
     missionAndValues,
+<<<<<<< HEAD
     metadatas,
+=======
+    sustainability,
+    aboutPages,
+>>>>>>> 8b1167e (add Nav to About pages, reformat schema and layout based off Figma design changes)
   ],
 };

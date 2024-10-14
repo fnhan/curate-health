@@ -399,6 +399,11 @@ export const CONTACT_PAGE_QUERY = groq`{
   "surveyLink": ${SURVEY_LINK_QUERY}
 }`;
 
+export const ABOUT_PAGES_QUERY = groq`*[_type == "aboutPage" && isActive == true]{
+  title,
+  "slug": slug.current,
+}`;
+
 export const OUR_STORY_QUERY = groq`*[_type == "ourStory"][0]{
   headerTitle,
   headerTitleDesktop,
@@ -476,6 +481,7 @@ export const OUR_STORY_QUERY = groq`*[_type == "ourStory"][0]{
 }`;
 
 export const OUR_STORY_PAGE_QUERY = groq`{
+  "aboutPages": ${ABOUT_PAGES_QUERY},
   "footer": ${FOOTER_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "surveyLink": ${SURVEY_LINK_QUERY},
@@ -521,6 +527,7 @@ export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues"][0]{
 }`;
 
 export const MISSION_AND_VALUES_PAGE_QUERY = groq`{
+  "aboutPages": ${ABOUT_PAGES_QUERY},
   "footer": ${FOOTER_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "surveyLink": ${SURVEY_LINK_QUERY},
@@ -571,6 +578,7 @@ export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{
 }`;
 
 export const SUSTAINABILITY_PAGE_QUERY = groq`{
+  "aboutPages": ${ABOUT_PAGES_QUERY},
   "footer": ${FOOTER_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "surveyLink": ${SURVEY_LINK_QUERY},

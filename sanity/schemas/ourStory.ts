@@ -76,23 +76,6 @@ export default defineType({
       description: 'The text content of section one',
     }),
     defineField({
-      name: 'sectionTwoImage',
-      title: 'Section Two Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
-        },
-      ],
-    }),
-    defineField({
       name: 'sectionTwoTextContent',
       title: 'Section Two Text Content',
       type: 'string',
@@ -126,29 +109,6 @@ export default defineType({
       title: 'Section Three Text Content',
       type: 'string',
       description: 'The text content of section three',
-    }),
-    defineField({
-      name: 'sectionFourImage',
-      title: 'Section Four Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
-        },
-      ],
-    }),
-    defineField({
-      name: 'sectionFourTextContent',
-      title: 'Section Four Text Content',
-      type: 'string',
-      description: 'The text content of section four',
     }),
     defineField({
       name: 'sectionFiveImage',

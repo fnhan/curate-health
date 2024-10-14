@@ -2,10 +2,12 @@ import imageUrlBuilder from '@sanity/image-url';
 import Image from 'next/image';
 import { Loading } from 'components/Loading';
 import { dataset, projectId } from '../../../sanity/env';
+import Link from 'next/link';
+import styles from '../../../styles/CarouselNav.module.css';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-export default function OurStory({ ourStory }) {
+export default function OurStory({ ourStory, aboutPages }) {
 
   if (!ourStory) {
     return <Loading />;
@@ -21,7 +23,6 @@ export default function OurStory({ ourStory }) {
     sectionTwoTextContent,
     sectionThreeTextContent,
     sectionThreeTitle,
-    sectionFourTextContent,
     sectionFiveTextContent,
     sectionFiveTitle,
     sectionSixTextContent,
@@ -30,9 +31,7 @@ export default function OurStory({ ourStory }) {
     sectionSevenTextContent,
     sectionSevenTitle,
     sectionOneImage,
-    sectionTwoImage,
     sectionThreeImage,
-    sectionFourImage,
     sectionFiveImage,
     sectionSixImage,
     sectionSevenBgImage,
@@ -41,7 +40,7 @@ export default function OurStory({ ourStory }) {
 
   return (
     <div className='flex flex-col'>
-      <section id="headerSection" className='relative bg-white flex justify-center font-light'>
+      <section id="headerSection" className='relative bg-white font-light'>
         <Image
           loading='lazy'
           width={608}
@@ -52,8 +51,8 @@ export default function OurStory({ ourStory }) {
         />
         <div className='absolute inset-0 flex flex-col pt-12 bg-secondary 
       h-[450px] md:h-[412px] lg:h-[520px] top-[50px] md:top-[250px]'>
-          <h1 className='block md:hidden text-2xl md:text-4xl leading-8 md:leading-10 ml-[32px] md:ml-[60px] pb-4 md:pb-6'>{headerTitle}</h1>
-          <h1 className='hidden md:block w-[798px] text-7xl ml-[160px] top-[408px] pb-8'>{headerTitleDesktop}</h1>
+          <h1 className='block md:hidden text-2xl leading-8 ml-[32px] pb-4'>{headerTitle}</h1>
+          <h1 className='hidden md:block w-[798px] md:text-4xl lg:text-7xl lg:ml-[160px] top-[408px] pb-8 md:leading-10 md:ml-[60px] md:pb-6'>{headerTitleDesktop}</h1>
           <p className='hidden lg:block leading-7 text-base w-[832px] 
           ml-[160px]'
           >
@@ -65,17 +64,59 @@ export default function OurStory({ ourStory }) {
             {headerSubtitle}
           </p>
         </div>
+        <div className='bg-[#C3C7BB] bg-opacity-50 backdrop-blur-3xl h-[78px] mt-[500px] md:mt-[662px] lg:mt-[770px]'>
+          <div className='bg-[#C3C7BB] bg-opacity-50 backdrop-blur-3xl h-[78px]'>
+            <div
+              className={`container whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}>
+              <div className='flex'>
+                <div className=' -mr-8'>
+                  <div className='p-1 group'>
+                    <Link href='/about'>
+                      <div className='flex bg-transparent border-none'>
+                        <div
+                          className='p-6 text-black font-light font-Poppins text-[12px] lg:text-[14px] leading-[14px] underline'>
+                          About
+                          <div
+                            className='-mt-1 bg-black h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
+                        </div>
+                        <div className='text-black font-light -ml-6 p-6 mx-3 lg:inline leading-[14px]'>
+                          |
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+                {aboutPages.map((aboutPage, index) => (
+                  <div key={index}>
+                    <div className='p-1 group'>
+                      <Link href={`/about/${aboutPage.slug}`}>
+                        <div
+                          className='bg-transparent border-none underline text-black'>
+                          <div className='-ml-4 -mr-4 items-center font-light font-Poppins justify-center p-6 text-black text-[12px] lg:text-[14px] leading-[14px]'>
+                            {aboutPage.title}
+                            <div
+                              className='-mt-1 bg-black h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
-      <section id="sectionOne" className='w-full font-light bg-white pt-[200px] md:pt-0 lg:pt-[1197px] grid grid-cols-2'>
+      <section id="sectionOne" className='w-full font-light bg-white pt-[200px] md:pt-0 lg:pt-[300px] grid grid-cols-2'>
         <Image
           loading='lazy'
           width={704}
           height={500}
           alt={`${sectionOneImage.alt}`}
           src={builder.image(sectionOneImage).width(704).height(500).url()}
-          className='hidden lg:block absolute inset-x-13 w-[704px] h-[500px]'
+          className='absolute inset-x-13 w-[704px] h-[500px] pt-14'
         />
-        <div className='hidden lg:block bg-secondary w-[608px] h-[429px] top-[200px]'>
+        <div className='bg-secondary w-[608px] h-[429px] top-[200px]'>
         </div>
         <div className='flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
           <h1 className='text-primary hidden lg:block text-[40px] py-14'>{sectionOneTitle}</h1>
@@ -86,14 +127,6 @@ export default function OurStory({ ourStory }) {
         </div>
       </section>
       <section id="sectionTwo" className='relative bg-white font-light pt-[40px] md:pt-[200px]'>
-        <Image
-          loading='lazy'
-          width={608}
-          height={997}
-          alt={`${sectionTwoImage.alt}`}
-          src={builder.image(sectionTwoImage).width(608).height(997).url()}
-          className='object-cover w-full h-[560px] md:w-[317px] lg:w-[448px] lg:h-[656px] md:ml-[60px] lg:ml-[160px]'
-        />
         <div className='absolute inset-0 pt-[60px] mt-[200px] md:pt-[200px] md:h-[264px] h-[216px]'>
           <p className='text-center italic text-2xl md:text-4xl lg:text-6xl text-primary leading-9 md:leading-[50px] lg:leading-[66px] 
           mx-[32px] md:mx-[60px] lg:w-[928px] lg:ml-[352px] top-48'
@@ -121,26 +154,9 @@ export default function OurStory({ ourStory }) {
             .height(500)
             .url()
           }
-          className='z-10 hidden lg:block absolute right-0 w-[704px] h-[500px]'
+          className='z-10 absolute right-0 w-[704px] h-[500px]'
         />
-        <div className='z-0 lg:block hidden absolute right-0 bg-secondary w-[608px] h-[429px]'>
-        </div>
-      </section>
-      <section id="sectionFour" className='relative bg-white font-light md:pt-[200px]'>
-        <Image
-          loading='lazy'
-          width={608}
-          height={997}
-          alt={`${sectionFourImage.alt}`}
-          src={builder.image(sectionFourImage).width(608).height(997).url()}
-          className='object-cover w-full h-[560px] md:w-[317px] lg:w-[448px] lg:h-[656px] md:ml-[60px] lg:ml-[160px] mt-[100px]'
-        />
-        <div className='absolute inset-0 pt-[60px] mt-[300px] md:pt-[200px] md:h-[264px] h-[216px]'>
-          <p className='text-center italic text-2xl md:text-4xl lg:text-6xl text-primary leading-9 md:leading-[50px] lg:leading-[66px] 
-          mx-[32px] md:mx-[60px] lg:w-[928px] lg:ml-[352px]'
-          >
-            {sectionFourTextContent}
-          </p>
+        <div className='z-0 absolute right-0 bg-secondary w-[608px] h-[429px]'>
         </div>
       </section>
       <section id="sectionFive" className='w-full font-light bg-white pt-[40px] md:pt-[180px] lg:pt-[200px] grid grid-cols-2'>
@@ -150,12 +166,12 @@ export default function OurStory({ ourStory }) {
           height={500}
           alt={`${sectionFiveImage.alt}`}
           src={builder.image(sectionFiveImage).width(704).height(500).url()}
-          className='hidden lg:block absolute inset-x-13 w-[704px] h-[500px]'
+          className='absolute inset-x-13 w-[704px] h-[500px]'
         />
-        <div className='hidden lg:block bg-secondary w-[608px] h-[429px] top-[200px]'>
+        <div className='bg-secondary w-[608px] h-[429px] top-[200px]'>
         </div>
         <div className='flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-0 w-[258px] md:w-[648px] lg:w-[544px] lg:h-[500px]'>
-          <h1 className='text-primary hidden lg:block text-[40px] py-14'>{sectionFiveTitle}</h1>
+          <h1 className='text-primary text-[40px] py-14'>{sectionFiveTitle}</h1>
           <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
           >
             {sectionFiveTextContent}
@@ -181,9 +197,9 @@ export default function OurStory({ ourStory }) {
             .height(500)
             .url()
           }
-          className='z-10 hidden lg:block absolute right-0 w-[704px] h-[500px]'
+          className='z-10 absolute right-0 w-[704px] h-[500px]'
         />
-        <div className='z-0 lg:block hidden absolute right-0 bg-secondary w-[608px] h-[429px]'>
+        <div className='z-0 absolute right-0 bg-secondary w-[608px] h-[429px]'>
         </div>
       </section>
       <section id="sectionSeven" className='relative bg-white h-full font-light md:pt-[180px] lg:pt-[200px] text-white'>

@@ -8,6 +8,7 @@ import { token } from '../../sanity/lib/token';
 import MissionAndValues from 'components/layout/About/MissionAndValues';
 
 type PageProps = {
+  aboutPages: SanityDocument;
   surveyLink: SanityDocument;
   navigation: SanityDocument;
   missionAndValues: SanityDocument;
@@ -23,7 +24,7 @@ export default function AboutOS(props: PageProps) {
       title={'Mission-And-Values'}
       navigation={props.navigation}
       footer={props.footer}>
-      <MissionAndValues missionAndValues={props.missionAndValues} />
+      <MissionAndValues missionAndValues={props.missionAndValues} aboutPages={props.aboutPages} />
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>

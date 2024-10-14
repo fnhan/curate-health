@@ -1,8 +1,8 @@
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'sustainability',
-  title: 'Sustainability Page',
+  name: 'sustainabilitySection',
+  title: 'Sustainabiliy Section',
   type: 'document',
   fields: [
     defineField({
@@ -22,8 +22,8 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'headerTopImage',
-      title: 'Sustainability Header Top Image',
+      name: 'bgImage',
+      title: 'Background image',
       type: 'image',
       options: {
         hotspot: true,
@@ -31,123 +31,32 @@ export default defineType({
       fields: [
         {
           name: 'alt',
-          type: 'string',
           title: 'Alternative Text',
+          type: 'string',
           description:
             'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
         },
       ],
     }),
     defineField({
-      name: 'headerBottomImage',
-      title: 'Sustainability Header Bottom Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
-        },
-      ],
+      name: 'sustainText',
+      title: 'Sustainability Text',
+      type: 'blockContent',
+      description: 'The main text displayed for Sustainability',
     }),
-    defineField({
-      name: 'headerTitle',
-      title: 'Header Title',
-      type: 'string',
-      description: 'Title of Sustainability page',
-    }),
-    defineField({
-      name: 'headerTextContent',
-      title: 'Header Text Content',
-      type: 'string',
-      description: 'Text content of header section on page',
-    }),
-    defineField({
-      name: 'sectionOneImage',
-      title: 'Section One Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
-        },
-      ],
-    }),
-    defineField({
-      name: 'sectionTwoImage',
-      title: 'Section Two Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
-        },
-      ],
-    }),
-    defineField({
-      name: 'sectionTwoTextContent',
-      title: 'Section Two Text Content',
-      type: 'string',
-      description: 'Text content of section two on page',
-    }),
-    defineField({
-      name: 'sectionThreeTextContent',
-      title: 'Section Three Text Content',
-      type: 'string',
-      description: 'Text content of section three on page',
-    }),
-    defineField({
-      name: 'sectionFourImage',
-      title: 'Section Four Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
-          description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
-        },
-      ],
-    }),
-
   ],
 
-  // preview: {
-  //   select: {
-  //     streetAddress: 'streetAddress',
-  //     postalAddress: 'postalAddress',
-  //     emailAddress: 'emailAddress',
-  //     phoneNumber: 'phoneNumber',
-  //     contactInfoImage: 'contactInfoImage',
-  //     hrefDirections: 'hrefDirections'
-  //   },
-  //   prepare(selection) {
-  //     const { streetAddress, postalAddress, emailAddress, phoneNumber, contactInfoImage, hrefDirections } = selection;
-  //     return {
-  //       title: 'Our Story ',
-  //       media: contactInfoImage,
-  //     };
-  //   },
-  // },
+  preview: {
+    select: {
+      bgImage: 'bgImage',
+      sustainText: 'sustainText.0.children.0.text',
+    },
+    prepare(selection) {
+      const { bgImage } = selection;
+      return {
+        title: 'Sustainabiliy Section',
+        media: bgImage,
+      };
+    },
+  },
 });

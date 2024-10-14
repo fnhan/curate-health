@@ -393,3 +393,86 @@ export const CONTACT_PAGE_QUERY = groq`{
   "navigation": ${NAVIGATION_QUERY},
   "surveyLink": ${SURVEY_LINK_QUERY}
 }`;
+
+export const OUR_STORY_QUERY = groq`*[_type == "ourStory"][0]{
+  headerTitle,
+  headerTitleDesktop,
+  headerSubtitle,
+  headerSubtitleDesktop,
+  sectionOneTextContent,
+  sectionOneTitle,
+  sectionTwoTextContent,
+  sectionThreeTextContent,
+  sectionThreeTitle,
+  sectionFourTextContent,
+  sectionFiveTextContent,
+  sectionFiveTitle,
+  sectionSixTextContent,
+  sectionSixTitle,
+  sectionSevenCta,
+  SectionSevenTextContent,
+  SectionSevenTitle,
+  "headerBgImage": {
+    "asset": headerBgImage.asset->{
+      _id,
+      url
+    },
+    "alt": headerBgImage.alt
+  },
+    "sectionSevenBgImage": {
+    "asset": sectionSevenBgImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionSevenBgImage.alt
+  },
+    "sectionSixImage": {
+    "asset": sectionSixImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionSixImage.alt
+  },
+      "sectionFiveImage": {
+    "asset": sectionFiveImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionFiveImage.alt
+  },
+      "sectionFourImage": {
+    "asset": sectionFourImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionFourImage.alt
+  },
+      "sectionThreeImage": {
+    "asset": sectionThreeImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionThreeImage.alt
+  },
+      "sectionTwoImage": {
+    "asset": sectionTwoImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionTwoImage.alt
+  },
+      "sectionOneImage": {
+    "asset": sectionOneImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionOneImage.alt
+  },
+}`;
+
+export const ABOUT_PAGE_QUERY = groq`{
+  "footer": ${FOOTER_QUERY},
+  "navigation": ${NAVIGATION_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY},
+  "ourStory": ${OUR_STORY_QUERY}
+}`;

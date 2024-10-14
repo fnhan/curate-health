@@ -1,35 +1,39 @@
 import { SanityDocument } from 'next-sanity';
 import Layout from '../../components/layout/layout';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
+import Newsletter from 'components/layout/Home/Newsletter';
+import OurStory from 'components/layout/About/OurStory';
+import { ABOUT_PAGE_QUERY } from '../../sanity/lib/queries';
+import { SanityDocument } from 'next-sanity';
 import { getClient } from '../../sanity/lib/client';
-import {
-  FOOTER_QUERY,
-  METADATA_BY_SLUG_QUERY,
-  MetaData_Slug,
-  NAVIGATION_QUERY,
-} from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
-import { GetStaticPaths } from 'next';
+type PageProps = {
+  surveyLink: SanityDocument;
+  navigation: SanityDocument;
+  ourStory: SanityDocument;
+  footer: SanityDocument;
+  draftMode: boolean;
+  token: string;
+};
 
-type meta = {};
+export default function About(props: PageProps) {
 
-export default function About({ meta, navigation, footer }) {
   return (
     <Layout
-      navigation={navigation}
-      footer={footer}
-      title={meta?.title || 'About'}
-      description={meta?.description || 'About us'}
-    >
-      About
+      title={'About'}
+      navigation={props.navigation}
+      footer={props.footer}>
+      <OurStory ourStory={props.ourStory} />
+      <SurveyLink surveyLink={props.surveyLink} />
+      <Newsletter />
     </Layout>
   );
 }
 
-export const getStaticProps = async ({ params, preview = false }) => {
-  const client = getClient(preview ? token : undefined);
-  const navigation = await client.fetch(NAVIGATION_QUERY);
-  const footer = await client.fetch(FOOTER_QUERY);
+export const getStaticProps = async ({ draftMode = false }) => {
+  const client = getClient(draftMode ? token : undefined);
+  const allData = await client.fetch(ABOUT_PAGE_QUERY);
 
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
@@ -39,11 +43,9 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
   return {
     props: {
-      navigation,
-      footer,
-      meta,
-      draftMode: preview,
-      token: preview ? token : '',
+      ...allData,
+      draftMode,
+      token: draftMode ? token : '',
     },
   };
 };

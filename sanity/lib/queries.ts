@@ -321,6 +321,12 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
   }
 }`;
 
+export const POPUP_CONTENT_QUERY = groq`*[_type == "popup" && isActive == true][0]{
+  title,
+  content,
+  isActive,
+}`;
+
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
   "posts": ${POSTS_QUERY}{
@@ -343,6 +349,7 @@ export const HOME_PAGE_QUERY = groq`{
   "termsOfUse": ${TERMS_OF_USE_QUERY},
   "privacy": ${PRIVACY_QUERY},
   "accessibility": ${ACCESSIBILITY_QUERY},
+  "popup": ${POPUP_CONTENT_QUERY},
   
 }`;
 

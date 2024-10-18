@@ -27,7 +27,7 @@ module.exports = {
         'hero-image': "url('/images/leaf-background.png')",
       },
       fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
+        poppins: ['Poppins', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -79,10 +79,15 @@ module.exports = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 },
         },
+        appear: {
+          from: { opacity: 0 },
+          to: { opacity: 100 },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        appear: 'appear 0.5s ease-in-out',
       },
     },
   },

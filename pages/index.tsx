@@ -10,6 +10,7 @@ import Sustainability from 'components/layout/Home/Sustainability';
 import Newsletter from 'components/layout/Home/TEMP-Newsletter';
 import Layout from 'components/layout/layout';
 import SurveyLink from 'components/layout/Survey/SurveyLink';
+import PopupBanner from 'components/layout/Popup-banner';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import { getClient } from '../sanity/lib/client';
@@ -31,6 +32,7 @@ type PageProps = {
   sustainabilitySection: SanityDocument[];
   surveyLink: SanityDocument[];
   navigation: SanityDocument[];
+  popup: SanityDocument[];
   meta: SanityDocument;
 };
 
@@ -61,6 +63,7 @@ export default function Index(props: PageProps) {
       footer={props.footer}
       description={props.meta?.description || 'Description'}
     >
+      <PopupBanner props={props.popup}></PopupBanner>
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />
       <Clinic clinicSection={props.clinicSection} />

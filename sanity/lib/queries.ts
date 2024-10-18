@@ -3,7 +3,7 @@ import { groq } from 'next-sanity';
 export const POSTS_QUERY = groq`*[_type == "post" && defined(slug)]`;
 
 export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)][]{
-  "params": { "slug": slug.current }
+  "params": { "slug": slug.current },
 }`;
 
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
@@ -21,7 +21,7 @@ export const SUSTAINABILITY_SECTION_QUERY = `*[_type == "sustainabilitySection"]
     },
     alt
   },
-  sustainText,
+  sustainText
 }`;
 
 const HIGHLIGHT_QUERY = groq`*[_type == "highlight"][0]{
@@ -57,7 +57,11 @@ const CAFE_QUERY = groq`*[_type == "cafeSection"][0] {
   title,
   content,
   hoverLinkText,
-  hoverLinkHref
+  hoverLinkHref,
+  meta {
+    title,
+    description
+  }
 }`;
 
 export const OURSERVICES_QUERY = groq`*[_type == "ourServices"][0]{
@@ -74,7 +78,7 @@ export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   content
 }`;
 
-export const SERVICES_SLUG_QUERY = `*[_type == "service" && isActive == true && defined(slug.current)] {
+export const SERVICES_SLUG_QUERY = groq`*[_type == "service" && isActive == true && defined(slug.current)] {
   "params": {"slug": slug.current}
 }`;
 
@@ -85,6 +89,10 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     "above_image": above_image.asset->url,
     "image": image.asset->url,
     "altText": image.alt,
+    meta {
+    title,
+    description
+  },
     content,
     "treatments": *[_type == "treatment" && references(^._id)]{
       _id,
@@ -103,8 +111,47 @@ export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]
   },
   "image": image.asset->url,
   "altText": image.alt,
-  content
+  content,
+
 }`;
+
+export const METADATAS_QUERY = groq`*[_type == "metadatas"]{
+  datas
+}`;
+
+export const METADATASone_QUERY = groq`*[_type == "metadatas"][0]{
+  datas
+}`;
+
+export const MetaData_Slug = groq`*[_type == "metadatas" && defined(slug.current) ][0]{
+  "params": {"slug": slug.current}
+}`;
+
+// export const METADATA_BY_SLUG_QUERY = groq`
+//   *[_type == "metadatas"]{
+//     datas[slug.current == $slug]{
+//       title,
+//       description
+//     }
+//   }
+// `;
+
+export const METADATA_BY_SLUG_QUERY = groq`
+  *[_type == "metadatas"]{
+    "meta":datas[slug.current == $slug][0]{
+      title,
+      description
+    } 
+  }[0]
+`;
+
+export const ANOTHERMETADATA_BY_SLUG_QUERY = groq`
+  *[_type == "metadatas" && datas[slug.current == $slug][0]]{
+      title,
+      description
+    } 
+  
+`;
 
 export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{
   "slug": service->slug.current,
@@ -139,7 +186,11 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     framesTitle,
     frames[]{
       title,
-      content
+      content,
+    meta {
+      title,
+      description
+    }
     }
   }
 `;
@@ -195,11 +246,23 @@ export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
 
 export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
+  indepthblockinfo,
   description,
+  "slug" : slug.current,
+  "banner": banner.asset->url,
   "image": image.asset->url,
-  "altText": image.alt
+  "altText": image.alt,
+  meta {
+    title,
+    description
   }
-`;
+}`;
+
+export const PRODUCT_QUERY = groq`*[_type == "product" && slug.current == $slug][0]`;
+
+export const PRODUCT_SLUG_QUERY = groq`*[_type == "product" && isActive == true && defined(slug.current)] {
+  "params": {"slug": slug.current}
+}`;
 
 export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
   serviceLinks[]->{
@@ -215,17 +278,29 @@ export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
 
 export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"] {
   title,
-  content
+  content,
+  meta {
+    title,
+    description
+  }
 }`;
 
 export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
   title,
-  content
+  content,
+  meta {
+    title,
+    description
+  }
 }`;
 
 export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"] {
   title,
-  content
+  content,
+  meta {
+    title,
+    description
+  }
 }`;
 
 export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
@@ -239,7 +314,11 @@ export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
   cta,
   youformId,
   content,
-  bold
+  bold,
+  meta {
+    title,
+    description
+  }
 }`;
 
 export const HOME_PAGE_QUERY = groq`{
@@ -249,7 +328,7 @@ export const HOME_PAGE_QUERY = groq`{
     title,
     excerpt,
     slug,
-    publishedAt,
+    publishedAt
   },
   "highlightSection": ${HIGHLIGHT_QUERY},
   "clinicSection": ${CLINIC_QUERY},
@@ -262,8 +341,9 @@ export const HOME_PAGE_QUERY = groq`{
   "surveyLink": ${SURVEY_LINK_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "termsOfUse": ${TERMS_OF_USE_QUERY},
-  "privacy": ${PRIVACY_QUERY}  ,
-  "accessibility": ${ACCESSIBILITY_QUERY} 
+  "privacy": ${PRIVACY_QUERY},
+  "accessibility": ${ACCESSIBILITY_QUERY},
+  
 }`;
 
 export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
@@ -277,6 +357,10 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
       url
     },
     "alt": contactInfoImage.alt
+  },
+  meta {
+    title,
+    description
   },
   hrefDirections
 }`;

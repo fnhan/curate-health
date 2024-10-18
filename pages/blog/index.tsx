@@ -20,11 +20,17 @@ type PageProps = {
   navigation: SanityDocument;
   draftMode: boolean;
   token: string;
+  description: string;
 };
 
 export default function BlogPage(props: PageProps) {
   return (
-    <Layout navigation={props.navigation} footer={props.footer} title={'Blog'}>
+    <Layout
+      navigation={props.navigation}
+      footer={props.footer}
+      title={'Blog'}
+      description={props.description}
+    >
       {props.draftMode ? (
         <PostsPreview posts={props.posts} />
       ) : (

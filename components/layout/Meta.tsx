@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { CMS_NAME, HOME_OG_IMAGE_URL } from '../../lib/constants';
 
-export default function Meta({ title }) {
+export default function Meta({ title, description }) {
   return (
     <Head>
       <link
@@ -32,7 +32,7 @@ export default function Meta({ title }) {
       <meta name='msapplication-config' content='/favicon/browserconfig.xml' />
       <meta name='theme-color' content='#000' />
       <link rel='alternate' type='application/rss+xml' href='/feed.xml' />
-      <meta name='description' content={'Curate Health'} />
+      <meta name='description' content={description} />
       <meta property='og:image' content={HOME_OG_IMAGE_URL} />
       <title>{title ? `${title} | Curate Health` : 'Curate Health'}</title>
       <script src="https://app.youform.com/widgets/widget.js"></script>

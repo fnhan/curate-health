@@ -5,7 +5,12 @@ import { token } from '../../sanity/lib/token';
 
 export default function Products({ navigation, footer }) {
   return (
-    <Layout navigation={navigation} footer={footer} title={'Products'}>
+    <Layout
+      navigation={navigation}
+      footer={footer}
+      title={'Products'}
+      description={''}
+    >
       Products
     </Layout>
   );

@@ -32,7 +32,8 @@ export default defineType({
       name: 'hrefDirections',
       title: 'href Directions',
       type: 'string',
-      description: 'URL/Link for actionable address (links to Google Maps when clicked)',
+      description:
+        'URL/Link for actionable address (links to Google Maps when clicked)',
     }),
     defineField({
       name: 'postalAddress',
@@ -52,6 +53,23 @@ export default defineType({
       type: 'string',
       description: 'The contact phone number for Curate Health',
     }),
+
+    defineField({
+      name: 'meta',
+      type: 'object',
+      fields: [
+        {
+          title: 'Title',
+          name: 'title',
+          type: 'string',
+        },
+        {
+          title: 'Description',
+          name: 'description',
+          type: 'string',
+        },
+      ],
+    }),
   ],
 
   preview: {
@@ -61,10 +79,17 @@ export default defineType({
       emailAddress: 'emailAddress',
       phoneNumber: 'phoneNumber',
       contactInfoImage: 'contactInfoImage',
-      hrefDirections: 'hrefDirections'
+      hrefDirections: 'hrefDirections',
     },
     prepare(selection) {
-      const { streetAddress, postalAddress, emailAddress, phoneNumber, contactInfoImage, hrefDirections } = selection;
+      const {
+        streetAddress,
+        postalAddress,
+        emailAddress,
+        phoneNumber,
+        contactInfoImage,
+        hrefDirections,
+      } = selection;
       return {
         title: 'Contact Information',
         media: contactInfoImage,

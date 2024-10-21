@@ -6,7 +6,7 @@ import { token } from '../../sanity/lib/token';
 
 export default function privacy({ navigation, footer, privacy }) {
   return (
-    <Layout navigation={navigation} footer={footer} title={'Privacy'}>
+    <Layout navigation={navigation} footer={footer} title={'Privacy'} description= {'Default description for privacy'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
           <h1 className='font-denton font-bold text-xl mb-6'>{privacy.title}</h1>

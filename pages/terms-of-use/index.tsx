@@ -6,7 +6,7 @@ import { token } from '../../sanity/lib/token';
 
 export default function TermsOfUse({ navigation, footer, termsOfUse }) {
   return (
-    <Layout navigation={navigation} footer={footer} title={'Terms Of Use'}>
+    <Layout navigation={navigation} footer={footer} title={'Terms Of Use'} description= {'Default description for term of use'}>
       <section className='bg-white py-10 md:py-20'>
         <div className='text-black container'>
           <h1 className='font-bold text-xl mb-6'>{termsOfUse.title}</h1>

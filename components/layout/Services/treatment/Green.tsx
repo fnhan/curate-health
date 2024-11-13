@@ -2,7 +2,9 @@ import { PortableText } from '@portabletext/react';
 
 export default function Green({treatment}) {
   if (!treatment.greenTitle && !treatment.greenContent) {
-    return null;
+    return (
+      <div className='-mt-36'></div>
+    )
   }
 
   return (

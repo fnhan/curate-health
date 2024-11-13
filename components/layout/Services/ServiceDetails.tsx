@@ -29,7 +29,7 @@ export default function ServiceDetails({ service, treatments }) {
         width={1080}
         height={1440}
         src={builder
-          .image(service.image)
+          .image(service.hero_image)
           .width(1080)
           .height(1440)
           .quality(80)

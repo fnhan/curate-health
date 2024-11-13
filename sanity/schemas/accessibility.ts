@@ -14,7 +14,7 @@ export default defineType({
     defineField({
       name: 'content',
       title: 'Content',
-      type: 'text',
+      type: 'blockContent',
       description: 'The content of accessibility',
       validation: (Rule) => Rule.required(),
     }),

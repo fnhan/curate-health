@@ -86,8 +86,8 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   *[_type == "service" && slug.current == $slug][0]{
     title,
     "slug": slug.current,
-    "above_image": above_image.asset->url,
     "image": image.asset->url,
+    "hero_image": hero_image.asset->url,
     "altText": image.alt,
     meta {
     title,
@@ -276,7 +276,7 @@ export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
   }
 }`;
 
-export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"] {
+export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"][0] {
   title,
   content,
   meta {
@@ -285,7 +285,7 @@ export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"] {
   }
 }`;
 
-export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
+export const PRIVACY_QUERY = groq`*[_type == "privacy"][0] {
   title,
   content,
   meta {
@@ -294,7 +294,7 @@ export const PRIVACY_QUERY = groq`*[_type == "privacy"] {
   }
 }`;
 
-export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"] {
+export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"][0] {
   title,
   content,
   meta {

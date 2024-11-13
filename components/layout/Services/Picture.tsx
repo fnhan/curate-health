@@ -18,7 +18,7 @@ export default function Picture({ service }) {
             width={1080}
             height={1440}
             src={builder
-              .image(service.above_image)
+              .image(service.image)
               .width(1440)
               .height(760)
               .quality(80)

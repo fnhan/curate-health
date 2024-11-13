@@ -24,8 +24,8 @@ export default defineType({
       validation: (Rule) => Rule.required().error('A slug is required'),
     }),
     defineField({
-      name: 'above_image',
-      title: 'above_image',
+      name: 'image',
+      title: 'image',
       type: 'image',
       validation: (Rule) => Rule.required().error('An image is required'),
       options: {
@@ -42,8 +42,8 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'image',
-      title: 'image',
+      name: 'hero_image',
+      title: 'hero_image',
       type: 'image',
       validation: (Rule) => Rule.required().error('An image is required'),
       options: {

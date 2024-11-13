@@ -24,6 +24,7 @@ import ourServices from './schemas/ourServices';
 import surveyLink from './schemas/surveyLink';
 import treatments from './schemas/treatments';
 import metadatas from './schemas/metadatas';
+import popup from './schemas/popup';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -32,6 +33,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     clinicSection,
     cafeSection,
     services,
+    popup,
     productsSection,
     products,
     post,

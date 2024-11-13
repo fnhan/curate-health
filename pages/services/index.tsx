@@ -70,7 +70,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
       slug: '/services',
     })
   ).meta;
-  console.log(meta);
+
   return {
     props: {
       draftMode,

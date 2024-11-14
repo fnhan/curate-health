@@ -9,8 +9,8 @@ import Services from 'components/layout/Home/Services';
 import Sustainability from 'components/layout/Home/Sustainability';
 import Newsletter from 'components/layout/Home/TEMP-Newsletter';
 import Layout from 'components/layout/layout';
-import SurveyLink from 'components/layout/Survey/SurveyLink';
 import PopupBanner from 'components/layout/Popup-banner';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
 import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import { getClient } from '../sanity/lib/client';
@@ -45,24 +45,23 @@ export default function Index(props: PageProps) {
     return <HomePreview />;
   }
 
-  const comingSoon = process.env.NODE_ENV === 'production';
+  // const comingSoon = process.env.NODE_ENV === 'production';
 
-  if (comingSoon) {
-    return (
-      <main className='flex flex-col min-h-screen justify-center items-center text-white gap-16'>
-        <ComingSoon />
-        <Newsletter />
-      </main>
-    );
-  }
+  // if (comingSoon) {
+  //   return (
+  //     <main className='flex flex-col min-h-screen justify-center items-center text-white gap-16'>
+  //       <ComingSoon />
+  //       <Newsletter />
+  //     </main>
+  //   );
+  // }
 
   return (
     <Layout
       title={props.meta?.title || 'Home'}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.meta?.description || 'Description'}
-    >
+      description={props.meta?.description || 'Description'}>
       <PopupBanner props={props.popup}></PopupBanner>
       <Hero heroSection={props.heroSection} />
       <Highlight highlightSection={props.highlightSection} />

@@ -1,11 +1,12 @@
 import imageUrlBuilder from '@sanity/image-url';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone, MessageSquareShare } from 'lucide-react';
 import Image from 'next/image';
 import { dataset, projectId } from '../../../sanity/env';
+import { useEffect } from 'react';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
-export default function ContactInfo({ contactInfo }) {
+export default function ContactInfo({ contactInfo, feedbackLink }) {
   const {
     streetAddress,
     postalAddress,
@@ -14,6 +15,20 @@ export default function ContactInfo({ contactInfo }) {
     contactInfoImage,
     hrefDirections,
   } = contactInfo;
+
+  const { youformId, linkText } = feedbackLink
+
+  useEffect(() => {
+    // Load the YouForm script dynamically if it's not already loaded
+    const script = document.createElement('script');
+    script.src = 'https://embed.youform.com/js/youform.js'; // Add the correct YouForm script URL here
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const phNumDestructured = phoneNumber.toString().replace(/[^+\d]+/g, "");
 
@@ -84,6 +99,21 @@ export default function ContactInfo({ contactInfo }) {
                   target='_blank'
                   href={'tel:' + phNumDestructured}>
                   {phoneNumber}
+                </a>
+              </div>
+              <div className='flex gap-3'>
+                <MessageSquareShare className='w-[18px] h-[18px] md:w-[24px] md:h-[24px]' />
+                <h4 className='text-[10px] md:text-[14px] lg:text-[18px] not-italic pt-0.5 lg:pt-0 lg:-mt-0.5'>
+                  Feedback
+                </h4>
+              </div>
+              <div className='indent-8 md:indent-9 pb-4'>
+                <a
+                  className='text-[14px] md:text-[28px] lg:text-[32px] not-italic cursor-pointer'
+                  data-youform-open={youformId}
+                  data-youform-position="center"
+                >
+                  {linkText}
                 </a>
               </div>
             </address>

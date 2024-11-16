@@ -4,7 +4,6 @@ import { Loading } from 'components/Loading';
 import { dataset, projectId } from '../../../sanity/env';
 import Link from 'next/link';
 import styles from '../../../styles/CarouselNav.module.css';
-import BookAppointment from '../Buttons/BookAppointment';
 
 const builder = imageUrlBuilder({ projectId, dataset });
 

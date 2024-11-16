@@ -220,21 +220,4 @@ export default defineType({
 
   ],
 
-  // preview: {
-  //   select: {
-  //     streetAddress: 'streetAddress',
-  //     postalAddress: 'postalAddress',
-  //     emailAddress: 'emailAddress',
-  //     phoneNumber: 'phoneNumber',
-  //     contactInfoImage: 'contactInfoImage',
-  //     hrefDirections: 'hrefDirections'
-  //   },
-  //   prepare(selection) {
-  //     const { streetAddress, postalAddress, emailAddress, phoneNumber, contactInfoImage, hrefDirections } = selection;
-  //     return {
-  //       title: 'Our Story ',
-  //       media: contactInfoImage,
-  //     };
-  //   },
-  // },
 });

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Loading } from 'components/Loading';
 import { dataset, projectId } from '../../../sanity/env';
 import Link from 'next/link';
+import { Button } from 'components/ui/button';
 import styles from '../../../styles/CarouselNav.module.css';
 
 const builder = imageUrlBuilder({ projectId, dataset });
@@ -152,7 +153,7 @@ export default function Sustainability({ sustainability, aboutPages }) {
         />
         <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
-        <div className='pt-24 md:pt-12 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-2.5 w-[84%] lg:w-[2/5] lg:h-[500px]'>
+        <div className='pt-24 md:pt-12 lg:pt-0 lg:-mt-8 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-2.5 w-[84%] lg:w-[2/5] lg:h-[500px]'>
           <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-64 pt-14 py-4 md:py-14 lg:pt-0 lg:mb-12'>{sectionTwoTitle}</h1>
           <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
           >
@@ -195,7 +196,7 @@ export default function Sustainability({ sustainability, aboutPages }) {
         />
         <div className='bg-secondary w-[288px] h-[460px] md:w-[624px] md:h-[450px] lg:w-[608px] lg:h-[429px]'>
         </div>
-        <div className='pt-24 md:pt-12 lg:pt-0 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-2.5 w-[84%] lg:w-[2/5] lg:h-[500px]'>
+        <div className='pt-24 md:pt-12 lg:pt-0 lg:-mt-8 flex flex-col justify-center mx-[32px] md:mx-[60px] lg:mx-2.5 w-[84%] lg:w-[2/5] lg:h-[500px]'>
           <h1 className='text-primary text-base md:text-[32px] lg:text-[40px] md:pt-64 pt-14 py-4 md:py-14 lg:pt-0 lg:mb-12'>{sectionFourTitle}</h1>
           <p className='lg:col-span-1 lg:p-1 lg:mx-0 text-primary leading-5 md:leading-7 text-xs lg:text-base md:text-sm'
           >
@@ -263,7 +264,7 @@ export default function Sustainability({ sustainability, aboutPages }) {
           src={builder.image(sectionSevenBgImage).width(1440).height(1040).url()}
           className='object-cover w-full h-[1040px] md:h-[792px] lg:h-[1040px]'
         />
-        <div className='text-white absolute top-[30%] md:top-[34%] lg:top-[48%] lg:left-1/2 transform lg:-translate-x-1/2 flex flex-col bg-secondary 
+        <div className='text-white absolute top-[35%] md:top-[33%] lg:top-[35%] lg:left-1/2 transform lg:-translate-x-1/2 flex flex-col bg-secondary 
         w-3/4 lg:w-2/3 h-[413px] md:h-[487px] lg:h-[484px] 
         justify-center text-center'>
           <div className='flex flex-col px-2 md:px-[30px]'>
@@ -283,9 +284,13 @@ export default function Sustainability({ sustainability, aboutPages }) {
             <a
               href={esgLink}
               target="blank"
-              className='md:hover:underline text-xs md:text-sm lg:text-base self-start text:left lg:self-center text-left lg:text-center
-              pt-4 md:pt-6 lg:pt-10'>
-              {sectionSevenEsg}
+              className='pt-8 self-start lg:self-center'
+            >
+              <Button className='bg-white text-primary hover:text-white hover:bg-primary rounded-none duration-300 transition-all
+              text-xs md:text-base lg:text-xl leading-4 font-light'
+              >
+                {sectionSevenEsg}
+              </Button>
             </a>
           </div>
         </div>

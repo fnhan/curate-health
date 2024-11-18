@@ -6,6 +6,33 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'aboutLinks',
+      title: 'About Links',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'title',
+              title: 'About Link Title',
+              description: 'What will appear in the navigation menu',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'href',
+              title: 'About Link',
+              description:
+                'The url to the About page you want to link to. (Example: our-story for /about/our-story)',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
+          ],
+        }
+      ]
+    }),
+    defineField({
       name: 'serviceLinks',
       title: 'Service Links',
       type: 'array',
@@ -57,6 +84,13 @@ export default defineType({
                 },
               ],
             }),
+            {
+              name: 'isAboutLinks',
+              title: 'Is About Links Placeholder',
+              type: 'boolean',
+              description:
+                'Check this if you want to render the About Links at this position.',
+            },
           ],
         },
       ],

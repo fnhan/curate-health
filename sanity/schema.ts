@@ -22,7 +22,12 @@ import contactInfo from './schemas/contactInfo';
 import contactDetails from './schemas/contactDetails';
 import ourServices from './schemas/ourServices';
 import surveyLink from './schemas/surveyLink';
+import ourStory from './schemas/ourStory';
+import missionAndValues from './schemas/missionAndValues';
+import sustainability from './schemas/sustainability';
+import aboutPages from './schemas/aboutPages';
 import treatments from './schemas/treatments';
+import pillarsOfHealth from './schemas/pillarsOfHealth';
 import metadatas from './schemas/metadatas';
 import popup from './schemas/popup';
 import feedbackLink from './schemas/feedbackLink';
@@ -50,10 +55,13 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     accessibility,
     contactInfo,
     contactDetails,
-    treatments,
-    ourServices,
     surveyLink,
+    ourStory,
+    missionAndValues,
     metadatas,
+    sustainability,
+    aboutPages,
+    pillarsOfHealth,
     feedbackLink
   ],
 };

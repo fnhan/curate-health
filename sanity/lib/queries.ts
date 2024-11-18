@@ -269,10 +269,15 @@ export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
     title,
     "slug": slug.current
   },
+  aboutLinks[]{
+    title,
+    href,
+  },
   navItems[]{
     linkText,
     href,
-    isServiceLinks
+    isServiceLinks,
+    isAboutLinks
   }
 }`;
 
@@ -400,3 +405,270 @@ export const CONTACT_PAGE_QUERY = groq`{
   "surveyLink": ${SURVEY_LINK_QUERY},
   "feedbackLink": ${FEEDBACK_LINK_QUERY}
 }`;
+
+export const ABOUT_PAGES_QUERY = groq`*[_type == "aboutPage" && isActive == true] | order(_createdAt desc){
+  title,
+  "slug": slug.current,
+}`;
+
+export const OUR_STORY_QUERY = groq`*[_type == "ourStory"][0]{
+  headerTitle,
+  headerSubtitle,
+  sectionOneTextContent,
+  sectionOneTitle,
+  sectionTwoTextContent,
+  sectionThreeTextContent,
+  sectionThreeTitle,
+  sectionFiveTextContent,
+  sectionFiveTitle,
+  sectionSixTextContent,
+  sectionSixTitle,
+  sectionSevenCta,
+  ctaUrl,
+  sectionSevenTextContent,
+  sectionSevenTitle,
+    "quotationMark": {
+    "asset": quotationMark.asset->{
+      _id,
+      url
+    },
+    "alt": quotationMark.alt
+  },
+  "headerBgImage": {
+    "asset": headerBgImage.asset->{
+      _id,
+      url
+    },
+    "alt": headerBgImage.alt
+  },
+    "sectionSevenBgImage": {
+    "asset": sectionSevenBgImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionSevenBgImage.alt
+  },
+    "sectionFiveImage": {
+    "asset": sectionFiveImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionFiveImage.alt
+  },
+      "sectionSixImage": {
+    "asset": sectionSixImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionSixImage.alt
+  },
+      "sectionFourImage": {
+    "asset": sectionFourImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionFourImage.alt
+  },
+      "sectionThreeImage": {
+    "asset": sectionThreeImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionThreeImage.alt
+  },
+      "sectionTwoImage": {
+    "asset": sectionTwoImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionTwoImage.alt
+  },
+      "sectionOneImage": {
+    "asset": sectionOneImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionOneImage.alt
+  },
+}`;
+
+export const OUR_STORY_PAGE_QUERY = groq`{
+  "aboutPages": ${ABOUT_PAGES_QUERY},
+  "footer": ${FOOTER_QUERY},
+  "navigation": ${NAVIGATION_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY},
+  "ourStory": ${OUR_STORY_QUERY}
+}`;
+
+export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues"][0]{
+  purposeTextContent,
+  purposeTitle,
+  missionTitle,
+  missionTextContent,
+  visionTitle,
+  visionTextContent,
+  "headerImage": {
+    "asset": headerImage.asset->{
+      _id,
+      url
+    },
+    "alt": headerImage.alt
+  },
+    "purposeImage": {
+    "asset": purposeImage.asset->{
+      _id,
+      url
+    },
+    "alt": purposeImage.alt
+  },
+    "missionImage": {
+    "asset": missionImage.asset->{
+      _id,
+      url
+    },
+    "alt": missionImage.alt
+  },
+      "visionImage": {
+    "asset": visionImage.asset->{
+      _id,
+      url
+    },
+    "alt": visionImage.alt
+  },
+
+}`;
+
+export const MISSION_AND_VALUES_PAGE_QUERY = groq`{
+  "aboutPages": ${ABOUT_PAGES_QUERY},
+  "footer": ${FOOTER_QUERY},
+  "navigation": ${NAVIGATION_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY},
+  "missionAndValues": ${MISSION_AND_VALUES_QUERY}
+}`;
+
+export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{
+  headerTitle,
+  headerTitleDesktop,
+  headerTextContent,
+  sectionOneTitle,
+  sectionOneTextContent,
+  sectionTwoTitle,
+  sectionTwoTextContent,
+  sectionThreeTitle,
+  sectionThreeTextContent,
+  sectionFourTitle,
+  sectionFourTextContent,
+  sectionFiveTitle,
+  sectionFiveTextContent,
+  sectionSixTitle,
+  sectionSixTextContent,
+  sectionSixSubtitleOne,
+  sectionSixSubtitleOneText,
+  sectionSixSubtitleTwo,
+  sectionSixSubtitleTwoText,
+  sectionSixSubtitleThree,
+  sectionSixSubtitleThreeText,
+  sectionSevenTitle,
+  sectionSevenTextContent,
+  sectionSevenCta,
+  ctaUrl,
+  sectionSevenEsg,
+  "esgLink": esgLink.asset->url,
+  "headerImage": {
+    "asset": headerImage.asset->{
+      _id,
+      url
+    },
+    "alt": headerImage.alt
+  },
+      "sectionFourImage": {
+    "asset": sectionFourImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionFourImage.alt
+  },
+        "sectionThreeImage": {
+    "asset": sectionThreeImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionThreeImage.alt
+  },
+      "sectionTwoImage": {
+    "asset": sectionTwoImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionTwoImage.alt
+  },
+      "sectionOneImage": {
+    "asset": sectionOneImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionOneImage.alt
+  },
+        "sectionFiveImage": {
+    "asset": sectionFiveImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionFiveImage.alt
+  },
+        "sectionSixImage": {
+    "asset": sectionSixImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionSixImage.alt
+  },
+        "sectionSevenBgImage": {
+    "asset": sectionSevenBgImage.asset->{
+      _id,
+      url
+    },
+    "alt": sectionSevenBgImage.alt
+  },
+
+}`;
+
+export const SUSTAINABILITY_PAGE_QUERY = groq`{
+  "aboutPages": ${ABOUT_PAGES_QUERY},
+  "footer": ${FOOTER_QUERY},
+  "navigation": ${NAVIGATION_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY},
+  "sustainability": ${SUSTAINABILITY_QUERY}
+}`;
+
+export const PILLARS_OF_HEALTH_QUERY = groq`*[_type == "pillarsOfHealth"][0]{
+  pageTitle,
+  pageSubtitle,
+  mentalHealthTitle,
+  mentalHealthTextContent,
+  emotionalHealthTitle,
+  emotionalHealthTextContent,
+  socialHealthTitle,
+  socialHealthTextContent,
+  spiritualHealthTitle,
+  spiritualHealthTextContent,
+  physicalHealthTitle,
+  physicalHealthTextContent,
+    "headerBgImage": {
+    "asset": headerBgImage.asset->{
+      _id,
+      url
+    },
+    "alt": headerBgImage.alt
+  },
+  }`;
+
+export const PILLARS_OF_HEALTH_PAGE_QUERY = groq`{
+    "aboutPages": ${ABOUT_PAGES_QUERY},
+    "footer": ${FOOTER_QUERY},
+    "navigation": ${NAVIGATION_QUERY},
+    "surveyLink": ${SURVEY_LINK_QUERY},
+    "pillarsOfHealth": ${PILLARS_OF_HEALTH_QUERY}
+  }`;
+
+

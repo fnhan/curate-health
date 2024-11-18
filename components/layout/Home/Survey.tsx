@@ -16,7 +16,7 @@ export default function SurveyLink({ surveyLink }) {
         src={builder.image(bgImage).width(1440).height(594).url()}
         className='w-full h-full object-cover'
       />
-      <div className='absolute inset-0 flex items-center justify-center p-4'>
+      <div className='absolute inset-0 flex items-center justify-center p-4 mt-10'>
         <a
           data-youform-open={youformId}
           data-youform-position='center'

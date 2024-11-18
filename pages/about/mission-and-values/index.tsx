@@ -1,33 +1,37 @@
-import Layout from '../../components/layout/layout';
-import SurveyLink from 'components/layout/Survey/SurveyLink';
+import MissionAndValues from 'components/layout/About/MissionAndValues';
 import Newsletter from 'components/layout/Home/Newsletter';
-import { PILLARS_OF_HEALTH_PAGE_QUERY, METADATA_BY_SLUG_QUERY } from '../../sanity/lib/queries';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
 import { SanityDocument } from 'next-sanity';
-import { getClient } from '../../sanity/lib/client';
-import { token } from '../../sanity/lib/token';
-import PillarsofHealth from 'components/layout/About/PillarsOfHealth';
+import Layout from '../../../components/layout/layout';
+import { getClient } from '../../../sanity/lib/client';
+import {
+  METADATA_BY_SLUG_QUERY,
+  MISSION_AND_VALUES_PAGE_QUERY,
+} from '../../../sanity/lib/queries';
+import { token } from '../../../sanity/lib/token';
 
 type PageProps = {
   aboutPages: SanityDocument;
   surveyLink: SanityDocument;
   navigation: SanityDocument;
-  pillarsOfHealth: SanityDocument;
+  missionAndValues: SanityDocument;
   footer: SanityDocument;
   description: SanityDocument;
   draftMode: boolean;
   token: string;
 };
 
-export default function PillarsHealth(props: PageProps) {
-
+export default function MissionValues(props: PageProps) {
   return (
     <Layout
-      title={'Pillars-of-Health'}
+      title={'Mission-And-Values'}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.description}
-      >
-      <PillarsofHealth pillarsOfHealth={props.pillarsOfHealth} aboutPages={props.aboutPages} />
+      description={props.description}>
+      <MissionAndValues
+        missionAndValues={props.missionAndValues}
+        aboutPages={props.aboutPages}
+      />
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
     </Layout>
@@ -36,11 +40,11 @@ export default function PillarsHealth(props: PageProps) {
 
 export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
-  const allData = await client.fetch(PILLARS_OF_HEALTH_PAGE_QUERY);
+  const allData = await client.fetch(MISSION_AND_VALUES_PAGE_QUERY);
 
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: '/about/pillars-of-health',
+      slug: '/about/mission-and-values',
     })
   ).meta;
 
@@ -48,6 +52,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
     props: {
       ...allData,
       draftMode,
+      meta,
       token: draftMode ? token : '',
     },
   };

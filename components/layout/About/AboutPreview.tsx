@@ -1,11 +1,10 @@
-import { Loading } from 'components/Loading';
-import SurveyLink from '../Survey/SurveyLink';
-// import OurStory from '../About/OurStory';
-import Newsletter from '../Home/Newsletter';
 import Layout from 'components/layout/layout';
+import { Loading } from 'components/Loading';
 import { SanityDocument } from 'next-sanity';
 import { useLiveQuery } from 'next-sanity/preview';
 import { OUR_STORY_PAGE_QUERY } from '../../../sanity/lib/queries';
+import Newsletter from '../Home/Newsletter';
+import SurveyLink from '../Survey/SurveyLink';
 
 type AboutPageData = {
   ourStory: SanityDocument;
@@ -15,7 +14,10 @@ type AboutPageData = {
 };
 
 export default function AboutPreview() {
-  const [data, isLoading] = useLiveQuery<AboutPageData>(null, OUR_STORY_PAGE_QUERY);
+  const [data, isLoading] = useLiveQuery<AboutPageData>(
+    null,
+    OUR_STORY_PAGE_QUERY
+  );
 
   if (isLoading) {
     return (
@@ -30,7 +32,11 @@ export default function AboutPreview() {
   }
 
   return (
-    <Layout title='About' navigation={data.navigation} footer={data.footer}>
+    <Layout
+      title='About'
+      description='About'
+      navigation={data.navigation}
+      footer={data.footer}>
       <SurveyLink surveyLink={data.surveyLink} />
       <Newsletter />
     </Layout>

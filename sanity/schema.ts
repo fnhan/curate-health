@@ -25,6 +25,7 @@ import surveyLink from './schemas/surveyLink';
 import treatments from './schemas/treatments';
 import metadatas from './schemas/metadatas';
 import popup from './schemas/popup';
+import feedbackLink from './schemas/feedbackLink';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -53,5 +54,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     ourServices,
     surveyLink,
     metadatas,
+    feedbackLink
   ],
 };

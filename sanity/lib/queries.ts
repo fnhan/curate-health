@@ -386,10 +386,17 @@ export const CONTACT_DETAILS_QUERY = groq`*[_type == "contactDetails"][0]{
   href
 }`;
 
+export const FEEDBACK_LINK_QUERY = groq`*[_type == "feedbackLink"][0]{
+  linkText,
+  youformId
+}`;
+
+
 export const CONTACT_PAGE_QUERY = groq`{
   "contactInfo": ${CONTACT_INFO_QUERY},
   "contactDetails": ${CONTACT_DETAILS_QUERY},
   "footer": ${FOOTER_QUERY},
   "navigation": ${NAVIGATION_QUERY},
-  "surveyLink": ${SURVEY_LINK_QUERY}
+  "surveyLink": ${SURVEY_LINK_QUERY},
+  "feedbackLink": ${FEEDBACK_LINK_QUERY}
 }`;

@@ -3,7 +3,6 @@ import ContactInfo from 'components/layout/Contact/ContactInfo';
 import Newsletter from 'components/layout/Home/Newsletter';
 import SurveyLink from 'components/layout/Survey/SurveyLink';
 import Layout from 'components/layout/layout';
-import { SanityDocument } from 'next-sanity';
 import dynamic from 'next/dynamic';
 import { getClient } from '../../sanity/lib/client';
 import {
@@ -12,6 +11,12 @@ import {
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
+type SanityDocument = {
+  _id: string;
+  _type: string;
+  [key: string]: any;
+};
+
 type PageProps = {
   contactInfo: SanityDocument;
   contactDetails: SanityDocument;
@@ -19,6 +24,7 @@ type PageProps = {
   navigation: SanityDocument;
   footer: SanityDocument;
   draftMode: boolean;
+  feedbackLink: SanityDocument;
   token: string;
   meta: SanityDocument;
 };
@@ -39,7 +45,7 @@ export default function Index(props: PageProps) {
       footer={props.footer}
       description={props.meta?.description || 'Contact page'}
     >
-      <ContactInfo contactInfo={props.contactInfo} />
+      <ContactInfo contactInfo={props.contactInfo} feedbackLink={props.feedbackLink} />
       <ContactDetails contactDetails={props.contactDetails} />
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
@@ -50,11 +56,13 @@ export default function Index(props: PageProps) {
 export const getStaticProps = async ({ draftMode = false }) => {
   const client = getClient(draftMode ? token : undefined);
   const allData = await client.fetch(CONTACT_PAGE_QUERY);
+
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
       slug: '/contact',
     })
   ).meta;
+
   return {
     props: {
       ...allData,
@@ -64,3 +72,4 @@ export const getStaticProps = async ({ draftMode = false }) => {
     },
   };
 };
+

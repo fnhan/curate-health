@@ -30,6 +30,7 @@ import treatments from './schemas/treatments';
 import pillarsOfHealth from './schemas/pillarsOfHealth';
 import metadatas from './schemas/metadatas';
 import popup from './schemas/popup';
+import feedbackLink from './schemas/feedbackLink';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -61,5 +62,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     sustainability,
     aboutPages,
     pillarsOfHealth,
+    feedbackLink
   ],
 };

@@ -1,39 +1,46 @@
 import { type SchemaTypeDefinition } from 'sanity';
 
+import aboutPages from './schemas/aboutPages';
+import accessibility from './schemas/accessibility';
 import author from './schemas/author';
 import blockContent from './schemas/blockContent';
 import cafeSection from './schemas/cafeSection';
 import category from './schemas/category';
 import clinicSection from './schemas/clinicSection';
+import contactDetails from './schemas/contactDetails';
+import contactInfo from './schemas/contactInfo';
+import feedbackLink from './schemas/feedbackLink';
 import footer from './schemas/footer';
 import heroSection from './schemas/heroSection';
 import highlight from './schemas/highlight';
+import legalPages from './schemas/legalPages';
+import metadatas from './schemas/metadatas';
+import missionAndValues from './schemas/missionAndValues';
 import navigation from './schemas/navigation';
 import newsletter from './schemas/newsletter';
+import ourStory from './schemas/ourStory';
+import pageMetadata from './schemas/pageMetadata';
+import pillarsOfHealth from './schemas/pillarsOfHealth';
+import popup from './schemas/popup';
 import post from './schemas/post';
+import privacy from './schemas/privacy';
 import products from './schemas/products';
 import productsSection from './schemas/productsSection';
 import services from './schemas/services';
+import siteMeta from './schemas/siteMeta';
+import siteSettings from './schemas/siteSettings';
+import socialMeta from './schemas/socialMeta';
+import surveyLink from './schemas/surveyLink';
+import sustainability from './schemas/sustainability';
 import sustainabilitySection from './schemas/sustainabilitySection';
 import termsOfUse from './schemas/termsOfUse';
-import privacy from './schemas/privacy';
-import accessibility from './schemas/accessibility';
-import contactInfo from './schemas/contactInfo';
-import contactDetails from './schemas/contactDetails';
-import ourServices from './schemas/ourServices';
-import surveyLink from './schemas/surveyLink';
-import ourStory from './schemas/ourStory';
-import missionAndValues from './schemas/missionAndValues';
-import sustainability from './schemas/sustainability';
-import aboutPages from './schemas/aboutPages';
-import treatments from './schemas/treatments';
-import pillarsOfHealth from './schemas/pillarsOfHealth';
-import metadatas from './schemas/metadatas';
-import popup from './schemas/popup';
-import feedbackLink from './schemas/feedbackLink';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
+    siteSettings,
+    siteMeta,
+    socialMeta,
+    pageMetadata,
     heroSection,
     highlight,
     clinicSection,
@@ -62,6 +69,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     sustainability,
     aboutPages,
     pillarsOfHealth,
-    feedbackLink
+    feedbackLink,
+    legalPages,
   ],
 };

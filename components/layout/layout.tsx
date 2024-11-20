@@ -10,11 +10,13 @@ export default function Layout({
   description,
 }) {
   return (
-    <>
+    <div className='flex flex-col min-h-screen'>
       <Meta title={title} description={description || 'description'} />
       <Nav navigation={navigation} />
-      <main className='flex-1 text-white antialiased'>{children}</main>
+      <main className='flex-1 text-white antialiased flex flex-col'>
+        {children}
+      </main>
       <Footer footer={footer} />
-    </>
+    </div>
   );
 }

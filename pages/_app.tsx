@@ -3,6 +3,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Toaster } from 'components/ui/toaster';
 import { AppProps } from 'next/app';
 import { Poppins } from 'next/font/google';
+import posthog from 'posthog-js';
+import { PostHogProvider } from 'posthog-js/react';
 import { lazy, Suspense } from 'react';
 import '../styles/index.css';
 
@@ -21,6 +23,18 @@ const PreviewProvider = lazy(
 );
 const VisualEditing = lazy(() => import('../components/sanity/VisualEditing'));
 
+if (typeof window !== 'undefined') {
+  // checks that we are client-side
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+    api_host: '/ingest',
+    ui_host: 'https://us.posthog.com',
+    person_profiles: 'always',
+    loaded: (posthog) => {
+      if (process.env.NODE_ENV === 'development') posthog.debug(); // debug mode in development
+    },
+  });
+}
+
 export default function App({
   Component,
   pageProps,
@@ -28,7 +42,7 @@ export default function App({
   const { draftMode, token } = pageProps;
 
   return (
-    <>
+    <PostHogProvider client={posthog}>
       <Toaster />
       <SpeedInsights />
       <Analytics />
@@ -46,6 +60,6 @@ export default function App({
           <Component {...pageProps} />
         </div>
       )}
-    </>
+    </PostHogProvider>
   );
 }

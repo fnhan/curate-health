@@ -1,6 +1,7 @@
 import { type SchemaTypeDefinition } from 'sanity';
 
 import aboutPages from './schemas/aboutPages';
+import aboutSection from './schemas/aboutSection';
 import accessibility from './schemas/accessibility';
 import author from './schemas/author';
 import blockContent from './schemas/blockContent';
@@ -44,6 +45,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     pageMetadata,
     heroSection,
     highlight,
+    aboutSection,
     clinicSection,
     cafeSection,
     services,

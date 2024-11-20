@@ -1,13 +1,13 @@
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'highlight',
-  title: 'DELETE | About Us Section',
+  name: 'aboutSection',
+  title: 'Home | About Section',
   type: 'document',
   fields: [
     defineField({
-      name: 'highlightImage',
-      title: 'Highlight Image',
+      name: 'aboutImage',
+      title: 'About Image',
       type: 'image',
       options: {
         hotspot: true,
@@ -26,13 +26,13 @@ export default defineType({
       name: 'title1',
       title: 'First Title',
       type: 'string',
-      description: 'The first title displayed in the Highlight section',
+      description: 'The first title displayed in the About section',
     }),
     defineField({
       name: 'title2',
       title: 'Second Title',
       type: 'string',
-      description: 'The second title displayed in the Highlight section',
+      description: 'The second title displayed in the About section',
     }),
     defineField({
       name: 'hoverLinkText',
@@ -52,13 +52,13 @@ export default defineType({
     select: {
       title1: 'title1',
       title2: 'title2',
-      highlightImage: 'highlightImage',
+      aboutImage: 'aboutImage',
     },
     prepare(selection) {
-      const { title1, title2, highlightImage } = selection;
+      const { aboutImage } = selection;
       return {
-        title: 'Highlight Section',
-        media: highlightImage,
+        title: 'About Section',
+        media: aboutImage,
       };
     },
   },

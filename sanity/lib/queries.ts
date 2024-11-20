@@ -33,6 +33,20 @@ const HIGHLIGHT_QUERY = groq`*[_type == "highlight"][0]{
   hoverLinkHref
 }`;
 
+const ABOUT_SECTION_QUERY = groq`*[_type == "aboutSection"][0]{
+  title1,
+  title2,
+  "aboutImage": {
+    "asset": aboutImage.asset->{
+      _id,
+      url
+    },
+    "alt": aboutImage.alt
+  },
+  hoverLinkText,
+  hoverLinkHref
+}`;
+
 const CLINIC_QUERY = groq`*[_type == "clinic"][0]{
   "clinicImage": clinicImage.asset->{
     _id,
@@ -760,6 +774,7 @@ export const HOME_PAGE_QUERY = groq`{
     publishedAt
   },
   "highlightSection": ${HIGHLIGHT_QUERY},
+  "aboutSection": ${ABOUT_SECTION_QUERY},
   "clinicSection": ${CLINIC_QUERY},
   "cafeSection": ${CAFE_QUERY},
   "services": ${SERVICES_QUERY},

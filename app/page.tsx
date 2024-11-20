@@ -1,3 +1,4 @@
+import AboutSection from 'components/layout/home-page/about-section';
 import HeroSection from 'components/layout/home-page/hero-section';
 import Layout from 'components/shared/layout';
 import { HOME_PAGE_QUERYResult } from '../sanity.types';
@@ -9,9 +10,7 @@ export default async function Home() {
     query: HOME_PAGE_QUERY,
   });
 
-  const { layout, heroSection, primaryCTAButton } = homePage;
-
-  console.log('primaryCTAButton', primaryCTAButton);
+  const { layout, heroSection, primaryCTAButton, aboutSection } = homePage;
 
   return (
     <Layout layout={layout}>
@@ -19,6 +18,7 @@ export default async function Home() {
         heroSection={heroSection}
         primaryCTAButton={primaryCTAButton}
       />
+      <AboutSection aboutSection={aboutSection} />
     </Layout>
   );
 }

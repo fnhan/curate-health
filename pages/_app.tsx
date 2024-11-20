@@ -25,7 +25,7 @@ const VisualEditing = lazy(() => import('../components/sanity/VisualEditing'));
 
 if (typeof window !== 'undefined') {
   // checks that we are client-side
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
     api_host: '/ingest',
     ui_host: 'https://us.posthog.com',
     person_profiles: 'always',

@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'clinic',
-  title: 'Clinic Section',
+  title: 'Home | Clinic Section',
   type: 'document',
   fields: [
     defineField({

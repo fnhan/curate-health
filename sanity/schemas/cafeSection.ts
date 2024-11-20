@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'cafeSection',
-  title: 'Cafe Section',
+  title: 'Home | Cafe Section',
   type: 'document',
   fields: [
     defineField({

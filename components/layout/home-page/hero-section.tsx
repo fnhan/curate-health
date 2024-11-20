@@ -1,7 +1,7 @@
 import { PortableText } from '@portabletext/react';
-import BookAppointment from '../Buttons/BookAppointment';
+import PrimaryCTAButton from 'components/shared/primary-cta';
 
-export default function HeroSection({ heroSection }) {
+export default function HeroSection({ heroSection, primaryCTAButton }) {
   const { videoID, heroText } = heroSection;
 
   const videoSrc = `https://player.vimeo.com/video/${videoID}?muted=1&autoplay=1&autopause=0&pip=0&controls=0&loop=1&background=1&quality=undefined&app_id=58479&texttrack=undefined`;
@@ -19,10 +19,10 @@ export default function HeroSection({ heroSection }) {
         <h1 className='text-[32px] md:text-[42px] 2xl:text-[72px] mb-6'>
           <PortableText value={heroText} />
         </h1>
-        <div className="flex justify-center text-white text-secondary font-thin text-[150px] h-[250px]">
+        <div className='flex justify-center text-white text-secondary font-thin text-[150px] h-[250px]'>
           |
         </div>
-        <BookAppointment />
+        <PrimaryCTAButton cta={primaryCTAButton.ctaButton} />
       </div>
     </section>
   );

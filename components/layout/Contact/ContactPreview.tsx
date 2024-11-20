@@ -1,16 +1,16 @@
+import Layout from 'components/layout/layout';
 import { Loading } from 'components/Loading';
 import { useLiveQuery } from 'next-sanity/preview';
+import { CONTACT_PAGE_QUERYResult } from 'sanity.types';
 import { CONTACT_PAGE_QUERY } from '../../../sanity/lib/queries';
-import Layout from 'components/layout/layout';
-import ContactInfo from './ContactInfo';
-import ContactDetails from './ContactDetails';
-import SurveyLink from '../Survey/SurveyLink';
 import Newsletter from '../Home/Newsletter';
+import SurveyLink from '../Survey/SurveyLink';
+import ContactDetails from './ContactDetails';
+import ContactInfo from './ContactInfo';
 
 export default function ContactPreview() {
-  // Fetch data using live query
-  const [contactPageData, isLoading] = useLiveQuery(
-    null,
+  const [data, isLoading] = useLiveQuery<CONTACT_PAGE_QUERYResult>(
+    {} as CONTACT_PAGE_QUERYResult,
     CONTACT_PAGE_QUERY
   );
 
@@ -18,19 +18,25 @@ export default function ContactPreview() {
     return <Loading />;
   }
 
-  if (!contactPageData) {
+  if (!data) {
     return <div>Data could not be fetched.</div>;
   }
 
-  const { contactInfo, contactDetails, footer, surveyLink, navigation, feedbackLink } = contactPageData;
+  const {
+    contactInfo,
+    contactDetails,
+    footer,
+    surveyLink,
+    navigation,
+    feedbackLink,
+  } = data;
 
   return (
     <Layout
-      title="Contact"
+      title='Contact'
       navigation={navigation}
       footer={footer}
-      description={contactInfo?.meta?.description || 'Contact page description'}
-    >
+      description={contactInfo?.meta?.description}>
       <ContactInfo contactInfo={contactInfo} feedbackLink={feedbackLink} />
       <ContactDetails contactDetails={contactDetails} />
       <SurveyLink surveyLink={surveyLink} />
@@ -38,5 +44,3 @@ export default function ContactPreview() {
     </Layout>
   );
 }
-
-

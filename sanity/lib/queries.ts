@@ -8,11 +8,6 @@ export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)]
 
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
 
-export const HERO_SECTION_QUERY = `*[_type == "heroSection"][0]{
-  videoID,
-  heroText
-}`;
-
 export const SUSTAINABILITY_SECTION_QUERY = `*[_type == "sustainabilitySection"][0]{
   bgImage {
     asset->{
@@ -332,32 +327,6 @@ export const POPUP_CONTENT_QUERY = groq`*[_type == "popup" && isActive == true][
   isActive,
 }`;
 
-export const HOME_PAGE_QUERY = groq`{
-  "heroSection": ${HERO_SECTION_QUERY},
-  "posts": ${POSTS_QUERY}{
-    mainImage,
-    title,
-    excerpt,
-    slug,
-    publishedAt
-  },
-  "highlightSection": ${HIGHLIGHT_QUERY},
-  "clinicSection": ${CLINIC_QUERY},
-  "cafeSection": ${CAFE_QUERY},
-  "services": ${SERVICES_QUERY},
-  "footer": ${FOOTER_QUERY},
-  "productsSection": ${PRODUCTS_SECTION_QUERY},
-  "products": ${PRODUCTS_QUERY},
-  "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
-  "surveyLink": ${SURVEY_LINK_QUERY},
-  "navigation": ${NAVIGATION_QUERY},
-  "termsOfUse": ${TERMS_OF_USE_QUERY},
-  "privacy": ${PRIVACY_QUERY},
-  "accessibility": ${ACCESSIBILITY_QUERY},
-  "popup": ${POPUP_CONTENT_QUERY},
-  
-}`;
-
 export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
   streetAddress,
   postalAddress,
@@ -669,3 +638,135 @@ export const PILLARS_OF_HEALTH_PAGE_QUERY = groq`{
     "surveyLink": ${SURVEY_LINK_QUERY},
     "pillarsOfHealth": ${PILLARS_OF_HEALTH_QUERY}
   }`;
+
+// * Settings, Layout & Page Queries
+
+export const SITE_METADATA_QUERY = groq`
+  *[_type == "siteMetadata"][0]{
+    homePageTitle,
+    templateTitlePrefix,
+    defaultDescription,
+    favicon {
+      asset -> {
+        url
+      }
+    },
+    socialMeta {
+      title,
+      description,
+      ogImage {
+        asset -> {
+          url,
+          alt
+        }
+      },
+      twitterImage {
+        asset -> {
+          url,
+          alt
+        }
+      }
+    }
+  }
+`;
+
+export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
+  brandName,
+  siteLogo{
+    mobile{
+      asset->{
+        _id,
+        url
+      }
+    },
+    desktop{
+      asset->{
+        _id,
+        url
+      }
+    },
+  },
+  contactInfo{
+    email,
+    phone,
+    address{
+      street,
+      city,
+      state,
+      zip,
+      country
+    }
+  },
+  navLinks[]{
+    _key,
+    title,
+    slug {
+      current
+    }
+  },
+  legalLinks[]{
+    _key,
+    "title": @->title,
+    "slug": @->slug.current
+  },
+  socialMedia[]{
+    _key,
+    platform,
+    platformLogo{
+      asset->{
+        _id,
+        url
+      }
+    },
+    isActive,
+    url
+  }
+}[0]`;
+
+export const PRIMARY_CTA_BUTTON_QUERY = groq`
+  *[_type == "primaryCTAButton"][0]{
+    ctaButton{
+      ctaText,
+      ctaLink,
+    }
+  }
+`;
+
+export const HERO_SECTION_QUERY = groq`*[_type == "heroSection"][0]{
+  videoID,
+  heroText,
+}`;
+
+export const LAYOUT_QUERY = groq`{
+  "siteSettings": ${SITE_SETTINGS_QUERY},
+  "navLinks": ${NAVIGATION_QUERY},
+  "footer": ${FOOTER_QUERY},
+  "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY},
+}`;
+
+export const HOME_PAGE_QUERY = groq`{
+  "layout": ${LAYOUT_QUERY},
+  "heroSection": ${HERO_SECTION_QUERY},
+  "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY},
+  "posts": ${POSTS_QUERY}{
+    mainImage,
+    title,
+    excerpt,
+    slug,
+    publishedAt
+  },
+  "highlightSection": ${HIGHLIGHT_QUERY},
+  "clinicSection": ${CLINIC_QUERY},
+  "cafeSection": ${CAFE_QUERY},
+  "services": ${SERVICES_QUERY},
+  "footer": ${FOOTER_QUERY},
+  "productsSection": ${PRODUCTS_SECTION_QUERY},
+  "products": ${PRODUCTS_QUERY},
+  "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
+  "surveyLink": ${SURVEY_LINK_QUERY},
+  "navigation": ${NAVIGATION_QUERY},
+  "termsOfUse": ${TERMS_OF_USE_QUERY},
+  "privacy": ${PRIVACY_QUERY},
+  "accessibility": ${ACCESSIBILITY_QUERY},
+  "popup": ${POPUP_CONTENT_QUERY},
+}`;

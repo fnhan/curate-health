@@ -23,6 +23,7 @@ import pageMetadata from './schemas/pageMetadata';
 import pillarsOfHealth from './schemas/pillarsOfHealth';
 import popup from './schemas/popup';
 import post from './schemas/post';
+import primaryCTAButton from './schemas/primaryCTAButton';
 import privacy from './schemas/privacy';
 import products from './schemas/products';
 import productsSection from './schemas/productsSection';
@@ -71,5 +72,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     pillarsOfHealth,
     feedbackLink,
     legalPages,
+    primaryCTAButton,
   ],
 };

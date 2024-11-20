@@ -15,7 +15,7 @@ type AboutPageData = {
 
 export default function AboutPreview() {
   const [data, isLoading] = useLiveQuery<AboutPageData>(
-    null,
+    {} as AboutPageData,
     OUR_STORY_PAGE_QUERY
   );
 

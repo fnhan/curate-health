@@ -641,6 +641,10 @@ export const PILLARS_OF_HEALTH_PAGE_QUERY = groq`{
 
 // * Settings, Layout & Page Queries
 
+export const FAVICON_QUERY = groq`*[_type == "siteMetadata"]{
+  "url": favicon.asset->url
+}[0]`;
+
 export const SITE_METADATA_QUERY = groq`
   *[_type == "siteMetadata"][0]{
     homePageTitle,

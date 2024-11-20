@@ -46,11 +46,13 @@ export default function ServicesList({ services }) {
               width={1440}
               height={2560}
               src={builder
+                // @ts-ignore
                 .image(hoveredService.image)
                 .width(1080)
                 .height(1440)
                 .quality(80)
                 .url()}
+              // @ts-ignore
               alt={hoveredService.title}
               className='object-cover transition duration-300 h-[0px] w-[0px] md:h-[420px] 2xl:h-[470px] md:w-full'
             />

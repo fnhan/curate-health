@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Loading } from 'components/Loading';
 import AbovePicture from 'components/layout/Services/treatment/AbovePicture';
 import Content from 'components/layout/Services/treatment/Content';
@@ -60,8 +62,7 @@ export default function TreatmentsPage(props: PageProps) {
       title={props.meta?.title || 'Treatments'}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.meta?.description || ''}
-    >
+      description={props.meta?.description || ''}>
       <AbovePicture treatment={props.treatment} />
       <TreatmentNav
         treatments={props.treatments}

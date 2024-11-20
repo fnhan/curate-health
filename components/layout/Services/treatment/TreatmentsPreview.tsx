@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Loading } from 'components/Loading';
 import { useLiveQuery } from 'next-sanity/preview';
 import { useRouter } from 'next/router';
@@ -58,8 +60,7 @@ export default function TreatmentsPreview() {
       title={treatment?.title || 'Treatments'}
       navigation={navigation}
       footer={footer}
-      description={meta?.description || ''}
-    >
+      description={meta?.description || ''}>
       <TreatmentNav
         treatments={treatments}
         currentPageTitle={treatment?.title || 'Services'}

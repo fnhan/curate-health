@@ -396,7 +396,6 @@ export const FEEDBACK_LINK_QUERY = groq`*[_type == "feedbackLink"][0]{
   youformId
 }`;
 
-
 export const CONTACT_PAGE_QUERY = groq`{
   "contactInfo": ${CONTACT_INFO_QUERY},
   "contactDetails": ${CONTACT_DETAILS_QUERY},
@@ -670,5 +669,3 @@ export const PILLARS_OF_HEALTH_PAGE_QUERY = groq`{
     "surveyLink": ${SURVEY_LINK_QUERY},
     "pillarsOfHealth": ${PILLARS_OF_HEALTH_QUERY}
   }`;
-
-

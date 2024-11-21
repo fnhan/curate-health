@@ -7,6 +7,13 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'isComingSoon',
+      type: 'boolean',
+      title: 'Is Coming Soon',
+      description: 'Toggle to show the coming soon page',
+      initialValue: true,
+    }),
+    defineField({
       name: 'brandName',
       type: 'string',
       title: 'Brand Name',

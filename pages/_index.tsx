@@ -7,7 +7,7 @@ import Highlight from 'components/layout/Home/Highlight';
 import Products from 'components/layout/Home/Products';
 import Services from 'components/layout/Home/Services';
 import Sustainability from 'components/layout/Home/Sustainability';
-import Newsletter from 'components/layout/Home/TEMP-Newsletter';
+import Newsletter from 'components/layout/Home/Newsletter';
 import Layout from 'components/layout/layout';
 import PopupBanner from 'components/layout/Popup-banner';
 import SurveyLink from 'components/layout/Survey/SurveyLink';

@@ -1,10 +1,16 @@
+'use client';
+
 import { Button } from 'components/ui/button';
 import { Input } from 'components/ui/input';
 import { useToast } from 'components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
-export default function Newsletter() {
+export default function Newsletter({
+  isComingSoon = false,
+}: {
+  isComingSoon?: boolean;
+}) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -54,7 +60,7 @@ export default function Newsletter() {
   };
 
   return (
-    <section className='bg-secondary'>
+    <section className={`${!isComingSoon ? 'bg-secondary' : ''}`}>
       <div className='container py-4 md:py-8 2xl:py-9 flex flex-col md:flex-row gap-3 md:gap-16 2xl:justify-between items-center'>
         <h2 className='italic md:text-lg 2xl:text-2xl'>
           Sign up to our newsletter

@@ -1,13 +1,12 @@
 'use client';
 
 import imageUrlBuilder from '@sanity/image-url';
+import HoverLink from 'components/shared/hover-link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import highlightCircleText from 'public/images/CircleText.png';
 import { ABOUT_SECTION_QUERYResult } from 'sanity.types';
 import { dataset, projectId } from '../../../sanity/env';
-import HoverLink from '../Home/HoverLink';
-
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function AboutSection({

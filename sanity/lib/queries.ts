@@ -8,7 +8,7 @@ export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)]
 
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
 
-export const SUSTAINABILITY_SECTION_QUERY = `*[_type == "sustainabilitySection"][0]{
+export const SUSTAINABILITY_SECTION_QUERY = groq`*[_type == "sustainabilitySection"][0]{
   bgImage {
     asset->{
       _id,

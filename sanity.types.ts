@@ -1544,6 +1544,18 @@ export type POST_QUERYResult = {
     description?: string;
   };
 } | null;
+// Variable: SUSTAINABILITY_SECTION_QUERY
+// Query: *[_type == "sustainabilitySection"][0]{  bgImage {    asset->{      _id,      url    },    alt  },  sustainText}
+export type SUSTAINABILITY_SECTION_QUERYResult = {
+  bgImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+    } | null;
+    alt: string | null;
+  } | null;
+  sustainText: BlockContent | null;
+} | null;
 // Variable: ABOUT_SECTION_QUERY
 // Query: *[_type == "aboutSection"][0]{  title1,  title2,  "aboutImage": {    "asset": aboutImage.asset->{      _id,      url    },    "alt": aboutImage.alt  },  hoverLinkText,  hoverLinkHref}
 export type ABOUT_SECTION_QUERYResult = {
@@ -3517,6 +3529,7 @@ declare module "@sanity/client" {
     '*[_type == "post" && defined(slug)]': POSTS_QUERYResult;
     '*[_type == "post" && defined(slug.current)][]{\n  "params": { "slug": slug.current },\n}': POSTS_SLUG_QUERYResult;
     '*[_type == "post" && slug.current == $slug][0]': POST_QUERYResult;
+    '*[_type == "sustainabilitySection"][0]{\n  bgImage {\n    asset->{\n      _id,\n      url\n    },\n    alt\n  },\n  sustainText\n}': SUSTAINABILITY_SECTION_QUERYResult;
     '*[_type == "aboutSection"][0]{\n  title1,\n  title2,\n  "aboutImage": {\n    "asset": aboutImage.asset->{\n      _id,\n      url\n    },\n    "alt": aboutImage.alt\n  },\n  hoverLinkText,\n  hoverLinkHref\n}': ABOUT_SECTION_QUERYResult;
     '*[_type == "clinic"][0]{\n  "clinicImage": {\n    "asset": clinicImage.asset->{\n      _id,\n      url\n    },\n    "alt": clinicImage.alt\n  },\n  content\n}': CLINIC_SECTION_QUERYResult;
     '*[_type == "cafeSection"][0] {\n  cafeImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  title,\n  content,\n  hoverLinkText,\n  hoverLinkHref,\n  meta {\n    title,\n    description\n  }\n}': CAFE_QUERYResult;

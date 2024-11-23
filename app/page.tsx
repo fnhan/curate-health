@@ -1,4 +1,5 @@
 import AboutSection from 'components/layout/home-page/about-section';
+import CafeSection from 'components/layout/home-page/cafe-section';
 import ClinicSection from 'components/layout/home-page/clinic-section';
 import HeroSection from 'components/layout/home-page/hero-section';
 import ProductsSection from 'components/layout/home-page/products-section';
@@ -22,6 +23,7 @@ export default async function Home() {
     productsSection,
     products,
     servicesSection,
+    cafeSection,
   } = homePage;
 
   return (
@@ -34,6 +36,7 @@ export default async function Home() {
       <ClinicSection clinicSection={clinicSection} />
       <ServicesSection servicesSection={servicesSection} />
       <ProductsSection productsSection={productsSection} products={products} />
+      <CafeSection cafeSection={cafeSection} />
     </Layout>
   );
 }

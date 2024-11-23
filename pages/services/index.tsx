@@ -1,4 +1,3 @@
-import HomePagePreview from 'components/layout/Home/HomePreview';
 import Newsletter from 'components/layout/Home/Newsletter';
 import OurServiceDetail from 'components/layout/Services/OurServiceDetail';
 import OurServicePicture from 'components/layout/Services/OurServicePicture';
@@ -11,9 +10,9 @@ import {
   FOOTER_QUERY,
   METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
+  OURSERVICES_QUERY,
   SERVICES_QUERY,
   SURVEY_LINK_QUERY,
-  OURSERVICES_QUERY,
 } from '../../sanity/lib/queries';
 import { token } from '../../sanity/lib/token';
 
@@ -38,8 +37,7 @@ const OurService = (props: PageProps) => {
       title={props.meta?.title || 'Our Services'}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.meta?.description || ''}
-    >
+      description={props.meta?.description || ''}>
       <OurServicePicture ourServices={props.ourServices} />
       <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50'>
         <ServicesNav

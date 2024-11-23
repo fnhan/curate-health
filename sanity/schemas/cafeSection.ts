@@ -52,22 +52,6 @@ export default defineType({
       description: "URL/Link for the hover link. (Example: /about)",
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
-      name: "meta",
-      type: "object",
-      fields: [
-        {
-          title: "Title",
-          name: "title",
-          type: "string",
-        },
-        {
-          title: "Description",
-          name: "description",
-          type: "string",
-        },
-      ],
-    }),
   ],
   preview: {
     select: {

@@ -1,17 +1,19 @@
-import Posts from 'components/layout/Blog-Page/Posts';
-import Layout from 'components/layout/layout';
-import { SanityDocument } from 'next-sanity';
-import dynamic from 'next/dynamic';
-import { getClient } from '../../sanity/lib/client';
+import dynamic from "next/dynamic";
+
+import Posts from "components/layout/Blog-Page/Posts";
+import Layout from "components/layout/layout";
+import { SanityDocument } from "next-sanity";
+
+import { getClient } from "../../sanity/lib/client";
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
   POSTS_QUERY,
-} from '../../sanity/lib/queries';
-import { token } from '../../sanity/lib/token';
+} from "../../sanity/lib/queries";
+import { token } from "../../sanity/lib/token";
 
 const PostsPreview = dynamic(
-  () => import('../../components/layout/Blog-Page/PostsPreview')
+  () => import("../../components/layout/Blog-Page/PostsPreview")
 );
 
 type PageProps = {
@@ -28,7 +30,7 @@ export default function BlogPage(props: PageProps) {
     <Layout
       navigation={props.navigation}
       footer={props.footer}
-      title={'Blog'}
+      title={"Blog"}
       description={props.description}
     >
       {props.draftMode ? (
@@ -52,7 +54,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
       navigation,
       footer,
       draftMode,
-      token: draftMode ? token : '',
+      token: draftMode ? token : "",
     },
   };
 };

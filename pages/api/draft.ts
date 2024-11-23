@@ -1,13 +1,14 @@
-import { validatePreviewUrl } from '@sanity/preview-url-secret';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from 'next-sanity';
+import type { NextApiRequest, NextApiResponse } from "next";
 
-import { apiVersion, dataset, projectId } from '../../sanity/env';
+import { validatePreviewUrl } from "@sanity/preview-url-secret";
+import { createClient } from "next-sanity";
+
+import { apiVersion, dataset, projectId } from "../../sanity/env";
 
 const token = process.env.SANITY_API_READ_TOKEN;
 if (!token) {
   throw new Error(
-    'A secret is provided but there is no `SANITY_API_READ_TOKEN` environment variable setup.'
+    "A secret is provided but there is no `SANITY_API_READ_TOKEN` environment variable setup."
   );
 }
 const client = createClient({
@@ -23,14 +24,14 @@ export default async function handle(
   res: NextApiResponse<string | void>
 ) {
   if (!req.url) {
-    throw new Error('Missing url');
+    throw new Error("Missing url");
   }
-  const { isValid, redirectTo = '/' } = await validatePreviewUrl(
+  const { isValid, redirectTo = "/" } = await validatePreviewUrl(
     client,
     req.url
   );
   if (!isValid) {
-    return res.status(401).send('Invalid secret');
+    return res.status(401).send("Invalid secret");
   }
   // Enable Draft Mode by setting the cookies
   res.setDraftMode({ enable: true });

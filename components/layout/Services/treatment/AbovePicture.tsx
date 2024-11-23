@@ -1,7 +1,9 @@
-import imageUrlBuilder from '@sanity/image-url';
-import { Loading } from 'components/Loading';
-import Image from 'next/image';
-import { dataset, projectId } from '../../../../sanity/env';
+import Image from "next/image";
+
+import imageUrlBuilder from "@sanity/image-url";
+import { Loading } from "components/Loading";
+
+import { dataset, projectId } from "../../../../sanity/env";
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
@@ -11,9 +13,9 @@ export default function AbovePicture({ treatment }) {
   }
 
   return (
-    <div className=''>
+    <div className="">
       <Image
-        loading='lazy'
+        loading="lazy"
         width={1440}
         height={2560}
         src={builder
@@ -23,7 +25,7 @@ export default function AbovePicture({ treatment }) {
           .quality(80)
           .url()}
         alt={treatment.title}
-        className='object-cover w-full h-[200px] md:h-[300px] 2xl:h-[400px]'
+        className="h-[200px] w-full object-cover md:h-[300px] 2xl:h-[400px]"
       />
     </div>
   );

@@ -1,14 +1,16 @@
-import { Loading } from 'components/Loading';
-import Picture from 'components/layout/Services/Picture';
-import ServiceDetails from 'components/layout/Services/ServiceDetails';
-import { ServicesNav } from 'components/layout/Services/ServicesNav';
-import { GetStaticPaths } from 'next';
-import { SanityDocument } from 'next-sanity';
-import dynamic from 'next/dynamic';
-import Newsletter from '../../../components/layout/Home/Newsletter';
-import Survey from '../../../components/layout/Home/Survey';
-import Layout from '../../../components/layout/layout';
-import { getClient } from '../../../sanity/lib/client';
+import { GetStaticPaths } from "next";
+import dynamic from "next/dynamic";
+
+import { Loading } from "components/Loading";
+import Picture from "components/layout/Services/Picture";
+import ServiceDetails from "components/layout/Services/ServiceDetails";
+import { ServicesNav } from "components/layout/Services/ServicesNav";
+import { SanityDocument } from "next-sanity";
+
+import Newsletter from "../../../components/layout/Home/Newsletter";
+import Survey from "../../../components/layout/Home/Survey";
+import Layout from "../../../components/layout/layout";
+import { getClient } from "../../../sanity/lib/client";
 import {
   FOOTER_QUERY,
   METADATA_BY_SLUG_QUERY,
@@ -18,8 +20,8 @@ import {
   SERVICE_BY_SLUG_QUERY,
   SURVEY_LINK_QUERY,
   TREATMENTS_QUERY,
-} from '../../../sanity/lib/queries';
-import { token } from '../../../sanity/lib/token';
+} from "../../../sanity/lib/queries";
+import { token } from "../../../sanity/lib/token";
 
 type PageProps = {
   draftMode: boolean;
@@ -35,7 +37,7 @@ type PageProps = {
 
 export default function ServicesPage(props: PageProps) {
   const ServicesPreview = dynamic(
-    () => import('../../../components/layout/Services/ServicesPreview')
+    () => import("../../../components/layout/Services/ServicesPreview")
   );
 
   if (props.draftMode) {
@@ -50,13 +52,13 @@ export default function ServicesPage(props: PageProps) {
     <Layout
       navigation={props.navigation}
       footer={props.footer}
-      title={props.service?.title || 'Services'}
-      description={props.service?.meta?.description || ''}
+      title={props.service?.title || "Services"}
+      description={props.service?.meta?.description || ""}
     >
       <Picture service={props.service} />
       <ServicesNav
         services={props.services}
-        currentPageTitle={props.service?.title || 'Services'}
+        currentPageTitle={props.service?.title || "Services"}
       />
       <ServiceDetails
         service={props.service}
@@ -73,7 +75,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
 
   const services = await client.fetch(SERVICES_QUERY);
   const service = await client.fetch(SERVICE_BY_SLUG_QUERY, {
-    slug: params?.slug || '',
+    slug: params?.slug || "",
   });
 
   if (!service) {
@@ -85,7 +87,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
   const surveySection = await client.fetch(SURVEY_LINK_QUERY);
 
   const treatments = await client.fetch(TREATMENTS_QUERY, {
-    serviceSlug: service?.slug || '',
+    serviceSlug: service?.slug || "",
   });
 
   const meta = (
@@ -104,7 +106,7 @@ export const getStaticProps = async ({ params, preview = false }) => {
       treatments,
       meta,
       draftMode: preview,
-      token: preview ? token : '',
+      token: preview ? token : "",
     },
   };
 };

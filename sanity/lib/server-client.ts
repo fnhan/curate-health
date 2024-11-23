@@ -1,9 +1,10 @@
-import 'server-only';
+import { draftMode } from "next/headers";
 
-import { createClient, type QueryOptions, type QueryParams } from 'next-sanity';
-import { draftMode } from 'next/headers';
-import { apiVersion, dataset, projectId } from '../env';
-import { token } from './token';
+import { type QueryOptions, type QueryParams, createClient } from "next-sanity";
+import "server-only";
+
+import { apiVersion, dataset, projectId } from "../env";
+import { token } from "./token";
 
 export const client = createClient({
   projectId,
@@ -11,8 +12,8 @@ export const client = createClient({
   apiVersion,
   useCdn: true,
   stega: {
-    enabled: process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview',
-    studioUrl: '/studio',
+    enabled: process.env.NEXT_PUBLIC_VERCEL_ENV === "preview",
+    studioUrl: "/studio",
   },
 });
 
@@ -29,7 +30,7 @@ export async function sanityFetch<QueryResponse>({
 }) {
   const isDraftMode = draftMode().isEnabled;
   if (isDraftMode && !token) {
-    throw new Error('Missing environment variable SANITY_API_READ_TOKEN');
+    throw new Error("Missing environment variable SANITY_API_READ_TOKEN");
   }
 
   let dynamicRevalidate = revalidate;
@@ -45,7 +46,7 @@ export async function sanityFetch<QueryResponse>({
     ...(isDraftMode &&
       ({
         token: token,
-        perspective: 'previewDrafts',
+        perspective: "previewDrafts",
         stega: true,
       } satisfies QueryOptions)),
     next: {

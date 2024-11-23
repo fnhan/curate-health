@@ -1,6 +1,7 @@
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
-import { client } from './sanity/lib/server-client';
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+
+import { client } from "./sanity/lib/server-client";
 
 let comingSoonCache: {
   value: boolean;
@@ -29,7 +30,7 @@ async function getComingSoonStatus() {
     };
     return result;
   } catch (error) {
-    console.error('Failed to fetch coming soon status:', error);
+    console.error("Failed to fetch coming soon status:", error);
     return false;
   }
 }
@@ -39,7 +40,7 @@ export async function middleware(request: NextRequest) {
   // console.log('Current path:', request.nextUrl.pathname);
 
   // Always allow access to these paths
-  const publicPaths = ['/login', '/api/login', '/studio', '/coming-soon'];
+  const publicPaths = ["/login", "/api/login", "/studio", "/coming-soon"];
   if (publicPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     // console.log('Public path detected, allowing access');
     return NextResponse.next();
@@ -55,13 +56,13 @@ export async function middleware(request: NextRequest) {
   // If site is coming soon and user is not admin, show coming soon page
   if (isComingSoon && !hasAdminAccess) {
     // console.log('Redirecting to login');
-    return NextResponse.redirect(new URL('/coming-soon', request.url));
+    return NextResponse.redirect(new URL("/coming-soon", request.url));
   }
 
-  console.log('Allowing access');
+  console.log("Allowing access");
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|public).*)'],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|public).*)"],
 };

@@ -1,115 +1,114 @@
-import { defineField, defineType } from 'sanity';
+import { defineField, defineType } from "sanity";
 
 export default defineType({
-  name: 'missionAndValues',
-  title: 'Mission and Values',
-  type: 'document',
+  name: "missionAndValues",
+  title: "Mission and Values",
+  type: "document",
   fields: [
     defineField({
-      name: 'headerImage',
-      title: 'Mission and Values Header Image',
-      type: 'image',
+      name: "headerImage",
+      title: "Mission and Values Header Image",
+      type: "image",
       options: {
         hotspot: true,
       },
       fields: [
         {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
           description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
         },
       ],
     }),
     defineField({
-      name: 'purposeImage',
-      title: 'Purpose Image',
-      type: 'image',
+      name: "purposeImage",
+      title: "Purpose Image",
+      type: "image",
       options: {
         hotspot: true,
       },
       fields: [
         {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
           description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
         },
       ],
     }),
     defineField({
-      name: 'purposeTitle',
-      title: 'Purpose Title',
-      type: 'string',
-      description: 'Title of purpose section on page',
+      name: "purposeTitle",
+      title: "Purpose Title",
+      type: "string",
+      description: "Title of purpose section on page",
     }),
     defineField({
-      name: 'purposeTextContent',
-      title: 'Purpose Text Content',
-      type: 'string',
-      description: 'Text content of purpose section on page',
+      name: "purposeTextContent",
+      title: "Purpose Text Content",
+      type: "string",
+      description: "Text content of purpose section on page",
     }),
     defineField({
-      name: 'missionImage',
-      title: 'Mission Image',
-      type: 'image',
+      name: "missionImage",
+      title: "Mission Image",
+      type: "image",
       options: {
         hotspot: true,
       },
       fields: [
         {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
           description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
         },
       ],
     }),
     defineField({
-      name: 'missionTitle',
-      title: 'Mission Title',
-      type: 'string',
-      description: 'Title of Mission section on page',
+      name: "missionTitle",
+      title: "Mission Title",
+      type: "string",
+      description: "Title of Mission section on page",
     }),
     defineField({
-      name: 'missionTextContent',
-      title: 'Mission Text Content',
-      type: 'string',
-      description: 'Text content of Mission section on page',
+      name: "missionTextContent",
+      title: "Mission Text Content",
+      type: "string",
+      description: "Text content of Mission section on page",
     }),
     defineField({
-      name: 'visionImage',
-      title: 'Vision Image',
-      type: 'image',
+      name: "visionImage",
+      title: "Vision Image",
+      type: "image",
       options: {
         hotspot: true,
       },
       fields: [
         {
-          name: 'alt',
-          type: 'string',
-          title: 'Alternative Text',
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
           description:
-            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
+            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
         },
       ],
     }),
     defineField({
-      name: 'visionTitle',
-      title: 'Vision Title',
-      type: 'string',
-      description: 'Title of vision section on page',
+      name: "visionTitle",
+      title: "Vision Title",
+      type: "string",
+      description: "Title of vision section on page",
     }),
     defineField({
-      name: 'visionTextContent',
-      title: 'Vision Text Content',
-      type: 'string',
-      description: 'Text content of vision section on page',
+      name: "visionTextContent",
+      title: "Vision Text Content",
+      type: "string",
+      description: "Text content of vision section on page",
     }),
-
   ],
 
   // preview: {

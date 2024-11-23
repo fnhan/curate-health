@@ -1,11 +1,12 @@
-import Newsletter from 'components/layout/Home/Newsletter';
-import OurServiceDetail from 'components/layout/Services/OurServiceDetail';
-import OurServicePicture from 'components/layout/Services/OurServicePicture';
-import { ServicesNav } from 'components/layout/Services/ServicesNav';
-import Layout from 'components/layout/layout';
-import { SanityDocument } from 'next-sanity';
-import Survey from '../../components/layout/Home/Survey';
-import { getClient } from '../../sanity/lib/client';
+import Newsletter from "components/layout/Home/Newsletter";
+import OurServiceDetail from "components/layout/Services/OurServiceDetail";
+import OurServicePicture from "components/layout/Services/OurServicePicture";
+import { ServicesNav } from "components/layout/Services/ServicesNav";
+import Layout from "components/layout/layout";
+import { SanityDocument } from "next-sanity";
+
+import Survey from "../../components/layout/Home/Survey";
+import { getClient } from "../../sanity/lib/client";
 import {
   FOOTER_QUERY,
   METADATA_BY_SLUG_QUERY,
@@ -13,8 +14,8 @@ import {
   OURSERVICES_QUERY,
   SERVICES_QUERY,
   SURVEY_LINK_QUERY,
-} from '../../sanity/lib/queries';
-import { token } from '../../sanity/lib/token';
+} from "../../sanity/lib/queries";
+import { token } from "../../sanity/lib/token";
 
 type PageProps = {
   contactInfo: SanityDocument;
@@ -34,19 +35,20 @@ type PageProps = {
 const OurService = (props: PageProps) => {
   return (
     <Layout
-      title={props.meta?.title || 'Our Services'}
+      title={props.meta?.title || "Our Services"}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.meta?.description || ''}>
+      description={props.meta?.description || ""}
+    >
       <OurServicePicture ourServices={props.ourServices} />
-      <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50'>
+      <div className="sticky top-[100px] z-50 bg-secondary bg-opacity-50 backdrop-blur-3xl">
         <ServicesNav
           services={props.services}
-          currentPageTitle='Our Services'
+          currentPageTitle="Our Services"
         />
       </div>
-      <div className='bg-white'>
-        <div className='mb-32'>
+      <div className="bg-white">
+        <div className="mb-32">
           <OurServiceDetail services={props.services} />
         </div>
         <Survey surveyLink={props.surveySection} />
@@ -65,7 +67,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
   const footer = await client.fetch(FOOTER_QUERY);
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: '/services',
+      slug: "/services",
     })
   ).meta;
 
@@ -76,7 +78,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
       footer,
       surveySection,
       meta,
-      token: draftMode ? token : '',
+      token: draftMode ? token : "",
       services,
       ourServices,
     },

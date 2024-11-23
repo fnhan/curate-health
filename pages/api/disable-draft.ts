@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default function handle(
   _req: NextApiRequest,
@@ -8,6 +8,6 @@ export default function handle(
   res.setDraftMode({ enable: false });
 
   // Redirect the user back to the index page.
-  res.writeHead(307, { Location: '/' });
+  res.writeHead(307, { Location: "/" });
   res.end();
 }

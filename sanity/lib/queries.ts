@@ -19,20 +19,6 @@ export const SUSTAINABILITY_SECTION_QUERY = `*[_type == "sustainabilitySection"]
   sustainText
 }`;
 
-const HIGHLIGHT_QUERY = groq`*[_type == "highlight"][0]{
-  title1,
-  title2,
-  "highlightImage": {
-    "asset": highlightImage.asset->{
-      _id,
-      url
-    },
-    "alt": highlightImage.alt
-  },
-  hoverLinkText,
-  hoverLinkHref
-}`;
-
 const ABOUT_SECTION_QUERY = groq`*[_type == "aboutSection"][0]{
   title1,
   title2,
@@ -74,6 +60,12 @@ const CAFE_QUERY = groq`*[_type == "cafeSection"][0] {
     title,
     description
   }
+}`;
+
+const BLOG_SECTION_QUERY = groq`*[_type == "blogSection"][0]{
+  sectionTitle,
+  hoverLinkText,
+  hoverLinkHref
 }`;
 
 export const OURSERVICES_QUERY = groq`*[_type == "ourServices"][0]{
@@ -784,6 +776,7 @@ export const HOME_PAGE_QUERY = groq`{
   "servicesSection": ${SERVICES_SECTION_QUERY},
   "productsSection": ${PRODUCTS_SECTION_QUERY},
   "cafeSection": ${CAFE_QUERY},
+  "blogSection": ${BLOG_SECTION_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
   "surveyLink": ${SURVEY_LINK_QUERY},
   "navigation": ${NAVIGATION_QUERY},

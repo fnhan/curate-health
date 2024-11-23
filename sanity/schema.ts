@@ -5,6 +5,7 @@ import aboutSection from "./schemas/aboutSection";
 import accessibility from "./schemas/accessibility";
 import author from "./schemas/author";
 import blockContent from "./schemas/blockContent";
+import blogSection from "./schemas/blogSection";
 import cafeSection from "./schemas/cafeSection";
 import category from "./schemas/category";
 import clinicSection from "./schemas/clinicSection";
@@ -13,7 +14,6 @@ import contactInfo from "./schemas/contactInfo";
 import feedbackLink from "./schemas/feedbackLink";
 import footer from "./schemas/footer";
 import heroSection from "./schemas/heroSection";
-import highlight from "./schemas/highlight";
 import legalPages from "./schemas/legalPages";
 import metadatas from "./schemas/metadatas";
 import missionAndValues from "./schemas/missionAndValues";
@@ -50,6 +50,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     servicesSection,
     productsSection,
     cafeSection,
+    blogSection,
     popup,
     post,
     sustainabilitySection,

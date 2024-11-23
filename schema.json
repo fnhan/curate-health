@@ -7300,6 +7300,13 @@
           "type": "string"
         }
       },
+      "isComingSoon": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
       "brandName": {
         "type": "objectAttribute",
         "value": {

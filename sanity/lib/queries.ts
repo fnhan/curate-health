@@ -47,10 +47,13 @@ const ABOUT_SECTION_QUERY = groq`*[_type == "aboutSection"][0]{
   hoverLinkHref
 }`;
 
-const CLINIC_QUERY = groq`*[_type == "clinic"][0]{
-  "clinicImage": clinicImage.asset->{
-    _id,
-    url
+const CLINIC_SECTION_QUERY = groq`*[_type == "clinic"][0]{
+  "clinicImage": {
+    "asset": clinicImage.asset->{
+      _id,
+      url
+    },
+    "alt": clinicImage.alt
   },
   content
 }`;
@@ -135,15 +138,6 @@ export const METADATASone_QUERY = groq`*[_type == "metadatas"][0]{
 export const MetaData_Slug = groq`*[_type == "metadatas" && defined(slug.current) ][0]{
   "params": {"slug": slug.current}
 }`;
-
-// export const METADATA_BY_SLUG_QUERY = groq`
-//   *[_type == "metadatas"]{
-//     datas[slug.current == $slug]{
-//       title,
-//       description
-//     }
-//   }
-// `;
 
 export const METADATA_BY_SLUG_QUERY = groq`
   *[_type == "metadatas"]{
@@ -775,7 +769,7 @@ export const HOME_PAGE_QUERY = groq`{
   },
   "highlightSection": ${HIGHLIGHT_QUERY},
   "aboutSection": ${ABOUT_SECTION_QUERY},
-  "clinicSection": ${CLINIC_QUERY},
+  "clinicSection": ${CLINIC_SECTION_QUERY},
   "cafeSection": ${CAFE_QUERY},
   "services": ${SERVICES_QUERY},
   "footer": ${FOOTER_QUERY},

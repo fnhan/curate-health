@@ -1,6 +1,7 @@
 import AboutSection from 'components/layout/home-page/about-section';
 import ClinicSection from 'components/layout/home-page/clinic-section';
 import HeroSection from 'components/layout/home-page/hero-section';
+import ProductsSection from 'components/layout/home-page/products-section';
 import Layout from 'components/shared/layout';
 import { HOME_PAGE_QUERYResult } from '../sanity.types';
 import { HOME_PAGE_QUERY } from '../sanity/lib/queries';
@@ -11,8 +12,15 @@ export default async function Home() {
     query: HOME_PAGE_QUERY,
   });
 
-  const { layout, heroSection, primaryCTAButton, aboutSection, clinicSection } =
-    homePage;
+  const {
+    layout,
+    heroSection,
+    primaryCTAButton,
+    aboutSection,
+    clinicSection,
+    productsSection,
+    products,
+  } = homePage;
 
   return (
     <Layout layout={layout}>
@@ -22,6 +30,7 @@ export default async function Home() {
       />
       <AboutSection aboutSection={aboutSection} />
       <ClinicSection clinicSection={clinicSection} />
+      <ProductsSection productsSection={productsSection} products={products} />
     </Layout>
   );
 }

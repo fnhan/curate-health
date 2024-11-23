@@ -15,8 +15,8 @@ export default defineType({
       fields: [
         {
           name: 'alt',
-          title: 'Alternative Text',
           type: 'string',
+          title: 'Alternative Text',
           description:
             'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
         },

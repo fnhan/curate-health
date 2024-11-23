@@ -29,6 +29,7 @@ import privacy from './schemas/privacy';
 import products from './schemas/products';
 import productsSection from './schemas/productsSection';
 import services from './schemas/services';
+import servicesSection from './schemas/servicesSection';
 import siteMeta from './schemas/siteMeta';
 import siteSettings from './schemas/siteSettings';
 import socialMeta from './schemas/socialMeta';
@@ -36,7 +37,6 @@ import surveyLink from './schemas/surveyLink';
 import sustainability from './schemas/sustainability';
 import sustainabilitySection from './schemas/sustainabilitySection';
 import termsOfUse from './schemas/termsOfUse';
-import servicesSection from './schemas/servicesSection';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -45,15 +45,12 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     socialMeta,
     pageMetadata,
     heroSection,
-    highlight,
     aboutSection,
     clinicSection,
     servicesSection,
-    cafeSection,
-    services,
-    popup,
     productsSection,
-    products,
+    cafeSection,
+    popup,
     post,
     sustainabilitySection,
     author,
@@ -77,5 +74,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     feedbackLink,
     legalPages,
     primaryCTAButton,
+    products,
+    services,
   ],
 };

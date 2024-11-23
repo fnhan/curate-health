@@ -36,6 +36,7 @@ import surveyLink from './schemas/surveyLink';
 import sustainability from './schemas/sustainability';
 import sustainabilitySection from './schemas/sustainabilitySection';
 import termsOfUse from './schemas/termsOfUse';
+import servicesSection from './schemas/servicesSection';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -47,6 +48,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     highlight,
     aboutSection,
     clinicSection,
+    servicesSection,
     cafeSection,
     services,
     popup,

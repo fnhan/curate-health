@@ -1,8 +1,8 @@
 import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: 'productsSection',
-  title: 'Products Section',
+  name: 'servicesSection',
+  title: 'Home | Services Section',
   type: 'document',
   fields: [
     defineField({
@@ -26,19 +26,4 @@ export default defineType({
       validation: (Rule) => Rule.required().error('Hover link URL is required'),
     }),
   ],
-
-  preview: {
-    select: {
-      title: 'sectionTitle',
-      hoverLinkText: 'hoverLinkText',
-      hoverLinkHref: 'hoverLinkHref',
-    },
-    prepare(selection) {
-      const { title, hoverLinkText, hoverLinkHref } = selection;
-      return {
-        title: title,
-        subtitle: `Link Text: ${hoverLinkText}, Link Href: ${hoverLinkHref}`,
-      };
-    },
-  },
 });

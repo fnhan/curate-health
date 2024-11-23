@@ -1,8 +1,8 @@
-import { defineField, defineType, Fieldset } from 'sanity';
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'service',
-  title: 'Services',
+  title: 'Shared | Services',
   type: 'document',
   fields: [
     defineField({
@@ -70,53 +70,6 @@ export default defineType({
       name: 'content',
       title: 'Content',
       type: 'blockContent',
-    }),
-    defineField({
-      name: 'meta',
-      title: 'Meta',
-      type: 'object',
-      fields: [
-        {
-          title: 'Title',
-          name: 'title',
-          type: 'string',
-        },
-        {
-          title: 'Description',
-          name: 'description',
-          type: 'string',
-        },
-      ],
-    }),
-    defineField({
-      type: 'object',
-      name: 'person',
-      fieldsets: [{ name: 'social', title: 'Social media handles' }],
-      fields: [
-        {
-          title: 'Name',
-          name: 'name',
-          type: 'string',
-        },
-        {
-          title: 'Twitter',
-          name: 'twitter',
-          type: 'string',
-          fieldset: 'social',
-        },
-        {
-          title: 'Instagram',
-          name: 'instagram',
-          type: 'string',
-          fieldset: 'social',
-        },
-        {
-          title: 'Facebook',
-          name: 'facebook',
-          type: 'string',
-          fieldset: 'social',
-        },
-      ],
     }),
   ],
 

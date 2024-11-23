@@ -90,6 +90,18 @@ export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   content
 }`;
 
+export const SERVICES_SECTION_QUERY = groq`*[_type == "servicesSection"][0]{
+  sectionTitle,
+  hoverLinkText,
+  hoverLinkHref,
+  "services": *[_type == "service" && isActive == true]{
+    title,
+    "slug": slug.current,
+    "image": image.asset->url,
+    "altText": image.alt
+  }
+}`;
+
 export const SERVICES_SLUG_QUERY = groq`*[_type == "service" && isActive == true && defined(slug.current)] {
   "params": {"slug": slug.current}
 }`;
@@ -759,27 +771,18 @@ export const LAYOUT_QUERY = groq`{
 export const HOME_PAGE_QUERY = groq`{
   "layout": ${LAYOUT_QUERY},
   "heroSection": ${HERO_SECTION_QUERY},
-  "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY},
-  "posts": ${POSTS_QUERY}{
-    mainImage,
-    title,
-    excerpt,
-    slug,
-    publishedAt
-  },
-  "highlightSection": ${HIGHLIGHT_QUERY},
+  "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY}, 
   "aboutSection": ${ABOUT_SECTION_QUERY},
   "clinicSection": ${CLINIC_SECTION_QUERY},
-  "cafeSection": ${CAFE_QUERY},
-  "services": ${SERVICES_QUERY},
-  "footer": ${FOOTER_QUERY},
+  "servicesSection": ${SERVICES_SECTION_QUERY},
   "productsSection": ${PRODUCTS_SECTION_QUERY},
   "products": ${PRODUCTS_QUERY},
+  "cafeSection": ${CAFE_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
   "surveyLink": ${SURVEY_LINK_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "termsOfUse": ${TERMS_OF_USE_QUERY},
   "privacy": ${PRIVACY_QUERY},
   "accessibility": ${ACCESSIBILITY_QUERY},
-  "popup": ${POPUP_CONTENT_QUERY},
+  "footer": ${FOOTER_QUERY},
 }`;

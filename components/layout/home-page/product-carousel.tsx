@@ -20,7 +20,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { PRODUCTS_QUERYResult } from 'sanity.types';
+import { PRODUCTS_SECTION_QUERYResult } from 'sanity.types';
 import { dataset, projectId } from '../../../sanity/env';
 
 const builder = imageUrlBuilder({ projectId, dataset });
@@ -28,7 +28,13 @@ const builder = imageUrlBuilder({ projectId, dataset });
 export function ProductCarousel({
   products,
 }: {
-  products: PRODUCTS_QUERYResult;
+  products: Array<{
+    title: string | null;
+    description: string | null;
+    slug: string | null;
+    image: string | null;
+    altText: string | null;
+  }>;
 }) {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -65,7 +71,7 @@ export function ProductCarousel({
         opts={{ align: 'start' }}
         className='container mx-auto relative p-3'>
         <CarouselContent>
-          {products.map((product, idx: number) => (
+          {products?.map((product, idx: number) => (
             <CarouselItem key={idx} className='md:basis-1/2 lg:basis-1/3'>
               <Link href={`/products/${product.slug}`}>
                 <Card className='transition ease-in-out hover:hover:-translate-y-3 w-full rounded-none flex flex-col h-full border-none shadow-none'>

@@ -256,7 +256,14 @@ export const FOOTER_QUERY = groq`
 export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
   sectionTitle,
   hoverLinkText,
-  hoverLinkHref
+  hoverLinkHref,
+  "products": *[_type == "product" && isActive == true]{
+    title,
+    description,
+    "slug": slug.current,
+    "image": image.asset->url,
+    "altText": image.alt
+  }
 }`;
 
 export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
@@ -776,7 +783,6 @@ export const HOME_PAGE_QUERY = groq`{
   "clinicSection": ${CLINIC_SECTION_QUERY},
   "servicesSection": ${SERVICES_SECTION_QUERY},
   "productsSection": ${PRODUCTS_SECTION_QUERY},
-  "products": ${PRODUCTS_QUERY},
   "cafeSection": ${CAFE_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
   "surveyLink": ${SURVEY_LINK_QUERY},

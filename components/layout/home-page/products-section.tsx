@@ -7,16 +7,15 @@ import { ProductCarousel } from './product-carousel';
 
 export default function ProductsSection({
   productsSection,
-  products,
 }: {
   productsSection: PRODUCTS_SECTION_QUERYResult;
-  products: PRODUCTS_QUERYResult;
 }) {
   if (!productsSection) {
     return null;
   }
 
-  const { sectionTitle, hoverLinkText, hoverLinkHref } = productsSection;
+  const { sectionTitle, hoverLinkText, hoverLinkHref, products } =
+    productsSection;
 
   return (
     <section id='products' className='bg-white flex flex-col gap-10'>

@@ -21,7 +21,6 @@ export default async function Home() {
     aboutSection,
     clinicSection,
     productsSection,
-    products,
     servicesSection,
     cafeSection,
   } = homePage;
@@ -35,7 +34,7 @@ export default async function Home() {
       <AboutSection aboutSection={aboutSection} />
       <ClinicSection clinicSection={clinicSection} />
       <ServicesSection servicesSection={servicesSection} />
-      <ProductsSection productsSection={productsSection} products={products} />
+      <ProductsSection productsSection={productsSection} />
       <CafeSection cafeSection={cafeSection} />
     </Layout>
   );

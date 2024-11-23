@@ -1,28 +1,27 @@
 // @ts-nocheck
-import { useRouter } from "next/router";
 
-import { Loading } from "components/Loading";
-import { useLiveQuery } from "next-sanity/preview";
-
-import Survey from "../../../../components/layout/Home/Survey";
+import { Loading } from 'components/Loading';
+import { useLiveQuery } from 'next-sanity/preview';
+import { useRouter } from 'next/router';
+import Survey from '../../../../components/layout/Home/Survey';
 import {
   FOOTER_QUERY,
   METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
   SURVEY_LINK_QUERY,
-  TREATMENTS_QUERY,
   TREATMENT_BY_SLUG_QUERY,
-} from "../../../../sanity/lib/queries";
-import Newsletter from "../../Home/Newsletter";
-import Layout from "../../layout";
-import AbovePicture from "./AbovePicture";
-import Content from "./Content";
-import Frame from "./Frame";
-import Green from "./Green";
-import Hero from "./Hero";
-import Quote from "./Quote";
-import { TreatmentNav } from "./TreatmentNav";
-import Written from "./Written";
+  TREATMENTS_QUERY,
+} from '../../../../sanity/lib/queries';
+import Newsletter from '../../Home/Newsletter';
+import Layout from '../../layout';
+import AbovePicture from './AbovePicture';
+import Content from './Content';
+import Frame from './Frame';
+import Green from './Green';
+import Hero from './Hero';
+import Quote from './Quote';
+import { TreatmentNav } from './TreatmentNav';
+import Written from './Written';
 
 export default function TreatmentsPreview() {
   const router = useRouter();
@@ -58,16 +57,15 @@ export default function TreatmentsPreview() {
 
   return (
     <Layout
-      title={treatment?.title || "Treatments"}
+      title={treatment?.title || 'Treatments'}
       navigation={navigation}
       footer={footer}
-      description={meta?.description || ""}
-    >
+      description={meta?.description || ''}>
       <TreatmentNav
         treatments={treatments}
-        currentPageTitle={treatment?.title || "Services"}
-        serviceTitle={treatment?.service?.title || ""}
-        serviceSlug={treatment?.service?.slug.current || ""}
+        currentPageTitle={treatment?.title || 'Services'}
+        serviceTitle={treatment?.service?.title || ''}
+        serviceSlug={treatment?.service?.slug.current || ''}
       />
       <AbovePicture treatment={treatment} />
       <Hero treatment={treatment} />

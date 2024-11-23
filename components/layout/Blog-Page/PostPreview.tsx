@@ -1,8 +1,7 @@
-import { QueryParams, SanityDocument } from "next-sanity";
-import { useLiveQuery } from "next-sanity/preview";
-
-import { POST_QUERY } from "../../../sanity/lib/queries";
-import Post from "./Post";
+import { QueryParams, SanityDocument } from 'next-sanity';
+import { useLiveQuery } from 'next-sanity/preview';
+import { POST_QUERY } from '../../../sanity/lib/queries';
+import Post from './Post';
 
 export default function PostPreview({
   post,

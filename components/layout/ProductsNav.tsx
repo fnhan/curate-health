@@ -1,36 +1,35 @@
-import Link from "next/link";
-
-import { Loading } from "components/Loading";
-import styles from "styles/CarouselNav.module.css";
+import { Loading } from 'components/Loading';
+import Link from 'next/link';
+import styles from 'styles/CarouselNav.module.css';
 
 export function ProductsNav({ products, currentPageTitle }) {
   return (
-    <div className="sticky top-[100px] z-50 bg-secondary bg-opacity-50 backdrop-blur-3xl">
+    <div className='bg-secondary bg-opacity-50 backdrop-blur-3xl sticky top-[100px] z-50'>
       <div
-        className={`container -ml-6 overflow-x-auto whitespace-nowrap 2xl:ml-4 ${styles.customScrollbar}`}
+        className={`container -ml-6 2xl:ml-4 whitespace-nowrap overflow-x-auto ${styles.customScrollbar}`}
       >
-        <div className="flex">
-          <div className="-mr-8">
-            <div className="group p-1">
+        <div className='flex'>
+          <div className=' -mr-8'>
+            <div className='p-1 group'>
               <div>
-                <div className="flex border-none bg-transparent">
+                <div className='flex bg-transparent border-none'>
                   <div
-                    className={`font-Poppins p-6 text-[12px] font-light text-black 2xl:text-[14px] ${
-                      currentPageTitle === "Our Services"
-                        ? "text-black underline"
-                        : ""
+                    className={`p-6 text-black font-light font-Poppins text-[12px] 2xl:text-[14px]  ${
+                      currentPageTitle === 'Our Services'
+                        ? 'underline text-black'
+                        : ''
                     }`}
                   >
                     Our Products
                     <div
                       className={`${
-                        currentPageTitle !== "Our Services"
-                          ? "-mt-1 h-[1.35px] w-0 bg-black"
-                          : ""
+                        currentPageTitle !== 'Our Services'
+                          ? '-mt-1 bg-black h-[1.35px] w-0'
+                          : ''
                       }`}
                     ></div>
                   </div>
-                  <div className="mx-3 -ml-6 p-6 font-light text-black lg:inline">
+                  <div className='text-black font-light -ml-6 p-6 mx-3 lg:inline'>
                     |
                   </div>
                 </div>
@@ -39,22 +38,22 @@ export function ProductsNav({ products, currentPageTitle }) {
           </div>
           {products.map((product, index) => (
             <div key={index}>
-              <div className="group p-1">
+              <div className='p-1 group'>
                 <Link href={`/products/${product.slug}`}>
                   <div
-                    className={`border-none bg-transparent ${
+                    className={`bg-transparent border-none ${
                       currentPageTitle === product.title
-                        ? "text-black underline"
-                        : ""
+                        ? 'underline text-black'
+                        : ''
                     }`}
                   >
-                    <div className="font-Poppins -ml-4 -mr-4 items-center justify-center p-6 text-[12px] font-light text-black 2xl:text-[14px]">
+                    <div className='-ml-4 -mr-4 items-center font-light font-Poppins justify-center p-6 text-black text-[12px] 2xl:text-[14px] '>
                       {product.title}
                       <div
                         className={`${
                           currentPageTitle !== product.title
-                            ? "-mt-1 h-[1.35px] w-0 bg-black transition-all duration-500 group-hover:w-full"
-                            : ""
+                            ? '-mt-1 bg-black h-[1.35px] w-0 group-hover:w-full transition-all duration-500'
+                            : ''
                         }`}
                       ></div>
                     </div>

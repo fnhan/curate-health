@@ -1,16 +1,16 @@
-import { PortableText } from "@portabletext/react";
-import { QuoteIcon } from "lucide-react";
+import { PortableText } from '@portabletext/react';
+import { QuoteIcon } from 'lucide-react';
 
-export default function Quote({ treatment }) {
+export default function Quote({treatment}) {
   return (
-    <div className="bg-secondary opacity-100">
-      <div className="2xl:jusitfy-center container flex-col py-44 text-black 2xl:flex">
-        <div className="ml-4 h-[54px] w-[60px] rotate-180 md:ml-8 md:h-[79px] md:w-[88px] 2xl:mx-auto 2xl:h-[134px] 2xl:w-[160px]">
+    <div className='bg-secondary opacity-100'>
+      <div className='container py-44 text-black 2xl:flex flex-col 2xl:jusitfy-center'>
+        <div className='ml-4 md:ml-8 rotate-180 w-[60px] h-[54px] md:w-[88px] md:h-[79px] 2xl:w-[160px] 2xl:h-[134px] 2xl:mx-auto'>
           <svg
             viewBox="0 0 160 134"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="mx-auto rotate-180 scale-[1.33] fill-current text-primary"
+            className='fill-current text-primary rotate-180 mx-auto scale-[1.33]'
           >
             <path
               opacity="0.8"
@@ -19,7 +19,7 @@ export default function Quote({ treatment }) {
             />
           </svg>
         </div>
-        <div className="pt-20 text-[16px] font-light italic md:text-[22px] 2xl:px-60 2xl:text-center 2xl:text-[32px]">
+        <div className='pt-20 2xl:px-60 2xl:text-center italic text-[16px] font-light md:text-[22px] 2xl:text-[32px]'>
           <PortableText value={treatment.quoteContent} />
         </div>
       </div>

@@ -1,15 +1,14 @@
-import OurStory from "components/layout/About/OurStory";
-import Newsletter from "components/layout/Home/Newsletter";
-import SurveyLink from "components/layout/Survey/SurveyLink";
-import { SanityDocument } from "next-sanity";
-
-import Layout from "../../../components/layout/layout";
-import { getClient } from "../../../sanity/lib/client";
+import OurStory from 'components/layout/About/OurStory';
+import Newsletter from 'components/layout/Home/Newsletter';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
+import { SanityDocument } from 'next-sanity';
+import Layout from '../../../components/layout/layout';
+import { getClient } from '../../../sanity/lib/client';
 import {
   METADATA_BY_SLUG_QUERY,
   OUR_STORY_PAGE_QUERY,
-} from "../../../sanity/lib/queries";
-import { token } from "../../../sanity/lib/token";
+} from '../../../sanity/lib/queries';
+import { token } from '../../../sanity/lib/token';
 
 type PageProps = {
   surveyLink: SanityDocument;
@@ -25,11 +24,10 @@ type PageProps = {
 export default function OurStoryPage(props: PageProps) {
   return (
     <Layout
-      title={"Our-Story"}
+      title={'Our-Story'}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.description}
-    >
+      description={props.description}>
       <div>Our Team</div>
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
@@ -43,7 +41,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
 
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: "/about/our-story",
+      slug: '/about/our-story',
     })
   ).meta;
 
@@ -52,7 +50,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
       ...allData,
       draftMode,
       meta,
-      token: draftMode ? token : "",
+      token: draftMode ? token : '',
     },
   };
 };

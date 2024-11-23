@@ -1,9 +1,7 @@
-import Link from "next/link";
-
-import { SanityDocument } from "next-sanity";
-
-import CoverImage from "./CoverImage";
-import Date from "./Date";
+import { SanityDocument } from 'next-sanity';
+import Link from 'next/link';
+import CoverImage from './CoverImage';
+import Date from './Date';
 
 export default function PostPreview({ post }: { post: SanityDocument }) {
   if (!post) {
@@ -13,30 +11,29 @@ export default function PostPreview({ post }: { post: SanityDocument }) {
   const { title, mainImage, excerpt, slug, publishedAt } = post;
 
   return (
-    <div className="flex flex-col gap-6 border-l pl-4 md:gap-8 2xl:gap-16">
-      <h3 className="flex-grow text-2xl md:text-4xl">
+    <div className='border-l pl-4 flex flex-col gap-6 md:gap-8 2xl:gap-16'>
+      <h3 className='text-2xl md:text-4xl flex-grow'>
         <Link
           href={`/blog/${slug.current}`}
-          className="border-b border-transparent transition-all duration-300 hover:border-current"
+          className='duration-300 transition-all border-b border-transparent hover:border-current'
           dangerouslySetInnerHTML={{ __html: title }}
         />
       </h3>
-      <div className="flex flex-grow items-center justify-center">
+      <div className='flex justify-center items-center flex-grow'>
         {mainImage && (
           <CoverImage title={title} mainImage={mainImage} slug={slug} />
         )}
       </div>
-      <div className="flex flex-col gap-6">
+      <div className='flex flex-col gap-6'>
         <div
-          className="text-sm leading-relaxed md:text-base"
+          className='text-sm md:text-base leading-relaxed'
           dangerouslySetInnerHTML={{ __html: excerpt }}
         />
-        <div className="flex justify-between text-xs md:text-sm">
+        <div className='text-xs md:text-sm flex justify-between'>
           <Date dateString={publishedAt} />
           <Link
-            className="italic text-secondary transition-all duration-300 hover:text-white hover:underline"
-            href={`/blog/${slug.current}`}
-          >
+            className='text-secondary italic hover:text-white hover:underline duration-300 transition-all'
+            href={`/blog/${slug.current}`}>
             Read More
           </Link>
         </div>

@@ -1,60 +1,60 @@
-import { defineField, defineType } from "sanity";
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: "sustainabilitySection",
-  title: "Sustainabiliy Section",
-  type: "document",
+  name: 'sustainabilitySection',
+  title: 'Sustainabiliy Section',
+  type: 'document',
   fields: [
     defineField({
-      name: "meta",
-      type: "object",
+      name: 'meta',
+      type: 'object',
       fields: [
         {
-          title: "Title",
-          name: "title",
-          type: "string",
+          title: 'Title',
+          name: 'title',
+          type: 'string',
         },
         {
-          title: "Description",
-          name: "description",
-          type: "string",
+          title: 'Description',
+          name: 'description',
+          type: 'string',
         },
       ],
     }),
     defineField({
-      name: "bgImage",
-      title: "Background image",
-      type: "image",
+      name: 'bgImage',
+      title: 'Background image',
+      type: 'image',
       options: {
         hotspot: true,
       },
       fields: [
         {
-          name: "alt",
-          title: "Alternative Text",
-          type: "string",
+          name: 'alt',
+          title: 'Alternative Text',
+          type: 'string',
           description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
+            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
         },
       ],
     }),
     defineField({
-      name: "sustainText",
-      title: "Sustainability Text",
-      type: "blockContent",
-      description: "The main text displayed for Sustainability",
+      name: 'sustainText',
+      title: 'Sustainability Text',
+      type: 'blockContent',
+      description: 'The main text displayed for Sustainability',
     }),
   ],
 
   preview: {
     select: {
-      bgImage: "bgImage",
-      sustainText: "sustainText.0.children.0.text",
+      bgImage: 'bgImage',
+      sustainText: 'sustainText.0.children.0.text',
     },
     prepare(selection) {
       const { bgImage } = selection;
       return {
-        title: "Sustainabiliy Section",
+        title: 'Sustainabiliy Section',
         media: bgImage,
       };
     },

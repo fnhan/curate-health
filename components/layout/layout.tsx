@@ -1,6 +1,6 @@
-import Footer from "./Footer";
-import Meta from "./Meta";
-import Nav from "./Nav";
+import Footer from './Footer';
+import Meta from './Meta';
+import Nav from './Nav';
 
 export default function Layout({
   title,
@@ -10,10 +10,10 @@ export default function Layout({
   description,
 }) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <Meta title={title} description={description || "description"} />
+    <div className='flex flex-col min-h-screen'>
+      <Meta title={title} description={description || 'description'} />
       <Nav navigation={navigation} />
-      <main className="flex flex-1 flex-col text-white antialiased">
+      <main className='flex-1 text-white antialiased flex flex-col'>
         {children}
       </main>
       <Footer footer={footer} />

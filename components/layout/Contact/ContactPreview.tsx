@@ -1,13 +1,12 @@
-import { Loading } from "components/Loading";
-import Layout from "components/layout/layout";
-import { useLiveQuery } from "next-sanity/preview";
-import { CONTACT_PAGE_QUERYResult } from "sanity.types";
-
-import { CONTACT_PAGE_QUERY } from "../../../sanity/lib/queries";
-import Newsletter from "../Home/Newsletter";
-import SurveyLink from "../Survey/SurveyLink";
-import ContactDetails from "./ContactDetails";
-import ContactInfo from "./ContactInfo";
+import Layout from 'components/layout/layout';
+import { Loading } from 'components/Loading';
+import { useLiveQuery } from 'next-sanity/preview';
+import { CONTACT_PAGE_QUERYResult } from 'sanity.types';
+import { CONTACT_PAGE_QUERY } from '../../../sanity/lib/queries';
+import Newsletter from '../Home/Newsletter';
+import SurveyLink from '../Survey/SurveyLink';
+import ContactDetails from './ContactDetails';
+import ContactInfo from './ContactInfo';
 
 export default function ContactPreview() {
   const [data, isLoading] = useLiveQuery<CONTACT_PAGE_QUERYResult>(
@@ -34,11 +33,10 @@ export default function ContactPreview() {
 
   return (
     <Layout
-      title="Contact"
+      title='Contact'
       navigation={navigation}
       footer={footer}
-      description={contactInfo?.meta?.description}
-    >
+      description={contactInfo?.meta?.description}>
       <ContactInfo contactInfo={contactInfo} feedbackLink={feedbackLink} />
       <ContactDetails contactDetails={contactDetails} />
       <SurveyLink surveyLink={surveyLink} />

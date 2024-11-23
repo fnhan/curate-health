@@ -1,8 +1,6 @@
-import Link from "next/link";
-
-import { Loading } from "components/Loading";
-
-import { FooterMobileAccordion } from "./Footer-Mobile-Accordion";
+import { Loading } from 'components/Loading';
+import Link from 'next/link';
+import { FooterMobileAccordion } from './Footer-Mobile-Accordion';
 
 export type FooterProps = {
   footer: {
@@ -52,10 +50,10 @@ export default function Footer({ footer }: FooterProps) {
   } = footer;
 
   return (
-    <footer className="flex w-full flex-col pb-8 pt-14">
-      <div className="container flex flex-col gap-10 text-white">
+    <footer className='flex flex-col pt-14 pb-8 w-full'>
+      <div className='container text-white flex flex-col gap-10'>
         {/* Contact Info */}
-        <div className="text-sm md:text-base">
+        <div className='text-sm md:text-base'>
           <h2>{contactInfo?.sectionTitle}</h2>
           {contactInfo?.details.map((detail, index) => (
             <div key={index}>
@@ -65,17 +63,16 @@ export default function Footer({ footer }: FooterProps) {
         </div>
         <div>
           <FooterMobileAccordion footer={footer} />
-          <div className="hidden flex-col gap-2 text-sm md:flex md:flex-row md:justify-end md:gap-10 md:text-base">
+          <div className='hidden md:flex flex-col gap-2 md:flex-row md:justify-end md:gap-10 text-sm md:text-base'>
             {/* Services Section */}
-            <div className="border-b border-white pb-2 md:border-none">
-              <h3 className="pl-3 md:mb-3">Services</h3>
-              <div className="hidden flex-col gap-1 pl-3 md:flex">
+            <div className='border-b border-white md:border-none pb-2'>
+              <h3 className='pl-3 md:mb-3'>Services</h3>
+              <div className='hidden md:flex flex-col gap-1 pl-3'>
                 {servicesSection.map((service, index) => (
                   <Link
                     key={index}
-                    className="hover:underline"
-                    href={`/services/${service.slug}`}
-                  >
+                    className='hover:underline'
+                    href={`/services/${service.slug}`}>
                     {service.title}
                   </Link>
                 ))}
@@ -85,16 +82,14 @@ export default function Footer({ footer }: FooterProps) {
             {sections.map((section, index) => (
               <div
                 key={index}
-                className="border-b border-white pb-2 md:border-none"
-              >
-                <h3 className="pl-3 md:mb-3">{section.title}</h3>
-                <div className="hidden flex-col gap-1 pl-3 md:flex">
+                className='border-b border-white md:border-none pb-2'>
+                <h3 className='pl-3 md:mb-3'>{section.title}</h3>
+                <div className='hidden md:flex flex-col gap-1 pl-3'>
                   {section.links?.map((link, linkIndex) => (
                     <Link
                       key={linkIndex}
-                      className="hover:underline"
-                      href={link.href}
-                    >
+                      className='hover:underline'
+                      href={link.href}>
                       {link.text}
                     </Link>
                   ))}
@@ -103,15 +98,14 @@ export default function Footer({ footer }: FooterProps) {
             ))}
             {/* Social Links Section */}
             <div>
-              <h3 className="pl-3 md:mb-3">{socialLinksSection.title}</h3>
-              <div className="hidden flex-col gap-1 pl-3 md:flex">
+              <h3 className='pl-3 md:mb-3'>{socialLinksSection.title}</h3>
+              <div className='hidden md:flex flex-col gap-1 pl-3'>
                 {socialLinksSection.links.map((link, linkIndex) => (
                   <a
                     key={linkIndex}
-                    target="_blank"
-                    className="hover:underline"
-                    href={link.url}
-                  >
+                    target='_blank'
+                    className='hover:underline'
+                    href={link.url}>
                     {link.platform}
                   </a>
                 ))}
@@ -119,18 +113,18 @@ export default function Footer({ footer }: FooterProps) {
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-between gap-6 md:flex-row">
-          <div className="text-xs">
+        <div className='flex flex-col md:flex-row justify-between gap-6'>
+          <div className='text-xs'>
             &copy; {new Date().getFullYear()} Curate Health
           </div>
-          <div className="flex justify-between text-xs md:justify-end md:gap-10">
-            <Link className="hover:underline" href={"/terms-of-use"}>
+          <div className='flex justify-between md:justify-end md:gap-10 text-xs'>
+            <Link className='hover:underline' href={'/terms-of-use'}>
               Terms of Use
             </Link>
-            <Link href={"/privacy"} className="hover:underline">
+            <Link href={'/privacy'} className='hover:underline'>
               Privacy + Cookies
             </Link>
-            <Link href={"/accessibility"} className="hover:underline">
+            <Link href={'/accessibility'} className='hover:underline'>
               Accessibility
             </Link>
           </div>

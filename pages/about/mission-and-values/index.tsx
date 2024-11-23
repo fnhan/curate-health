@@ -1,15 +1,14 @@
-import MissionAndValues from "components/layout/About/MissionAndValues";
-import Newsletter from "components/layout/Home/Newsletter";
-import SurveyLink from "components/layout/Survey/SurveyLink";
-import { SanityDocument } from "next-sanity";
-
-import Layout from "../../../components/layout/layout";
-import { getClient } from "../../../sanity/lib/client";
+import MissionAndValues from 'components/layout/About/MissionAndValues';
+import Newsletter from 'components/layout/Home/Newsletter';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
+import { SanityDocument } from 'next-sanity';
+import Layout from '../../../components/layout/layout';
+import { getClient } from '../../../sanity/lib/client';
 import {
   METADATA_BY_SLUG_QUERY,
   MISSION_AND_VALUES_PAGE_QUERY,
-} from "../../../sanity/lib/queries";
-import { token } from "../../../sanity/lib/token";
+} from '../../../sanity/lib/queries';
+import { token } from '../../../sanity/lib/token';
 
 type PageProps = {
   aboutPages: SanityDocument;
@@ -25,11 +24,10 @@ type PageProps = {
 export default function MissionValues(props: PageProps) {
   return (
     <Layout
-      title={"Mission-And-Values"}
+      title={'Mission-And-Values'}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.description}
-    >
+      description={props.description}>
       <MissionAndValues
         missionAndValues={props.missionAndValues}
         aboutPages={props.aboutPages}
@@ -46,7 +44,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
 
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: "/about/mission-and-values",
+      slug: '/about/mission-and-values',
     })
   ).meta;
 
@@ -55,7 +53,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
       ...allData,
       draftMode,
       meta,
-      token: draftMode ? token : "",
+      token: draftMode ? token : '',
     },
   };
 };

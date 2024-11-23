@@ -1,1 +1,1 @@
-export const BASEURL = "https://curatehealth.ca";
+export const BASEURL = 'https://curatehealth.ca';

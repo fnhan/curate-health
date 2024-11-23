@@ -1,17 +1,15 @@
-import dynamic from "next/dynamic";
-
-import ContactDetails from "components/layout/Contact/ContactDetails";
-import ContactInfo from "components/layout/Contact/ContactInfo";
-import Newsletter from "components/layout/Home/Newsletter";
-import SurveyLink from "components/layout/Survey/SurveyLink";
-import Layout from "components/layout/layout";
-
-import { getClient } from "../../sanity/lib/client";
+import ContactDetails from 'components/layout/Contact/ContactDetails';
+import ContactInfo from 'components/layout/Contact/ContactInfo';
+import Newsletter from 'components/layout/Home/Newsletter';
+import SurveyLink from 'components/layout/Survey/SurveyLink';
+import Layout from 'components/layout/layout';
+import dynamic from 'next/dynamic';
+import { getClient } from '../../sanity/lib/client';
 import {
   CONTACT_PAGE_QUERY,
   METADATA_BY_SLUG_QUERY,
-} from "../../sanity/lib/queries";
-import { token } from "../../sanity/lib/token";
+} from '../../sanity/lib/queries';
+import { token } from '../../sanity/lib/token';
 
 type SanityDocument = {
   _id: string;
@@ -33,7 +31,7 @@ type PageProps = {
 
 export default function Index(props: PageProps) {
   const ContactPreview = dynamic(
-    () => import("../../components/layout/Contact/ContactPreview")
+    () => import('../../components/layout/Contact/ContactPreview')
   );
 
   if (props.draftMode) {
@@ -42,15 +40,12 @@ export default function Index(props: PageProps) {
 
   return (
     <Layout
-      title={"Contact"}
+      title={'Contact'}
       navigation={props.navigation}
       footer={props.footer}
-      description={props.meta?.description || "Contact page"}
+      description={props.meta?.description || 'Contact page'}
     >
-      <ContactInfo
-        contactInfo={props.contactInfo}
-        feedbackLink={props.feedbackLink}
-      />
+      <ContactInfo contactInfo={props.contactInfo} feedbackLink={props.feedbackLink} />
       <ContactDetails contactDetails={props.contactDetails} />
       <SurveyLink surveyLink={props.surveyLink} />
       <Newsletter />
@@ -64,7 +59,7 @@ export const getStaticProps = async ({ draftMode = false }) => {
 
   const meta = (
     await client.fetch<SanityDocument>(METADATA_BY_SLUG_QUERY, {
-      slug: "/contact",
+      slug: '/contact',
     })
   ).meta;
 
@@ -73,7 +68,8 @@ export const getStaticProps = async ({ draftMode = false }) => {
       ...allData,
       draftMode,
       meta,
-      token: draftMode ? token : "",
+      token: draftMode ? token : '',
     },
   };
 };
+

@@ -1,59 +1,59 @@
-import { defineField, defineType } from "sanity";
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
-  name: "clinic",
-  title: "Home | Clinic Section",
-  type: "document",
+  name: 'clinic',
+  title: 'Home | Clinic Section',
+  type: 'document',
   fields: [
     defineField({
-      name: "clinicImage",
-      title: "Clinic Background Image",
-      type: "image",
+      name: 'clinicImage',
+      title: 'Clinic Background Image',
+      type: 'image',
       options: {
         hotspot: true,
       },
       fields: [
         {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
           description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
+            'Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.',
         },
       ],
     }),
     defineField({
-      name: "content",
-      title: "Clinic Content",
-      type: "blockContent",
-      description: "Add content paragraphs for the clinic section",
+      name: 'content',
+      title: 'Clinic Content',
+      type: 'blockContent',
+      description: 'Add content paragraphs for the clinic section',
     }),
     defineField({
-      name: "meta",
-      type: "object",
+      name: 'meta',
+      type: 'object',
       fields: [
         {
-          title: "Title",
-          name: "title",
-          type: "string",
+          title: 'Title',
+          name: 'title',
+          type: 'string',
         },
         {
-          title: "Description",
-          name: "description",
-          type: "string",
+          title: 'Description',
+          name: 'description',
+          type: 'string',
         },
       ],
     }),
   ],
   preview: {
     select: {
-      title: "content",
-      media: "clinicImage",
+      title: 'content',
+      media: 'clinicImage',
     },
     prepare(selection) {
       const { media } = selection;
       return {
-        title: "Clinic Section",
+        title: 'Clinic Section',
         media: media,
       };
     },

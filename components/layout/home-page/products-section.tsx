@@ -1,10 +1,9 @@
-import HoverLink from "components/shared/hover-link";
+import HoverLink from 'components/shared/hover-link';
 import {
   PRODUCTS_QUERYResult,
   PRODUCTS_SECTION_QUERYResult,
-} from "sanity.types";
-
-import { ProductCarousel } from "./product-carousel";
+} from 'sanity.types';
+import { ProductCarousel } from './product-carousel';
 
 export default function ProductsSection({
   productsSection,
@@ -19,17 +18,17 @@ export default function ProductsSection({
     productsSection;
 
   return (
-    <section id="products" className="flex flex-col gap-10 bg-white">
-      <div className="container pt-9">
-        <h2 className="font-light text-primary md:text-4xl">{sectionTitle}</h2>
+    <section id='products' className='bg-white flex flex-col gap-10'>
+      <div className='container pt-9'>
+        <h2 className=' text-primary font-light md:text-4xl'>{sectionTitle}</h2>
       </div>
-      <div className="container">
+      <div className='container'>
         <ProductCarousel products={products} />
       </div>
       <HoverLink
         href={hoverLinkHref!}
         text={hoverLinkText!}
-        textColor="text-black"
+        textColor='text-black'
       />
     </section>
   );

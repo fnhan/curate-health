@@ -1,8 +1,7 @@
-import React from "react";
-
-import { LAYOUT_QUERYResult } from "../../sanity.types";
-import SiteFooter from "./site-footer";
-import SiteNavigation from "./site-navigation";
+import React from 'react';
+import { LAYOUT_QUERYResult } from '../../sanity.types';
+import SiteFooter from './site-footer';
+import SiteNavigation from './site-navigation';
 
 export default function Layout({
   children,
@@ -14,7 +13,7 @@ export default function Layout({
   const { navLinks, footer, primaryCTAButton } = layout;
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className='flex flex-col flex-1'>
       <SiteNavigation navLinks={navLinks} />
       {children}
       <SiteFooter footer={footer} />

@@ -1,18 +1,19 @@
 /**
  * This configuration is used to for the Sanity Studio that’s mounted on the `/pages/studio/[[...index]].tsx` route
  */
-import { visionTool } from "@sanity/vision";
-import { defineConfig } from "sanity";
-import { presentationTool } from "sanity/presentation";
-import { structureTool } from "sanity/structure";
+
+import { visionTool } from '@sanity/vision';
+import { defineConfig } from 'sanity';
+import { presentationTool } from 'sanity/presentation';
+import { structureTool } from 'sanity/structure';
+import { locate } from './sanity/presentation/locate';
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-import { apiVersion, dataset, projectId } from "./sanity/env";
-import { locate } from "./sanity/presentation/locate";
-import { schema } from "./sanity/schema";
+import { apiVersion, dataset, projectId } from './sanity/env';
+import { schema } from './sanity/schema';
 
 export default defineConfig({
-  basePath: "/studio",
+  basePath: '/studio',
   projectId,
   dataset,
   // Add and edit the content schema in the './sanity/schema' folder
@@ -26,7 +27,7 @@ export default defineConfig({
       locate,
       previewUrl: {
         draftMode: {
-          enable: "/api/draft",
+          enable: '/api/draft',
         },
       },
     }),

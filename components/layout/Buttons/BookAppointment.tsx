@@ -1,11 +1,10 @@
-import Link from "next/link";
-
-import { Button } from "components/ui/button";
+import { Button } from 'components/ui/button';
+import Link from 'next/link';
 
 export default function BookAppointment() {
   return (
-    <Link href={"/booking"}>
-      <Button className="rounded-none border border-white bg-transparent px-8 py-8 text-xl text-white transition-all duration-300 hover:bg-white hover:text-primary hover:text-white">
+    <Link href={'/booking'}>
+      <Button className='bg-transparent text-xl text-white border border-white hover:text-white hover:bg-white hover:text-primary rounded-none duration-300 transition-all px-8 py-8'>
         Book Appointment
       </Button>
     </Link>

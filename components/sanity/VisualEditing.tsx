@@ -1,7 +1,6 @@
-import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-
-import { HistoryAdapterNavigate, enableOverlays } from "@sanity/overlays";
+import { enableOverlays, HistoryAdapterNavigate } from '@sanity/overlays';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
 
 export default function VisualEditing() {
   const router = useRouter();
@@ -22,11 +21,11 @@ export default function VisualEditing() {
         },
         update: (update) => {
           switch (update.type) {
-            case "push":
+            case 'push':
               return routerRef.current.push(update.url);
-            case "pop":
+            case 'pop':
               return routerRef.current.back();
-            case "replace":
+            case 'replace':
               return routerRef.current.replace(update.url);
             default:
               throw new Error(`Unknown update type: ${update.type}`);
@@ -38,7 +37,7 @@ export default function VisualEditing() {
   }, []);
   useEffect(() => {
     if (navigate && router.isReady) {
-      navigate({ type: "push", url: router.asPath });
+      navigate({ type: 'push', url: router.asPath });
     }
   }, [navigate, router.asPath, router.isReady]);
 

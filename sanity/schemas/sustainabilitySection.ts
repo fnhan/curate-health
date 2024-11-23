@@ -6,22 +6,6 @@ export default defineType({
   type: "document",
   fields: [
     defineField({
-      name: "meta",
-      type: "object",
-      fields: [
-        {
-          title: "Title",
-          name: "title",
-          type: "string",
-        },
-        {
-          title: "Description",
-          name: "description",
-          type: "string",
-        },
-      ],
-    }),
-    defineField({
       name: "bgImage",
       title: "Background image",
       type: "image",

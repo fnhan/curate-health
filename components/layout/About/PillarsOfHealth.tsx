@@ -1,15 +1,17 @@
-import imageUrlBuilder from '@sanity/image-url';
-import { Loading } from 'components/Loading';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { dataset, projectId } from '../../../sanity/env';
-import styles from '../../../styles/CarouselNav.module.css';
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+
+import imageUrlBuilder from "@sanity/image-url";
+import { Loading } from "components/Loading";
+
+import { dataset, projectId } from "../../../sanity/env";
+import styles from "../../../styles/CarouselNav.module.css";
 
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
-  const [textContent, setTextContent] = useState('');
+  const [textContent, setTextContent] = useState("");
   if (!pillarsOfHealth) {
     return <Loading />;
   }
@@ -35,32 +37,34 @@ export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
   }
 
   return (
-    <div className='flex flex-col w-full font-light'>
+    <div className="flex w-full flex-col font-light">
       <section
-        id='headerSection'
-        className='relative bg-primary font-light w-full'>
+        id="headerSection"
+        className="relative w-full bg-primary font-light"
+      >
         <Image
-          loading='lazy'
+          loading="lazy"
           width={1440}
           height={690}
           alt={`${headerBgImage.alt}`}
           src={builder.image(headerBgImage).width(1440).height(690).url()}
-          className='object-cover w-full h-[354px] md:h-[450px] lg:h-[690px]'
+          className="h-[354px] w-full object-cover md:h-[450px] lg:h-[690px]"
         />
-        <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[48px] md:h-[68px] lg:h-[78px]'>
-          <div className='bg-[#C3C7BB] backdrop-blur-3xl h-[78px] md:h-[68px] lg:h-[78px]'>
+        <div className="h-[48px] bg-[#C3C7BB] backdrop-blur-3xl md:h-[68px] lg:h-[78px]">
+          <div className="h-[78px] bg-[#C3C7BB] backdrop-blur-3xl md:h-[68px] lg:h-[78px]">
             <div
-              className={`container whitespace-nowrap overflow-x-auto -mt-2.5 md:-mt-0 ${styles.customScrollbar}`}>
-              <div className='flex'>
-                <div className=' -mr-8'>
-                  <div className='p-1 group'>
-                    <Link href='/about/our-story'>
-                      <div className='flex bg-transparent border-none'>
-                        <div className='-ml-6 p-6 text-primary font-light text-[12px] lg:text-[14px] leading-[14px]'>
+              className={`container -mt-2.5 overflow-x-auto whitespace-nowrap md:-mt-0 ${styles.customScrollbar}`}
+            >
+              <div className="flex">
+                <div className="-mr-8">
+                  <div className="group p-1">
+                    <Link href="/about/our-story">
+                      <div className="flex border-none bg-transparent">
+                        <div className="-ml-6 p-6 text-[12px] font-light leading-[14px] text-primary lg:text-[14px]">
                           About
-                          <div className='mt-1 bg-primary md:h-[0.5px] lg:h-[1.35px] w-0 group-hover:w-full transition-all duration-500'></div>
+                          <div className="mt-1 w-0 bg-primary transition-all duration-500 group-hover:w-full md:h-[0.5px] lg:h-[1.35px]"></div>
                         </div>
-                        <div className='text-primary font-light -ml-6 p-6 mx-3 lg:inline leading-[14px]'>
+                        <div className="mx-3 -ml-6 p-6 font-light leading-[14px] text-primary lg:inline">
                           |
                         </div>
                       </div>
@@ -69,14 +73,16 @@ export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
                 </div>
                 {aboutPages.map((aboutPage, index) => (
                   <div key={index}>
-                    <div className='p-1 group'>
+                    <div className="group p-1">
                       <Link href={`/about/${aboutPage.slug}`}>
                         <div
-                          className={`bg-transparent border-none ${aboutPage.title === 'Pillars of Health' ? 'underline text-primary underline-offset-[7px] lg:underline-offset-[7.5px]' : ''}`}>
-                          <div className='-ml-4 -mr-4 items-center font-light justify-center p-6 text-primary text-[12px] lg:text-[14px] leading-[14px]'>
+                          className={`border-none bg-transparent ${aboutPage.title === "Pillars of Health" ? "text-primary underline underline-offset-[7px] lg:underline-offset-[7.5px]" : ""}`}
+                        >
+                          <div className="-ml-4 -mr-4 items-center justify-center p-6 text-[12px] font-light leading-[14px] text-primary lg:text-[14px]">
                             {aboutPage.title}
                             <div
-                              className={`${aboutPage.title !== 'Pillars of Health' ? 'mt-1 bg-primary md:h-[0.5px] lg:h-[1.35px] w-0 group-hover:w-full transition-all duration-500' : ''}`}></div>
+                              className={`${aboutPage.title !== "Pillars of Health" ? "mt-1 w-0 bg-primary transition-all duration-500 group-hover:w-full md:h-[0.5px] lg:h-[1.35px]" : ""}`}
+                            ></div>
                           </div>
                         </div>
                       </Link>
@@ -88,78 +94,77 @@ export default function PillarsofHealth({ pillarsOfHealth, aboutPages }) {
           </div>
         </div>
       </section>
-      <section id='titleSection'>
-        <h1
-          className='text-white text-2xl md:text-5xl lg:text-7xl leading-8 md:leading-10 lg:leading-[72px] flex justify-center font-light
-        pt-24 lg:pt-32'>
+      <section id="titleSection">
+        <h1 className="flex justify-center pt-24 text-2xl font-light leading-8 text-white md:text-5xl md:leading-10 lg:pt-32 lg:text-7xl lg:leading-[72px]">
           {pageTitle}
         </h1>
-        <h2 className='hidden md:block leading-10 text-center italic text:sm md:text-xl lg:text-3xl w-[621px] lg:w-[736px] m-auto pl-1 pt-8'>
+        <h2 className="text:sm m-auto hidden w-[621px] pl-1 pt-8 text-center italic leading-10 md:block md:text-xl lg:w-[736px] lg:text-3xl">
           {pageSubtitle}
         </h2>
       </section>
       <section
-        id='pageContent'
-        className='flex flex-col container  
-      py-20 md:py-32 w-full'>
-        <div className='lg:ml-8 flex flex-col lg:flex-row justify-center items-center lg:justify-start lg:items-start'>
+        id="pageContent"
+        className="container flex w-full flex-col py-20 md:py-32"
+      >
+        <div className="flex flex-col items-center justify-center lg:ml-8 lg:flex-row lg:items-start lg:justify-start">
           <div
-            id='outterCircle'
-            className='flex justify-center items-center lg:justify-between lg:flex-row h-[237px] md:h-[450px] aspect-square rounded-full border'>
+            id="outterCircle"
+            className="flex aspect-square h-[237px] items-center justify-center rounded-full border md:h-[450px] lg:flex-row lg:justify-between"
+          >
             <p
-              id='textContent'
-              className='italic w-[120px] md:w-[265px] lg:w-[450px] text-[9px] md:text-sm lg:text-2xl lg:text-left
-              lg:transform lg:translate-x-[40rem] leading-3 md:leading-4 lg:leading-7 text-center'>
+              id="textContent"
+              className="w-[120px] text-center text-[9px] italic leading-3 md:w-[265px] md:text-sm md:leading-4 lg:w-[450px] lg:translate-x-[40rem] lg:transform lg:text-left lg:text-2xl lg:leading-7"
+            >
               {textContent}
             </p>
           </div>
           <div
-            className='absolute top-[680px] md:top-[940px] lg:top-[1310px] lg:transform lg:translate-x-[9.5rem] bg-primary flex justify-center items-center cursor-pointer 
-        h-[78px] md:h-[145px] aspect-square rounded-full border border-white hover:bg-white hover:text-primary transition-all duration-300 focus:bg-white focus:text-primary'
+            className="absolute top-[680px] flex aspect-square h-[78px] cursor-pointer items-center justify-center rounded-full border border-white bg-primary transition-all duration-300 hover:bg-white hover:text-primary focus:bg-white focus:text-primary md:top-[940px] md:h-[145px] lg:top-[1310px] lg:translate-x-[9.5rem] lg:transform"
             onClick={() => displayText(mentalHealthTextContent)}
             onMouseEnter={() => displayText(mentalHealthTextContent)}
-            onMouseLeave={() => displayText('')}>
-            <span className='text-xs md:text-lg lg:text-2xl flex text-center'>
+            onMouseLeave={() => displayText("")}
+          >
+            <span className="flex text-center text-xs md:text-lg lg:text-2xl">
               {mentalHealthTitle}
             </span>
           </div>
           <div
-            className='absolute top-[750px] md:top-[1050px] lg:top-[1450px] transform translate-x-[6.5rem] md:translate-x-[12.5rem] lg:translate-x-[22rem]
-         bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[145px] aspect-square rounded-full border border-white hover:bg-white hover:text-primary transition-all duration-300 focus:bg-white focus:text-primary'
+            className="absolute top-[750px] flex aspect-square h-[78px] translate-x-[6.5rem] transform cursor-pointer items-center justify-center rounded-full border border-white bg-primary transition-all duration-300 hover:bg-white hover:text-primary focus:bg-white focus:text-primary md:top-[1050px] md:h-[145px] md:translate-x-[12.5rem] lg:top-[1450px] lg:translate-x-[22rem]"
             onClick={() => displayText(emotionalHealthTextContent)}
             onMouseEnter={() => displayText(emotionalHealthTextContent)}
-            onMouseLeave={() => displayText('')}>
-            <span className='text-xs md:text-lg lg:text-2xl flex text-center'>
+            onMouseLeave={() => displayText("")}
+          >
+            <span className="flex text-center text-xs md:text-lg lg:text-2xl">
               {emotionalHealthTitle}
             </span>
           </div>
           <div
-            className='absolute top-[890px] md:top-[1295px] lg:top-[1705px] transform translate-x-16 md:translate-x-[135px] lg:translate-x-[17.5rem] bg-primary flex justify-center items-center cursor-pointer 
-        h-[78px] md:h-[145px] aspect-square rounded-full border border-white hover:bg-white hover:text-primary transition-all duration-300 focus:bg-white focus:text-primary'
+            className="absolute top-[890px] flex aspect-square h-[78px] translate-x-16 transform cursor-pointer items-center justify-center rounded-full border border-white bg-primary transition-all duration-300 hover:bg-white hover:text-primary focus:bg-white focus:text-primary md:top-[1295px] md:h-[145px] md:translate-x-[135px] lg:top-[1705px] lg:translate-x-[17.5rem]"
             onClick={() => displayText(socialHealthTextContent)}
             onMouseEnter={() => displayText(socialHealthTextContent)}
-            onMouseLeave={() => displayText('')}>
-            <span className='text-xs md:text-lg lg:text-2xl flex text-center'>
+            onMouseLeave={() => displayText("")}
+          >
+            <span className="flex text-center text-xs md:text-lg lg:text-2xl">
               {socialHealthTitle}
             </span>
           </div>
           <div
-            className='absolute top-[890px] md:top-[1295px] lg:top-[1705px] transform -translate-x-16 md:-translate-x-[135px] lg:translate-x-[2rem] bg-primary flex justify-center items-center cursor-pointer 
-          h-[78px] md:h-[145px] aspect-square rounded-full border border-white  hover:bg-white hover:text-primary transition-all duration-300 focus:bg-white focus:text-primary'
+            className="absolute top-[890px] flex aspect-square h-[78px] -translate-x-16 transform cursor-pointer items-center justify-center rounded-full border border-white bg-primary transition-all duration-300 hover:bg-white hover:text-primary focus:bg-white focus:text-primary md:top-[1295px] md:h-[145px] md:-translate-x-[135px] lg:top-[1705px] lg:translate-x-[2rem]"
             onClick={() => displayText(spiritualHealthTextContent)}
             onMouseEnter={() => displayText(spiritualHealthTextContent)}
-            onMouseLeave={() => displayText('')}>
-            <span className='text-xs md:text-lg lg:text-2xl flex text-center'>
+            onMouseLeave={() => displayText("")}
+          >
+            <span className="flex text-center text-xs md:text-lg lg:text-2xl">
               {spiritualHealthTitle}
             </span>
           </div>
           <div
-            className='absolute top-[750px] md:top-[1050px] lg:top-[1450px] transform -translate-x-[6.5rem] md:-translate-x-[12.5rem] lg:-translate-x-12 
-        bg-primary flex justify-center items-center cursor-pointer h-[78px] md:h-[145px] aspect-square rounded-full border border-white hover:bg-white hover:text-primary transition-all duration-300 focus:bg-white focus:text-primary'
+            className="absolute top-[750px] flex aspect-square h-[78px] -translate-x-[6.5rem] transform cursor-pointer items-center justify-center rounded-full border border-white bg-primary transition-all duration-300 hover:bg-white hover:text-primary focus:bg-white focus:text-primary md:top-[1050px] md:h-[145px] md:-translate-x-[12.5rem] lg:top-[1450px] lg:-translate-x-12"
             onMouseEnter={() => displayText(physicalHealthTextContent)}
-            onMouseLeave={() => displayText('')}
-            onClick={() => displayText(physicalHealthTextContent)}>
-            <span className=' text-xs md:text-lg lg:text-2xl flex text-center'>
+            onMouseLeave={() => displayText("")}
+            onClick={() => displayText(physicalHealthTextContent)}
+          >
+            <span className="flex text-center text-xs md:text-lg lg:text-2xl">
               {physicalHealthTitle}
             </span>
           </div>

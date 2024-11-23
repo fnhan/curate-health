@@ -1,5 +1,6 @@
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
+import Link from "next/link";
+
+import { ChevronRight } from "lucide-react";
 
 type HoverLinkProps = {
   href: string;
@@ -10,12 +11,12 @@ type HoverLinkProps = {
 export default function HoverLink({
   href,
   text,
-  textColor = 'text-white',
+  textColor = "text-white",
 }: HoverLinkProps) {
   return (
-    <Link className='w-full' href={href}>
-      <div className='container border-t duration-300 transition-all group hover:bg-secondary py-5 text-right block italic'>
-        <div className='flex items-center gap-2 hover:gap-20 transition-all duration-300 justify-end'>
+    <Link className="w-full" href={href}>
+      <div className="group container block border-t py-5 text-right italic transition-all duration-300 hover:bg-secondary">
+        <div className="flex items-center justify-end gap-2 transition-all duration-300 hover:gap-20">
           <span className={`${textColor} group-hover:text-white`}>{text}</span>
           <ChevronRight className={`w-5 ${textColor} group-hover:text-white`} />
         </div>

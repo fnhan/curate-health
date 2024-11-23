@@ -1,18 +1,19 @@
-import ComingSoon from 'components/layout/Home/ComingSoon';
-import Newsletter from 'components/layout/Home/Newsletter';
-import Link from 'next/link';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
+
+import ComingSoon from "components/layout/Home/ComingSoon";
+import Newsletter from "components/layout/Home/Newsletter";
 
 export default function LoginPage() {
   return (
-    <main className='flex flex-1 flex-col items-center justify-center'>
+    <main className="flex flex-1 flex-col items-center justify-center">
       <ComingSoon />
       <Newsletter isComingSoon={true} />
-      <p className='mt-4 text-center'>
-        If you are an admin of this site,{' '}
-        <Link className='underline' href='/login'>
+      <p className="mt-4 text-center">
+        If you are an admin of this site,{" "}
+        <Link className="underline" href="/login">
           click here
-        </Link>{' '}
+        </Link>{" "}
         to login
       </p>
     </main>

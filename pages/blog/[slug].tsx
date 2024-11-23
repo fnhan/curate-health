@@ -1,22 +1,24 @@
-import { Loading } from 'components/Loading';
-import Post from 'components/layout/Blog-Page/Post';
-import Layout from 'components/layout/layout';
-import { GetStaticPaths } from 'next';
-import { QueryParams, SanityDocument } from 'next-sanity';
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import { getClient } from '../../sanity/lib/client';
+import { GetStaticPaths } from "next";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+
+import { Loading } from "components/Loading";
+import Post from "components/layout/Blog-Page/Post";
+import Layout from "components/layout/layout";
+import { QueryParams, SanityDocument } from "next-sanity";
+
+import { getClient } from "../../sanity/lib/client";
 import {
   FOOTER_QUERY,
   METADATA_BY_SLUG_QUERY,
   NAVIGATION_QUERY,
   POSTS_SLUG_QUERY,
   POST_QUERY,
-} from '../../sanity/lib/queries';
-import { token } from '../../sanity/lib/token';
+} from "../../sanity/lib/queries";
+import { token } from "../../sanity/lib/token";
 
 const PostPreview = dynamic(
-  () => import('../../components/layout/Blog-Page/PostPreview')
+  () => import("../../components/layout/Blog-Page/PostPreview")
 );
 
 type PageProps = {
@@ -35,7 +37,7 @@ export default function SinglePost(props: PageProps) {
 
   if (router.isFallback) {
     return (
-      <div className='min-h-screen flex justify-center'>
+      <div className="flex min-h-screen justify-center">
         <Loading />
       </div>
     );
@@ -46,7 +48,7 @@ export default function SinglePost(props: PageProps) {
     <Layout
       navigation={navigation}
       footer={footer}
-      title={'Blog'}
+      title={"Blog"}
       description={props.description}
     >
       {draftMode ? (
@@ -78,7 +80,7 @@ export const getStaticProps = async ({ params = {}, draftMode = false }) => {
       footer,
       draftMode,
       meta,
-      token: draftMode ? token : '',
+      token: draftMode ? token : "",
     },
   };
 };

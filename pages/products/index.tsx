@@ -1,15 +1,15 @@
-import Layout from '../../components/layout/layout';
-import { getClient } from '../../sanity/lib/client';
-import { FOOTER_QUERY, NAVIGATION_QUERY } from '../../sanity/lib/queries';
-import { token } from '../../sanity/lib/token';
+import Layout from "../../components/layout/layout";
+import { getClient } from "../../sanity/lib/client";
+import { FOOTER_QUERY, NAVIGATION_QUERY } from "../../sanity/lib/queries";
+import { token } from "../../sanity/lib/token";
 
 export default function Products({ navigation, footer }) {
   return (
     <Layout
       navigation={navigation}
       footer={footer}
-      title={'Products'}
-      description={''}
+      title={"Products"}
+      description={""}
     >
       Products
     </Layout>
@@ -26,7 +26,7 @@ export const getStaticProps = async ({ preview = false }) => {
       navigation,
       footer,
       draftMode: preview,
-      token: preview ? token : '',
+      token: preview ? token : "",
     },
   };
 };

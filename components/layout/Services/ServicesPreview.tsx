@@ -1,22 +1,23 @@
 // @ts-nocheck
+import { useRouter } from "next/router";
 
-import { Loading } from 'components/Loading';
-import { useLiveQuery } from 'next-sanity/preview';
-import { useRouter } from 'next/router';
-import Survey from '../../../components/layout/Home/Survey';
+import { Loading } from "components/Loading";
+import { useLiveQuery } from "next-sanity/preview";
+
+import Survey from "../../../components/layout/Home/Survey";
 import {
   FOOTER_QUERY,
   NAVIGATION_QUERY,
-  SERVICE_BY_SLUG_QUERY,
   SERVICES_QUERY,
+  SERVICE_BY_SLUG_QUERY,
   SURVEY_LINK_QUERY,
   TREATMENTS_QUERY,
-} from '../../../sanity/lib/queries';
-import Newsletter from '../Home/Newsletter';
-import Layout from '../layout';
-import Picture from './Picture';
-import ServiceDetails from './ServiceDetails';
-import { ServicesNav } from './ServicesNav';
+} from "../../../sanity/lib/queries";
+import Newsletter from "../Home/Newsletter";
+import Layout from "../layout";
+import Picture from "./Picture";
+import ServiceDetails from "./ServiceDetails";
+import { ServicesNav } from "./ServicesNav";
 
 export default function ServicesPreview() {
   const router = useRouter();
@@ -51,8 +52,9 @@ export default function ServicesPreview() {
     <Layout
       navigation={navigation}
       footer={footer}
-      title={service?.title || 'Services'}
-      description={service?.meta?.description || 'descp'}>
+      title={service?.title || "Services"}
+      description={service?.meta?.description || "descp"}
+    >
       <Picture service={service} />
       <ServicesNav services={services} currentPageTitle={service.title} />
       <ServiceDetails service={service} treatments={service.treatments} />

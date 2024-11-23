@@ -1,16 +1,28 @@
-import Layout from 'components/layout/layout';
-import { getClient } from '../../sanity/lib/client';
-import { FOOTER_QUERY, NAVIGATION_QUERY, PRIVACY_QUERY} from '../../sanity/lib/queries';
-import { PortableText } from '@portabletext/react';
-import { token } from '../../sanity/lib/token';
+import { PortableText } from "@portabletext/react";
+import Layout from "components/layout/layout";
+
+import { getClient } from "../../sanity/lib/client";
+import {
+  FOOTER_QUERY,
+  NAVIGATION_QUERY,
+  PRIVACY_QUERY,
+} from "../../sanity/lib/queries";
+import { token } from "../../sanity/lib/token";
 
 export default function privacy({ navigation, footer, privacy }) {
   return (
-    <Layout navigation={navigation} footer={footer} title={'Privacy'} description= {'Default description for privacy'}>
-      <section className='bg-white py-10 md:py-20'>
-        <div className='text-black container'>
-          <h1 className='font-denton font-bold text-xl mb-6'>{privacy.title}</h1>
-          <div className='flex flex-col gap-4'>
+    <Layout
+      navigation={navigation}
+      footer={footer}
+      title={"Privacy"}
+      description={"Default description for privacy"}
+    >
+      <section className="bg-white py-10 md:py-20">
+        <div className="container text-black">
+          <h1 className="font-denton mb-6 text-xl font-bold">
+            {privacy.title}
+          </h1>
+          <div className="flex flex-col gap-4">
             <PortableText value={privacy.content} />
           </div>
         </div>
@@ -31,7 +43,7 @@ export const getStaticProps = async ({ preview = false }) => {
       footer,
       privacy,
       draftMode: preview,
-      token: preview ? token : '',
+      token: preview ? token : "",
     },
   };
 };

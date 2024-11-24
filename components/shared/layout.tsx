@@ -1,6 +1,7 @@
 import React from "react";
 
 import { LAYOUT_QUERYResult } from "../../sanity.types";
+import NewsletterSection from "./newsletter-section";
 import SiteFooter from "./site-footer";
 import SiteNavigation from "./site-navigation";
 import SurveySection from "./survey-section";
@@ -19,7 +20,7 @@ export default function Layout({
       <SiteNavigation navLinks={navLinks} />
       {children}
       <SurveySection surveySection={surveySection} />
-      {/* <NewsletterSection /> */}
+      <NewsletterSection />
       <SiteFooter footer={footer} />
     </div>
   );

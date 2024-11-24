@@ -23,7 +23,7 @@ export default function ServicesSection({
   const { sectionTitle, hoverLinkText, hoverLinkHref, services } =
     servicesSection;
 
-  const [hoveredService, setHoveredService] = useState(null);
+  const [hoveredService, setHoveredService] = useState(services?.[0]);
 
   return (
     <>
@@ -39,7 +39,6 @@ export default function ServicesSection({
                 key={service.title}
                 className="cursor-pointer py-3"
                 onMouseEnter={() => setHoveredService(service as any)}
-                onMouseLeave={() => setHoveredService(null)}
               >
                 <Link href={`/services/${service.slug}`}>
                   <div className="group">

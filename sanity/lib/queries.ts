@@ -322,7 +322,7 @@ export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"][0] {
   }
 }`;
 
-export const SURVEY_LINK_QUERY = groq`*[_type == "surveyLink"][0]{
+export const SURVEY_LINK_QUERY = groq`*[_type == "surveySection"][0]{
   bgImage {
     asset-> {
       _id,
@@ -760,11 +760,41 @@ export const HERO_SECTION_QUERY = groq`*[_type == "heroSection"][0]{
   heroText,
 }`;
 
+export const SURVEY_SECTION_QUERY = groq`*[_type == "surveySection"][0]{
+  bgImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
+  },
+  cta,
+  youformId,
+  content,
+  bold,
+}`;
+
+export const NEWSLETTER_SECTION_QUERY = groq`*[_type == "newsletterSection"][0]{
+  bgImage {
+    asset-> {
+      _id,
+      url
+    },
+    alt
+  },
+  cta,
+  youformId,
+  content,
+  bold,
+}`;
+
 export const LAYOUT_QUERY = groq`{
   "siteSettings": ${SITE_SETTINGS_QUERY},
-  "navLinks": ${NAVIGATION_QUERY},
-  "footer": ${FOOTER_QUERY},
   "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY},
+  "navLinks": ${NAVIGATION_QUERY},
+  "newsletterSection": ${NEWSLETTER_SECTION_QUERY},
+  "surveySection": ${SURVEY_SECTION_QUERY},
+  "footer": ${FOOTER_QUERY},
 }`;
 
 export const HOME_PAGE_QUERY = groq`{
@@ -778,7 +808,6 @@ export const HOME_PAGE_QUERY = groq`{
   "cafeSection": ${CAFE_QUERY},
   "blogSection": ${BLOG_SECTION_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
-  "surveyLink": ${SURVEY_LINK_QUERY},
   "navigation": ${NAVIGATION_QUERY},
   "termsOfUse": ${TERMS_OF_USE_QUERY},
   "privacy": ${PRIVACY_QUERY},

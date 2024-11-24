@@ -13,6 +13,15 @@ import { sanityFetch } from "../sanity/lib/server-client";
 import "./globals.css";
 import { BASEURL } from "./site-settings";
 
+declare global {
+  interface Window {
+    YouFormWidget?: {
+      init: () => void;
+      openEmbed: (id: string) => void;
+    };
+  }
+}
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

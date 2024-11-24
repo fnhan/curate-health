@@ -1,13 +1,13 @@
 import { defineField, defineType } from "sanity";
 
 export default defineType({
-  name: "survey",
-  title: "Survey Section",
+  name: "surveySection",
+  title: "Shared | Survey Section",
   type: "document",
   fields: [
     defineField({
       name: "bgImage",
-      title: "Survey Image",
+      title: "Survey Section Image",
       type: "image",
       options: {
         hotspot: true,
@@ -21,47 +21,36 @@ export default defineType({
             "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
         },
       ],
-    }),
-    defineField({
-      name: "title",
-      title: "Survey Title",
-      type: "string",
-      description: "Title for the survey section",
-    }),
-    defineField({
-      name: "content",
-      title: "Survey Content",
-      type: "string",
-      description: "Text for the survey section",
+      validation: (Rule) => Rule.required().error("Image is required"),
     }),
     defineField({
       name: "cta",
       title: "Call to Action",
       type: "string",
-      description: "Text for the CTA button",
+      description: "CTA survey link",
+      validation: (Rule) => Rule.required().error("Call to Action is required"),
     }),
     defineField({
-      name: "href",
-      title: "Link Href",
+      name: "youformId",
+      title: "Youform Id",
       type: "string",
-      description: "URL/Link for the hover link. (Example: /survey)",
+      description: "Alphanumeric code linked to Youform survey",
+      validation: (Rule) => Rule.required().error("Youform Id is required"),
     }),
-
     defineField({
-      name: "meta",
-      type: "object",
-      fields: [
-        {
-          title: "Title",
-          name: "title",
-          type: "string",
-        },
-        {
-          title: "Description",
-          name: "description",
-          type: "string",
-        },
-      ],
+      name: "content",
+      title: "Text Content",
+      type: "string",
+      description: "Text content for the survey link",
+      validation: (Rule) => Rule.required().error("Text Content is required"),
+    }),
+    defineField({
+      name: "bold",
+      title: "Bolded text content",
+      type: "string",
+      description: "Bolded text at end of text content",
+      validation: (Rule) =>
+        Rule.required().error("Bolded text content is required"),
     }),
   ],
   preview: {

@@ -33,7 +33,7 @@ import servicesSection from "./schemas/servicesSection";
 import siteMeta from "./schemas/siteMeta";
 import siteSettings from "./schemas/siteSettings";
 import socialMeta from "./schemas/socialMeta";
-import surveyLink from "./schemas/surveyLink";
+import surveySection from "./schemas/surveySection";
 import sustainability from "./schemas/sustainability";
 import sustainabilitySection from "./schemas/sustainabilitySection";
 import termsOfUse from "./schemas/termsOfUse";
@@ -65,7 +65,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     accessibility,
     contactInfo,
     contactDetails,
-    surveyLink,
     ourStory,
     missionAndValues,
     metadatas,
@@ -74,6 +73,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     pillarsOfHealth,
     feedbackLink,
     legalPages,
+    surveySection,
     primaryCTAButton,
     products,
     services,

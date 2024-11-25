@@ -727,6 +727,11 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     "slug": slug.current,
     isActive
   },
+  aboutPages[]->{
+    _key,
+    title,
+    "slug": slug.current,
+  },
   navLinks[]{
     _key,
     groupTitle,

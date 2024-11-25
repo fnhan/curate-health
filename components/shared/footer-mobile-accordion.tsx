@@ -17,7 +17,7 @@ export function FooterMobileAccordion({
 }) {
   if (!siteSettings) return null;
 
-  const { services, navLinks, socialMedia } = siteSettings;
+  const { services, navLinks, socialMedia, aboutPages } = siteSettings;
 
   return (
     <Accordion type="single" collapsible className="w-full lg:hidden">
@@ -36,6 +36,25 @@ export function FooterMobileAccordion({
                   href={`/services/${service.slug}`}
                 >
                   {service.title}
+                </Link>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      )}
+      {/* About Pages Section */}
+      {aboutPages && (
+        <AccordionItem value="about-pages">
+          <AccordionTrigger className="font-semibold">About</AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-1 text-base">
+              {aboutPages.map((page, index) => (
+                <Link
+                  key={index}
+                  className="hover:underline"
+                  href={`/about/${page.slug}`}
+                >
+                  {page.title}
                 </Link>
               ))}
             </div>

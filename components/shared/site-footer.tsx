@@ -22,6 +22,7 @@ export default function SiteFooter({
     contactInfo,
     navLinks,
     services,
+    aboutPages,
   } = siteSettings!;
 
   return (
@@ -79,6 +80,21 @@ export default function SiteFooter({
                       href={`/services/${service.slug}`}
                     >
                       {service.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              {/* About Pages Section */}
+              <div className="border-b border-white pb-2 lg:border-none">
+                <h6 className="pl-3 font-semibold md:mb-3">About</h6>
+                <div className="hidden flex-col gap-1 pl-3 md:flex">
+                  {aboutPages?.map((page, index) => (
+                    <Link
+                      key={index}
+                      className="hover:underline"
+                      href={`/about/${page.slug}`}
+                    >
+                      {page.title}
                     </Link>
                   ))}
                 </div>

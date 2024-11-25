@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { Menu } from "lucide-react";
@@ -24,6 +27,8 @@ export default function SiteNav({
   siteSettings: SITE_SETTINGS_QUERYResult;
   primaryCTAButton: PRIMARY_CTA_BUTTON_QUERYResult;
 }) {
+  const [open, setOpen] = useState(false);
+
   if (!siteSettings) return null;
 
   const { brandName, navLinks, services, aboutPages, siteLogo } = siteSettings!;
@@ -33,7 +38,7 @@ export default function SiteNav({
       <div className="flex items-center justify-between px-4 sm:container">
         <div className="flex flex-1 items-center">
           <div className="flex py-10" aria-label="menu toggle">
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger
                 aria-label="navigation menu"
                 aria-controls="nav-items"
@@ -50,7 +55,11 @@ export default function SiteNav({
                   id="nav-items"
                   aria-labelledby="nav-items nav-menu"
                 >
-                  <Link className="text-2xl hover:underline" href={"/"}>
+                  <Link
+                    className="text-2xl hover:underline"
+                    href={"/"}
+                    onClick={() => setOpen(false)}
+                  >
                     Home
                   </Link>
                   {/* Services */}
@@ -95,6 +104,7 @@ export default function SiteNav({
                             key={index}
                             className="text-base hover:underline"
                             href={`/about/${page.slug}`}
+                            onClick={() => setOpen(false)}
                           >
                             {page.title}
                           </Link>
@@ -108,6 +118,7 @@ export default function SiteNav({
                       key={index}
                       className="text-2xl hover:underline"
                       href={link.href!}
+                      onClick={() => setOpen(false)}
                     >
                       {link.title}
                     </Link>
@@ -118,7 +129,7 @@ export default function SiteNav({
           </div>
         </div>
         <div className="flex flex-1 justify-center">
-          <Link href={"/"}>
+          <Link href={"/"} onClick={() => setOpen(false)}>
             <Image
               src={siteLogo?.asset?.url!}
               width={48}

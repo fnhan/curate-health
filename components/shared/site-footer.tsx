@@ -20,7 +20,7 @@ export default function SiteFooter({
     socialMedia,
     legalLinks,
     contactInfo,
-    navLinks,
+    footerNavLinks,
     services,
     aboutPages,
   } = siteSettings!;
@@ -100,7 +100,7 @@ export default function SiteFooter({
                 </div>
               </div>
               {/* Grouped Links Sections */}
-              {navLinks?.map((group, index) => (
+              {footerNavLinks?.map((group, index) => (
                 <div
                   key={index}
                   className="border-b border-white pb-2 md:border-none"

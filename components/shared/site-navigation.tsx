@@ -1,22 +1,36 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
+import { Menu } from "lucide-react";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "components/ui/accordion";
-import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
-import { Menu } from "lucide-react";
-import logo from "public/images/logo_white.png";
+} from "@/components/ui/accordion";
+import {
+  PRIMARY_CTA_BUTTON_QUERYResult,
+  SITE_SETTINGS_QUERYResult,
+} from "@/sanity.types";
 
-export default function SiteNav({ navLinks }) {
-  const { aboutLinks, serviceLinks, navItems } = navLinks;
+import PrimaryCTAButton from "./primary-cta-button";
+
+export default function SiteNav({
+  siteSettings,
+  primaryCTAButton,
+}: {
+  siteSettings: SITE_SETTINGS_QUERYResult;
+  primaryCTAButton: PRIMARY_CTA_BUTTON_QUERYResult;
+}) {
+  if (!siteSettings) return null;
+
+  const { brandName, navLinks, services, aboutPages, siteLogo } = siteSettings!;
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-primary/25 text-white backdrop-blur-3xl">
-      <div className="container flex items-center justify-between">
+      <div className="flex items-center justify-between px-4 sm:container">
         <div className="flex flex-1 items-center">
           <div className="flex py-10" aria-label="menu toggle">
             <Sheet>
@@ -36,88 +50,68 @@ export default function SiteNav({ navLinks }) {
                   id="nav-items"
                   aria-labelledby="nav-items nav-menu"
                 >
-                  {navItems.map((item, index) => {
-                    if (item.isServiceLinks) {
-                      return (
-                        <Accordion
-                          key={`service-links-${index}`}
-                          type="single"
-                          collapsible
-                          className="w-full"
-                        >
-                          <AccordionItem
-                            value="service-links"
-                            className="border-none text-2xl"
+                  <Link className="text-2xl hover:underline" href={"/"}>
+                    Home
+                  </Link>
+                  {/* Services */}
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem
+                      value="services"
+                      className="border-none text-2xl"
+                    >
+                      <AccordionTrigger className="p-0 font-normal">
+                        Services
+                      </AccordionTrigger>
+                      <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
+                        {services?.map((service, index) => (
+                          <Link
+                            key={index}
+                            className="text-base hover:underline"
+                            href={`/services/${service.slug}`}
                           >
-                            <AccordionTrigger
-                              className="p-0 font-normal"
-                              aria-label="services"
-                              aria-controls="service-items"
-                              id="service-menu"
-                            >
-                              Services
-                            </AccordionTrigger>
-                            <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                              {serviceLinks.map((service, serviceIndex) => (
-                                <Link
-                                  key={`service-link-${serviceIndex}`}
-                                  className="text-base hover:underline"
-                                  href={`/services/${service.slug}`}
-                                >
-                                  {service.title}
-                                </Link>
-                              ))}
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      );
-                    }
-                    if (item.isAboutLinks) {
-                      return (
-                        <Accordion
-                          key={`about-links-${index}`}
-                          type="single"
-                          collapsible
-                          className="w-full"
-                        >
-                          <AccordionItem
-                            value="about-links"
-                            className="border-none text-2xl"
-                          >
-                            <AccordionTrigger
-                              className="p-0 font-normal"
-                              aria-label="about pages"
-                              aria-controls="about-items"
-                              id="about-menu"
-                            >
-                              About
-                            </AccordionTrigger>
-                            <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                              {aboutLinks.map((aboutLink, aboutIndex) => (
-                                <Link
-                                  key={`about-link-${aboutIndex}`}
-                                  className="text-base hover:underline"
-                                  href={aboutLink.href}
-                                >
-                                  {aboutLink.title}
-                                </Link>
-                              ))}
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      );
-                    }
-
-                    return (
-                      <Link
-                        key={`nav-item-${index}`}
-                        className="text-2xl hover:underline"
-                        href={item.href}
+                            {service.title}
+                          </Link>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                  {/* About Pages */}
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem
+                      value="about-pages"
+                      className="border-none text-2xl"
+                    >
+                      <AccordionTrigger
+                        className="p-0 font-normal"
+                        aria-label="about-pages"
+                        aria-controls="about-items"
+                        id="about-menu"
                       >
-                        {item.linkText}
-                      </Link>
-                    );
-                  })}
+                        About
+                      </AccordionTrigger>
+                      <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
+                        {aboutPages?.map((page, index) => (
+                          <Link
+                            key={index}
+                            className="text-base hover:underline"
+                            href={`/about/${page.slug}`}
+                          >
+                            {page.title}
+                          </Link>
+                        ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                  {/* Additional Links */}
+                  {navLinks?.map((link, index) => (
+                    <Link
+                      key={index}
+                      className="text-2xl hover:underline"
+                      href={link.href!}
+                    >
+                      {link.title}
+                    </Link>
+                  ))}
                 </div>
               </SheetContent>
             </Sheet>
@@ -126,21 +120,17 @@ export default function SiteNav({ navLinks }) {
         <div className="flex flex-1 justify-center">
           <Link href={"/"}>
             <Image
-              src={logo}
+              src={siteLogo?.asset?.url!}
               width={48}
               height={48}
-              alt="Curate Health Logo"
-              className="h-10 w-10 md:h-12 md:w-12"
+              alt={`${brandName} Logo`}
+              className="size-[30px] transition-all duration-300 hover:opacity-75 sm:size-12"
             />
           </Link>
         </div>
+        {/* Primary CTA Button */}
         <div className="flex flex-1 justify-end">
-          <Link
-            className="text-center text-[10px] hover:underline md:text-base"
-            href={"/booking"}
-          >
-            Book Appointment
-          </Link>
+          <PrimaryCTAButton primaryCTAButton={primaryCTAButton} />
         </div>
       </div>
     </nav>

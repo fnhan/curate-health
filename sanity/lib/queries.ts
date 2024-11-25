@@ -696,17 +696,9 @@ export const SITE_METADATA_QUERY = groq`
 export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
   brandName,
   siteLogo{
-    mobile{
-      asset->{
-        _id,
-        url
-      }
-    },
-    desktop{
-      asset->{
-        _id,
-        url
-      }
+    asset->{
+      _id,
+      url
     },
   },
   contactInfo{
@@ -733,6 +725,11 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     "slug": slug.current,
   },
   navLinks[]{
+    _key,
+    title,
+    href
+  },
+  footerNavLinks[]{
     _key,
     groupTitle,
     links[]{

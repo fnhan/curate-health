@@ -20,32 +20,14 @@ export default defineType({
     }),
     defineField({
       name: "siteLogo",
-      type: "object",
+      type: "image",
       title: "Site Logo",
-      fields: [
-        defineField({
-          name: "mobile",
-          type: "image",
-          title: "Mobile Logo",
-          description: "Logo for mobile view",
-          options: {
-            hotspot: true,
-          },
-          validation: (Rule) =>
-            Rule.required().error("Mobile Logo is required"),
-        }),
-        defineField({
-          name: "desktop",
-          type: "image",
-          title: "Desktop Logo",
-          description: "Logo for desktop view",
-          options: {
-            hotspot: true,
-          },
-          validation: (Rule) =>
-            Rule.required().error("Desktop Logo is required"),
-        }),
-      ],
+      description:
+        "Logo for the site. Please upload a png with transparent background.",
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required().error("Site Logo is required"),
     }),
     defineField({
       name: "contactInfo",
@@ -126,6 +108,36 @@ export default defineType({
     }),
     defineField({
       name: "navLinks",
+      type: "array",
+      title: "Additional Navigation Links",
+      description: "Additional links displayed in the navigation menu",
+      of: [
+        {
+          type: "object",
+          name: "navLink",
+          fields: [
+            defineField({
+              name: "title",
+              type: "string",
+              title: "Link Title",
+              validation: (Rule) =>
+                Rule.required().error("Link Title is required"),
+            }),
+            defineField({
+              name: "href",
+              type: "string",
+              title: "Link URL",
+              description:
+                "The URL the link should point to (e.g., /about, /contact)",
+              validation: (Rule) =>
+                Rule.required().error("Link URL is required"),
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: "footerNavLinks",
       type: "array",
       title: "Footer Navigation Links",
       description: "Groups of links displayed in the footer",

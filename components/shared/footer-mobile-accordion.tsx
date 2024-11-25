@@ -17,7 +17,7 @@ export function FooterMobileAccordion({
 }) {
   if (!siteSettings) return null;
 
-  const { services, navLinks, socialMedia, aboutPages } = siteSettings;
+  const { services, footerNavLinks, socialMedia, aboutPages } = siteSettings;
 
   return (
     <Accordion type="single" collapsible className="w-full lg:hidden">
@@ -63,7 +63,7 @@ export function FooterMobileAccordion({
       )}
 
       {/* Other Sections */}
-      {navLinks?.map((section, index) => (
+      {footerNavLinks?.map((section, index) => (
         <AccordionItem key={index} value={`section-${index}`}>
           <AccordionTrigger className="font-semibold">
             {section.groupTitle}

@@ -1,5 +1,5 @@
 import { PortableText } from "@portabletext/react";
-import PrimaryCTAButton from "components/shared/primary-cta";
+import PrimaryCTAButton from "components/shared/primary-cta-button";
 import {
   HERO_SECTION_QUERYResult,
   PRIMARY_CTA_BUTTON_QUERYResult,
@@ -35,7 +35,7 @@ export default function HeroSection({
         <div className="flex h-[250px] justify-center text-[150px] font-thin text-secondary text-white">
           |
         </div>
-        <PrimaryCTAButton cta={primaryCTAButton?.ctaButton} />
+        <PrimaryCTAButton primaryCTAButton={primaryCTAButton} size="xl" />
       </div>
     </section>
   );

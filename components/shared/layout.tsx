@@ -13,11 +13,16 @@ export default function Layout({
   children: React.ReactNode;
   layout: LAYOUT_QUERYResult;
 }) {
-  const { navLinks, footer, surveySection, siteSettings } = layout;
+  const { surveySection, siteSettings, primaryCTAButton } = layout;
+
+  console.log(primaryCTAButton);
 
   return (
     <div className="flex flex-1 flex-col">
-      <SiteNavigation navLinks={navLinks} />
+      <SiteNavigation
+        siteSettings={siteSettings}
+        primaryCTAButton={primaryCTAButton}
+      />
       {children}
       <SurveySection surveySection={surveySection} />
       <NewsletterSection />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "components/ui/button";
@@ -81,7 +81,11 @@ export default function PasswordPrompt() {
             </FormItem>
           )}
         />
-        <Button variant={"secondary"} className="w-full bg-card" type="submit">
+        <Button
+          variant={"secondary"}
+          className="w-full bg-card hover:bg-card/80"
+          type="submit"
+        >
           {loading ? <Loader2Icon className="animate-spin" /> : "Login"}
         </Button>
       </form>

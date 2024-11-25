@@ -13,7 +13,7 @@ export default function Layout({
   children: React.ReactNode;
   layout: LAYOUT_QUERYResult;
 }) {
-  const { navLinks, footer, surveySection } = layout;
+  const { navLinks, footer, surveySection, siteSettings } = layout;
 
   return (
     <div className="flex flex-1 flex-col">
@@ -21,7 +21,7 @@ export default function Layout({
       {children}
       <SurveySection surveySection={surveySection} />
       <NewsletterSection />
-      <SiteFooter footer={footer} />
+      <SiteFooter siteSettings={siteSettings} />
     </div>
   );
 }

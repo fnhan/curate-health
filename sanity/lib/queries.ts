@@ -718,13 +718,23 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
       state,
       zip,
       country
-    }
+    },
+    mapLink,
+  },
+  services[]->{
+    _key,
+    title,
+    "slug": slug.current,
+    isActive
   },
   navLinks[]{
     _key,
-    title,
-    slug {
-      current
+    groupTitle,
+    links[]{
+      title,
+      slug {
+        current
+      }
     }
   },
   legalLinks[]{

@@ -1,7 +1,5 @@
 import { defineField, defineType } from "sanity";
 
-import legalPages from "./legalPages";
-
 export default defineType({
   name: "siteSettings",
   title: "Site Settings",
@@ -98,31 +96,72 @@ export default defineType({
             }),
           ],
         }),
+        defineField({
+          name: "mapLink",
+          type: "url",
+          title: "Google Map Link",
+          description: "Link to the Google Map",
+        }),
+      ],
+    }),
+    defineField({
+      name: "services",
+      type: "array",
+      title: "Services",
+      description: "Services displayed in the navigation menu and footer",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "service" }],
+        },
       ],
     }),
     defineField({
       name: "navLinks",
       type: "array",
       title: "Navigation Links",
+      description:
+        "Groups of links displayed in the navigation menu and footer",
       of: [
         {
           type: "object",
-          name: "navLink",
+          name: "navGroup",
           fields: [
             defineField({
-              name: "title",
+              name: "groupTitle",
               type: "string",
-              title: "Link Title",
-              validation: (Rule) =>
-                Rule.required().error("Link Title is required"),
+              title: "Group Title",
             }),
             defineField({
-              name: "slug",
-              type: "slug",
-              title: "Link Slug",
-              description: "The slug of the page to link to.",
-              validation: (Rule) =>
-                Rule.required().error("Link Slug is required"),
+              name: "links",
+              type: "array",
+              title: "Links in Group",
+              of: [
+                {
+                  type: "object",
+                  name: "navLink",
+                  fields: [
+                    defineField({
+                      name: "title",
+                      type: "string",
+                      title: "Link Title",
+                      description:
+                        "The text to display for the link. Example: Our Story",
+                      validation: (Rule) =>
+                        Rule.required().error("Link Title is required"),
+                    }),
+                    defineField({
+                      name: "slug",
+                      type: "slug",
+                      title: "Link Slug",
+                      description:
+                        "The slug of the page to link to. Example: /about/our-story",
+                      validation: (Rule) =>
+                        Rule.required().error("Link Slug is required"),
+                    }),
+                  ],
+                },
+              ],
             }),
           ],
         },
@@ -132,6 +171,7 @@ export default defineType({
       name: "legalLinks",
       type: "array",
       title: "Legal Links",
+      description: "Links displayed in the footer",
       of: [
         defineField({
           name: "legalLink",
@@ -146,6 +186,7 @@ export default defineType({
       name: "socialMedia",
       type: "array",
       title: "Social Media Links",
+      description: "Links displayed in the footer",
       of: [
         {
           type: "object",

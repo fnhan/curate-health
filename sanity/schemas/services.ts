@@ -6,6 +6,18 @@ export default defineType({
   type: "document",
   fields: [
     defineField({
+      name: "isActive",
+      title: "Is Active",
+      type: "boolean",
+      description: "Toggle to show/hide this service on the website.",
+      initialValue: true,
+    }),
+    defineField({
+      name: "content",
+      title: "Content",
+      type: "blockContent",
+    }),
+    defineField({
       name: "title",
       title: "Title",
       type: "string",
@@ -58,18 +70,6 @@ export default defineType({
             "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
         },
       ],
-    }),
-    defineField({
-      name: "isActive",
-      title: "Is Active",
-      type: "boolean",
-      description: "Toggle to show/hide this service on the website.",
-      initialValue: true,
-    }),
-    defineField({
-      name: "content",
-      title: "Content",
-      type: "blockContent",
     }),
   ],
 

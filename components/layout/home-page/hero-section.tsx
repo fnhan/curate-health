@@ -29,7 +29,7 @@ export default function HeroSection({
         ></iframe>
       </div>
       <div className="z-10 text-center">
-        <h1 className="mb-6 text-[32px] md:text-[42px] 2xl:text-[72px]">
+        <h1 className="mb-6 text-pretty text-[32px] md:text-[42px] 2xl:text-[72px]">
           <PortableText value={heroText!} />
         </h1>
         <div className="flex h-[250px] justify-center text-[150px] font-thin text-secondary text-white">

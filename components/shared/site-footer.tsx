@@ -143,11 +143,11 @@ export default function SiteFooter({
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse justify-between gap-6 md:flex-row">
+        <div className="flex flex-col-reverse justify-between gap-6 text-sm md:flex-row">
           <div>
             &copy; {new Date().getFullYear()} {brandName}
           </div>
-          <div className="flex justify-between md:justify-end md:gap-10">
+          <div className="flex flex-col justify-center gap-2 text-center sm:flex-row sm:justify-between md:justify-end md:gap-10 md:text-left">
             {legalLinks?.map((link, index) => (
               <Link key={index} className="hover:underline" href={link.slug!}>
                 {link.title}

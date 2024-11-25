@@ -15,8 +15,6 @@ export default function Layout({
 }) {
   const { surveySection, siteSettings, primaryCTAButton } = layout;
 
-  console.log(primaryCTAButton);
-
   return (
     <div className="flex flex-1 flex-col">
       <SiteNavigation

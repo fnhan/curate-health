@@ -36,9 +36,6 @@ async function getComingSoonStatus() {
 }
 
 export async function middleware(request: NextRequest) {
-  // Debug current path
-  // console.log('Current path:', request.nextUrl.pathname);
-
   // Always allow access to these paths
   const publicPaths = ["/login", "/api/login", "/studio", "/coming-soon"];
   if (publicPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
@@ -47,19 +44,14 @@ export async function middleware(request: NextRequest) {
   }
 
   const isComingSoon = await getComingSoonStatus();
-  // console.log('Coming soon status:', isComingSoon);
 
   const hasAdminAccess = request.cookies.has(process.env.PASSWORD_COOKIE_NAME!);
-  // console.log('Has admin access:', hasAdminAccess);
-  // console.log('Cookie name being checked:', process.env.PASSWORD_COOKIE_NAME);
 
   // If site is coming soon and user is not admin, show coming soon page
   if (isComingSoon && !hasAdminAccess) {
-    // console.log('Redirecting to login');
     return NextResponse.redirect(new URL("/coming-soon", request.url));
   }
 
-  console.log("Allowing access");
   return NextResponse.next();
 }
 

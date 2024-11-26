@@ -19,8 +19,8 @@ export default function HeroSection({
   const videoSrc = `https://player.vimeo.com/video/${videoID}?muted=1&autoplay=1&autopause=0&pip=0&controls=0&loop=1&background=1&quality=undefined&app_id=58479&texttrack=undefined`;
 
   return (
-    <section className="relative flex h-[600px] flex-col items-center justify-center overflow-hidden text-white 2xl:h-[1080px]">
-      <div className="absolute left-0 top-0 -mt-4 h-full w-full overflow-hidden">
+    <section className="relative flex aspect-video min-h-[600px] flex-col items-center justify-center overflow-hidden py-40 text-white">
+      <div className="absolute left-0 top-0 h-full w-full overflow-hidden">
         <iframe
           src={videoSrc}
           allow="autoplay; fullscreen; picture-in-picture"
@@ -28,7 +28,7 @@ export default function HeroSection({
           title="curate-health-home-video"
         ></iframe>
       </div>
-      <div className="z-10 text-center">
+      <div className="z-10 py-20 text-center">
         <h1 className="mb-6 text-pretty text-[32px] md:text-[42px] 2xl:text-[72px]">
           <PortableText value={heroText!} />
         </h1>

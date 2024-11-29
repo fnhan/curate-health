@@ -660,6 +660,11 @@ export const PILLARS_OF_HEALTH_PAGE_QUERY = groq`{
 
 // * Settings, Layout & Page Queries
 
+export const POPUP_BANNER_QUERY = groq`*[_type == "popupBanner" && isActive == true][0]{
+  title,
+  content,
+}`;
+
 export const FAVICON_QUERY = groq`*[_type == "siteMetadata"]{
   "url": favicon.asset->url
 }[0]`;
@@ -807,6 +812,7 @@ export const LAYOUT_QUERY = groq`{
   "newsletterSection": ${NEWSLETTER_SECTION_QUERY},
   "surveySection": ${SURVEY_SECTION_QUERY},
   "footer": ${FOOTER_QUERY},
+  "popupBanner": ${POPUP_BANNER_QUERY}
 }`;
 
 export const HOME_PAGE_QUERY = groq`{

@@ -1,5 +1,7 @@
 import { type SchemaTypeDefinition } from "sanity";
 
+
+
 import aboutPages from "./schemas/aboutPages";
 import aboutSection from "./schemas/aboutSection";
 import accessibility from "./schemas/accessibility";
@@ -22,7 +24,7 @@ import newsletter from "./schemas/newsletter";
 import ourStory from "./schemas/ourStory";
 import pageMetadata from "./schemas/pageMetadata";
 import pillarsOfHealth from "./schemas/pillarsOfHealth";
-import popup from "./schemas/popup";
+import popupBanner from "./schemas/popupBanner";
 import post from "./schemas/post";
 import primaryCTAButton from "./schemas/primaryCTAButton";
 import privacy from "./schemas/privacy";
@@ -38,6 +40,7 @@ import sustainability from "./schemas/sustainability";
 import sustainabilitySection from "./schemas/sustainabilitySection";
 import termsOfUse from "./schemas/termsOfUse";
 
+
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     siteSettings,
@@ -52,7 +55,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     cafeSection,
     blogSection,
     sustainabilitySection,
-    popup,
     post,
     author,
     category,
@@ -73,6 +75,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     pillarsOfHealth,
     feedbackLink,
     legalPages,
+    popupBanner,
     surveySection,
     primaryCTAButton,
     products,

@@ -816,7 +816,6 @@ export const LAYOUT_QUERY = groq`{
 }`;
 
 export const HOME_PAGE_QUERY = groq`{
-  "layout": ${LAYOUT_QUERY},
   "heroSection": ${HERO_SECTION_QUERY},
   "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY}, 
   "aboutSection": ${ABOUT_SECTION_QUERY},
@@ -831,4 +830,7 @@ export const HOME_PAGE_QUERY = groq`{
   "privacy": ${PRIVACY_QUERY},
   "accessibility": ${ACCESSIBILITY_QUERY},
   "footer": ${FOOTER_QUERY},
+}`;
+
+export const SERVICES_PAGE_QUERY = groq`{
 }`;

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -128,7 +129,7 @@ export default function SiteNav({
           </div>
         </div>
         <div className="flex flex-1 justify-center">
-          {/* <Link href={"/"} onClick={() => setOpen(false)}>
+          <Link href={"/"} onClick={() => setOpen(false)}>
             <Image
               src={siteLogo?.asset?.url!}
               width={48}
@@ -136,7 +137,7 @@ export default function SiteNav({
               alt={`${brandName} Logo`}
               className="size-[30px] transition-all duration-300 hover:opacity-75 sm:size-12"
             />
-          </Link> */}
+          </Link>
         </div>
         {/* Primary CTA Button */}
         <div className="flex flex-1 justify-end">

@@ -6,7 +6,6 @@ import HeroSection from "@/components/layout/home-page/hero-section";
 import ProductsSection from "@/components/layout/home-page/products-section";
 import ServicesSection from "@/components/layout/home-page/services-section";
 import SustainabilitySection from "@/components/layout/home-page/sustainability-section";
-import Layout from "@/components/shared/layout";
 import { HOME_PAGE_QUERYResult } from "@/sanity.types";
 import { HOME_PAGE_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/server-client";
@@ -30,7 +29,7 @@ export default async function Home() {
   } = homePage;
 
   return (
-    <Layout layout={layout}>
+    <>
       <HeroSection
         heroSection={heroSection}
         primaryCTAButton={primaryCTAButton}
@@ -42,6 +41,6 @@ export default async function Home() {
       <CafeSection cafeSection={cafeSection} />
       <BlogSection blogSection={blogSection} />
       <SustainabilitySection sustainabilitySection={sustainabilitySection} />
-    </Layout>
+    </>
   );
 }

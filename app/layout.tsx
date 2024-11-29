@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { draftMode } from "next/headers";
 
-import { CSPostHogProvider } from "components/providers/posthog-provider";
-import SanityDisablePreviewButton from "components/shared/sanity-disable-preview-button";
-import { Toaster } from "components/ui/toaster";
 import { VisualEditing } from "next-sanity";
-import { SITE_METADATA_QUERYResult } from "sanity.types";
+import { LAYOUT_QUERYResult, SITE_METADATA_QUERYResult } from "sanity.types";
 
-import { SITE_METADATA_QUERY } from "../sanity/lib/queries";
+import { CSPostHogProvider } from "@/components/providers/posthog-provider";
+import Layout from "@/components/shared/layout";
+import SanityDisablePreviewButton from "@/components/shared/sanity-disable-preview-button";
+import { Toaster } from "@/components/ui/toaster";
+
+import { LAYOUT_QUERY, SITE_METADATA_QUERY } from "../sanity/lib/queries";
 import { sanityFetch } from "../sanity/lib/server-client";
 import "./globals.css";
 import { BASEURL } from "./site-settings";
@@ -61,18 +63,24 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const layout = await sanityFetch<LAYOUT_QUERYResult>({
+    query: LAYOUT_QUERY,
+  });
+
   return (
     <html lang="en">
       <CSPostHogProvider>
         <body
           className={`${poppins.className} flex min-h-screen flex-col bg-background antialiased`}
         >
-          <main className="flex flex-1 flex-col">{children}</main>
+          <Layout layout={layout}>
+            <main className="flex flex-1 flex-col">{children}</main>
+          </Layout>
           {draftMode().isEnabled && (
             <>
               <SanityDisablePreviewButton />

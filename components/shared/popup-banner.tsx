@@ -13,11 +13,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { POPUP_BANNER_QUERYResult } from "@/sanity.types";
-
-import { Button } from "../ui/button";
 
 export default function PopupBanner({
   popupBanner,
@@ -51,9 +48,6 @@ export default function PopupBanner({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
-      </AlertDialogTrigger>
       <AlertDialogContent className="text-center">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>

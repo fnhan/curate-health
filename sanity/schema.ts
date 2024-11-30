@@ -1,7 +1,5 @@
 import { type SchemaTypeDefinition } from "sanity";
 
-
-
 import aboutPages from "./schemas/aboutPages";
 import aboutSection from "./schemas/aboutSection";
 import accessibility from "./schemas/accessibility";
@@ -31,6 +29,7 @@ import privacy from "./schemas/privacy";
 import products from "./schemas/products";
 import productsSection from "./schemas/productsSection";
 import services from "./schemas/services";
+import servicesHeroSection from "./schemas/services-hero-section";
 import servicesSection from "./schemas/servicesSection";
 import siteMeta from "./schemas/siteMeta";
 import siteSettings from "./schemas/siteSettings";
@@ -39,7 +38,6 @@ import surveySection from "./schemas/surveySection";
 import sustainability from "./schemas/sustainability";
 import sustainabilitySection from "./schemas/sustainabilitySection";
 import termsOfUse from "./schemas/termsOfUse";
-
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -55,6 +53,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     cafeSection,
     blogSection,
     sustainabilitySection,
+    servicesHeroSection,
     post,
     author,
     category,

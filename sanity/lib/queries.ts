@@ -74,6 +74,20 @@ export const OURSERVICES_QUERY = groq`*[_type == "ourServices"][0]{
   content
 }`;
 
+export const SERVICES_HERO_SECTION_QUERY = groq`*[_type == "servicesHeroSection"][0]{
+  title,
+  "image": image.asset->url,
+  subtitle
+}`;
+
+export const ALL_SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
+  title,
+  "slug": slug.current,
+  "image": image.asset->url,
+  "altText": image.alt,
+  content
+}`;
+
 export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   title,
   "slug": slug.current,
@@ -658,7 +672,7 @@ export const PILLARS_OF_HEALTH_PAGE_QUERY = groq`{
     "pillarsOfHealth": ${PILLARS_OF_HEALTH_QUERY}
   }`;
 
-// * Settings, Layout & Page Queries
+// * Settings / Shared Queries
 
 export const POPUP_BANNER_QUERY = groq`*[_type == "popupBanner" && isActive == true][0]{
   title,
@@ -772,11 +786,6 @@ export const PRIMARY_CTA_BUTTON_QUERY = groq`
   }
 `;
 
-export const HERO_SECTION_QUERY = groq`*[_type == "heroSection"][0]{
-  videoID,
-  heroText,
-}`;
-
 export const SURVEY_SECTION_QUERY = groq`*[_type == "surveySection"][0]{
   bgImage {
     asset-> {
@@ -805,6 +814,15 @@ export const NEWSLETTER_SECTION_QUERY = groq`*[_type == "newsletterSection"][0]{
   bold,
 }`;
 
+// * Home Page Sections Queries
+
+export const HERO_SECTION_QUERY = groq`*[_type == "heroSection"][0]{
+  videoID,
+  heroText,
+}`;
+
+//* Layout Query
+
 export const LAYOUT_QUERY = groq`{
   "siteSettings": ${SITE_SETTINGS_QUERY},
   "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY},
@@ -814,6 +832,8 @@ export const LAYOUT_QUERY = groq`{
   "footer": ${FOOTER_QUERY},
   "popupBanner": ${POPUP_BANNER_QUERY}
 }`;
+
+//* Page Queries
 
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},

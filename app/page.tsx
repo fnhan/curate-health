@@ -16,7 +16,6 @@ export default async function Home() {
   });
 
   const {
-    layout,
     heroSection,
     primaryCTAButton,
     aboutSection,

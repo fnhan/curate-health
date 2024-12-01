@@ -17,19 +17,14 @@ export function ServicesNavigation({
 
   return (
     <div className="bg-secondary">
-      <nav className="container py-4 font-light text-primary md:py-7 2xl:py-8">
-        <ul className="flex items-center gap-4">
+      <nav className="container font-light text-primary">
+        <ul className="scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary scrollbar-thumb-rounded-full flex items-center gap-4 overflow-x-auto whitespace-nowrap py-8">
           <li>
-            <Link
-              className={`${hoverEffect} border-r border-primary pr-4 hover:after:scale-x-[.85] ${
-                pathname === "/services" &&
-                "after:origin-bottom-left after:scale-x-[.85]"
-              }`}
-              href="/services"
-            >
+            <Link className={`${hoverEffect}`} href="/services">
               Our Services
             </Link>
           </li>
+          <div className="text-primary">|</div>
           {services.map((service) => (
             <li key={service.slug}>
               <Link

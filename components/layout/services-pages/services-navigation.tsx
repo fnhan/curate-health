@@ -20,7 +20,13 @@ export function ServicesNavigation({
       <nav className="container font-light text-primary">
         <ul className="scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary scrollbar-thumb-rounded-full flex items-center gap-4 overflow-x-auto whitespace-nowrap py-8">
           <li>
-            <Link className={`${hoverEffect}`} href="/services">
+            <Link
+              className={`${hoverEffect} ${
+                pathname?.startsWith(`/services`) &&
+                "after:origin-bottom-left after:scale-x-100"
+              }`}
+              href="/services"
+            >
               Our Services
             </Link>
           </li>

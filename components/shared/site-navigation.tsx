@@ -44,7 +44,7 @@ export default function SiteNav({
                 aria-controls="nav-items"
                 id="nav-menu"
               >
-                <Menu className="transition-all duration-300 hover:text-black" />
+                <Menu className="transition-all duration-300 hover:text-secondary" />
               </SheetTrigger>
               <SheetContent
                 side="left"

@@ -143,8 +143,8 @@ export default function SiteFooter({
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse justify-between gap-6 text-sm md:flex-row">
-          <div>
+        <div className="flex flex-col-reverse justify-between gap-6 pt-6 text-sm md:flex-row lg:border-t lg:border-white">
+          <div className="text-center sm:text-left">
             &copy; {new Date().getFullYear()} {brandName}
           </div>
           <div className="flex flex-col justify-center gap-2 text-center sm:flex-row sm:justify-between md:justify-end md:gap-10 md:text-left">

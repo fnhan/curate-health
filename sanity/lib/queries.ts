@@ -853,4 +853,5 @@ export const HOME_PAGE_QUERY = groq`{
 }`;
 
 export const SERVICES_PAGE_QUERY = groq`{
+  "services": ${SERVICES_QUERY},
 }`;

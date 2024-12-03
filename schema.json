@@ -494,7 +494,7 @@
         },
         "optional": true
       },
-      "image": {
+      "hero_image": {
         "type": "objectAttribute",
         "value": {
           "type": "object",
@@ -563,7 +563,7 @@
         },
         "optional": true
       },
-      "hero_image": {
+      "content_image": {
         "type": "objectAttribute",
         "value": {
           "type": "object",

@@ -77,23 +77,21 @@ export const OURSERVICES_QUERY = groq`*[_type == "ourServices"][0]{
 export const SERVICES_HERO_SECTION_QUERY = groq`*[_type == "servicesHeroSection"][0]{
   title,
   "image": image.asset->url,
+  "alt": image.alt,
   subtitle
+}`;
+
+export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
+  "slug": slug.current,
+  "hero_image": hero_image.asset->url,
+  "altText": hero_image.alt,
 }`;
 
 export const ALL_SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   title,
   "slug": slug.current,
-  "image": image.asset->url,
-  "altText": image.alt,
-  content
-}`;
-
-export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
-  title,
-  "slug": slug.current,
-  "image": image.asset->url,
-  "altText": image.alt,
-  content
+  "hero_image": hero_image.asset->url,
+  "hero_alt": hero_image.alt,
 }`;
 
 export const SERVICES_SECTION_QUERY = groq`*[_type == "servicesSection"][0]{
@@ -103,8 +101,8 @@ export const SERVICES_SECTION_QUERY = groq`*[_type == "servicesSection"][0]{
   "services": *[_type == "service" && isActive == true]{
     title,
     "slug": slug.current,
-    "image": image.asset->url,
-    "altText": image.alt
+    "hero_image": hero_image.asset->url,
+    "hero_alt": hero_image.alt
   }
 }`;
 
@@ -116,13 +114,10 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   *[_type == "service" && slug.current == $slug][0]{
     title,
     "slug": slug.current,
-    "image": image.asset->url,
     "hero_image": hero_image.asset->url,
-    "altText": image.alt,
-    meta {
-    title,
-    description
-  },
+    "hero_alt": hero_image.alt,
+    "content_image": content_image.asset->url,
+    "content_alt": content_image.alt,
     content,
     "treatments": *[_type == "treatment" && references(^._id)]{
       _id,
@@ -853,5 +848,5 @@ export const HOME_PAGE_QUERY = groq`{
 }`;
 
 export const SERVICES_PAGE_QUERY = groq`{
-  "services": ${SERVICES_QUERY},
+  "services": ${ALL_SERVICES_QUERY},
 }`;

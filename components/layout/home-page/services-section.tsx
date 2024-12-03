@@ -4,14 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-import imageUrlBuilder from "@sanity/image-url";
 import HoverLink from "components/shared/hover-link";
 import { MoveRightIcon } from "lucide-react";
 import { SERVICES_SECTION_QUERYResult } from "sanity.types";
-
-import { dataset, projectId } from "../../../sanity/env";
-
-const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function ServicesSection({
   servicesSection,
@@ -51,7 +46,7 @@ export default function ServicesSection({
             width={546}
             height={678}
             className="object-cover md:size-full"
-            src={builder.image(hoveredService?.image!).url()}
+            src={hoveredService?.hero_image!}
             alt={hoveredService?.title!}
           />
         </div>

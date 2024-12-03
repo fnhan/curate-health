@@ -36,8 +36,8 @@ export default defineType({
       validation: (Rule) => Rule.required().error("A slug is required"),
     }),
     defineField({
-      name: "image",
-      title: "image",
+      name: "hero_image",
+      title: "Hero Image",
       type: "image",
       validation: (Rule) => Rule.required().error("An image is required"),
       options: {
@@ -54,8 +54,8 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "hero_image",
-      title: "hero_image",
+      name: "content_image",
+      title: "Content Image",
       type: "image",
       validation: (Rule) => Rule.required().error("An image is required"),
       options: {
@@ -71,13 +71,19 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: "treatments",
+      type: "array",
+      hidden: true,
+      of: [{ type: "reference", to: [{ type: "treatment" }] }],
+    }),
   ],
 
   preview: {
     select: {
       title: "title",
       isActive: "isActive",
-      media: "image",
+      media: "hero_image",
     },
     prepare(selection) {
       const { title, isActive, media } = selection;

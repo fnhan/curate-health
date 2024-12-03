@@ -11,16 +11,15 @@ export default function ServicesHeroSection({
     return null;
   }
 
-  const { title, image, subtitle } = servicesHeroSection;
+  const { image, alt, title, subtitle } = servicesHeroSection;
 
   return (
-    <div className="relative">
+    <section className="relative">
       <Image
-        loading="lazy"
         width={1080}
         height={1440}
         src={image!}
-        alt="Our Services"
+        alt={alt!}
         className="h-[400px] w-full object-cover opacity-60 md:h-[550px]"
       />
       <div className="absolute inset-0 flex flex-col justify-end pb-16">
@@ -31,6 +30,6 @@ export default function ServicesHeroSection({
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

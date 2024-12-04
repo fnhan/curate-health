@@ -174,42 +174,97 @@ export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == 
   "treatmentSlug": treatmentSlug.current
 }`;
 
+// export const TREATMENT_BY_SLUG_QUERY = groq`
+//   *[_type == "treatment" && treatmentSlug.current == $treatmentSlug][0]{
+//     title,
+//     "treatmentSlug": treatmentSlug.current,
+//     service->{
+//       title,
+//       slug
+//     },
+//     "aboveImage": aboveImage.asset->url,
+//     "altText": image.alt,
+//     heroSubtitle,
+//     heroContent,
+//     quoteContent,
+//     leftSubtitle,
+//     leftContent,
+//     "rightImage": rightImage.asset->url,
+//     rightSubtitle,
+//     rightContent,
+//     "leftImage": leftImage.asset->url,
+//     greenTitle,
+//     greenContent,
+//     writtenTitle,
+//     writtenContent,
+//     "writtenImage": writtenImage.asset->url,
+//     writtenBracketContent,
+//     framesTitle,
+//     frames[]{
+//       title,
+//       content,
+//     meta {
+//       title,
+//       description
+//     }
+//     }
+//   }
+// `;
+
 export const TREATMENT_BY_SLUG_QUERY = groq`
-  *[_type == "treatment" && treatmentSlug.current == $treatmentSlug][0]{
-    title,
-    "treatmentSlug": treatmentSlug.current,
-    service->{
-      title,
-      slug
+*[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {
+  title,
+  treatmentSlug,
+  "serviceName": service->title,
+  heroImage {
+    asset->{
+      url,
+      metadata {
+        dimensions
+      }
     },
-    "aboveImage": aboveImage.asset->url,
-    "altText": image.alt,
-    heroSubtitle,
-    heroContent,
-    quoteContent,
-    leftSubtitle,
-    leftContent,
-    "rightImage": rightImage.asset->url,
-    rightSubtitle,
-    rightContent,
-    "leftImage": leftImage.asset->url,
-    greenTitle,
-    greenContent,
-    writtenTitle,
-    writtenContent,
-    "writtenImage": writtenImage.asset->url,
-    writtenBracketContent,
-    framesTitle,
-    frames[]{
-      title,
-      content,
-    meta {
-      title,
-      description
+    heroAlt
+  },
+  intro {
+    subtitle,
+    introParagraph
+  },
+  quoteContent,
+  overview[] {
+    title,
+    paragraph,
+    image {
+      asset->{
+        url,
+        metadata {
+          dimensions
+        }
+      },
+      alt
     }
+  },
+  benefits {
+    title,
+    benefitsList[] {
+      title,
+      subtitle
     }
+  },
+  cta {
+    ctaBg {
+      asset->{
+        url,
+        metadata {
+          dimensions
+        }
+      }
+    },
+    ctaBgAlt,
+    ctaTitle,
+    ctaText,
+    ctaButtonText
   }
-`;
+}`;
 
 export const FOOTER_QUERY = groq`
   *[_type == "footer"][0] {

@@ -38,6 +38,7 @@ import surveySection from "./schemas/surveySection";
 import sustainability from "./schemas/sustainability";
 import sustainabilitySection from "./schemas/sustainabilitySection";
 import termsOfUse from "./schemas/termsOfUse";
+import treatment from "./schemas/treatment";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -79,5 +80,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     primaryCTAButton,
     products,
     services,
+    treatment,
   ],
 };

@@ -71,12 +71,6 @@ export default defineType({
         },
       ],
     }),
-    defineField({
-      name: "treatments",
-      type: "array",
-      hidden: true,
-      of: [{ type: "reference", to: [{ type: "treatment" }] }],
-    }),
   ],
 
   preview: {

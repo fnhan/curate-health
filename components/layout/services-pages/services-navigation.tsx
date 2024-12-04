@@ -36,7 +36,7 @@ export function ServicesNavigation({
               <Link
                 href={`/services/${service.slug}`}
                 className={`${hoverEffect} ${
-                  pathname?.endsWith(`/${service.slug}`) &&
+                  pathname?.endsWith(`/services/${service.slug}`) &&
                   "after:origin-bottom-left after:scale-x-100"
                 }`}
               >

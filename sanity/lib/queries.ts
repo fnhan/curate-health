@@ -336,6 +336,30 @@ export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   }
 }`;
 
+export const PRODUCTS_NAVIGATION_QUERY = groq`*[_type == "product" && isActive == true] {
+  title,
+  "slug": slug.current,
+}`;
+
+export const PRODUCT_BY_SLUG_QUERY = groq`*[_type == "product" && slug.current == $slug && isActive == true][0] {
+  title,
+  slug,
+  description,
+  image {
+    asset->,
+    alt
+  },
+  banner {
+    asset->,
+    alt
+  },
+  accordioninfo[] {
+    title,
+    description
+  },
+  callToAction
+}`;
+
 export const PRODUCT_QUERY = groq`*[_type == "product" && slug.current == $slug][0]`;
 
 export const PRODUCT_SLUG_QUERY = groq`*[_type == "product" && isActive == true && defined(slug.current)] {

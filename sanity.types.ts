@@ -200,18 +200,9 @@ export type Product = {
   _updatedAt: string;
   _rev: string;
   isActive?: boolean;
-  banner?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
+  title?: string;
+  slug?: Slug;
+  description?: string;
   image?: {
     asset?: {
       _ref: string;
@@ -224,8 +215,18 @@ export type Product = {
     alt?: string;
     _type: "image";
   };
-  title?: string;
-  description?: string;
+  banner?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
   accordioninfo?: Array<{
     title?: string;
     description?: Array<
@@ -264,7 +265,12 @@ export type Product = {
     _type: "accordionitems";
     _key: string;
   }>;
-  slug?: Slug;
+  callToAction?: {
+    ctaText?: string;
+    ctaLink?: string;
+    ctaSectionTitle?: string;
+    ctaSectionDescription?: string;
+  };
 };
 
 export type PrimaryCTAButton = {
@@ -1984,6 +1990,111 @@ export type PRODUCTS_QUERYResult = Array<{
   altText: string | null;
   meta: null;
 }>;
+// Variable: PRODUCTS_NAVIGATION_QUERY
+// Query: *[_type == "product" && isActive == true] {  title,  "slug": slug.current,}
+export type PRODUCTS_NAVIGATION_QUERYResult = Array<{
+  title: string | null;
+  slug: string | null;
+}>;
+// Variable: PRODUCT_BY_SLUG_QUERY
+// Query: *[_type == "product" && slug.current == $slug && isActive == true][0] {  title,  slug,  description,  image {    asset->,    alt  },  banner {    asset->,    alt  },  accordioninfo[] {    title,    description  },  callToAction}
+export type PRODUCT_BY_SLUG_QUERYResult = {
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  image: {
+    asset: {
+      _id: string;
+      _type: "sanity.imageAsset";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      originalFilename?: string;
+      label?: string;
+      title?: string;
+      description?: string;
+      altText?: string;
+      sha1hash?: string;
+      extension?: string;
+      mimeType?: string;
+      size?: number;
+      assetId?: string;
+      uploadId?: string;
+      path?: string;
+      url?: string;
+      metadata?: SanityImageMetadata;
+      source?: SanityAssetSourceData;
+    } | null;
+    alt: string | null;
+  } | null;
+  banner: {
+    asset: {
+      _id: string;
+      _type: "sanity.imageAsset";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      originalFilename?: string;
+      label?: string;
+      title?: string;
+      description?: string;
+      altText?: string;
+      sha1hash?: string;
+      extension?: string;
+      mimeType?: string;
+      size?: number;
+      assetId?: string;
+      uploadId?: string;
+      path?: string;
+      url?: string;
+      metadata?: SanityImageMetadata;
+      source?: SanityAssetSourceData;
+    } | null;
+    alt: string | null;
+  } | null;
+  accordioninfo: Array<{
+    title: string | null;
+    description: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+  }> | null;
+  callToAction: {
+    ctaText?: string;
+    ctaLink?: string;
+    ctaSectionTitle?: string;
+    ctaSectionDescription?: string;
+  } | null;
+} | null;
 // Variable: PRODUCT_QUERY
 // Query: *[_type == "product" && slug.current == $slug][0]
 export type PRODUCT_QUERYResult = {
@@ -1993,18 +2104,9 @@ export type PRODUCT_QUERYResult = {
   _updatedAt: string;
   _rev: string;
   isActive?: boolean;
-  banner?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
+  title?: string;
+  slug?: Slug;
+  description?: string;
   image?: {
     asset?: {
       _ref: string;
@@ -2017,8 +2119,18 @@ export type PRODUCT_QUERYResult = {
     alt?: string;
     _type: "image";
   };
-  title?: string;
-  description?: string;
+  banner?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
   accordioninfo?: Array<{
     title?: string;
     description?: Array<
@@ -2057,7 +2169,12 @@ export type PRODUCT_QUERYResult = {
     _type: "accordionitems";
     _key: string;
   }>;
-  slug?: Slug;
+  callToAction?: {
+    ctaText?: string;
+    ctaLink?: string;
+    ctaSectionTitle?: string;
+    ctaSectionDescription?: string;
+  };
 } | null;
 // Variable: PRODUCT_SLUG_QUERY
 // Query: *[_type == "product" && isActive == true && defined(slug.current)] {  "params": {"slug": slug.current}}
@@ -3694,6 +3811,8 @@ declare module "@sanity/client" {
     '\n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n': FOOTER_QUERYResult;
     '*[_type == "productsSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n}': PRODUCTS_SECTION_QUERYResult;
     '*[_type == "product" && isActive == true] {\n  title,\n  indepthblockinfo,\n  description,\n  "slug" : slug.current,\n  "banner": banner.asset->url,\n  "image": image.asset->url,\n  "altText": image.alt,\n  meta {\n    title,\n    description\n  }\n}': PRODUCTS_QUERYResult;
+    '*[_type == "product" && isActive == true] {\n  title,\n  "slug": slug.current,\n}': PRODUCTS_NAVIGATION_QUERYResult;
+    '*[_type == "product" && slug.current == $slug && isActive == true][0] {\n  title,\n  slug,\n  description,\n  image {\n    asset->,\n    alt\n  },\n  banner {\n    asset->,\n    alt\n  },\n  accordioninfo[] {\n    title,\n    description\n  },\n  callToAction\n}': PRODUCT_BY_SLUG_QUERYResult;
     '*[_type == "product" && slug.current == $slug][0]': PRODUCT_QUERYResult;
     '*[_type == "product" && isActive == true && defined(slug.current)] {\n  "params": {"slug": slug.current}\n}': PRODUCT_SLUG_QUERYResult;
     '*[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n}': NAVIGATION_QUERYResult;

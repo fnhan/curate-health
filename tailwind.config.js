@@ -23,11 +23,8 @@ module.exports = {
       },
     },
     extend: {
-      backgroundImage: {
-        "hero-image": "url('/images/leaf-background.png')",
-      },
       fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
+        poppins: "var(--font-poppins)",
       },
       colors: {
         border: "hsl(var(--border))",

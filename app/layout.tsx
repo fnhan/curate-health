@@ -18,6 +18,8 @@ import { BASEURL } from "./site-settings";
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+  variable: "--font-poppins",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,11 +75,9 @@ export default async function RootLayout({
   });
 
   return (
-    <html lang="en">
+    <html lang="en" className={poppins.className}>
       <CSPostHogProvider>
-        <body
-          className={`${poppins.className} flex min-h-screen flex-col bg-background antialiased`}
-        >
+        <body className="flex min-h-screen flex-col bg-background antialiased">
           <Layout layout={layout}>
             <main className="flex flex-1 flex-col">{children}</main>
           </Layout>

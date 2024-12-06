@@ -32,7 +32,11 @@
   * {
     @apply border-border;
   }
+  html {
+    @apply font-poppins;
+  }
+
   body {
-    @apply bg-background font-poppins text-foreground;
+    @apply bg-background text-foreground;
   }
 }

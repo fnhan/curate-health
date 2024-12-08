@@ -46,7 +46,7 @@ export default function SurveySection({ surveySection }) {
                 <ArrowRight className="ml-1 h-3 w-3 md:ml-2 md:h-5 md:w-5 lg:h-6 lg:w-6" />
               </div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="border-none">
               <iframe
                 src={`https://app.youform.com/forms/${youformId}`}
                 loading="lazy"

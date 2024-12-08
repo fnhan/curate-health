@@ -24,7 +24,7 @@ export default function Layout({
       />
       {children}
       <SurveySection surveySection={surveySection} />
-      <NewsletterSection />
+      <NewsletterSection isComingSoon={false} isLayout={true} />
       <SiteFooter siteSettings={siteSettings} />
       <PopupBanner popupBanner={popupBanner} />
     </div>

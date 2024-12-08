@@ -8,17 +8,25 @@ import { Input } from "components/ui/input";
 import { useToast } from "components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 
-export default function Newsletter({
+export default function NewsletterSection({
   isComingSoon = false,
+  isLayout = false,
 }: {
   isComingSoon?: boolean;
+  isLayout?: boolean;
 }) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const pathname = usePathname();
 
-  if (pathname === "/coming-soon" || pathname === "/login") {
+  // Don't render on login page
+  if (pathname === "/login") {
+    return null;
+  }
+
+  // Don't render layout version on coming soon page
+  if (isLayout && pathname === "/coming-soon") {
     return null;
   }
 
@@ -39,14 +47,12 @@ export default function Newsletter({
       });
 
       if (response.ok) {
-        // Handle success, e.g., show a success message
         toast({
           title: "You are now signed up!",
           description: "Thank you for subscribing to our newsletter.",
         });
         setEmail("");
       } else {
-        // Handle server-side validation errors or other issues
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
@@ -55,7 +61,6 @@ export default function Newsletter({
         });
       }
     } catch (error) {
-      // Handle network errors or other unexpected issues
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",

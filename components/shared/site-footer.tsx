@@ -138,7 +138,7 @@ export default function SiteFooter({
                       <a
                         key={linkIndex}
                         target="_blank"
-                        className="flex items-center gap-2 hover:underline"
+                        className="flex items-center hover:underline"
                         href={link.url!}
                       >
                         <span>{link.platform}</span>

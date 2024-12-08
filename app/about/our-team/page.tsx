@@ -2,6 +2,12 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -55,11 +61,13 @@ export default async function OurTeamPage() {
                 <CardDescription>{teamMember.role}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  {teamMember.bio}
-                </p>
+                <Accordion type="single" collapsible>
+                  <AccordionItem value="item-1" className="border-none">
+                    <AccordionTrigger>Learn More</AccordionTrigger>
+                    <AccordionContent>{teamMember.bio}</AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </CardContent>
-              {/* <CardFooter></CardFooter> */}
             </Card>
           ))}
         </div>

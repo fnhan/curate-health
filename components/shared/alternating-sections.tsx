@@ -19,7 +19,7 @@ export const AlternatingSections = ({ sections }: AlternatingSectionsProps) => {
   if (!sections || sections.length === 0) return null;
 
   return (
-    <section className="-z-20 flex flex-col gap-20 bg-white py-14 text-primary md:gap-28">
+    <section className="-z-20 flex flex-col gap-20 bg-white py-28 text-primary md:gap-28">
       {sections.map((section, index) => (
         <div
           key={section.sectionTitle}

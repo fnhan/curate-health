@@ -610,68 +610,6 @@ export type Metadatas = {
   }>;
 };
 
-export type MissionAndValues = {
-  _id: string;
-  _type: "missionAndValues";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  headerImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  purposeImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  purposeTitle?: string;
-  purposeTextContent?: string;
-  missionImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  missionTitle?: string;
-  missionTextContent?: string;
-  visionImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  visionTitle?: string;
-  visionTextContent?: string;
-};
-
 export type ContactDetails = {
   _id: string;
   _type: "contactDetails";
@@ -1065,6 +1003,50 @@ export type Author = {
     }>;
     level?: number;
     _type: "block";
+    _key: string;
+  }>;
+};
+
+export type MissionAndValues = {
+  _id: string;
+  _type: "missionAndValues";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  pageActive?: boolean;
+  heroSection?: {
+    heroImage?: {
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      alt?: string;
+    };
+  };
+  additionalSections?: Array<{
+    sectionTitle?: string;
+    sectionParagraph?: BlockContent;
+    sectionImage?: {
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      alt?: string;
+    };
     _key: string;
   }>;
 };
@@ -1565,7 +1547,6 @@ export type AllSanitySchemaTypes =
   | Sustainability
   | SanityFileAsset
   | Metadatas
-  | MissionAndValues
   | ContactDetails
   | ContactInfo
   | Accessibility
@@ -1578,6 +1559,7 @@ export type AllSanitySchemaTypes =
   | Category
   | Post
   | Author
+  | MissionAndValues
   | OurTeam
   | OurStory
   | ServicesHeroSection
@@ -2553,143 +2535,46 @@ export type OUR_TEAM_PAGE_QUERYResult = {
   }> | null;
 } | null;
 // Variable: MISSION_AND_VALUES_QUERY
-// Query: *[_type == "missionAndValues"][0]{  purposeTextContent,  purposeTitle,  missionTitle,  missionTextContent,  visionTitle,  visionTextContent,  "headerImage": {    "asset": headerImage.asset->{      _id,      url    },    "alt": headerImage.alt  },    "purposeImage": {    "asset": purposeImage.asset->{      _id,      url    },    "alt": purposeImage.alt  },    "missionImage": {    "asset": missionImage.asset->{      _id,      url    },    "alt": missionImage.alt  },      "visionImage": {    "asset": visionImage.asset->{      _id,      url    },    "alt": visionImage.alt  },}
+// Query: *[_type == "missionAndValues" && pageActive == true][0]{ heroSection{   heroImage{     image{       asset->     },     alt   } }, additionalSections[]{    sectionTitle,    sectionParagraph,    sectionImage{      "image": image.asset->url,      alt    }  },}
 export type MISSION_AND_VALUES_QUERYResult = {
-  purposeTextContent: string | null;
-  purposeTitle: string | null;
-  missionTitle: string | null;
-  missionTextContent: string | null;
-  visionTitle: string | null;
-  visionTextContent: string | null;
-  headerImage: {
-    asset: {
-      _id: string;
-      url: string | null;
+  heroSection: {
+    heroImage: {
+      image: {
+        asset: {
+          _id: string;
+          _type: "sanity.imageAsset";
+          _createdAt: string;
+          _updatedAt: string;
+          _rev: string;
+          originalFilename?: string;
+          label?: string;
+          title?: string;
+          description?: string;
+          altText?: string;
+          sha1hash?: string;
+          extension?: string;
+          mimeType?: string;
+          size?: number;
+          assetId?: string;
+          uploadId?: string;
+          path?: string;
+          url?: string;
+          metadata?: SanityImageMetadata;
+          source?: SanityAssetSourceData;
+        } | null;
+      } | null;
+      alt: string | null;
     } | null;
-    alt: string | null;
-  };
-  purposeImage: {
-    asset: {
-      _id: string;
-      url: string | null;
+  } | null;
+  additionalSections: Array<{
+    sectionTitle: string | null;
+    sectionParagraph: BlockContent | null;
+    sectionImage: {
+      image: string | null;
+      alt: string | null;
     } | null;
-    alt: string | null;
-  };
-  missionImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-    } | null;
-    alt: string | null;
-  };
-  visionImage: {
-    asset: {
-      _id: string;
-      url: string | null;
-    } | null;
-    alt: string | null;
-  };
+  }> | null;
 } | null;
-// Variable: MISSION_AND_VALUES_PAGE_QUERY
-// Query: {  "aboutPages": *[_type == "aboutPage" && isActive == true] | order(_createdAt desc){  title,  "slug": slug.current,},  "footer":   *[_type == "footer"][0] {    contactInfo {      sectionTitle,      details[] {        label,        value      }    },    servicesSection[]-> {      title,      "slug": slug.current,      image {        asset-> {          _id,          url        },        alt      }    },    sections[] {      title,      links[] {        text,        href      }    },    socialLinksSection {      title,      links[] {        platform,        url      }    },    privacy {      links[] {        title,        href      }    }  },  "navigation": *[_type == "navigation"][0]{  serviceLinks[]->{    title,    "slug": slug.current  },  aboutLinks[]{    title,    href,  },  navItems[]{    linkText,    href,    isServiceLinks,    isAboutLinks  }},  "surveyLink": *[_type == "surveySection"][0]{  bgImage {    asset-> {      _id,      url    },    alt  },  cta,  youformId,  content,  bold,  meta {    title,    description  }},  "missionAndValues": *[_type == "missionAndValues"][0]{  purposeTextContent,  purposeTitle,  missionTitle,  missionTextContent,  visionTitle,  visionTextContent,  "headerImage": {    "asset": headerImage.asset->{      _id,      url    },    "alt": headerImage.alt  },    "purposeImage": {    "asset": purposeImage.asset->{      _id,      url    },    "alt": purposeImage.alt  },    "missionImage": {    "asset": missionImage.asset->{      _id,      url    },    "alt": missionImage.alt  },      "visionImage": {    "asset": visionImage.asset->{      _id,      url    },    "alt": visionImage.alt  },}}
-export type MISSION_AND_VALUES_PAGE_QUERYResult = {
-  aboutPages: Array<never>;
-  footer: {
-    contactInfo: {
-      sectionTitle: string | null;
-      details: Array<{
-        label: string | null;
-        value: string | null;
-      }> | null;
-    } | null;
-    servicesSection: Array<{
-      title: string | null;
-      slug: string | null;
-      image: null;
-    }> | null;
-    sections: Array<{
-      title: string | null;
-      links: Array<{
-        text: string | null;
-        href: string | null;
-      }> | null;
-    }> | null;
-    socialLinksSection: {
-      title: string | null;
-      links: Array<{
-        platform: string | null;
-        url: string | null;
-      }> | null;
-    } | null;
-    privacy: null;
-  } | null;
-  navigation: {
-    serviceLinks: Array<{
-      title: string | null;
-      slug: string | null;
-    }> | null;
-    aboutLinks: Array<{
-      title: string | null;
-      href: string | null;
-    }> | null;
-    navItems: Array<{
-      linkText: string | null;
-      href: string | null;
-      isServiceLinks: boolean | null;
-      isAboutLinks: boolean | null;
-    }> | null;
-  } | null;
-  surveyLink: {
-    bgImage: {
-      asset: {
-        _id: string;
-        url: string | null;
-      } | null;
-      alt: string | null;
-    } | null;
-    cta: string | null;
-    youformId: string | null;
-    content: string | null;
-    bold: string | null;
-    meta: null;
-  } | null;
-  missionAndValues: {
-    purposeTextContent: string | null;
-    purposeTitle: string | null;
-    missionTitle: string | null;
-    missionTextContent: string | null;
-    visionTitle: string | null;
-    visionTextContent: string | null;
-    headerImage: {
-      asset: {
-        _id: string;
-        url: string | null;
-      } | null;
-      alt: string | null;
-    };
-    purposeImage: {
-      asset: {
-        _id: string;
-        url: string | null;
-      } | null;
-      alt: string | null;
-    };
-    missionImage: {
-      asset: {
-        _id: string;
-        url: string | null;
-      } | null;
-      alt: string | null;
-    };
-    visionImage: {
-      asset: {
-        _id: string;
-        url: string | null;
-      } | null;
-      alt: string | null;
-    };
-  } | null;
-};
 // Variable: SUSTAINABILITY_QUERY
 // Query: *[_type == "sustainability"][0]{  headerTitle,  headerTitleDesktop,  headerTextContent,  sectionOneTitle,  sectionOneTextContent,  sectionTwoTitle,  sectionTwoTextContent,  sectionThreeTitle,  sectionThreeTextContent,  sectionFourTitle,  sectionFourTextContent,  sectionFiveTitle,  sectionFiveTextContent,  sectionSixTitle,  sectionSixTextContent,  sectionSixSubtitleOne,  sectionSixSubtitleOneText,  sectionSixSubtitleTwo,  sectionSixSubtitleTwoText,  sectionSixSubtitleThree,  sectionSixSubtitleThreeText,  sectionSevenTitle,  sectionSevenTextContent,  sectionSevenCta,  ctaUrl,  sectionSevenEsg,  "esgLink": esgLink.asset->url,  "headerImage": {    "asset": headerImage.asset->{      _id,      url    },    "alt": headerImage.alt  },      "sectionFourImage": {    "asset": sectionFourImage.asset->{      _id,      url    },    "alt": sectionFourImage.alt  },        "sectionThreeImage": {    "asset": sectionThreeImage.asset->{      _id,      url    },    "alt": sectionThreeImage.alt  },      "sectionTwoImage": {    "asset": sectionTwoImage.asset->{      _id,      url    },    "alt": sectionTwoImage.alt  },      "sectionOneImage": {    "asset": sectionOneImage.asset->{      _id,      url    },    "alt": sectionOneImage.alt  },        "sectionFiveImage": {    "asset": sectionFiveImage.asset->{      _id,      url    },    "alt": sectionFiveImage.alt  },        "sectionSixImage": {    "asset": sectionSixImage.asset->{      _id,      url    },    "alt": sectionSixImage.alt  },        "sectionSevenBgImage": {    "asset": sectionSevenBgImage.asset->{      _id,      url    },    "alt": sectionSevenBgImage.alt  },}
 export type SUSTAINABILITY_QUERYResult = {
@@ -3681,8 +3566,7 @@ declare module "@sanity/client" {
     '*[_type == "aboutPage" && isActive == true] | order(_createdAt desc){\n  title,\n  "slug": slug.current,\n}': ABOUT_PAGES_QUERYResult;
     '*[_type == "ourStory" && pageActive == true][0]{\n  heroSection{\n    heroImage{\n      "image": image.asset->url,\n      alt\n    },\n    heroTitle,\n    heroSubtitle\n  },\n  quoteSection{\n    quoteImage{\n      "image": image.asset->url,\n      alt\n    },\n    quoteText\n  },\n  additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  ctaSection{\n    ctaSectionImage{\n      "image": image.asset->url,\n      alt\n    },\n    ctaSectionTitle,\n    ctaSectionParagraph,\n    ctaButton{\n      buttonText,\n      buttonLink\n    }\n  }\n}': OUR_STORY_PAGE_QUERYResult;
     '*[_type == "ourTeam" && pageActive == true][0]{\n  heroSection{\n    heroTitle,\n    heroParagraph\n  },\n  teamMembers[] {\n    name,\n    role,\n    bio,\n    image {\n      asset-> {\n        url\n      }\n    }\n  }\n}': OUR_TEAM_PAGE_QUERYResult;
-    '*[_type == "missionAndValues"][0]{\n  purposeTextContent,\n  purposeTitle,\n  missionTitle,\n  missionTextContent,\n  visionTitle,\n  visionTextContent,\n  "headerImage": {\n    "asset": headerImage.asset->{\n      _id,\n      url\n    },\n    "alt": headerImage.alt\n  },\n    "purposeImage": {\n    "asset": purposeImage.asset->{\n      _id,\n      url\n    },\n    "alt": purposeImage.alt\n  },\n    "missionImage": {\n    "asset": missionImage.asset->{\n      _id,\n      url\n    },\n    "alt": missionImage.alt\n  },\n      "visionImage": {\n    "asset": visionImage.asset->{\n      _id,\n      url\n    },\n    "alt": visionImage.alt\n  },\n\n}': MISSION_AND_VALUES_QUERYResult;
-    '{\n  "aboutPages": *[_type == "aboutPage" && isActive == true] | order(_createdAt desc){\n  title,\n  "slug": slug.current,\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n  "navigation": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "surveyLink": *[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n  meta {\n    title,\n    description\n  }\n},\n  "missionAndValues": *[_type == "missionAndValues"][0]{\n  purposeTextContent,\n  purposeTitle,\n  missionTitle,\n  missionTextContent,\n  visionTitle,\n  visionTextContent,\n  "headerImage": {\n    "asset": headerImage.asset->{\n      _id,\n      url\n    },\n    "alt": headerImage.alt\n  },\n    "purposeImage": {\n    "asset": purposeImage.asset->{\n      _id,\n      url\n    },\n    "alt": purposeImage.alt\n  },\n    "missionImage": {\n    "asset": missionImage.asset->{\n      _id,\n      url\n    },\n    "alt": missionImage.alt\n  },\n      "visionImage": {\n    "asset": visionImage.asset->{\n      _id,\n      url\n    },\n    "alt": visionImage.alt\n  },\n\n}\n}': MISSION_AND_VALUES_PAGE_QUERYResult;
+    '*[_type == "missionAndValues" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n}': MISSION_AND_VALUES_QUERYResult;
     '*[_type == "sustainability"][0]{\n  headerTitle,\n  headerTitleDesktop,\n  headerTextContent,\n  sectionOneTitle,\n  sectionOneTextContent,\n  sectionTwoTitle,\n  sectionTwoTextContent,\n  sectionThreeTitle,\n  sectionThreeTextContent,\n  sectionFourTitle,\n  sectionFourTextContent,\n  sectionFiveTitle,\n  sectionFiveTextContent,\n  sectionSixTitle,\n  sectionSixTextContent,\n  sectionSixSubtitleOne,\n  sectionSixSubtitleOneText,\n  sectionSixSubtitleTwo,\n  sectionSixSubtitleTwoText,\n  sectionSixSubtitleThree,\n  sectionSixSubtitleThreeText,\n  sectionSevenTitle,\n  sectionSevenTextContent,\n  sectionSevenCta,\n  ctaUrl,\n  sectionSevenEsg,\n  "esgLink": esgLink.asset->url,\n  "headerImage": {\n    "asset": headerImage.asset->{\n      _id,\n      url\n    },\n    "alt": headerImage.alt\n  },\n      "sectionFourImage": {\n    "asset": sectionFourImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionFourImage.alt\n  },\n        "sectionThreeImage": {\n    "asset": sectionThreeImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionThreeImage.alt\n  },\n      "sectionTwoImage": {\n    "asset": sectionTwoImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionTwoImage.alt\n  },\n      "sectionOneImage": {\n    "asset": sectionOneImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionOneImage.alt\n  },\n        "sectionFiveImage": {\n    "asset": sectionFiveImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionFiveImage.alt\n  },\n        "sectionSixImage": {\n    "asset": sectionSixImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionSixImage.alt\n  },\n        "sectionSevenBgImage": {\n    "asset": sectionSevenBgImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionSevenBgImage.alt\n  },\n\n}': SUSTAINABILITY_QUERYResult;
     '{\n  "aboutPages": *[_type == "aboutPage" && isActive == true] | order(_createdAt desc){\n  title,\n  "slug": slug.current,\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n  "navigation": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "surveyLink": *[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n  meta {\n    title,\n    description\n  }\n},\n  "sustainability": *[_type == "sustainability"][0]{\n  headerTitle,\n  headerTitleDesktop,\n  headerTextContent,\n  sectionOneTitle,\n  sectionOneTextContent,\n  sectionTwoTitle,\n  sectionTwoTextContent,\n  sectionThreeTitle,\n  sectionThreeTextContent,\n  sectionFourTitle,\n  sectionFourTextContent,\n  sectionFiveTitle,\n  sectionFiveTextContent,\n  sectionSixTitle,\n  sectionSixTextContent,\n  sectionSixSubtitleOne,\n  sectionSixSubtitleOneText,\n  sectionSixSubtitleTwo,\n  sectionSixSubtitleTwoText,\n  sectionSixSubtitleThree,\n  sectionSixSubtitleThreeText,\n  sectionSevenTitle,\n  sectionSevenTextContent,\n  sectionSevenCta,\n  ctaUrl,\n  sectionSevenEsg,\n  "esgLink": esgLink.asset->url,\n  "headerImage": {\n    "asset": headerImage.asset->{\n      _id,\n      url\n    },\n    "alt": headerImage.alt\n  },\n      "sectionFourImage": {\n    "asset": sectionFourImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionFourImage.alt\n  },\n        "sectionThreeImage": {\n    "asset": sectionThreeImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionThreeImage.alt\n  },\n      "sectionTwoImage": {\n    "asset": sectionTwoImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionTwoImage.alt\n  },\n      "sectionOneImage": {\n    "asset": sectionOneImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionOneImage.alt\n  },\n        "sectionFiveImage": {\n    "asset": sectionFiveImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionFiveImage.alt\n  },\n        "sectionSixImage": {\n    "asset": sectionSixImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionSixImage.alt\n  },\n        "sectionSevenBgImage": {\n    "asset": sectionSevenBgImage.asset->{\n      _id,\n      url\n    },\n    "alt": sectionSevenBgImage.alt\n  },\n\n}\n}': SUSTAINABILITY_PAGE_QUERYResult;
     '*[_type == "pillarsOfHealth"][0]{\n  pageTitle,\n  pageSubtitle,\n  mentalHealthTitle,\n  mentalHealthTextContent,\n  emotionalHealthTitle,\n  emotionalHealthTextContent,\n  socialHealthTitle,\n  socialHealthTextContent,\n  spiritualHealthTitle,\n  spiritualHealthTextContent,\n  physicalHealthTitle,\n  physicalHealthTextContent,\n    "headerBgImage": {\n    "asset": headerBgImage.asset->{\n      _id,\n      url\n    },\n    "alt": headerBgImage.alt\n  },\n  }': PILLARS_OF_HEALTH_QUERYResult;

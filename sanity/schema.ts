@@ -20,6 +20,7 @@ import missionAndValues from "./schemas/missionAndValues";
 import navigation from "./schemas/navigation";
 import newsletter from "./schemas/newsletter";
 import ourStory from "./schemas/ourStory";
+import ourTeam from "./schemas/ourTeam";
 import pageMetadata from "./schemas/pageMetadata";
 import pillarsOfHealth from "./schemas/pillarsOfHealth";
 import popupBanner from "./schemas/popupBanner";
@@ -39,7 +40,6 @@ import sustainability from "./schemas/sustainability";
 import sustainabilitySection from "./schemas/sustainabilitySection";
 import termsOfUse from "./schemas/termsOfUse";
 import treatment from "./schemas/treatment";
-import ourTeam from "./schemas/ourTeam";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -58,6 +58,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     servicesHeroSection,
     ourStory,
     ourTeam,
+    missionAndValues,
     post,
     author,
     category,
@@ -70,7 +71,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     accessibility,
     contactInfo,
     contactDetails,
-    missionAndValues,
     metadatas,
     sustainability,
     aboutPages,

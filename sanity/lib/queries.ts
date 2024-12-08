@@ -541,50 +541,23 @@ export const OUR_TEAM_PAGE_QUERY = groq`*[_type == "ourTeam" && pageActive == tr
   }
 }`;
 
-export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues"][0]{
-  purposeTextContent,
-  purposeTitle,
-  missionTitle,
-  missionTextContent,
-  visionTitle,
-  visionTextContent,
-  "headerImage": {
-    "asset": headerImage.asset->{
-      _id,
-      url
-    },
-    "alt": headerImage.alt
+export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pageActive == true][0]{
+ heroSection{
+   heroImage{
+     image{
+       asset->
+     },
+     alt
+   }
+ },
+ additionalSections[]{
+    sectionTitle,
+    sectionParagraph,
+    sectionImage{
+      "image": image.asset->url,
+      alt
+    }
   },
-    "purposeImage": {
-    "asset": purposeImage.asset->{
-      _id,
-      url
-    },
-    "alt": purposeImage.alt
-  },
-    "missionImage": {
-    "asset": missionImage.asset->{
-      _id,
-      url
-    },
-    "alt": missionImage.alt
-  },
-      "visionImage": {
-    "asset": visionImage.asset->{
-      _id,
-      url
-    },
-    "alt": visionImage.alt
-  },
-
-}`;
-
-export const MISSION_AND_VALUES_PAGE_QUERY = groq`{
-  "aboutPages": ${ABOUT_PAGES_QUERY},
-  "footer": ${FOOTER_QUERY},
-  "navigation": ${NAVIGATION_QUERY},
-  "surveyLink": ${SURVEY_LINK_QUERY},
-  "missionAndValues": ${MISSION_AND_VALUES_QUERY}
 }`;
 
 export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{

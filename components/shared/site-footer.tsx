@@ -51,9 +51,9 @@ export default function SiteFooter({
               <div>
                 {contactInfo?.address?.street},
                 <br />
-                {contactInfo?.address?.city}, {contactInfo?.address?.state}
-                {", "}
-                {contactInfo?.address?.zip}, {contactInfo?.address?.country}
+                {contactInfo?.address?.city}
+                {contactInfo?.address?.state}
+                {contactInfo?.address?.zip}
               </div>
             </a>
             <div className="space-y-2">

@@ -33,9 +33,9 @@ export default function SiteFooter({
   } = siteSettings!;
 
   return (
-    <footer className="flex w-full flex-col pb-8 pt-14 text-sm md:text-base">
-      <div className="container flex flex-col gap-10 text-white">
-        <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
+    <footer className="flex w-full flex-col pb-8 text-sm md:text-base">
+      <div className="container flex flex-col text-white">
+        <div className="flex flex-col gap-10 py-14 lg:flex-row lg:justify-between lg:py-36">
           {/* Contact Info */}
           <address className="space-y-2 text-sm not-italic md:text-base">
             <h6 className="w-fit font-semibold hover:underline">

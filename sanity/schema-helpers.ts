@@ -1,4 +1,6 @@
 export const fieldDescriptions = {
+  pageActiveDescription:
+    "Whether the page is active or not. If not, the page will not be visible on the website.",
   ctaText: "Text for the call-to-action button.",
   ctaLink: "Enter the URL for the CTA button.",
   altImageDescription:

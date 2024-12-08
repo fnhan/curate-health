@@ -1,222 +1,203 @@
 import { defineField, defineType } from "sanity";
 
+import { fieldDescriptions } from "../schema-helpers";
+
 export default defineType({
   name: "ourStory",
-  title: "Our Story",
+  title: "About | Our Story Page",
   type: "document",
   fields: [
     defineField({
-      name: "headerBgImage",
-      title: "Our Story Header Background Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
+      name: "pageActive",
+      title: "Page Active",
+      type: "boolean",
+      description: fieldDescriptions.pageActiveDescription,
+    }),
+    defineField({
+      name: "heroSection",
+      title: "Hero Section",
+      type: "object",
       fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
-        },
-      ],
-    }),
-    defineField({
-      name: "headerTitle",
-      title: "Header Title",
-      type: "string",
-      description: "Title of header section on page",
-    }),
-    defineField({
-      name: "headerSubtitle",
-      title: "Header Subtitle",
-      type: "string",
-      description: "Subtitle of header section on page",
-    }),
-    defineField({
-      name: "sectionOneImage",
-      title: "Section One Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
-        },
-      ],
-    }),
-    defineField({
-      name: "sectionOneTitle",
-      title: "Title of Section One",
-      type: "string",
-      description: "The title of section one",
-    }),
-    defineField({
-      name: "sectionOneTextContent",
-      title: "Section One Text Content",
-      type: "string",
-      description: "The text content of section one",
-    }),
-    defineField({
-      name: "quotationMark",
-      title: "Quotation Mark Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
-        },
-      ],
-    }),
-    defineField({
-      name: "sectionTwoTextContent",
-      title: "Section Two Text Content",
-      type: "string",
-      description: "The text content of section two",
-    }),
-    defineField({
-      name: "sectionThreeImage",
-      title: "Section Three Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
-        },
-      ],
-    }),
-    defineField({
-      name: "sectionThreeTitle",
-      title: "Title of Section Three",
-      type: "string",
-      description: "The title of section three",
-    }),
-    defineField({
-      name: "sectionThreeTextContent",
-      title: "Section Three Text Content",
-      type: "string",
-      description: "The text content of section three",
-    }),
-    defineField({
-      name: "sectionFiveImage",
-      title: "Section Five Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
-        },
-      ],
-    }),
-    defineField({
-      name: "sectionFiveTitle",
-      title: "Title of Section Five",
-      type: "string",
-      description: "The title of section five",
-    }),
-    defineField({
-      name: "sectionFiveTextContent",
-      title: "Section Five Text Content",
-      type: "string",
-      description: "The text content of section five",
-    }),
-    defineField({
-      name: "sectionSixImage",
-      title: "Section Six Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
-        },
-      ],
-    }),
-    defineField({
-      name: "sectionSixTitle",
-      title: "Title of Section Six",
-      type: "string",
-      description: "The title of section five",
-    }),
-    defineField({
-      name: "sectionSixTextContent",
-      title: "Section Six Text Content",
-      type: "string",
-      description: "The text content of section Six",
-    }),
-    defineField({
-      name: "sectionSevenBgImage",
-      title: "Section Seven Background Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
-      fields: [
-        {
-          name: "alt",
-          type: "string",
-          title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
-        },
-      ],
-    }),
-    defineField({
-      name: "sectionSevenTitle",
-      title: "Section Seven Title",
-      type: "string",
-      description: "Title of section seven",
-    }),
-    defineField({
-      name: "sectionSevenTextContent",
-      title: "Section Seven Text Content",
-      type: "string",
-      description: "Text content of section seven",
-    }),
-    defineField({
-      name: "sectionSevenCta",
-      title: "Section Seven Call To Action",
-      type: "string",
-      description: "Call to action statement of section seven",
-    }),
-    defineField({
-      name: "ctaUrl",
-      title: "Call to action url",
-      type: "url",
-      validation: (Rule) =>
-        Rule.uri({
-          scheme: ["http", "https", "mailto", "tel"],
+        defineField({
+          name: "heroImage",
+          title: "Hero Image",
+          type: "object",
+          fields: [
+            {
+              name: "image",
+              title: "Image",
+              type: "image",
+              validation: (Rule) =>
+                Rule.required().error("An image is required"),
+            },
+            {
+              name: "alt",
+              title: "Alternative Text",
+              type: "string",
+              description: fieldDescriptions.altImageDescription,
+              validation: (Rule) =>
+                Rule.required().error("An alternative text is required"),
+            },
+          ],
         }),
-      description: "url for CTA statement",
+        defineField({
+          name: "heroTitle",
+          title: "Hero Title",
+          type: "string",
+          description: "Title of the hero section",
+          validation: (Rule) =>
+            Rule.required().error("A hero title is required"),
+        }),
+        defineField({
+          name: "heroSubtitle",
+          title: "Hero Subtitle",
+          type: "text",
+          description: "Subtitle of the hero section",
+          validation: (Rule) =>
+            Rule.required().error("A hero subtitle is required"),
+        }),
+      ],
+    }),
+    defineField({
+      name: "quoteSection",
+      title: "Quote Section",
+      type: "object",
+      fields: [
+        defineField({
+          name: "quoteImage",
+          title: "Quote Image",
+          type: "object",
+          fields: [
+            {
+              name: "image",
+              title: "Image",
+              type: "image",
+              validation: (Rule) =>
+                Rule.required().error("An image is required"),
+            },
+            {
+              name: "alt",
+              title: "Alternative Text",
+              type: "string",
+              description: fieldDescriptions.altImageDescription,
+              validation: (Rule) =>
+                Rule.required().error("An alternative text is required"),
+            },
+          ],
+          validation: (Rule) =>
+            Rule.required().error("A quote image is required"),
+        }),
+        defineField({
+          name: "quoteText",
+          title: "Quote Text",
+          type: "text",
+          validation: (Rule) =>
+            Rule.required().error("A quote text is required"),
+        }),
+      ],
+    }),
+    defineField({
+      name: "additionalSections",
+      title: "Additional Sections",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "sectionTitle",
+              title: "Section Title",
+              type: "string",
+              validation: (Rule) =>
+                Rule.required().error("A section title is required"),
+            }),
+            defineField({
+              name: "sectionParagraph",
+              title: "Section Paragraph",
+              type: "blockContent",
+              validation: (Rule) =>
+                Rule.required().error("A section paragraph is required"),
+            }),
+            defineField({
+              name: "sectionImage",
+              title: "Section Image",
+              type: "object",
+              fields: [
+                {
+                  name: "image",
+                  title: "Image",
+                  type: "image",
+                },
+                {
+                  name: "alt",
+                  title: "Alternative Text",
+                  type: "string",
+                  description: fieldDescriptions.altImageDescription,
+                },
+              ],
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: "ctaSection",
+      title: "Call to Action Section",
+      type: "object",
+      fields: [
+        defineField({
+          name: "ctaSectionImage",
+          title: "CTA Section Image",
+          type: "object",
+          fields: [
+            {
+              name: "image",
+              title: "Image",
+              type: "image",
+            },
+            {
+              name: "alt",
+              title: "Alternative Text",
+              type: "string",
+              description: fieldDescriptions.altImageDescription,
+            },
+          ],
+        }),
+        defineField({
+          name: "ctaSectionTitle",
+          title: "CTA Title",
+          type: "string",
+        }),
+        defineField({
+          name: "ctaSectionParagraph",
+          title: "CTA Paragraph",
+          type: "text",
+        }),
+        defineField({
+          name: "ctaButton",
+          title: "CTA Button",
+          type: "object",
+          fields: [
+            {
+              name: "buttonText",
+              title: "Button Text",
+              type: "string",
+            },
+            {
+              name: "buttonLink",
+              title: "Button Link",
+              type: "url",
+            },
+          ],
+        }),
+      ],
     }),
   ],
+  preview: {
+    prepare() {
+      return {
+        title: "Our Story",
+      };
+    },
+  },
 });

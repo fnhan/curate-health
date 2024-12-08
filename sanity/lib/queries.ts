@@ -486,93 +486,42 @@ export const ABOUT_PAGES_QUERY = groq`*[_type == "aboutPage" && isActive == true
   "slug": slug.current,
 }`;
 
-export const OUR_STORY_QUERY = groq`*[_type == "ourStory"][0]{
-  headerTitle,
-  headerSubtitle,
-  sectionOneTextContent,
-  sectionOneTitle,
-  sectionTwoTextContent,
-  sectionThreeTextContent,
-  sectionThreeTitle,
-  sectionFiveTextContent,
-  sectionFiveTitle,
-  sectionSixTextContent,
-  sectionSixTitle,
-  sectionSevenCta,
-  ctaUrl,
-  sectionSevenTextContent,
-  sectionSevenTitle,
-    "quotationMark": {
-    "asset": quotationMark.asset->{
-      _id,
-      url
+export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == true][0]{
+  heroSection{
+    heroImage{
+      "image": image.asset->url,
+      alt
     },
-    "alt": quotationMark.alt
+    heroTitle,
+    heroSubtitle
   },
-  "headerBgImage": {
-    "asset": headerBgImage.asset->{
-      _id,
-      url
+  quoteSection{
+    quoteImage{
+      "image": image.asset->url,
+      alt
     },
-    "alt": headerBgImage.alt
+    quoteText
   },
-    "sectionSevenBgImage": {
-    "asset": sectionSevenBgImage.asset->{
-      _id,
-      url
+  additionalSections[]{
+    sectionTitle,
+    sectionParagraph,
+    sectionImage{
+      "image": image.asset->url,
+      alt
+    }
+  },
+  ctaSection{
+    ctaSectionImage{
+      "image": image.asset->url,
+      alt
     },
-    "alt": sectionSevenBgImage.alt
-  },
-    "sectionFiveImage": {
-    "asset": sectionFiveImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionFiveImage.alt
-  },
-      "sectionSixImage": {
-    "asset": sectionSixImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionSixImage.alt
-  },
-      "sectionFourImage": {
-    "asset": sectionFourImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionFourImage.alt
-  },
-      "sectionThreeImage": {
-    "asset": sectionThreeImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionThreeImage.alt
-  },
-      "sectionTwoImage": {
-    "asset": sectionTwoImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionTwoImage.alt
-  },
-      "sectionOneImage": {
-    "asset": sectionOneImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionOneImage.alt
-  },
-}`;
-
-export const OUR_STORY_PAGE_QUERY = groq`{
-  "aboutPages": ${ABOUT_PAGES_QUERY},
-  "footer": ${FOOTER_QUERY},
-  "navigation": ${NAVIGATION_QUERY},
-  "surveyLink": ${SURVEY_LINK_QUERY},
-  "ourStory": ${OUR_STORY_QUERY}
+    ctaSectionTitle,
+    ctaSectionParagraph,
+    ctaButton{
+      buttonText,
+      buttonLink
+    }
+  }
 }`;
 
 export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues"][0]{

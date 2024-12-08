@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
@@ -27,7 +28,12 @@ export default function SiteNav({
   siteSettings: SITE_SETTINGS_QUERYResult;
   primaryCTAButton: PRIMARY_CTA_BUTTON_QUERYResult;
 }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  if (pathname === "/coming-soon") {
+    return null;
+  }
 
   if (!siteSettings) return null;
 

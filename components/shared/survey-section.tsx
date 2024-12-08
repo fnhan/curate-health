@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 import imageUrlBuilder from "@sanity/image-url";
 import { ArrowRight } from "lucide-react";
@@ -12,7 +13,12 @@ import { dataset, projectId } from "../../sanity/env";
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function SurveySection({ surveySection }) {
+  const pathname = usePathname();
   const { bgImage, cta, youformId, content, bold } = surveySection;
+
+  if (pathname === "/coming-soon") {
+    return null;
+  }
 
   return (
     <>

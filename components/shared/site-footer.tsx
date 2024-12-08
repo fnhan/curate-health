@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { MailIcon, MapPinIcon, MoveUpRightIcon, PhoneIcon } from "lucide-react";
 
@@ -6,13 +9,17 @@ import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
 import { FooterMobileAccordion } from "./footer-mobile-accordion";
 
-// import { FooterMobileAccordion } from './Footer-Mobile-Accordion';
-
 export default function SiteFooter({
   siteSettings,
 }: {
   siteSettings: SITE_SETTINGS_QUERYResult;
 }) {
+  const pathname = usePathname();
+
+  if (pathname === "/coming-soon") {
+    return null;
+  }
+
   if (!siteSettings) return null;
 
   const {

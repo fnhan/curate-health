@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "components/ui/button";
@@ -15,6 +16,11 @@ export default function Newsletter({
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const pathname = usePathname();
+
+  if (pathname === "/coming-soon") {
+    return null;
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();

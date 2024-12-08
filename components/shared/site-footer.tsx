@@ -49,7 +49,7 @@ export default function SiteFooter({
             >
               <MapPinIcon size={20} className="mt-1" />
               <div>
-                {contactInfo?.address?.street},
+                {contactInfo?.address?.street}
                 <br />
                 {contactInfo?.address?.city}
                 {contactInfo?.address?.state}

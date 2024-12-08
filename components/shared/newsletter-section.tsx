@@ -18,7 +18,7 @@ export default function Newsletter({
   const [email, setEmail] = useState("");
   const pathname = usePathname();
 
-  if (pathname === "/coming-soon") {
+  if (pathname === "/coming-soon" || pathname === "/login") {
     return null;
   }
 

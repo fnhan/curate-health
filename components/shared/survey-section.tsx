@@ -16,7 +16,7 @@ export default function SurveySection({ surveySection }) {
   const pathname = usePathname();
   const { bgImage, cta, youformId, content, bold } = surveySection;
 
-  if (pathname === "/coming-soon") {
+  if (pathname === "/coming-soon" || pathname === "/login") {
     return null;
   }
 

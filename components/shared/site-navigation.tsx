@@ -31,7 +31,7 @@ export default function SiteNav({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  if (pathname === "/coming-soon") {
+  if (pathname === "/coming-soon" || pathname === "/login") {
     return null;
   }
 

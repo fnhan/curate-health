@@ -524,6 +524,23 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
   }
 }`;
 
+export const OUR_TEAM_PAGE_QUERY = groq`*[_type == "ourTeam" && pageActive == true][0]{
+  heroSection{
+    heroTitle,
+    heroParagraph
+  },
+  teamMembers[] {
+    name,
+    role,
+    bio,
+    image {
+      asset-> {
+        url
+      }
+    }
+  }
+}`;
+
 export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues"][0]{
   purposeTextContent,
   purposeTitle,

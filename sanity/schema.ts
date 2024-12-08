@@ -39,6 +39,7 @@ import sustainability from "./schemas/sustainability";
 import sustainabilitySection from "./schemas/sustainabilitySection";
 import termsOfUse from "./schemas/termsOfUse";
 import treatment from "./schemas/treatment";
+import ourTeam from "./schemas/ourTeam";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -56,6 +57,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     sustainabilitySection,
     servicesHeroSection,
     ourStory,
+    ourTeam,
     post,
     author,
     category,

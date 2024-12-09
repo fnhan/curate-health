@@ -1,5 +1,7 @@
 import { defineField, defineType } from "sanity";
 
+import { fieldDescriptions } from "../schema-helpers";
+
 export default defineType({
   name: "treatments",
   title: "Shared | Treatments",
@@ -53,8 +55,7 @@ export default defineType({
           name: "heroAlt",
           type: "string",
           title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
+          description: fieldDescriptions.altImageDescription,
           validation: (Rule) =>
             Rule.required().error("Alternative text is required"),
         },
@@ -125,8 +126,7 @@ export default defineType({
               name: "alt",
               title: "Alternative Text",
               type: "string",
-              description:
-                "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
+              description: fieldDescriptions.altImageDescription,
               validation: (Rule) =>
                 Rule.required().error("Alternative text is required"),
             },
@@ -197,8 +197,7 @@ export default defineType({
           name: "ctaBgAlt",
           title: "CTA Background Alternative Text",
           type: "string",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
+          description: fieldDescriptions.altImageDescription,
           validation: (Rule) =>
             Rule.required().error(
               "CTA background alternative text is required"

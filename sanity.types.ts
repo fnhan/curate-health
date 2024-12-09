@@ -103,21 +103,55 @@ export type Treatments = {
     introParagraph?: string;
   };
   quoteContent?: string;
-  overview?: Array<{
-    title?: string;
-    paragraph?: string;
-    image?: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+  additionalSections?: Array<{
+    sectionTitle?: string;
+    sectionParagraph?: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    >;
+    sectionImage?: {
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
       };
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
+      alt?: string;
     };
-    alt?: string;
     _key: string;
   }>;
   benefits?: {
@@ -1800,7 +1834,7 @@ export type ANOTHERMETADATA_BY_SLUG_QUERYResult = Array<never>;
 // Query: *[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{  "slug": service->slug.current,  "treatmentSlug": treatmentSlug.current}
 export type TREATMENTS_SLUG_QUERYResult = Array<never>;
 // Variable: TREATMENT_BY_SLUG_QUERY
-// Query: *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {  title,  treatmentSlug,  "serviceName": service->title,  heroImage {    asset->{      url,      metadata {        dimensions      }    },    heroAlt  },  intro {    subtitle,    introParagraph  },  quoteContent,  overview[] {    title,    paragraph,    image {      asset->{        url,        metadata {          dimensions        }      },      alt    }  },  benefits {    title,    benefitsList[] {      title,      subtitle    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  }}
+// Query: *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {  title,  treatmentSlug,  "serviceName": service->title,  heroImage {    asset->{      url,          },    heroAlt  },  intro {    subtitle,    introParagraph  },  quoteContent,  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },    benefits {    title,    benefitsList[] {      title,      subtitle    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  }}
 export type TREATMENT_BY_SLUG_QUERYResult = {
   title: string | null;
   treatmentSlug: Slug | null;
@@ -1808,9 +1842,6 @@ export type TREATMENT_BY_SLUG_QUERYResult = {
   heroImage: {
     asset: {
       url: string | null;
-      metadata: {
-        dimensions: SanityImageDimensions | null;
-      } | null;
     } | null;
     heroAlt: string | null;
   } | null;
@@ -1819,17 +1850,44 @@ export type TREATMENT_BY_SLUG_QUERYResult = {
     introParagraph: string | null;
   } | null;
   quoteContent: string | null;
-  overview: Array<{
-    title: string | null;
-    paragraph: string | null;
-    image: {
-      asset: {
-        url: string | null;
-        metadata: {
-          dimensions: SanityImageDimensions | null;
-        } | null;
-      } | null;
-      alt: null;
+  additionalSections: Array<{
+    sectionTitle: string | null;
+    sectionParagraph: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+    sectionImage: {
+      image: string | null;
+      alt: string | null;
     } | null;
   }> | null;
   benefits: {
@@ -3364,7 +3422,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "metadatas"]{\n    "meta":datas[slug.current == $slug][0]{\n      title,\n      description\n    } \n  }[0]\n': METADATA_BY_SLUG_QUERYResult;
     '\n  *[_type == "metadatas" && datas[slug.current == $slug][0]]{\n      title,\n      description\n    } \n  \n': ANOTHERMETADATA_BY_SLUG_QUERYResult;
     '*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{\n  "slug": service->slug.current,\n  "treatmentSlug": treatmentSlug.current\n}': TREATMENTS_SLUG_QUERYResult;
-    '\n*[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {\n  title,\n  treatmentSlug,\n  "serviceName": service->title,\n  heroImage {\n    asset->{\n      url,\n      metadata {\n        dimensions\n      }\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  quoteContent,\n  overview[] {\n    title,\n    paragraph,\n    image {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      },\n      alt\n    }\n  },\n  benefits {\n    title,\n    benefitsList[] {\n      title,\n      subtitle\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  }\n}': TREATMENT_BY_SLUG_QUERYResult;
+    '\n*[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {\n  title,\n  treatmentSlug,\n  "serviceName": service->title,\n  heroImage {\n    asset->{\n      url,      \n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  quoteContent,\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },  \n  benefits {\n    title,\n    benefitsList[] {\n      title,\n      subtitle\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  }\n}': TREATMENT_BY_SLUG_QUERYResult;
     '\n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n': FOOTER_QUERYResult;
     '*[_type == "productsSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n}': PRODUCTS_SECTION_QUERYResult;
     '*[_type == "product" && isActive == true] {\n  title,\n  indepthblockinfo,\n  description,\n  "slug" : slug.current,\n  "banner": banner.asset->url,\n  "image": image.asset->url,\n  "altText": image.alt,\n  meta {\n    title,\n    description\n  }\n}': PRODUCTS_QUERYResult;

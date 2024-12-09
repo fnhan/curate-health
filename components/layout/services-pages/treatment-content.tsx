@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
 import {
   PRIMARY_CTA_BUTTON_QUERYResult,
@@ -17,23 +18,28 @@ export default function TreatmentContent({
     return null;
   }
 
-  const { title, intro, quoteContent, overview, benefits, cta } = treatment;
+  const { title, intro, quoteContent, additionalSections, benefits, cta } =
+    treatment;
   const { title: benefitsTitle, benefitsList } = benefits || {};
   const { ctaBg, ctaBgAlt, ctaTitle, ctaText, ctaButtonText } = cta || {};
   const { ctaButton } = primaryCTA || {};
 
   return (
-    <div className="bg-white text-primary">
-      <section className="container flex flex-col gap-3 py-14 md:gap-6 md:py-28 2xl:gap-8">
-        <div className="flex flex-col items-center gap-3 md:gap-6 2xl:gap-8">
-          <h1 className="text-2xl capitalize md:text-4xl 2xl:text-6xl">
-            {title}
-          </h1>
-          <div className="h-16 w-px bg-primary md:h-24 2xl:h-32" />
-        </div>
-        <div className="mx-auto max-w-[80ch] space-y-4 text-pretty text-center">
-          <h2 className="text-xl capitalize md:text-3xl">{intro?.subtitle}</h2>
-          <p className="font-light">{intro?.introParagraph}</p>
+    <div className="text-primary">
+      <section className="bg-white">
+        <div className="container flex flex-col gap-3 py-14 md:gap-6 md:py-28 2xl:gap-8">
+          <div className="flex flex-col items-center gap-3 md:gap-6 2xl:gap-8">
+            <h1 className="text-2xl capitalize md:text-4xl 2xl:text-6xl">
+              {title}
+            </h1>
+            <div className="h-16 w-px bg-primary md:h-24 2xl:h-32" />
+          </div>
+          <div className="mx-auto max-w-[80ch] space-y-4 text-pretty text-center">
+            <h2 className="text-xl capitalize md:text-3xl">
+              {intro?.subtitle}
+            </h2>
+            <p className="font-light">{intro?.introParagraph}</p>
+          </div>
         </div>
       </section>
       <section className="flex bg-secondary py-24 2xl:py-52">
@@ -56,56 +62,27 @@ export default function TreatmentContent({
           </p>
         </div>
       </section>
-      <section className="bg-white py-20 md:py-28">
-        <div className="flex flex-col gap-20">
-          {overview?.map((item, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col-reverse gap-14 md:container md:grid md:grid-cols-2 md:items-center"
-            >
+      <AlternatingSections sections={additionalSections!} />
+      <section className="bg-white">
+        <div className="container flex flex-col gap-8 py-20 md:py-28">
+          <h4 className="text-center text-xl capitalize md:text-3xl 2xl:text-4xl">
+            {benefitsTitle}
+          </h4>
+          <div className="flex flex-col">
+            {benefitsList?.map((item, idx) => (
               <div
-                className={`container space-y-4 md:space-y-6 md:px-0 ${idx % 2 === 1 ? "md:order-2" : "md:order-1"}`}
+                key={idx}
+                className="flex flex-col gap-4 border-b py-8 md:items-center md:justify-center md:py-12"
               >
-                <h3 className="text-balance text-lg capitalize md:text-3xl">
+                <h5 className="text-balance text-lg md:text-2xl 2xl:text-3xl">
                   {item.title}
-                </h3>
-                <p className="max-w-[80ch] text-pretty font-light">
-                  {item.paragraph}
+                </h5>
+                <p className="max-w-[80ch] text-pretty font-light md:text-center">
+                  {item.subtitle}
                 </p>
               </div>
-              <div
-                className={`w-full ${idx % 2 === 1 ? "md:order-1" : "md:order-2"}`}
-              >
-                <Image
-                  src={item.image?.asset?.url!}
-                  alt={item.image?.alt!}
-                  width={708}
-                  height={556}
-                  className="h-[460px] w-full object-cover pr-4 md:h-[556px] md:pr-0"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="container flex flex-col gap-8 py-20 md:py-28">
-        <h4 className="text-center text-xl capitalize md:text-3xl 2xl:text-4xl">
-          {benefitsTitle}
-        </h4>
-        <div className="flex flex-col">
-          {benefitsList?.map((item, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col gap-4 border-b py-8 md:items-center md:justify-center md:py-12"
-            >
-              <h5 className="text-balance text-lg md:text-2xl 2xl:text-3xl">
-                {item.title}
-              </h5>
-              <p className="max-w-[80ch] text-pretty font-light md:text-center">
-                {item.subtitle}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
       <section className={`relative h-[calc(100vh-100px)]`}>

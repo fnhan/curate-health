@@ -218,10 +218,7 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   "serviceName": service->title,
   heroImage {
     asset->{
-      url,
-      metadata {
-        dimensions
-      }
+      url,      
     },
     heroAlt
   },
@@ -230,19 +227,14 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     introParagraph
   },
   quoteContent,
-  overview[] {
-    title,
-    paragraph,
-    image {
-      asset->{
-        url,
-        metadata {
-          dimensions
-        }
-      },
+  additionalSections[] {
+    sectionTitle,
+    sectionParagraph,
+    sectionImage {
+      "image": image.asset->url,
       alt
     }
-  },
+  },  
   benefits {
     title,
     benefitsList[] {

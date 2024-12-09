@@ -89,47 +89,45 @@ export default defineType({
       validation: (Rule) => Rule.required().error("Quote content is required"),
     }),
     defineField({
-      name: "overview",
-      title: "Overview Sections",
+      name: "additionalSections",
+      title: "Additional Sections",
       type: "array",
-      validation: (Rule) =>
-        Rule.required().error("At least one overview section is required"),
       of: [
         {
           type: "object",
           fields: [
-            {
-              name: "title",
-              title: "Title",
+            defineField({
+              name: "sectionTitle",
+              title: "Section Title",
               type: "string",
-              description: "The title of the overview section",
               validation: (Rule) =>
-                Rule.required().error("Overview title is required"),
-            },
-            {
-              name: "paragraph",
-              title: "Paragraph",
-              type: "text",
-              description: "The paragraph of the overview section",
+                Rule.required().error("A section title is required"),
+            }),
+            defineField({
+              name: "sectionParagraph",
+              title: "Section Paragraph",
+              type: "blockContent",
               validation: (Rule) =>
-                Rule.required().error("Overview paragraph is required"),
-            },
-            {
-              name: "image",
-              title: "Image",
-              type: "image",
-              description: "The image of the overview section",
-              validation: (Rule) =>
-                Rule.required().error("Overview image is required"),
-            },
-            {
-              name: "alt",
-              title: "Alternative Text",
-              type: "string",
-              description: fieldDescriptions.altImageDescription,
-              validation: (Rule) =>
-                Rule.required().error("Alternative text is required"),
-            },
+                Rule.required().error("A section paragraph is required"),
+            }),
+            defineField({
+              name: "sectionImage",
+              title: "Section Image",
+              type: "object",
+              fields: [
+                {
+                  name: "image",
+                  title: "Image",
+                  type: "image",
+                },
+                {
+                  name: "alt",
+                  title: "Alternative Text",
+                  type: "string",
+                  description: fieldDescriptions.altImageDescription,
+                },
+              ],
+            }),
           ],
         },
       ],

@@ -446,38 +446,6 @@ export type FeedbackLink = {
   youformId?: string;
 };
 
-export type PillarsOfHealth = {
-  _id: string;
-  _type: "pillarsOfHealth";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  headerBgImage?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  pageTitle?: string;
-  pageSubtitle?: string;
-  mentalHealthTitle?: string;
-  mentalHealthTextContent?: string;
-  emotionalHealthTitle?: string;
-  emotionalHealthTextContent?: string;
-  socialHealthTitle?: string;
-  socialHealthTextContent?: string;
-  spiritualHealthTitle?: string;
-  spiritualHealthTextContent?: string;
-  physicalHealthTitle?: string;
-  physicalHealthTextContent?: string;
-};
-
 export type AboutPages = {
   _id: string;
   _type: "aboutPages";
@@ -898,6 +866,38 @@ export type Author = {
     }>;
     level?: number;
     _type: "block";
+    _key: string;
+  }>;
+};
+
+export type PillarsOfHealth = {
+  _id: string;
+  _type: "pillarsOfHealth";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  pageActive?: boolean;
+  heroSection?: {
+    heroTitle?: string;
+    heroParagraph?: string;
+    heroImage?: {
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      alt?: string;
+    };
+  };
+  pillars?: Array<{
+    pillarName?: string;
+    pillarDescription?: string;
     _key: string;
   }>;
 };
@@ -1506,7 +1506,6 @@ export type AllSanitySchemaTypes =
   | PopupBanner
   | LegalPage
   | FeedbackLink
-  | PillarsOfHealth
   | AboutPages
   | Metadatas
   | ContactDetails
@@ -1521,6 +1520,7 @@ export type AllSanitySchemaTypes =
   | Category
   | Post
   | Author
+  | PillarsOfHealth
   | Sustainability
   | MissionAndValues
   | OurTeam
@@ -2689,113 +2689,21 @@ export type SUSTAINABILITY_PAGE_QUERYResult = {
   } | null;
 };
 // Variable: PILLARS_OF_HEALTH_QUERY
-// Query: *[_type == "pillarsOfHealth"][0]{  pageTitle,  pageSubtitle,  mentalHealthTitle,  mentalHealthTextContent,  emotionalHealthTitle,  emotionalHealthTextContent,  socialHealthTitle,  socialHealthTextContent,  spiritualHealthTitle,  spiritualHealthTextContent,  physicalHealthTitle,  physicalHealthTextContent,    "headerBgImage": {    "asset": headerBgImage.asset->{      _id,      url    },    "alt": headerBgImage.alt  },  }
+// Query: *[_type == "pillarsOfHealth" && pageActive == true][0] {  heroSection {    heroTitle,    heroParagraph,    heroImage {      "image": image.asset->url,      alt    }  },  pillars[] {    pillarName,    pillarDescription  }}
 export type PILLARS_OF_HEALTH_QUERYResult = {
-  pageTitle: string | null;
-  pageSubtitle: string | null;
-  mentalHealthTitle: string | null;
-  mentalHealthTextContent: string | null;
-  emotionalHealthTitle: string | null;
-  emotionalHealthTextContent: string | null;
-  socialHealthTitle: string | null;
-  socialHealthTextContent: string | null;
-  spiritualHealthTitle: string | null;
-  spiritualHealthTextContent: string | null;
-  physicalHealthTitle: string | null;
-  physicalHealthTextContent: string | null;
-  headerBgImage: {
-    asset: {
-      _id: string;
-      url: string | null;
+  heroSection: {
+    heroTitle: string | null;
+    heroParagraph: string | null;
+    heroImage: {
+      image: string | null;
+      alt: string | null;
     } | null;
-    alt: string | null;
-  };
+  } | null;
+  pillars: Array<{
+    pillarName: string | null;
+    pillarDescription: string | null;
+  }> | null;
 } | null;
-// Variable: PILLARS_OF_HEALTH_PAGE_QUERY
-// Query: {    "aboutPages": *[_type == "aboutPage" && isActive == true] | order(_createdAt desc){  title,  "slug": slug.current,},    "footer":   *[_type == "footer"][0] {    contactInfo {      sectionTitle,      details[] {        label,        value      }    },    servicesSection[]-> {      title,      "slug": slug.current,      image {        asset-> {          _id,          url        },        alt      }    },    sections[] {      title,      links[] {        text,        href      }    },    socialLinksSection {      title,      links[] {        platform,        url      }    },    privacy {      links[] {        title,        href      }    }  },    "navigation": *[_type == "navigation"][0]{  serviceLinks[]->{    title,    "slug": slug.current  },  aboutLinks[]{    title,    href,  },  navItems[]{    linkText,    href,    isServiceLinks,    isAboutLinks  }},    "surveyLink": *[_type == "surveySection"][0]{  bgImage {    asset-> {      _id,      url    },    alt  },  cta,  youformId,  content,  bold,  meta {    title,    description  }},    "pillarsOfHealth": *[_type == "pillarsOfHealth"][0]{  pageTitle,  pageSubtitle,  mentalHealthTitle,  mentalHealthTextContent,  emotionalHealthTitle,  emotionalHealthTextContent,  socialHealthTitle,  socialHealthTextContent,  spiritualHealthTitle,  spiritualHealthTextContent,  physicalHealthTitle,  physicalHealthTextContent,    "headerBgImage": {    "asset": headerBgImage.asset->{      _id,      url    },    "alt": headerBgImage.alt  },  }  }
-export type PILLARS_OF_HEALTH_PAGE_QUERYResult = {
-  aboutPages: Array<never>;
-  footer: {
-    contactInfo: {
-      sectionTitle: string | null;
-      details: Array<{
-        label: string | null;
-        value: string | null;
-      }> | null;
-    } | null;
-    servicesSection: Array<{
-      title: string | null;
-      slug: string | null;
-      image: null;
-    }> | null;
-    sections: Array<{
-      title: string | null;
-      links: Array<{
-        text: string | null;
-        href: string | null;
-      }> | null;
-    }> | null;
-    socialLinksSection: {
-      title: string | null;
-      links: Array<{
-        platform: string | null;
-        url: string | null;
-      }> | null;
-    } | null;
-    privacy: null;
-  } | null;
-  navigation: {
-    serviceLinks: Array<{
-      title: string | null;
-      slug: string | null;
-    }> | null;
-    aboutLinks: Array<{
-      title: string | null;
-      href: string | null;
-    }> | null;
-    navItems: Array<{
-      linkText: string | null;
-      href: string | null;
-      isServiceLinks: boolean | null;
-      isAboutLinks: boolean | null;
-    }> | null;
-  } | null;
-  surveyLink: {
-    bgImage: {
-      asset: {
-        _id: string;
-        url: string | null;
-      } | null;
-      alt: string | null;
-    } | null;
-    cta: string | null;
-    youformId: string | null;
-    content: string | null;
-    bold: string | null;
-    meta: null;
-  } | null;
-  pillarsOfHealth: {
-    pageTitle: string | null;
-    pageSubtitle: string | null;
-    mentalHealthTitle: string | null;
-    mentalHealthTextContent: string | null;
-    emotionalHealthTitle: string | null;
-    emotionalHealthTextContent: string | null;
-    socialHealthTitle: string | null;
-    socialHealthTextContent: string | null;
-    spiritualHealthTitle: string | null;
-    spiritualHealthTextContent: string | null;
-    physicalHealthTitle: string | null;
-    physicalHealthTextContent: string | null;
-    headerBgImage: {
-      asset: {
-        _id: string;
-        url: string | null;
-      } | null;
-      alt: string | null;
-    };
-  } | null;
-};
 // Variable: POPUP_BANNER_QUERY
 // Query: *[_type == "popupBanner" && isActive == true][0]{  title,  content,}
 export type POPUP_BANNER_QUERYResult = {
@@ -3446,8 +3354,7 @@ declare module "@sanity/client" {
     '*[_type == "missionAndValues" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n}': MISSION_AND_VALUES_QUERYResult;
     '*[_type == "sustainability" && pageActive == true][0] {\n  heroSection {\n    heroTitle,\n    heroParagraph,\n    heroImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  ctaSection {\n    ctaSectionImage {\n      "image": image.asset->url,\n      alt\n    },\n    ctaSectionTitle,\n    ctaSectionParagraph,\n    ctaButton {\n      buttonText,\n      buttonLink\n    }\n  }\n}': SUSTAINABILITY_QUERYResult;
     '{\n  "aboutPages": *[_type == "aboutPage" && isActive == true] | order(_createdAt desc){\n  title,\n  "slug": slug.current,\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n  "navigation": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "surveyLink": *[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n  meta {\n    title,\n    description\n  }\n},\n  "sustainability": *[_type == "sustainability" && pageActive == true][0] {\n  heroSection {\n    heroTitle,\n    heroParagraph,\n    heroImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  ctaSection {\n    ctaSectionImage {\n      "image": image.asset->url,\n      alt\n    },\n    ctaSectionTitle,\n    ctaSectionParagraph,\n    ctaButton {\n      buttonText,\n      buttonLink\n    }\n  }\n}\n}': SUSTAINABILITY_PAGE_QUERYResult;
-    '*[_type == "pillarsOfHealth"][0]{\n  pageTitle,\n  pageSubtitle,\n  mentalHealthTitle,\n  mentalHealthTextContent,\n  emotionalHealthTitle,\n  emotionalHealthTextContent,\n  socialHealthTitle,\n  socialHealthTextContent,\n  spiritualHealthTitle,\n  spiritualHealthTextContent,\n  physicalHealthTitle,\n  physicalHealthTextContent,\n    "headerBgImage": {\n    "asset": headerBgImage.asset->{\n      _id,\n      url\n    },\n    "alt": headerBgImage.alt\n  },\n  }': PILLARS_OF_HEALTH_QUERYResult;
-    '{\n    "aboutPages": *[_type == "aboutPage" && isActive == true] | order(_createdAt desc){\n  title,\n  "slug": slug.current,\n},\n    "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n    "navigation": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n    "surveyLink": *[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n  meta {\n    title,\n    description\n  }\n},\n    "pillarsOfHealth": *[_type == "pillarsOfHealth"][0]{\n  pageTitle,\n  pageSubtitle,\n  mentalHealthTitle,\n  mentalHealthTextContent,\n  emotionalHealthTitle,\n  emotionalHealthTextContent,\n  socialHealthTitle,\n  socialHealthTextContent,\n  spiritualHealthTitle,\n  spiritualHealthTextContent,\n  physicalHealthTitle,\n  physicalHealthTextContent,\n    "headerBgImage": {\n    "asset": headerBgImage.asset->{\n      _id,\n      url\n    },\n    "alt": headerBgImage.alt\n  },\n  }\n  }': PILLARS_OF_HEALTH_PAGE_QUERYResult;
+    '*[_type == "pillarsOfHealth" && pageActive == true][0] {\n  heroSection {\n    heroTitle,\n    heroParagraph,\n    heroImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  pillars[] {\n    pillarName,\n    pillarDescription\n  }\n}': PILLARS_OF_HEALTH_QUERYResult;
     '*[_type == "popupBanner" && isActive == true][0]{\n  title,\n  content,\n}': POPUP_BANNER_QUERYResult;
     '*[_type == "siteMetadata"]{\n  "url": favicon.asset->url\n}[0]': FAVICON_QUERYResult;
     '\n  *[_type == "siteMetadata"][0]{\n    homePageTitle,\n    templateTitlePrefix,\n    defaultDescription,\n    favicon {\n      asset -> {\n        url\n      }\n    },\n    socialMeta {\n      title,\n      description,\n      ogImage {\n        asset -> {\n          url,\n          alt\n        }\n      },\n      twitterImage {\n        asset -> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n': SITE_METADATA_QUERYResult;

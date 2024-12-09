@@ -1,134 +1,88 @@
 import { defineField, defineType } from "sanity";
 
+import { fieldDescriptions } from "../schema-helpers";
+
 export default defineType({
   name: "pillarsOfHealth",
-  title: "Pillars of Health",
+  title: "About | Pillars of Health Page",
   type: "document",
   fields: [
     defineField({
-      name: "headerBgImage",
-      title: "Our Story Header Background Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
+      name: "pageActive",
+      title: "Page Active",
+      type: "boolean",
+      description: fieldDescriptions.pageActiveDescription,
+    }),
+    defineField({
+      name: "heroSection",
+      title: "Hero Section",
+      type: "object",
       fields: [
-        {
-          name: "alt",
+        defineField({
+          name: "heroTitle",
+          title: "Hero Title",
           type: "string",
-          title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
-        },
+        }),
+        defineField({
+          name: "heroParagraph",
+          title: "Hero Paragraph",
+          type: "text",
+        }),
+        defineField({
+          name: "heroImage",
+          title: "Hero Image",
+          type: "object",
+          fields: [
+            {
+              name: "image",
+              title: "Image",
+              type: "image",
+              validation: (Rule) =>
+                Rule.required().error("An image is required"),
+            },
+            {
+              name: "alt",
+              title: "Alternative Text",
+              type: "string",
+              description: fieldDescriptions.altImageDescription,
+              validation: (Rule) =>
+                Rule.required().error("An alternative text is required"),
+            },
+          ],
+        }),
       ],
     }),
     defineField({
-      name: "pageTitle",
-      title: "Title of Page",
-      type: "string",
-      description: "Title of header section on page",
-    }),
-    defineField({
-      name: "pageSubtitle",
-      title: "Subtitle of Page",
-      type: "string",
-      description: "Subtitle of header section on page",
-    }),
-    defineField({
-      name: "mentalHealthTitle",
-      title: "Title of Mental Health Pillar",
-      type: "string",
-      description: "The title of mental health pillar",
-    }),
-    defineField({
-      name: "mentalHealthTextContent",
-      title: "Mental Health Text Content",
-      type: "string",
-      description: "The text content of mental health pillar",
-    }),
-    defineField({
-      name: "emotionalHealthTitle",
-      title: "Title of Emotional Health Pillar",
-      type: "string",
-      description: "The title of emotional health pillar",
-    }),
-    defineField({
-      name: "emotionalHealthTextContent",
-      title: "Emotional Health Text Content",
-      type: "string",
-      description: "The text content of emotional health pillar",
-    }),
-    defineField({
-      name: "socialHealthTitle",
-      title: "Title of Social Health Pillar",
-      type: "string",
-      description: "The title of social health pillar",
-    }),
-    defineField({
-      name: "socialHealthTextContent",
-      title: "Social Health Text Content",
-      type: "string",
-      description: "The text content of social health pillar",
-    }),
-    defineField({
-      name: "spiritualHealthTitle",
-      title: "Title of Spiritual Health Pillar",
-      type: "string",
-      description: "The title of spiritual health pillar",
-    }),
-    defineField({
-      name: "spiritualHealthTextContent",
-      title: "Spiritual Health Text Content",
-      type: "string",
-      description: "The text content of spiritual health pillar",
-    }),
-    defineField({
-      name: "physicalHealthTitle",
-      title: "Title of Physical Health Pillar",
-      type: "string",
-      description: "The title of physical health pillar",
-    }),
-    defineField({
-      name: "physicalHealthTextContent",
-      title: "Physical Health Text Content",
-      type: "string",
-      description: "The text content of physical health pillar",
+      name: "pillars",
+      title: "Pillars",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "pillarName",
+              title: "Pillar Name",
+              type: "string",
+              validation: (Rule) =>
+                Rule.required().error("A pillar name is required"),
+            }),
+            defineField({
+              name: "pillarDescription",
+              title: "Pillar Description",
+              type: "text",
+              validation: (Rule) =>
+                Rule.required().error("A pillar description is required"),
+            }),
+          ],
+        },
+      ],
     }),
   ],
-
   preview: {
-    select: {
-      pageTitle: "pageTitle",
-      headerBgImage: "headerBgImage",
-      mentalHealthTitle: "mentalHealthTitle",
-      mentalHealthTextContent: "mentalHealthTextContent",
-      emotionalHealthTitle: "emotionalHealthTitle",
-      emotionalHealthTextContent: "emotionalHealthTextContent",
-      socialHealthTitle: "socialHealthTitle",
-      socialHealthTextContent: "socialHealthTextContent",
-      spiritualHealthTitle: "spritualHealthTitle",
-      spiritualHealthTextContent: "spiritualHealthTextContent",
-      physicalHealthTitle: "physicalHealthTitle",
-      physicalHealthTextContent: "physicalHealthTextContent",
-    },
-    prepare(selection) {
-      const {
-        pageTitle,
-        headerBgImage,
-        mentalHealthTitle,
-        mentalHealthTextContent,
-        emotionalHealthTitle,
-        emotionalHealthTextContent,
-        socialHealthTitle,
-        socialHealthTextContent,
-        spiritualHealthTitle,
-        spiritualHealthTextContent,
-        physicalHealthTitle,
-        physicalHealthTextContent,
-      } = selection;
+    prepare() {
       return {
         title: "Pillars of Health",
-        media: headerBgImage,
       };
     },
   },

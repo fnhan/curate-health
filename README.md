@@ -10,13 +10,14 @@
 
 - Node (18 or higher)
 - Acces to the Sanity project (provided by an admin)
-- A `.env.local` file with necessary environment variables
+- A `.env.local` file with necessary environment variables - obtain from an admin
 
 ### Setup
 
 ```bash
 git clone https://github.com/fnhan/curate-health.git
 cd curate-health
+cp .env.example .env.local
 npm install
 npm run dev
 ```
@@ -24,9 +25,8 @@ npm run dev
 ### Project Structure
 
 - This repo uses [shadcn](https://ui.shadcn.com/) for UI components. When installing a new component they will be added to the `components/ui` folder.
-- Components that belong to specific pages should correspond to the page they belong to. For example, the `components/layout/Contact` folder contains all the components for the contact page.
+- Components that belong to specific pages should correspond to the page they belong to. For example, the `components/layout/home-page` folder contains all the components for the home page.
 - The `pages` folder contains folders which belong to a page. For example, the `pages/products` folder contains all the files for the products page, where `index.tsx` inside the folder serves as the page.
-- Use the `layout` component when creating new pages. This component contains the `Nav` & `Footer` components.
 
 ### Working with Sanity
 

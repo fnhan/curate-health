@@ -560,91 +560,35 @@ export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pa
   },
 }`;
 
-export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability"][0]{
-  headerTitle,
-  headerTitleDesktop,
-  headerTextContent,
-  sectionOneTitle,
-  sectionOneTextContent,
-  sectionTwoTitle,
-  sectionTwoTextContent,
-  sectionThreeTitle,
-  sectionThreeTextContent,
-  sectionFourTitle,
-  sectionFourTextContent,
-  sectionFiveTitle,
-  sectionFiveTextContent,
-  sectionSixTitle,
-  sectionSixTextContent,
-  sectionSixSubtitleOne,
-  sectionSixSubtitleOneText,
-  sectionSixSubtitleTwo,
-  sectionSixSubtitleTwoText,
-  sectionSixSubtitleThree,
-  sectionSixSubtitleThreeText,
-  sectionSevenTitle,
-  sectionSevenTextContent,
-  sectionSevenCta,
-  ctaUrl,
-  sectionSevenEsg,
-  "esgLink": esgLink.asset->url,
-  "headerImage": {
-    "asset": headerImage.asset->{
-      _id,
-      url
-    },
-    "alt": headerImage.alt
+export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability" && pageActive == true][0] {
+  heroSection {
+    heroTitle,
+    heroParagraph,
+    heroImage {
+      "image": image.asset->url,
+      alt
+    }
   },
-      "sectionFourImage": {
-    "asset": sectionFourImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionFourImage.alt
+  additionalSections[] {
+    sectionTitle,
+    sectionParagraph,
+    sectionImage {
+      "image": image.asset->url,
+      alt
+    }
   },
-        "sectionThreeImage": {
-    "asset": sectionThreeImage.asset->{
-      _id,
-      url
+  ctaSection {
+    ctaSectionImage {
+      "image": image.asset->url,
+      alt
     },
-    "alt": sectionThreeImage.alt
-  },
-      "sectionTwoImage": {
-    "asset": sectionTwoImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionTwoImage.alt
-  },
-      "sectionOneImage": {
-    "asset": sectionOneImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionOneImage.alt
-  },
-        "sectionFiveImage": {
-    "asset": sectionFiveImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionFiveImage.alt
-  },
-        "sectionSixImage": {
-    "asset": sectionSixImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionSixImage.alt
-  },
-        "sectionSevenBgImage": {
-    "asset": sectionSevenBgImage.asset->{
-      _id,
-      url
-    },
-    "alt": sectionSevenBgImage.alt
-  },
-
+    ctaSectionTitle,
+    ctaSectionParagraph,
+    ctaButton {
+      buttonText,
+      buttonLink
+    }
+  }
 }`;
 
 export const SUSTAINABILITY_PAGE_QUERY = groq`{

@@ -33,7 +33,7 @@ export default function SurveySection({ surveySection }) {
         <div className="absolute inset-0 flex items-center justify-center p-4">
           <Dialog>
             <DialogTrigger className="flex size-[200px] cursor-pointer flex-col items-center justify-center gap-3 rounded-full border-4 border-white bg-platinum p-5 text-center text-primary transition-all duration-300 hover:bg-primary hover:text-white md:size-96 lg:size-[537px]">
-              <p className="text-pretty pt-4 capitalize md:text-[22px] lg:text-[36px]">
+              <p className="text-balance pt-4 md:text-[22px] lg:text-[36px]">
                 {content}{" "}
                 <span className="font-bold italic md:text-[22px] lg:text-[36px]">
                   {bold}

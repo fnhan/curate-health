@@ -26,13 +26,13 @@ export default function CafeSection({
         height={1040}
         src={cafeImage?.asset?.url!}
         alt="Curate Cafe"
-        className={`max-h-[calc(100vh-100px)] min-h-[231px] w-full object-cover`}
+        className={`h-full min-h-[calc(50vh)] w-full object-cover md:min-h-[calc(100vh-100px)]`}
       />
-      <div className="container absolute bottom-0 left-0 right-0 top-0 flex flex-col justify-between pt-8 md:pt-16">
-        <h2 className="text-3xl font-light text-black xl:text-6xl">
+      <div className="container absolute bottom-0 left-0 right-0 top-0 flex flex-col justify-between pt-8 md:pt-24">
+        <h2 className="text-2xl text-black md:text-3xl lg:text-6xl xl:text-6xl">
           <PortableText value={title!} />
         </h2>
-        <div className="max-w-[200px] pb-20 text-sm font-light italic text-black sm:max-w-[300px] sm:text-xl 2xl:max-w-[544px] 2xl:text-4xl">
+        <div className="max-w-[200px] pb-32 text-sm font-light text-black sm:max-w-[300px] sm:text-xl 2xl:max-w-[544px] 2xl:text-4xl">
           <PortableText value={content!} />
         </div>
       </div>

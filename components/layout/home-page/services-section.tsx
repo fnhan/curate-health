@@ -21,7 +21,7 @@ export default function ServicesSection({
   const [hoveredService, setHoveredService] = useState(services?.[0]);
 
   return (
-    <section>
+    <section className="relative min-h-[calc(100vh-100px)]">
       <div className="container relative flex flex-col gap-6 py-14 md:grid md:grid-cols-2 md:py-24">
         {/* List of Services */}
         <div className="flex flex-col gap-14 md:gap-28 xl:gap-40">

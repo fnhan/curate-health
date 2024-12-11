@@ -13,9 +13,11 @@ export default function BlogSection({
   const { sectionTitle, hoverLinkText, hoverLinkHref } = blogSection;
 
   return (
-    <section id="blog">
-      <div className="2xl:py-18 container py-9 md:py-14">
-        <h2 className="mb-10 md:text-xl 2xl:text-3xl">{sectionTitle}</h2>
+    <section id="blog" className="min-h-[calc(100vh-100px)]">
+      <div className="2xl:py-18 container py-9 md:py-24">
+        <h2 className="mb-10 text-2xl md:text-3xl lg:text-6xl xl:text-6xl">
+          {sectionTitle}
+        </h2>
         <FeaturedBlogPosts />
       </div>
       <HoverLink href={hoverLinkHref!} text={hoverLinkText!} />

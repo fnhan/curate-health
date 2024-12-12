@@ -30,7 +30,7 @@ export default async function ServicesPage() {
         <div className="grid gap-1 bg-white lg:container sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
             <Link
-              className="relative grayscale transition-all duration-300 hover:grayscale-0 focus:grayscale-0"
+              className="group relative grayscale transition-all duration-300 hover:grayscale-0 focus:grayscale-0"
               key={service.slug}
               href={`/services/${service.slug}`}
             >
@@ -41,10 +41,16 @@ export default async function ServicesPage() {
                 width={380}
                 height={500}
               />
-              <div className="absolute inset-0 flex h-full w-full items-end p-4">
-                <h3 className="bg-black/50 px-2 py-1 text-center font-light text-white md:text-lg lg:text-2xl">
-                  {service.title}
-                </h3>
+              <div className="absolute inset-0 flex h-full w-full items-end">
+                <div className="relative w-full">
+                  {/* Default gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-muted-foreground from-10% to-transparent opacity-100 transition-opacity duration-300 group-hover:opacity-0" />
+                  {/* Hover gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/80 from-10% to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <h3 className="relative p-4 text-left text-white md:text-lg lg:text-2xl">
+                    {service.title}
+                  </h3>
+                </div>
               </div>
             </Link>
           ))}

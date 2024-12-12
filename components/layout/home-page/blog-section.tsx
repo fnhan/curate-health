@@ -15,9 +15,7 @@ export default function BlogSection({
   return (
     <section id="blog">
       <div className="container flex flex-col gap-10 py-14 md:gap-20 md:py-24">
-        <h2 className="text-2xl md:text-3xl lg:text-6xl xl:text-6xl">
-          {sectionTitle}
-        </h2>
+        <h2 className="text-2xl md:text-3xl xl:text-6xl">{sectionTitle}</h2>
         <FeaturedBlogPosts />
       </div>
       <HoverLink href={hoverLinkHref!} text={hoverLinkText!} />

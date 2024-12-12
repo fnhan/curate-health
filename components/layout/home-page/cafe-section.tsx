@@ -32,7 +32,7 @@ export default function CafeSection({
           />
         </div>
         <div className="container absolute bottom-0 left-0 right-0 top-0 flex flex-col justify-between">
-          <h2 className="py-14 text-2xl text-black md:py-24 md:text-3xl lg:text-6xl xl:text-6xl">
+          <h2 className="py-14 text-2xl text-black md:py-24 md:text-3xl xl:text-6xl">
             <PortableText value={title!} />
           </h2>
           <div className="mb-32 max-w-[200px] text-sm font-light text-black sm:max-w-[300px] sm:text-xl 2xl:max-w-[544px] 2xl:text-4xl">

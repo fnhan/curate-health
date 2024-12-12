@@ -672,11 +672,28 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     "slug": slug.current,
     isActive
   },
-  aboutPages[]->{
-    _key,
-    title,
-    "slug": slug.current,
-  },
+  "aboutPages": [
+    *[_type == "ourStory" && pageActive == true][0]{
+      "title": "Our Story",
+      "slug": "our-story"
+    },
+    *[_type == "ourTeam" && pageActive == true][0]{
+      "title": "Our Team",
+      "slug": "our-team"
+    },
+    *[_type == "missionAndValues" && pageActive == true][0]{
+      "title": "Mission and Values",
+      "slug": "mission-and-values"
+    },
+    *[_type == "sustainability" && pageActive == true][0]{
+      "title": "Sustainability",
+      "slug": "sustainability"
+    },
+    *[_type == "pillarsOfHealth" && pageActive == true][0]{
+      "title": "Pillars of Health",
+      "slug": "pillars-of-health"
+    },
+  ],
   navLinks[]{
     _key,
     title,

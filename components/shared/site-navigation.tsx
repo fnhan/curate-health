@@ -105,16 +105,18 @@ export default function SiteNav({
                         About
                       </AccordionTrigger>
                       <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                        {aboutPages?.map((page, index) => (
-                          <Link
-                            key={index}
-                            className="text-base hover:underline"
-                            href={`/about/${page.slug}`}
-                            onClick={() => setOpen(false)}
-                          >
-                            {page.title}
-                          </Link>
-                        ))}
+                        {aboutPages
+                          ?.filter(Boolean) // Remove null/undefined values
+                          .map((page, index) => (
+                            <Link
+                              key={index}
+                              className="text-base hover:underline"
+                              href={`/about/${page.slug}`}
+                              onClick={() => setOpen(false)}
+                            >
+                              {page.title}
+                            </Link>
+                          ))}
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>

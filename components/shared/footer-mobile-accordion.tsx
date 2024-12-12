@@ -29,15 +29,18 @@ export function FooterMobileAccordion({
           </AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-1 text-base">
-              {services.map((service, index) => (
-                <Link
-                  key={index}
-                  className="hover:underline"
-                  href={`/services/${service.slug}`}
-                >
-                  {service.title}
-                </Link>
-              ))}
+              {services.map(
+                (service, index) =>
+                  service.isActive && (
+                    <Link
+                      key={index}
+                      className="hover:underline"
+                      href={`/services/${service.slug}`}
+                    >
+                      {service.title}
+                    </Link>
+                  )
+              )}
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -48,15 +51,17 @@ export function FooterMobileAccordion({
           <AccordionTrigger className="font-semibold">About</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-1 text-base">
-              {aboutPages.map((page, index) => (
-                <Link
-                  key={index}
-                  className="hover:underline"
-                  href={`/about/${page.slug}`}
-                >
-                  {page.title}
-                </Link>
-              ))}
+              {aboutPages
+                ?.filter(Boolean) // Remove null/undefined values
+                .map((page, index) => (
+                  <Link
+                    key={index}
+                    className="hover:underline"
+                    href={`/about/${page.slug}`}
+                  >
+                    {page.title}
+                  </Link>
+                ))}
             </div>
           </AccordionContent>
         </AccordionItem>

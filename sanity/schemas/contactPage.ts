@@ -1,8 +1,8 @@
 import { defineField, defineType } from "sanity";
 
 export default defineType({
-  name: "contactDetails",
-  title: "Contact Details",
+  name: "contactPage",
+  title: "Contact | Contact Page",
   type: "document",
   fields: [
     defineField({
@@ -77,34 +77,6 @@ export default defineType({
   preview: {
     select: {
       title: "title",
-      monHours: "monHours",
-      tuesHours: "tuesHours",
-      wedHours: "wedHours",
-      thursHours: "thursHours",
-      friHours: "friHours",
-      satHours: "satHours",
-      sunHours: "sunHours",
-      mapURL: "mapURL",
-      cta: "cta",
-      href: "href",
-    },
-    prepare(selection) {
-      const {
-        title,
-        monHours,
-        tuesHours,
-        wedHours,
-        thursHours,
-        friHours,
-        satHours,
-        sunHours,
-        mapURL,
-        cta,
-        href,
-      } = selection;
-      return {
-        title: "Contact Details",
-      };
     },
   },
 });

@@ -2,31 +2,24 @@ import { type SchemaTypeDefinition } from "sanity";
 
 import aboutPages from "./schemas/aboutPages";
 import aboutSection from "./schemas/aboutSection";
-import accessibility from "./schemas/accessibility";
 import author from "./schemas/author";
 import blockContent from "./schemas/blockContent";
 import blogSection from "./schemas/blogSection";
 import cafeSection from "./schemas/cafeSection";
 import category from "./schemas/category";
 import clinicSection from "./schemas/clinicSection";
-import contactDetails from "./schemas/contactDetails";
-import contactInfo from "./schemas/contactInfo";
+import contactPage from "./schemas/contactPage";
 import feedbackLink from "./schemas/feedbackLink";
-import footer from "./schemas/footer";
 import heroSection from "./schemas/heroSection";
 import legalPages from "./schemas/legalPages";
-import metadatas from "./schemas/metadatas";
 import missionAndValues from "./schemas/missionAndValues";
-import navigation from "./schemas/navigation";
 import newsletter from "./schemas/newsletter";
 import ourStory from "./schemas/ourStory";
 import ourTeam from "./schemas/ourTeam";
-import pageMetadata from "./schemas/pageMetadata";
 import pillarsOfHealth from "./schemas/pillarsOfHealth";
 import popupBanner from "./schemas/popupBanner";
 import post from "./schemas/post";
 import primaryCTAButton from "./schemas/primaryCTAButton";
-import privacy from "./schemas/privacy";
 import products from "./schemas/products";
 import productsSection from "./schemas/productsSection";
 import services from "./schemas/services";
@@ -38,15 +31,16 @@ import socialMeta from "./schemas/socialMeta";
 import surveySection from "./schemas/surveySection";
 import sustainability from "./schemas/sustainability";
 import sustainabilitySection from "./schemas/sustainabilitySection";
-import termsOfUse from "./schemas/termsOfUse";
 import treatment from "./schemas/treatment";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
+    blockContent /* Hidden type */,
+    socialMeta /* Hidden type */,
     siteSettings,
-    siteMeta,
-    socialMeta,
-    pageMetadata,
+    siteMeta /* Uses socialMeta */,
+    newsletter,
+    popupBanner,
     heroSection,
     aboutSection,
     clinicSection,
@@ -56,32 +50,22 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     blogSection,
     sustainabilitySection,
     servicesHeroSection,
-    ourStory,
-    ourTeam,
-    missionAndValues,
-    sustainability,
-    pillarsOfHealth,
+    ourStory /* Uses socialMeta */,
+    ourTeam /* Uses socialMeta */,
+    missionAndValues /* Uses socialMeta */,
+    sustainability /* Uses socialMeta */,
+    pillarsOfHealth /* Uses socialMeta */,
+    contactPage /* Uses socialMeta */,
+    surveySection,
+    primaryCTAButton,
+    products /* Uses socialMeta */,
+    services /* Uses socialMeta */,
+    treatment /* Uses socialMeta */,
+    legalPages,
     post,
     author,
     category,
-    blockContent,
-    footer,
-    newsletter,
-    navigation,
-    termsOfUse,
-    privacy,
-    accessibility,
-    contactInfo,
-    contactDetails,
-    metadatas,
-    aboutPages,
-    feedbackLink,
-    legalPages,
-    popupBanner,
-    surveySection,
-    primaryCTAButton,
-    products,
-    services,
-    treatment,
+    aboutPages /* To be removed */,
+    feedbackLink /* Refactor */,
   ],
 };

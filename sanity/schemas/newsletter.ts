@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "newsletterSection",
-  title: "Newsletter",
+  title: "Settings | Newsletter",
   type: "document",
   fields: [
     defineField({

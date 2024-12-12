@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "popupBanner",
-  title: "Shared | Popup banner",
+  title: "Settings | Popup banner",
   type: "document",
   fields: [
     defineField({
@@ -13,9 +13,9 @@ export default defineType({
       initialValue: false,
     }),
     defineField({
-      name: 'title',
-      title: 'Popup Title',
-      type: 'string',
+      name: "title",
+      title: "Popup Title",
+      type: "string",
     }),
     defineField({
       name: "content",

@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "siteMetadata",
-  title: "Site Metadata",
+  title: "Settings | Site Metadata",
   type: "document",
   fields: [
     defineField({

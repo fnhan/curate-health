@@ -8,8 +8,6 @@ import { Toaster } from "components/ui/toaster";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 
-import "../styles/index.css";
-
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

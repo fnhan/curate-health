@@ -13,17 +13,24 @@ export default function ClinicSection({
   const { clinicImage, content } = clinicSection;
 
   return (
-    <section className="relative">
-      <Image
-        width={1080}
-        height={1440}
-        src={clinicImage?.asset?.url!}
-        alt={clinicImage?.alt ?? ""}
-        className={`max-h-[calc(100vh-100px)] min-h-[231px] w-full object-cover`}
-      />
-      <div className="container relative">
-        <div className="absolute bottom-0 right-0 my-10 flex w-[237px] flex-col gap-10 bg-white p-8 text-xs text-black md:my-0 md:w-[496px] md:p-20 md:text-base">
-          <PortableText value={content!} />
+    <section>
+      <div className="relative">
+        <div className="aspect-[16/12] min-h-[500px] w-full sm:aspect-[16/10] md:aspect-[16/8]">
+          <Image
+            fill
+            src={clinicImage?.asset?.url!}
+            alt={clinicImage?.alt ?? ""}
+            className="object-cover object-top"
+            sizes="100vw"
+          />
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0">
+          <div className="container">
+            <div className="relative float-right max-w-xs bg-white p-8 text-xs text-black md:max-w-md md:p-20 md:text-base lg:max-w-lg">
+              <PortableText value={content!} />
+            </div>
+          </div>
         </div>
       </div>
     </section>

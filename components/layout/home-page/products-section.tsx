@@ -15,12 +15,9 @@ export default function ProductsSection({
     productsSection;
 
   return (
-    <section
-      id="products"
-      className="flex min-h-[calc(100vh-100px)] flex-col gap-10 bg-white pb-10"
-    >
-      <div className="container pt-9">
-        <h2 className="mb-8 mt-8 text-2xl text-black 2xl:container md:mb-24 md:mt-16 md:text-3xl xl:text-6xl">
+    <section id="products" className="flex-col gap-10 bg-white py-14 md:py-24">
+      <div className="container">
+        <h2 className="mb-8 text-2xl text-black 2xl:container md:mb-24 md:text-3xl xl:text-6xl">
           {sectionTitle}
         </h2>
       </div>

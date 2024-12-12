@@ -2,15 +2,10 @@
 
 import Image from "next/image";
 
-import imageUrlBuilder from "@sanity/image-url";
 import HoverLink from "components/shared/hover-link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import highlightCircleText from "public/images/CircleText.png";
 import { ABOUT_SECTION_QUERYResult } from "sanity.types";
-
-import { dataset, projectId } from "../../../sanity/env";
-
-const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function AboutSection({
   aboutSection,
@@ -39,12 +34,7 @@ export default function AboutSection({
               width={536}
               height={536}
               alt={aboutImage?.alt || ""}
-              src={builder
-                .image(aboutImage)
-                .width(536)
-                .height(536)
-                .quality(80)
-                .url()}
+              src={aboutImage?.asset?.url!}
               className="w-[250px] md:w-[375px] 2xl:w-[536px]"
             />
             <motion.div

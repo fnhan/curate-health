@@ -20,28 +20,32 @@ export default function CafeSection({
     cafeSection;
 
   return (
-    <section className="relative bg-white">
-      <Image
-        width={1440}
-        height={1040}
-        src={cafeImage?.asset?.url!}
-        alt="Curate Cafe"
-        className={`h-full min-h-[calc(50vh)] w-full object-cover md:min-h-[calc(100vh-100px)]`}
-      />
-      <div className="container absolute bottom-0 left-0 right-0 top-0 flex flex-col justify-between pt-8 md:pt-24">
-        <h2 className="text-2xl text-black md:text-3xl lg:text-6xl xl:text-6xl">
-          <PortableText value={title!} />
-        </h2>
-        <div className="max-w-[200px] pb-32 text-sm font-light text-black sm:max-w-[300px] sm:text-xl 2xl:max-w-[544px] 2xl:text-4xl">
-          <PortableText value={content!} />
+    <section>
+      <div className="relative">
+        <div className="aspect-[16/12] min-h-[500px] w-full sm:aspect-[16/10] md:aspect-[16/8]">
+          <Image
+            fill
+            src={cafeImage?.asset?.url!}
+            alt={cafeImage?.alt ?? ""}
+            className="object-cover object-top"
+            sizes="100vw"
+          />
         </div>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 z-10">
-        <HoverLink
-          href={hoverLinkHref!}
-          text={hoverLinkText!}
-          textColor="text-black"
-        />
+        <div className="container absolute bottom-0 left-0 right-0 top-0 flex flex-col justify-between">
+          <h2 className="py-14 text-2xl text-black md:py-24 md:text-3xl lg:text-6xl xl:text-6xl">
+            <PortableText value={title!} />
+          </h2>
+          <div className="mb-32 max-w-[200px] text-sm font-light text-black sm:max-w-[300px] sm:text-xl 2xl:max-w-[544px] 2xl:text-4xl">
+            <PortableText value={content!} />
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <HoverLink
+            href={hoverLinkHref!}
+            text={hoverLinkText!}
+            textColor="text-black"
+          />
+        </div>
       </div>
     </section>
   );

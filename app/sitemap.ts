@@ -115,6 +115,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  // Legal routes
+  const legalRoutes = [
+    {
+      url: `${BASEURL}/accessibility`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
+    {
+      url: `${BASEURL}/terms-of-use`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
+    {
+      url: `${BASEURL}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
+  ];
+
   return [
     ...staticRoutes,
     ...aboutRoutes,
@@ -122,5 +144,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...treatmentRoutes,
     ...productRoutes,
     ...blogRoutes,
+    ...legalRoutes,
   ];
 }

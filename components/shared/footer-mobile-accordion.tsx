@@ -57,9 +57,9 @@ export function FooterMobileAccordion({
                   <Link
                     key={index}
                     className="hover:underline"
-                    href={`/about/${page.slug}`}
+                    href={`/about/${page?.slug}`}
                   >
-                    {page.title}
+                    {page?.title}
                   </Link>
                 ))}
             </div>

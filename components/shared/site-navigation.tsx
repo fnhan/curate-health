@@ -111,10 +111,10 @@ export default function SiteNav({
                             <Link
                               key={index}
                               className="text-base hover:underline"
-                              href={`/about/${page.slug}`}
+                              href={`/about/${page?.slug}`}
                               onClick={() => setOpen(false)}
                             >
-                              {page.title}
+                              {page?.title}
                             </Link>
                           ))}
                       </AccordionContent>

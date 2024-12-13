@@ -27,8 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
     query: SITE_METADATA_QUERY,
   });
 
-  const { homePageTitle, templateTitlePrefix, defaultDescription, socialMeta } =
-    siteMetadata!;
+  const {
+    homePageTitle,
+    templateTitlePrefix,
+    defaultDescription,
+    socialMeta,
+    keywords,
+  } = siteMetadata!;
   const { ogImage, twitterImage } = socialMeta!;
 
   return {
@@ -36,6 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${templateTitlePrefix}`,
       default: homePageTitle!,
     },
+    keywords: keywords || [],
     description: defaultDescription,
     openGraph: {
       siteName: templateTitlePrefix!,

@@ -2930,7 +2930,7 @@ export type FAVICON_QUERYResult = {
   url: string | null;
 } | null;
 // Variable: SITE_METADATA_QUERY
-// Query: *[_type == "siteMetadata"][0]{    homePageTitle,    templateTitlePrefix,    defaultDescription,    favicon {      asset -> {        url      }    },    socialMeta {      title,      description,      ogImage {        asset -> {          url,          alt        }      },      twitterImage {        asset -> {          url,          alt        }      }    }  }
+// Query: *[_type == "siteMetadata"][0]{    homePageTitle,    templateTitlePrefix,    defaultDescription,    favicon {      asset -> {        url      }    },    keywords,    socialMeta {      title,      description,      ogImage {        asset -> {          url,          alt        }      },      twitterImage {        asset -> {          url,          alt        }      }    }  }
 export type SITE_METADATA_QUERYResult = {
   homePageTitle: string | null;
   templateTitlePrefix: string | null;
@@ -2940,6 +2940,7 @@ export type SITE_METADATA_QUERYResult = {
       url: string | null;
     } | null;
   } | null;
+  keywords: Array<string> | null;
   socialMeta: {
     title: string | null;
     description: string | null;
@@ -3642,7 +3643,7 @@ declare module "@sanity/client" {
     '*[_type == "pillarsOfHealth" && pageActive == true][0] {\n  heroSection {\n    heroTitle,\n    heroParagraph,\n    heroImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  pillars[] {\n    pillarName,\n    pillarDescription\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PILLARS_OF_HEALTH_QUERYResult;
     '*[_type == "popupBanner" && isActive == true][0]{\n  title,\n  content,\n}': POPUP_BANNER_QUERYResult;
     '*[_type == "siteMetadata"]{\n  "url": favicon.asset->url\n}[0]': FAVICON_QUERYResult;
-    '\n  *[_type == "siteMetadata"][0]{\n    homePageTitle,\n    templateTitlePrefix,\n    defaultDescription,\n    favicon {\n      asset -> {\n        url\n      }\n    },\n    socialMeta {\n      title,\n      description,\n      ogImage {\n        asset -> {\n          url,\n          alt\n        }\n      },\n      twitterImage {\n        asset -> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n': SITE_METADATA_QUERYResult;
+    '\n  *[_type == "siteMetadata"][0]{\n    homePageTitle,\n    templateTitlePrefix,\n    defaultDescription,\n    favicon {\n      asset -> {\n        url\n      }\n    },\n    keywords,\n    socialMeta {\n      title,\n      description,\n      ogImage {\n        asset -> {\n          url,\n          alt\n        }\n      },\n      twitterImage {\n        asset -> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n': SITE_METADATA_QUERYResult;
     '*[_type == "siteSettings"]{\n  brandName,\n  siteLogo{\n    asset->{\n      _id,\n      url\n    },\n  },\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n  services[]->{\n    _key,\n    title,\n    "slug": slug.current,\n    isActive\n  },\n  "aboutPages": [\n    *[_type == "ourStory" && pageActive == true][0]{\n      "title": "Our Story",\n      "slug": "our-story"\n    },\n    *[_type == "ourTeam" && pageActive == true][0]{\n      "title": "Our Team",\n      "slug": "our-team"\n    },\n    *[_type == "missionAndValues" && pageActive == true][0]{\n      "title": "Mission and Values",\n      "slug": "mission-and-values"\n    },\n    *[_type == "sustainability" && pageActive == true][0]{\n      "title": "Sustainability",\n      "slug": "sustainability"\n    },\n    *[_type == "pillarsOfHealth" && pageActive == true][0]{\n      "title": "Pillars of Health",\n      "slug": "pillars-of-health"\n    },\n  ],\n  navLinks[]{\n    _key,\n    title,\n    href\n  },\n  footerNavLinks[]{\n    _key,\n    groupTitle,\n    links[]{\n      title,\n      slug {\n        current\n      }\n    }\n  },\n  legalLinks[]{\n    _key,\n    "title": @->title,\n    "slug": @->slug.current\n  },\n  socialMedia[]{\n    _key,\n    platform,\n    platformLogo{\n      asset->{\n        _id,\n        url\n      }\n    },\n    isActive,\n    url\n  }\n}[0]': SITE_SETTINGS_QUERYResult;
     '\n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n': PRIMARY_CTA_BUTTON_QUERYResult;
     '*[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n}': SURVEY_SECTION_QUERYResult;

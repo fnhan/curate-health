@@ -573,6 +573,7 @@ export const SITE_METADATA_QUERY = groq`
         url
       }
     },
+    keywords,
     socialMeta {
       title,
       description,

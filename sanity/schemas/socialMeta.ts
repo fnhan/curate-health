@@ -9,6 +9,8 @@ export default defineType({
       name: "title",
       title: "Title",
       type: "string",
+      description:
+        "The title of the page, used for social media meta tags Can be the same as the page title",
       validation: (Rule) =>
         Rule.required().error("A title is required for social media meta."),
     }),
@@ -16,6 +18,8 @@ export default defineType({
       name: "description",
       title: "Description",
       type: "text",
+      description:
+        "The description of the page, used for social media meta tags Can be the same as the page description",
       validation: (Rule) =>
         Rule.required().error(
           "A description is required for social media meta."

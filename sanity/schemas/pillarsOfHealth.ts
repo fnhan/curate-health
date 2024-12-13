@@ -1,6 +1,9 @@
 import { defineField, defineType } from "sanity";
 
+
+
 import { fieldDescriptions } from "../schema-helpers";
+
 
 export default defineType({
   name: "pillarsOfHealth",
@@ -77,6 +80,11 @@ export default defineType({
           ],
         },
       ],
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
     }),
   ],
   preview: {

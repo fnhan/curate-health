@@ -1,17 +1,19 @@
 import Image from "next/image";
 
-import { SERVICES_HERO_SECTION_QUERYResult } from "@/sanity.types";
+import { SERVICES_PAGE_QUERYResult } from "@/sanity.types";
 
 export default function ServicesHeroSection({
   servicesHeroSection,
 }: {
-  servicesHeroSection: SERVICES_HERO_SECTION_QUERYResult;
+  servicesHeroSection: SERVICES_PAGE_QUERYResult;
 }) {
   if (!servicesHeroSection) {
     return null;
   }
 
-  const { image, alt, title, subtitle } = servicesHeroSection;
+  const { heroSection } = servicesHeroSection;
+
+  const { image, alt, title, subtitle } = heroSection;
 
   return (
     <section className="relative">

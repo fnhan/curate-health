@@ -192,6 +192,11 @@ export default defineType({
         }),
       ],
     }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
+    }),
   ],
   preview: {
     prepare() {

@@ -171,3 +171,32 @@ export default async function ContactPage() {
     </>
   );
 }
+
+export async function generateMetadata() {
+  const contactPage = await sanityFetch<CONTACT_PAGE_QUERYResult>({
+    query: CONTACT_PAGE_QUERY,
+  });
+
+  const { seo } = contactPage.page!;
+
+  return {
+    title: seo?.pageTitle,
+    description: seo?.pageDescription,
+    openGraph: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.ogImage?.asset?.url!,
+        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
+      },
+    },
+    twitter: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.twitterImage?.asset?.url!,
+        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
+      },
+    },
+  };
+}

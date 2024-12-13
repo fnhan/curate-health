@@ -52,3 +52,37 @@ export default async function TreatmentPage({
     </>
   );
 }
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { service: string; treatment: string };
+}) {
+  const treatmentPage = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
+    query: TREATMENT_BY_SLUG_QUERY,
+    params: { slug: params.treatment },
+  });
+
+  const { seo } = treatmentPage!;
+
+  return {
+    title: seo?.pageTitle,
+    description: seo?.pageDescription,
+    openGraph: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.ogImage?.asset?.url!,
+        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
+      },
+    },
+    twitter: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.twitterImage?.asset?.url!,
+        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
+      },
+    },
+  };
+}

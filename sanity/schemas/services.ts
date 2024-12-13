@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 
+
 export default defineType({
   name: "service",
   title: "Shared | Services",
@@ -70,6 +71,11 @@ export default defineType({
             "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
         },
       ],
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
     }),
   ],
 

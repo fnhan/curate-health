@@ -1,5 +1,26 @@
 import { groq } from "next-sanity";
 
+export const SEO_QUERY = groq`
+  seo{
+    pageTitle,
+    pageDescription,
+    socialMeta{
+      ogImage{
+        asset-> {
+          url,
+          alt
+        }
+      },
+      twitterImage{
+        asset-> {
+          url,
+          alt
+        }
+      }
+    }
+  }
+`;
+
 export const POSTS_QUERY = groq`*[_type == "post" && defined(slug)]`;
 
 export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)][]{
@@ -74,25 +95,29 @@ export const OURSERVICES_QUERY = groq`*[_type == "ourServices"][0]{
   content
 }`;
 
-export const SERVICES_HERO_SECTION_QUERY = groq`*[_type == "servicesHeroSection"][0]{
-  title,
-  "image": image.asset->url,
-  "alt": image.alt,
-  subtitle
-}`;
-
 export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
   "slug": slug.current,
   "hero_image": hero_image.asset->url,
   "altText": hero_image.alt,
-}`;
+  }`;
 
 export const ALL_SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
-  title,
-  "slug": slug.current,
-  "hero_image": hero_image.asset->url,
-  "hero_alt": hero_image.alt,
-}`;
+    title,
+    "slug": slug.current,
+    "hero_image": hero_image.asset->url,
+    "hero_alt": hero_image.alt,
+    }`;
+
+export const SERVICES_PAGE_QUERY = groq`*[_type == "servicesHeroSection"][0]{
+  "heroSection": {
+    title,
+    "image": image.asset->url,
+    "alt": image.alt,
+    subtitle
+  },
+  "seo": ${SEO_QUERY},
+  "services": ${ALL_SERVICES_QUERY},
+  }`;
 
 export const SERVICES_SECTION_QUERY = groq`*[_type == "servicesSection"][0]{
   sectionTitle,
@@ -123,7 +148,8 @@ export const SERVICE_BY_SLUG_QUERY = groq`
       _id,
       title,
       "slug": treatmentSlug.current
-    }
+    },
+    ${SEO_QUERY}
   }
 `;
 
@@ -218,7 +244,8 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     ctaTitle,
     ctaText,
     ctaButtonText
-  }
+  },
+  ${SEO_QUERY}
 }`;
 
 export const FOOTER_QUERY = groq`
@@ -312,7 +339,8 @@ export const PRODUCT_BY_SLUG_QUERY = groq`*[_type == "product" && slug.current =
     title,
     description
   },
-  callToAction
+  callToAction,
+  ${SEO_QUERY}
 }`;
 
 export const PRODUCT_QUERY = groq`*[_type == "product" && slug.current == $slug][0]`;
@@ -434,7 +462,8 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
       buttonText,
       buttonLink
     }
-  }
+  },
+  ${SEO_QUERY}
 }`;
 
 export const OUR_TEAM_PAGE_QUERY = groq`*[_type == "ourTeam" && pageActive == true][0]{
@@ -451,7 +480,8 @@ export const OUR_TEAM_PAGE_QUERY = groq`*[_type == "ourTeam" && pageActive == tr
         url
       }
     }
-  }
+  },
+  ${SEO_QUERY}
 }`;
 
 export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pageActive == true][0]{
@@ -471,6 +501,7 @@ export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pa
       alt
     }
   },
+  ${SEO_QUERY}
 }`;
 
 export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability" && pageActive == true][0] {
@@ -501,15 +532,8 @@ export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability" && pageActi
       buttonText,
       buttonLink
     }
-  }
-}`;
-
-export const SUSTAINABILITY_PAGE_QUERY = groq`{
-  "aboutPages": ${ABOUT_PAGES_QUERY},
-  "footer": ${FOOTER_QUERY},
-  "navigation": ${NAVIGATION_QUERY},
-  "surveyLink": ${SURVEY_LINK_QUERY},
-  "sustainability": ${SUSTAINABILITY_QUERY}
+  },
+  ${SEO_QUERY}
 }`;
 
 export const PILLARS_OF_HEALTH_QUERY = groq`*[_type == "pillarsOfHealth" && pageActive == true][0] {
@@ -524,7 +548,8 @@ export const PILLARS_OF_HEALTH_QUERY = groq`*[_type == "pillarsOfHealth" && page
   pillars[] {
     pillarName,
     pillarDescription
-  }
+  },
+  ${SEO_QUERY}
 }`;
 
 // * Settings / Shared Queries
@@ -724,10 +749,6 @@ export const HOME_PAGE_QUERY = groq`{
   "footer": ${FOOTER_QUERY},
 }`;
 
-export const SERVICES_PAGE_QUERY = groq`{
-  "services": ${ALL_SERVICES_QUERY},
-}`;
-
 export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
   "brandName": brandName,
   contactInfo{
@@ -763,6 +784,7 @@ export const CONTACT_PAGE_QUERY = groq`{
         day,
         hours
       }
-    }
-  }
+    },
+    ${SEO_QUERY}
+  },
 }`;

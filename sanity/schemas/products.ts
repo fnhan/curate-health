@@ -1,6 +1,9 @@
 import { defineField, defineType } from "sanity";
 
+
+
 import { fieldDescriptions } from "../schema-helpers";
+
 
 export default defineType({
   name: "product",
@@ -150,6 +153,11 @@ export default defineType({
             Rule.required().error("CTA Section Description is required"),
         }),
       ],
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
     }),
   ],
 

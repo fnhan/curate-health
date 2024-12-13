@@ -5,22 +5,18 @@ import ServicesHeroSection from "@/components/layout/services-pages/services-her
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import {
   ALL_SERVICES_QUERYResult,
-  SERVICES_HERO_SECTION_QUERYResult,
+  SERVICES_PAGE_QUERYResult,
 } from "@/sanity.types";
-import {
-  ALL_SERVICES_QUERY,
-  SERVICES_HERO_SECTION_QUERY,
-} from "@/sanity/lib/queries";
+import { ALL_SERVICES_QUERY, SERVICES_PAGE_QUERY } from "@/sanity/lib/queries";
 import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function ServicesPage() {
   const services = await sanityFetch<ALL_SERVICES_QUERYResult>({
     query: ALL_SERVICES_QUERY,
   });
-  const servicesHeroSection =
-    await sanityFetch<SERVICES_HERO_SECTION_QUERYResult>({
-      query: SERVICES_HERO_SECTION_QUERY,
-    });
+  const servicesHeroSection = await sanityFetch<SERVICES_PAGE_QUERYResult>({
+    query: SERVICES_PAGE_QUERY,
+  });
 
   return (
     <>
@@ -58,4 +54,33 @@ export default async function ServicesPage() {
       </section>
     </>
   );
+}
+
+export async function generateMetadata() {
+  const servicesPage = await sanityFetch<SERVICES_PAGE_QUERYResult>({
+    query: SERVICES_PAGE_QUERY,
+  });
+
+  const { seo } = servicesPage!;
+
+  return {
+    title: seo?.pageTitle,
+    description: seo?.pageDescription,
+    openGraph: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.ogImage?.asset?.url!,
+        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
+      },
+    },
+    twitter: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.twitterImage?.asset?.url!,
+        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
+      },
+    },
+  };
 }

@@ -22,6 +22,7 @@ import post from "./schemas/post";
 import primaryCTAButton from "./schemas/primaryCTAButton";
 import products from "./schemas/products";
 import productsSection from "./schemas/productsSection";
+import seo from "./schemas/seo";
 import services from "./schemas/services";
 import servicesHeroSection from "./schemas/services-hero-section";
 import servicesSection from "./schemas/servicesSection";
@@ -37,8 +38,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     blockContent /* Hidden type */,
     socialMeta /* Hidden type */,
+    seo /* Hidden type - uses socialMeta Type */,
     siteSettings,
-    siteMeta /* Uses socialMeta */,
+    siteMeta /* Uses socialMeta Type */,
     newsletter,
     popupBanner,
     heroSection,
@@ -50,17 +52,17 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     blogSection,
     sustainabilitySection,
     servicesHeroSection,
-    ourStory /* Uses socialMeta */,
-    ourTeam /* Uses socialMeta */,
-    missionAndValues /* Uses socialMeta */,
-    sustainability /* Uses socialMeta */,
-    pillarsOfHealth /* Uses socialMeta */,
-    contactPage /* Uses socialMeta */,
+    ourStory /* Uses SEO Type */,
+    ourTeam /* Uses SEO Type */,
+    missionAndValues /* Uses SEO Type */,
+    sustainability /* Uses SEO Type */,
+    pillarsOfHealth /* Uses SEO Type */,
+    contactPage /* Uses SEO Type */,
     surveySection,
     primaryCTAButton,
-    products /* Uses socialMeta */,
-    services /* Uses socialMeta */,
-    treatment /* Uses socialMeta */,
+    products /* Uses SEO Type */,
+    services /* Uses SEO Type */,
+    treatment /* Uses SEO Type */,
     legalPages,
     post,
     author,

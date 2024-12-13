@@ -45,6 +45,18 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "keywords",
+      title: "Keywords",
+      type: "array",
+      description:
+        "Add keywords that describe your content (optional for SEO). Enter tag and press ENTER.",
+      of: [{ type: "string" }],
+      options: {
+        layout: "tags",
+      },
+      validation: (Rule) => Rule.unique(),
+    }),
+    defineField({
       name: "socialMeta",
       title: "Social Media Meta",
       type: "socialMeta",

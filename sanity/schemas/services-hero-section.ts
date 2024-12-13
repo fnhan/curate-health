@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "servicesHeroSection",
-  title: "Services | Hero Section",
+  title: "Services | Services Page",
   type: "document",
   fields: [
     defineField({
@@ -30,16 +30,14 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "isActive",
-      title: "Is Active",
-      type: "boolean",
-      description: "Toggle to show/hide this service on the website.",
-      initialValue: true,
-    }),
-    defineField({
       name: "subtitle",
       title: "Subtitle",
       type: "string",
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
     }),
   ],
 

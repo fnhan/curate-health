@@ -88,3 +88,32 @@ export default async function OurStoryPage() {
     </>
   );
 }
+
+export async function generateMetadata() {
+  const ourStory = await sanityFetch<OUR_STORY_PAGE_QUERYResult>({
+    query: OUR_STORY_PAGE_QUERY,
+  });
+
+  const { seo } = ourStory!;
+
+  return {
+    title: seo?.pageTitle,
+    description: seo?.pageDescription,
+    openGraph: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.ogImage?.asset?.url!,
+        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
+      },
+    },
+    twitter: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.twitterImage?.asset?.url!,
+        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
+      },
+    },
+  };
+}

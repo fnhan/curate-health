@@ -37,3 +37,32 @@ export default async function PillarsofHealth() {
     </>
   );
 }
+
+export async function generateMetadata() {
+  const pillarsOfHealth = await sanityFetch<PILLARS_OF_HEALTH_QUERYResult>({
+    query: PILLARS_OF_HEALTH_QUERY,
+  });
+
+  const { seo } = pillarsOfHealth!;
+
+  return {
+    title: seo?.pageTitle,
+    description: seo?.pageDescription,
+    openGraph: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.ogImage?.asset?.url!,
+        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
+      },
+    },
+    twitter: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.twitterImage?.asset?.url!,
+        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
+      },
+    },
+  };
+}

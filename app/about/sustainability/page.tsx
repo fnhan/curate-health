@@ -44,3 +44,32 @@ export default async function SustainabilityPage() {
     </>
   );
 }
+
+export async function generateMetadata() {
+  const sustainability = await sanityFetch<SUSTAINABILITY_QUERYResult>({
+    query: SUSTAINABILITY_QUERY,
+  });
+
+  const { seo } = sustainability!;
+
+  return {
+    title: seo?.pageTitle,
+    description: seo?.pageDescription,
+    openGraph: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.ogImage?.asset?.url!,
+        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
+      },
+    },
+    twitter: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.twitterImage?.asset?.url!,
+        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
+      },
+    },
+  };
+}

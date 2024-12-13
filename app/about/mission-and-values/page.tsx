@@ -30,3 +30,32 @@ export default async function MissionAndValuesPage() {
     </>
   );
 }
+
+export async function generateMetadata() {
+  const missionAndValues = await sanityFetch<MISSION_AND_VALUES_QUERYResult>({
+    query: MISSION_AND_VALUES_QUERY,
+  });
+
+  const { seo } = missionAndValues!;
+
+  return {
+    title: seo?.pageTitle,
+    description: seo?.pageDescription,
+    openGraph: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.ogImage?.asset?.url!,
+        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
+      },
+    },
+    twitter: {
+      title: seo?.pageTitle,
+      description: seo?.pageDescription,
+      images: {
+        url: seo?.socialMeta?.twitterImage?.asset?.url!,
+        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
+      },
+    },
+  };
+}

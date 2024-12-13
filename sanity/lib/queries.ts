@@ -174,43 +174,6 @@ export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == 
   "treatmentSlug": treatmentSlug.current
 }`;
 
-// export const TREATMENT_BY_SLUG_QUERY = groq`
-//   *[_type == "treatment" && treatmentSlug.current == $treatmentSlug][0]{
-//     title,
-//     "treatmentSlug": treatmentSlug.current,
-//     service->{
-//       title,
-//       slug
-//     },
-//     "aboveImage": aboveImage.asset->url,
-//     "altText": image.alt,
-//     heroSubtitle,
-//     heroContent,
-//     quoteContent,
-//     leftSubtitle,
-//     leftContent,
-//     "rightImage": rightImage.asset->url,
-//     rightSubtitle,
-//     rightContent,
-//     "leftImage": leftImage.asset->url,
-//     greenTitle,
-//     greenContent,
-//     writtenTitle,
-//     writtenContent,
-//     "writtenImage": writtenImage.asset->url,
-//     writtenBracketContent,
-//     framesTitle,
-//     frames[]{
-//       title,
-//       content,
-//     meta {
-//       title,
-//       description
-//     }
-//     }
-//   }
-// `;
-
 export const TREATMENT_BY_SLUG_QUERY = groq`
 *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {
   title,
@@ -426,51 +389,9 @@ export const POPUP_CONTENT_QUERY = groq`*[_type == "popup" && isActive == true][
   isActive,
 }`;
 
-export const CONTACT_INFO_QUERY = groq`*[_type == "contactInfo"][0]{
-  streetAddress,
-  postalAddress,
-  emailAddress,
-  phoneNumber,
-  "contactInfoImage": {
-    "asset": contactInfoImage.asset->{
-      _id,
-      url
-    },
-    "alt": contactInfoImage.alt
-  },
-  meta {
-    title,
-    description
-  },
-  hrefDirections
-}`;
-
-export const CONTACT_DETAILS_QUERY = groq`*[_type == "contactDetails"][0]{
-  title,
-  monHours,
-  tuesHours,
-  wedHours,
-  thursHours,
-  friHours,
-  satHours,
-  sunHours,
-  mapURL,
-  cta,
-  href
-}`;
-
 export const FEEDBACK_LINK_QUERY = groq`*[_type == "feedbackLink"][0]{
   linkText,
   youformId
-}`;
-
-export const CONTACT_PAGE_QUERY = groq`{
-  "contactInfo": ${CONTACT_INFO_QUERY},
-  "contactDetails": ${CONTACT_DETAILS_QUERY},
-  "footer": ${FOOTER_QUERY},
-  "navigation": ${NAVIGATION_QUERY},
-  "surveyLink": ${SURVEY_LINK_QUERY},
-  "feedbackLink": ${FEEDBACK_LINK_QUERY}
 }`;
 
 export const ABOUT_PAGES_QUERY = groq`*[_type == "aboutPage" && isActive == true] | order(_createdAt desc){
@@ -805,4 +726,43 @@ export const HOME_PAGE_QUERY = groq`{
 
 export const SERVICES_PAGE_QUERY = groq`{
   "services": ${ALL_SERVICES_QUERY},
+}`;
+
+export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
+  "brandName": brandName,
+  contactInfo{
+    email,
+    phone,
+    address{
+      street,
+      city,
+      state,
+      zip,
+      country
+    },
+    mapLink,
+  },
+}`;
+
+export const CONTACT_PAGE_QUERY = groq`{
+  "contactInfo": ${CONTACT_INFO_QUERY},
+  "page": *[_type == "contactPage"][0]{
+    heroSection{
+      title,
+      heroImage {
+        "image": image.asset->url,
+        alt
+      }
+    },
+    mapURL,
+    businessHours{
+      standardHours,
+      customStandardHours,
+      daysOpen,
+      exceptions[]{
+        day,
+        hours
+      }
+    }
+  }
 }`;

@@ -1,70 +1,49 @@
 import { defineField, defineType } from "sanity";
 
+import { fieldDescriptions } from "../schema-helpers";
+
 export default defineType({
   name: "contactPage",
   title: "Contact | Contact Page",
   type: "document",
   fields: [
     defineField({
-      name: "title",
-      title: "Contact Details Title",
-      type: "string",
-      description: "Heading text for the Contact Details section",
+      name: "heroSection",
+      title: "Hero Section",
+      type: "object",
+      fields: [
+        defineField({
+          name: "title",
+          title: "Hero Title",
+          type: "string",
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          name: "heroImage",
+          title: "Hero Image",
+          type: "object",
+          fields: [
+            defineField({
+              name: "image",
+              title: "Hero Image",
+              type: "image",
+              options: {
+                hotspot: true,
+              },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "alt",
+              title: "Alt Text",
+              description: fieldDescriptions.altImageDescription,
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+        }),
+      ],
     }),
-    defineField({
-      name: "monHours",
-      title: "Monday Hours",
-      type: "string",
-      description: "The Monday opening hours",
-    }),
-    defineField({
-      name: "tuesHours",
-      title: "Tuesday Hours",
-      type: "string",
-      description: "The Tuesday opening hours",
-    }),
-    defineField({
-      name: "wedHours",
-      title: "Wednesday Hours",
-      type: "string",
-      description: "The Wednesday opening hours",
-    }),
-    defineField({
-      name: "thursHours",
-      title: "Thursday Hours",
-      type: "string",
-      description: "The Thursday opening hours",
-    }),
-    defineField({
-      name: "friHours",
-      title: "Friday Hours",
-      type: "string",
-      description: "The Friday opening hours",
-    }),
-    defineField({
-      name: "satHours",
-      title: "Saturday Hours",
-      type: "string",
-      description: "The Saturday opening hours",
-    }),
-    defineField({
-      name: "sunHours",
-      title: "Sunday Hours",
-      type: "string",
-      description: "The Sunday opening hours",
-    }),
-    defineField({
-      name: "cta",
-      title: "Call to Action",
-      type: "string",
-      description: "Text for the CTA button",
-    }),
-    defineField({
-      name: "href",
-      title: "Link Href",
-      type: "string",
-      description: "URL/Link to Google Maps directions",
-    }),
+
     defineField({
       name: "mapURL",
       title: "Map Embed Url",
@@ -72,11 +51,103 @@ export default defineType({
       description:
         "embed URL from Google Maps; search address and find embed url under Share option",
     }),
+
+    defineField({
+      name: "businessHours",
+      title: "Business Hours",
+      description: "Set your business hours for each day",
+      type: "object",
+      fields: [
+        defineField({
+          name: "standardHours",
+          title: "Standard Hours",
+          description: "Used for days with the same opening and closing times",
+          type: "string",
+          options: {
+            list: [
+              { title: "9:00 AM - 5:00 PM", value: "9:00 AM - 5:00 PM" },
+              { title: "9:00 AM - 6:00 PM", value: "9:00 AM - 6:00 PM" },
+              { title: "9:00 AM - 7:00 PM", value: "9:00 AM - 7:00 PM" },
+              { title: "10:00 AM - 7:00 PM", value: "10:00 AM - 7:00 PM" },
+              { title: "8:00 AM - 4:00 PM", value: "8:00 AM - 4:00 PM" },
+              { title: "Custom", value: "custom" },
+            ],
+          },
+        }),
+        defineField({
+          name: "customStandardHours",
+          title: "Custom Standard Hours",
+          type: "string",
+          hidden: ({ parent }) => parent?.standardHours !== "custom",
+          description: "Format: HH:MM AM - HH:MM PM",
+          validation: (Rule) =>
+            Rule.regex(
+              /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM) - (0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/
+            ).error('Please use format like "9:00 AM - 5:00 PM"'),
+        }),
+        defineField({
+          name: "daysOpen",
+          title: "Days Open",
+          type: "array",
+          of: [{ type: "string" }],
+          options: {
+            list: [
+              { title: "Monday", value: "monday" },
+              { title: "Tuesday", value: "tuesday" },
+              { title: "Wednesday", value: "wednesday" },
+              { title: "Thursday", value: "thursday" },
+              { title: "Friday", value: "friday" },
+              { title: "Saturday", value: "saturday" },
+              { title: "Sunday", value: "sunday" },
+            ],
+          },
+        }),
+        defineField({
+          name: "exceptions",
+          title: "Exceptions",
+          description: "Add any days with different hours",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                defineField({
+                  name: "day",
+                  title: "Day",
+                  type: "string",
+                  options: {
+                    list: [
+                      { title: "Monday", value: "monday" },
+                      { title: "Tuesday", value: "tuesday" },
+                      { title: "Wednesday", value: "wednesday" },
+                      { title: "Thursday", value: "thursday" },
+                      { title: "Friday", value: "friday" },
+                      { title: "Saturday", value: "saturday" },
+                      { title: "Sunday", value: "sunday" },
+                    ],
+                  },
+                }),
+                defineField({
+                  name: "hours",
+                  title: "Hours",
+                  type: "string",
+                  description: "Format: HH:MM AM - HH:MM PM",
+                  validation: (Rule) =>
+                    Rule.regex(
+                      /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM) - (0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/
+                    ).error('Please use format like "9:00 AM - 5:00 PM"'),
+                }),
+              ],
+            },
+          ],
+        }),
+      ],
+    }),
   ],
 
   preview: {
     select: {
-      title: "title",
+      title: "heroSection.title",
     },
   },
 });

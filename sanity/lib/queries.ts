@@ -789,3 +789,18 @@ export const CONTACT_PAGE_QUERY = groq`{
     ${SEO_QUERY}
   },
 }`;
+
+export const SITEMAP_QUERY = groq`{
+  "services": *[_type == "service" && isActive == true].slug.current,
+  "treatments": *[_type == "treatment" && isActive == true]{
+    "serviceSlug": service->slug.current,
+    "treatmentSlug": treatmentSlug.current
+  },
+  "products": *[_type == "product" && isActive == true].slug.current,
+  "posts": *[_type == "post" && defined(slug)].slug.current,
+  "team": *[_type == "ourTeam" && pageActive == true]{_id},
+  "story": *[_type == "ourStory" && pageActive == true]{_id},
+  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},
+  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},
+  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id}
+}`;

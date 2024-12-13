@@ -3594,6 +3594,29 @@ export type CONTACT_PAGE_QUERYResult = {
     } | null;
   } | null;
 };
+// Variable: SITEMAP_QUERY
+// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  "treatments": *[_type == "treatment" && isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id}}
+export type SITEMAP_QUERYResult = {
+  services: Array<string | null>;
+  treatments: Array<never>;
+  products: Array<string | null>;
+  posts: Array<string | null>;
+  team: Array<{
+    _id: string;
+  }>;
+  story: Array<{
+    _id: string;
+  }>;
+  missionValues: Array<{
+    _id: string;
+  }>;
+  sustainability: Array<{
+    _id: string;
+  }>;
+  pillarsHealth: Array<{
+    _id: string;
+  }>;
+};
 
 declare module "@sanity/client" {
   interface SanityQueries {
@@ -3653,5 +3676,6 @@ declare module "@sanity/client" {
     '{\n  "heroSection": *[_type == "heroSection"][0]{\n  videoID,\n  heroText,\n},\n  "primaryCTAButton": \n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n, \n  "aboutSection": *[_type == "aboutSection"][0]{\n  title1,\n  title2,\n  "aboutImage": {\n    "asset": aboutImage.asset->{\n      _id,\n      url\n    },\n    "alt": aboutImage.alt\n  },\n  hoverLinkText,\n  hoverLinkHref\n},\n  "clinicSection": *[_type == "clinic"][0]{\n  "clinicImage": {\n    "asset": clinicImage.asset->{\n      _id,\n      url\n    },\n    "alt": clinicImage.alt\n  },\n  content\n},\n  "servicesSection": *[_type == "servicesSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt\n  }\n},\n  "productsSection": *[_type == "productsSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n},\n  "cafeSection": *[_type == "cafeSection"][0] {\n  cafeImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  title,\n  content,\n  hoverLinkText,\n  hoverLinkHref,\n  meta {\n    title,\n    description\n  }\n},\n  "blogSection": *[_type == "blogSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref\n},\n  "sustainabilitySection": *[_type == "sustainabilitySection"][0]{\n  bgImage {\n    asset->{\n      _id,\n      url\n    },\n    alt\n  },\n  sustainText\n},\n  "navigation": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "termsOfUse": *[_type == "termOfUse"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "privacy": *[_type == "privacy"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "accessibility": *[_type == "accessibility"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n}': HOME_PAGE_QUERYResult;
     '*[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n}': CONTACT_INFO_QUERYResult;
     '{\n  "contactInfo": *[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n},\n  "page": *[_type == "contactPage"][0]{\n    heroSection{\n      title,\n      heroImage {\n        "image": image.asset->url,\n        alt\n      }\n    },\n    mapURL,\n    businessHours{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours\n      }\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n}': CONTACT_PAGE_QUERYResult;
+    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  "treatments": *[_type == "treatment" && isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
   }
 }

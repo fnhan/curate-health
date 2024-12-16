@@ -6,7 +6,6 @@ import author from "./schemas/author";
 import blockContent from "./schemas/blockContent";
 import blogSection from "./schemas/blogSection";
 import cafeSection from "./schemas/cafeSection";
-import category from "./schemas/category";
 import clinicSection from "./schemas/clinicSection";
 import contactPage from "./schemas/contactPage";
 import feedbackLink from "./schemas/feedbackLink";
@@ -63,10 +62,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     products /* Uses SEO Type */,
     services /* Uses SEO Type */,
     treatment /* Uses SEO Type */,
-    legalPages,
-    post,
+    post /* Uses SEO Type */,
     author,
-    category,
+    legalPages,
     aboutPages /* To be removed */,
     feedbackLink /* Refactor */,
   ],

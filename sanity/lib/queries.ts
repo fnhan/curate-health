@@ -790,6 +790,26 @@ export const CONTACT_PAGE_QUERY = groq`{
   },
 }`;
 
+export const GET_ALL_POSTS_QUERY = groq`*[_type == "post" && published == true] {
+  _id,
+  title,
+  publishedAt,
+  "slug": slug.current,
+  excerpt,
+  "author": author->{
+    name,
+    image {
+      asset-> {
+        url
+      }
+    }
+  },
+  mainImage {
+    asset->,
+    alt
+  },
+} | order(publishedAt desc)`;
+
 export const SITEMAP_QUERY = groq`{
   "services": *[_type == "service" && isActive == true].slug.current,
   "treatments": *[_type == "treatment" && isActive == true]{

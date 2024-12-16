@@ -1,8 +1,10 @@
 import { defineField, defineType } from "sanity";
 
+import { fieldDescriptions } from "../schema-helpers";
+
 export default defineType({
   name: "post",
-  title: "Post",
+  title: "Blog | Post",
   type: "document",
   fields: [
     defineField({
@@ -10,6 +12,18 @@ export default defineType({
       title: "Title",
       type: "string",
       validation: (Rule) => Rule.required().error("A title is required"),
+    }),
+    defineField({
+      name: "publishedAt",
+      title: "Published at",
+      type: "date",
+      description: "The date the post was published.",
+    }),
+    defineField({
+      name: "published",
+      title: "Published",
+      type: "boolean",
+      description: "Whether the post is published or not.",
     }),
     defineField({
       name: "slug",
@@ -40,6 +54,7 @@ export default defineType({
       name: "mainImage",
       title: "Main image",
       type: "image",
+      description: "Used for the blog card preview",
       validation: (Rule) => Rule.required().error("An image is required"),
       options: {
         hotspot: true,
@@ -49,42 +64,58 @@ export default defineType({
           name: "alt",
           type: "string",
           title: "Alternative Text",
-          description:
-            "Describes the appearance and function of the image. Important for SEO and accessibility. Should be concise and informative.",
+          description: fieldDescriptions.altImageDescription,
         },
       ],
     }),
     defineField({
-      name: "categories",
-      title: "Categories",
+      name: "sections",
+      title: "Sections",
       type: "array",
-      of: [{ type: "reference", to: { type: "category" } }],
-    }),
-    defineField({
-      name: "publishedAt",
-      title: "Published at",
-      type: "datetime",
-    }),
-    defineField({
-      name: "body",
-      title: "Body",
-      type: "blockContent",
-    }),
-    defineField({
-      name: "meta",
-      type: "object",
-      fields: [
+      of: [
         {
-          title: "Title",
-          name: "title",
-          type: "string",
-        },
-        {
-          title: "Description",
-          name: "description",
-          type: "string",
+          type: "object",
+          fields: [
+            defineField({
+              name: "sectionTitle",
+              title: "Section Title",
+              type: "string",
+              validation: (Rule) =>
+                Rule.required().error("A section title is required"),
+            }),
+            defineField({
+              name: "sectionParagraph",
+              title: "Section Paragraph",
+              type: "blockContent",
+              validation: (Rule) =>
+                Rule.required().error("A section paragraph is required"),
+            }),
+            defineField({
+              name: "sectionImage",
+              title: "Section Image",
+              type: "object",
+              fields: [
+                {
+                  name: "image",
+                  title: "Image",
+                  type: "image",
+                },
+                {
+                  name: "alt",
+                  title: "Alternative Text",
+                  type: "string",
+                  description: fieldDescriptions.altImageDescription,
+                },
+              ],
+            }),
+          ],
         },
       ],
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
     }),
   ],
 

@@ -54,20 +54,24 @@ export async function generateMetadata({
 
   const { seo } = servicePage!;
 
+  const fallbackTitle = "Services";
+  const fallbackDescription =
+    "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
+
   return {
-    title: seo?.pageTitle,
-    description: seo?.pageDescription,
+    title: seo?.pageTitle || fallbackTitle,
+    description: seo?.pageDescription || fallbackDescription,
     openGraph: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
+      title: seo?.pageTitle || fallbackTitle,
+      description: seo?.pageDescription || fallbackDescription,
       images: {
         url: seo?.socialMeta?.ogImage?.asset?.url!,
         alt: seo?.socialMeta?.ogImage?.asset?.alt!,
       },
     },
     twitter: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
+      title: seo?.pageTitle || fallbackTitle,
+      description: seo?.pageDescription || fallbackDescription,
       images: {
         url: seo?.socialMeta?.twitterImage?.asset?.url!,
         alt: seo?.socialMeta?.twitterImage?.asset?.alt!,

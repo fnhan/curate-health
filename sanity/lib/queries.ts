@@ -872,5 +872,6 @@ export const SITEMAP_QUERY = groq`{
   "story": *[_type == "ourStory" && pageActive == true]{_id},
   "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},
   "sustainability": *[_type == "sustainability" && pageActive == true]{_id},
-  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id}
+  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},
+  "cafe": *[_type == "cafePage" && pageActive == true]{_id}
 }`;

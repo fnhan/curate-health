@@ -37,7 +37,7 @@ export default async function BlogPostPage({
       </section>
       <div className="pt-20">
         <div className="container flex flex-col items-center gap-8 text-primary md:flex-row md:items-start md:justify-between">
-          <h1 className="text-balance text-center text-4xl md:text-left">
+          <h1 className="text-balance text-center text-2xl md:text-left md:text-4xl">
             {title}
           </h1>
           <div className="flex flex-col gap-4">

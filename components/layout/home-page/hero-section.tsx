@@ -37,7 +37,7 @@ export default function HeroSection({
           </div>
         </Suspense>
       </div>
-      <div className="z-20 py-20 text-center">
+      <div className="container z-20 py-20 text-center">
         <h1 className="mb-6 text-pretty text-[32px] md:text-[42px] 2xl:text-[72px]">
           <PortableText value={heroText!} />
         </h1>
@@ -72,11 +72,13 @@ async function VimeoIframe({ videoID }: { videoID: string }) {
   const videoSrc = `https://player.vimeo.com/video/${videoID}?muted=1&autoplay=1&autopause=0&pip=0&controls=0&loop=1&background=1&quality=auto&transparent=1`;
 
   return (
-    <iframe
-      src={videoSrc}
-      allow="autoplay; fullscreen; picture-in-picture"
-      className="absolute inset-0 h-full w-full object-cover md:left-1/2 md:top-1/2 md:h-[56.25vw] md:min-h-full md:min-w-[177.77vh] md:-translate-x-1/2 md:-translate-y-1/2"
-      title="Background video"
-    />
+    <div className="absolute inset-0 h-full w-full overflow-hidden">
+      <iframe
+        src={videoSrc}
+        allow="autoplay; fullscreen; picture-in-picture"
+        className="absolute left-1/2 top-1/2 h-[100vh] w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover"
+        title="curate-health-home-video"
+      />
+    </div>
   );
 }

@@ -3,17 +3,17 @@
 import { useState } from "react";
 
 import { PortableText } from "@portabletext/react";
-import { XCircleIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { POPUP_BANNER_QUERYResult } from "@/sanity.types";
 
 export default function PopupBanner({
@@ -47,23 +47,23 @@ export default function PopupBanner({
   const { title, content } = popupBanner;
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="flex size-[300px] max-w-none flex-col items-center justify-center rounded-full border-none bg-secondary text-center sm:size-[520px] sm:rounded-full">
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription className="prose-invert text-balance text-foreground">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="flex size-[300px] max-w-none flex-col items-center justify-center rounded-full border-none bg-secondary text-center sm:size-[520px] sm:rounded-full [&>button]:hidden">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="prose-invert text-balance text-foreground">
             <PortableText value={content!} />
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter className="absolute right-12 top-12 sm:right-24 sm:top-24">
-          <AlertDialogCancel
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="absolute right-12 top-12 sm:right-24 sm:top-24">
+          <DialogClose
             onClick={handleClose}
             className="h-fit w-fit border-none bg-transparent p-0 hover:bg-transparent hover:opacity-80"
           >
-            <XCircleIcon className="h-5 w-5 sm:h-6 sm:w-6" />
-          </AlertDialogCancel>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+            <XIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

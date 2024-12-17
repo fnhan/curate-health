@@ -48,14 +48,14 @@ export default function PopupBanner({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="text-center">
+      <AlertDialogContent className="flex size-[300px] max-w-none flex-col items-center justify-center rounded-full border-none bg-secondary text-center sm:size-[520px] sm:rounded-full">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription className="prose-invert text-balance text-foreground">
             <PortableText value={content!} />
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="absolute right-4 top-4">
+        <AlertDialogFooter className="absolute right-12 top-12 sm:right-24 sm:top-24">
           <AlertDialogCancel
             onClick={handleClose}
             className="h-fit w-fit border-none bg-transparent p-0 hover:bg-transparent hover:opacity-80"

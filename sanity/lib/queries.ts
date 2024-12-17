@@ -28,8 +28,8 @@ export const POSTS_QUERY = groq`*[_type == "post" && defined(slug)]`;
 export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)][]{
   "params": { "slug": slug.current },
   }`;
-  
-  // ! To be removed
+
+// ! To be removed
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
 
 export const SUSTAINABILITY_SECTION_QUERY = groq`*[_type == "sustainabilitySection"][0]{
@@ -835,6 +835,26 @@ export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == tru
     sectionImage {
       "image": image.asset->url,
       "alt": image.alt
+    }
+  },
+  ${SEO_QUERY}
+}`;
+
+export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true][0]{
+ heroSection{
+   heroImage{
+     image{
+       asset->
+     },
+     alt
+   }
+ },
+ additionalSections[]{
+    sectionTitle,
+    sectionParagraph,
+    sectionImage{
+      "image": image.asset->url,
+      alt
     }
   },
   ${SEO_QUERY}

@@ -48,7 +48,9 @@ export const AlternatingSections = ({ sections }: AlternatingSectionsProps) => {
               />
             </div>
             <div className="container flex flex-col gap-4 md:max-w-none md:px-0">
-              <h2 className="text-2xl font-light">{section.sectionTitle}</h2>
+              <h2 className="text-balance text-2xl font-light">
+                {section.sectionTitle}
+              </h2>
               <div className="prose max-w-[80ch]">
                 <PortableText value={section.sectionParagraph!} />
               </div>

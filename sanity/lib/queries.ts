@@ -21,12 +21,15 @@ export const SEO_QUERY = groq`
   }
 `;
 
+// ! To be removed
 export const POSTS_QUERY = groq`*[_type == "post" && defined(slug)]`;
 
+// ! To be removed
 export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)][]{
   "params": { "slug": slug.current },
-}`;
-
+  }`;
+  
+  // ! To be removed
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
 
 export const SUSTAINABILITY_SECTION_QUERY = groq`*[_type == "sustainabilitySection"][0]{
@@ -809,6 +812,33 @@ export const GET_ALL_POSTS_QUERY = groq`*[_type == "post" && published == true] 
     alt
   },
 } | order(publishedAt desc)`;
+
+export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == true && slug.current == $slug][0] {
+  title,
+  publishedAt,
+  slug,
+  "author": author->{
+    name,
+    image {
+      asset-> {
+        url
+      }
+    }
+  },
+  "mainImage": {
+    "image": mainImage.asset->url,
+    "alt": mainImage.alt
+  },
+  sections[] {
+    sectionTitle,
+    sectionParagraph,
+    sectionImage {
+      "image": image.asset->url,
+      "alt": image.alt
+    }
+  },
+  ${SEO_QUERY}
+}`;
 
 export const SITEMAP_QUERY = groq`{
   "services": *[_type == "service" && isActive == true].slug.current,

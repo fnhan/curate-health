@@ -24,7 +24,7 @@ export default function HeroSection({
         {/* Thumbnail loads first */}
         <Suspense
           fallback={
-            <div className="absolute left-1/2 top-1/2 z-10 h-[56.25vw] min-h-full w-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 bg-black" />
+            <div className="absolute inset-0 z-10 h-full w-full bg-black md:left-1/2 md:top-1/2 md:h-[56.25vw] md:min-h-full md:min-w-[177.77vh] md:-translate-x-1/2 md:-translate-y-1/2" />
           }
         >
           <ThumbnailBackground videoID={videoID!} />
@@ -63,21 +63,20 @@ async function ThumbnailBackground({ videoID }: { videoID: string }) {
     <img
       src={thumbnailUrl}
       alt=""
-      className="absolute left-1/2 top-1/2 z-10 h-[56.25vw] min-h-full w-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover"
+      className="absolute inset-0 h-full w-full object-cover md:left-1/2 md:top-1/2 md:h-[56.25vw] md:min-h-full md:min-w-[177.77vh] md:-translate-x-1/2 md:-translate-y-1/2"
     />
   );
 }
 
 async function VimeoIframe({ videoID }: { videoID: string }) {
-  const videoSrc = `https://player.vimeo.com/video/${videoID}?muted=1&autoplay=1&autopause=0&pip=0&controls=0&loop=1&background=1&quality=auto&transparent=1&background=0`;
+  const videoSrc = `https://player.vimeo.com/video/${videoID}?muted=1&autoplay=1&autopause=0&pip=0&controls=0&loop=1&background=1&quality=auto&transparent=1`;
 
   return (
     <iframe
       src={videoSrc}
       allow="autoplay; fullscreen; picture-in-picture"
-      className="absolute left-1/2 top-1/2 z-20 h-[56.25vw] min-h-full w-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 bg-transparent"
+      className="absolute inset-0 h-full w-full object-cover md:left-1/2 md:top-1/2 md:h-[56.25vw] md:min-h-full md:min-w-[177.77vh] md:-translate-x-1/2 md:-translate-y-1/2"
       title="Background video"
-      style={{ backgroundColor: "transparent" }}
     />
   );
 }

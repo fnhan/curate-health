@@ -75,7 +75,6 @@ async function VimeoIframe({ videoID }: { videoID: string }) {
     <iframe
       src={videoSrc}
       allow="autoplay; fullscreen; picture-in-picture"
-      loading="lazy"
       className="absolute left-1/2 top-1/2 z-20 h-[56.25vw] min-h-full w-full min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 bg-transparent"
       title="Background video"
       style={{ backgroundColor: "transparent" }}

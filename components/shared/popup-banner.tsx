@@ -47,7 +47,7 @@ export default function PopupBanner({
   const { title, content } = popupBanner;
 
   return (
-    <Dialog open={true} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="flex size-[300px] max-w-none flex-col items-center justify-center rounded-full border-none bg-secondary text-center sm:size-[520px] sm:rounded-full [&>button]:hidden">
         <DialogHeader>
           <DialogTitle className="pb-2 text-center">{title}</DialogTitle>

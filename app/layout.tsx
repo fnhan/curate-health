@@ -55,6 +55,8 @@ export async function generateMetadata(): Promise<Metadata> {
         url: ogImage?.asset?.url!,
         alt: ogImage?.asset?.alt!,
       },
+      type: "website",
+      locale: "en_CA",
     },
     twitter: {
       site: templateTitlePrefix!,

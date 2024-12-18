@@ -47,12 +47,14 @@ export default function PopupBanner({
   const { title, content } = popupBanner;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={true} onOpenChange={setOpen}>
       <DialogContent className="flex size-[300px] max-w-none flex-col items-center justify-center rounded-full border-none bg-secondary text-center sm:size-[520px] sm:rounded-full [&>button]:hidden">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="prose-invert text-balance text-foreground">
-            <PortableText value={content!} />
+          <DialogTitle className="pb-2 text-center">{title}</DialogTitle>
+          <DialogDescription>
+            <div className="flex flex-col items-center justify-center gap-2 text-center text-white">
+              <PortableText value={content!} />
+            </div>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="absolute right-12 top-12 sm:right-24 sm:top-24">

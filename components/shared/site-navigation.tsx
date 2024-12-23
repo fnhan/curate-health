@@ -83,6 +83,7 @@ export default function SiteNav({
                             key={index}
                             className="text-base hover:underline"
                             href={`/services/${service.slug}`}
+                            onClick={() => setOpen(false)}
                           >
                             {service.title}
                           </Link>

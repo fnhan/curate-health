@@ -34,8 +34,8 @@ export default function SiteFooter({
 
   return (
     <footer className="flex w-full flex-col pb-8 text-sm md:text-base">
-      <div className="container flex flex-col text-white">
-        <div className="flex flex-col gap-10 py-14 lg:flex-row lg:justify-between lg:py-36">
+      <div className="flex flex-col text-white">
+        <div className="container flex flex-col gap-10 py-14 lg:flex-row lg:justify-between lg:py-40">
           {/* Contact Info */}
           <address className="space-y-2 text-sm not-italic md:text-base">
             <h6 className="w-fit font-semibold hover:underline">
@@ -155,11 +155,11 @@ export default function SiteFooter({
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse justify-between gap-6 pt-6 text-sm md:flex-row lg:border-t lg:border-white">
-          <div className="text-center sm:text-left">
+        <div className="flex flex-col-reverse justify-between gap-6 border-t border-white pt-6 text-sm md:flex-row">
+          <div className="container text-center sm:text-left">
             &copy; {new Date().getFullYear()} {brandName}
           </div>
-          <div className="flex flex-col justify-center gap-2 text-center sm:flex-row sm:justify-between md:justify-end md:gap-10 md:text-left">
+          <div className="container flex flex-col justify-center gap-2 text-center sm:flex-row sm:justify-between md:justify-end md:gap-10 md:text-left">
             {legalLinks?.map((link, index) => (
               <Link key={index} className="hover:underline" href={link.slug!}>
                 {link.title}

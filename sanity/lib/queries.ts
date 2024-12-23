@@ -719,6 +719,11 @@ export const NEWSLETTER_SECTION_QUERY = groq`*[_type == "newsletterSection"][0]{
 
 export const HERO_SECTION_QUERY = groq`*[_type == "heroSection"][0]{
   videoID,
+  videoFile {
+    asset-> {
+      playbackId
+    }
+  },
   heroText,
 }`;
 

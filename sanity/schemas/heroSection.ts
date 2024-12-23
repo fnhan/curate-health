@@ -13,6 +13,11 @@ export default defineType({
         "You can find this in the video URL on Vimeo. For example, in the URL https://vimeo.com/912438525?share=copy, the Video ID is 912438525.",
     }),
     defineField({
+      name: "videoFile",
+      title: "Video File",
+      type: "mux.video",
+    }),
+    defineField({
       name: "heroText",
       title: "Hero Text",
       type: "blockContent",

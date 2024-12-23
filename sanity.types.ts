@@ -1321,6 +1321,7 @@ export type HeroSection = {
   _updatedAt: string;
   _rev: string;
   videoID?: string;
+  videoFile?: MuxVideo;
   heroText?: Array<
     | {
         children?: Array<{
@@ -1644,6 +1645,91 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
+export type MuxVideo = {
+  _type: "mux.video";
+  asset?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "mux.videoAsset";
+  };
+};
+
+export type MuxVideoAsset = {
+  _type: "mux.videoAsset";
+  status?: string;
+  assetId?: string;
+  playbackId?: string;
+  filename?: string;
+  thumbTime?: number;
+  data?: MuxAssetData;
+};
+
+export type MuxAssetData = {
+  _type: "mux.assetData";
+  resolution_tier?: string;
+  upload_id?: string;
+  created_at?: string;
+  id?: string;
+  status?: string;
+  max_stored_resolution?: string;
+  passthrough?: string;
+  encoding_tier?: string;
+  master_access?: string;
+  aspect_ratio?: string;
+  duration?: number;
+  max_stored_frame_rate?: number;
+  mp4_support?: string;
+  max_resolution_tier?: string;
+  tracks?: Array<
+    {
+      _key: string;
+    } & MuxTrack
+  >;
+  playback_ids?: Array<
+    {
+      _key: string;
+    } & MuxPlaybackId
+  >;
+  static_renditions?: MuxStaticRenditions;
+};
+
+export type MuxStaticRenditions = {
+  _type: "mux.staticRenditions";
+  status?: string;
+  files?: Array<
+    {
+      _key: string;
+    } & MuxStaticRenditionFile
+  >;
+};
+
+export type MuxStaticRenditionFile = {
+  _type: "mux.staticRenditionFile";
+  ext?: string;
+  name?: string;
+  width?: number;
+  bitrate?: number;
+  filesize?: number;
+  height?: number;
+};
+
+export type MuxPlaybackId = {
+  _type: "mux.playbackId";
+  id?: string;
+  policy?: string;
+};
+
+export type MuxTrack = {
+  _type: "mux.track";
+  id?: string;
+  type?: string;
+  max_width?: number;
+  max_frame_rate?: number;
+  duration?: number;
+  max_height?: number;
+};
+
 export type AllSanitySchemaTypes =
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -1688,7 +1774,14 @@ export type AllSanitySchemaTypes =
   | SanityImageHotspot
   | SanityImageAsset
   | SanityAssetSourceData
-  | SanityImageMetadata;
+  | SanityImageMetadata
+  | MuxVideo
+  | MuxVideoAsset
+  | MuxAssetData
+  | MuxStaticRenditions
+  | MuxStaticRenditionFile
+  | MuxPlaybackId
+  | MuxTrack;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/queries.ts
 // Variable: SEO_QUERY
@@ -3140,9 +3233,12 @@ export type NEWSLETTER_SECTION_QUERYResult = {
   bold: null;
 } | null;
 // Variable: HERO_SECTION_QUERY
-// Query: *[_type == "heroSection"][0]{  videoID,  heroText,}
+// Query: *[_type == "heroSection"][0]{  videoID,  videoFile {    asset-> {      playbackId    }  },  heroText,}
 export type HERO_SECTION_QUERYResult = {
   videoID: string | null;
+  videoFile: {
+    asset: null;
+  } | null;
   heroText: Array<
     | {
         children?: Array<{
@@ -3323,10 +3419,13 @@ export type LAYOUT_QUERYResult = {
   } | null;
 };
 // Variable: HOME_PAGE_QUERY
-// Query: {  "heroSection": *[_type == "heroSection"][0]{  videoID,  heroText,},  "primaryCTAButton":   *[_type == "primaryCTAButton"][0]{    ctaButton{      ctaText,      ctaLink,    }  },   "aboutSection": *[_type == "aboutSection"][0]{  title1,  title2,  "aboutImage": {    "asset": aboutImage.asset->{      _id,      url    },    "alt": aboutImage.alt  },  hoverLinkText,  hoverLinkHref},  "clinicSection": *[_type == "clinic"][0]{  "clinicImage": {    "asset": clinicImage.asset->{      _id,      url    },    "alt": clinicImage.alt  },  content},  "servicesSection": *[_type == "servicesSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref,  "services": *[_type == "service" && isActive == true]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt  }},  "productsSection": *[_type == "productsSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref,  "products": *[_type == "product" && isActive == true]{    title,    description,    "slug": slug.current,    "image": image.asset->url,    "altText": image.alt  }},  "cafeSection": *[_type == "cafeSection"][0] {  cafeImage {    asset-> {      _id,      url    },    alt  },  title,  content,  hoverLinkText,  hoverLinkHref,  meta {    title,    description  }},  "blogSection": *[_type == "blogSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref},  "sustainabilitySection": *[_type == "sustainabilitySection"][0]{  bgImage {    asset->{      _id,      url    },    alt  },  sustainText},  "navigation": *[_type == "navigation"][0]{  serviceLinks[]->{    title,    "slug": slug.current  },  aboutLinks[]{    title,    href,  },  navItems[]{    linkText,    href,    isServiceLinks,    isAboutLinks  }},  "termsOfUse": *[_type == "termOfUse"][0] {  title,  content,  meta {    title,    description  }},  "privacy": *[_type == "privacy"][0] {  title,  content,  meta {    title,    description  }},  "accessibility": *[_type == "accessibility"][0] {  title,  content,  meta {    title,    description  }},  "footer":   *[_type == "footer"][0] {    contactInfo {      sectionTitle,      details[] {        label,        value      }    },    servicesSection[]-> {      title,      "slug": slug.current,      image {        asset-> {          _id,          url        },        alt      }    },    sections[] {      title,      links[] {        text,        href      }    },    socialLinksSection {      title,      links[] {        platform,        url      }    },    privacy {      links[] {        title,        href      }    }  },}
+// Query: {  "heroSection": *[_type == "heroSection"][0]{  videoID,  videoFile {    asset-> {      playbackId    }  },  heroText,},  "primaryCTAButton":   *[_type == "primaryCTAButton"][0]{    ctaButton{      ctaText,      ctaLink,    }  },   "aboutSection": *[_type == "aboutSection"][0]{  title1,  title2,  "aboutImage": {    "asset": aboutImage.asset->{      _id,      url    },    "alt": aboutImage.alt  },  hoverLinkText,  hoverLinkHref},  "clinicSection": *[_type == "clinic"][0]{  "clinicImage": {    "asset": clinicImage.asset->{      _id,      url    },    "alt": clinicImage.alt  },  content},  "servicesSection": *[_type == "servicesSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref,  "services": *[_type == "service" && isActive == true]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt  }},  "productsSection": *[_type == "productsSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref,  "products": *[_type == "product" && isActive == true]{    title,    description,    "slug": slug.current,    "image": image.asset->url,    "altText": image.alt  }},  "cafeSection": *[_type == "cafeSection"][0] {  cafeImage {    asset-> {      _id,      url    },    alt  },  title,  content,  hoverLinkText,  hoverLinkHref,  meta {    title,    description  }},  "blogSection": *[_type == "blogSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref},  "sustainabilitySection": *[_type == "sustainabilitySection"][0]{  bgImage {    asset->{      _id,      url    },    alt  },  sustainText},  "navigation": *[_type == "navigation"][0]{  serviceLinks[]->{    title,    "slug": slug.current  },  aboutLinks[]{    title,    href,  },  navItems[]{    linkText,    href,    isServiceLinks,    isAboutLinks  }},  "termsOfUse": *[_type == "termOfUse"][0] {  title,  content,  meta {    title,    description  }},  "privacy": *[_type == "privacy"][0] {  title,  content,  meta {    title,    description  }},  "accessibility": *[_type == "accessibility"][0] {  title,  content,  meta {    title,    description  }},  "footer":   *[_type == "footer"][0] {    contactInfo {      sectionTitle,      details[] {        label,        value      }    },    servicesSection[]-> {      title,      "slug": slug.current,      image {        asset-> {          _id,          url        },        alt      }    },    sections[] {      title,      links[] {        text,        href      }    },    socialLinksSection {      title,      links[] {        platform,        url      }    },    privacy {      links[] {        title,        href      }    }  },}
 export type HOME_PAGE_QUERYResult = {
   heroSection: {
     videoID: string | null;
+    videoFile: {
+      asset: null;
+    } | null;
     heroText: Array<
       | {
           children?: Array<{
@@ -3875,7 +3974,7 @@ export type CAFE_PAGE_QUERYResult = {
   } | null;
 } | null;
 // Variable: SITEMAP_QUERY
-// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  "treatments": *[_type == "treatment" && isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id}}
+// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  "treatments": *[_type == "treatment" && isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},  "cafe": *[_type == "cafePage" && pageActive == true]{_id}}
 export type SITEMAP_QUERYResult = {
   services: Array<string | null>;
   treatments: Array<never>;
@@ -3894,6 +3993,9 @@ export type SITEMAP_QUERYResult = {
     _id: string;
   }>;
   pillarsHealth: Array<{
+    _id: string;
+  }>;
+  cafe: Array<{
     _id: string;
   }>;
 };
@@ -3951,14 +4053,14 @@ declare module "@sanity/client" {
     '\n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n': PRIMARY_CTA_BUTTON_QUERYResult;
     '*[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n}': SURVEY_SECTION_QUERYResult;
     '*[_type == "newsletterSection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n}': NEWSLETTER_SECTION_QUERYResult;
-    '*[_type == "heroSection"][0]{\n  videoID,\n  heroText,\n}': HERO_SECTION_QUERYResult;
+    '*[_type == "heroSection"][0]{\n  videoID,\n  videoFile {\n    asset-> {\n      playbackId\n    }\n  },\n  heroText,\n}': HERO_SECTION_QUERYResult;
     '{\n  "siteSettings": *[_type == "siteSettings"]{\n  brandName,\n  siteLogo{\n    asset->{\n      _id,\n      url\n    },\n  },\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n  services[]->{\n    _key,\n    title,\n    "slug": slug.current,\n    isActive\n  },\n  "aboutPages": [\n    *[_type == "ourStory" && pageActive == true][0]{\n      "title": "Our Story",\n      "slug": "our-story"\n    },\n    *[_type == "ourTeam" && pageActive == true][0]{\n      "title": "Our Team",\n      "slug": "our-team"\n    },\n    *[_type == "missionAndValues" && pageActive == true][0]{\n      "title": "Mission and Values",\n      "slug": "mission-and-values"\n    },\n    *[_type == "sustainability" && pageActive == true][0]{\n      "title": "Sustainability",\n      "slug": "sustainability"\n    },\n    *[_type == "pillarsOfHealth" && pageActive == true][0]{\n      "title": "Pillars of Health",\n      "slug": "pillars-of-health"\n    },\n  ],\n  navLinks[]{\n    _key,\n    title,\n    href\n  },\n  footerNavLinks[]{\n    _key,\n    groupTitle,\n    links[]{\n      title,\n      slug {\n        current\n      }\n    }\n  },\n  legalLinks[]{\n    _key,\n    "title": @->title,\n    "slug": @->slug.current\n  },\n  socialMedia[]{\n    _key,\n    platform,\n    platformLogo{\n      asset->{\n        _id,\n        url\n      }\n    },\n    isActive,\n    url\n  }\n}[0],\n  "primaryCTAButton": \n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n,\n  "navLinks": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "newsletterSection": *[_type == "newsletterSection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n},\n  "surveySection": *[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n  "popupBanner": *[_type == "popupBanner" && isActive == true][0]{\n  title,\n  content,\n}\n}': LAYOUT_QUERYResult;
-    '{\n  "heroSection": *[_type == "heroSection"][0]{\n  videoID,\n  heroText,\n},\n  "primaryCTAButton": \n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n, \n  "aboutSection": *[_type == "aboutSection"][0]{\n  title1,\n  title2,\n  "aboutImage": {\n    "asset": aboutImage.asset->{\n      _id,\n      url\n    },\n    "alt": aboutImage.alt\n  },\n  hoverLinkText,\n  hoverLinkHref\n},\n  "clinicSection": *[_type == "clinic"][0]{\n  "clinicImage": {\n    "asset": clinicImage.asset->{\n      _id,\n      url\n    },\n    "alt": clinicImage.alt\n  },\n  content\n},\n  "servicesSection": *[_type == "servicesSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt\n  }\n},\n  "productsSection": *[_type == "productsSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n},\n  "cafeSection": *[_type == "cafeSection"][0] {\n  cafeImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  title,\n  content,\n  hoverLinkText,\n  hoverLinkHref,\n  meta {\n    title,\n    description\n  }\n},\n  "blogSection": *[_type == "blogSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref\n},\n  "sustainabilitySection": *[_type == "sustainabilitySection"][0]{\n  bgImage {\n    asset->{\n      _id,\n      url\n    },\n    alt\n  },\n  sustainText\n},\n  "navigation": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "termsOfUse": *[_type == "termOfUse"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "privacy": *[_type == "privacy"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "accessibility": *[_type == "accessibility"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n}': HOME_PAGE_QUERYResult;
+    '{\n  "heroSection": *[_type == "heroSection"][0]{\n  videoID,\n  videoFile {\n    asset-> {\n      playbackId\n    }\n  },\n  heroText,\n},\n  "primaryCTAButton": \n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n, \n  "aboutSection": *[_type == "aboutSection"][0]{\n  title1,\n  title2,\n  "aboutImage": {\n    "asset": aboutImage.asset->{\n      _id,\n      url\n    },\n    "alt": aboutImage.alt\n  },\n  hoverLinkText,\n  hoverLinkHref\n},\n  "clinicSection": *[_type == "clinic"][0]{\n  "clinicImage": {\n    "asset": clinicImage.asset->{\n      _id,\n      url\n    },\n    "alt": clinicImage.alt\n  },\n  content\n},\n  "servicesSection": *[_type == "servicesSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt\n  }\n},\n  "productsSection": *[_type == "productsSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n},\n  "cafeSection": *[_type == "cafeSection"][0] {\n  cafeImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  title,\n  content,\n  hoverLinkText,\n  hoverLinkHref,\n  meta {\n    title,\n    description\n  }\n},\n  "blogSection": *[_type == "blogSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref\n},\n  "sustainabilitySection": *[_type == "sustainabilitySection"][0]{\n  bgImage {\n    asset->{\n      _id,\n      url\n    },\n    alt\n  },\n  sustainText\n},\n  "navigation": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "termsOfUse": *[_type == "termOfUse"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "privacy": *[_type == "privacy"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "accessibility": *[_type == "accessibility"][0] {\n  title,\n  content,\n  meta {\n    title,\n    description\n  }\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n}': HOME_PAGE_QUERYResult;
     '*[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n}': CONTACT_INFO_QUERYResult;
     '{\n  "contactInfo": *[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n},\n  "page": *[_type == "contactPage"][0]{\n    heroSection{\n      title,\n      heroImage {\n        "image": image.asset->url,\n        alt\n      }\n    },\n    mapURL,\n    businessHours{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours\n      }\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n}': CONTACT_PAGE_QUERYResult;
     '*[_type == "post" && published == true] {\n  _id,\n  title,\n  publishedAt,\n  "slug": slug.current,\n  excerpt,\n  "author": author->{\n    name,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  mainImage {\n    asset->,\n    alt\n  },\n} | order(publishedAt desc)': GET_ALL_POSTS_QUERYResult;
     '*[_type == "post" && published == true && slug.current == $slug][0] {\n  title,\n  publishedAt,\n  slug,\n  "author": author->{\n    name,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  "mainImage": {\n    "image": mainImage.asset->url,\n    "alt": mainImage.alt\n  },\n  sections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      "alt": image.alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': GET_POST_BY_SLUG_QUERYResult;
     '*[_type == "cafePage" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': CAFE_PAGE_QUERYResult;
-    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  "treatments": *[_type == "treatment" && isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
+    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  "treatments": *[_type == "treatment" && isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
   }
 }

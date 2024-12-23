@@ -7,6 +7,8 @@ import {
   PRIMARY_CTA_BUTTON_QUERYResult,
 } from "sanity.types";
 
+import HeroBgVideo from "./hero-bg-video";
+
 export default function HeroSection({
   heroSection,
   primaryCTAButton,
@@ -16,7 +18,7 @@ export default function HeroSection({
 }) {
   if (!heroSection) return null;
 
-  const { videoID, heroText } = heroSection;
+  const { heroText, videoFile } = heroSection;
 
   return (
     <section className="relative flex aspect-video min-h-[600px] flex-col items-center justify-center overflow-hidden py-40 text-white">
@@ -24,16 +26,17 @@ export default function HeroSection({
         {/* Thumbnail loads first */}
         <Suspense
           fallback={
-            <div className="absolute inset-0 z-10 h-full w-full bg-black md:left-1/2 md:top-1/2 md:h-[56.25vw] md:min-h-full md:min-w-[177.77vh] md:-translate-x-1/2 md:-translate-y-1/2" />
+            <div className="absolute inset-0 z-10 h-full w-full bg-black" />
           }
         >
-          <ThumbnailBackground videoID={videoID!} />
+          {/* @ts-ignore */}
+          <ThumbnailBackground playbackId={videoFile?.asset?.playbackId!} />
         </Suspense>
-
         {/* Video loads on top with transparent background */}
         <Suspense fallback={null}>
-          <div className="bg-transparent">
-            <VimeoIframe videoID={videoID!} />
+          <div className="absolute inset-0 h-full w-full">
+            {/* @ts-ignore */}
+            <HeroBgVideo playbackId={videoFile?.asset?.playbackId!} />
           </div>
         </Suspense>
       </div>
@@ -50,14 +53,10 @@ export default function HeroSection({
   );
 }
 
-async function ThumbnailBackground({ videoID }: { videoID: string }) {
-  const thumbnailResponse = await fetch(
-    `https://vimeo.com/api/v2/video/${videoID}.json`
-  );
-  const thumbnailData = await thumbnailResponse.json();
-  const thumbnailUrl = thumbnailData[0]?.thumbnail_large;
+async function ThumbnailBackground({ playbackId }: { playbackId: string }) {
+  const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg?time=0`;
 
-  if (!thumbnailUrl) return null;
+  if (!playbackId) return null;
 
   return (
     <img
@@ -65,20 +64,5 @@ async function ThumbnailBackground({ videoID }: { videoID: string }) {
       alt=""
       className="absolute inset-0 h-full w-full object-cover md:left-1/2 md:top-1/2 md:h-[56.25vw] md:min-h-full md:min-w-[177.77vh] md:-translate-x-1/2 md:-translate-y-1/2"
     />
-  );
-}
-
-async function VimeoIframe({ videoID }: { videoID: string }) {
-  const videoSrc = `https://player.vimeo.com/video/${videoID}?muted=1&autoplay=1&autopause=0&pip=0&controls=0&loop=1&background=1&quality=auto&transparent=1`;
-
-  return (
-    <div className="absolute inset-0 h-full w-full overflow-hidden">
-      <iframe
-        src={videoSrc}
-        allow="autoplay; fullscreen; picture-in-picture"
-        className="absolute left-1/2 top-1/2 h-[100vh] w-[177.77vh] -translate-x-1/2 -translate-y-1/2 object-cover"
-        title="curate-health-home-video"
-      />
-    </div>
   );
 }

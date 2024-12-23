@@ -52,7 +52,7 @@ export default function PopupBanner({
         <DialogHeader>
           <DialogTitle className="pb-2 text-center">{title}</DialogTitle>
           <DialogDescription>
-            <div className="flex flex-col items-center justify-center gap-2 text-center text-white">
+            <div className="flex flex-col items-center justify-center gap-2 text-center text-xs text-white sm:text-base">
               <PortableText value={content!} />
             </div>
           </DialogDescription>

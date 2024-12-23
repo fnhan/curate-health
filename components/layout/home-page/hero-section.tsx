@@ -21,20 +21,17 @@ export default function HeroSection({
   const { heroText, videoFile } = heroSection;
 
   return (
-    <section className="relative flex aspect-video min-h-[600px] flex-col items-center justify-center overflow-hidden py-40 text-white">
-      <div className="absolute left-0 top-0 h-full w-full overflow-hidden">
+    <section className="relative flex h-[calc(100vh-100px)] min-h-[600px] flex-col items-center justify-center overflow-hidden py-40 text-white">
+      <div className="absolute inset-0">
         {/* Thumbnail loads first */}
-        <Suspense
-          fallback={
-            <div className="absolute inset-0 z-10 h-full w-full bg-black" />
-          }
-        >
+        <Suspense fallback={<div className="h-full w-full bg-black" />}>
           {/* @ts-ignore */}
           <ThumbnailBackground playbackId={videoFile?.asset?.playbackId!} />
         </Suspense>
-        {/* Video loads on top with transparent background */}
+
+        {/* Video loads on top */}
         <Suspense fallback={null}>
-          <div className="absolute inset-0 h-full w-full">
+          <div className="absolute inset-0">
             {/* @ts-ignore */}
             <HeroBgVideo playbackId={videoFile?.asset?.playbackId!} />
           </div>
@@ -62,7 +59,7 @@ async function ThumbnailBackground({ playbackId }: { playbackId: string }) {
     <img
       src={thumbnailUrl}
       alt=""
-      className="absolute inset-0 h-full w-full object-cover md:left-1/2 md:top-1/2 md:h-[56.25vw] md:min-h-full md:min-w-[177.77vh] md:-translate-x-1/2 md:-translate-y-1/2"
+      className="absolute inset-0 h-full w-full object-cover"
     />
   );
 }

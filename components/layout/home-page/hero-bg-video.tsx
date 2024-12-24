@@ -3,6 +3,10 @@
 import MuxPlayer from "@/components/ui/mux-player";
 
 export default function HeroBgVideo({ playbackId }: { playbackId: string }) {
+  if (process.env.NODE_ENV === "development") {
+    return null;
+  }
+
   const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg?time=0`;
 
   return (

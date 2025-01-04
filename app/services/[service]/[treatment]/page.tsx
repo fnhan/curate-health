@@ -8,12 +8,12 @@ import {
   PRIMARY_CTA_BUTTON_QUERYResult,
   TREATMENT_BY_SLUG_QUERYResult,
 } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import {
   ALL_SERVICES_QUERY,
   PRIMARY_CTA_BUTTON_QUERY,
   TREATMENT_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function TreatmentPage({
   params,
@@ -62,6 +62,10 @@ export async function generateMetadata({
     query: TREATMENT_BY_SLUG_QUERY,
     params: { slug: params.treatment },
   });
+
+  if (!treatmentPage) {
+    return null;
+  }
 
   const { seo } = treatmentPage!;
 

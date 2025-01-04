@@ -1,8 +1,8 @@
 import { MetadataRoute } from "next";
 
 import { SITEMAP_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { SITEMAP_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 import { BASEURL } from "./site-settings";
 

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { validatePreviewUrl } from "@sanity/preview-url-secret";
 
-import { client } from "@/sanity/lib/server-client";
+import { client } from "@/sanity/lib/client";
 import { token } from "@/sanity/lib/token";
 
 const clientWithToken = client.withConfig({ token });

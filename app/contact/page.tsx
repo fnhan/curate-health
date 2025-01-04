@@ -5,8 +5,8 @@ import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function ContactPage() {
   const contactPage = await sanityFetch<CONTACT_PAGE_QUERYResult>({

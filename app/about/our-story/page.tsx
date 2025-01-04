@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
 import { OUR_STORY_PAGE_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_STORY_PAGE_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function OurStoryPage() {
   const ourStory = await sanityFetch<OUR_STORY_PAGE_QUERYResult>({

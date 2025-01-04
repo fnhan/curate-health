@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { CAFE_PAGE_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { CAFE_PAGE_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function CafePage() {
   const cafePage = await sanityFetch<CAFE_PAGE_QUERYResult>({

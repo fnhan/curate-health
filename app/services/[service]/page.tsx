@@ -5,11 +5,11 @@ import {
   ALL_SERVICES_QUERYResult,
   SERVICE_BY_SLUG_QUERYResult,
 } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import {
   ALL_SERVICES_QUERY,
   SERVICE_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function ServicePage({
   params,

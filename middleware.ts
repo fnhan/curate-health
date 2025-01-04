@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { client } from "./sanity/lib/server-client";
+import { middlewareClient } from "./sanity/lib/middleware-client";
 
 let comingSoonCache: {
   value: boolean;
@@ -21,7 +21,7 @@ async function getComingSoonStatus() {
   }
 
   try {
-    const result = await client.fetch(
+    const result = await middlewareClient.fetch(
       `*[_type == "siteSettings"][0].isComingSoon`
     );
     comingSoonCache = {

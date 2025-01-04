@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import imageUrlBuilder from "@sanity/image-url";
 import {
   Card,
   CardContent,
@@ -20,10 +19,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "components/ui/carousel";
-
-import { dataset, projectId } from "../../../sanity/env";
-
-const builder = imageUrlBuilder({ projectId, dataset });
 
 export function ProductCarousel({
   products,
@@ -82,12 +77,7 @@ export function ProductCarousel({
                   <CardContent className="mb-4 flex items-center justify-center p-0 2xl:h-64">
                     <Link href={`/products/${product.slug}`}>
                       <Image
-                        src={builder
-                          .image(product.image!)
-                          .quality(80)
-                          .size(200, 200)
-                          .auto("format")
-                          .url()}
+                        src={product.image ?? ""}
                         width={200}
                         height={200}
                         alt={product.altText ?? ""}

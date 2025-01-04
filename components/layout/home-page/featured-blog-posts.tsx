@@ -7,8 +7,8 @@ import { format, parseISO } from "date-fns";
 import { getMostRecentPosts } from "lib/utils";
 
 import { POSTS_QUERYResult, POST_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 import { dataset, projectId } from "../../../sanity/env";
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PortableText } from "@portabletext/react";
 import { ArrowRightIcon } from "lucide-react";
 
+import { cleanSlug } from "@/lib/utils";
 import { SERVICE_BY_SLUG_QUERYResult } from "@/sanity.types";
 
 interface Treatment {
@@ -35,16 +36,19 @@ export default function ServiceContent({
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            {treatments.map((treatment) => (
-              <Link
-                className="flex w-fit items-center gap-2 italic hover:underline"
-                key={treatment._id}
-                href={`/services/${slug}/${treatment.slug}`}
-              >
-                {treatment.title}
-                <ArrowRightIcon size={16} />
-              </Link>
-            ))}
+            {treatments.map((treatment) => {
+              return (
+                <Link
+                  className="flex w-fit items-center gap-2 italic hover:underline"
+                  key={treatment._id}
+                  // * Clean slug is used when sanity preview mode is enabled
+                  href={`/services/${cleanSlug(slug!)}/${cleanSlug(treatment.slug!)}`}
+                >
+                  {treatment.title}
+                  <ArrowRightIcon size={16} />
+                </Link>
+              );
+            })}
           </div>
         </div>
         <div className="flex justify-center md:justify-end">

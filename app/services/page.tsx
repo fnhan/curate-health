@@ -7,8 +7,8 @@ import {
   ALL_SERVICES_QUERYResult,
   SERVICES_PAGE_QUERYResult,
 } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { ALL_SERVICES_QUERY, SERVICES_PAGE_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function ServicesPage() {
   const services = await sanityFetch<ALL_SERVICES_QUERYResult>({

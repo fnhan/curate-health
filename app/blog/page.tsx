@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
 import { GET_ALL_POSTS_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { GET_ALL_POSTS_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function BlogPage() {
   const posts = await sanityFetch<GET_ALL_POSTS_QUERYResult>({

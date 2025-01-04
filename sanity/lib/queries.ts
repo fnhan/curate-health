@@ -151,6 +151,7 @@ export const SERVICE_BY_SLUG_QUERY = groq`
       _id,
       title,
       "slug": treatmentSlug.current,
+      "rawSlug": treatmentSlug
     },
     ${SEO_QUERY}
   }

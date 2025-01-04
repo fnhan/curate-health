@@ -1,6 +1,6 @@
 import { FAVICON_QUERYResult } from "../sanity.types";
+import { sanityFetch } from "../sanity/lib/client";
 import { FAVICON_QUERY } from "../sanity/lib/queries";
-import { sanityFetch } from "../sanity/lib/server-client";
 
 // Route segment config
 export const runtime = "edge";

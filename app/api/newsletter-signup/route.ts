@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getClient } from "@/sanity/lib/client";
+import { client } from "@/sanity/lib/client";
 
 export async function POST(request: Request) {
   try {
@@ -10,7 +10,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const client = getClient();
     const query = `*[_type == "newsletterSection"][0]`;
     const { endpointUrl } = await client.fetch(query);
 

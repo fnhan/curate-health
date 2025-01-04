@@ -15,8 +15,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { OUR_TEAM_PAGE_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_TEAM_PAGE_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function OurTeamPage() {
   const ourTeam = await sanityFetch<OUR_TEAM_PAGE_QUERYResult>({

@@ -5,8 +5,8 @@ import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/utils";
 import { GET_POST_BY_SLUG_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { GET_POST_BY_SLUG_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function BlogPostPage({
   params,

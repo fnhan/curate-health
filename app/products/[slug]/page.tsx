@@ -15,11 +15,11 @@ import {
   PRODUCTS_NAVIGATION_QUERYResult,
   PRODUCT_BY_SLUG_QUERYResult,
 } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import {
   PRODUCTS_NAVIGATION_QUERY,
   PRODUCT_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function ProductPage({
   params,

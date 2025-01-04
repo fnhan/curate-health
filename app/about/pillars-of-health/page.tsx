@@ -2,8 +2,8 @@ import Image from "next/image";
 
 import Pillars from "@/components/layout/about-pages/pillars";
 import { PILLARS_OF_HEALTH_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { PILLARS_OF_HEALTH_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function PillarsofHealth() {
   const pillarsOfHealth = await sanityFetch<PILLARS_OF_HEALTH_QUERYResult>({

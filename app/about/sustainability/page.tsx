@@ -6,8 +6,8 @@ import { PortableText } from "@portabletext/react";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import CtaFooterSection from "@/components/shared/cta-footer-section";
 import { SUSTAINABILITY_QUERYResult } from "@/sanity.types";
+import { sanityFetch } from "@/sanity/lib/client";
 import { SUSTAINABILITY_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/server-client";
 
 export default async function SustainabilityPage() {
   const sustainability = await sanityFetch<SUSTAINABILITY_QUERYResult>({

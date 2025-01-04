@@ -8,13 +8,18 @@ export default function HeroBgVideo({ playbackId }: { playbackId: string }) {
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [initTime, setInitTime] = useState<number | null>(null);
+  const [isSafari, setIsSafari] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg?time=0`;
 
-  // Safari detection
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-
   useEffect(() => {
+    const checkBrowser = () => {
+      const userAgent = navigator.userAgent;
+      setIsSafari(/^((?!chrome|android).)*safari/i.test(userAgent));
+      setIsIOS(/iPad|iPhone|iPod/.test(userAgent));
+    };
+
+    checkBrowser();
     setInitTime(Date.now());
 
     const player = playerRef.current;

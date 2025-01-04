@@ -147,16 +147,16 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     "content_image": content_image.asset->url,
     "content_alt": content_image.alt,
     content,
-    "treatments": *[_type == "treatment" && references(^._id)]{
+    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{
       _id,
       title,
-      "slug": treatmentSlug.current
+      "slug": treatmentSlug.current,
     },
     ${SEO_QUERY}
   }
 `;
 
-export const TREATMENTS_QUERY = groq`*[_type == "treatment" && isActive == true]{
+export const TREATMENTS_QUERY = groq`*[_type == "treatments" && isActive == true]{
   title,
   "treatmentSlug": treatmentSlug.current,
   "service": service->{
@@ -197,11 +197,6 @@ export const ANOTHERMETADATA_BY_SLUG_QUERY = groq`
     } 
   
 `;
-
-export const TREATMENTS_SLUG_QUERY = groq`*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{
-  "slug": service->slug.current,
-  "treatmentSlug": treatmentSlug.current
-}`;
 
 export const TREATMENT_BY_SLUG_QUERY = groq`
 *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {
@@ -867,7 +862,7 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
 
 export const SITEMAP_QUERY = groq`{
   "services": *[_type == "service" && isActive == true].slug.current,
-  "treatments": *[_type == "treatment" && isActive == true]{
+  "treatments": *[_type == "treatments" && isActive == true]{
     "serviceSlug": service->slug.current,
     "treatmentSlug": treatmentSlug.current
   },

@@ -2225,7 +2225,7 @@ export type SERVICES_SLUG_QUERYResult = Array<{
   };
 }>;
 // Variable: SERVICE_BY_SLUG_QUERY
-// Query: *[_type == "service" && slug.current == $slug][0]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt,    "content_image": content_image.asset->url,    "content_alt": content_image.alt,    content,    "treatments": *[_type == "treatment" && references(^._id)]{      _id,      title,      "slug": treatmentSlug.current    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }  }
+// Query: *[_type == "service" && slug.current == $slug][0]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt,    "content_image": content_image.asset->url,    "content_alt": content_image.alt,    content,    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{      _id,      title,      "slug": treatmentSlug.current,    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }  }
 export type SERVICE_BY_SLUG_QUERYResult = {
   title: string | null;
   slug: string | null;
@@ -2266,7 +2266,11 @@ export type SERVICE_BY_SLUG_QUERYResult = {
         _key: string;
       }
   > | null;
-  treatments: Array<never>;
+  treatments: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+  }>;
   seo: {
     pageTitle: string | null;
     pageDescription: string | null;
@@ -2287,8 +2291,18 @@ export type SERVICE_BY_SLUG_QUERYResult = {
   } | null;
 } | null;
 // Variable: TREATMENTS_QUERY
-// Query: *[_type == "treatment" && isActive == true]{  title,  "treatmentSlug": treatmentSlug.current,  "service": service->{    title,    "slug": slug.current  },  "image": image.asset->url,  "altText": image.alt,  content,}
-export type TREATMENTS_QUERYResult = Array<never>;
+// Query: *[_type == "treatments" && isActive == true]{  title,  "treatmentSlug": treatmentSlug.current,  "service": service->{    title,    "slug": slug.current  },  "image": image.asset->url,  "altText": image.alt,  content,}
+export type TREATMENTS_QUERYResult = Array<{
+  title: string | null;
+  treatmentSlug: string | null;
+  service: {
+    title: string | null;
+    slug: string | null;
+  } | null;
+  image: null;
+  altText: null;
+  content: null;
+}>;
 // Variable: METADATAS_QUERY
 // Query: *[_type == "metadatas"]{  datas}
 export type METADATAS_QUERYResult = Array<never>;
@@ -2304,9 +2318,6 @@ export type METADATA_BY_SLUG_QUERYResult = null;
 // Variable: ANOTHERMETADATA_BY_SLUG_QUERY
 // Query: *[_type == "metadatas" && datas[slug.current == $slug][0]]{      title,      description    }
 export type ANOTHERMETADATA_BY_SLUG_QUERYResult = Array<never>;
-// Variable: TREATMENTS_SLUG_QUERY
-// Query: *[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{  "slug": service->slug.current,  "treatmentSlug": treatmentSlug.current}
-export type TREATMENTS_SLUG_QUERYResult = Array<never>;
 // Variable: TREATMENT_BY_SLUG_QUERY
 // Query: *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {  title,  treatmentSlug,  "serviceName": service->title,  heroImage {    asset->{      url,          },    heroAlt  },  intro {    subtitle,    introParagraph  },  quoteContent,  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },    benefits {    title,    benefitsList[] {      title,      subtitle    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
 export type TREATMENT_BY_SLUG_QUERYResult = {
@@ -3974,10 +3985,13 @@ export type CAFE_PAGE_QUERYResult = {
   } | null;
 } | null;
 // Variable: SITEMAP_QUERY
-// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  "treatments": *[_type == "treatment" && isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},  "cafe": *[_type == "cafePage" && pageActive == true]{_id}}
+// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  "treatments": *[_type == "treatments" && isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},  "cafe": *[_type == "cafePage" && pageActive == true]{_id}}
 export type SITEMAP_QUERYResult = {
   services: Array<string | null>;
-  treatments: Array<never>;
+  treatments: Array<{
+    serviceSlug: string | null;
+    treatmentSlug: string | null;
+  }>;
   products: Array<string | null>;
   posts: Array<string | null>;
   team: Array<{
@@ -4017,14 +4031,13 @@ declare module "@sanity/client" {
     '*[_type == "servicesHeroSection"][0]{\n  "heroSection": {\n    title,\n    "image": image.asset->url,\n    "alt": image.alt,\n    subtitle\n  },\n  "seo": \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    },\n  }': SERVICES_PAGE_QUERYResult;
     '*[_type == "servicesSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt\n  }\n}': SERVICES_SECTION_QUERYResult;
     '*[_type == "service" && isActive == true && defined(slug.current)] {\n  "params": {"slug": slug.current}\n}': SERVICES_SLUG_QUERYResult;
-    '\n  *[_type == "service" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatment" && references(^._id)]{\n      _id,\n      title,\n      "slug": treatmentSlug.current\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  }\n': SERVICE_BY_SLUG_QUERYResult;
-    '*[_type == "treatment" && isActive == true]{\n  title,\n  "treatmentSlug": treatmentSlug.current,\n  "service": service->{\n    title,\n    "slug": slug.current\n  },\n  "image": image.asset->url,\n  "altText": image.alt,\n  content,\n\n}': TREATMENTS_QUERYResult;
+    '\n  *[_type == "service" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  }\n': SERVICE_BY_SLUG_QUERYResult;
+    '*[_type == "treatments" && isActive == true]{\n  title,\n  "treatmentSlug": treatmentSlug.current,\n  "service": service->{\n    title,\n    "slug": slug.current\n  },\n  "image": image.asset->url,\n  "altText": image.alt,\n  content,\n\n}': TREATMENTS_QUERYResult;
     '*[_type == "metadatas"]{\n  datas\n}': METADATAS_QUERYResult;
     '*[_type == "metadatas"][0]{\n  datas\n}': METADATASone_QUERYResult;
     '*[_type == "metadatas" && defined(slug.current) ][0]{\n  "params": {"slug": slug.current}\n}': MetaData_SlugResult;
     '\n  *[_type == "metadatas"]{\n    "meta":datas[slug.current == $slug][0]{\n      title,\n      description\n    } \n  }[0]\n': METADATA_BY_SLUG_QUERYResult;
     '\n  *[_type == "metadatas" && datas[slug.current == $slug][0]]{\n      title,\n      description\n    } \n  \n': ANOTHERMETADATA_BY_SLUG_QUERYResult;
-    '*[_type == "treatment" && isActive == true && defined(treatmentSlug.current)]{\n  "slug": service->slug.current,\n  "treatmentSlug": treatmentSlug.current\n}': TREATMENTS_SLUG_QUERYResult;
     '\n*[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {\n  title,\n  treatmentSlug,\n  "serviceName": service->title,\n  heroImage {\n    asset->{\n      url,      \n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  quoteContent,\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },  \n  benefits {\n    title,\n    benefitsList[] {\n      title,\n      subtitle\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': TREATMENT_BY_SLUG_QUERYResult;
     '\n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n': FOOTER_QUERYResult;
     '*[_type == "productsSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n}': PRODUCTS_SECTION_QUERYResult;
@@ -4061,6 +4074,6 @@ declare module "@sanity/client" {
     '*[_type == "post" && published == true] {\n  _id,\n  title,\n  publishedAt,\n  "slug": slug.current,\n  excerpt,\n  "author": author->{\n    name,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  mainImage {\n    asset->,\n    alt\n  },\n} | order(publishedAt desc)': GET_ALL_POSTS_QUERYResult;
     '*[_type == "post" && published == true && slug.current == $slug][0] {\n  title,\n  publishedAt,\n  slug,\n  "author": author->{\n    name,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  "mainImage": {\n    "image": mainImage.asset->url,\n    "alt": mainImage.alt\n  },\n  sections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      "alt": image.alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': GET_POST_BY_SLUG_QUERYResult;
     '*[_type == "cafePage" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': CAFE_PAGE_QUERYResult;
-    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  "treatments": *[_type == "treatment" && isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
+    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  "treatments": *[_type == "treatments" && isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
   }
 }

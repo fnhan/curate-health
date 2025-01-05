@@ -1,6 +1,5 @@
 import { type SchemaTypeDefinition } from "sanity";
 
-import aboutPages from "./schemas/aboutPages";
 import aboutSection from "./schemas/aboutSection";
 import author from "./schemas/author";
 import blockContent from "./schemas/blockContent";
@@ -9,7 +8,6 @@ import cafePage from "./schemas/cafePage";
 import cafeSection from "./schemas/cafeSection";
 import clinicSection from "./schemas/clinicSection";
 import contactPage from "./schemas/contactPage";
-import feedbackLink from "./schemas/feedbackLink";
 import heroSection from "./schemas/heroSection";
 import legalPages from "./schemas/legalPages";
 import missionAndValues from "./schemas/missionAndValues";
@@ -67,7 +65,5 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     post /* Uses SEO Type */,
     author,
     legalPages,
-    aboutPages /* To be removed */,
-    feedbackLink /* Refactor */,
   ],
 };

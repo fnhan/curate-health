@@ -99,14 +99,6 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "aboutPages",
-      type: "array",
-      title: "About Pages",
-      description:
-        "Links to About Pages displayed in the navigation menu and footer",
-      of: [{ type: "reference", to: [{ type: "aboutPages" }] }],
-    }),
-    defineField({
       name: "navLinks",
       type: "array",
       title: "Additional Navigation Links",

@@ -71,27 +71,6 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type FeedbackLink = {
-  _id: string;
-  _type: "feedbackLink";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  linkText?: string;
-  youformId?: string;
-};
-
-export type AboutPages = {
-  _id: string;
-  _type: "aboutPages";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  isActive?: boolean;
-};
-
 export type LegalPage = {
   _id: string;
   _type: "legalPage";
@@ -1471,13 +1450,6 @@ export type SiteSettings = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "service";
   }>;
-  aboutPages?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "aboutPages";
-  }>;
   navLinks?: Array<{
     title?: string;
     href?: string;
@@ -1736,8 +1708,6 @@ export type AllSanitySchemaTypes =
   | SanityImageDimensions
   | SanityFileAsset
   | Geopoint
-  | FeedbackLink
-  | AboutPages
   | LegalPage
   | Post
   | Author
@@ -2225,7 +2195,7 @@ export type SERVICES_SLUG_QUERYResult = Array<{
   };
 }>;
 // Variable: SERVICE_BY_SLUG_QUERY
-// Query: *[_type == "service" && slug.current == $slug][0]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt,    "content_image": content_image.asset->url,    "content_alt": content_image.alt,    content,    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{      _id,      title,      "slug": treatmentSlug.current,    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }  }
+// Query: *[_type == "service" && slug.current == $slug][0]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt,    "content_image": content_image.asset->url,    "content_alt": content_image.alt,    content,    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{      _id,      title,      "slug": treatmentSlug.current,      "rawSlug": treatmentSlug    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }  }
 export type SERVICE_BY_SLUG_QUERYResult = {
   title: string | null;
   slug: string | null;
@@ -2270,6 +2240,7 @@ export type SERVICE_BY_SLUG_QUERYResult = {
     _id: string;
     title: string | null;
     slug: string | null;
+    rawSlug: Slug | null;
   }>;
   seo: {
     pageTitle: string | null;
@@ -2689,10 +2660,7 @@ export type SURVEY_LINK_QUERYResult = {
 export type POPUP_CONTENT_QUERYResult = null;
 // Variable: FEEDBACK_LINK_QUERY
 // Query: *[_type == "feedbackLink"][0]{  linkText,  youformId}
-export type FEEDBACK_LINK_QUERYResult = {
-  linkText: string | null;
-  youformId: string | null;
-} | null;
+export type FEEDBACK_LINK_QUERYResult = null;
 // Variable: ABOUT_PAGES_QUERY
 // Query: *[_type == "aboutPage" && isActive == true] | order(_createdAt desc){  title,  "slug": slug.current,}
 export type ABOUT_PAGES_QUERYResult = Array<never>;
@@ -4031,7 +3999,7 @@ declare module "@sanity/client" {
     '*[_type == "servicesHeroSection"][0]{\n  "heroSection": {\n    title,\n    "image": image.asset->url,\n    "alt": image.alt,\n    subtitle\n  },\n  "seo": \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    },\n  }': SERVICES_PAGE_QUERYResult;
     '*[_type == "servicesSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt\n  }\n}': SERVICES_SECTION_QUERYResult;
     '*[_type == "service" && isActive == true && defined(slug.current)] {\n  "params": {"slug": slug.current}\n}': SERVICES_SLUG_QUERYResult;
-    '\n  *[_type == "service" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  }\n': SERVICE_BY_SLUG_QUERYResult;
+    '\n  *[_type == "service" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  }\n': SERVICE_BY_SLUG_QUERYResult;
     '*[_type == "treatments" && isActive == true]{\n  title,\n  "treatmentSlug": treatmentSlug.current,\n  "service": service->{\n    title,\n    "slug": slug.current\n  },\n  "image": image.asset->url,\n  "altText": image.alt,\n  content,\n\n}': TREATMENTS_QUERYResult;
     '*[_type == "metadatas"]{\n  datas\n}': METADATAS_QUERYResult;
     '*[_type == "metadatas"][0]{\n  datas\n}': METADATASone_QUERYResult;

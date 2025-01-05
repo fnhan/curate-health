@@ -6,6 +6,8 @@ import { SITEMAP_QUERY } from "@/sanity/lib/queries";
 
 import { BASEURL } from "./site-settings";
 
+export const contentType = "application/xml";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemap = await sanityFetch<SITEMAP_QUERYResult>({
     query: SITEMAP_QUERY,

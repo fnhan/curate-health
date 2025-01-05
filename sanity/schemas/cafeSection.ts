@@ -27,7 +27,7 @@ export default defineType({
     defineField({
       name: "title",
       title: "Cafe Title",
-      type: "blockContent",
+      type: "string",
       description: "Add title for the cafe section",
       validation: (Rule) => Rule.required(),
     }),

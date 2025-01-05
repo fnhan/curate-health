@@ -77,8 +77,8 @@ export type LegalPage = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  slug?: Slug;
   title?: string;
+  slug?: Slug;
   body?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -1125,39 +1125,7 @@ export type CafeSection = {
     alt?: string;
     _type: "image";
   };
-  title?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-        listItem?: "bullet";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt?: string;
-        _type: "image";
-        _key: string;
-      }
-  >;
+  title?: string;
   content?: Array<
     | {
         children?: Array<{
@@ -1300,7 +1268,6 @@ export type HeroSection = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  videoID?: string;
   videoFile?: MuxVideo;
   heroText?: Array<
     | {
@@ -2046,39 +2013,7 @@ export type CAFE_QUERYResult = {
     } | null;
     alt: string | null;
   } | null;
-  title: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-        listItem?: "bullet";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | {
-        asset?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt?: string;
-        _type: "image";
-        _key: string;
-      }
-  > | null;
+  title: string | null;
   content: Array<
     | {
         children?: Array<{
@@ -3215,7 +3150,7 @@ export type NEWSLETTER_SECTION_QUERYResult = {
 // Variable: HERO_SECTION_QUERY
 // Query: *[_type == "heroSection"][0]{  videoID,  videoFile {    asset-> {      playbackId    }  },  heroText,}
 export type HERO_SECTION_QUERYResult = {
-  videoID: string | null;
+  videoID: null;
   videoFile: {
     asset: null;
   } | null;
@@ -3402,7 +3337,7 @@ export type LAYOUT_QUERYResult = {
 // Query: {  "heroSection": *[_type == "heroSection"][0]{  videoID,  videoFile {    asset-> {      playbackId    }  },  heroText,},  "primaryCTAButton":   *[_type == "primaryCTAButton"][0]{    ctaButton{      ctaText,      ctaLink,    }  },   "aboutSection": *[_type == "aboutSection"][0]{  title1,  title2,  "aboutImage": {    "asset": aboutImage.asset->{      _id,      url    },    "alt": aboutImage.alt  },  hoverLinkText,  hoverLinkHref},  "clinicSection": *[_type == "clinic"][0]{  "clinicImage": {    "asset": clinicImage.asset->{      _id,      url    },    "alt": clinicImage.alt  },  content},  "productsSection": *[_type == "productsSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref,  "products": *[_type == "product" && isActive == true]{    title,    description,    "slug": slug.current,    "image": image.asset->url,    "altText": image.alt  }},  "servicesSection": *[_type == "servicesSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref,  "services": *[_type == "service" && isActive == true]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt  }},  "cafeSection": *[_type == "cafeSection"][0] {  cafeImage {    asset-> {      _id,      url    },    alt  },  title,  content,  hoverLinkText,  hoverLinkHref,  meta {    title,    description  }},  "blogSection": *[_type == "blogSection"][0]{  sectionTitle,  hoverLinkText,  hoverLinkHref},  "sustainabilitySection": *[_type == "sustainabilitySection"][0]{  bgImage {    asset->{      _id,      url    },    alt  },  sustainText},}
 export type HOME_PAGE_QUERYResult = {
   heroSection: {
-    videoID: string | null;
+    videoID: null;
     videoFile: {
       asset: null;
     } | null;
@@ -3532,39 +3467,7 @@ export type HOME_PAGE_QUERYResult = {
       } | null;
       alt: string | null;
     } | null;
-    title: Array<
-      | {
-          children?: Array<{
-            marks?: Array<string>;
-            text?: string;
-            _type: "span";
-            _key: string;
-          }>;
-          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-          listItem?: "bullet";
-          markDefs?: Array<{
-            href?: string;
-            _type: "link";
-            _key: string;
-          }>;
-          level?: number;
-          _type: "block";
-          _key: string;
-        }
-      | {
-          asset?: {
-            _ref: string;
-            _type: "reference";
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          alt?: string;
-          _type: "image";
-          _key: string;
-        }
-    > | null;
+    title: string | null;
     content: Array<
       | {
           children?: Array<{

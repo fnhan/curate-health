@@ -21,15 +21,8 @@ export const SEO_QUERY = groq`
   }
 `;
 
-// ! To be removed
 export const POSTS_QUERY = groq`*[_type == "post" && defined(slug)]`;
 
-// ! To be removed
-export const POSTS_SLUG_QUERY = groq`*[_type == "post" && defined(slug.current)][]{
-  "params": { "slug": slug.current },
-  }`;
-
-// ! To be removed
 export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
 
 export const SUSTAINABILITY_SECTION_QUERY = groq`*[_type == "sustainabilitySection"][0]{

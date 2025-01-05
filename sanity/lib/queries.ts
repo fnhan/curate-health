@@ -292,8 +292,6 @@ export const FOOTER_QUERY = groq`
 
 export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
   sectionTitle,
-  hoverLinkText,
-  hoverLinkHref,
   "products": *[_type == "product" && isActive == true]{
     title,
     description,

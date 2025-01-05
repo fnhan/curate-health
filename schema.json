@@ -7288,20 +7288,6 @@
           "type": "string"
         },
         "optional": true
-      },
-      "hoverLinkText": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
-      "hoverLinkHref": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
       }
     }
   },

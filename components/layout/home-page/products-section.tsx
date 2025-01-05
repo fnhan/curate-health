@@ -11,8 +11,7 @@ export default function ProductsSection({
     return null;
   }
 
-  const { sectionTitle, hoverLinkText, hoverLinkHref, products } =
-    productsSection;
+  const { sectionTitle, products } = productsSection;
 
   return (
     <section id="products" className="flex-col gap-10 bg-white py-14 md:py-24">

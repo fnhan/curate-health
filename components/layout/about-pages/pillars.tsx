@@ -33,12 +33,18 @@ export default function Pillars({
   const isLargeScreen = useMediaQuery("(min-width: 1536px)");
 
   useEffect(() => {
+    // Get the smallest dimension between window width and height
+    const viewportSmallestDimension = Math.min(
+      window.innerWidth,
+      window.innerHeight
+    );
+
     if (isLargeScreen) {
-      setCircleSize(800);
+      setCircleSize(Math.min(800, viewportSmallestDimension * 0.7));
     } else if (!isTablet) {
-      setCircleSize(640);
+      setCircleSize(Math.min(640, viewportSmallestDimension * 0.7));
     } else if (!isMobile) {
-      setCircleSize(448);
+      setCircleSize(Math.min(448, viewportSmallestDimension * 0.7));
     } else {
       setCircleSize(0);
     }
@@ -105,7 +111,7 @@ export default function Pillars({
               }
               className={`absolute size-32 rounded-full border border-white transition-all duration-300 md:text-lg lg:size-40 ${
                 activePillar === pillar.pillarName
-                  ? "bg-primary text-white"
+                  ? "border-secondary bg-secondary text-white"
                   : "bg-white text-primary hover:bg-primary hover:text-white"
               }`}
               key={pillar.pillarName}

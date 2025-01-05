@@ -31,7 +31,7 @@ export default async function ServicesPage() {
               href={`/services/${service.slug}`}
             >
               <Image
-                className="h-60 w-full object-cover md:h-72 lg:h-96"
+                className="h-72 w-full object-cover md:h-96 lg:h-[512px]"
                 src={service.hero_image!}
                 alt={service.hero_alt!}
                 width={380}

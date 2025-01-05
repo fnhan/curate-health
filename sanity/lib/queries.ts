@@ -610,7 +610,7 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     },
     mapLink,
   },
-  services[]->{
+  "services": *[_type == "service" && isActive == true]{
     _key,
     title,
     "slug": slug.current,

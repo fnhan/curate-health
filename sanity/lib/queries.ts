@@ -742,16 +742,11 @@ export const HOME_PAGE_QUERY = groq`{
   "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY}, 
   "aboutSection": ${ABOUT_SECTION_QUERY},
   "clinicSection": ${CLINIC_SECTION_QUERY},
-  "servicesSection": ${SERVICES_SECTION_QUERY},
   "productsSection": ${PRODUCTS_SECTION_QUERY},
+  "servicesSection": ${SERVICES_SECTION_QUERY},
   "cafeSection": ${CAFE_QUERY},
   "blogSection": ${BLOG_SECTION_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
-  "navigation": ${NAVIGATION_QUERY},
-  "termsOfUse": ${TERMS_OF_USE_QUERY},
-  "privacy": ${PRIVACY_QUERY},
-  "accessibility": ${ACCESSIBILITY_QUERY},
-  "footer": ${FOOTER_QUERY},
 }`;
 
 export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
@@ -875,4 +870,10 @@ export const SITEMAP_QUERY = groq`{
   "sustainability": *[_type == "sustainability" && pageActive == true]{_id},
   "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},
   "cafe": *[_type == "cafePage" && pageActive == true]{_id}
+}`;
+
+export const LEGAL_PAGE_BY_SLUG_QUERY = groq`*[_type == "legalPage" && slug.current == $slug][0]{
+  title,
+  body,
+  ${SEO_QUERY}
 }`;

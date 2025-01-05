@@ -124,19 +124,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Legal routes
   const legalRoutes = [
     {
-      url: `${BASEURL}/accessibility`,
+      url: `${BASEURL}/legal/accessibility`,
       lastModified: new Date(),
       changeFrequency: "yearly" as const,
       priority: 0.3,
     },
     {
-      url: `${BASEURL}/terms-of-use`,
+      url: `${BASEURL}/legal/terms-of-use`,
       lastModified: new Date(),
       changeFrequency: "yearly" as const,
       priority: 0.3,
     },
     {
-      url: `${BASEURL}/privacy`,
+      url: `${BASEURL}/legal/privacy-and-cookies`,
       lastModified: new Date(),
       changeFrequency: "yearly" as const,
       priority: 0.3,

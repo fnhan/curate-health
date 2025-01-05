@@ -161,7 +161,11 @@ export default function SiteFooter({
           </div>
           <div className="container flex flex-col justify-center gap-2 text-center sm:flex-row sm:justify-between md:justify-end md:gap-10 md:text-left">
             {legalLinks?.map((link, index) => (
-              <Link key={index} className="hover:underline" href={link.slug!}>
+              <Link
+                key={index}
+                className="hover:underline"
+                href={`/legal/${link.slug}`}
+              >
                 {link.title}
               </Link>
             ))}

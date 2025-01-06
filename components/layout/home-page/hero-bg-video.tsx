@@ -27,6 +27,9 @@ export default function HeroBgVideo({ playbackId }: { playbackId: string }) {
 
     const attemptPlay = async () => {
       try {
+        if (!player.muted) {
+          player.muted = true;
+        }
         await player.play();
         containerRef.current?.classList.add("playing");
       } catch (error) {

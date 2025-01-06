@@ -23,7 +23,7 @@ export default async function ServicesPage() {
       <ServicesHeroSection servicesHeroSection={servicesHeroSection} />
       <ServicesNavigation services={services} />
       <section className="bg-white">
-        <div className="grid gap-1 bg-white lg:container sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-1 bg-white pb-28 lg:container sm:grid-cols-2 md:pb-36 lg:grid-cols-3 lg:pb-[200px]">
           {services.map((service) => (
             <Link
               className="group relative grayscale transition-all duration-300 hover:grayscale-0 focus:grayscale-0"

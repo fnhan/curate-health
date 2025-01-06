@@ -36,19 +36,39 @@ async function getComingSoonStatus() {
 }
 
 export async function middleware(request: NextRequest) {
+  const userAgent = request.headers.get("user-agent") || "";
+  const isCrawler =
+    userAgent.toLowerCase().includes("bot") ||
+    userAgent.toLowerCase().includes("crawler");
+
   // Always allow access to these paths
-  const publicPaths = ["/login", "/api/login", "/studio", "/coming-soon"];
+  const publicPaths = [
+    "/login",
+    "/api/login",
+    "/studio",
+    "/coming-soon",
+    "sitemap.xml",
+  ];
+
   if (publicPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     // console.log('Public path detected, allowing access');
     return NextResponse.next();
   }
 
   const isComingSoon = await getComingSoonStatus();
-
   const hasAdminAccess = request.cookies.has(process.env.PASSWORD_COOKIE_NAME!);
 
   // If site is coming soon and user is not admin, show coming soon page
   if (isComingSoon && !hasAdminAccess) {
+    if (isCrawler) {
+      return new NextResponse(null, {
+        status: 503,
+        headers: {
+          'Retry-After': '86400', // 24 hours
+        }
+      });
+    }
+
     return NextResponse.redirect(new URL("/coming-soon", request.url));
   }
 

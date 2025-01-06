@@ -52,6 +52,8 @@ export default defineType({
               name: "role",
               title: "Role",
               type: "blockContent",
+              description:
+                "If listing multiple roles, use the bulleted list to separate them by line.",
             }),
             defineField({
               name: "bio",

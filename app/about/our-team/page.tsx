@@ -61,7 +61,7 @@ export default async function OurTeamPage() {
                   {teamMember.name}
                 </CardTitle>
                 <CardDescription>
-                  <div className="prose">
+                  <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
                     <PortableText value={teamMember.role!} />
                   </div>
                 </CardDescription>

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { PortableText } from "next-sanity";
+
 import {
   Accordion,
   AccordionContent,
@@ -54,17 +56,25 @@ export default async function OurTeamPage() {
                   height={400}
                 />
               </div>
-              <CardHeader>
+              <CardHeader className="flex-1">
                 <CardTitle className="font-light not-italic">
                   {teamMember.name}
                 </CardTitle>
-                <CardDescription>{teamMember.role}</CardDescription>
+                <CardDescription>
+                  <div className="prose">
+                    <PortableText value={teamMember.role!} />
+                  </div>
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="item-1" className="border-none">
                     <AccordionTrigger>Learn More</AccordionTrigger>
-                    <AccordionContent>{teamMember.bio}</AccordionContent>
+                    <AccordionContent>
+                      <div className="prose">
+                        <PortableText value={teamMember.bio!} />
+                      </div>
+                    </AccordionContent>
                   </AccordionItem>
                 </Accordion>
               </CardContent>

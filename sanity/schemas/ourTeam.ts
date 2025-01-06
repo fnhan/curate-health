@@ -51,12 +51,12 @@ export default defineType({
             defineField({
               name: "role",
               title: "Role",
-              type: "string",
+              type: "blockContent",
             }),
             defineField({
               name: "bio",
               title: "Bio",
-              type: "text",
+              type: "blockContent",
             }),
             defineField({
               name: "image",

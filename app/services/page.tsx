@@ -36,6 +36,7 @@ export default async function ServicesPage() {
                 alt={service.hero_alt!}
                 width={380}
                 height={500}
+                quality={100}
               />
               <div className="absolute inset-0 flex h-full w-full items-end">
                 <div className="relative w-full">

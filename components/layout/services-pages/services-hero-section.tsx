@@ -18,10 +18,13 @@ export default function ServicesHeroSection({
   return (
     <section className="relative">
       <Image
-        width={1080}
-        height={1440}
+        width={1920}
+        height={1080}
         src={image!}
         alt={alt!}
+        quality={100}
+        priority
+        sizes="100vw"
         className="h-[400px] w-full object-cover opacity-60 md:h-[550px]"
       />
       <div className="absolute inset-0 flex flex-col justify-end pb-16">

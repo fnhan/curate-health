@@ -16,11 +16,14 @@ export default function TreatmentHeroSection({
 
   return (
     <Image
-      width={1080}
-      height={1440}
+      width={1920}
+      height={1080}
       src={asset.url}
       alt={alt}
-      className="h-[400px] w-full object-cover md:h-[550px]"
+      priority
+      quality={100}
+      sizes="100vw"
+      className="h-[254px] w-full object-cover md:h-[364px] lg:h-[608px]"
     />
   );
 }

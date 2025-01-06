@@ -33,10 +33,12 @@ export default async function ContactPage() {
           <Image
             src={heroSection?.heroImage?.image ?? ""}
             alt={heroSection?.heroImage?.alt ?? ""}
-            width={1440}
+            width={1920}
             height={1080}
-            className="absolute h-full w-full object-cover"
             priority
+            quality={100}
+            sizes="100vw"
+            className="absolute h-full w-full object-cover"
           />
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-black/30" />

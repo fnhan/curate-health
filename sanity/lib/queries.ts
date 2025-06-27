@@ -716,6 +716,7 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
   contactInfo{
     email,
     phone,
+    fax,
     address{
       street,
       city,

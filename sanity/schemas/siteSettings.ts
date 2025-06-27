@@ -47,6 +47,11 @@ export default defineType({
           title: "Contact Phone",
         }),
         defineField({
+          name: "fax",
+          type: "string",
+          title: "Contact Fax",
+        }),
+        defineField({
           name: "address",
           type: "object",
           title: "Contact Address",

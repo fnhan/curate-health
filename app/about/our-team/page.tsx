@@ -68,9 +68,9 @@ export default async function OurTeamPage() {
               </CardHeader>
               <CardContent>
                 <Accordion type="single" collapsible>
-                  <AccordionItem value="item-1" className="border-none">
+                  <AccordionItem value="item-1" className="border-none relative">
                     <AccordionTrigger>Learn More</AccordionTrigger>
-                    <AccordionContent>
+                    <AccordionContent className="absolute top-12 left-0 w-full z-10 bg-white rounded-lg p-4">
                       <div className="prose">
                         <PortableText value={teamMember.bio!} />
                       </div>

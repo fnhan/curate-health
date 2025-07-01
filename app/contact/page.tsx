@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
+import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
@@ -97,6 +97,22 @@ export default async function ContactPage() {
                     className="not-italic hover:underline md:text-3xl"
                   >
                     {contactInfo?.contactInfo?.phone}
+                  </a>
+                </div>
+              </div>
+              {/* Fax */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-4">
+                  <PrinterIcon className="h-4 w-4" />
+                  <p className="text-sm text-white/80 md:text-base">Fax</p>
+                </div>
+                <div className="pl-8">
+                  <a
+                    target="_blank"
+                    href={`tel:${contactInfo?.contactInfo?.fax ?? "000-000-0000"}`}
+                    className="not-italic hover:underline md:text-3xl"
+                  >
+                    {contactInfo?.contactInfo?.fax ?? "000-000-0000"}
                   </a>
                 </div>
               </div>

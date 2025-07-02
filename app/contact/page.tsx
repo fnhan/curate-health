@@ -104,7 +104,7 @@ export default async function ContactPage() {
           </div>
         </div>
       </section>
-      <section className="bg-white py-14 text-black md:py-28">
+      <section className="bg-white py-14 text-black md:py-28 space-y-16">
         <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
           <div className="flex flex-col gap-8">
             <div className="space-y-4">
@@ -167,6 +167,23 @@ export default async function ContactPage() {
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen={false}
             ></iframe>
+          </div>
+        </div>
+
+        <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
+          <div>
+            <h2 className="text-2xl font-medium mb-4">Parking</h2>
+            <p>
+              We have a parking lot available for our patients. Please park in
+              the parking lot and enter through the main entrance.
+            </p>
+          </div>
+          <div>
+            <h2 className="text-2xl font-medium mb-4">How to get here</h2>
+            <p>
+              We are located in the heart of the city, just a short drive from
+              the main highway.
+            </p>
           </div>
         </div>
       </section>

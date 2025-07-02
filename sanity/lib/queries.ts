@@ -578,7 +578,13 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     _key,
     title,
     "slug": slug.current,
-    isActive
+    isActive,
+    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{
+      _id,
+      title,
+      "slug": treatmentSlug.current,
+      "rawSlug": treatmentSlug
+    },
   },
   "aboutPages": [
     *[_type == "ourStory" && pageActive == true][0]{

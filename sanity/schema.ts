@@ -21,6 +21,7 @@ import primaryCTAButton from "./schemas/primaryCTAButton";
 import products from "./schemas/products";
 import productsSection from "./schemas/productsSection";
 import seo from "./schemas/seo";
+import serviceCurateLifestyle from "./schemas/service-curate-lifestyle";
 import services from "./schemas/services";
 import servicesHeroSection from "./schemas/services-hero-section";
 import servicesSection from "./schemas/servicesSection";
@@ -65,5 +66,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     post /* Uses SEO Type */,
     author,
     legalPages,
+    serviceCurateLifestyle,
   ],
 };

@@ -150,6 +150,25 @@ export const SERVICE_BY_SLUG_QUERY = groq`
   }
 `;
 
+export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
+  *[_type == "serviceLifestyle" && slug.current == $slug][0]{
+    title,
+    "slug": slug.current,
+    "hero_image": hero_image.asset->url,
+    "hero_alt": hero_image.alt,
+    "content_image": content_image.asset->url,
+    "content_alt": content_image.alt,
+    content,
+    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{
+      _id,
+      title,
+      "slug": treatmentSlug.current,
+      "rawSlug": treatmentSlug
+    },
+    ${SEO_QUERY}
+  }
+`;
+
 export const TREATMENTS_QUERY = groq`*[_type == "treatments" && isActive == true]{
   title,
   "treatmentSlug": treatmentSlug.current,

@@ -165,6 +165,17 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
       "slug": treatmentSlug.current,
       "rawSlug": treatmentSlug
     },
+    hero_secondary_title,
+    hero_large_text,
+    block_2_title,
+    block_2_content,
+    block_2_image {
+      asset-> {
+        url,
+      }
+    },
+    block_3_title,
+    block_3_content,
     ${SEO_QUERY}
   }
 `;

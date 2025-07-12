@@ -72,6 +72,73 @@ export default defineType({
         },
       ],
     }),
+    ///////
+    defineField({
+      name: "hero_secondary_title",
+      title: "Hero Secondary Title",
+      type: "string",
+    }),
+
+    defineField({
+      name: "hero_large_text",
+      title: "Hero Large Text",
+      type: "string",
+    }),
+
+    defineField({
+      name: "block_2_title",
+      title: "Block 2 Title",
+      type: "string",
+    }),
+
+    defineField({
+      name: "block_2_content",
+      title: "Block 2 Content",
+      type: "blockContent",
+    }),
+
+    defineField({
+      name: "block_2_image",
+      title: "Block 2 Image",
+      type: "image",
+      validation: (Rule) => Rule.required().error("An image is required"),
+    }),
+
+    defineField({
+      name: "block_3_title",
+      title: "Block 3 Title",
+      type: "string",
+    }),
+
+    defineField({
+      name: "block_3_content",
+      title: "Condition List",
+      type: "array",
+      of: [
+        {
+          name: "condition",
+          title: "Condition",
+          type: "object",
+          fields: [
+            {
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required().error("A title is required"),
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "blockContent",
+              validation: (Rule) => Rule.required().error("A description is required"),
+            },
+          ]
+        },
+      ]
+    }),
+
+    ///////
+
     defineField({
       name: "seo",
       title: "SEO",

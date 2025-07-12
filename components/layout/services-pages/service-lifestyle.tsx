@@ -1,12 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { PortableText } from "@portabletext/react";
+import { PortableText, PortableTextBlock } from "@portabletext/react";
 import { ArrowRightIcon } from "lucide-react";
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { cleanSlug } from "@/lib/utils";
-import { SERVICE_BY_SLUG_QUERYResult } from "@/sanity.types";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { cleanSlug, cn } from "@/lib/utils";
+import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
+
 
 interface Treatment {
   _id: string;
@@ -14,46 +17,57 @@ interface Treatment {
   slug: string;
 }
 
+const Heading = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+  return (
+    <h1 className={cn("text-xl md:text-4xl 2xl:text-6xl", className)}>{children}</h1>
+  );
+};
+
+
+const SubHeading = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+  return (
+    <h2 className={cn("text-2xl md:font-light md:text-3xl 2xl:text-4xl", className)}>
+      {children}
+    </h2>
+  );
+};
+
+const LargeText = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+  return (
+    <p className={cn("text-lg md:text-2xl 2xl:text-4xl 2xl:leading-[1.5em] font-light", className)}>
+      {children}
+    </p>
+  );
+};
+
+
 export default function ServiceLifestyleContent({
   service,
 }: {
-  service: SERVICE_BY_SLUG_QUERYResult;
+  service: SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
 }) {
   if (!service) {
     return null;
   }
 
-  const { title, content, content_image, content_alt, slug } = service;
+  const {
+    title,
+    content,
+    content_image,
+    content_alt,
+    slug,
+    hero_secondary_title,
+    hero_large_text,
+    block_2_title,
+    block_2_content,
+    block_2_image,
+    block_3_title,
+    block_3_content,
+  } = service;
+
   const treatments = service.treatments as Treatment[];
 
   const conditions = [
-    {
-      title: "Cardiovascular Health",
-    },
-    {
-      title: "Mental & Cognitive Health",
-    },
-    {
-      title: "Population Specific Benefits",
-    },
-    {
-      title: "Cardiovascular Health",
-    },
-    {
-      title: "Mental & Cognitive Health",
-    },
-    {
-      title: "Population Specific Benefits",
-    },
-    {
-      title: "Cardiovascular Health",
-    },
-    {
-      title: "Mental & Cognitive Health",
-    },
-    {
-      title: "Population Specific Benefits",
-    },
     {
       title: "Cardiovascular Health",
     },
@@ -75,29 +89,59 @@ export default function ServiceLifestyleContent({
     {
       title: "Sharpen Focus & Balance Mood",
     },
-    {
-      title: "Sustain Energy Naturally",
-    },
-    {
-      title: "Sleep Deeply, Wake Rested",
-    },
-    {
-      title: "Sharpen Focus & Balance Mood",
-    },
-    {
-      title: "Sharpen Focus & Balance Mood",
-    },
-    {
-      title: "Sharpen Focus & Balance Mood",
-    },
   ];
+
+  const teamMembers: Array<{
+    name: string;
+    role: PortableTextBlock;
+    bio: PortableTextBlock;
+    image?: {
+      asset: {
+        url: string;
+      };
+    }
+  }> = [
+      {
+        name: "Dr. John Doe",
+        role: {
+          _type: "block",
+          children: [{ _type: "span", text: "Doctor" }],
+        },
+        bio: {
+          _type: "block",
+          children: [{ _type: "span", text: "Dr. John Doe is a doctor with a passion for lifestyle medicine." }],
+        },
+      },
+      {
+        name: "Dr. John Doe 2",
+        role: {
+          _type: "block",
+          children: [{ _type: "span", text: "Doctor" }],
+        },
+        bio: {
+          _type: "block",
+          children: [{ _type: "span", text: "Dr. John Doe is a doctor with a passion for lifestyle medicine." }],
+        },
+      },
+      {
+        name: "Dr. John Doe 3",
+        role: {
+          _type: "block",
+          children: [{ _type: "span", text: "Doctor" }],
+        },
+        bio: {
+          _type: "block",
+          children: [{ _type: "span", text: "Dr. John Doe is a doctor with a passion for lifestyle medicine." }],
+        },
+      },
+    ];
   return (
     <>
       <section className="bg-white py-16 text-primary md:py-24">
         <div className="container flex flex-col gap-12 md:grid md:grid-cols-2 md:items-center">
           <div className="flex flex-col gap-8">
             <div className="space-y-4 md:space-y-6 2xl:space-y-8">
-              <h1 className="text-xl md:text-4xl 2xl:text-6xl">{title}</h1>
+              <Heading>{title}</Heading>
               <div className="max-w-[80ch] text-pretty font-light">
                 <PortableText value={content!} />
               </div>
@@ -127,38 +171,45 @@ export default function ServiceLifestyleContent({
               alt={content_alt!}
             />
           </div>
-          <div className="col-span-2 border-l border-l-2 border-primary h-24"></div>
-          <div className="col-span-2">
-            <h2 className="text-xl md:text-4xl 2xl:text-6xl">Lifestyle Medicine</h2>
-            <p className="text-lg md:text-2xl 2xl:text-4xl font-light mt-12 max-w-2xl leading-relaxed">
-              A thoughtful, scientifically proven path toward long-term vitality, where small, sustainable shifts yield profound results.
-            </p>
+          <div className="col-span-2 border-l border-l-2 border-primary h-32"></div>
+          <div className="col-span-2 pt-12">
+            <h1 className="text-xl md:text-4xl 2xl:text-6xl">
+              {hero_secondary_title}
+            </h1>
+            <LargeText className="max-w-2xl mt-12">
+              {hero_large_text}
+            </LargeText>
           </div>
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
-        [BG Image]
+      <section
+        className="py-16 md:py-24 relative bg-cover bg-center bg-no-repeat text-primary"
+        style={{
+          backgroundImage: `url(${block_2_image?.asset?.url})`
+        }}
+      >
         <div className="container">
-          <h2 className="text-xl md:text-4xl 2xl:text-5xl">What is a Lifestyle Medicine</h2>
-          <p className="text-lg  max-w-2xl leading-relaxed mt-12">
-            Lifestyle Medicine is the art and science of healing through the choices we make each day. Rooted in decades of rigorous research, it recognizes that the foundation of lasting health lies in how we nourish, move, rest, connect, and find meaning in our lives.
-          </p>
-          <p className="text-lg  max-w-2xl leading-relaxed mt-12">
-            At Curate Health, we take a thoughtful, whole-person approach—using personalized, evidence-based strategies in nutrition, movement, sleep, stress care, social connection and avoidance of    harmful substances to gently restore balance and vitality. Through personalized guidance, clinical expertise, and a deeply supportive environment, we help you reconnect with your body’s innate ability to heal and thrive.
-          </p>
+          <div className="flex flex-col gap-y-10 relative z-10 max-w-2xl">
+            <SubHeading>
+              {block_2_title}
+            </SubHeading>
+            <div className="text-pretty font-light">
+              <PortableText value={block_2_content!} />
+            </div>
+          </div>
         </div>
       </section >
 
-      <section className="bg-white py-16 text-primary md:py-24">
+      <section className="bg-white py-16 text-primary md:py-40">
         <div className="container flex justify-center flex-col items-center gap-12">
-          <h2 className="text-xl md:text-4xl 2xl:text-5xl">
-            Conditions We Address
-          </h2>
+          <SubHeading>
+            {block_3_title}
+          </SubHeading>
           <div className="grid grid-cols-3 gap-y-6 gap-x-8 w-full">
-            {conditions.map((condition) => {
+            {block_3_content?.map((condition) => {
               return (
-                <div className="border border-primary flex items-center py-3 justify-center text-center">
+                <div key={condition.title} className="border border-primary flex items-center py-3 justify-center text-center">
                   <h3 className="text-lg xl:text-xl">
                     {condition.title}
                   </h3>
@@ -169,17 +220,17 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-      <section className="bg-platinum py-16 space-y-12 text-primary md:py-24">
-        <div className="flex flex-col justify-center items-center gap-y-10">
-          <h2 className="text-xl md:text-4xl 2xl:text-5xl">
+      <section className="bg-platinum py-16 space-y-12 text-primary md:py-32">
+        <div className="container flex flex-col justify-center items-center gap-y-10">
+          <Heading className="text-center max-w-xl">
             The Pillars of Lifestyle Medicine
-          </h2>
+          </Heading>
           <div className="h-24 border-l border-primary">
             &nbsp;
           </div>
-          <p className="text-lg max-w-2xl leading-relaxed text-center">
+          <LargeText className="text-center italic max-w-3xl">
             Evidence-based strategies for preventing, treating, and even reversing chronic diseases through sustainable lifestyle changes.
-          </p>
+          </LargeText>
         </div>
         <div className="flex flex-row gap-6">
           <div className="flex-1 flex justify-end items-center">
@@ -187,11 +238,13 @@ export default function ServiceLifestyleContent({
             </div>
           </div>
           <div className="flex-1 p-12">
-            <h3 className="text-xl md:text-2xl 2xl:text-3xl">Balanced Nutrition</h3>
-            <p className="mt-12">
+            <SubHeading>
+              Balanced Nutrition
+            </SubHeading>
+            <p className="mt-12 max-w-md">
               Nourish your body with intention. At the heart of vibrant health is a relationship with food that is joyful, balanced, and deeply supportive. Our approach centers on whole, nutrient-rich foods—colourful fruits and vegetables, healthful proteins, whole grains, and healthful fats—chosen not through restriction, but through care.
             </p>
-            <p className="mt-12">
+            <p className="mt-12 max-w-md">
               These mindful choices replenish energy, reduce inflammation, and help protect against chronic conditions such as cardiovascular disease and metabolic dysfunction. With personalized guidance, we help you reconnect with the innate wisdom of eating well—fueling vitality from within.
             </p>
           </div>
@@ -199,12 +252,12 @@ export default function ServiceLifestyleContent({
       </section>
 
       <section className="bg-white py-16 text-primary md:py-24 flex justify-center items-center">
-        <div className="flex flex-row w-full max-w-5xl">
-          <div className="flex-1">
-            <h2 className="text-xl md:text-4xl 2xl:text-5xl">
+        <div className="container flex flex-row items-center justify-center w-full">
+          <div className="flex-1 max-w-xl">
+            <SubHeading>
               What Makes Our Program Unique?
-            </h2>
-            <ul className="list-disc list-inside mt-12">
+            </SubHeading>
+            <ul className="list-disc list-inside mt-12 pr-8">
               <li>
                 Overseen by a team of healthcare professionals, including doctors, therapists, and nutrition experts—so it’s both safe and effective.
               </li>
@@ -226,7 +279,7 @@ export default function ServiceLifestyleContent({
             </ul>
           </div>
 
-          <div className="flex-1">
+          <div className="">
             <div className="size-96 bg-gray-200">
             </div>
           </div>
@@ -234,15 +287,15 @@ export default function ServiceLifestyleContent({
       </section>
 
       <section className="bg-white py-16 text-primary md:py-24">
-        <div className="container flex flex-col gap-y-12">
-          <h2 className="text-xl md:text-4xl 2xl:text-5xl text-center">
+        <div className="container flex flex-col gap-y-14">
+          <SubHeading className="text-center">
             Additional Benefits
-          </h2>
-          <div className="grid grid-cols-3 gap-1 w-full max-w-2xl mx-auto">
+          </SubHeading>
+          <div className="grid grid-cols-3 gap-1 w-full mx-auto px-12">
             {additionalBenefits.map((benefit) => {
               return (
-                <div className="flex bg-gray-200 w-full min-h-80 p-6 items-end">
-                  <h3 className="text-lg xl:text-xl">
+                <div key={benefit.title} className="flex bg-gray-600 w-full min-h-80 p-6 items-end">
+                  <h3 className="text-lg xl:text-3xl text-white">
                     {benefit.title}
                   </h3>
                 </div>
@@ -252,7 +305,7 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-      <section className="bg-platinum">
+      <section className="bg-platinum text-primary py-16 md:py-24">
         <div className="container flex flex-col items-center gap-7 py-14 md:gap-16 md:py-16 2xl:gap-20 2xl:py-24">
           {/* <Image
             src={"/images/curate-lifestyle/curate-lifestyle-quote.png"}
@@ -261,37 +314,203 @@ export default function ServiceLifestyleContent({
             height={134}
             className="size-16 object-contain md:size-20 2xl:size-40"
           /> */}
-          [Quote Image]
-          <p className="max-w-[80ch] text-balance text-center text-xl font-light italic text-primary md:text-3xl 2xl:max-w-5xl 2xl:text-4xl">
+          <LargeText className="text-center italic max-w-2xl">
             Canada’s only Lifestyle Medicine clinic with a triple-certified Gastroenterologist, Internal Medicine and Lifestyle Medicine Doctor — reversing disease from the inside out.
-          </p>
+          </LargeText>
+        </div>
+      </section>
+
+      <section className="bg-white text-primary py-16 md:py-24">
+        <div className="container flex flex-col items-center gap-y-10">
+          <div className="grid grid-cols-1 gap-4 py-20 md:grid-cols-2 lg:grid-cols-3">
+            <SubHeading className="md:col-span-2 lg:col-span-3 pb-6">
+              Meet Your Team
+            </SubHeading>
+            {teamMembers?.map((teamMember) => (
+              <Card key={teamMember.name} className="flex flex-col rounded-none">
+                <div className="h-[300px]">
+                  {/* <Image
+                  className="h-full w-full object-cover"
+                  src={teamMember.image?.asset?.url ?? ""}
+                  alt={teamMember.name ?? ""}
+                  width={400}
+                  height={400}
+                /> */}
+                  <div className="size-96 bg-gray-200"></div>
+                </div>
+                <CardHeader className="flex-1">
+                  <CardTitle className="font-light not-italic">
+                    {teamMember.name}
+                  </CardTitle>
+                  <CardDescription>
+                    <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
+                      <PortableText value={teamMember.role!} />
+                    </div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="item-1" className="border-none">
+                      <AccordionTrigger>Learn More</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="prose">
+                          <PortableText value={teamMember.bio!} />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="bg-white py-16 text-primary md:py-24">
-        Meet Your Team
+        <div className="container flex flex-row gap-x-12">
+          <div className="size-96 bg-gray-200 flex-1">Image</div>
+          <div className="flex flex-col gap-y-8 flex-1">
+            <Heading>
+              How to Join
+            </Heading>
+            <div className="flex flex-col gap-y-12 mt-8 max-w-lg">
+              <div className="flex flex-col gap-y-6">
+                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
+                  1. Speak with Your Physician
+                </h3>
+                <p>
+                  Ask your family doctor or any medical doctor on your care team for a referral to our Curate Lifestyle Program. Your doctor can use our [Referral Form] for convenience.
+                </p>
+              </div>
+              <div className="flex flex-col gap-y-6">
+                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
+                  2. Send the Referral
+                </h3>
+                <p>
+                  Have the referral faxed directly to us at 416-900-3311.
+                </p>
+              </div>
+              <div className="flex flex-col gap-y-6">
+                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
+                  3. We’ll Take it From There
+                </h3>
+                <p>
+                  Once received, our team will review your referral and contact you to ask screening questions and to schedule your initial consultation if this program is the right fit for you!                </p>
+              </div>
+              <div className="flex flex-col gap-y-6">
+                <p>
+                  No referral yet? Let us know—our team can help guide you through options on joining the program without a doctor's referral.
+                </p>
+
+                <p>
+                  Questions? We’re here to support you. Feel free to reach out to our front desk for assistance at 416-900-3311 or hello@curatehealth.ca.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <section className="bg-platinum py-16 text-primary md:py-24">
+        <div className="container flex flex-col items-center gap-y-10">
+          <Heading>
+            Program Timeline
+          </Heading>
+        </div>
       </section>
 
       <section className="bg-white py-16 text-primary md:py-24">
-        How to Join
+        <div className="container mx-auto space-y-12 2xl:px-12">
+          <SubHeading>
+            Frequently Asked Questions
+          </SubHeading>
+          <Accordion type="multiple">
+            <AccordionItem value="item-1" className="border-b-2 border-b-gray-500">
+              <AccordionTrigger className="py-6">
+                <h4 className="text-lg 2xl:text-xl font-light italic">
+                  Who is this program for?
+                </h4>
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="list-disc list-inside text-base pb-6">
+                  <li>
+                    Anyone seeking a proactive, sustainable path to better health
+                  </li>
+                  <li>
+                    Those managing chronic conditions as listed in the above section [link] (e.g., Type 2 diabetes, hypertension, metabolic syndrome, fatty liver disease, etc)
+                  </li>
+                  <li>
+                    Individuals wishing to reduce medication use or avoid more invasive treatments
+                  </li>
+                  <li>
+                    Anyone ready to commit to small, meaningful lifestyle changes with professional and community support
+                  </li>
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-2" className="border-b-2 border-b-gray-500">
+              <AccordionTrigger className="py-6">
+                <h4 className="text-lg 2xl:text-xl font-light italic">
+                  How does the program work?
+                </h4>
+              </AccordionTrigger>
+              <AccordionContent>
+                <ol className="list-decimal list-inside text-base pb-6">
+                  <li>
+                    Referral: Requires a referral from your family physician or medical care team.
+                    <li>
+                      Assessment Visits: Includes consultations with an ND or DC and MD, personalized body composition analysis, diagnostic testing, and goal-setting.
+                    </li>
+                    <li>
+                      Ongoing Support: Monthly check-ins, body composition updates, and collaborative care from a multidisciplinary team (coaches, chefs, therapists, trainers).
+                    </li>
+                    <li>
+                      Group Learning: Weekly small-group sessions (6–15 people) featuring interactive education, Q&A, and practical demos.
+                    </li>
+                    <li>
+                      Holistic Care Model: Access to a broad professional team—Physicians, Naturopaths, Chiropractors, Psychotherapists, Yoga Instructors, Chefs and more—all collaborating to support your journey.
+                    </li>
+                  </li>
+                  <li>
+                    Follow-up Visits: 30-45 minutes
+                  </li>
+                </ol>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       </section>
 
-      <section className="bg-white py-16 text-primary md:py-24">
-        Program Timeline
+      <section className="bg-white py-16 text-primary md:py-32">
+        <div className="container mx-auto space-y-12">
+          <SubHeading className="text-center">
+            Doctor Testimonials
+          </SubHeading>
+          <div className="grid grid-cols-3 gap-4 max-w-screen-xl mx-auto mt-12">
+            <div className="flex flex-col items-center gap-y-6">
+              <div className="size-64 bg-gray-200 rounded-full"></div>
+              <p className="text-center max-w-72">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+              </p>
+            </div>
+            <div className="flex flex-col items-center gap-y-6">
+              <div className="size-64 bg-gray-200 rounded-full"></div>
+              <p className="text-center max-w-72">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+              </p>
+            </div>
+            <div className="flex flex-col items-center gap-y-6">
+              <div className="size-64 bg-gray-200 rounded-full"></div>
+              <p className="text-center max-w-72">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="bg-white py-16 text-primary md:py-24">
-        Frequently Asked Questions
-      </section>
-
-      <section className="bg-white py-16 text-primary md:py-24">
-        Doctor Testimonials
-      </section>
-
-      <section className="bg-white py-16 text-primary md:py-24">
-      </section>
       <section className={`relative h-full md:h-[calc(100vh-100px)]`}>
-        [CTA Image]
         {/* <Image
           loading="lazy"
           src={ctaSection?.ctaSectionImage?.image || ""}
@@ -303,9 +522,9 @@ export default function ServiceLifestyleContent({
         <div className="absolute inset-0 mx-auto flex max-w-xs flex-col items-center justify-center md:max-w-xl 2xl:max-w-7xl">
           <div className="flex flex-col gap-8 bg-secondary p-8 text-white md:items-center md:justify-center md:gap-12 md:p-16">
             <div className="space-y-4 px-4">
-              <h6 className="text-balance text-lg capitalize md:text-center md:text-3xl 2xl:text-4xl">
+              <LargeText className="text-light max-w-lg text-center mx-auto">
                 Be Among the First to Experience Lifestyle Medicine at Curate Health
-              </h6>
+              </LargeText>
               <p className="max-w-[80ch] text-pretty text-sm font-light md:text-center md:text-base">
                 We’re launching June 14th 2025, with discounted spots for the first 12 participants. You’ll be contacted by our team for intake once enrollment opens.
               </p>

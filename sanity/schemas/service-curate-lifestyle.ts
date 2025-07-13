@@ -150,6 +150,39 @@ export default defineType({
       type: "image",
     }),
 
+
+    defineField({
+      name: "benefits",
+      title: "Additional Benefits",
+      type: "array",
+      of: [
+        {
+          name: "benefit",
+          title: "Benefit",
+          type: "object",
+          fields: [
+            {
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required().error("A title is required"),
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "blockContent",
+              validation: (Rule) => Rule.required().error("A description is required"),
+            },
+            {
+              name: "image",
+              title: "Image",
+              type: "image",
+            }
+          ]
+        },
+      ]
+    }),
+
     defineField({
       name: "block_7_image",
       title: "Block 7 Image",
@@ -160,6 +193,34 @@ export default defineType({
       name: "block_9_image",
       title: "Block 9 Image",
       type: "image",
+    }),
+
+
+    defineField({
+      name: "timeline",
+      title: "Program Timeline",
+      type: "array",
+      of: [
+        {
+          name: "timeline_item",
+          title: "Timeline Item",
+          type: "object",
+          fields: [
+            {
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required().error("A title is required"),
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "blockContent",
+              validation: (Rule) => Rule.required().error("A description is required"),
+            },
+          ]
+        },
+      ]
     }),
 
     defineField({

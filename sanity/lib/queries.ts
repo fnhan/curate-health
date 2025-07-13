@@ -178,8 +178,17 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
     block_3_content,
     "block_4_image": block_4_image.asset->url,
     "block_5_image": block_5_image.asset->url,
+    benefits[] {
+      title,
+      description,
+      "image": image.asset->url
+    },
     "block_7_image": block_7_image.asset->url,
     "block_9_image": block_9_image.asset->url,
+    timeline[] {
+      title,
+      description
+    },
     "block_11_image": block_11_image.asset->url,
     faq[] {
       title,

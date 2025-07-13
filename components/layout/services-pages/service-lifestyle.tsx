@@ -19,7 +19,7 @@ interface Treatment {
 
 const Heading = ({ children, className }: { children: React.ReactNode, className?: string }) => {
   return (
-    <h1 className={cn("text-xl md:text-4xl 2xl:text-6xl", className)}>{children}</h1>
+    <h1 className={cn("text-xl md:text-5xl 2xl:text-6xl", className)}>{children}</h1>
   );
 };
 
@@ -65,37 +65,15 @@ export default function ServiceLifestyleContent({
     block_3_content,
     block_4_image,
     block_5_image,
+    benefits,
     block_7_image,
     block_9_image,
+    timeline,
     block_11_image,
     faq,
   } = service;
 
   const treatments = service.treatments as Treatment[];
-
-  const conditions = [
-    {
-      title: "Cardiovascular Health",
-    },
-    {
-      title: "Mental & Cognitive Health",
-    },
-    {
-      title: "Population Specific Benefits",
-    },
-  ];
-
-  const additionalBenefits = [
-    {
-      title: "Sustain Energy Naturally",
-    },
-    {
-      title: "Sleep Deeply, Wake Rested",
-    },
-    {
-      title: "Sharpen Focus & Balance Mood",
-    },
-  ];
 
   const teamMembers: Array<{
     name: string;
@@ -215,10 +193,15 @@ export default function ServiceLifestyleContent({
           <div className="grid grid-cols-3 gap-y-6 gap-x-8 w-full">
             {block_3_content?.map((condition) => {
               return (
-                <div key={condition.title} className="border border-primary flex items-center py-3 justify-center text-center">
-                  <h3 className="text-lg xl:text-xl">
+                <div key={condition.title} className="border border-primary flex flex-col items-center py-3 group relative">
+                  <h3 className="text-lg xl:text-xl text-center">
                     {condition.title}
                   </h3>
+                  <div className="absolute top-full -left-[1px] -right-[1px] bg-white border border-primary border-t-0 z-10 opacity-0 invisible transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:visible">
+                    <div className="text-pretty font-light w-full px-2 prose">
+                      <PortableText value={condition.description!} />
+                    </div>
+                  </div>
                 </div>
               );
             })}
@@ -277,7 +260,7 @@ export default function ServiceLifestyleContent({
                   Overseen by a team of healthcare professionals, including doctors, therapists, and nutrition experts—so it’s both safe and effective.
                 </li>
                 <li>
-                  Receive expert care from Canada’s only clinic with a doctor triple-certified in Internal Medicine, Gastroenterology/Hepatology, and Lifestyle Medicine.
+                  Receive expert care from Canada&apos;s only clinic with a doctor triple-certified in Internal Medicine, Gastroenterology/Hepatology, and Lifestyle Medicine.
                 </li>
                 <li>
                   Covered by OHIP and most health benefit programs
@@ -305,12 +288,27 @@ export default function ServiceLifestyleContent({
             Additional Benefits
           </SubHeading>
           <div className="grid grid-cols-3 gap-1 w-full mx-auto px-12">
-            {additionalBenefits.map((benefit) => {
+            {benefits?.map((benefit) => {
               return (
-                <div key={benefit.title} className="flex bg-gray-600 w-full min-h-80 p-6 items-end">
-                  <h3 className="text-lg xl:text-3xl text-white">
-                    {benefit.title}
-                  </h3>
+                <div
+                  key={benefit.title}
+                  className="flex flex-col gap-y-4 w-full min-h-80 p-6 justify-end relative overflow-hidden group cursor-pointer transition-all duration-300"
+                  style={{
+                    backgroundImage: benefit.image ? `url(${benefit.image})` : undefined,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                  }}
+                >
+                  <div className="absolute inset-0 bg-black bg-opacity-50 transition-all duration-300 group-hover:bg-opacity-70"></div>
+                  <div className="relative z-10">
+                    <h3 className="text-lg xl:text-3xl text-white">
+                      {benefit.title}
+                    </h3>
+                    <div className="text-white text-pretty font-light max-h-0 overflow-hidden transition-all duration-300 group-hover:max-h-96">
+                      <PortableText value={benefit.description!} />
+                    </div>
+                  </div>
                 </div>
               );
             })}
@@ -320,15 +318,18 @@ export default function ServiceLifestyleContent({
 
       <section className="bg-platinum text-primary py-16 md:py-24">
         <div className="container flex flex-col items-center gap-4 md:gap-8 md:py-8">
-          <Image
-            src={block_7_image!}
-            alt={"Curate Lifestyle Quote"}
-            width={160}
-            height={134}
-            className="size-16 object-contain md:size-20 2xl:size-40"
-          />
+          <div className="size-32">
+            <Image
+              src={block_7_image!}
+              alt={"Curate Lifestyle Quote"}
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="object-cover w-full h-auto"
+            />
+          </div>
           <LargeText className="text-center italic max-w-2xl">
-            Canada’s only Lifestyle Medicine clinic with a triple-certified Gastroenterologist, Internal Medicine and Lifestyle Medicine Doctor — reversing disease from the inside out.
+            Canada&apos;s only Lifestyle Medicine clinic with a triple-certified Gastroenterologist, Internal Medicine and Lifestyle Medicine Doctor — reversing disease from the inside out.
           </LargeText>
         </div>
       </section>
@@ -414,7 +415,7 @@ export default function ServiceLifestyleContent({
               </div>
               <div className="flex flex-col gap-y-6">
                 <h3 className="text-xl md:text-2xl 2xl:text-3xl">
-                  3. We’ll Take it From There
+                  3. We&apos;ll Take it From There
                 </h3>
                 <p>
                   Once received, our team will review your referral and contact you to ask screening questions and to schedule your initial consultation if this program is the right fit for you!                </p>
@@ -425,7 +426,7 @@ export default function ServiceLifestyleContent({
                 </p>
 
                 <p>
-                  Questions? We’re here to support you. Feel free to reach out to our front desk for assistance at 416-900-3311 or hello@curatehealth.ca.
+                  Questions? We&apos;re here to support you. Feel free to reach out to our front desk for assistance at 416-900-3311 or hello@curatehealth.ca.
                 </p>
               </div>
             </div>
@@ -434,11 +435,26 @@ export default function ServiceLifestyleContent({
 
       </section>
 
-      <section className="bg-platinum py-16 text-primary md:py-24">
-        <div className="container flex flex-col items-center gap-y-10">
+      <section className="bg-platinum py-16 text-primary md:py-24 lg:py-32">
+        <div className="container flex flex-col items-center gap-y-20">
           <Heading>
             Program Timeline
           </Heading>
+          <div className="grid grid-cols-1 gap-x-4 gap-y-20 md:grid-cols-2 lg:grid-cols-3 w-full text-center lg:px-12">
+            {timeline?.map((timeline_item) => {
+              return (
+                <div className="flex flex-col gap-y-1 items-center max-w-sm mx-auto">
+                  <div className="size-32 bg-white rounded-full mb-4 border border-[#878E76]"></div>
+                  <h3 className="text-lg font-light italic text-pretty">
+                    {timeline_item.title}
+                  </h3>
+                  <div className="text-pretty font-light text-base">
+                    <PortableText value={timeline_item.description!} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

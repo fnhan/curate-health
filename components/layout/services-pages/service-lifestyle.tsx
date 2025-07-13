@@ -63,6 +63,12 @@ export default function ServiceLifestyleContent({
     block_2_image,
     block_3_title,
     block_3_content,
+    block_4_image,
+    block_5_image,
+    block_7_image,
+    block_9_image,
+    block_11_image,
+    faq,
   } = service;
 
   const treatments = service.treatments as Treatment[];
@@ -234,8 +240,13 @@ export default function ServiceLifestyleContent({
         </div>
         <div className="flex flex-row gap-6">
           <div className="flex-1 flex justify-end items-center">
-            <div className="size-96 bg-gray-200">
-            </div>
+            <Image
+              src={block_4_image!}
+              alt=""
+              width={545}
+              height={545}
+              className="size-96 object-contain"
+            />
           </div>
           <div className="flex-1 p-12">
             <SubHeading>
@@ -251,37 +262,39 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-      <section className="bg-white py-16 text-primary md:py-24 flex justify-center items-center">
-        <div className="container flex flex-row items-center justify-center w-full">
-          <div className="flex-1 max-w-xl">
-            <SubHeading>
-              What Makes Our Program Unique?
-            </SubHeading>
-            <ul className="list-disc list-inside mt-12 pr-8">
-              <li>
-                Overseen by a team of healthcare professionals, including doctors, therapists, and nutrition experts—so it’s both safe and effective.
-              </li>
-              <li>
-                Receive expert care from Canada’s only clinic with a doctor triple-certified in Internal Medicine, Gastroenterology/Hepatology, and Lifestyle Medicine.
-              </li>
-              <li>
-                Covered by OHIP and most health benefit programs
-              </li>
-              <li>
-                Flexible to participate in-person or online, although we do encourage in-person
-              </li>
-              <li>
-                Participate in small intimate group sessions (6-15 people) to learn, ask our doctors questions, and interact with program peers.
-              </li>
-              <li>
-                Canada's only interdisciplinary approach to Lifestyle Medicine, with a core MD/ND team.
-              </li>
-            </ul>
-          </div>
-
-          <div className="">
-            <div className="size-96 bg-gray-200">
+      <section
+        className="bg-white py-24 text-primary md:py-40 flex justify-center items-center relative bg-cover bg-center bg-no-repeat overflow-hidden"
+      >
+        <div className="absolute inset-0 pointer-events-none z-0" style={{ transform: 'scaleX(-1) translate(0, -15%)', backgroundImage: `url(${block_5_image!})`, backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: 1 }}></div>
+        <div className="container flex flex-row items-center justify-center w-full relative z-20">
+          <div className="flex-1 flex justify-end">
+            <div className="max-w-xl">
+              <SubHeading>
+                What Makes Our Program Unique?
+              </SubHeading>
+              <ul className="list-disc list-inside mt-12 pr-8">
+                <li>
+                  Overseen by a team of healthcare professionals, including doctors, therapists, and nutrition experts—so it’s both safe and effective.
+                </li>
+                <li>
+                  Receive expert care from Canada’s only clinic with a doctor triple-certified in Internal Medicine, Gastroenterology/Hepatology, and Lifestyle Medicine.
+                </li>
+                <li>
+                  Covered by OHIP and most health benefit programs
+                </li>
+                <li>
+                  Flexible to participate in-person or online, although we do encourage in-person
+                </li>
+                <li>
+                  Participate in small intimate group sessions (6-15 people) to learn, ask our doctors questions, and interact with program peers.
+                </li>
+                <li>
+                  Canada's only interdisciplinary approach to Lifestyle Medicine, with a core MD/ND team.
+                </li>
+              </ul>
             </div>
+          </div>
+          <div className="flex-1">
           </div>
         </div>
       </section>
@@ -306,14 +319,14 @@ export default function ServiceLifestyleContent({
       </section>
 
       <section className="bg-platinum text-primary py-16 md:py-24">
-        <div className="container flex flex-col items-center gap-7 py-14 md:gap-16 md:py-16 2xl:gap-20 2xl:py-24">
-          {/* <Image
-            src={"/images/curate-lifestyle/curate-lifestyle-quote.png"}
+        <div className="container flex flex-col items-center gap-4 md:gap-8 md:py-8">
+          <Image
+            src={block_7_image!}
             alt={"Curate Lifestyle Quote"}
             width={160}
             height={134}
             className="size-16 object-contain md:size-20 2xl:size-40"
-          /> */}
+          />
           <LargeText className="text-center italic max-w-2xl">
             Canada’s only Lifestyle Medicine clinic with a triple-certified Gastroenterologist, Internal Medicine and Lifestyle Medicine Doctor — reversing disease from the inside out.
           </LargeText>
@@ -366,10 +379,19 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-      <section className="bg-white py-16 text-primary md:py-24">
-        <div className="container flex flex-row gap-x-12">
-          <div className="size-96 bg-gray-200 flex-1">Image</div>
-          <div className="flex flex-col gap-y-8 flex-1">
+      <section className="bg-white text-primary">
+        <div className="container flex flex-row gap-x-12 items-end">
+          <div className="flex-1">
+            <Image
+              src={block_9_image!}
+              alt={"How to Join"}
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="object-cover w-full h-auto"
+            />
+          </div>
+          <div className="flex flex-col gap-y-8 flex-1 pb-24">
             <Heading>
               How to Join
             </Heading>
@@ -426,58 +448,20 @@ export default function ServiceLifestyleContent({
             Frequently Asked Questions
           </SubHeading>
           <Accordion type="multiple">
-            <AccordionItem value="item-1" className="border-b-2 border-b-gray-500">
-              <AccordionTrigger className="py-6">
-                <h4 className="text-lg 2xl:text-xl font-light italic">
-                  Who is this program for?
-                </h4>
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="list-disc list-inside text-base pb-6">
-                  <li>
-                    Anyone seeking a proactive, sustainable path to better health
-                  </li>
-                  <li>
-                    Those managing chronic conditions as listed in the above section [link] (e.g., Type 2 diabetes, hypertension, metabolic syndrome, fatty liver disease, etc)
-                  </li>
-                  <li>
-                    Individuals wishing to reduce medication use or avoid more invasive treatments
-                  </li>
-                  <li>
-                    Anyone ready to commit to small, meaningful lifestyle changes with professional and community support
-                  </li>
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2" className="border-b-2 border-b-gray-500">
-              <AccordionTrigger className="py-6">
-                <h4 className="text-lg 2xl:text-xl font-light italic">
-                  How does the program work?
-                </h4>
-              </AccordionTrigger>
-              <AccordionContent>
-                <ol className="list-decimal list-inside text-base pb-6">
-                  <li>
-                    Referral: Requires a referral from your family physician or medical care team.
-                    <li>
-                      Assessment Visits: Includes consultations with an ND or DC and MD, personalized body composition analysis, diagnostic testing, and goal-setting.
-                    </li>
-                    <li>
-                      Ongoing Support: Monthly check-ins, body composition updates, and collaborative care from a multidisciplinary team (coaches, chefs, therapists, trainers).
-                    </li>
-                    <li>
-                      Group Learning: Weekly small-group sessions (6–15 people) featuring interactive education, Q&A, and practical demos.
-                    </li>
-                    <li>
-                      Holistic Care Model: Access to a broad professional team—Physicians, Naturopaths, Chiropractors, Psychotherapists, Yoga Instructors, Chefs and more—all collaborating to support your journey.
-                    </li>
-                  </li>
-                  <li>
-                    Follow-up Visits: 30-45 minutes
-                  </li>
-                </ol>
-              </AccordionContent>
-            </AccordionItem>
+            {faq?.map((faq, index) => {
+              return (
+                <AccordionItem value={`item-${index}`} className="border-b-2 border-b-gray-500">
+                  <AccordionTrigger className="py-6">
+                    <h4 className="text-lg 2xl:text-xl font-light italic">
+                      {faq.title}
+                    </h4>
+                  </AccordionTrigger>
+                  <AccordionContent className="prose">
+                    <PortableText value={faq.description!} />
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
           </Accordion>
         </div>
       </section>
@@ -510,15 +494,12 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-      <section className={`relative h-full md:h-[calc(100vh-100px)]`}>
-        {/* <Image
-          loading="lazy"
-          src={ctaSection?.ctaSectionImage?.image || ""}
-          alt={ctaSection?.ctaSectionImage?.alt || ""}
-          width={1440}
-          height={1040}
-          className="h-full w-full object-cover"
-        /> */}
+      <section
+        className={`relative h-full md:h-[calc(100vh-100px)] bg-cover bg-center bg-no-repeat`}
+        style={{
+          backgroundImage: `url(${block_11_image})`
+        }}
+      >
         <div className="absolute inset-0 mx-auto flex max-w-xs flex-col items-center justify-center md:max-w-xl 2xl:max-w-7xl">
           <div className="flex flex-col gap-8 bg-secondary p-8 text-white md:items-center md:justify-center md:gap-12 md:p-16">
             <div className="space-y-4 px-4">

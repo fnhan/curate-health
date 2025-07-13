@@ -137,6 +137,64 @@ export default defineType({
       ]
     }),
 
+
+    defineField({
+      name: "block_4_image",
+      title: "Block 4 Image",
+      type: "image",
+    }),
+
+    defineField({
+      name: "block_5_image",
+      title: "Block 5 Image",
+      type: "image",
+    }),
+
+    defineField({
+      name: "block_7_image",
+      title: "Block 7 Image",
+      type: "image",
+    }),
+
+    defineField({
+      name: "block_9_image",
+      title: "Block 9 Image",
+      type: "image",
+    }),
+
+    defineField({
+      name: "block_11_image",
+      title: "Block 11 Image",
+      type: "image",
+    }),
+
+
+    defineField({
+      name: "faq",
+      title: "FAQ",
+      type: "array",
+      of: [
+        {
+          name: "question",
+          title: "Question",
+          type: "object",
+          fields: [
+            {
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required().error("A title is required"),
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "blockContent",
+              validation: (Rule) => Rule.required().error("A description is required"),
+            },
+          ]
+        },
+      ]
+    }),
     ///////
 
     defineField({

@@ -174,11 +174,11 @@ export default function ServiceLifestyleContent({
         }}
       >
         <div className="container">
-          <div className="flex flex-col gap-y-10 relative z-10 max-w-2xl">
+          <div className="flex flex-col gap-y-10 relative z-10 max-w-xl">
             <SubHeading>
               {block_2_title}
             </SubHeading>
-            <div className="text-pretty font-light">
+            <div className="text-pretty font-light max-w-xl">
               <PortableText value={block_2_content!} />
             </div>
           </div>

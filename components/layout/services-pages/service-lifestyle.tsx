@@ -341,7 +341,7 @@ export default function ServiceLifestyleContent({
               Meet Your Team
             </SubHeading>
             {teamMembers?.map((teamMember) => (
-              <Card key={teamMember.name} className="flex flex-col rounded-none">
+              <Card key={teamMember.name} className="flex flex-col rounded-none h-full">
                 <div className="h-[300px]">
                   {/* <Image
                   className="h-full w-full object-cover"
@@ -361,11 +361,11 @@ export default function ServiceLifestyleContent({
                     </div>
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="relative">
                   <Accordion type="single" collapsible>
                     <AccordionItem value="item-1" className="border-none">
                       <AccordionTrigger>Learn More</AccordionTrigger>
-                      <AccordionContent>
+                      <AccordionContent className="absolute top-[calc(100%-10px)] -left-[1px] -right-[1px] z-10 bg-white border border-t-0 border-gray-200 shadow-lg px-4 pb-4">
                         <div className="prose">
                           <PortableText value={teamMember.bio!} />
                         </div>

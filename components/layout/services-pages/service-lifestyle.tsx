@@ -255,7 +255,7 @@ export default function ServiceLifestyleContent({
               <SubHeading>
                 What Makes Our Program Unique?
               </SubHeading>
-              <ul className="list-disc list-inside mt-12 pr-8">
+              <ul className="list-disc ml-4 mt-10 pr-8 leading-7 text-pretty font-light">
                 <li>
                   Overseen by a team of healthcare professionals, including doctors, therapists, and nutrition experts—so it’s both safe and effective.
                 </li>

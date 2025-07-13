@@ -437,14 +437,14 @@ export default function ServiceLifestyleContent({
 
       <section className="bg-platinum py-16 text-primary md:py-24 lg:py-32">
         <div className="container flex flex-col items-center gap-y-20">
-          <Heading>
+          <Heading className="font-light">
             Program Timeline
           </Heading>
           <div className="grid grid-cols-1 gap-x-4 gap-y-20 md:grid-cols-2 lg:grid-cols-3 w-full text-center lg:px-12">
             {timeline?.map((timeline_item) => {
               return (
                 <div className="flex flex-col gap-y-1 items-center max-w-sm mx-auto">
-                  <div className="size-32 bg-white rounded-full mb-4 border border-[#878E76]"></div>
+                  <div className="size-40 bg-white rounded-full mb-4 border border-[#878E76]"></div>
                   <h3 className="text-lg font-light italic text-pretty">
                     {timeline_item.title}
                   </h3>
@@ -481,7 +481,7 @@ export default function ServiceLifestyleContent({
           </Accordion>
         </div>
       </section>
-
+      {/* 
       <section className="bg-white py-16 text-primary md:py-32">
         <div className="container mx-auto space-y-12">
           <SubHeading className="text-center">
@@ -508,7 +508,7 @@ export default function ServiceLifestyleContent({
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section
         className={`relative h-full md:h-[calc(100vh-100px)] bg-cover bg-center bg-no-repeat`}

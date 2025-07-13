@@ -190,7 +190,7 @@ export default function ServiceLifestyleContent({
           <SubHeading>
             {block_3_title}
           </SubHeading>
-          <div className="grid grid-cols-3 gap-y-6 gap-x-8 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8 w-full">
             {block_3_content?.map((condition) => {
               return (
                 <div key={condition.title} className="border border-primary flex flex-col items-center py-3 group relative">
@@ -221,8 +221,8 @@ export default function ServiceLifestyleContent({
             Evidence-based strategies for preventing, treating, and even reversing chronic diseases through sustainable lifestyle changes.
           </LargeText>
         </div>
-        <div className="flex flex-row gap-6">
-          <div className="flex-1 flex justify-end items-center">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1 flex justify-end items-center px-6 md:p-0">
             <Image
               src={block_4_image!}
               alt=""
@@ -248,8 +248,8 @@ export default function ServiceLifestyleContent({
       <section
         className="bg-white py-24 text-primary md:py-40 flex justify-center items-center relative bg-cover bg-center bg-no-repeat overflow-hidden"
       >
-        <div className="absolute inset-0 pointer-events-none z-0" style={{ transform: 'scaleX(-1) translate(0, -15%)', backgroundImage: `url(${block_5_image!})`, backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: 1 }}></div>
-        <div className="container flex flex-row items-center justify-center w-full relative z-20">
+        <div className="absolute inset-0 pointer-events-none z-0 hidden md:block" style={{ transform: 'scaleX(-1) translate(0, -15%)', backgroundImage: `url(${block_5_image!})`, backgroundSize: 'contain', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: 1 }}></div>
+        <div className="container flex flex-col md:flex-row items-center justify-center w-full relative z-20">
           <div className="flex-1 flex justify-end">
             <div className="max-w-xl">
               <SubHeading>
@@ -287,7 +287,7 @@ export default function ServiceLifestyleContent({
           <SubHeading className="text-center">
             Additional Benefits
           </SubHeading>
-          <div className="grid grid-cols-3 gap-1 w-full mx-auto px-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 w-full mx-auto md:px-12">
             {benefits?.map((benefit) => {
               return (
                 <div
@@ -318,7 +318,7 @@ export default function ServiceLifestyleContent({
 
       <section className="bg-platinum text-primary py-16 md:py-24">
         <div className="container flex flex-col items-center gap-4 md:gap-8 md:py-8">
-          <div className="size-32">
+          <div className="size-20 md:size-32">
             <Image
               src={block_7_image!}
               alt={"Curate Lifestyle Quote"}
@@ -336,7 +336,7 @@ export default function ServiceLifestyleContent({
 
       <section className="bg-white text-primary py-16 md:py-24">
         <div className="container flex flex-col items-center gap-y-10">
-          <div className="grid grid-cols-1 gap-4 py-20 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 py-20 md:grid-cols-2 lg:grid-cols-3 w-full">
             <SubHeading className="md:col-span-2 lg:col-span-3 pb-6">
               Meet Your Team
             </SubHeading>
@@ -350,7 +350,6 @@ export default function ServiceLifestyleContent({
                   width={400}
                   height={400}
                 /> */}
-                  <div className="size-96 bg-gray-200"></div>
                 </div>
                 <CardHeader className="flex-1">
                   <CardTitle className="font-light not-italic">
@@ -381,7 +380,7 @@ export default function ServiceLifestyleContent({
       </section>
 
       <section className="bg-white text-primary">
-        <div className="container flex flex-row gap-x-12 items-end">
+        <div className="container flex flex-col md:flex-row gap-x-12 items-end">
           <div className="flex-1">
             <Image
               src={block_9_image!}
@@ -443,7 +442,7 @@ export default function ServiceLifestyleContent({
           <div className="grid grid-cols-1 gap-x-4 gap-y-20 md:grid-cols-2 lg:grid-cols-3 w-full text-center lg:px-12">
             {timeline?.map((timeline_item) => {
               return (
-                <div className="flex flex-col gap-y-1 items-center max-w-sm mx-auto">
+                <div className="flex flex-col gap-y-1 items-center max-w-sm mx-auto" key={timeline_item.title}>
                   <div className="size-40 bg-white rounded-full mb-4 border border-[#878E76]"></div>
                   <h3 className="text-lg font-light italic text-pretty">
                     {timeline_item.title}
@@ -466,9 +465,9 @@ export default function ServiceLifestyleContent({
           <Accordion type="multiple">
             {faq?.map((faq, index) => {
               return (
-                <AccordionItem value={`item-${index}`} className="border-b-2 border-b-gray-500">
+                <AccordionItem value={`item-${index}`} className="border-b-2 border-b-gray-500" key={faq.title}>
                   <AccordionTrigger className="py-6">
-                    <h4 className="text-lg 2xl:text-xl font-light italic">
+                    <h4 className="text-lg xl:text-xl text-left font-light italic">
                       {faq.title}
                     </h4>
                   </AccordionTrigger>
@@ -511,32 +510,34 @@ export default function ServiceLifestyleContent({
       </section> */}
 
       <section
-        className={`relative h-full md:h-[calc(100vh-100px)] bg-cover bg-center bg-no-repeat`}
+        className={`relative min-h-screen bg-cover bg-center bg-no-repeat py-8 md:h-[calc(100vh-100px)] md:py-0`}
         style={{
           backgroundImage: `url(${block_11_image})`
         }}
       >
-        <div className="absolute inset-0 mx-auto flex max-w-xs flex-col items-center justify-center md:max-w-xl 2xl:max-w-7xl">
-          <div className="flex flex-col gap-8 bg-secondary p-8 text-white md:items-center md:justify-center md:gap-12 md:p-16">
-            <div className="space-y-4 px-4">
-              <LargeText className="text-light max-w-lg text-center mx-auto">
-                Be Among the First to Experience Lifestyle Medicine at Curate Health
-              </LargeText>
-              <p className="max-w-[80ch] text-pretty text-sm font-light md:text-center md:text-base">
-                We’re launching June 14th 2025, with discounted spots for the first 12 participants. You’ll be contacted by our team for intake once enrollment opens.
+        <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8">
+          <div className="w-full max-w-xs md:max-w-xl 2xl:max-w-7xl">
+            <div className="flex flex-col gap-6 bg-secondary p-6 text-white md:items-center md:justify-center md:gap-12 md:p-16">
+              <div className="space-y-4 md:px-4">
+                <LargeText className="text-light max-w-lg text-center mx-auto text-base md:text-lg lg:text-2xl">
+                  Be Among the First to Experience Lifestyle Medicine at Curate Health
+                </LargeText>
+                <p className="max-w-[80ch] text-pretty text-sm font-light text-center md:text-base">
+                  We’re launching June 14th 2025, with discounted spots for the first 12 participants. You’ll be contacted by our team for intake once enrollment opens.
+                </p>
+              </div>
+              <Button
+                asChild
+                className="mx-auto w-full max-w-xs rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white md:w-fit"
+              >
+                <a target="_blank" href="">
+                  Join the Waitlist
+                </a>
+              </Button>
+              <p className="text-center text-sm md:text-base">
+                Want to refer a patient? Click Here
               </p>
             </div>
-            <Button
-              asChild
-              className="mx-auto w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
-            >
-              <a target="_blank" href="">
-                Join the Waitlist
-              </a>
-            </Button>
-            <p>
-              Want to refer a patient? Click Here
-            </p>
           </div>
         </div>
       </section>

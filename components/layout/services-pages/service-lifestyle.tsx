@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { PortableText, PortableTextBlock } from "@portabletext/react";
+import { PortableText } from "@portabletext/react";
 import { ArrowRightIcon } from "lucide-react";
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -71,54 +71,12 @@ export default function ServiceLifestyleContent({
     timeline,
     block_11_image,
     faq,
+    ourTeam,
   } = service;
 
+  const teamMembers = ourTeam?.teamMembers ?? [];
   const treatments = service.treatments as Treatment[];
 
-  const teamMembers: Array<{
-    name: string;
-    role: PortableTextBlock;
-    bio: PortableTextBlock;
-    image?: {
-      asset: {
-        url: string;
-      };
-    }
-  }> = [
-      {
-        name: "Dr. John Doe",
-        role: {
-          _type: "block",
-          children: [{ _type: "span", text: "Doctor" }],
-        },
-        bio: {
-          _type: "block",
-          children: [{ _type: "span", text: "Dr. John Doe is a doctor with a passion for lifestyle medicine." }],
-        },
-      },
-      {
-        name: "Dr. John Doe 2",
-        role: {
-          _type: "block",
-          children: [{ _type: "span", text: "Doctor" }],
-        },
-        bio: {
-          _type: "block",
-          children: [{ _type: "span", text: "Dr. John Doe is a doctor with a passion for lifestyle medicine." }],
-        },
-      },
-      {
-        name: "Dr. John Doe 3",
-        role: {
-          _type: "block",
-          children: [{ _type: "span", text: "Doctor" }],
-        },
-        bio: {
-          _type: "block",
-          children: [{ _type: "span", text: "Dr. John Doe is a doctor with a passion for lifestyle medicine." }],
-        },
-      },
-    ];
   return (
     <>
       <section className="bg-white py-16 text-primary md:py-24">
@@ -343,13 +301,14 @@ export default function ServiceLifestyleContent({
             {teamMembers?.map((teamMember) => (
               <Card key={teamMember.name} className="flex flex-col rounded-none h-full">
                 <div className="h-[300px]">
-                  {/* <Image
-                  className="h-full w-full object-cover"
-                  src={teamMember.image?.asset?.url ?? ""}
-                  alt={teamMember.name ?? ""}
-                  width={400}
-                  height={400}
-                /> */}
+                  <Image
+                    className="h-full w-full object-cover"
+                    src={teamMember.image?.asset?.url ?? ""}
+                    alt={teamMember.name ?? ""}
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                  />
                 </div>
                 <CardHeader className="flex-1">
                   <CardTitle className="font-light not-italic">

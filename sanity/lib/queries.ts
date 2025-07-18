@@ -884,6 +884,10 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
       title,
       description
     },
+    pillars[] {
+      title,
+      description
+    },
     ${SEO_QUERY},
     "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{
       teamMembers[] {

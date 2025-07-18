@@ -145,6 +145,33 @@ export default defineType({
     }),
 
     defineField({
+      name: "pillars",
+      title: "Pillars of Lifestyle Medicine",
+      type: "array",
+      of: [
+        {
+          name: "pillar",
+          title: "Pillar",
+          type: "object",
+          fields: [
+            {
+              name: "title",
+              title: "Title",
+              type: "string",
+              validation: (Rule) => Rule.required().error("A title is required"),
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "blockContent",
+              validation: (Rule) => Rule.required().error("A description is required"),
+            },
+          ]
+        },
+      ]
+    }),
+
+    defineField({
       name: "block_5_image",
       title: "Block 5 Image",
       type: "image",

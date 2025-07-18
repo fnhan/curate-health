@@ -4,12 +4,13 @@ import Link from "next/link";
 import { PortableText } from "@portabletext/react";
 import { ArrowRightIcon } from "lucide-react";
 
+import HoverLinkVariation from "@/components/shared/hover-link-variation";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cleanSlug, cn } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
-
+import PillarsSection from "./pilars-section";
 
 interface Treatment {
   _id: string;
@@ -64,6 +65,7 @@ export default function ServiceLifestyleContent({
     block_3_title,
     block_3_content,
     block_4_image,
+    pillars,
     block_5_image,
     benefits,
     block_7_image,
@@ -179,26 +181,47 @@ export default function ServiceLifestyleContent({
             Evidence-based strategies for preventing, treating, and even reversing chronic diseases through sustainable lifestyle changes.
           </LargeText>
         </div>
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="flex-1 flex justify-end items-center px-6 md:p-0">
-            <Image
-              src={block_4_image!}
-              alt=""
-              width={545}
-              height={545}
-              className="size-96 object-contain"
-            />
+        <div className="flex flex-col lg:flex-row gap-6 xl:ml-32 py-12 px-6 md:px-0">
+          <div className="flex-1 flex justify-center items-center relative">
+            <div className="w-[300px] sm:w-[350px] xl:w-[400px] md:pt-12 xl:pt-16">
+              <Image
+                src={block_4_image!}
+                alt=""
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="object-contain w-full h-auto"
+              />
+              <div className="hidden md:flex absolute gap-y-8 top-0 text-sm xl:text-base right-0 w-full h-full flex-col">
+                <div className="flex justify-between gap-4 md:px-[25%] lg:px-[16%]">
+                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
+                    Balanced<br />Nutrition
+                  </div>
+                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
+                    Regular<br />Physical<br />Activity
+                  </div>
+                </div>
+                <div className="flex justify-between gap-4 md:px-[20%] lg:px-[10%]">
+                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
+                    Substance<br />Control
+                  </div>
+                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
+                    Restorative<br />Sleep
+                  </div>
+                </div>
+                <div className="flex justify-between gap-4 md:px-[25%] lg:px-[16%]">
+                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
+                    Meaningful<br />Social<br />Connection
+                  </div>
+                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
+                    Effective<br />Stress<br />Management
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex-1 p-12">
-            <SubHeading>
-              Balanced Nutrition
-            </SubHeading>
-            <p className="mt-12 max-w-md">
-              Nourish your body with intention. At the heart of vibrant health is a relationship with food that is joyful, balanced, and deeply supportive. Our approach centers on whole, nutrient-rich foods—colourful fruits and vegetables, healthful proteins, whole grains, and healthful fats—chosen not through restriction, but through care.
-            </p>
-            <p className="mt-12 max-w-md">
-              These mindful choices replenish energy, reduce inflammation, and help protect against chronic conditions such as cardiovascular disease and metabolic dysfunction. With personalized guidance, we help you reconnect with the innate wisdom of eating well—fueling vitality from within.
-            </p>
+          <div className="flex-1 pt-12 flex justify-center lg:justify-start">
+            <PillarsSection pillars={pillars ?? []} />
           </div>
         </div>
       </section>
@@ -415,6 +438,7 @@ export default function ServiceLifestyleContent({
           </div>
         </div>
       </section>
+      <HoverLinkVariation href="#" text="View Full Program Breakdown" />
 
       <section className="bg-white py-16 text-primary md:py-24">
         <div className="container mx-auto space-y-12 2xl:px-12">

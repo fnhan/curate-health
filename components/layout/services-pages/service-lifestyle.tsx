@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cleanSlug, cn } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
+import React, { useState } from "react";
 import PillarsSection from "./pilars-section";
 
 interface Treatment {
@@ -41,6 +43,11 @@ const LargeText = ({ children, className }: { children: React.ReactNode, classNa
   );
 };
 
+// Add Condition type for block_3_content
+interface Condition {
+  title?: string;
+  description?: any;
+}
 
 export default function ServiceLifestyleContent({
   service,
@@ -78,6 +85,8 @@ export default function ServiceLifestyleContent({
 
   const teamMembers = ourTeam?.teamMembers ?? [];
   const treatments = service.treatments as Treatment[];
+  // Explicitly type block_3_content as Condition[]
+  const block3Conditions: Condition[] = (block_3_content || []) as Condition[];
 
   return (
     <>
@@ -150,22 +159,59 @@ export default function ServiceLifestyleContent({
           <SubHeading>
             {block_3_title}
           </SubHeading>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8 w-full">
-            {block_3_content?.map((condition) => {
-              return (
-                <div key={condition.title} className="border border-primary flex flex-col items-center py-3 group relative">
-                  <h3 className="text-lg xl:text-xl text-center">
-                    {condition.title}
-                  </h3>
-                  <div className="absolute top-full -left-[1px] -right-[1px] bg-white border border-primary border-t-0 z-10 opacity-0 invisible transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:visible">
-                    <div className="text-pretty font-light w-full px-2 prose">
-                      <PortableText value={condition.description!} />
-                    </div>
+          {/* Group conditions into columns */}
+          {(() => {
+            // Responsive column count
+            let columnCount = 1;
+            if (typeof window !== 'undefined') {
+              if (window.innerWidth >= 1024) columnCount = 3;
+              else if (window.innerWidth >= 768) columnCount = 2;
+            }
+            // Fallback for SSR: always 3 columns
+            if (typeof window === 'undefined') columnCount = 3;
+            // Split block_3_content into columns
+            const items: Condition[] = block3Conditions;
+            const columns: Condition[][] = Array.from({ length: columnCount }, () => []);
+            items.forEach((item, idx) => {
+              columns[idx % columnCount].push(item);
+            });
+            // State for hovered index per column
+            const [hovered, setHovered] = useState<(number | null)[]>(Array(columnCount).fill(null));
+            return (
+              <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8 w-full`}>
+                {columns.map((col, colIdx) => (
+                  <div key={colIdx} className="flex flex-col gap-y-6">
+                    {col.map((condition, rowIdx) => {
+                      const isOpen = hovered[colIdx] === rowIdx;
+                      if (!condition.title) return null;
+                      return (
+                        <div
+                          key={condition.title}
+                          className="border border-primary flex flex-col items-center py-3 group relative cursor-pointer transition-all duration-300"
+                          onMouseEnter={() => setHovered((prev) => prev.map((v, i) => i === colIdx ? rowIdx : v))}
+                          onMouseLeave={() => setHovered((prev) => prev.map((v, i) => i === colIdx ? null : v))}
+                          tabIndex={0}
+                          onFocus={() => setHovered((prev) => prev.map((v, i) => i === colIdx ? rowIdx : v))}
+                          onBlur={() => setHovered((prev) => prev.map((v, i) => i === colIdx ? null : v))}
+                        >
+                          <h3 className="text-lg xl:text-xl text-center">
+                            {condition.title || ''}
+                          </h3>
+                          <div
+                            className={`w-full overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 opacity-100 visible mt-2' : 'max-h-0 opacity-0 invisible'}`}
+                          >
+                            <div className="text-pretty font-light w-full px-2 prose">
+                              <PortableText value={condition.description!} />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                ))}
+              </div>
+            );
+          })()}
         </div>
       </section>
 

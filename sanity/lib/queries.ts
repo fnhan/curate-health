@@ -903,3 +903,62 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
     }
   }
 `;
+
+
+export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
+  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{
+ title,
+  "slug": slug.current,
+  heroImage {
+    asset->{
+      url,      
+    },
+    heroAlt
+  },
+  intro {
+    subtitle,
+    introParagraph
+  },
+  additionalSections[] {
+    sectionTitle,
+    sectionParagraph,
+    sectionImage {
+      "image": image.asset->url,
+      alt
+    }
+  },  
+  additionalCheckinTitle,
+  additionalCheckin[] {
+    checkinDescription,
+    checkinCount
+  },
+  groupSectionTitle,
+  groupSectionDescription,
+  groupSections[] {
+    description,
+    "image": image.asset->url,
+    "alt": image.alt
+  },
+  assistanceSectionTitle,
+  assistanceSectionDescription,
+  assistanceSectionImage {
+    asset-> {
+      url,
+    }
+  },
+  cta {
+    ctaBg {
+      asset->{
+        url,
+        metadata {
+          dimensions
+        }
+      }
+    },
+    ctaBgAlt,
+    ctaTitle,
+    ctaText,
+    ctaButtonText
+  },
+  ${SEO_QUERY}
+}`;

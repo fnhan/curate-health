@@ -248,6 +248,17 @@ export default defineType({
         },
       ],
     }),
+
+    defineField({
+      name: "referral_form_pdf",
+      title: "Referral Form PDF",
+      type: "file",
+      validation: (Rule) => Rule.required().error("A PDF is required"),
+      options: {
+        accept: "application/pdf",
+      },
+    }),
+
     defineField({
       name: "seo",
       title: "SEO",

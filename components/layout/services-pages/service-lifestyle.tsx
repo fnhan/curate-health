@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PortableText } from "@portabletext/react";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, ClipboardCheckIcon, ClipboardIcon, HandshakeIcon, PersonStandingIcon, PhoneIcon, ScrollIcon } from "lucide-react";
 
 import HoverLinkVariation from "@/components/shared/hover-link-variation";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { cleanSlug, cn } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
 import React, { useState } from "react";
-import PillarsSection from "./pilars-section";
+import PillarsModified from "./pillars-modified";
 
 interface Treatment {
   _id: string;
@@ -81,12 +81,34 @@ export default function ServiceLifestyleContent({
     block_11_image,
     faq,
     ourTeam,
+    referral_form_pdf,
   } = service;
 
   const teamMembers = ourTeam?.teamMembers ?? [];
   const treatments = service.treatments as Treatment[];
   // Explicitly type block_3_content as Condition[]
   const block3Conditions: Condition[] = (block_3_content || []) as Condition[];
+
+  const programIcons = [
+    {
+      icon: <PhoneIcon className="text-white size-10" />,
+    },
+    {
+      icon: <ClipboardIcon className="text-white size-10" />,
+    },
+    {
+      icon: <PersonStandingIcon className="text-white size-10" />,
+    },
+    {
+      icon: <ScrollIcon className="text-white size-10" />,
+    },
+    {
+      icon: <ClipboardCheckIcon className="text-white size-10" />,
+    },
+    {
+      icon: <HandshakeIcon className="text-white size-10" />,
+    },
+  ]
 
   return (
     <>
@@ -221,10 +243,14 @@ export default function ServiceLifestyleContent({
             Program Timeline
           </Heading>
           <div className="grid grid-cols-1 gap-x-4 gap-y-20 md:grid-cols-2 lg:grid-cols-3 w-full text-center lg:px-12">
-            {timeline?.map((timeline_item) => {
+            {timeline?.map((timeline_item, index) => {
               return (
                 <div className="flex flex-col gap-y-1 items-center max-w-sm mx-auto" key={timeline_item.title}>
-                  <div className="size-40 bg-white rounded-full mb-4 border border-[#878E76]"></div>
+                  <div className="size-40 bg-white flex items-center justify-center rounded-full mb-4 border border-[#878E76]">
+                    <div className="size-24 bg-[#878E76] flex items-center justify-center rounded-full">
+                      {programIcons[index].icon}
+                    </div>
+                  </div>
                   <h3 className="text-lg font-light italic text-pretty">
                     {timeline_item.title}
                   </h3>
@@ -237,7 +263,7 @@ export default function ServiceLifestyleContent({
           </div>
         </div>
       </section>
-      <HoverLinkVariation href="#" text="View Full Program Breakdown" />
+      <HoverLinkVariation href="/services/curate-lifestyle-program" text="View Full Program Breakdown" />
 
 
       <section
@@ -397,7 +423,7 @@ export default function ServiceLifestyleContent({
                   1. Speak with Your Physician
                 </h3>
                 <p>
-                  Ask your family doctor or any medical doctor on your care team for a referral to our Curate Lifestyle Program. Your doctor can use our [Referral Form] for convenience.
+                  Ask your family doctor or any medical doctor on your care team for a referral to our Curate Lifestyle Program. Your doctor can use our <a href={referral_form_pdf?.asset?.url ?? ""} className="underline">Referral Form</a> for convenience.
                 </p>
               </div>
               <div className="flex flex-col gap-y-6">
@@ -405,7 +431,7 @@ export default function ServiceLifestyleContent({
                   2. Send the Referral
                 </h3>
                 <p>
-                  Have the referral faxed directly to us at 416-900-3311.
+                  Have the referral faxed directly to us at <a href="tel:+1-416-900-3311" className="underline">416-900-3311</a>.
                 </p>
               </div>
               <div className="flex flex-col gap-y-6">
@@ -421,7 +447,7 @@ export default function ServiceLifestyleContent({
                 </p>
 
                 <p>
-                  Questions? We&apos;re here to support you. Feel free to reach out to our front desk for assistance at 416-900-3311 or hello@curatehealth.ca.
+                  Questions? We&apos;re here to support you. Feel free to reach out to our front desk for assistance at <a href="tel:+1-416-900-3311" className="underline">416-900-3311</a> or <a href="mailto:hello@curatehealth.ca" className="underline">hello@curatehealth.ca</a>.
                 </p>
               </div>
             </div>
@@ -429,8 +455,6 @@ export default function ServiceLifestyleContent({
         </div>
 
       </section>
-
-
       {/* Pillars Section */}
 
       <section className="bg-platinum py-16 space-y-12 text-primary md:py-32">
@@ -445,74 +469,12 @@ export default function ServiceLifestyleContent({
             Evidence-based strategies for preventing, treating, and even reversing chronic diseases through sustainable lifestyle changes.
           </LargeText>
         </div>
-        <div className="flex flex-col lg:flex-row gap-6 xl:ml-32 py-12 px-6 md:px-0">
-          <div className="flex-1 flex justify-center items-center relative">
-            <div className="w-[300px] sm:w-[350px] xl:w-[400px] md:pt-12 xl:pt-16">
-              <Image
-                src={block_4_image!}
-                alt=""
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="object-contain w-full h-auto"
-              />
-              <div className="hidden md:flex absolute gap-y-8 top-0 text-sm xl:text-base right-0 w-full h-full flex-col">
-                <div className="flex justify-between gap-4 md:px-[25%] lg:px-[16%]">
-                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
-                    Balanced<br />Nutrition
-                  </div>
-                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
-                    Regular<br />Physical<br />Activity
-                  </div>
-                </div>
-                <div className="flex justify-between gap-4 md:px-[20%] lg:px-[10%]">
-                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
-                    Substance<br />Control
-                  </div>
-                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
-                    Restorative<br />Sleep
-                  </div>
-                </div>
-                <div className="flex justify-between gap-4 md:px-[25%] lg:px-[16%]">
-                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
-                    Meaningful<br />Social<br />Connection
-                  </div>
-                  <div className="font-medium text-center rounded-full h-32 w-32 xl:h-40 xl:w-40 bg-platinum border-2 border-[#283619] flex items-center justify-center">
-                    Effective<br />Stress<br />Management
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex-1 pt-12 flex justify-center lg:justify-start">
-            <PillarsSection pillars={pillars ?? []} />
-          </div>
+        <div className="flex flex-col lg:flex-row gap-6 py-12 px-6 md:px-0 max-w-screen-xl mx-auto">
+          <PillarsModified pillars={pillars ?? []} block_4_image={block_4_image!} />
         </div>
       </section>
 
-      <section className="bg-white py-16 text-primary md:py-24">
-        <div className="container mx-auto space-y-12 2xl:px-12">
-          <SubHeading>
-            Frequently Asked Questions
-          </SubHeading>
-          <Accordion type="multiple">
-            {faq?.map((faq, index) => {
-              return (
-                <AccordionItem value={`item-${index}`} className="border-b-2 border-b-gray-500" key={faq.title}>
-                  <AccordionTrigger className="py-6">
-                    <h4 className="text-lg xl:text-xl text-left font-light italic">
-                      {faq.title}
-                    </h4>
-                  </AccordionTrigger>
-                  <AccordionContent className="prose">
-                    <PortableText value={faq.description!} />
-                  </AccordionContent>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-        </div>
-      </section>
+
       {/* 
       <section className="bg-white py-16 text-primary md:py-32">
         <div className="container mx-auto space-y-12">
@@ -563,12 +525,12 @@ export default function ServiceLifestyleContent({
                 asChild
                 className="mx-auto w-full max-w-xs rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white md:w-fit"
               >
-                <a target="_blank" href="">
+                <a target="_blank" href="#">
                   Join the Waitlist
                 </a>
               </Button>
               <p className="text-center text-sm md:text-base">
-                Want to refer a patient? Click Here
+                Want to refer a patient? <a href="#" className="underline">Click Here</a>
               </p>
             </div>
           </div>

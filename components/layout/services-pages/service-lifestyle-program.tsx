@@ -16,7 +16,7 @@ export default function ServiceLifestyleProgramContent({
     return null;
   }
 
-  const { title, intro, additionalSections, cta, additionalCheckinTitle, additionalCheckin, groupSectionTitle, groupSections, groupSectionDescription, assistanceSectionTitle, assistanceSectionDescription, assistanceSectionImage } = program;
+  const { title, intro, additionalSections, cta, additionalCheckinTitle, additionalCheckin, groupSectionTitle, groupSections, groupSectionDescription, assistanceSectionTitle, assistanceSectionDescription, assistanceSectionImage, referral_form_pdf } = program;
   const { ctaBg, ctaBgAlt, ctaTitle, ctaText, ctaButtonText } = cta || {};
 
   return (
@@ -128,7 +128,7 @@ export default function ServiceLifestyleProgramContent({
               asChild
               className="w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
             >
-              <a target="_blank" href={ctaButtonText!}>
+              <a target="_blank" href={referral_form_pdf?.asset?.url ?? ""}>
                 {ctaButtonText}
               </a>
             </Button>

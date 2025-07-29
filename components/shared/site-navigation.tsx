@@ -79,14 +79,47 @@ export default function SiteNav({
                       </AccordionTrigger>
                       <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
                         {services?.map((service, index) => (
-                          <Link
-                            key={index}
-                            className="text-base hover:underline"
-                            href={`/services/${service.slug}`}
-                            onClick={() => setOpen(false)}
-                          >
-                            {service.title}
-                          </Link>
+                          <div key={index}>
+                            {service.treatments && service.treatments.length > 0 ? (
+                              <Accordion type="single" collapsible className="w-full">
+                                <AccordionItem
+                                  value={`service-${index}`}
+                                  className="border-none"
+                                >
+                                  <AccordionTrigger className="p-0 font-normal text-base pr-4">
+                                    {service.title}
+                                  </AccordionTrigger>
+                                  <AccordionContent className="ml-4 flex flex-col gap-2 pt-4">
+                                    <Link
+                                      className="text-sm hover:underline"
+                                      href={`/services/${service.slug}`}
+                                      onClick={() => setOpen(false)}
+                                    >
+                                      Overview
+                                    </Link>
+                                    {service.treatments.map((treatment, treatmentIndex) => (
+                                      <Link
+                                        key={treatmentIndex}
+                                        className="text-sm hover:underline"
+                                        href={`/services/${service.slug}/${treatment.slug}`}
+                                        onClick={() => setOpen(false)}
+                                      >
+                                        {treatment.title}
+                                      </Link>
+                                    ))}
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </Accordion>
+                            ) : (
+                              <Link
+                                className="text-base hover:underline"
+                                href={`/services/${service.slug}`}
+                                onClick={() => setOpen(false)}
+                              >
+                                {service.title}
+                              </Link>
+                            )}
+                          </div>
                         ))}
                       </AccordionContent>
                     </AccordionItem>

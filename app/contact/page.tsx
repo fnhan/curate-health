@@ -18,7 +18,7 @@ export default async function ContactPage() {
   }
 
   const { contactInfo, page } = contactPage;
-  const { contactInfo2 } = contactInfo;
+  const contactInfo2 = contactInfo?.contactInfo2;
 
   if (!page) {
     return null;

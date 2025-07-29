@@ -44,9 +44,9 @@ export default async function OurTeamPage() {
         </div>
       </section>
       <section className="bg-white text-primary">
-        <div className="container grid grid-cols-1 gap-4 py-20 md:grid-cols-2 lg:grid-cols-3">
+        <div className="container grid grid-cols-1 gap-4 py-20 md:grid-cols-2 lg:grid-cols-3 items-start">
           {teamMembers?.map((teamMember) => (
-            <Card key={teamMember.name} className="flex flex-col rounded-none">
+            <Card key={teamMember.name} className="flex flex-col rounded-none h-full">
               <div className="h-[300px]">
                 <Image
                   className="h-full w-full object-cover"
@@ -66,11 +66,11 @@ export default async function OurTeamPage() {
                   </div>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative">
                 <Accordion type="single" collapsible>
-                  <AccordionItem value="item-1" className="border-none relative">
+                  <AccordionItem value="item-1" className="border-none">
                     <AccordionTrigger>Learn More</AccordionTrigger>
-                    <AccordionContent className="absolute top-12 left-0 w-full z-10 bg-white rounded-lg p-4">
+                    <AccordionContent className="absolute top-12 -left-[1px] -right-[1px] z-10 bg-white border-l border-r border-b border-border p-4 mt-2">
                       <div className="prose">
                         <PortableText value={teamMember.bio!} />
                       </div>

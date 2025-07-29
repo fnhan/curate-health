@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
+import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
@@ -18,12 +18,13 @@ export default async function ContactPage() {
   }
 
   const { contactInfo, page } = contactPage;
+  const { contactInfo2 } = contactInfo;
 
   if (!page) {
     return null;
   }
 
-  const { heroSection, mapURL, businessHours } = page;
+  const { heroSection, mapURL, mapURL2, businessHours, businessHours2, parking, howToGetHere } = page;
 
   return (
     <>
@@ -100,6 +101,23 @@ export default async function ContactPage() {
                   </a>
                 </div>
               </div>
+              {/* Fax */}
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-4">
+                  <PrinterIcon className="h-4 w-4" />
+                  <p className="text-sm text-white/80 md:text-base">Fax</p>
+                </div>
+                <div className="pl-8">
+                  <a
+                    target="_blank"
+                    href={`tel:${contactInfo?.contactInfo?.phone}`}
+                    className="not-italic hover:underline md:text-3xl"
+                  >
+                    {contactInfo?.contactInfo?.phone}
+                  </a>
+                  <p className="text-xs text-white/80 md:text-base">Same as phone number</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -170,23 +188,96 @@ export default async function ContactPage() {
           </div>
         </div>
 
-        <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
-          <div>
-            <h2 className="text-2xl font-medium mb-4">Parking</h2>
-            <p>
-              We have a parking lot available for our patients. Please park in
-              the parking lot and enter through the main entrance.
-            </p>
+        {(parking || howToGetHere) && (
+          <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
+            {parking && (
+              <div>
+                <h2 className="text-2xl font-medium mb-4">Parking</h2>
+                <p>
+                  {parking}
+                </p>
+              </div>
+            )}
+            {howToGetHere && (
+              <div>
+                <h2 className="text-2xl font-medium mb-4">How to get here</h2>
+                <p>
+                  {howToGetHere}
+                </p>
+              </div>
+            )}
           </div>
-          <div>
-            <h2 className="text-2xl font-medium mb-4">How to get here</h2>
-            <p>
-              We are located in the heart of the city, just a short drive from
-              the main highway.
-            </p>
-          </div>
-        </div>
+        )}
       </section>
+
+      {contactInfo2 && (
+        <section className="bg-white py-14 text-black md:py-28 space-y-16">
+          <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
+            <div className="flex flex-col gap-8">
+              <div className="space-y-4">
+                <h2 className="text-2xl font-medium">{contactInfo2?.brandName}</h2>
+                <address className="not-italic">
+                  {contactInfo2?.address?.street}
+                  {contactInfo2?.address?.city}
+                  {contactInfo2?.address?.state}
+                  {contactInfo2?.address?.zip}
+                </address>
+              </div>
+              <div className="flex flex-col gap-4">
+                {/* Hours */}
+                <div className="space-y-2">
+                  {businessHours2?.daysOpen?.map((day) => {
+                    // Check if day has an exception
+                    const exception = businessHours2.exceptions?.find(
+                      (exc) => exc.day === day
+                    );
+
+                    // Use exception hours if they exist, otherwise use standard hours
+                    const hours =
+                      exception?.hours ??
+                      (businessHours2.standardHours === "custom"
+                        ? businessHours2.customStandardHours
+                        : businessHours2.standardHours);
+
+                    return (
+                      <div
+                        key={day}
+                        className="grid grid-cols-2 text-sm sm:text-base"
+                      >
+                        <span className="font-medium capitalize">{day}</span>
+                        <span className="text-right">{hours || "Closed"}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <Button
+                asChild
+                className="rounded-none border border-primary transition-all duration-300 hover:bg-transparent hover:text-primary"
+              >
+                <a
+                  href={contactInfo2?.mapLink ?? ""}
+                  target="_blank"
+                  className="flex items-center justify-center gap-2"
+                >
+                  <MapPinIcon className="h-4 w-4" />
+                  <span>Get Directions</span>
+                </a>
+              </Button>
+            </div>
+            <div>
+              <iframe
+                src={mapURL2 ?? ""}
+                className="h-80 w-full md:h-full"
+                title="curate-health-google-maps"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen={false}
+              ></iframe>
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }

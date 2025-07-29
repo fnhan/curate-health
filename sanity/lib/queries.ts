@@ -725,6 +725,17 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
     },
     mapLink,
   },
+  contactInfo2{
+    brandName,
+    address{
+      street,
+      city,
+      state,
+      zip,
+      country
+    },
+    mapLink,
+  },
 }`;
 
 export const CONTACT_PAGE_QUERY = groq`{
@@ -737,8 +748,20 @@ export const CONTACT_PAGE_QUERY = groq`{
         alt
       }
     },
+    parking,
+    howToGetHere,
     mapURL,
+    mapURL2,
     businessHours{
+      standardHours,
+      customStandardHours,
+      daysOpen,
+      exceptions[]{
+        day,
+        hours
+      }
+    },
+    businessHours2{
       standardHours,
       customStandardHours,
       daysOpen,

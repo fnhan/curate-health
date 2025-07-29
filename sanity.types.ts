@@ -601,7 +601,33 @@ export type ContactPage = {
     };
   };
   mapURL?: string;
+  mapURL2?: string;
+  parking?: string;
+  howToGetHere?: string;
   businessHours?: {
+    standardHours?:
+      | "9:00 AM - 5:00 PM"
+      | "9:00 AM - 6:00 PM"
+      | "9:00 AM - 7:00 PM"
+      | "10:00 AM - 7:00 PM"
+      | "8:00 AM - 4:00 PM"
+      | "custom";
+    customStandardHours?: string;
+    daysOpen?: Array<string>;
+    exceptions?: Array<{
+      day?:
+        | "monday"
+        | "tuesday"
+        | "wednesday"
+        | "thursday"
+        | "friday"
+        | "saturday"
+        | "sunday";
+      hours?: string;
+      _key: string;
+    }>;
+  };
+  businessHours2?: {
     standardHours?:
       | "9:00 AM - 5:00 PM"
       | "9:00 AM - 6:00 PM"
@@ -1472,6 +1498,17 @@ export type SiteSettings = {
       country?: string;
     };
     mapLink?: string;
+  };
+  contactInfo2?: {
+    address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zip?: string;
+      country?: string;
+    };
+    mapLink?: string;
+    brandName?: string;
   };
   services?: Array<{
     _ref: string;
@@ -3654,7 +3691,7 @@ export type HOME_PAGE_QUERYResult = {
   } | null;
 };
 // Variable: CONTACT_INFO_QUERY
-// Query: *[_type == "siteSettings"][0]{  "brandName": brandName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country    },    mapLink,  },}
+// Query: *[_type == "siteSettings"][0]{  "brandName": brandName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country    },    mapLink,  },  contactInfo2{    brandName,    address{      street,      city,      state,      zip,      country    },    mapLink,  },}
 export type CONTACT_INFO_QUERYResult = {
   brandName: string | null;
   contactInfo: {
@@ -3669,15 +3706,37 @@ export type CONTACT_INFO_QUERYResult = {
     } | null;
     mapLink: string | null;
   } | null;
+  contactInfo2: {
+    brandName: string | null;
+    address: {
+      street: string | null;
+      city: string | null;
+      state: string | null;
+      zip: string | null;
+      country: string | null;
+    } | null;
+    mapLink: string | null;
+  } | null;
 } | null;
 // Variable: CONTACT_PAGE_QUERY
-// Query: {  "contactInfo": *[_type == "siteSettings"][0]{  "brandName": brandName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country    },    mapLink,  },},  "page": *[_type == "contactPage"][0]{    heroSection{      title,      heroImage {        "image": image.asset->url,        alt      }    },    mapURL,    businessHours{      standardHours,      customStandardHours,      daysOpen,      exceptions[]{        day,        hours      }    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }  },}
+// Query: {  "contactInfo": *[_type == "siteSettings"][0]{  "brandName": brandName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country    },    mapLink,  },  contactInfo2{    brandName,    address{      street,      city,      state,      zip,      country    },    mapLink,  },},  "page": *[_type == "contactPage"][0]{    heroSection{      title,      heroImage {        "image": image.asset->url,        alt      }    },    parking,    howToGetHere,    mapURL,    mapURL2,    businessHours{      standardHours,      customStandardHours,      daysOpen,      exceptions[]{        day,        hours      }    },    businessHours2{      standardHours,      customStandardHours,      daysOpen,      exceptions[]{        day,        hours      }    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }  },}
 export type CONTACT_PAGE_QUERYResult = {
   contactInfo: {
     brandName: string | null;
     contactInfo: {
       email: string | null;
       phone: string | null;
+      address: {
+        street: string | null;
+        city: string | null;
+        state: string | null;
+        zip: string | null;
+        country: string | null;
+      } | null;
+      mapLink: string | null;
+    } | null;
+    contactInfo2: {
+      brandName: string | null;
       address: {
         street: string | null;
         city: string | null;
@@ -3696,8 +3755,35 @@ export type CONTACT_PAGE_QUERYResult = {
         alt: string | null;
       } | null;
     } | null;
+    parking: string | null;
+    howToGetHere: string | null;
     mapURL: string | null;
+    mapURL2: string | null;
     businessHours: {
+      standardHours:
+        | "10:00 AM - 7:00 PM"
+        | "8:00 AM - 4:00 PM"
+        | "9:00 AM - 5:00 PM"
+        | "9:00 AM - 6:00 PM"
+        | "9:00 AM - 7:00 PM"
+        | "custom"
+        | null;
+      customStandardHours: string | null;
+      daysOpen: Array<string> | null;
+      exceptions: Array<{
+        day:
+          | "friday"
+          | "monday"
+          | "saturday"
+          | "sunday"
+          | "thursday"
+          | "tuesday"
+          | "wednesday"
+          | null;
+        hours: string | null;
+      }> | null;
+    } | null;
+    businessHours2: {
       standardHours:
         | "10:00 AM - 7:00 PM"
         | "8:00 AM - 4:00 PM"
@@ -4071,8 +4157,8 @@ declare module "@sanity/client" {
     '*[_type == "heroSection"][0]{\n  videoID,\n  videoFile {\n    asset-> {\n      playbackId\n    }\n  },\n  heroText,\n}': HERO_SECTION_QUERYResult;
     '{\n  "siteSettings": *[_type == "siteSettings"]{\n  brandName,\n  siteLogo{\n    asset->{\n      _id,\n      url\n    },\n  },\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n  "services": *[_type == "service" && isActive == true]{\n    _key,\n    title,\n    "slug": slug.current,\n    isActive\n  },\n  "aboutPages": [\n    *[_type == "ourStory" && pageActive == true][0]{\n      "title": "Our Story",\n      "slug": "our-story"\n    },\n    *[_type == "ourTeam" && pageActive == true][0]{\n      "title": "Our Team",\n      "slug": "our-team"\n    },\n    *[_type == "missionAndValues" && pageActive == true][0]{\n      "title": "Mission and Values",\n      "slug": "mission-and-values"\n    },\n    *[_type == "sustainability" && pageActive == true][0]{\n      "title": "Sustainability",\n      "slug": "sustainability"\n    },\n    *[_type == "pillarsOfHealth" && pageActive == true][0]{\n      "title": "Pillars of Health",\n      "slug": "pillars-of-health"\n    },\n  ],\n  navLinks[]{\n    _key,\n    title,\n    href\n  },\n  footerNavLinks[]{\n    _key,\n    groupTitle,\n    links[]{\n      title,\n      slug {\n        current\n      }\n    }\n  },\n  legalLinks[]{\n    _key,\n    "title": @->title,\n    "slug": @->slug.current\n  },\n  socialMedia[]{\n    _key,\n    platform,\n    platformLogo{\n      asset->{\n        _id,\n        url\n      }\n    },\n    isActive,\n    url\n  }\n}[0],\n  "primaryCTAButton": \n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n,\n  "navLinks": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "newsletterSection": *[_type == "newsletterSection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n},\n  "surveySection": *[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n  "popupBanner": *[_type == "popupBanner" && isActive == true][0]{\n  title,\n  content,\n}\n}': LAYOUT_QUERYResult;
     '{\n  "heroSection": *[_type == "heroSection"][0]{\n  videoID,\n  videoFile {\n    asset-> {\n      playbackId\n    }\n  },\n  heroText,\n},\n  "primaryCTAButton": \n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n, \n  "aboutSection": *[_type == "aboutSection"][0]{\n  title1,\n  title2,\n  "aboutImage": {\n    "asset": aboutImage.asset->{\n      _id,\n      url\n    },\n    "alt": aboutImage.alt\n  },\n  hoverLinkText,\n  hoverLinkHref\n},\n  "clinicSection": *[_type == "clinic"][0]{\n  "clinicImage": {\n    "asset": clinicImage.asset->{\n      _id,\n      url\n    },\n    "alt": clinicImage.alt\n  },\n  content\n},\n  "productsSection": *[_type == "productsSection"][0]{\n  sectionTitle,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n},\n  "servicesSection": *[_type == "servicesSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt\n  }\n},\n  "cafeSection": *[_type == "cafeSection"][0] {\n  cafeImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  title,\n  content,\n  hoverLinkText,\n  hoverLinkHref,\n  meta {\n    title,\n    description\n  }\n},\n  "blogSection": *[_type == "blogSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref\n},\n  "sustainabilitySection": *[_type == "sustainabilitySection"][0]{\n  bgImage {\n    asset->{\n      _id,\n      url\n    },\n    alt\n  },\n  sustainText\n},\n}': HOME_PAGE_QUERYResult;
-    '*[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n}': CONTACT_INFO_QUERYResult;
-    '{\n  "contactInfo": *[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n},\n  "page": *[_type == "contactPage"][0]{\n    heroSection{\n      title,\n      heroImage {\n        "image": image.asset->url,\n        alt\n      }\n    },\n    mapURL,\n    businessHours{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours\n      }\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n}': CONTACT_PAGE_QUERYResult;
+    '*[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n  contactInfo2{\n    brandName,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n}': CONTACT_INFO_QUERYResult;
+    '{\n  "contactInfo": *[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n  contactInfo2{\n    brandName,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n},\n  "page": *[_type == "contactPage"][0]{\n    heroSection{\n      title,\n      heroImage {\n        "image": image.asset->url,\n        alt\n      }\n    },\n    parking,\n    howToGetHere,\n    mapURL,\n    mapURL2,\n    businessHours{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours\n      }\n    },\n    businessHours2{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours\n      }\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n}': CONTACT_PAGE_QUERYResult;
     '*[_type == "post" && published == true] {\n  _id,\n  title,\n  publishedAt,\n  "slug": slug.current,\n  excerpt,\n  "author": author->{\n    name,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  mainImage {\n    asset->,\n    alt\n  },\n} | order(publishedAt desc)': GET_ALL_POSTS_QUERYResult;
     '*[_type == "post" && published == true && slug.current == $slug][0] {\n  title,\n  publishedAt,\n  slug,\n  "author": author->{\n    name,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  "mainImage": {\n    "image": mainImage.asset->url,\n    "alt": mainImage.alt\n  },\n  sections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      "alt": image.alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': GET_POST_BY_SLUG_QUERYResult;
     '*[_type == "cafePage" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': CAFE_PAGE_QUERYResult;

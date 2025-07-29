@@ -82,9 +82,22 @@ export default function ServiceLifestyleContent({
     faq,
     ourTeam,
     referral_form_pdf,
+    testimonials,
   } = service;
 
-  const teamMembers = ourTeam?.teamMembers ?? [];
+  const teamMembers = (ourTeam?.teamMembers ?? []).filter(member =>
+    member.name === "Dr. Frank Nhan" ||
+    member.name === "Dr. Rebecca Lester" ||
+    member.name === "Dr. David Gabriele"
+  );
+
+  const mainMember = (ourTeam?.teamMembers ?? []).filter(member =>
+    member.name === "Dr. Eric Leong"
+  );
+
+
+
+
   const treatments = service.treatments as Treatment[];
   // Explicitly type block_3_content as Condition[]
   const block3Conditions: Condition[] = (block_3_content || []) as Condition[];
@@ -176,11 +189,11 @@ export default function ServiceLifestyleContent({
         </div>
       </section >
 
-      <section className="bg-white py-16 text-primary md:py-40">
-        <div className="container flex justify-center flex-col items-center gap-12">
-          <SubHeading>
-            {block_3_title}
-          </SubHeading>
+      <section className="bg-white py-16 text-primary md:py-40 container">
+        <SubHeading className="md:text-center">
+          {block_3_title}
+        </SubHeading>
+        <div className="container flex justify-center flex-col items-center gap-12 relative min-h-[1000px] md:min-h-[600px]">
           {/* Group conditions into columns */}
           {(() => {
             // Responsive column count
@@ -200,7 +213,7 @@ export default function ServiceLifestyleContent({
             // State for hovered index per column
             const [hovered, setHovered] = useState<(number | null)[]>(Array(columnCount).fill(null));
             return (
-              <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8 w-full`}>
+              <div className={`grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8 w-full absolute top-12`}>
                 {columns.map((col, colIdx) => (
                   <div key={colIdx} className="flex flex-col gap-y-6">
                     {col.map((condition, rowIdx) => {
@@ -209,7 +222,7 @@ export default function ServiceLifestyleContent({
                       return (
                         <div
                           key={condition.title}
-                          className="border border-primary flex flex-col items-center py-3 group relative cursor-pointer transition-all duration-300"
+                          className="border border-primary bg-white flex flex-col items-center py-3 group relative cursor-pointer transition-all duration-300"
                           onMouseEnter={() => setHovered((prev) => prev.map((v, i) => i === colIdx ? rowIdx : v))}
                           onMouseLeave={() => setHovered((prev) => prev.map((v, i) => i === colIdx ? null : v))}
                           tabIndex={0}
@@ -355,12 +368,110 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-      <section className="bg-white text-primary py-16 md:py-24">
-        <div className="container flex flex-col items-center gap-y-10">
-          <div className="grid grid-cols-1 gap-4 py-20 md:grid-cols-2 lg:grid-cols-3 w-full">
-            <SubHeading className="md:col-span-2 lg:col-span-3 pb-6">
-              Meet Your Team
+      <section className="bg-white text-primary">
+        <div className="container flex flex-col md:flex-row gap-x-12 items-end">
+          <div className="flex-1 hidden md:block">
+            <Image
+              src={block_9_image!}
+              alt={"How to Join"}
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="object-cover w-full h-auto"
+            />
+          </div>
+          <div className="flex flex-col gap-y-6 mt-8 flex-1 pb-24">
+            <SubHeading>
+              How to Join
             </SubHeading>
+            <div className="flex flex-col gap-y-12 md:mt-6 max-w-lg">
+              <div className="flex flex-col gap-y-6">
+                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
+                  1. Speak with Your Physician
+                </h3>
+                <p>
+                  Ask your family doctor or any medical doctor on your care team for a referral to our Curate Lifestyle Program. Your doctor can use our <a href={referral_form_pdf?.asset?.url ?? ""} className="underline">Referral Form</a> for convenience.
+                </p>
+              </div>
+              <div className="flex flex-col gap-y-6">
+                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
+                  2. Send the Referral
+                </h3>
+                <p>
+                  Have the referral faxed directly to us at <a href="tel:+1-416-900-3311" className="underline">416-900-3311</a>.
+                </p>
+              </div>
+              <div className="flex flex-col gap-y-6">
+                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
+                  3. We&apos;ll Take it From There
+                </h3>
+                <p>
+                  Once received, our team will review your referral and contact you to ask screening questions and to schedule your initial consultation if this program is the right fit for you!                </p>
+              </div>
+              <div className="flex flex-col gap-y-6">
+                <p>
+                  No referral yet? Let us know—our team can help guide you through options on joining the program without a doctor's referral.
+                </p>
+
+                <p>
+                  Questions? We&apos;re here to support you. Feel free to reach out to our front desk for assistance at <a href="tel:+1-416-900-3311" className="underline">416-900-3311</a> or <a href="mailto:hello@curatehealth.ca" className="underline">hello@curatehealth.ca</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <section className="bg-white text-primary py-16 md:py-24">
+        <SubHeading className="md:col-span-2 lg:col-span-3 pb-6 md:mb-8 px-4 container">
+          Meet Your Team
+        </SubHeading>
+        <div className="container flex flex-col items-center gap-y-4">
+          <Card className="flex flex-col md:flex-row rounded-none h-full w-full">
+            <div className="md:w-[45%]">
+              <Image
+                className="h-full w-full object-cover"
+                src={mainMember[0]?.image?.asset?.url ?? ""}
+                alt={mainMember[0]?.name ?? ""}
+                width={0}
+                height={0}
+                sizes="100vw"
+              />
+            </div>
+            <div className="flex flex-col justify-between md:px-8 md:py-10">
+              <CardHeader className="flex-1">
+                <CardTitle className="font-light not-italic">
+                  {mainMember[0]?.name}
+                </CardTitle>
+                <CardDescription>
+                  <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
+                    <PortableText value={mainMember[0]?.role!} />
+                  </div>
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="relative">
+
+                <div className="prose">
+                  <PortableText value={mainMember[0]?.bio!} />
+                </div>
+                {/* <Accordion type="single" collapsible>
+                  <AccordionItem value="item-1" className="border-none">
+                    <AccordionTrigger>Learn More</AccordionTrigger>
+                    <AccordionContent className="absolute top-[calc(100%-10px)] -left-[1px] -right-[1px] z-10 bg-white border border-t-0 border-gray-200 shadow-lg px-4 pb-4">
+                      <div className="prose">
+                        <PortableText value={mainMember[0]?.bio!} />
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion> */}
+              </CardContent>
+            </div>
+          </Card>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
+
             {teamMembers?.map((teamMember) => (
               <Card key={teamMember.name} className="flex flex-col rounded-none h-full">
                 <div className="h-[300px]">
@@ -401,60 +512,7 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-      <section className="bg-white text-primary">
-        <div className="container flex flex-col md:flex-row gap-x-12 items-end">
-          <div className="flex-1">
-            <Image
-              src={block_9_image!}
-              alt={"How to Join"}
-              width={0}
-              height={0}
-              sizes="100vw"
-              className="object-cover w-full h-auto"
-            />
-          </div>
-          <div className="flex flex-col gap-y-8 flex-1 pb-24">
-            <Heading>
-              How to Join
-            </Heading>
-            <div className="flex flex-col gap-y-12 mt-8 max-w-lg">
-              <div className="flex flex-col gap-y-6">
-                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
-                  1. Speak with Your Physician
-                </h3>
-                <p>
-                  Ask your family doctor or any medical doctor on your care team for a referral to our Curate Lifestyle Program. Your doctor can use our <a href={referral_form_pdf?.asset?.url ?? ""} className="underline">Referral Form</a> for convenience.
-                </p>
-              </div>
-              <div className="flex flex-col gap-y-6">
-                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
-                  2. Send the Referral
-                </h3>
-                <p>
-                  Have the referral faxed directly to us at <a href="tel:+1-416-900-3311" className="underline">416-900-3311</a>.
-                </p>
-              </div>
-              <div className="flex flex-col gap-y-6">
-                <h3 className="text-xl md:text-2xl 2xl:text-3xl">
-                  3. We&apos;ll Take it From There
-                </h3>
-                <p>
-                  Once received, our team will review your referral and contact you to ask screening questions and to schedule your initial consultation if this program is the right fit for you!                </p>
-              </div>
-              <div className="flex flex-col gap-y-6">
-                <p>
-                  No referral yet? Let us know—our team can help guide you through options on joining the program without a doctor's referral.
-                </p>
 
-                <p>
-                  Questions? We&apos;re here to support you. Feel free to reach out to our front desk for assistance at <a href="tel:+1-416-900-3311" className="underline">416-900-3311</a> or <a href="mailto:hello@curatehealth.ca" className="underline">hello@curatehealth.ca</a>.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </section>
       {/* Pillars Section */}
 
       <section className="bg-platinum py-16 space-y-12 text-primary md:py-32">
@@ -474,35 +532,59 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-
-      {/* 
-      <section className="bg-white py-16 text-primary md:py-32">
-        <div className="container mx-auto space-y-12">
-          <SubHeading className="text-center">
-            Doctor Testimonials
+      <section className="bg-white py-16 text-primary md:py-24">
+        <div className="container mx-auto space-y-12 2xl:px-12">
+          <SubHeading>
+            Frequently Asked Questions
           </SubHeading>
-          <div className="grid grid-cols-3 gap-4 max-w-screen-xl mx-auto mt-12">
-            <div className="flex flex-col items-center gap-y-6">
-              <div className="size-64 bg-gray-200 rounded-full"></div>
-              <p className="text-center max-w-72">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-y-6">
-              <div className="size-64 bg-gray-200 rounded-full"></div>
-              <p className="text-center max-w-72">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-              </p>
-            </div>
-            <div className="flex flex-col items-center gap-y-6">
-              <div className="size-64 bg-gray-200 rounded-full"></div>
-              <p className="text-center max-w-72">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-              </p>
+          <Accordion type="multiple">
+            {faq?.map((faq, index) => {
+              return (
+                <AccordionItem value={`item-${index}`} className="border-b-2 border-b-gray-500" key={faq.title}>
+                  <AccordionTrigger className="py-6">
+                    <h4 className="text-lg xl:text-xl text-left font-light italic">
+                      {faq.title}
+                    </h4>
+                  </AccordionTrigger>
+                  <AccordionContent className="prose">
+                    <PortableText value={faq.description!} />
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
+        </div>
+      </section>
+
+      {testimonials && testimonials.length > 0 && (
+        <section className="bg-white py-16 text-primary md:py-32">
+          <div className="container mx-auto space-y-24">
+            <SubHeading className="text-center">
+              Doctor Testimonials
+            </SubHeading>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-screen-xl mx-auto mt-12">
+              <div className="flex flex-col items-center gap-y-6">
+                <div className="size-64 bg-gray-200 rounded-full"></div>
+                <p className="text-center max-w-72">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                </p>
+              </div>
+              <div className="flex flex-col items-center gap-y-6">
+                <div className="size-64 bg-gray-200 rounded-full"></div>
+                <p className="text-center max-w-72">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                </p>
+              </div>
+              <div className="flex flex-col items-center gap-y-6">
+                <div className="size-64 bg-gray-200 rounded-full"></div>
+                <p className="text-center max-w-72">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section> */}
+        </section>
+      )}
 
       <section
         className={`relative min-h-screen bg-cover bg-center bg-no-repeat py-8 md:h-[calc(100vh-100px)] md:py-0`}

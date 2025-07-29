@@ -42,9 +42,9 @@ export default function PillarsModified({
     );
 
     if (isLargeScreen) {
-      setCircleSize(Math.min(500, viewportSmallestDimension * 0.7));
+      setCircleSize(Math.min(550, viewportSmallestDimension * 0.7));
     } else if (!isTablet) {
-      setCircleSize(Math.min(500, viewportSmallestDimension * 0.7));
+      setCircleSize(Math.min(450, viewportSmallestDimension * 0.7));
     } else if (!isMobile) {
       setCircleSize(Math.min(500, viewportSmallestDimension * 0.7));
     } else {
@@ -86,7 +86,7 @@ export default function PillarsModified({
       </div>
       {/* Tablet */}
       <div className="hidden sm:block">
-        <div className="flex sm:flex-col lg:flex-row gap-2">
+        <div className="flex sm:flex-col lg:flex-row gap-2 items-center">
           <div className="flex-1">
             <div
               className="relative mx-auto rounded-full"
@@ -102,7 +102,7 @@ export default function PillarsModified({
                   // animate={{ opacity: 1, y: 0 }}
                   // exit={{ opacity: 0, y: -10 }}
                   // transition={{ duration: 0.2 }}
-                  className="absolute inset-0 mx-auto flex items-center justify-center text-balance text-center text-sm italic  md:text-base 2xl:text-lg"
+                  className="p-20 absolute inset-0 mx-auto flex items-center justify-center text-balance text-center text-sm italic  md:text-base 2xl:text-lg"
                 >
                   <Image
                     src={block_4_image!}
@@ -134,9 +134,11 @@ export default function PillarsModified({
               ))}
             </div>
           </div>
-          <div className="flex-1 max-w-lg mx-auto mt-24 lg:pr-4">
+          <div className="flex-1 max-w-lg mt-24 lg:pl-8 lg:pr-4">
             <h2 className="text-2xl font-medium mb-6">{activePillar}</h2>
-            <PortableText value={textContent!} />
+            <div className="prose">
+              <PortableText value={textContent!} />
+            </div>
           </div>
         </div>
       </div>

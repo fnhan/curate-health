@@ -293,7 +293,38 @@ export default defineType({
         },
       ]
     }),
-    ///////
+
+    defineField({
+      name: "testimonials",
+      title: "Testimonials",
+      type: "array",
+      of: [
+        {
+          name: "testimonial",
+          title: "Testimonial",
+          type: "object",
+          fields: [
+            {
+              name: "name",
+              title: "Name",
+              type: "string",
+              validation: (Rule) => Rule.required().error("A name is required"),
+            },
+            {
+              name: "image",
+              title: "Image",
+              type: "image",
+            },
+            {
+              name: "description",
+              title: "Description",
+              type: "blockContent",
+              validation: (Rule) => Rule.required().error("A description is required"),
+            },
+          ]
+        },
+      ]
+    }),
 
     defineField({
       name: "seo",

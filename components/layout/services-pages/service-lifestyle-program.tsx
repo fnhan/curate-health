@@ -70,10 +70,19 @@ export default function ServiceLifestyleProgramContent({
           </div>
           <div className="flex flex-col gap-4 justify-center divide-y divide-primary w-full max-w-2xl">
             {groupSections?.map((section, idx) => (
-              <div key={idx} className="flex flex-row gap-4 justify-between items-center py-4">
+              <div
+                key={idx}
+                className="flex flex-row gap-4 justify-between items-center py-4 group"
+              >
                 <div><PortableText value={section.description!} /></div>
                 <div className="size-24 rounded-full bg-primary shrink-0">
-                  <Image src={section.image!} alt={section.alt!} width={100} height={100} className="rounded-full size-full object-cover grayscale" />
+                  <Image
+                    src={section.image!}
+                    alt={section.alt!}
+                    width={100}
+                    height={100}
+                    className="rounded-full size-full object-cover transition-all duration-300 md:grayscale group-hover:md:grayscale-0"
+                  />
                 </div>
               </div>
             ))}

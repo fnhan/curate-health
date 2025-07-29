@@ -86,16 +86,14 @@ export default function ServiceLifestyleContent({
   } = service;
 
   const teamMembers = (ourTeam?.teamMembers ?? []).filter(member =>
-    member.name === "Dr. Frank Nhan" ||
-    member.name === "Dr. Rebecca Lester" ||
-    member.name === "Dr. David Gabriele"
+    member.name?.includes("Frank") ||
+    member.name?.includes("Rebecca") ||
+    member.name?.includes("David")
   );
 
   const mainMember = (ourTeam?.teamMembers ?? []).filter(member =>
-    member.name === "Dr. Eric Leong"
+    member.name?.includes("Eric")
   );
-
-
 
 
   const treatments = service.treatments as Treatment[];
@@ -189,8 +187,8 @@ export default function ServiceLifestyleContent({
         </div>
       </section >
 
-      <section className="bg-white py-16 text-primary md:py-40 container">
-        <SubHeading className="md:text-center">
+      <section className="bg-white py-16 text-primary md:py-40">
+        <SubHeading className="md:text-center container">
           {block_3_title}
         </SubHeading>
         <div className="container flex justify-center flex-col items-center gap-12 relative min-h-[1000px] md:min-h-[600px]">
@@ -423,53 +421,42 @@ export default function ServiceLifestyleContent({
 
       </section>
 
-
       <section className="bg-white text-primary py-16 md:py-24">
         <SubHeading className="md:col-span-2 lg:col-span-3 pb-6 md:mb-8 px-4 container">
           Meet Your Team
         </SubHeading>
         <div className="container flex flex-col items-center gap-y-4">
-          <Card className="flex flex-col md:flex-row rounded-none h-full w-full">
-            <div className="md:w-[45%]">
-              <Image
-                className="h-full w-full object-cover"
-                src={mainMember[0]?.image?.asset?.url ?? ""}
-                alt={mainMember[0]?.name ?? ""}
-                width={0}
-                height={0}
-                sizes="100vw"
-              />
-            </div>
-            <div className="flex flex-col justify-between md:px-8 md:py-10">
-              <CardHeader className="flex-1">
-                <CardTitle className="font-light not-italic">
-                  {mainMember[0]?.name}
-                </CardTitle>
-                <CardDescription>
-                  <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
-                    <PortableText value={mainMember[0]?.role!} />
+          {mainMember && mainMember.length > 0 && (
+            <Card className="flex flex-col md:flex-row rounded-none h-full w-full">
+              <div className="md:w-[45%]">
+                <Image
+                  className="h-full w-full object-cover"
+                  src={mainMember[0]?.image?.asset?.url ?? ""}
+                  alt={mainMember[0]?.name ?? ""}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                />
+              </div>
+              <div className="flex flex-col justify-between md:px-8 md:py-10">
+                <CardHeader className="flex-1">
+                  <CardTitle className="font-light not-italic">
+                    {mainMember[0]?.name}
+                  </CardTitle>
+                  <CardDescription>
+                    <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
+                      <PortableText value={mainMember[0]?.role!} />
+                    </div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="relative">
+                  <div className="prose">
+                    <PortableText value={mainMember[0]?.bio!} />
                   </div>
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="relative">
-
-                <div className="prose">
-                  <PortableText value={mainMember[0]?.bio!} />
-                </div>
-                {/* <Accordion type="single" collapsible>
-                  <AccordionItem value="item-1" className="border-none">
-                    <AccordionTrigger>Learn More</AccordionTrigger>
-                    <AccordionContent className="absolute top-[calc(100%-10px)] -left-[1px] -right-[1px] z-10 bg-white border border-t-0 border-gray-200 shadow-lg px-4 pb-4">
-                      <div className="prose">
-                        <PortableText value={mainMember[0]?.bio!} />
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion> */}
-              </CardContent>
-            </div>
-          </Card>
-
+                </CardContent>
+              </div>
+            </Card>
+          )}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
 
             {teamMembers?.map((teamMember) => (

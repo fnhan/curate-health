@@ -3722,7 +3722,154 @@
         },
         "optional": true
       },
+      "mapURL2": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "parking": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "howToGetHere": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "businessHours": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "standardHours": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "union",
+                "of": [
+                  {
+                    "type": "string",
+                    "value": "9:00 AM - 5:00 PM"
+                  },
+                  {
+                    "type": "string",
+                    "value": "9:00 AM - 6:00 PM"
+                  },
+                  {
+                    "type": "string",
+                    "value": "9:00 AM - 7:00 PM"
+                  },
+                  {
+                    "type": "string",
+                    "value": "10:00 AM - 7:00 PM"
+                  },
+                  {
+                    "type": "string",
+                    "value": "8:00 AM - 4:00 PM"
+                  },
+                  {
+                    "type": "string",
+                    "value": "custom"
+                  }
+                ]
+              },
+              "optional": true
+            },
+            "customStandardHours": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
+            "daysOpen": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "array",
+                "of": {
+                  "type": "string"
+                }
+              },
+              "optional": true
+            },
+            "exceptions": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "array",
+                "of": {
+                  "type": "object",
+                  "attributes": {
+                    "day": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "union",
+                        "of": [
+                          {
+                            "type": "string",
+                            "value": "monday"
+                          },
+                          {
+                            "type": "string",
+                            "value": "tuesday"
+                          },
+                          {
+                            "type": "string",
+                            "value": "wednesday"
+                          },
+                          {
+                            "type": "string",
+                            "value": "thursday"
+                          },
+                          {
+                            "type": "string",
+                            "value": "friday"
+                          },
+                          {
+                            "type": "string",
+                            "value": "saturday"
+                          },
+                          {
+                            "type": "string",
+                            "value": "sunday"
+                          }
+                        ]
+                      },
+                      "optional": true
+                    },
+                    "hours": {
+                      "type": "objectAttribute",
+                      "value": {
+                        "type": "string"
+                      },
+                      "optional": true
+                    }
+                  },
+                  "rest": {
+                    "type": "object",
+                    "attributes": {
+                      "_key": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "optional": true
+            }
+          }
+        },
+        "optional": true
+      },
+      "businessHours2": {
         "type": "objectAttribute",
         "value": {
           "type": "object",
@@ -9268,6 +9415,73 @@
               "optional": true
             },
             "mapLink": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            }
+          }
+        },
+        "optional": true
+      },
+      "contactInfo2": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "address": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "object",
+                "attributes": {
+                  "street": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    },
+                    "optional": true
+                  },
+                  "city": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    },
+                    "optional": true
+                  },
+                  "state": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    },
+                    "optional": true
+                  },
+                  "zip": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    },
+                    "optional": true
+                  },
+                  "country": {
+                    "type": "objectAttribute",
+                    "value": {
+                      "type": "string"
+                    },
+                    "optional": true
+                  }
+                }
+              },
+              "optional": true
+            },
+            "mapLink": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
+            "brandName": {
               "type": "objectAttribute",
               "value": {
                 "type": "string"

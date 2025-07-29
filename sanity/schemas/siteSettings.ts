@@ -87,6 +87,56 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "contactInfo2",
+      type: "object",
+      title: "Contact Information 2",
+      fields: [
+        defineField({
+          name: "address",
+          type: "object",
+          title: "Contact Address",
+          fields: [
+            defineField({
+              name: "street",
+              type: "string",
+              title: "Street",
+            }),
+            defineField({
+              name: "city",
+              type: "string",
+              title: "City",
+            }),
+            defineField({
+              name: "state",
+              type: "string",
+              title: "State / Province",
+            }),
+            defineField({
+              name: "zip",
+              type: "string",
+              title: "Zip",
+            }),
+            defineField({
+              name: "country",
+              type: "string",
+              title: "Country",
+            }),
+          ],
+        }),
+        defineField({
+          name: "mapLink",
+          type: "url",
+          title: "Google Map Link",
+          description: "Link to the Google Map",
+        }),
+        defineField({
+          name: "brandName",
+          type: "string",
+          title: "Brand Name",
+        }),
+      ],
+    }),
+    defineField({
       name: "services",
       type: "array",
       title: "Services",

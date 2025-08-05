@@ -3,13 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PortableText } from "@portabletext/react";
-import { ArrowRightIcon, ClipboardCheckIcon, ClipboardIcon, HandshakeIcon, PersonStandingIcon, PhoneIcon, ScrollIcon } from "lucide-react";
+import { ArrowRightIcon, ChevronRight, ClipboardCheckIcon, ClipboardIcon, HandshakeIcon, PersonStandingIcon, PhoneIcon, ScrollIcon } from "lucide-react";
 
 import HoverLinkVariation from "@/components/shared/hover-link-variation";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { cleanSlug, cn } from "@/lib/utils";
+import { cleanSlug, cn, getFirstParagraph, getTeamMemberUrlId } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
 import React, { useState } from "react";
 import PillarsModified from "./pillars-modified";
@@ -451,8 +451,15 @@ export default function ServiceLifestyleContent({
                 </CardHeader>
                 <CardContent className="relative">
                   <div className="prose">
-                    <PortableText value={mainMember[0]?.bio!} />
+                    <PortableText value={getFirstParagraph(mainMember[0]?.bio)} />
                   </div>
+                  <Link
+                    href={`/about/our-team?member=${getTeamMemberUrlId(mainMember[0]?.name || '')}`}
+                    className="mt-8 flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
+                  >
+                    Learn More
+                    <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />
+                  </Link>
                 </CardContent>
               </div>
             </Card>
@@ -482,16 +489,13 @@ export default function ServiceLifestyleContent({
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="relative">
-                  <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1" className="border-none">
-                      <AccordionTrigger>Learn More</AccordionTrigger>
-                      <AccordionContent className="absolute top-[calc(100%-10px)] -left-[1px] -right-[1px] z-10 bg-white border border-t-0 border-gray-200 shadow-lg px-4 pb-4">
-                        <div className="prose">
-                          <PortableText value={teamMember.bio!} />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
+                  <Link
+                    href={`/about/our-team?member=${getTeamMemberUrlId(teamMember.name || '')}`}
+                    className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
+                  >
+                    Learn More
+                    <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />
+                  </Link>
                 </CardContent>
               </Card>
             ))}

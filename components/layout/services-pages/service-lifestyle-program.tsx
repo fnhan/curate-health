@@ -142,7 +142,7 @@ export default function ServiceLifestyleProgramContent({
               </a>
             </Button>
             <div className="text-white text-sm font-light">
-              Want to refer a patient? <a href="#" className="underline">Click Here</a>
+              Want to refer a patient? <a href="/contact" className="underline">Click Here</a>
             </div>
           </div>
         </div>

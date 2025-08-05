@@ -187,11 +187,11 @@ export default function ServiceLifestyleContent({
         </div>
       </section >
 
-      <section className="bg-white py-16 text-primary md:py-40">
+      <section className="bg-white py-16 text-primary md:py-44">
         <SubHeading className="md:text-center container">
           {block_3_title}
         </SubHeading>
-        <div className="container flex justify-center flex-col items-center gap-12 relative min-h-[1000px] md:min-h-[600px]">
+        <div className="container flex justify-center flex-col items-center gap-12 relative min-h-[1000px] md:min-h-[450px]">
           {/* Group conditions into columns */}
           {(() => {
             // Responsive column count
@@ -211,7 +211,7 @@ export default function ServiceLifestyleContent({
             // State for hovered index per column
             const [hovered, setHovered] = useState<(number | null)[]>(Array(columnCount).fill(null));
             return (
-              <div className={`grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8 w-full absolute top-12`}>
+              <div className={`grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8 w-full absolute top-12 px-12`}>
                 {columns.map((col, colIdx) => (
                   <div key={colIdx} className="flex flex-col gap-y-6">
                     {col.map((condition, rowIdx) => {
@@ -519,8 +519,8 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
 
-      <section className="bg-white py-16 text-primary md:py-24">
-        <div className="container mx-auto space-y-12 2xl:px-12">
+      <section className="bg-white py-16 text-primary md:py-44">
+        <div className="container mx-auto space-y-12 2xl:px-12 md:pb-12">
           <SubHeading>
             Frequently Asked Questions
           </SubHeading>
@@ -594,12 +594,12 @@ export default function ServiceLifestyleContent({
                 asChild
                 className="mx-auto w-full max-w-xs rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white md:w-fit"
               >
-                <a target="_blank" href="#">
+                <a href="/contact">
                   Join the Waitlist
                 </a>
               </Button>
               <p className="text-center text-sm md:text-base">
-                Want to refer a patient? <a href="#" className="underline">Click Here</a>
+                Want to refer a patient? <a href={referral_form_pdf?.asset?.url ?? ""} className="underline">Click Here</a>
               </p>
             </div>
           </div>

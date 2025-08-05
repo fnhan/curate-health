@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import { PortableText } from "next-sanity";
 
@@ -98,7 +98,7 @@ interface TeamMembersSectionProps {
     teamMembers: TeamMember[];
 }
 
-export default function TeamMembersSection({ teamMembers }: TeamMembersSectionProps) {
+function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
     const searchParams = useSearchParams();
     const [openAccordion, setOpenAccordion] = useState<string | undefined>();
     const teamMemberRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -184,5 +184,46 @@ export default function TeamMembersSection({ teamMembers }: TeamMembersSectionPr
                 })}
             </div>
         </section>
+    );
+}
+
+export default function TeamMembersSection({ teamMembers }: TeamMembersSectionProps) {
+    return (
+        <Suspense fallback={
+            <section className="bg-white text-primary">
+                <div className="container grid grid-cols-1 gap-4 py-20 md:grid-cols-2 lg:grid-cols-3 items-start">
+                    {teamMembers?.map((teamMember) => (
+                        <Card key={teamMember.name} className="flex flex-col rounded-none h-full">
+                            <div className="h-[300px]">
+                                <Image
+                                    className="h-full w-full object-cover"
+                                    src={teamMember.image?.asset?.url ?? ""}
+                                    alt={teamMember.name ?? ""}
+                                    width={400}
+                                    height={400}
+                                />
+                            </div>
+                            <CardHeader className="flex-1">
+                                <CardTitle className="font-light not-italic">
+                                    {teamMember.name}
+                                </CardTitle>
+                                <CardDescription>
+                                    <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
+                                        <PortableText value={teamMember.role!} />
+                                    </div>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="relative">
+                                <div className="flex flex-1 items-center justify-between py-4 font-medium">
+                                    Learn More
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            </section>
+        }>
+            <TeamMembersContent teamMembers={teamMembers} />
+        </Suspense>
     );
 } 

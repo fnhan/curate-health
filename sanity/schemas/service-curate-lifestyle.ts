@@ -214,6 +214,19 @@ export default defineType({
               name: "image",
               title: "Image",
               type: "image",
+              validation: (Rule) => Rule.required().error("An image is required"),
+            },
+            {
+              name: "tint_percentage",
+              title: "Tint Percentage",
+              type: "string",
+              validation: (Rule) => Rule.required().error("A tint percentage is required"),
+            },
+            {
+              name: "tint_percentage_hover",
+              title: "Tint Percentage Hover",
+              type: "string",
+              validation: (Rule) => Rule.required().error("A tint hover percentage is required"),
             }
           ]
         },

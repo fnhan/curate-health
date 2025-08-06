@@ -9,7 +9,7 @@ import HoverLinkVariation from "@/components/shared/hover-link-variation";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { cleanSlug, cn, getFirstParagraph, getTeamMemberUrlId } from "@/lib/utils";
+import { cleanSlug, cn, getTeamMemberUrlId } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
 import React, { useState } from "react";
 import PillarsModified from "./pillars-modified";
@@ -86,10 +86,19 @@ export default function ServiceLifestyleContent({
   } = service;
 
   const teamMembers = (ourTeam?.teamMembers ?? []).filter(member =>
-    member.name?.includes("Frank") ||
     member.name?.includes("Rebecca") ||
-    member.name?.includes("David")
-  );
+    member.name?.includes("David") ||
+    member.name?.includes("Frank")
+  ).sort((a, b) => {
+    // Put Frank last
+    if (a.name?.includes("Frank")) return 1;
+    if (b.name?.includes("Frank")) return -1;
+    return 0;
+  });
+
+
+
+
 
   const mainMember = (ourTeam?.teamMembers ?? []).filter(member =>
     member.name?.includes("Eric")
@@ -320,30 +329,45 @@ export default function ServiceLifestyleContent({
             Additional Benefits
           </SubHeading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 w-full mx-auto md:px-12">
-            {benefits?.map((benefit) => {
-              return (
+            {benefits?.map((benefit) => (
+              <div
+                key={benefit.title}
+                className="flex flex-col gap-y-4 w-full min-h-80 p-6 justify-end relative overflow-hidden group cursor-pointer transition-all duration-300"
+                style={{
+                  backgroundImage: benefit.image ? `url(${benefit.image})` : undefined,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }}
+                onMouseEnter={(e) => {
+                  const bgDiv = e.currentTarget.querySelector('.benefit-bg') as HTMLElement;
+                  if (bgDiv) {
+                    bgDiv.style.backgroundColor = `rgba(0, 0, 0, ${Number(benefit?.tint_percentage_hover || 0) / 100})`;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  const bgDiv = e.currentTarget.querySelector('.benefit-bg') as HTMLElement;
+                  if (bgDiv) {
+                    bgDiv.style.backgroundColor = `rgba(0, 0, 0, ${Number(benefit?.tint_percentage || 0) / 100})`;
+                  }
+                }}
+              >
                 <div
-                  key={benefit.title}
-                  className="flex flex-col gap-y-4 w-full min-h-80 p-6 justify-end relative overflow-hidden group cursor-pointer transition-all duration-300"
+                  className="absolute inset-0 bg-black transition-all duration-300 benefit-bg"
                   style={{
-                    backgroundImage: benefit.image ? `url(${benefit.image})` : undefined,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat'
+                    backgroundColor: `rgba(0, 0, 0, ${Number(benefit?.tint_percentage || 0) / 100})`,
                   }}
-                >
-                  <div className="absolute inset-0 bg-black bg-opacity-50 transition-all duration-300 group-hover:bg-opacity-70"></div>
-                  <div className="relative z-10">
-                    <h3 className="text-lg xl:text-3xl text-white">
-                      {benefit.title}
-                    </h3>
-                    <div className="text-white text-pretty font-light max-h-0 overflow-hidden transition-all duration-300 group-hover:max-h-96">
-                      <PortableText value={benefit.description!} />
-                    </div>
+                ></div>
+                <div className="relative z-10">
+                  <h3 className="text-lg md:text-2xl xl:text-3xl text-white">
+                    {benefit.title}
+                  </h3>
+                  <div className="text-white text-pretty font-light max-h-0 overflow-hidden transition-all duration-300 group-hover:max-h-96">
+                    <PortableText value={benefit.description!} />
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -428,7 +452,7 @@ export default function ServiceLifestyleContent({
         <div className="container flex flex-col items-center gap-y-4">
           {mainMember && mainMember.length > 0 && (
             <Card className="flex flex-col md:flex-row rounded-none h-full w-full">
-              <div className="md:w-[45%]">
+              <div className="h-[400px]">
                 <Image
                   className="h-full w-full object-cover"
                   src={mainMember[0]?.image?.asset?.url ?? ""}
@@ -450,9 +474,6 @@ export default function ServiceLifestyleContent({
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="relative">
-                  <div className="prose">
-                    <PortableText value={getFirstParagraph(mainMember[0]?.bio)} />
-                  </div>
                   <Link
                     href={`/about/our-team?member=${getTeamMemberUrlId(mainMember[0]?.name || '')}`}
                     className="mt-8 flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"

@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -118,6 +120,77 @@ export default async function ContactPage() {
                   <p className="text-xs text-white/80 md:text-base">Same as phone number</p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="relative bg-[#EBEBEB] py-14">
+        <div className="container relative z-10 flex flex-row py-24 justify-center">
+          <div className="flex flex-col gap-6 text-black text-light">
+            <h2 className="text-balance text-2xl font-light">
+              Need assistance?
+            </h2>
+            <div className="mx-auto max-w-xl space-y-4 text-pretty font-light">
+              If you need help getting started with the Curate Lifestyle Program, our team is here to support you— please contact us or send us a message for guidance on the referral process and next steps.
+            </div>
+            <div className="w-full max-w-md">
+              <form
+                action="https://formspree.io/f/xrblyjbl"
+                method="POST"
+                className="space-y-4 text-black"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 items-end gap-4">
+                  <div className="space-y-2 relative">
+                    <Label htmlFor="name" className="absolute top-2 left-2 text-sm px-3 -translate-y-1/2 bg-[#EBEBEB]">Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      type="text"
+                      required
+                      placeholder="Name"
+                      className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    {/* <Label htmlFor="email">Email</Label> */}
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="Email address"
+                      className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  {/* <Label htmlFor="subject">Subject</Label> */}
+                  <Input
+                    id="subject"
+                    name="subject"
+                    type="text"
+                    required
+                    placeholder="Subject"
+                    className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* <Label htmlFor="message">Message</Label> */}
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    placeholder="Message"
+                    className="p-4 flex min-h-[80px] w-full border border-black bg-[#EBEBEB] focus-visible:ring-0 focus-visible:ring-offset-0"
+                    rows={4}
+                  />
+                </div>
+                <button type="submit"
+                  className="text-sm font-light text-black border w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 py-2"
+                >
+                  Send Message
+                </button>
+              </form>
             </div>
           </div>
         </div>

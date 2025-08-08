@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { PortableText } from "@portabletext/react";
-import { AnimatePresence, motion } from "framer-motion";
 
 import {
   Accordion,
@@ -13,6 +12,22 @@ import {
 } from "@/components/ui/accordion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import Image from "next/image";
+
+// Memoized component for the pillar title
+const PillarTitle = memo(({ title }: { title: string }) => (
+  <h2 className="text-2xl font-medium mb-6">{title}</h2>
+));
+
+PillarTitle.displayName = "PillarTitle";
+
+// Memoized component for the pillar content
+const PillarContent = memo(({ content }: { content: any }) => (
+  <div className="prose">
+    <PortableText value={content!} />
+  </div>
+));
+
+PillarContent.displayName = "PillarContent";
 
 export default function PillarsModified({
   pillars,
@@ -95,25 +110,17 @@ export default function PillarsModified({
                 height: `${circleSize}px`,
               }}
             >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activePillar}
-                  // initial={{ opacity: 0, y: 10 }}
-                  // animate={{ opacity: 1, y: 0 }}
-                  // exit={{ opacity: 0, y: -10 }}
-                  // transition={{ duration: 0.2 }}
-                  className="p-20 absolute inset-0 mx-auto flex items-center justify-center text-balance text-center text-sm italic  md:text-base 2xl:text-lg"
-                >
-                  <Image
-                    src={block_4_image!}
-                    alt=""
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    className="object-cover w-full h-full"
-                  />
-                </motion.div>
-              </AnimatePresence>
+              {/* Static background image - doesn't re-render */}
+              <div className="p-20 absolute inset-0 mx-auto flex items-center justify-center text-balance text-center text-sm italic md:text-base 2xl:text-lg">
+                <Image
+                  src={block_4_image!}
+                  alt=""
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="object-cover w-full h-full"
+                />
+              </div>
               {pillars?.map((pillar: any, index: number) => (
                 <button
                   onMouseEnter={() =>
@@ -135,10 +142,8 @@ export default function PillarsModified({
             </div>
           </div>
           <div className="flex-1 max-w-lg mt-22 lg:pl-8 lg:pr-4">
-            <h2 className="text-2xl font-medium mb-6">{activePillar}</h2>
-            <div className="prose">
-              <PortableText value={textContent!} />
-            </div>
+            <PillarTitle title={activePillar} />
+            <PillarContent content={textContent} />
           </div>
         </div>
       </div>

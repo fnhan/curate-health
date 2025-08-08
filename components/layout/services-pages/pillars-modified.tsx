@@ -134,7 +134,7 @@ export default function PillarsModified({
               ))}
             </div>
           </div>
-          <div className="flex-1 max-w-lg mt-24 lg:pl-8 lg:pr-4">
+          <div className="flex-1 max-w-lg mt-22 lg:pl-8 lg:pr-4">
             <h2 className="text-2xl font-medium mb-6">{activePillar}</h2>
             <div className="prose">
               <PortableText value={textContent!} />

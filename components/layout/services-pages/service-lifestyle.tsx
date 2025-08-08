@@ -451,8 +451,8 @@ export default function ServiceLifestyleContent({
         </SubHeading>
         <div className="container flex flex-col items-center gap-y-4">
           {mainMember && mainMember.length > 0 && (
-            <Card className="flex flex-col md:flex-row rounded-none h-full w-full">
-              <div className="h-[400px]">
+            <Card className="flex flex-col md:flex-row rounded-none h-full w-full md:max-w-screen-md xl:max-w-screen-lg">
+              <div className="h-[500px]">
                 <Image
                   className="h-full w-full object-cover"
                   src={mainMember[0]?.image?.asset?.url ?? ""}

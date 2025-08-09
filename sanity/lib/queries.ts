@@ -868,3 +868,147 @@ export const LEGAL_PAGE_BY_SLUG_QUERY = groq`*[_type == "legalPage" && slug.curr
   body,
   ${SEO_QUERY}
 }`;
+
+export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
+  *[_type == "serviceLifestyle" && slug.current == $slug][0]{
+    title,
+    "slug": slug.current,
+    "hero_image": hero_image.asset->url,
+    "hero_alt": hero_image.alt,
+    "content_image": content_image.asset->url,
+    "content_alt": content_image.alt,
+    content,
+    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{
+      _id,
+      title,
+      "slug": treatmentSlug.current,
+      "rawSlug": treatmentSlug
+    },
+    hero_secondary_title,
+    hero_large_text,
+    referral_form_pdf {
+      asset-> {
+        url,
+      }
+    },
+    block_2_title,
+    block_2_content,
+    block_2_image {
+      asset-> {
+        url,
+      }
+    },
+    block_3_title,
+    block_3_content,
+    "block_4_image": block_4_image.asset->url,
+    "block_5_image": block_5_image.asset->url,
+    benefits[] {
+      title,
+      description,
+      "image": image.asset->url,
+      tint_percentage,
+      tint_percentage_hover
+    },
+    "block_7_image": block_7_image.asset->url,
+    "block_9_image": block_9_image.asset->url,
+    timeline[] {
+      title,
+      description
+    },
+    "block_11_image": block_11_image.asset->url,
+    faq[] {
+      title,
+      description
+    },
+    pillars[] {
+      title,
+      description
+    },
+    ${SEO_QUERY},
+    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{
+      teamMembers[] {
+        name,
+        role,
+        bio,
+        image {
+          asset-> {
+            url
+          }
+        }
+      }
+    },
+    testimonials[] {
+      name,
+      description,
+      image {
+        asset-> {
+          url
+        }
+      }
+    }
+  }
+`;
+
+
+export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
+  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{
+ title,
+  "slug": slug.current,
+  heroImage {
+    asset->{
+      url,      
+    },
+    heroAlt
+  },
+  intro {
+    subtitle,
+    introParagraph
+  },
+  additionalSections[] {
+    sectionTitle,
+    sectionParagraph,
+    sectionImage {
+      "image": image.asset->url,
+      alt
+    }
+  },  
+  additionalCheckinTitle,
+  additionalCheckin[] {
+    checkinDescription,
+    checkinCount
+  },
+  groupSectionTitle,
+  groupSectionDescription,
+  groupSections[] {
+    description,
+    "image": image.asset->url,
+    "alt": image.alt
+  },
+  assistanceSectionTitle,
+  assistanceSectionDescription,
+  assistanceSectionImage {
+    asset-> {
+      url,
+    }
+  },
+  referral_form_pdf {
+    asset-> {
+      url,
+    }
+  },
+  cta {
+    ctaBg {
+      asset->{
+        url,
+        metadata {
+          dimensions
+        }
+      }
+    },
+    ctaBgAlt,
+    ctaTitle,
+    ctaText,
+    ctaButtonText
+  },
+  ${SEO_QUERY}
+}`;

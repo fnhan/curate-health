@@ -73,7 +73,12 @@ export default function PillarsModified({
   }
 
   const calculatePosition = (index: number, total: number) => {
-    const angle = (index * 360) / total - 90;
+    // Map to specific clock positions: 1, 3, 5, 7, 9, 11 o'clock
+    const clockPositions = [1.5, 3, 4.5, 7.5, 9, 10.5];
+    const clockPosition = clockPositions[index % clockPositions.length];
+
+    // Convert clock position to angle (12 o'clock = 0°, 3 o'clock = 90°, etc.)
+    const angle = (clockPosition * 30) - 90; // 30° per hour, -90° to start from 12 o'clock
     const radius = circleSize / 2;
     const radian = (angle * Math.PI) / 180;
 

@@ -200,7 +200,7 @@ export default function ServiceLifestyleContent({
         <SubHeading className="md:text-center container">
           {block_3_title}
         </SubHeading>
-        <div className="container flex justify-center flex-col items-center gap-12 relative min-h-[1000px] md:min-h-[450px]">
+        <div className="container flex justify-center flex-col items-center gap-12 relative min-h-[1100px] md:min-h-[450px]">
           {/* Group conditions into columns */}
           {(() => {
             // Responsive column count

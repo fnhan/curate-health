@@ -74,19 +74,24 @@ export default function SiteNav({
                       value="services"
                       className="border-none text-2xl"
                     >
-                      <AccordionTrigger className="p-0 font-normal">
+                      <AccordionTrigger className="mr-20 p-0 font-normal">
                         Services
                       </AccordionTrigger>
                       <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
                         {services?.map((service, index) => (
                           <div key={index}>
-                            {service.treatments && service.treatments.length > 0 ? (
-                              <Accordion type="single" collapsible className="w-full">
+                            {service.treatments &&
+                            service.treatments.length > 0 ? (
+                              <Accordion
+                                type="single"
+                                collapsible
+                                className="w-full"
+                              >
                                 <AccordionItem
                                   value={`service-${index}`}
                                   className="border-none"
                                 >
-                                  <AccordionTrigger className="p-0 font-normal text-base pr-4">
+                                  <AccordionTrigger className="mr-20 p-0 pr-4 text-base font-normal">
                                     {service.title}
                                   </AccordionTrigger>
                                   <AccordionContent className="ml-4 flex flex-col gap-2 pt-4">
@@ -97,16 +102,18 @@ export default function SiteNav({
                                     >
                                       Overview
                                     </Link>
-                                    {service.treatments.map((treatment, treatmentIndex) => (
-                                      <Link
-                                        key={treatmentIndex}
-                                        className="text-sm hover:underline"
-                                        href={`/services/${service.slug}/${treatment.slug}`}
-                                        onClick={() => setOpen(false)}
-                                      >
-                                        {treatment.title}
-                                      </Link>
-                                    ))}
+                                    {service.treatments.map(
+                                      (treatment, treatmentIndex) => (
+                                        <Link
+                                          key={treatmentIndex}
+                                          className="text-sm hover:underline"
+                                          href={`/services/${service.slug}/${treatment.slug}`}
+                                          onClick={() => setOpen(false)}
+                                        >
+                                          {treatment.title}
+                                        </Link>
+                                      )
+                                    )}
                                   </AccordionContent>
                                 </AccordionItem>
                               </Accordion>
@@ -131,7 +138,7 @@ export default function SiteNav({
                       className="border-none text-2xl"
                     >
                       <AccordionTrigger
-                        className="p-0 font-normal"
+                        className="mr-20 p-0 font-normal"
                         aria-label="about-pages"
                         aria-controls="about-items"
                         id="about-menu"

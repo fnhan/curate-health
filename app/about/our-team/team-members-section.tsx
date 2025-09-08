@@ -139,7 +139,7 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
           return (
             <Card
               key={teamMember.name}
-              className="flex min-h-[600px] flex-col rounded-none"
+              className={`flex min-h-[560px] flex-col rounded-none ${openAccordion === memberId ? "row-span-3" : ""}`}
               ref={(el) => {
                 teamMemberRefs.current[memberId] = el;
               }}
@@ -168,7 +168,6 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
                 <Accordion
                   type="single"
                   collapsible
-                  value={openAccordion === memberId ? memberId : undefined}
                   onValueChange={(value) => setOpenAccordion(value)}
                 >
                   <AccordionItem value={memberId} className="border-none">

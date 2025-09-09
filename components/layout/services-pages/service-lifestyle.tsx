@@ -131,6 +131,7 @@ export default function ServiceLifestyleContent({
     timeline,
     block_11_image,
     faq,
+    call_to_action,
     ourTeam,
     referral_form_pdf,
     testimonials,
@@ -729,9 +730,7 @@ export default function ServiceLifestyleContent({
                   Health
                 </LargeText>
                 <p className="max-w-[80ch] text-pretty text-center text-sm font-light md:text-base">
-                  We’re launching June 14th 2025, with discounted spots for the
-                  first 12 participants. You’ll be contacted by our team for
-                  intake once enrollment opens.
+                  {call_to_action}
                 </p>
               </div>
               <Button

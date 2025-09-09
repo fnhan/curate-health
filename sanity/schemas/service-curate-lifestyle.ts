@@ -1,6 +1,5 @@
 import { defineField, defineType } from "sanity";
 
-
 export default defineType({
   name: "serviceLifestyle",
   title: "Services | Curate Lifestyle",
@@ -134,19 +133,20 @@ export default defineType({
               name: "title",
               title: "Title",
               type: "string",
-              validation: (Rule) => Rule.required().error("A title is required"),
+              validation: (Rule) =>
+                Rule.required().error("A title is required"),
             },
             {
               name: "description",
               title: "Description",
               type: "blockContent",
-              validation: (Rule) => Rule.required().error("A description is required"),
+              validation: (Rule) =>
+                Rule.required().error("A description is required"),
             },
-          ]
+          ],
         },
-      ]
+      ],
     }),
-
 
     defineField({
       name: "block_4_image",
@@ -168,17 +168,19 @@ export default defineType({
               name: "title",
               title: "Title",
               type: "string",
-              validation: (Rule) => Rule.required().error("A title is required"),
+              validation: (Rule) =>
+                Rule.required().error("A title is required"),
             },
             {
               name: "description",
               title: "Description",
               type: "blockContent",
-              validation: (Rule) => Rule.required().error("A description is required"),
+              validation: (Rule) =>
+                Rule.required().error("A description is required"),
             },
-          ]
+          ],
         },
-      ]
+      ],
     }),
 
     defineField({
@@ -186,7 +188,6 @@ export default defineType({
       title: "Block 5 Image",
       type: "image",
     }),
-
 
     defineField({
       name: "benefits",
@@ -202,35 +203,40 @@ export default defineType({
               name: "title",
               title: "Title",
               type: "string",
-              validation: (Rule) => Rule.required().error("A title is required"),
+              validation: (Rule) =>
+                Rule.required().error("A title is required"),
             },
             {
               name: "description",
               title: "Description",
               type: "blockContent",
-              validation: (Rule) => Rule.required().error("A description is required"),
+              validation: (Rule) =>
+                Rule.required().error("A description is required"),
             },
             {
               name: "image",
               title: "Image",
               type: "image",
-              validation: (Rule) => Rule.required().error("An image is required"),
+              validation: (Rule) =>
+                Rule.required().error("An image is required"),
             },
             {
               name: "tint_percentage",
               title: "Tint Percentage",
               type: "string",
-              validation: (Rule) => Rule.required().error("A tint percentage is required"),
+              validation: (Rule) =>
+                Rule.required().error("A tint percentage is required"),
             },
             {
               name: "tint_percentage_hover",
               title: "Tint Percentage Hover",
               type: "string",
-              validation: (Rule) => Rule.required().error("A tint hover percentage is required"),
-            }
-          ]
+              validation: (Rule) =>
+                Rule.required().error("A tint hover percentage is required"),
+            },
+          ],
         },
-      ]
+      ],
     }),
 
     defineField({
@@ -244,7 +250,6 @@ export default defineType({
       title: "Block 9 Image",
       type: "image",
     }),
-
 
     defineField({
       name: "timeline",
@@ -260,17 +265,19 @@ export default defineType({
               name: "title",
               title: "Title",
               type: "string",
-              validation: (Rule) => Rule.required().error("A title is required"),
+              validation: (Rule) =>
+                Rule.required().error("A title is required"),
             },
             {
               name: "description",
               title: "Description",
               type: "blockContent",
-              validation: (Rule) => Rule.required().error("A description is required"),
+              validation: (Rule) =>
+                Rule.required().error("A description is required"),
             },
-          ]
+          ],
         },
-      ]
+      ],
     }),
 
     defineField({
@@ -278,7 +285,6 @@ export default defineType({
       title: "Block 11 Image",
       type: "image",
     }),
-
 
     defineField({
       name: "faq",
@@ -294,17 +300,27 @@ export default defineType({
               name: "title",
               title: "Title",
               type: "string",
-              validation: (Rule) => Rule.required().error("A title is required"),
+              validation: (Rule) =>
+                Rule.required().error("A title is required"),
             },
             {
               name: "description",
               title: "Description",
               type: "blockContent",
-              validation: (Rule) => Rule.required().error("A description is required"),
+              validation: (Rule) =>
+                Rule.required().error("A description is required"),
             },
-          ]
+          ],
         },
-      ]
+      ],
+    }),
+
+    defineField({
+      name: "call_to_action",
+      title: "Call To Action Text",
+      type: "text",
+      validation: (rule) =>
+        rule.required().error("The call to action text is required"),
     }),
 
     defineField({
@@ -332,11 +348,12 @@ export default defineType({
               name: "description",
               title: "Description",
               type: "blockContent",
-              validation: (Rule) => Rule.required().error("A description is required"),
+              validation: (Rule) =>
+                Rule.required().error("A description is required"),
             },
-          ]
+          ],
         },
-      ]
+      ],
     }),
 
     defineField({

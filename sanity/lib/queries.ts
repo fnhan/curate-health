@@ -920,6 +920,7 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
       title,
       description
     },
+    call_to_action,
     pillars[] {
       title,
       description
@@ -948,7 +949,6 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
     }
   }
 `;
-
 
 export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
   *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 
 import { PortableText } from "next-sanity";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
 import {
   Accordion,
@@ -131,59 +132,64 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
   }, [searchParams, teamMembers]);
 
   return (
-    <section className="bg-white text-primary">
-      <div className="container grid grid-cols-1 items-start gap-4 py-20 md:grid-cols-2 lg:grid-cols-3">
-        {teamMembers?.map((teamMember) => {
-          const memberId = `member-${getTeamMemberUrlId(teamMember.name || "")}`;
-
-          return (
-            <Card
-              key={teamMember.name}
-              className={`flex min-h-[560px] flex-col rounded-none ${openAccordion === memberId ? "row-span-3" : ""}`}
-              ref={(el) => {
-                teamMemberRefs.current[memberId] = el;
-              }}
-            >
-              <div className="h-[300px]">
-                <Image
-                  className="h-full w-full object-cover hover:cursor-pointer"
-                  src={teamMember.image?.asset?.url ?? ""}
-                  alt={teamMember.name ?? ""}
-                  width={400}
-                  height={400}
-                  onClick={() => setOpenAccordion(memberId)}
-                />
-              </div>
-              <CardHeader className="flex-1">
-                <CardTitle className="font-light not-italic">
-                  {teamMember.name}
-                </CardTitle>
-                <CardDescription>
-                  <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
-                    <PortableText value={teamMember.role!} />
-                  </div>
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Accordion
-                  type="single"
-                  collapsible
-                  onValueChange={(value) => setOpenAccordion(value)}
-                >
-                  <AccordionItem value={memberId} className="border-none">
-                    <AccordionTrigger>Learn More</AccordionTrigger>
-                    <AccordionContent>
-                      <div className="prose">
-                        <PortableText value={teamMember.bio!} />
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+    <section className="lg bg-white text-primary">
+      <ResponsiveMasonry
+        columnsCountBreakPoints={{ 320: 1, 768: 2, 1024: 3 }}
+        className="container py-20"
+      >
+        <Masonry style={{ gap: "1rem" }}>
+          {teamMembers?.map((teamMember) => {
+            const memberId = `member-${getTeamMemberUrlId(teamMember.name || "")}`;
+            return (
+              <Card
+                key={teamMember.name}
+                className="mb-[6px] flex min-h-[560px] w-full flex-col rounded-none"
+                ref={(el) => {
+                  teamMemberRefs.current[memberId] = el;
+                }}
+              >
+                <div className="h-[300px]">
+                  <Image
+                    className="h-full w-full object-cover hover:cursor-pointer"
+                    src={teamMember.image?.asset?.url ?? ""}
+                    alt={teamMember.name ?? ""}
+                    width={400}
+                    height={400}
+                    onClick={() => setOpenAccordion(memberId)}
+                  />
+                </div>
+                <CardHeader className="flex-1">
+                  <CardTitle className="font-light not-italic">
+                    {teamMember.name}
+                  </CardTitle>
+                  <CardDescription>
+                    <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
+                      <PortableText value={teamMember.role!} />
+                    </div>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Accordion
+                    type="single"
+                    collapsible
+                    value={openAccordion === memberId ? memberId : undefined}
+                    onValueChange={(value) => setOpenAccordion(value)}
+                  >
+                    <AccordionItem value={memberId} className="border-none">
+                      <AccordionTrigger>Learn More</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="prose">
+                          <PortableText value={teamMember.bio!} />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </Masonry>
+      </ResponsiveMasonry>
     </section>
   );
 }

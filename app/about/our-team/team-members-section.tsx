@@ -105,8 +105,8 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
   const teamMemberRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const breakpointColumns = {
     default: 3,
-    750: 2,
-    350: 1,
+    1023: 2,
+    767: 1,
   };
 
   useEffect(() => {
@@ -137,7 +137,7 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
   }, [searchParams, teamMembers]);
 
   return (
-    <section className="lg bg-white text-primary">
+    <section className="bg-white py-20 text-primary">
       <Masonry
         breakpointCols={breakpointColumns}
         className="container flex"
@@ -148,7 +148,7 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
           return (
             <Card
               key={teamMember.name}
-              className="mb-[6px] flex min-h-[560px] w-full flex-col rounded-none"
+              className="flex min-h-[580px] w-full flex-col rounded-none"
               ref={(el) => {
                 teamMemberRefs.current[memberId] = el;
               }}

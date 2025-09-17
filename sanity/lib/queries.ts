@@ -727,7 +727,8 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
       city,
       state,
       zip,
-      country
+      country,
+      locationInfo
     },
     mapLink,
   },
@@ -738,7 +739,8 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
       city,
       state,
       zip,
-      country
+      country,
+      locationInfo
     },
     mapLink,
   },
@@ -764,7 +766,8 @@ export const CONTACT_PAGE_QUERY = groq`{
       daysOpen,
       exceptions[]{
         day,
-        hours
+        hours,
+        message
       }
     },
     businessHours2{
@@ -773,7 +776,8 @@ export const CONTACT_PAGE_QUERY = groq`{
       daysOpen,
       exceptions[]{
         day,
-        hours
+        hours,
+        message
       }
     },
     ${SEO_QUERY}

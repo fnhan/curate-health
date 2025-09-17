@@ -63,13 +63,13 @@ export default defineType({
     defineField({
       name: "parking",
       title: "Parking",
-      type: "text"
+      type: "text",
     }),
 
     defineField({
       name: "howToGetHere",
       title: "How to Get Here",
-      type: "text"
+      type: "text",
     }),
 
     defineField({
@@ -125,7 +125,7 @@ export default defineType({
         defineField({
           name: "exceptions",
           title: "Exceptions",
-          description: "Add any days with different hours",
+          description: "Add any days with custom times/values",
           type: "array",
           of: [
             {
@@ -151,11 +151,13 @@ export default defineType({
                   name: "hours",
                   title: "Hours",
                   type: "string",
-                  description: "Format: HH:MM AM - HH:MM PM",
-                  validation: (Rule) =>
-                    Rule.regex(
-                      /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM) - (0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/
-                    ).error('Please use format like "9:00 AM - 5:00 PM"'),
+                  description: "Custom Time/Value",
+                }),
+                defineField({
+                  name: "message",
+                  title: "Message",
+                  type: "string",
+                  description: "Optional",
                 }),
               ],
             },
@@ -217,7 +219,7 @@ export default defineType({
         defineField({
           name: "exceptions",
           title: "Exceptions",
-          description: "Add any days with different hours",
+          description: "Add any days with custom times/values",
           type: "array",
           of: [
             {
@@ -243,11 +245,13 @@ export default defineType({
                   name: "hours",
                   title: "Hours",
                   type: "string",
-                  description: "Format: HH:MM AM - HH:MM PM",
-                  validation: (Rule) =>
-                    Rule.regex(
-                      /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM) - (0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/
-                    ).error('Please use format like "9:00 AM - 5:00 PM"'),
+                  description: "Custom Time/Value",
+                }),
+                defineField({
+                  name: "message",
+                  title: "Message",
+                  type: "string",
+                  description: "Optional",
                 }),
               ],
             },

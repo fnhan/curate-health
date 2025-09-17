@@ -125,7 +125,7 @@ export default async function ContactPage() {
                     {contactInfo?.contactInfo?.phone}
                   </a>
                   <p className="text-xs text-white/80 md:text-base">
-                    Same as Phone
+                    (Same as Phone)
                   </p>
                 </div>
               </div>
@@ -169,6 +169,7 @@ export default async function ContactPage() {
                     >
                       <span className="font-medium capitalize">{day}</span>
                       <span className="text-right">{hours || "Closed"}</span>
+                      {exception?.message && <p>{exception.message}</p>}
                     </div>
                   );
                 })}
@@ -226,6 +227,9 @@ export default async function ContactPage() {
                 <h2 className="text-2xl font-medium">
                   {contactInfo2?.brandName}
                 </h2>
+                {contactInfo2?.address?.locationInfo && (
+                  <p>{contactInfo2?.address?.locationInfo}</p>
+                )}
                 <address className="not-italic">
                   {contactInfo2?.address?.street}
                   {contactInfo2?.address?.city}
@@ -256,6 +260,7 @@ export default async function ContactPage() {
                       >
                         <span className="font-medium capitalize">{day}</span>
                         <span className="text-right">{hours || "Closed"}</span>
+                        {exception?.message && <p>{exception.message}</p>}
                       </div>
                     );
                   })}

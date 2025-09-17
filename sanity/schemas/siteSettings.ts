@@ -76,6 +76,11 @@ export default defineType({
               type: "string",
               title: "Country",
             }),
+            defineField({
+              name: "locationInfo",
+              title: "Location Information",
+              type: "text",
+            }),
           ],
         }),
         defineField({
@@ -120,6 +125,11 @@ export default defineType({
               name: "country",
               type: "string",
               title: "Country",
+            }),
+            defineField({
+              name: "locationInfo",
+              title: "Location Information",
+              type: "text",
             }),
           ],
         }),

@@ -206,13 +206,13 @@ export default async function ContactPage() {
             {parking && (
               <div>
                 <h2 className="mb-4 text-2xl font-medium">Parking</h2>
-                <p>{parking}</p>
+                <p className="whitespace-pre-line">{parking}</p>
               </div>
             )}
             {howToGetHere && (
               <div>
                 <h2 className="mb-4 text-2xl font-medium">How to get here</h2>
-                <p>{howToGetHere}</p>
+                <p className="whitespace-pre-line">{howToGetHere}</p>
               </div>
             )}
           </div>

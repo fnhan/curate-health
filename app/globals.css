@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+.three-color-border {
+  box-shadow:
+    -70px 0 0 0 hsl(73, 9%, 51%),
+    -140px 0 0 0 hsl(77, 27%, 65%),
+    -210px 0 0 0 hsl(var(--our-programs-border-3));
+}
+
+.two-color-border {
+  box-shadow:
+    -140px 0 0 0 hsl(77, 27%, 65%),
+    -210px 0 0 0 hsl(var(--our-programs-border-3));
+}
+
+.single-color-border {
+  box-shadow: -210px 0 0 0 hsl(var(--our-programs-border-3));
+}
+
+.li-checkmark {
+  list-style-image: url("../public/images/green-checkmark.svg");
+}
+
+.li-exclamation-mark {
+  list-style-image: url("../public/images/exclamation-mark.svg");
+}
+
+.li-checkmark-dark-green {
+  list-style-image: url("../public/images/dark-green-checkmark.svg");
+}
+
+.li-checkmark-light-green {
+  list-style-image: url("../public/images/light-green-checkmark.svg");
+}
+
 @layer base {
   :root {
     --background: 89 37% 15%;
@@ -25,6 +58,9 @@
     --ring: 89 37% 15%;
     --radius: 1rem;
     --platinum: 96 7% 86%;
+    --our-programs-border: 73 9% 51%;
+    --our-programs-border-2: 77 27% 65%;
+    --our-programs-border-3: 84 7% 86%;
   }
 }
 

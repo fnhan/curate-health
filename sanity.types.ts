@@ -49,6 +49,203 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type OurPrograms = {
+  _id: string;
+  _type: "ourPrograms";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  isActive?: boolean;
+  title?: string;
+  heroImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    heroAlt?: string;
+    _type: "image";
+  };
+  intro?: {
+    subtitle?: string;
+    introParagraph?: string;
+  };
+  programs?: Array<{
+    programName?: string;
+    description?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    _key: string;
+  }>;
+  essentialSeries?: {
+    description?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    tableContent?: {
+      includesSessions?: Array<number>;
+      bonusSessions?: Array<number>;
+      bonusTransferable?: Array<boolean>;
+    };
+    listContent?: Array<string>;
+  };
+  curateLifestyle?: {
+    description?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    structure?: {
+      length?: string;
+      format?: string;
+      focus?: string;
+      bonus?: Array<string>;
+    };
+    outcome?: string;
+  };
+  masterHealthBlueprint?: {
+    description?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    structure?: {
+      kickOff?: string;
+      team?: string;
+      plan?: string;
+      programIncludes?: Array<string>;
+      privileges?: Array<string>;
+    };
+    outcome?: string;
+  };
+  exploreYourOptions?: {
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    contactMessage?: string;
+  };
+  faq?: Array<{
+    title?: string;
+    description?: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    >;
+    _type: "question";
+    _key: string;
+  }>;
+  threePaths?: {
+    heading?: string;
+    subtitle?: string;
+    paragraph?: string;
+    tableContent?: {
+      bestFor?: Array<string>;
+      approach?: Array<string>;
+      focus?: Array<string>;
+      extras?: {
+        essentialSeries?: Array<string>;
+        curateLifestyle?: Array<string>;
+        masterHealthBlueprint?: Array<string>;
+      };
+      pricing?: {
+        essentialSeries?: string;
+        curateLifestyle?: Array<string>;
+        masterHealthBlueprint?: string;
+      };
+    };
+  };
+  ctaSection?: {
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    heading?: string;
+    paragraph?: string;
+    buttonText?: string;
+  };
+};
+
 export type ServiceLifestyleProgram = {
   _id: string;
   _type: "serviceLifestyleProgram";
@@ -603,6 +800,7 @@ export type ServiceLifestyle = {
     _type: "question";
     _key: string;
   }>;
+  call_to_action?: string;
   testimonials?: Array<{
     name?: string;
     image?: {
@@ -1230,6 +1428,7 @@ export type ContactPage = {
         | "saturday"
         | "sunday";
       hours?: string;
+      message?: string;
       _key: string;
     }>;
   };
@@ -1253,6 +1452,7 @@ export type ContactPage = {
         | "saturday"
         | "sunday";
       hours?: string;
+      message?: string;
       _key: string;
     }>;
   };
@@ -2102,6 +2302,7 @@ export type SiteSettings = {
       state?: string;
       zip?: string;
       country?: string;
+      locationInfo?: string;
     };
     mapLink?: string;
   };
@@ -2112,6 +2313,7 @@ export type SiteSettings = {
       state?: string;
       zip?: string;
       country?: string;
+      locationInfo?: string;
     };
     mapLink?: string;
     brandName?: string;
@@ -2380,6 +2582,7 @@ export type AllSanitySchemaTypes =
   | SanityImagePalette
   | SanityImageDimensions
   | Geopoint
+  | OurPrograms
   | ServiceLifestyleProgram
   | ServiceLifestyle
   | SanityFileAsset
@@ -4323,7 +4526,7 @@ export type CONTACT_INFO_QUERYResult = {
       state: string | null;
       zip: string | null;
       country: string | null;
-      locationInfo: null;
+      locationInfo: string | null;
     } | null;
     mapLink: string | null;
   } | null;
@@ -4335,7 +4538,7 @@ export type CONTACT_INFO_QUERYResult = {
       state: string | null;
       zip: string | null;
       country: string | null;
-      locationInfo: null;
+      locationInfo: string | null;
     } | null;
     mapLink: string | null;
   } | null;
@@ -4354,7 +4557,7 @@ export type CONTACT_PAGE_QUERYResult = {
         state: string | null;
         zip: string | null;
         country: string | null;
-        locationInfo: null;
+        locationInfo: string | null;
       } | null;
       mapLink: string | null;
     } | null;
@@ -4366,7 +4569,7 @@ export type CONTACT_PAGE_QUERYResult = {
         state: string | null;
         zip: string | null;
         country: string | null;
-        locationInfo: null;
+        locationInfo: string | null;
       } | null;
       mapLink: string | null;
     } | null;
@@ -4405,7 +4608,7 @@ export type CONTACT_PAGE_QUERYResult = {
           | "wednesday"
           | null;
         hours: string | null;
-        message: null;
+        message: string | null;
       }> | null;
     } | null;
     businessHours2: {
@@ -4430,7 +4633,7 @@ export type CONTACT_PAGE_QUERYResult = {
           | "wednesday"
           | null;
         hours: string | null;
-        message: null;
+        message: string | null;
       }> | null;
     } | null;
     seo: {
@@ -4982,7 +5185,7 @@ export type SERVICE_LIFESTYLE_BY_SLUG_QUERYResult = {
         }
     > | null;
   }> | null;
-  call_to_action: null;
+  call_to_action: string | null;
   pillars: Array<{
     title: string | null;
     description: Array<
@@ -5156,7 +5359,7 @@ export type SERVICE_LIFESTYLE_BY_SLUG_QUERYResult = {
   }> | null;
 } | null;
 // Variable: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY
-// Query: *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{ title,  "slug": slug.current,  heroImage {    asset->{      url,          },    heroAlt  },  intro {    subtitle,    introParagraph  },  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },    additionalCheckinTitle,  additionalCheckin[] {    checkinDescription,    checkinCount  },  groupSectionTitle,  groupSectionDescription,  groupSections[] {    description,    "image": image.asset->url,    "alt": image.alt  },  assistanceSectionTitle,  assistanceSectionDescription,  assistanceSectionImage {    asset-> {      url,    }  },  referral_form_pdf {    asset-> {      url,    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
+// Query: *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{ title,  "slug": slug.current,  heroImage {    asset->{      url,    },    heroAlt  },  intro {    subtitle,    introParagraph  },  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },  additionalCheckinTitle,  additionalCheckin[] {    checkinDescription,    checkinCount  },  groupSectionTitle,  groupSectionDescription,  groupSections[] {    description,    "image": image.asset->url,    "alt": image.alt  },  assistanceSectionTitle,  assistanceSectionDescription,  assistanceSectionImage {    asset-> {      url,    }  },  referral_form_pdf {    asset-> {      url,    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
 export type SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult = {
   title: string | null;
   slug: string | null;
@@ -5299,6 +5502,154 @@ export type SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult = {
     } | null;
   } | null;
 } | null;
+// Variable: OUR_PROGRAMS_QUERY
+// Query: *[_type == "ourPrograms"][0]{ title, heroImage {    asset->{      url,      alt    },    heroAlt  },  intro {    subtitle,    introParagraph  },  programs[] {    image {        asset->{          url        },      alt    },    programName,    description  },  essentialSeries {    description,    image {        asset->{          url        },      alt    },    tableContent {      includesSessions[],      bonusSessions[],      bonusTransferable[]    },    listContent[]  },  curateLifestyle {    description,    image {        asset->{          url        },      alt    },    structure {      length,      format,      focus,      bonus[]    },    outcome  },  masterHealthBlueprint {    description,    image {        asset->{          url        },      alt    },    structure {      kickOff,      team,      plan,      programIncludes[],      privileges[]    },    outcome  },  exploreYourOptions {    image {        asset->{          url        }    },    contactMessage  },  faq[] {      title,      description  },  threePaths {    heading,    subtitle,    paragraph,    tableContent {      bestFor[],      approach[],      focus[],      extras {        essentialSeries[],        curateLifestyle[],        masterHealthBlueprint[]      },      pricing {        essentialSeries,        curateLifestyle[],        masterHealthBlueprint      }    },  },  ctaSection {    image {        asset->{          url        }    },    heading,    paragraph,    buttonText  }}
+export type OUR_PROGRAMS_QUERYResult = {
+  title: string | null;
+  heroImage: {
+    asset: {
+      url: string | null;
+      alt: null;
+    } | null;
+    heroAlt: string | null;
+  } | null;
+  intro: {
+    subtitle: string | null;
+    introParagraph: string | null;
+  } | null;
+  programs: Array<{
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    programName: string | null;
+    description: string | null;
+  }> | null;
+  essentialSeries: {
+    description: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    tableContent: {
+      includesSessions: Array<number> | null;
+      bonusSessions: Array<number> | null;
+      bonusTransferable: Array<boolean> | null;
+    } | null;
+    listContent: Array<string> | null;
+  } | null;
+  curateLifestyle: {
+    description: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    structure: {
+      length: string | null;
+      format: string | null;
+      focus: string | null;
+      bonus: Array<string> | null;
+    } | null;
+    outcome: string | null;
+  } | null;
+  masterHealthBlueprint: {
+    description: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    structure: {
+      kickOff: string | null;
+      team: string | null;
+      plan: string | null;
+      programIncludes: Array<string> | null;
+      privileges: Array<string> | null;
+    } | null;
+    outcome: string | null;
+  } | null;
+  exploreYourOptions: {
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+    contactMessage: string | null;
+  } | null;
+  faq: Array<{
+    title: string | null;
+    description: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+  }> | null;
+  threePaths: {
+    heading: string | null;
+    subtitle: string | null;
+    paragraph: string | null;
+    tableContent: {
+      bestFor: Array<string> | null;
+      approach: Array<string> | null;
+      focus: Array<string> | null;
+      extras: {
+        essentialSeries: Array<string> | null;
+        curateLifestyle: Array<string> | null;
+        masterHealthBlueprint: Array<string> | null;
+      } | null;
+      pricing: {
+        essentialSeries: string | null;
+        curateLifestyle: Array<string> | null;
+        masterHealthBlueprint: string | null;
+      } | null;
+    } | null;
+  } | null;
+  ctaSection: {
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+    heading: string | null;
+    paragraph: string | null;
+    buttonText: string | null;
+  } | null;
+} | null;
 
 declare module "@sanity/client" {
   interface SanityQueries {
@@ -5357,6 +5708,7 @@ declare module "@sanity/client" {
     '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  "treatments": *[_type == "treatments" && isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
     '*[_type == "legalPage" && slug.current == $slug][0]{\n  title,\n  body,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': LEGAL_PAGE_BY_SLUG_QUERYResult;
     '\n  *[_type == "serviceLifestyle" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    hero_secondary_title,\n    hero_large_text,\n    referral_form_pdf {\n      asset-> {\n        url,\n      }\n    },\n    block_2_title,\n    block_2_content,\n    block_2_image {\n      asset-> {\n        url,\n      }\n    },\n    block_3_title,\n    block_3_content,\n    "block_4_image": block_4_image.asset->url,\n    "block_5_image": block_5_image.asset->url,\n    benefits[] {\n      title,\n      description,\n      "image": image.asset->url,\n      tint_percentage,\n      tint_percentage_hover\n    },\n    "block_7_image": block_7_image.asset->url,\n    "block_9_image": block_9_image.asset->url,\n    timeline[] {\n      title,\n      description\n    },\n    "block_11_image": block_11_image.asset->url,\n    faq[] {\n      title,\n      description\n    },\n    call_to_action,\n    pillars[] {\n      title,\n      description\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{\n      teamMembers[] {\n        name,\n        role,\n        bio,\n        image {\n          asset-> {\n            url\n          }\n        }\n      }\n    },\n    testimonials[] {\n      name,\n      description,\n      image {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n': SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
-    '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,      \n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },  \n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
+    '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
+    '\n  *[_type == "ourPrograms"][0]{\n title,\n heroImage {\n    asset->{\n      url,\n      alt\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  programs[] {\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    programName,\n    description\n  },\n  essentialSeries {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    tableContent {\n      includesSessions[],\n      bonusSessions[],\n      bonusTransferable[]\n    },\n    listContent[]\n  },\n  curateLifestyle {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      length,\n      format,\n      focus,\n      bonus[]\n    },\n    outcome\n  },\n  masterHealthBlueprint {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      kickOff,\n      team,\n      plan,\n      programIncludes[],\n      privileges[]\n    },\n    outcome\n  },\n  exploreYourOptions {\n    image {\n        asset->{\n          url\n        }\n    },\n    contactMessage\n  },\n  faq[] {\n      title,\n      description\n  },\n  threePaths {\n    heading,\n    subtitle,\n    paragraph,\n    tableContent {\n      bestFor[],\n      approach[],\n      focus[],\n      extras {\n        essentialSeries[],\n        curateLifestyle[],\n        masterHealthBlueprint[]\n      },\n      pricing {\n        essentialSeries,\n        curateLifestyle[],\n        masterHealthBlueprint\n      }\n    },\n  },\n  ctaSection {\n    image {\n        asset->{\n          url\n        }\n    },\n    heading,\n    paragraph,\n    buttonText\n  }\n}': OUR_PROGRAMS_QUERYResult;
   }
 }

@@ -960,7 +960,7 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
   "slug": slug.current,
   heroImage {
     asset->{
-      url,      
+      url,
     },
     heroAlt
   },
@@ -975,7 +975,7 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
       "image": image.asset->url,
       alt
     }
-  },  
+  },
   additionalCheckinTitle,
   additionalCheckin[] {
     checkinDescription,
@@ -1015,4 +1015,120 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
     ctaButtonText
   },
   ${SEO_QUERY}
+}`;
+
+export const OUR_PROGRAMS_QUERY = groq`
+  *[_type == "ourPrograms"][0]{
+ title,
+ heroImage {
+    asset->{
+      url,
+      alt
+    },
+    heroAlt
+  },
+  intro {
+    subtitle,
+    introParagraph
+  },
+  programs[] {
+    image {
+        asset->{
+          url
+        },
+      alt
+    },
+    programName,
+    description
+  },
+  essentialSeries {
+    description,
+    image {
+        asset->{
+          url
+        },
+      alt
+    },
+    tableContent {
+      includesSessions[],
+      bonusSessions[],
+      bonusTransferable[]
+    },
+    listContent[]
+  },
+  curateLifestyle {
+    description,
+    image {
+        asset->{
+          url
+        },
+      alt
+    },
+    structure {
+      length,
+      format,
+      focus,
+      bonus[]
+    },
+    outcome
+  },
+  masterHealthBlueprint {
+    description,
+    image {
+        asset->{
+          url
+        },
+      alt
+    },
+    structure {
+      kickOff,
+      team,
+      plan,
+      programIncludes[],
+      privileges[]
+    },
+    outcome
+  },
+  exploreYourOptions {
+    image {
+        asset->{
+          url
+        }
+    },
+    contactMessage
+  },
+  faq[] {
+      title,
+      description
+  },
+  threePaths {
+    heading,
+    subtitle,
+    paragraph,
+    tableContent {
+      bestFor[],
+      approach[],
+      focus[],
+      extras {
+        essentialSeries[],
+        curateLifestyle[],
+        masterHealthBlueprint[]
+      },
+      pricing {
+        essentialSeries,
+        curateLifestyle[],
+        masterHealthBlueprint
+      }
+    },
+  },
+  ctaSection {
+    image {
+        asset->{
+          url
+        }
+    },
+    heading,
+    paragraph,
+    buttonText
+  }
 }`;

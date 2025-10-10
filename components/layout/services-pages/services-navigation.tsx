@@ -18,7 +18,7 @@ export function ServicesNavigation({
   return (
     <div className="bg-secondary">
       <nav className="container font-light text-primary">
-        <ul className="scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary scrollbar-thumb-rounded-full flex items-center gap-4 overflow-x-auto whitespace-nowrap py-8">
+        <ul className="scrollbar-thumb-rounded-full flex items-center gap-4 overflow-x-auto whitespace-nowrap py-8 scrollbar-thin scrollbar-track-secondary scrollbar-thumb-primary">
           <li>
             <Link
               className={`${hoverEffect} ${

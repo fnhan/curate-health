@@ -3,12 +3,12 @@ import ServiceLifestyleProgramContent from "@/components/layout/services-pages/s
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import {
   ALL_SERVICES_QUERYResult,
-  SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult
+  SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
   ALL_SERVICES_QUERY,
-  SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY
+  SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
 
 export default async function ServiceLifestylePage() {
@@ -16,10 +16,11 @@ export default async function ServiceLifestylePage() {
     query: ALL_SERVICES_QUERY,
   });
 
-  const program = await sanityFetch<SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult>({
-    query: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY,
-    params: { slug: "curate-lifestyle-program" },
-  });
+  const program =
+    await sanityFetch<SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult>({
+      query: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY,
+      params: { slug: "curate-lifestyle-program" },
+    });
 
   if (!program) {
     return null;
@@ -30,7 +31,10 @@ export default async function ServiceLifestylePage() {
   return (
     <>
       <ServiceHeroSection
-        hero_image={{ asset: { url: heroImage?.asset?.url! }, alt: heroImage?.heroAlt! }}
+        hero_image={{
+          asset: { url: heroImage?.asset?.url! },
+          alt: heroImage?.heroAlt!,
+        }}
       />
       <ServicesNavigation services={services} />
       <ServiceLifestyleProgramContent program={program} />
@@ -39,11 +43,11 @@ export default async function ServiceLifestylePage() {
 }
 
 export async function generateMetadata() {
-  const servicePage = await sanityFetch<SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult>({
-    query: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY,
-    params: { slug: "curate-lifestyle-program" },
-  });
-
+  const servicePage =
+    await sanityFetch<SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult>({
+      query: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY,
+      params: { slug: "curate-lifestyle-program" },
+    });
 
   if (!servicePage) {
     return null;

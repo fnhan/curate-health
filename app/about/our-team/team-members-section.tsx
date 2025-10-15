@@ -137,7 +137,7 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
   }, [searchParams, teamMembers]);
 
   return (
-    <section className="bg-white py-20 text-primary">
+    <section className="bg-white pb-24 pt-12 text-primary md:pb-28 md:pt-14 2xl:pb-40 2xl:pt-20">
       <Masonry
         breakpointCols={breakpointColumns}
         className="container flex"

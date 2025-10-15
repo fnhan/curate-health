@@ -16,7 +16,10 @@ const EssentialSeries = ({
   const { essentialSeries } = program;
 
   return (
-    <section className="bg-white pl-[210px] text-primary" id="essential-series">
+    <section
+      className="bg-white pl-[210px] pt-32 text-primary"
+      id="essential-series"
+    >
       <div className="three-color-border container pl-10 pt-14">
         <div className="flex max-h-[550px] justify-between gap-8 pb-5">
           <div className="flex max-w-lg flex-col gap-16">

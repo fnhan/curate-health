@@ -756,6 +756,33 @@ export const CONTACT_PAGE_QUERY = groq`{
         alt
       }
     },
+    branchName,
+  contactInfo{
+    email,
+    phone,
+    address{
+      street,
+      city,
+      state,
+      zip,
+      country,
+      locationInfo
+    },
+    mapLink,
+  },
+  branchName2,
+  contactInfo2{
+    brandName,
+    address{
+      street,
+      city,
+      state,
+      zip,
+      country,
+      locationInfo
+    },
+    mapLink,
+  },
     parking,
     howToGetHere,
     mapURL,
@@ -779,6 +806,10 @@ export const CONTACT_PAGE_QUERY = groq`{
         hours,
         message
       }
+    },
+    contactForm{
+      "image": image.asset->url,
+      alt
     },
     ${SEO_QUERY}
   },

@@ -39,14 +39,14 @@ function Post({ post }: { post: POST_QUERYResult }) {
 
   return (
     <div className="flex flex-col gap-6 border-l pl-4">
-      <h3 className="flex-grow text-2xl md:text-4xl">
-        <Link
-          href={`/blog/${slug?.current}`}
-          className="border-b border-transparent transition-all duration-300 hover:border-current"
-          dangerouslySetInnerHTML={{ __html: title! }}
-        />
-      </h3>
-      <div className="flex flex-grow justify-center">
+      <div>
+        <h3 className="flex-grow md:text-2xl lg:text-4xl 2xl:text-7xl">
+          <Link
+            href={`/blog/${slug?.current}`}
+            className="border-b border-transparent transition-all duration-300 hover:border-current"
+            dangerouslySetInnerHTML={{ __html: title! }}
+          />
+        </h3>
         {mainImage && (
           <CoverImage
             title={title!}
@@ -55,7 +55,7 @@ function Post({ post }: { post: POST_QUERYResult }) {
           />
         )}
       </div>
-      <div className="flex flex-col gap-6">
+      <div className="mt-auto flex flex-col gap-6">
         <div
           className="text-sm leading-relaxed md:text-base"
           dangerouslySetInnerHTML={{ __html: excerpt! }}
@@ -90,7 +90,7 @@ function CoverImage({
       alt={`Cover Image for ${title}`}
       src={builder.image(mainImage).quality(100).url()}
       className={cn("shadow-small", {
-        "hover:shadow-medium relative -z-10 max-w-xs transition-shadow duration-200 md:-top-20 lg:-top-16 lg:max-w-md xl:-top-[3.25rem] xl:max-w-lg":
+        "hover:shadow-medium relative -z-10 mx-auto max-w-xs transition-shadow duration-200 md:-top-20 lg:-top-16 lg:max-w-md xl:-top-7 xl:max-w-lg":
           slug,
       })}
     />

@@ -18,8 +18,7 @@ export default async function ContactPage() {
     return notFound();
   }
 
-  const { contactInfo, page } = contactPage;
-  const contactInfo2 = contactInfo?.contactInfo2;
+  const { page } = contactPage;
 
   if (!page) {
     return null;
@@ -27,12 +26,17 @@ export default async function ContactPage() {
 
   const {
     heroSection,
+    branchName,
+    branchName2,
+    contactInfo,
+    contactInfo2,
     mapURL,
     mapURL2,
     businessHours,
     businessHours2,
     parking,
     howToGetHere,
+    contactForm,
   } = page;
 
   return (
@@ -67,14 +71,13 @@ export default async function ContactPage() {
                 </div>
                 <div className="pl-8">
                   <a
-                    href={contactInfo?.contactInfo?.mapLink ?? ""}
+                    href={contactInfo?.mapLink ?? ""}
                     target="_blank"
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.contactInfo?.address?.street}{" "}
-                    {contactInfo?.contactInfo?.address?.city}
-                    {contactInfo?.contactInfo?.address?.state}
-                    {contactInfo?.contactInfo?.address?.zip}
+                    {contactInfo?.address?.street} {contactInfo?.address?.city}
+                    {contactInfo?.address?.state}
+                    {contactInfo?.address?.zip}
                   </a>
                 </div>
               </div>
@@ -87,10 +90,10 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     target="_blank"
-                    href={`mailto:${contactInfo?.contactInfo?.email}`}
+                    href={`mailto:${contactInfo?.email}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.contactInfo?.email}
+                    {contactInfo?.email}
                   </a>
                 </div>
               </div>
@@ -103,10 +106,10 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     target="_blank"
-                    href={`tel:${contactInfo?.contactInfo?.phone}`}
+                    href={`tel:${contactInfo?.phone}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.contactInfo?.phone}
+                    {contactInfo?.phone}
                   </a>
                 </div>
               </div>
@@ -119,10 +122,10 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     target="_blank"
-                    href={`tel:${contactInfo?.contactInfo?.phone}`}
+                    href={`tel:${contactInfo?.phone}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.contactInfo?.phone}
+                    {contactInfo?.phone}
                   </a>
                   <p className="text-xs text-white/80 md:text-base">
                     (Same as Phone)
@@ -138,12 +141,12 @@ export default async function ContactPage() {
         <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
           <div className="flex flex-col gap-8">
             <div className="space-y-4">
-              <h2 className="text-2xl font-medium">{contactInfo?.brandName}</h2>
+              <h2 className="text-2xl font-medium">{branchName}</h2>
               <address className="not-italic">
-                {contactInfo?.contactInfo?.address?.street}
-                {contactInfo?.contactInfo?.address?.city}
-                {contactInfo?.contactInfo?.address?.state}
-                {contactInfo?.contactInfo?.address?.zip}
+                {`${contactInfo?.address?.street},
+                  ${contactInfo?.address?.city},
+                  ${contactInfo?.address?.state}
+                  ${contactInfo?.address?.zip}`}
               </address>
             </div>
             <div className="flex flex-col gap-4">
@@ -180,7 +183,7 @@ export default async function ContactPage() {
               className="rounded-none border border-primary transition-all duration-300 hover:bg-transparent hover:text-primary"
             >
               <a
-                href={contactInfo?.contactInfo?.mapLink ?? ""}
+                href={contactInfo?.mapLink ?? ""}
                 target="_blank"
                 className="flex items-center justify-center gap-2"
               >
@@ -224,17 +227,15 @@ export default async function ContactPage() {
           <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
             <div className="flex flex-col gap-8">
               <div className="space-y-4">
-                <h2 className="text-2xl font-medium">
-                  {contactInfo2?.brandName}
-                </h2>
+                <h2 className="text-2xl font-medium">{branchName2}</h2>
                 {contactInfo2?.address?.locationInfo && (
                   <p>{contactInfo2?.address?.locationInfo}</p>
                 )}
                 <address className="not-italic">
-                  {contactInfo2?.address?.street}
-                  {contactInfo2?.address?.city}
-                  {contactInfo2?.address?.state}
-                  {contactInfo2?.address?.zip}
+                  {`${contactInfo2?.address?.street},
+                  ${contactInfo2?.address?.city},
+                  ${contactInfo2?.address?.state}
+                  ${contactInfo2?.address?.zip}`}
                 </address>
               </div>
               <div className="flex flex-col gap-4">
@@ -295,8 +296,8 @@ export default async function ContactPage() {
       )}
 
       <section className="relative bg-[#EBEBEB] py-14">
-        <div className="container relative z-10 flex flex-col gap-16 py-24 md:grid md:grid-cols-2">
-          <div className="text-light flex flex-col items-start gap-6 text-black">
+        <div className="container flex flex-col gap-16 py-24 md:grid md:grid-cols-2">
+          <div className="text-light z-10 flex flex-col items-start gap-6 text-black">
             <h2 className="text-balance text-2xl font-light">
               Need assistance?
             </h2>
@@ -372,6 +373,14 @@ export default async function ContactPage() {
               </form>
             </div>
           </div>
+          <Image
+            src={contactForm?.image ?? ""}
+            alt={contactForm?.alt ?? ""}
+            fill
+            objectFit="contain"
+            objectPosition="0 0"
+            className="-scale-x-100"
+          />
         </div>
       </section>
     </>

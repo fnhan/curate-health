@@ -26,7 +26,7 @@ const IntroSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
             <p className="font-light">{intro?.introParagraph}</p>
           </div>
         </div>
-        <div className="container grid justify-center gap-8 py-32 lg:grid-cols-[repeat(3,_min(100%,_350px))]">
+        <div className="container grid grid-cols-[min(95%,_350px)] justify-center gap-8 py-32 md:grid-cols-2 lg:grid-cols-[repeat(3,_min(100%,_350px))]">
           {programs?.map(({ programName, description, image }, i) => {
             const color = [
               "border-our-programs-border",

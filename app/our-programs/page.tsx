@@ -5,21 +5,14 @@ import ExploreYourOptions from "@/components/layout/our-programs-page/explore-yo
 import FaqSection from "@/components/layout/our-programs-page/faq-section";
 import IntroSection from "@/components/layout/our-programs-page/intro-section";
 import MasterHealthBlueprint from "@/components/layout/our-programs-page/master-health-blueprint";
+import { OurProgramsNavigation } from "@/components/layout/our-programs-page/our-programs-navigation";
 import ThreePaths from "@/components/layout/our-programs-page/three-paths";
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
-import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
-import {
-  ALL_SERVICES_QUERYResult,
-  OUR_PROGRAMS_QUERYResult,
-} from "@/sanity.types";
+import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
-import { ALL_SERVICES_QUERY, OUR_PROGRAMS_QUERY } from "@/sanity/lib/queries";
+import { OUR_PROGRAMS_QUERY } from "@/sanity/lib/queries";
 
-export default async function ServiceLifestylePage() {
-  const services = await sanityFetch<ALL_SERVICES_QUERYResult>({
-    query: ALL_SERVICES_QUERY,
-  });
-
+export default async function OurProgramsPage() {
   const program = await sanityFetch<OUR_PROGRAMS_QUERYResult>({
     query: OUR_PROGRAMS_QUERY,
   });
@@ -38,7 +31,7 @@ export default async function ServiceLifestylePage() {
           alt: heroImage?.heroAlt!,
         }}
       />
-      <ServicesNavigation services={services} />
+      <OurProgramsNavigation />
       <IntroSection program={program} />
       <EssentialSeries program={program} />
       <CurateLifestyle program={program} />

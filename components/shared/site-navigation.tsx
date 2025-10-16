@@ -78,10 +78,10 @@ export default function SiteNav({
                         Services
                       </AccordionTrigger>
                       <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                        {services?.map((service, index) => (
-                          <div key={index}>
-                            {service.treatments &&
+                        {services?.map((service, index) => {
+                          return service.treatments &&
                             service.treatments.length > 0 ? (
+                            <div key={index}>
                               <Accordion
                                 type="single"
                                 collapsible
@@ -110,17 +110,9 @@ export default function SiteNav({
                                   </AccordionContent>
                                 </AccordionItem>
                               </Accordion>
-                            ) : (
-                              <Link
-                                className="text-base hover:underline"
-                                href={`/services/${service.slug}`}
-                                onClick={() => setOpen(false)}
-                              >
-                                {service.title}
-                              </Link>
-                            )}
-                          </div>
-                        ))}
+                            </div>
+                          ) : null;
+                        })}
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>

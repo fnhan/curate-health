@@ -48,7 +48,7 @@ const ExploreYourOptions = ({
                     type="text"
                     required
                     placeholder="Name"
-                    className="w-full rounded-none border-black bg-white px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="w-full rounded-none border-black bg-[rgba(255,255,255,0.5)] px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-2">
@@ -58,7 +58,7 @@ const ExploreYourOptions = ({
                     type="email"
                     required
                     placeholder="Email address"
-                    className="w-full rounded-none border-black bg-white px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="w-full rounded-none border-black bg-[rgba(255,255,255,0.5)] px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </div>
               </div>

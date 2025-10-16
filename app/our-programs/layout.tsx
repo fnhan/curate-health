@@ -5,7 +5,7 @@ import { LAYOUT_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { LAYOUT_QUERY } from "@/sanity/lib/queries";
 
-export default async function ProductsLayout({
+export default async function OurProgramsLayout({
   children,
 }: {
   children: React.ReactNode;

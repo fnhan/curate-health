@@ -39,7 +39,7 @@ export function OurProgramsNavigation() {
             },
             {
               title: "Curate Lifestyle",
-              href: "/services/curate-lifestyle",
+              href: "#curate-lifestyle",
             },
             {
               title: "Master Health Blueprint",

@@ -14,7 +14,7 @@ const CurateLifestyle = ({
   const { curateLifestyle } = program;
 
   return (
-    <section className="bg-white pl-[210px] text-primary">
+    <section className="bg-white pl-[210px] text-primary" id="curate-lifestyle">
       <div className="two-color-border container relative px-10 pt-52">
         <div className="flex justify-end pb-5">
           <div className="absolute -left-[210px]">

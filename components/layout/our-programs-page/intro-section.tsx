@@ -1,6 +1,15 @@
+"use client";
+
 import Image from "next/image";
 
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
+
+const scrollToSection = (id) => {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
 
 const IntroSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
   if (!program) {
@@ -35,8 +44,13 @@ const IntroSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
             ][i];
             return (
               <div
-                className="rounded-xs flex min-h-[550px] flex-col border shadow-md"
+                className="rounded-xs flex min-h-[550px] flex-col border shadow-md hover:cursor-pointer"
                 key={programName}
+                onClick={() =>
+                  scrollToSection(
+                    programName?.toLowerCase().replaceAll(" ", "-")
+                  )
+                }
               >
                 <div className="relative flex-1">
                   <Image

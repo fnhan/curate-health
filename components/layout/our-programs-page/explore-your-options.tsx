@@ -16,8 +16,8 @@ const ExploreYourOptions = ({
 
   return (
     <section className="bg-white py-14">
-      <div className="container flex justify-between py-24">
-        <div className="relative left-52 flex-1 overflow-hidden">
+      <div className="container flex justify-center py-24 lg:justify-between">
+        <div className="relative hidden flex-1 overflow-hidden lg:block xl:left-52">
           <Image
             src={exploreYourOptions?.image?.asset?.url!}
             alt=""

@@ -72,7 +72,7 @@ const ThreePaths = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
           </p>
         </div>
       </div>
-      <div className="container flex justify-center text-primary">
+      <div className="container flex overflow-auto text-primary md:overflow-hidden lg:justify-center">
         <table className="border-collapse border-spacing-0">
           <thead>
             <tr>

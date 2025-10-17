@@ -15,30 +15,35 @@ const MasterHealthBlueprint = ({
 
   return (
     <section
-      className="bg-white pl-[210px] text-primary"
+      className="bg-white text-primary 2xl:pl-[210px]"
       id="master-health-blueprint"
     >
       <div className="single-color-border container px-10 pt-52">
-        <div className="relative flex justify-between pb-5">
+        <div className="relative flex flex-col items-center justify-between gap-20 pb-5 xl:flex-row xl:gap-16">
           <div className="flex max-w-[450px] flex-col gap-16">
-            <h2 className="text-2xl capitalize leading-[52px] lg:text-[40px]">
+            <h2 className="text-3xl capitalize leading-[52px] lg:text-[40px]">
               Master Health Blueprint
             </h2>
             <p className="whitespace-pre-line text-base leading-[28px]">
               {masterHealthBlueprint?.description}
             </p>
           </div>
-          <div className="absolute -top-14 right-0 h-14 w-[45%] bg-our-programs-border-3"></div>
-          <Image
-            src={masterHealthBlueprint?.image?.asset?.url!}
-            alt={masterHealthBlueprint?.image?.alt ?? ""}
-            height={550}
-            width={700}
-          />
+          <div className="relative">
+            <div className="absolute -top-14 right-0 h-14 w-3/4 bg-our-programs-border-3"></div>
+            <Image
+              src={masterHealthBlueprint?.image?.asset?.url!}
+              alt={masterHealthBlueprint?.image?.alt ?? ""}
+              height={550}
+              width={700}
+              className="relative right-0"
+            />
+          </div>
         </div>
         <div>
-          <h3 className="my-14 text-[32px]">Master Health Blueprint</h3>
-          <div className="flex justify-between">
+          <h3 className="my-14 text-2xl lg:text-[32px]">
+            Master Health Blueprint
+          </h3>
+          <div className="flex flex-col justify-between xl:flex-row">
             <table className="[&_th]:pr-20 [&_th]:align-top">
               <thead>
                 <tr>
@@ -98,7 +103,7 @@ const MasterHealthBlueprint = ({
                 </tr>
               </tbody>
             </table>
-            <div className="flex flex-1 justify-center">
+            <div className="flex flex-1 xl:justify-center">
               <div className="max-w-[350px]">
                 <p className="text-base font-semibold">Outcome</p>
                 <p className="mt-10">{masterHealthBlueprint?.outcome}</p>

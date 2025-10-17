@@ -14,10 +14,13 @@ const CurateLifestyle = ({
   const { curateLifestyle } = program;
 
   return (
-    <section className="bg-white pl-[210px] text-primary" id="curate-lifestyle">
+    <section
+      className="bg-white text-primary 2xl:pl-[210px]"
+      id="curate-lifestyle"
+    >
       <div className="two-color-border container relative px-10 pt-52">
-        <div className="flex justify-end pb-5">
-          <div className="absolute -left-[210px]">
+        <div className="flex flex-col items-center justify-end gap-8 pb-5 xl:flex-row">
+          <div className="relative md:left-0 2xl:absolute 2xl:-left-[210px]">
             <div className="absolute -top-14 left-0 h-14 w-5/6 bg-our-programs-border-2"></div>
             <Image
               src={curateLifestyle?.image?.asset?.url!}
@@ -26,8 +29,8 @@ const CurateLifestyle = ({
               width={700}
             />
           </div>
-          <div className="mr-48 flex max-w-[540px] flex-col gap-16">
-            <h2 className="text-2xl capitalize lg:text-[40px]">
+          <div className="flex max-w-[540px] flex-col gap-16 2xl:mr-48">
+            <h2 className="text-3xl capitalize lg:text-[40px]">
               Curate Lifestyle
             </h2>
             <p className="whitespace-pre-line text-base leading-[28px]">
@@ -36,8 +39,8 @@ const CurateLifestyle = ({
           </div>
         </div>
         <div>
-          <h3 className="my-14 text-[32px]">Curate Lifestyle</h3>
-          <div className="flex justify-between">
+          <h3 className="my-14 text-2xl lg:text-[32px]">Curate Lifestyle</h3>
+          <div className="flex flex-col justify-between xl:flex-row">
             <table className="[&_th]:pr-20 [&_th]:align-top">
               <thead>
                 <tr>
@@ -80,7 +83,7 @@ const CurateLifestyle = ({
                 </tr>
               </tbody>
             </table>
-            <div className="mr-52 max-w-[350px]">
+            <div className="max-w-[350px] xl:mr-52">
               <p className="text-base font-semibold">Outcome</p>
               <p className="mt-10">{curateLifestyle?.outcome}</p>
             </div>

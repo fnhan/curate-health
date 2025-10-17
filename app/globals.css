@@ -1,23 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.three-color-border {
-  box-shadow:
-    -70px 0 0 0 hsl(73, 9%, 51%),
-    -140px 0 0 0 hsl(77, 27%, 65%),
-    -210px 0 0 0 hsl(var(--our-programs-border-3));
-}
-
-.two-color-border {
-  box-shadow:
-    -140px 0 0 0 hsl(77, 27%, 65%),
-    -210px 0 0 0 hsl(var(--our-programs-border-3));
-}
-
-.single-color-border {
-  box-shadow: -210px 0 0 0 hsl(var(--our-programs-border-3));
-}
+/* 
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: lightblue;
+  }
+} */
 
 .li-checkmark {
   list-style-image: url("../public/images/green-checkmark.svg");
@@ -61,6 +50,29 @@
     --our-programs-border: 73 9% 51%;
     --our-programs-border-2: 77 27% 65%;
     --our-programs-border-3: 84 7% 86%;
+  }
+
+  .three-color-border {
+    @screen 2xl {
+      box-shadow:
+        -70px 0 0 0 hsl(73, 9%, 51%),
+        -140px 0 0 0 hsl(77, 27%, 65%),
+        -210px 0 0 0 hsl(var(--our-programs-border-3));
+    }
+  }
+
+  .two-color-border {
+    @screen 2xl {
+      box-shadow:
+        -140px 0 0 0 hsl(77, 27%, 65%),
+        -210px 0 0 0 hsl(var(--our-programs-border-3));
+    }
+  }
+
+  .single-color-border {
+    @screen 2xl {
+      box-shadow: -210px 0 0 0 hsl(var(--our-programs-border-3));
+    }
   }
 }
 

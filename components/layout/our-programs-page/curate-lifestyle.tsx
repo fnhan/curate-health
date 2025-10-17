@@ -114,10 +114,10 @@ const CurateLifestyle = ({
                 </a>
                 <Link
                   href="/services/curate-lifestyle"
-                  className="flex justify-center bg-[#878E76] p-6 text-white shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] max-lg:gap-x-2 lg:justify-between"
+                  className="flex justify-center gap-x-2 bg-[#878E76] p-6 text-white shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] lg:justify-between"
                 >
                   {curateLifestyle?.call_to_action}
-                  <img src={arrow.src} alt="" width={30} height={30} />
+                  <img src={arrow.src} alt="" width={25} height={20} />
                 </Link>
               </div>
             </div>

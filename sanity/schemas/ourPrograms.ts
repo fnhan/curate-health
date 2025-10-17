@@ -11,7 +11,7 @@ export default defineType({
       name: "isActive",
       title: "Is Active",
       type: "boolean",
-      description: "Toggle to show/hide this treatment on the website.",
+      description: "Toggle to show/hide this page on the website.",
       initialValue: true,
       validation: (Rule) =>
         Rule.required().error("Is Active status is required"),
@@ -260,6 +260,12 @@ export default defineType({
                 },
               ],
             },
+            {
+              name: "entry",
+              title: "Entry",
+              type: "string",
+              validation: (Rule) => Rule.required().error("Entry is required"),
+            },
           ],
         },
         {
@@ -268,6 +274,22 @@ export default defineType({
           type: "text",
           validation: (Rule) => Rule.required().error("Outcome is required"),
         },
+        defineField({
+          name: "referral_form_pdf",
+          title: "Referral Form PDF",
+          type: "file",
+          validation: (Rule) => Rule.required().error("A PDF is required"),
+          options: {
+            accept: "application/pdf",
+          },
+        }),
+        defineField({
+          name: "call_to_action",
+          title: "Call To Action Text",
+          type: "string",
+          validation: (rule) =>
+            rule.required().error("The call to action text is required"),
+        }),
       ],
     }),
     defineField({

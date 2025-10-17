@@ -1049,7 +1049,7 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
 }`;
 
 export const OUR_PROGRAMS_QUERY = groq`
-  *[_type == "ourPrograms"][0]{
+  *[_type == "ourPrograms" && isActive == true][0]{
  title,
  heroImage {
     asset->{
@@ -1099,9 +1099,16 @@ export const OUR_PROGRAMS_QUERY = groq`
       length,
       format,
       focus,
-      bonus[]
+      bonus[],
+      entry
     },
-    outcome
+    outcome,
+    referral_form_pdf {
+      asset-> {
+        url,
+      }
+    },
+    call_to_action
   },
   masterHealthBlueprint {
     description,

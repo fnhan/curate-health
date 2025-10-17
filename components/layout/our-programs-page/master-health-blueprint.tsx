@@ -40,11 +40,11 @@ const MasterHealthBlueprint = ({
           </div>
         </div>
         <div>
-          <h3 className="my-14 text-2xl lg:text-[32px]">
+          <h3 className="my-14 text-2xl max-xl:text-center lg:text-[32px]">
             Master Health Blueprint
           </h3>
           <div className="flex flex-col justify-between xl:flex-row">
-            <table className="[&_th]:pr-20 [&_th]:align-top">
+            <table className="max-xl: mx-auto [&_th]:pr-20 [&_th]:align-top">
               <thead>
                 <tr>
                   <th className="pb-10 text-left font-semibold">Structure</th>
@@ -103,7 +103,7 @@ const MasterHealthBlueprint = ({
                 </tr>
               </tbody>
             </table>
-            <div className="flex flex-1 xl:justify-center">
+            <div className="flex flex-1 justify-center">
               <div className="max-w-[350px]">
                 <p className="text-base font-semibold">Outcome</p>
                 <p className="mt-10">{masterHealthBlueprint?.outcome}</p>

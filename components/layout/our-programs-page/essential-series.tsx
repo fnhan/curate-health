@@ -43,10 +43,12 @@ const EssentialSeries = ({
           </div>
         </div>
         <div>
-          <h3 className="my-14 text-2xl lg:text-[32px]">Essential Series</h3>
+          <h3 className="my-14 text-2xl max-xl:text-center lg:text-[32px]">
+            Essential Series
+          </h3>
           <div className="flex flex-col gap-12 xl:flex-row">
             <div className="overflow-auto lg:overflow-visible">
-              <table className="max-h-60 [&_td]:p-6">
+              <table className="max-h-60 max-xl:mx-auto [&_td]:p-6">
                 <thead>
                   <tr>
                     <th className="text-left font-semibold">Tier</th>

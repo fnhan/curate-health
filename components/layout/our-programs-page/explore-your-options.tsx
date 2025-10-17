@@ -22,9 +22,8 @@ const ExploreYourOptions = ({
             src={exploreYourOptions?.image?.asset?.url!}
             alt=""
             fill
-            objectFit="cover"
             objectPosition="100% 18%"
-            className="scale-110"
+            className="scale-110 object-cover"
           />
         </div>
         <div className="z-10 flex flex-col gap-6 text-primary">

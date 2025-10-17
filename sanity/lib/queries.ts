@@ -727,7 +727,8 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
       city,
       state,
       zip,
-      country
+      country,
+      locationInfo
     },
     mapLink,
   },
@@ -738,7 +739,8 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
       city,
       state,
       zip,
-      country
+      country,
+      locationInfo
     },
     mapLink,
   },
@@ -754,6 +756,33 @@ export const CONTACT_PAGE_QUERY = groq`{
         alt
       }
     },
+    branchName,
+  contactInfo{
+    email,
+    phone,
+    address{
+      street,
+      city,
+      state,
+      zip,
+      country,
+      locationInfo
+    },
+    mapLink,
+  },
+  branchName2,
+  contactInfo2{
+    brandName,
+    address{
+      street,
+      city,
+      state,
+      zip,
+      country,
+      locationInfo
+    },
+    mapLink,
+  },
     parking,
     howToGetHere,
     mapURL,
@@ -764,7 +793,8 @@ export const CONTACT_PAGE_QUERY = groq`{
       daysOpen,
       exceptions[]{
         day,
-        hours
+        hours,
+        message
       }
     },
     businessHours2{
@@ -773,8 +803,13 @@ export const CONTACT_PAGE_QUERY = groq`{
       daysOpen,
       exceptions[]{
         day,
-        hours
+        hours,
+        message
       }
+    },
+    contactForm{
+      "image": image.asset->url,
+      alt
     },
     ${SEO_QUERY}
   },
@@ -920,6 +955,7 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
       title,
       description
     },
+    call_to_action,
     pillars[] {
       title,
       description
@@ -949,14 +985,13 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
   }
 `;
 
-
 export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
   *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{
  title,
   "slug": slug.current,
   heroImage {
     asset->{
-      url,      
+      url,
     },
     heroAlt
   },
@@ -971,7 +1006,7 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
       "image": image.asset->url,
       alt
     }
-  },  
+  },
   additionalCheckinTitle,
   additionalCheckin[] {
     checkinDescription,
@@ -1011,4 +1046,127 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
     ctaButtonText
   },
   ${SEO_QUERY}
+}`;
+
+export const OUR_PROGRAMS_QUERY = groq`
+  *[_type == "ourPrograms" && isActive == true][0]{
+ title,
+ heroImage {
+    asset->{
+      url,
+      alt
+    },
+    heroAlt
+  },
+  intro {
+    subtitle,
+    introParagraph
+  },
+  programs[] {
+    image {
+        asset->{
+          url
+        },
+      alt
+    },
+    programName,
+    description
+  },
+  essentialSeries {
+    description,
+    image {
+        asset->{
+          url
+        },
+      alt
+    },
+    tableContent {
+      includesSessions[],
+      bonusSessions[],
+      bonusTransferable[]
+    },
+    listContent[]
+  },
+  curateLifestyle {
+    description,
+    image {
+        asset->{
+          url
+        },
+      alt
+    },
+    structure {
+      length,
+      format,
+      focus,
+      bonus[],
+      entry
+    },
+    outcome,
+    referral_form_pdf {
+      asset-> {
+        url,
+      }
+    },
+    call_to_action
+  },
+  masterHealthBlueprint {
+    description,
+    image {
+        asset->{
+          url
+        },
+      alt
+    },
+    structure {
+      kickOff,
+      team,
+      plan,
+      programIncludes[],
+      privileges[]
+    },
+    outcome
+  },
+  exploreYourOptions {
+    image {
+        asset->{
+          url
+        }
+    },
+    contactMessage
+  },
+  faq[] {
+      title,
+      description
+  },
+  threePaths {
+    heading,
+    subtitle,
+    paragraph,
+    tableContent {
+      bestFor[],
+      approach[],
+      focus[],
+      extras {
+        essentialSeries[],
+        curateLifestyle[],
+        masterHealthBlueprint[]
+      },
+      pricing {
+        essentialSeries,
+        curateLifestyle[],
+        masterHealthBlueprint
+      }
+    },
+  },
+  ctaSection {
+    image {
+        asset->{
+          url
+        }
+    },
+    heading,
+    paragraph,
+    buttonText
+  }
 }`;

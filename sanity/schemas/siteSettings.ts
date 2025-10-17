@@ -17,6 +17,10 @@ export default defineType({
       type: "string",
       title: "Brand Name",
       validation: (Rule) => Rule.required().error("Brand Name is required"),
+      deprecated: {
+        reason: "Moved to Contact Page.",
+      },
+      readOnly: true,
     }),
     defineField({
       name: "siteLogo",
@@ -33,6 +37,10 @@ export default defineType({
       name: "contactInfo",
       type: "object",
       title: "Contact Information",
+      deprecated: {
+        reason: "Moved to Contact Page.",
+      },
+      readOnly: true,
       fields: [
         defineField({
           name: "email",
@@ -76,6 +84,11 @@ export default defineType({
               type: "string",
               title: "Country",
             }),
+            defineField({
+              name: "locationInfo",
+              title: "Location Information",
+              type: "text",
+            }),
           ],
         }),
         defineField({
@@ -90,6 +103,10 @@ export default defineType({
       name: "contactInfo2",
       type: "object",
       title: "Contact Information 2",
+      deprecated: {
+        reason: "Moved to Contact Page.",
+      },
+      readOnly: true,
       fields: [
         defineField({
           name: "address",
@@ -120,6 +137,11 @@ export default defineType({
               name: "country",
               type: "string",
               title: "Country",
+            }),
+            defineField({
+              name: "locationInfo",
+              title: "Location Information",
+              type: "text",
             }),
           ],
         }),

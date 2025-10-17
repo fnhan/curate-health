@@ -74,53 +74,45 @@ export default function SiteNav({
                       value="services"
                       className="border-none text-2xl"
                     >
-                      <AccordionTrigger className="p-0 font-normal">
+                      <AccordionTrigger className="mr-20 p-0 font-normal">
                         Services
                       </AccordionTrigger>
                       <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                        {services?.map((service, index) => (
-                          <div key={index}>
-                            {service.treatments && service.treatments.length > 0 ? (
-                              <Accordion type="single" collapsible className="w-full">
+                        {services?.map((service, index) => {
+                          return service.treatments &&
+                            service.treatments.length > 0 ? (
+                            <div key={index}>
+                              <Accordion
+                                type="single"
+                                collapsible
+                                className="w-full"
+                              >
                                 <AccordionItem
                                   value={`service-${index}`}
                                   className="border-none"
                                 >
-                                  <AccordionTrigger className="p-0 font-normal text-base pr-4">
+                                  <AccordionTrigger className="mr-20 p-0 pr-4 text-base font-normal">
                                     {service.title}
                                   </AccordionTrigger>
                                   <AccordionContent className="ml-4 flex flex-col gap-2 pt-4">
-                                    <Link
-                                      className="text-sm hover:underline"
-                                      href={`/services/${service.slug}`}
-                                      onClick={() => setOpen(false)}
-                                    >
-                                      Overview
-                                    </Link>
-                                    {service.treatments.map((treatment, treatmentIndex) => (
-                                      <Link
-                                        key={treatmentIndex}
-                                        className="text-sm hover:underline"
-                                        href={`/services/${service.slug}/${treatment.slug}`}
-                                        onClick={() => setOpen(false)}
-                                      >
-                                        {treatment.title}
-                                      </Link>
-                                    ))}
+                                    {service.treatments.map(
+                                      (treatment, treatmentIndex) => (
+                                        <Link
+                                          key={treatmentIndex}
+                                          className="text-sm hover:underline"
+                                          href={`/services/${service.slug}/${treatment.slug}`}
+                                          onClick={() => setOpen(false)}
+                                        >
+                                          {treatment.title}
+                                        </Link>
+                                      )
+                                    )}
                                   </AccordionContent>
                                 </AccordionItem>
                               </Accordion>
-                            ) : (
-                              <Link
-                                className="text-base hover:underline"
-                                href={`/services/${service.slug}`}
-                                onClick={() => setOpen(false)}
-                              >
-                                {service.title}
-                              </Link>
-                            )}
-                          </div>
-                        ))}
+                            </div>
+                          ) : null;
+                        })}
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
@@ -131,7 +123,7 @@ export default function SiteNav({
                       className="border-none text-2xl"
                     >
                       <AccordionTrigger
-                        className="p-0 font-normal"
+                        className="mr-20 p-0 font-normal"
                         aria-label="about-pages"
                         aria-controls="about-items"
                         id="about-menu"
@@ -151,6 +143,47 @@ export default function SiteNav({
                               {page?.title}
                             </Link>
                           ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                  {/* Programs */}
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem
+                      value="about-pages"
+                      className="border-none text-2xl"
+                    >
+                      <AccordionTrigger
+                        className="mr-20 p-0 font-normal"
+                        aria-label="about-pages"
+                        aria-controls="about-items"
+                        id="about-menu"
+                      >
+                        Programs
+                      </AccordionTrigger>
+                      <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
+                        {[
+                          {
+                            title: "Essential Series",
+                            href: "/our-programs#essential-series",
+                          },
+                          {
+                            title: "Curate Lifestyle",
+                            href: "/services/curate-lifestyle",
+                          },
+                          {
+                            title: "Master Health Blueprint",
+                            href: "/our-programs#master-health-blueprint",
+                          },
+                        ].map((page, index) => (
+                          <Link
+                            key={index}
+                            className="text-base hover:underline"
+                            href={page.href}
+                            onClick={() => setOpen(false)}
+                          >
+                            {page.title}
+                          </Link>
+                        ))}
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>

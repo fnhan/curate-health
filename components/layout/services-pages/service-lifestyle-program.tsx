@@ -1,12 +1,11 @@
 import Image from "next/image";
 
+import { PortableText } from "@portabletext/react";
+
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult,
-} from "@/sanity.types";
-import { PortableText } from "@portabletext/react";
+import { SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult } from "@/sanity.types";
 
 export default function ServiceLifestyleProgramContent({
   program,
@@ -17,7 +16,21 @@ export default function ServiceLifestyleProgramContent({
     return null;
   }
 
-  const { title, intro, additionalSections, cta, additionalCheckinTitle, additionalCheckin, groupSectionTitle, groupSections, groupSectionDescription, assistanceSectionTitle, assistanceSectionDescription, assistanceSectionImage, referral_form_pdf } = program;
+  const {
+    title,
+    intro,
+    additionalSections,
+    cta,
+    additionalCheckinTitle,
+    additionalCheckin,
+    groupSectionTitle,
+    groupSections,
+    groupSectionDescription,
+    assistanceSectionTitle,
+    assistanceSectionDescription,
+    assistanceSectionImage,
+    referral_form_pdf,
+  } = program;
   const { ctaBg, ctaBgAlt, ctaTitle, ctaText, ctaButtonText } = cta || {};
 
   return (
@@ -42,15 +55,22 @@ export default function ServiceLifestyleProgramContent({
       <AlternatingSections sections={additionalSections!} />
 
       <section className="bg-white py-14">
-        <div className="container flex flex-col gap-12 items-center mx-auto">
-          <h2 className="text-balance text-2xl font-light text-center">
+        <div className="container mx-auto flex flex-col items-center gap-12">
+          <h2 className="text-balance text-center text-2xl font-light">
             {additionalCheckinTitle}
           </h2>
-          <div className="flex flex-col md:flex-row max-w-4xl gap-6 mx-auto">
+          <div className="mx-auto flex max-w-4xl flex-col gap-6 md:flex-row">
             {additionalCheckin?.map((checkin) => (
-              <div key={checkin.checkinDescription} className="flex-1 flex flex-col gap-6 items-center">
-                <div className="text-balance text-4xl text-center bg-[#878E76] size-20 rounded-full text-white font-medium flex items-center justify-center">{checkin.checkinCount}</div>
-                <p className="text-balance font-light text-center italic max-w-64">{checkin.checkinDescription}</p>
+              <div
+                key={checkin.checkinDescription}
+                className="flex flex-1 flex-col items-center gap-6"
+              >
+                <div className="flex size-20 items-center justify-center text-balance rounded-full bg-[#878E76] text-center text-4xl font-medium text-white">
+                  {checkin.checkinCount}
+                </div>
+                <p className="max-w-64 text-balance text-center font-light italic">
+                  {checkin.checkinDescription}
+                </p>
               </div>
             ))}
           </div>
@@ -63,26 +83,29 @@ export default function ServiceLifestyleProgramContent({
       </div>
 
       <section className="bg-white py-14">
-        <div className="container flex flex-col gap-12 items-center">
-
-          <h1 className="text-2xl capitalize md:text-4xl 2xl:text-5xl">{groupSectionTitle}</h1>
-          <div className="mx-auto font-light max-w-lg space-y-4 text-pretty text-center">
+        <div className="container flex flex-col items-center gap-12">
+          <h1 className="text-2xl capitalize md:text-4xl 2xl:text-5xl">
+            {groupSectionTitle}
+          </h1>
+          <div className="mx-auto max-w-lg space-y-4 text-pretty text-center font-light">
             {groupSectionDescription}
           </div>
-          <div className="flex flex-col gap-4 justify-center divide-y divide-primary w-full max-w-2xl">
+          <div className="flex w-full max-w-2xl flex-col justify-center gap-4 divide-y divide-primary">
             {groupSections?.map((section, idx) => (
               <div
                 key={idx}
-                className="flex flex-row gap-4 justify-between items-center py-4 group"
+                className="group flex flex-row items-center justify-between gap-4 py-4"
               >
-                <div><PortableText value={section.description!} /></div>
-                <div className="size-24 rounded-full bg-primary shrink-0">
+                <div>
+                  <PortableText value={section.description!} />
+                </div>
+                <div className="size-24 shrink-0 rounded-full bg-primary">
                   <Image
                     src={section.image!}
                     alt={section.alt!}
                     width={100}
                     height={100}
-                    className="rounded-full size-full object-cover transition-all duration-300 md:grayscale group-hover:md:grayscale-0"
+                    className="size-full rounded-full object-cover transition-all duration-300 md:grayscale group-hover:md:grayscale-0"
                   />
                 </div>
               </div>
@@ -97,8 +120,8 @@ export default function ServiceLifestyleProgramContent({
           src={assistanceSectionImage?.asset?.url!}
           alt="Assistance Section Image"
           fill
-          className="hidden xl:block object-contain w-full h-full bg-[#EBEBEB] min-w-full min-h-full -scale-x-100 left-0 right-0"
-          style={{ objectPosition: '0px center' }}
+          className="left-0 right-0 hidden h-full min-h-full w-full min-w-full -scale-x-100 bg-[#EBEBEB] object-contain xl:block"
+          style={{ objectPosition: "0px center" }}
           priority
         />
         <div className="container relative z-10 flex flex-row py-24">
@@ -115,7 +138,7 @@ export default function ServiceLifestyleProgramContent({
                 method="POST"
                 className="space-y-4"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Input
                       id="name"
@@ -123,7 +146,7 @@ export default function ServiceLifestyleProgramContent({
                       type="text"
                       required
                       placeholder="Name"
-                      className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="w-full rounded-none border-black bg-[#EBEBEB] px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
                   </div>
                   <div className="space-y-2">
@@ -134,7 +157,7 @@ export default function ServiceLifestyleProgramContent({
                       type="email"
                       required
                       placeholder="Email address"
-                      className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="w-full rounded-none border-black bg-[#EBEBEB] px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
                   </div>
                 </div>
@@ -146,7 +169,7 @@ export default function ServiceLifestyleProgramContent({
                     type="text"
                     required
                     placeholder="Subject"
-                    className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="w-full rounded-none border-black bg-[#EBEBEB] px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
                 </div>
                 <div className="space-y-2">
@@ -156,12 +179,13 @@ export default function ServiceLifestyleProgramContent({
                     name="message"
                     required
                     placeholder="Message"
-                    className="p-4 flex min-h-[80px] w-full border border-black bg-[#EBEBEB] focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="flex min-h-[80px] w-full border border-black bg-[#EBEBEB] p-4 focus-visible:ring-0 focus-visible:ring-offset-0"
                     rows={4}
                   />
                 </div>
-                <button type="submit"
-                  className="text-sm font-light text-black border w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 py-2"
+                <button
+                  type="submit"
+                  className="w-full rounded-none border border-black bg-[#EBEBEB] py-2 text-sm font-light text-black focus-visible:ring-0 focus-visible:ring-offset-0"
                 >
                   Send Message
                 </button>
@@ -185,7 +209,7 @@ export default function ServiceLifestyleProgramContent({
               <h6 className="text-balance text-lg capitalize md:text-center md:text-3xl 2xl:text-4xl">
                 {ctaTitle}
               </h6>
-              <p className="max-w-lg mx-auto text-pretty text-sm font-light md:text-center md:text-base">
+              <p className="mx-auto max-w-lg text-pretty text-sm font-light md:text-center md:text-base">
                 {ctaText}
               </p>
             </div>

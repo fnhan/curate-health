@@ -5,7 +5,6 @@ import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -19,14 +18,26 @@ export default async function ContactPage() {
     return notFound();
   }
 
-  const { contactInfo, page } = contactPage;
-  const contactInfo2 = contactInfo?.contactInfo2;
+  const { page } = contactPage;
 
   if (!page) {
     return null;
   }
 
-  const { heroSection, mapURL, mapURL2, businessHours, businessHours2, parking, howToGetHere } = page;
+  const {
+    heroSection,
+    branchName,
+    branchName2,
+    contactInfo,
+    contactInfo2,
+    mapURL,
+    mapURL2,
+    businessHours,
+    businessHours2,
+    parking,
+    howToGetHere,
+    contactForm,
+  } = page;
 
   return (
     <>
@@ -60,14 +71,13 @@ export default async function ContactPage() {
                 </div>
                 <div className="pl-8">
                   <a
-                    href={contactInfo?.contactInfo?.mapLink ?? ""}
+                    href={contactInfo?.mapLink ?? ""}
                     target="_blank"
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.contactInfo?.address?.street}{" "}
-                    {contactInfo?.contactInfo?.address?.city}
-                    {contactInfo?.contactInfo?.address?.state}
-                    {contactInfo?.contactInfo?.address?.zip}
+                    {contactInfo?.address?.street} {contactInfo?.address?.city}
+                    {contactInfo?.address?.state}
+                    {contactInfo?.address?.zip}
                   </a>
                 </div>
               </div>
@@ -80,10 +90,10 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     target="_blank"
-                    href={`mailto:${contactInfo?.contactInfo?.email}`}
+                    href={`mailto:${contactInfo?.email}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.contactInfo?.email}
+                    {contactInfo?.email}
                   </a>
                 </div>
               </div>
@@ -96,10 +106,10 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     target="_blank"
-                    href={`tel:${contactInfo?.contactInfo?.phone}`}
+                    href={`tel:${contactInfo?.phone}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.contactInfo?.phone}
+                    {contactInfo?.phone}
                   </a>
                 </div>
               </div>
@@ -112,99 +122,31 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     target="_blank"
-                    href={`tel:${contactInfo?.contactInfo?.phone}`}
+                    href={`tel:${contactInfo?.phone}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.contactInfo?.phone}
+                    {contactInfo?.phone}
                   </a>
-                  <p className="text-xs text-white/80 md:text-base">Same as phone number</p>
+                  <p className="text-xs text-white/80 md:text-base">
+                    (Same as Phone)
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section className="relative bg-[#EBEBEB] py-14">
-        <div className="container relative z-10 flex flex-row py-24 justify-center">
-          <div className="flex flex-col gap-6 text-black text-light">
-            <h2 className="text-balance text-2xl font-light">
-              Need assistance?
-            </h2>
-            <div className="mx-auto max-w-xl space-y-4 text-pretty font-light">
-              If you need help getting started with the Curate Lifestyle Program, our team is here to support you— please contact us or send us a message for guidance on the referral process and next steps.
-            </div>
-            <div className="w-full max-w-md">
-              <form
-                action="https://formspree.io/f/xrblyjbl"
-                method="POST"
-                className="space-y-4 text-black"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 items-end gap-4">
-                  <div className="space-y-2 relative">
-                    <Label htmlFor="name" className="absolute top-2 left-2 text-sm px-3 -translate-y-1/2 bg-[#EBEBEB]">Name</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      placeholder="Name"
-                      className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    {/* <Label htmlFor="email">Email</Label> */}
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="Email address"
-                      className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  {/* <Label htmlFor="subject">Subject</Label> */}
-                  <Input
-                    id="subject"
-                    name="subject"
-                    type="text"
-                    required
-                    placeholder="Subject"
-                    className="px-4 w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                  />
-                </div>
-                <div className="space-y-2">
-                  {/* <Label htmlFor="message">Message</Label> */}
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    placeholder="Message"
-                    className="p-4 flex min-h-[80px] w-full border border-black bg-[#EBEBEB] focus-visible:ring-0 focus-visible:ring-offset-0"
-                    rows={4}
-                  />
-                </div>
-                <button type="submit"
-                  className="text-sm font-light text-black border w-full bg-[#EBEBEB] border-black rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 py-2"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="bg-white py-14 text-black md:py-28 space-y-16">
+
+      <section className="space-y-16 bg-white py-14 text-black md:py-28">
         <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
           <div className="flex flex-col gap-8">
             <div className="space-y-4">
-              <h2 className="text-2xl font-medium">{contactInfo?.brandName}</h2>
+              <h2 className="text-2xl font-medium">{branchName}</h2>
               <address className="not-italic">
-                {contactInfo?.contactInfo?.address?.street}
-                {contactInfo?.contactInfo?.address?.city}
-                {contactInfo?.contactInfo?.address?.state}
-                {contactInfo?.contactInfo?.address?.zip}
+                {`${contactInfo?.address?.street},
+                  ${contactInfo?.address?.city},
+                  ${contactInfo?.address?.state}
+                  ${contactInfo?.address?.zip}`}
               </address>
             </div>
             <div className="flex flex-col gap-4">
@@ -230,6 +172,7 @@ export default async function ContactPage() {
                     >
                       <span className="font-medium capitalize">{day}</span>
                       <span className="text-right">{hours || "Closed"}</span>
+                      {exception?.message && <p>{exception.message}</p>}
                     </div>
                   );
                 })}
@@ -240,7 +183,7 @@ export default async function ContactPage() {
               className="rounded-none border border-primary transition-all duration-300 hover:bg-transparent hover:text-primary"
             >
               <a
-                href={contactInfo?.contactInfo?.mapLink ?? ""}
+                href={contactInfo?.mapLink ?? ""}
                 target="_blank"
                 className="flex items-center justify-center gap-2"
               >
@@ -265,18 +208,14 @@ export default async function ContactPage() {
           <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
             {parking && (
               <div>
-                <h2 className="text-2xl font-medium mb-4">Parking</h2>
-                <p>
-                  {parking}
-                </p>
+                <h2 className="mb-4 text-2xl font-medium">Parking</h2>
+                <p className="whitespace-pre-line">{parking}</p>
               </div>
             )}
             {howToGetHere && (
               <div>
-                <h2 className="text-2xl font-medium mb-4">How to get here</h2>
-                <p>
-                  {howToGetHere}
-                </p>
+                <h2 className="mb-4 text-2xl font-medium">How to get here</h2>
+                <p className="whitespace-pre-line">{howToGetHere}</p>
               </div>
             )}
           </div>
@@ -284,16 +223,19 @@ export default async function ContactPage() {
       </section>
 
       {contactInfo2 && (
-        <section className="bg-white py-14 text-black md:py-28 space-y-16">
+        <section className="space-y-16 bg-white py-14 text-black md:py-28">
           <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
             <div className="flex flex-col gap-8">
               <div className="space-y-4">
-                <h2 className="text-2xl font-medium">{contactInfo2?.brandName}</h2>
+                <h2 className="text-2xl font-medium">{branchName2}</h2>
+                {contactInfo2?.address?.locationInfo && (
+                  <p>{contactInfo2?.address?.locationInfo}</p>
+                )}
                 <address className="not-italic">
-                  {contactInfo2?.address?.street}
-                  {contactInfo2?.address?.city}
-                  {contactInfo2?.address?.state}
-                  {contactInfo2?.address?.zip}
+                  {`${contactInfo2?.address?.street},
+                  ${contactInfo2?.address?.city},
+                  ${contactInfo2?.address?.state}
+                  ${contactInfo2?.address?.zip}`}
                 </address>
               </div>
               <div className="flex flex-col gap-4">
@@ -319,6 +261,7 @@ export default async function ContactPage() {
                       >
                         <span className="font-medium capitalize">{day}</span>
                         <span className="text-right">{hours || "Closed"}</span>
+                        {exception?.message && <p>{exception.message}</p>}
                       </div>
                     );
                   })}
@@ -351,6 +294,95 @@ export default async function ContactPage() {
           </div>
         </section>
       )}
+
+      <section className="relative bg-[#EBEBEB] py-14">
+        <div className="container flex flex-col gap-16 py-24 md:grid md:grid-cols-2">
+          <div className="text-light z-10 flex flex-col items-start gap-6 text-black">
+            <h2 className="text-balance text-2xl font-light">
+              Need assistance?
+            </h2>
+            <div className="max-w-xl space-y-4 text-pretty font-light">
+              If you need help getting started with the Curate Lifestyle
+              Program, our team is here to support you— please contact us or
+              send us a message for guidance on the referral process and next
+              steps.
+            </div>
+            <div className="w-full">
+              <form
+                action="https://formspree.io/f/xrblyjbl"
+                method="POST"
+                className="space-y-4 text-black"
+              >
+                <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-2">
+                  <div className="relative space-y-2">
+                    {/* <Label
+                      htmlFor="name"
+                      className="absolute left-2 top-2 -translate-y-1/2 bg-[#EBEBEB] px-3 text-sm"
+                    >
+                      Name
+                    </Label> */}
+                    <Input
+                      id="name"
+                      name="name"
+                      type="text"
+                      required
+                      placeholder="Name"
+                      className="w-full rounded-none border-black bg-[#EBEBEB] px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    {/* <Label htmlFor="email">Email</Label> */}
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="Email address"
+                      className="w-full rounded-none border-black bg-[#EBEBEB] px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  {/* <Label htmlFor="subject">Subject</Label> */}
+                  <Input
+                    id="subject"
+                    name="subject"
+                    type="text"
+                    required
+                    placeholder="Subject"
+                    className="w-full rounded-none border-black bg-[#EBEBEB] px-4 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                </div>
+                <div className="space-y-2">
+                  {/* <Label htmlFor="message">Message</Label> */}
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    placeholder="Message"
+                    className="flex min-h-[80px] w-full border border-black bg-[#EBEBEB] p-4 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    rows={4}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full rounded-none border border-black bg-[#EBEBEB] py-2 text-sm font-light text-black focus-visible:ring-0 focus-visible:ring-offset-0"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+          <Image
+            src={contactForm?.image ?? ""}
+            alt={contactForm?.alt ?? ""}
+            fill
+            objectFit="contain"
+            objectPosition="0 0"
+            className="-scale-x-100"
+          />
+        </div>
+      </section>
     </>
   );
 }

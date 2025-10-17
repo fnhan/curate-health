@@ -49,6 +49,214 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type OurPrograms = {
+  _id: string;
+  _type: "ourPrograms";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  isActive?: boolean;
+  title?: string;
+  heroImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    heroAlt?: string;
+    _type: "image";
+  };
+  intro?: {
+    subtitle?: string;
+    introParagraph?: string;
+  };
+  programs?: Array<{
+    programName?: string;
+    description?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    _key: string;
+  }>;
+  essentialSeries?: {
+    description?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    tableContent?: {
+      includesSessions?: Array<number>;
+      bonusSessions?: Array<number>;
+      bonusTransferable?: Array<boolean>;
+    };
+    listContent?: Array<string>;
+  };
+  curateLifestyle?: {
+    description?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    structure?: {
+      length?: string;
+      format?: string;
+      focus?: string;
+      bonus?: Array<string>;
+      entry?: string;
+    };
+    outcome?: string;
+    referral_form_pdf?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+      };
+      _type: "file";
+    };
+    call_to_action?: string;
+  };
+  masterHealthBlueprint?: {
+    description?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    structure?: {
+      kickOff?: string;
+      team?: string;
+      plan?: string;
+      programIncludes?: Array<string>;
+      privileges?: Array<string>;
+    };
+    outcome?: string;
+  };
+  exploreYourOptions?: {
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    contactMessage?: string;
+  };
+  faq?: Array<{
+    title?: string;
+    description?: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    >;
+    _type: "question";
+    _key: string;
+  }>;
+  threePaths?: {
+    heading?: string;
+    subtitle?: string;
+    paragraph?: string;
+    tableContent?: {
+      bestFor?: Array<string>;
+      approach?: Array<string>;
+      focus?: Array<string>;
+      extras?: {
+        essentialSeries?: Array<string>;
+        curateLifestyle?: Array<string>;
+        masterHealthBlueprint?: Array<string>;
+      };
+      pricing?: {
+        essentialSeries?: string;
+        curateLifestyle?: Array<string>;
+        masterHealthBlueprint?: string;
+      };
+    };
+  };
+  ctaSection?: {
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    heading?: string;
+    paragraph?: string;
+    buttonText?: string;
+  };
+};
+
 export type ServiceLifestyleProgram = {
   _id: string;
   _type: "serviceLifestyleProgram";
@@ -603,6 +811,7 @@ export type ServiceLifestyle = {
     _type: "question";
     _key: string;
   }>;
+  call_to_action?: string;
   testimonials?: Array<{
     name?: string;
     image?: {
@@ -1206,6 +1415,32 @@ export type ContactPage = {
       alt?: string;
     };
   };
+  branchName?: string;
+  contactInfo?: {
+    email?: string;
+    phone?: string;
+    address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zip?: string;
+      country?: string;
+      locationInfo?: string;
+    };
+    mapLink?: string;
+  };
+  branchName2?: string;
+  contactInfo2?: {
+    address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zip?: string;
+      country?: string;
+      locationInfo?: string;
+    };
+    mapLink?: string;
+  };
   mapURL?: string;
   mapURL2?: string;
   parking?: string;
@@ -1230,6 +1465,7 @@ export type ContactPage = {
         | "saturday"
         | "sunday";
       hours?: string;
+      message?: string;
       _key: string;
     }>;
   };
@@ -1253,8 +1489,23 @@ export type ContactPage = {
         | "saturday"
         | "sunday";
       hours?: string;
+      message?: string;
       _key: string;
     }>;
+  };
+  contactForm?: {
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    alt?: string;
   };
   seo?: Seo;
 };
@@ -2102,6 +2353,7 @@ export type SiteSettings = {
       state?: string;
       zip?: string;
       country?: string;
+      locationInfo?: string;
     };
     mapLink?: string;
   };
@@ -2112,6 +2364,7 @@ export type SiteSettings = {
       state?: string;
       zip?: string;
       country?: string;
+      locationInfo?: string;
     };
     mapLink?: string;
     brandName?: string;
@@ -2380,6 +2633,7 @@ export type AllSanitySchemaTypes =
   | SanityImagePalette
   | SanityImageDimensions
   | Geopoint
+  | OurPrograms
   | ServiceLifestyleProgram
   | ServiceLifestyle
   | SanityFileAsset
@@ -4311,7 +4565,7 @@ export type HOME_PAGE_QUERYResult = {
   } | null;
 };
 // Variable: CONTACT_INFO_QUERY
-// Query: *[_type == "siteSettings"][0]{  "brandName": brandName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country    },    mapLink,  },  contactInfo2{    brandName,    address{      street,      city,      state,      zip,      country    },    mapLink,  },}
+// Query: *[_type == "siteSettings"][0]{  "brandName": brandName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country,      locationInfo    },    mapLink,  },  contactInfo2{    brandName,    address{      street,      city,      state,      zip,      country,      locationInfo    },    mapLink,  },}
 export type CONTACT_INFO_QUERYResult = {
   brandName: string | null;
   contactInfo: {
@@ -4323,6 +4577,7 @@ export type CONTACT_INFO_QUERYResult = {
       state: string | null;
       zip: string | null;
       country: string | null;
+      locationInfo: string | null;
     } | null;
     mapLink: string | null;
   } | null;
@@ -4334,12 +4589,13 @@ export type CONTACT_INFO_QUERYResult = {
       state: string | null;
       zip: string | null;
       country: string | null;
+      locationInfo: string | null;
     } | null;
     mapLink: string | null;
   } | null;
 } | null;
 // Variable: CONTACT_PAGE_QUERY
-// Query: {  "contactInfo": *[_type == "siteSettings"][0]{  "brandName": brandName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country    },    mapLink,  },  contactInfo2{    brandName,    address{      street,      city,      state,      zip,      country    },    mapLink,  },},  "page": *[_type == "contactPage"][0]{    heroSection{      title,      heroImage {        "image": image.asset->url,        alt      }    },    parking,    howToGetHere,    mapURL,    mapURL2,    businessHours{      standardHours,      customStandardHours,      daysOpen,      exceptions[]{        day,        hours      }    },    businessHours2{      standardHours,      customStandardHours,      daysOpen,      exceptions[]{        day,        hours      }    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }  },}
+// Query: {  "contactInfo": *[_type == "siteSettings"][0]{  "brandName": brandName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country,      locationInfo    },    mapLink,  },  contactInfo2{    brandName,    address{      street,      city,      state,      zip,      country,      locationInfo    },    mapLink,  },},  "page": *[_type == "contactPage"][0]{    heroSection{      title,      heroImage {        "image": image.asset->url,        alt      }    },    branchName,  contactInfo{    email,    phone,    address{      street,      city,      state,      zip,      country,      locationInfo    },    mapLink,  },  branchName2,  contactInfo2{    brandName,    address{      street,      city,      state,      zip,      country,      locationInfo    },    mapLink,  },    parking,    howToGetHere,    mapURL,    mapURL2,    businessHours{      standardHours,      customStandardHours,      daysOpen,      exceptions[]{        day,        hours,        message      }    },    businessHours2{      standardHours,      customStandardHours,      daysOpen,      exceptions[]{        day,        hours,        message      }    },    contactForm{      "image": image.asset->url,      alt    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }  },}
 export type CONTACT_PAGE_QUERYResult = {
   contactInfo: {
     brandName: string | null;
@@ -4352,6 +4608,7 @@ export type CONTACT_PAGE_QUERYResult = {
         state: string | null;
         zip: string | null;
         country: string | null;
+        locationInfo: string | null;
       } | null;
       mapLink: string | null;
     } | null;
@@ -4363,6 +4620,7 @@ export type CONTACT_PAGE_QUERYResult = {
         state: string | null;
         zip: string | null;
         country: string | null;
+        locationInfo: string | null;
       } | null;
       mapLink: string | null;
     } | null;
@@ -4374,6 +4632,33 @@ export type CONTACT_PAGE_QUERYResult = {
         image: string | null;
         alt: string | null;
       } | null;
+    } | null;
+    branchName: string | null;
+    contactInfo: {
+      email: string | null;
+      phone: string | null;
+      address: {
+        street: string | null;
+        city: string | null;
+        state: string | null;
+        zip: string | null;
+        country: string | null;
+        locationInfo: string | null;
+      } | null;
+      mapLink: string | null;
+    } | null;
+    branchName2: string | null;
+    contactInfo2: {
+      brandName: null;
+      address: {
+        street: string | null;
+        city: string | null;
+        state: string | null;
+        zip: string | null;
+        country: string | null;
+        locationInfo: string | null;
+      } | null;
+      mapLink: string | null;
     } | null;
     parking: string | null;
     howToGetHere: string | null;
@@ -4401,6 +4686,7 @@ export type CONTACT_PAGE_QUERYResult = {
           | "wednesday"
           | null;
         hours: string | null;
+        message: string | null;
       }> | null;
     } | null;
     businessHours2: {
@@ -4425,7 +4711,12 @@ export type CONTACT_PAGE_QUERYResult = {
           | "wednesday"
           | null;
         hours: string | null;
+        message: string | null;
       }> | null;
+    } | null;
+    contactForm: {
+      image: string | null;
+      alt: string | null;
     } | null;
     seo: {
       pageTitle: string | null;
@@ -4728,7 +5019,7 @@ export type LEGAL_PAGE_BY_SLUG_QUERYResult = {
   } | null;
 } | null;
 // Variable: SERVICE_LIFESTYLE_BY_SLUG_QUERY
-// Query: *[_type == "serviceLifestyle" && slug.current == $slug][0]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt,    "content_image": content_image.asset->url,    "content_alt": content_image.alt,    content,    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{      _id,      title,      "slug": treatmentSlug.current,      "rawSlug": treatmentSlug    },    hero_secondary_title,    hero_large_text,    referral_form_pdf {      asset-> {        url,      }    },    block_2_title,    block_2_content,    block_2_image {      asset-> {        url,      }    },    block_3_title,    block_3_content,    "block_4_image": block_4_image.asset->url,    "block_5_image": block_5_image.asset->url,    benefits[] {      title,      description,      "image": image.asset->url,      tint_percentage,      tint_percentage_hover    },    "block_7_image": block_7_image.asset->url,    "block_9_image": block_9_image.asset->url,    timeline[] {      title,      description    },    "block_11_image": block_11_image.asset->url,    faq[] {      title,      description    },    pillars[] {      title,      description    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  },    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{      teamMembers[] {        name,        role,        bio,        image {          asset-> {            url          }        }      }    },    testimonials[] {      name,      description,      image {        asset-> {          url        }      }    }  }
+// Query: *[_type == "serviceLifestyle" && slug.current == $slug][0]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt,    "content_image": content_image.asset->url,    "content_alt": content_image.alt,    content,    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{      _id,      title,      "slug": treatmentSlug.current,      "rawSlug": treatmentSlug    },    hero_secondary_title,    hero_large_text,    referral_form_pdf {      asset-> {        url,      }    },    block_2_title,    block_2_content,    block_2_image {      asset-> {        url,      }    },    block_3_title,    block_3_content,    "block_4_image": block_4_image.asset->url,    "block_5_image": block_5_image.asset->url,    benefits[] {      title,      description,      "image": image.asset->url,      tint_percentage,      tint_percentage_hover    },    "block_7_image": block_7_image.asset->url,    "block_9_image": block_9_image.asset->url,    timeline[] {      title,      description    },    "block_11_image": block_11_image.asset->url,    faq[] {      title,      description    },    call_to_action,    pillars[] {      title,      description    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  },    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{      teamMembers[] {        name,        role,        bio,        image {          asset-> {            url          }        }      }    },    testimonials[] {      name,      description,      image {        asset-> {          url        }      }    }  }
 export type SERVICE_LIFESTYLE_BY_SLUG_QUERYResult = {
   title: string | null;
   slug: string | null;
@@ -4976,6 +5267,7 @@ export type SERVICE_LIFESTYLE_BY_SLUG_QUERYResult = {
         }
     > | null;
   }> | null;
+  call_to_action: string | null;
   pillars: Array<{
     title: string | null;
     description: Array<
@@ -5149,7 +5441,7 @@ export type SERVICE_LIFESTYLE_BY_SLUG_QUERYResult = {
   }> | null;
 } | null;
 // Variable: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY
-// Query: *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{ title,  "slug": slug.current,  heroImage {    asset->{      url,          },    heroAlt  },  intro {    subtitle,    introParagraph  },  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },    additionalCheckinTitle,  additionalCheckin[] {    checkinDescription,    checkinCount  },  groupSectionTitle,  groupSectionDescription,  groupSections[] {    description,    "image": image.asset->url,    "alt": image.alt  },  assistanceSectionTitle,  assistanceSectionDescription,  assistanceSectionImage {    asset-> {      url,    }  },  referral_form_pdf {    asset-> {      url,    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
+// Query: *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{ title,  "slug": slug.current,  heroImage {    asset->{      url,    },    heroAlt  },  intro {    subtitle,    introParagraph  },  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },  additionalCheckinTitle,  additionalCheckin[] {    checkinDescription,    checkinCount  },  groupSectionTitle,  groupSectionDescription,  groupSections[] {    description,    "image": image.asset->url,    "alt": image.alt  },  assistanceSectionTitle,  assistanceSectionDescription,  assistanceSectionImage {    asset-> {      url,    }  },  referral_form_pdf {    asset-> {      url,    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
 export type SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult = {
   title: string | null;
   slug: string | null;
@@ -5292,6 +5584,161 @@ export type SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult = {
     } | null;
   } | null;
 } | null;
+// Variable: OUR_PROGRAMS_QUERY
+// Query: *[_type == "ourPrograms" && isActive == true][0]{ title, heroImage {    asset->{      url,      alt    },    heroAlt  },  intro {    subtitle,    introParagraph  },  programs[] {    image {        asset->{          url        },      alt    },    programName,    description  },  essentialSeries {    description,    image {        asset->{          url        },      alt    },    tableContent {      includesSessions[],      bonusSessions[],      bonusTransferable[]    },    listContent[]  },  curateLifestyle {    description,    image {        asset->{          url        },      alt    },    structure {      length,      format,      focus,      bonus[],      entry    },    outcome,    referral_form_pdf {      asset-> {        url,      }    },    call_to_action  },  masterHealthBlueprint {    description,    image {        asset->{          url        },      alt    },    structure {      kickOff,      team,      plan,      programIncludes[],      privileges[]    },    outcome  },  exploreYourOptions {    image {        asset->{          url        }    },    contactMessage  },  faq[] {      title,      description  },  threePaths {    heading,    subtitle,    paragraph,    tableContent {      bestFor[],      approach[],      focus[],      extras {        essentialSeries[],        curateLifestyle[],        masterHealthBlueprint[]      },      pricing {        essentialSeries,        curateLifestyle[],        masterHealthBlueprint      }    },  },  ctaSection {    image {        asset->{          url        }    },    heading,    paragraph,    buttonText  }}
+export type OUR_PROGRAMS_QUERYResult = {
+  title: string | null;
+  heroImage: {
+    asset: {
+      url: string | null;
+      alt: null;
+    } | null;
+    heroAlt: string | null;
+  } | null;
+  intro: {
+    subtitle: string | null;
+    introParagraph: string | null;
+  } | null;
+  programs: Array<{
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    programName: string | null;
+    description: string | null;
+  }> | null;
+  essentialSeries: {
+    description: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    tableContent: {
+      includesSessions: Array<number> | null;
+      bonusSessions: Array<number> | null;
+      bonusTransferable: Array<boolean> | null;
+    } | null;
+    listContent: Array<string> | null;
+  } | null;
+  curateLifestyle: {
+    description: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    structure: {
+      length: string | null;
+      format: string | null;
+      focus: string | null;
+      bonus: Array<string> | null;
+      entry: string | null;
+    } | null;
+    outcome: string | null;
+    referral_form_pdf: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+    call_to_action: string | null;
+  } | null;
+  masterHealthBlueprint: {
+    description: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    structure: {
+      kickOff: string | null;
+      team: string | null;
+      plan: string | null;
+      programIncludes: Array<string> | null;
+      privileges: Array<string> | null;
+    } | null;
+    outcome: string | null;
+  } | null;
+  exploreYourOptions: {
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+    contactMessage: string | null;
+  } | null;
+  faq: Array<{
+    title: string | null;
+    description: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+  }> | null;
+  threePaths: {
+    heading: string | null;
+    subtitle: string | null;
+    paragraph: string | null;
+    tableContent: {
+      bestFor: Array<string> | null;
+      approach: Array<string> | null;
+      focus: Array<string> | null;
+      extras: {
+        essentialSeries: Array<string> | null;
+        curateLifestyle: Array<string> | null;
+        masterHealthBlueprint: Array<string> | null;
+      } | null;
+      pricing: {
+        essentialSeries: string | null;
+        curateLifestyle: Array<string> | null;
+        masterHealthBlueprint: string | null;
+      } | null;
+    } | null;
+  } | null;
+  ctaSection: {
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+    heading: string | null;
+    paragraph: string | null;
+    buttonText: string | null;
+  } | null;
+} | null;
 
 declare module "@sanity/client" {
   interface SanityQueries {
@@ -5342,14 +5789,15 @@ declare module "@sanity/client" {
     '*[_type == "heroSection"][0]{\n  videoID,\n  videoFile {\n    asset-> {\n      playbackId\n    }\n  },\n  heroText,\n}': HERO_SECTION_QUERYResult;
     '{\n  "siteSettings": *[_type == "siteSettings"]{\n  brandName,\n  siteLogo{\n    asset->{\n      _id,\n      url\n    },\n  },\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n  "services": *[_type == "service" && isActive == true]{\n    _key,\n    title,\n    "slug": slug.current,\n    isActive,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n  },\n  "aboutPages": [\n    *[_type == "ourStory" && pageActive == true][0]{\n      "title": "Our Story",\n      "slug": "our-story"\n    },\n    *[_type == "ourTeam" && pageActive == true][0]{\n      "title": "Our Team",\n      "slug": "our-team"\n    },\n    *[_type == "missionAndValues" && pageActive == true][0]{\n      "title": "Mission and Values",\n      "slug": "mission-and-values"\n    },\n    *[_type == "sustainability" && pageActive == true][0]{\n      "title": "Sustainability",\n      "slug": "sustainability"\n    },\n    *[_type == "pillarsOfHealth" && pageActive == true][0]{\n      "title": "Pillars of Health",\n      "slug": "pillars-of-health"\n    },\n  ],\n  navLinks[]{\n    _key,\n    title,\n    href\n  },\n  footerNavLinks[]{\n    _key,\n    groupTitle,\n    links[]{\n      title,\n      slug {\n        current\n      }\n    }\n  },\n  legalLinks[]{\n    _key,\n    "title": @->title,\n    "slug": @->slug.current\n  },\n  socialMedia[]{\n    _key,\n    platform,\n    platformLogo{\n      asset->{\n        _id,\n        url\n      }\n    },\n    isActive,\n    url\n  }\n}[0],\n  "primaryCTAButton": \n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n,\n  "navLinks": *[_type == "navigation"][0]{\n  serviceLinks[]->{\n    title,\n    "slug": slug.current\n  },\n  aboutLinks[]{\n    title,\n    href,\n  },\n  navItems[]{\n    linkText,\n    href,\n    isServiceLinks,\n    isAboutLinks\n  }\n},\n  "newsletterSection": *[_type == "newsletterSection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n},\n  "surveySection": *[_type == "surveySection"][0]{\n  bgImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  cta,\n  youformId,\n  content,\n  bold,\n},\n  "footer": \n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n,\n  "popupBanner": *[_type == "popupBanner" && isActive == true][0]{\n  title,\n  content,\n}\n}': LAYOUT_QUERYResult;
     '{\n  "heroSection": *[_type == "heroSection"][0]{\n  videoID,\n  videoFile {\n    asset-> {\n      playbackId\n    }\n  },\n  heroText,\n},\n  "primaryCTAButton": \n  *[_type == "primaryCTAButton"][0]{\n    ctaButton{\n      ctaText,\n      ctaLink,\n    }\n  }\n, \n  "aboutSection": *[_type == "aboutSection"][0]{\n  title1,\n  title2,\n  "aboutImage": {\n    "asset": aboutImage.asset->{\n      _id,\n      url\n    },\n    "alt": aboutImage.alt\n  },\n  hoverLinkText,\n  hoverLinkHref\n},\n  "clinicSection": *[_type == "clinic"][0]{\n  "clinicImage": {\n    "asset": clinicImage.asset->{\n      _id,\n      url\n    },\n    "alt": clinicImage.alt\n  },\n  content\n},\n  "productsSection": *[_type == "productsSection"][0]{\n  sectionTitle,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n},\n  "servicesSection": *[_type == "servicesSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt\n  }\n},\n  "cafeSection": *[_type == "cafeSection"][0] {\n  cafeImage {\n    asset-> {\n      _id,\n      url\n    },\n    alt\n  },\n  title,\n  content,\n  hoverLinkText,\n  hoverLinkHref,\n  meta {\n    title,\n    description\n  }\n},\n  "blogSection": *[_type == "blogSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref\n},\n  "sustainabilitySection": *[_type == "sustainabilitySection"][0]{\n  bgImage {\n    asset->{\n      _id,\n      url\n    },\n    alt\n  },\n  sustainText\n},\n}': HOME_PAGE_QUERYResult;
-    '*[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n  contactInfo2{\n    brandName,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n}': CONTACT_INFO_QUERYResult;
-    '{\n  "contactInfo": *[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n  contactInfo2{\n    brandName,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country\n    },\n    mapLink,\n  },\n},\n  "page": *[_type == "contactPage"][0]{\n    heroSection{\n      title,\n      heroImage {\n        "image": image.asset->url,\n        alt\n      }\n    },\n    parking,\n    howToGetHere,\n    mapURL,\n    mapURL2,\n    businessHours{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours\n      }\n    },\n    businessHours2{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours\n      }\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n}': CONTACT_PAGE_QUERYResult;
+    '*[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country,\n      locationInfo\n    },\n    mapLink,\n  },\n  contactInfo2{\n    brandName,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country,\n      locationInfo\n    },\n    mapLink,\n  },\n}': CONTACT_INFO_QUERYResult;
+    '{\n  "contactInfo": *[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country,\n      locationInfo\n    },\n    mapLink,\n  },\n  contactInfo2{\n    brandName,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country,\n      locationInfo\n    },\n    mapLink,\n  },\n},\n  "page": *[_type == "contactPage"][0]{\n    heroSection{\n      title,\n      heroImage {\n        "image": image.asset->url,\n        alt\n      }\n    },\n    branchName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country,\n      locationInfo\n    },\n    mapLink,\n  },\n  branchName2,\n  contactInfo2{\n    brandName,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country,\n      locationInfo\n    },\n    mapLink,\n  },\n    parking,\n    howToGetHere,\n    mapURL,\n    mapURL2,\n    businessHours{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours,\n        message\n      }\n    },\n    businessHours2{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours,\n        message\n      }\n    },\n    contactForm{\n      "image": image.asset->url,\n      alt\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n}': CONTACT_PAGE_QUERYResult;
     '*[_type == "post" && published == true] {\n  _id,\n  title,\n  publishedAt,\n  "slug": slug.current,\n  excerpt,\n  "author": author->{\n    name,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  mainImage {\n    asset->,\n    alt\n  },\n} | order(publishedAt desc)': GET_ALL_POSTS_QUERYResult;
     '*[_type == "post" && published == true && slug.current == $slug][0] {\n  title,\n  publishedAt,\n  slug,\n  "author": author->{\n    name,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  "mainImage": {\n    "image": mainImage.asset->url,\n    "alt": mainImage.alt\n  },\n  sections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      "alt": image.alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': GET_POST_BY_SLUG_QUERYResult;
     '*[_type == "cafePage" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': CAFE_PAGE_QUERYResult;
     '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  "treatments": *[_type == "treatments" && isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
     '*[_type == "legalPage" && slug.current == $slug][0]{\n  title,\n  body,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': LEGAL_PAGE_BY_SLUG_QUERYResult;
-    '\n  *[_type == "serviceLifestyle" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    hero_secondary_title,\n    hero_large_text,\n    referral_form_pdf {\n      asset-> {\n        url,\n      }\n    },\n    block_2_title,\n    block_2_content,\n    block_2_image {\n      asset-> {\n        url,\n      }\n    },\n    block_3_title,\n    block_3_content,\n    "block_4_image": block_4_image.asset->url,\n    "block_5_image": block_5_image.asset->url,\n    benefits[] {\n      title,\n      description,\n      "image": image.asset->url,\n      tint_percentage,\n      tint_percentage_hover\n    },\n    "block_7_image": block_7_image.asset->url,\n    "block_9_image": block_9_image.asset->url,\n    timeline[] {\n      title,\n      description\n    },\n    "block_11_image": block_11_image.asset->url,\n    faq[] {\n      title,\n      description\n    },\n    pillars[] {\n      title,\n      description\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{\n      teamMembers[] {\n        name,\n        role,\n        bio,\n        image {\n          asset-> {\n            url\n          }\n        }\n      }\n    },\n    testimonials[] {\n      name,\n      description,\n      image {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n': SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
-    '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,      \n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },  \n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
+    '\n  *[_type == "serviceLifestyle" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    hero_secondary_title,\n    hero_large_text,\n    referral_form_pdf {\n      asset-> {\n        url,\n      }\n    },\n    block_2_title,\n    block_2_content,\n    block_2_image {\n      asset-> {\n        url,\n      }\n    },\n    block_3_title,\n    block_3_content,\n    "block_4_image": block_4_image.asset->url,\n    "block_5_image": block_5_image.asset->url,\n    benefits[] {\n      title,\n      description,\n      "image": image.asset->url,\n      tint_percentage,\n      tint_percentage_hover\n    },\n    "block_7_image": block_7_image.asset->url,\n    "block_9_image": block_9_image.asset->url,\n    timeline[] {\n      title,\n      description\n    },\n    "block_11_image": block_11_image.asset->url,\n    faq[] {\n      title,\n      description\n    },\n    call_to_action,\n    pillars[] {\n      title,\n      description\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{\n      teamMembers[] {\n        name,\n        role,\n        bio,\n        image {\n          asset-> {\n            url\n          }\n        }\n      }\n    },\n    testimonials[] {\n      name,\n      description,\n      image {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n': SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
+    '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
+    '\n  *[_type == "ourPrograms" && isActive == true][0]{\n title,\n heroImage {\n    asset->{\n      url,\n      alt\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  programs[] {\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    programName,\n    description\n  },\n  essentialSeries {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    tableContent {\n      includesSessions[],\n      bonusSessions[],\n      bonusTransferable[]\n    },\n    listContent[]\n  },\n  curateLifestyle {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      length,\n      format,\n      focus,\n      bonus[],\n      entry\n    },\n    outcome,\n    referral_form_pdf {\n      asset-> {\n        url,\n      }\n    },\n    call_to_action\n  },\n  masterHealthBlueprint {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      kickOff,\n      team,\n      plan,\n      programIncludes[],\n      privileges[]\n    },\n    outcome\n  },\n  exploreYourOptions {\n    image {\n        asset->{\n          url\n        }\n    },\n    contactMessage\n  },\n  faq[] {\n      title,\n      description\n  },\n  threePaths {\n    heading,\n    subtitle,\n    paragraph,\n    tableContent {\n      bestFor[],\n      approach[],\n      focus[],\n      extras {\n        essentialSeries[],\n        curateLifestyle[],\n        masterHealthBlueprint[]\n      },\n      pricing {\n        essentialSeries,\n        curateLifestyle[],\n        masterHealthBlueprint\n      }\n    },\n  },\n  ctaSection {\n    image {\n        asset->{\n          url\n        }\n    },\n    heading,\n    paragraph,\n    buttonText\n  }\n}': OUR_PROGRAMS_QUERYResult;
   }
 }

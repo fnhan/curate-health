@@ -45,6 +45,131 @@ export default defineType({
     }),
 
     defineField({
+      name: "branchName",
+      type: "string",
+      title: "Branch Name",
+      validation: (Rule) => Rule.required().error("Branch Name is required"),
+    }),
+    defineField({
+      name: "contactInfo",
+      type: "object",
+      title: "Contact Information",
+      fields: [
+        defineField({
+          name: "email",
+          type: "string",
+          title: "Contact Email",
+          validation: (Rule) =>
+            Rule.required().error("Contact Email is required"),
+        }),
+        defineField({
+          name: "phone",
+          type: "string",
+          title: "Contact Phone",
+        }),
+        defineField({
+          name: "address",
+          type: "object",
+          title: "Contact Address",
+          fields: [
+            defineField({
+              name: "street",
+              type: "string",
+              title: "Street",
+            }),
+            defineField({
+              name: "city",
+              type: "string",
+              title: "City",
+            }),
+            defineField({
+              name: "state",
+              type: "string",
+              title: "State / Province",
+            }),
+            defineField({
+              name: "zip",
+              type: "string",
+              title: "Zip",
+            }),
+            defineField({
+              name: "country",
+              type: "string",
+              title: "Country",
+            }),
+            defineField({
+              name: "locationInfo",
+              title: "Location Information",
+              type: "text",
+            }),
+          ],
+        }),
+        defineField({
+          name: "mapLink",
+          type: "url",
+          title: "Google Map Link",
+          description: "Link to the Google Map",
+        }),
+      ],
+    }),
+    defineField({
+      name: "branchName2",
+      type: "string",
+      title: "Second Branch Name",
+      validation: (Rule) => Rule.required().error("Branch Name is required"),
+    }),
+    defineField({
+      name: "contactInfo2",
+      type: "object",
+      title: "Contact Information 2",
+      fields: [
+        defineField({
+          name: "address",
+          type: "object",
+          title: "Contact Address",
+          fields: [
+            defineField({
+              name: "street",
+              type: "string",
+              title: "Street",
+            }),
+            defineField({
+              name: "city",
+              type: "string",
+              title: "City",
+            }),
+            defineField({
+              name: "state",
+              type: "string",
+              title: "State / Province",
+            }),
+            defineField({
+              name: "zip",
+              type: "string",
+              title: "Zip",
+            }),
+            defineField({
+              name: "country",
+              type: "string",
+              title: "Country",
+            }),
+            defineField({
+              name: "locationInfo",
+              title: "Location Information",
+              type: "text",
+            }),
+          ],
+        }),
+        defineField({
+          name: "mapLink",
+          type: "url",
+          title: "Google Map Link",
+          description: "Link to the Google Map",
+        }),
+      ],
+    }),
+
+    defineField({
       name: "mapURL",
       title: "Map Embed Url",
       type: "string",
@@ -63,13 +188,13 @@ export default defineType({
     defineField({
       name: "parking",
       title: "Parking",
-      type: "text"
+      type: "text",
     }),
 
     defineField({
       name: "howToGetHere",
       title: "How to Get Here",
-      type: "text"
+      type: "text",
     }),
 
     defineField({
@@ -125,7 +250,7 @@ export default defineType({
         defineField({
           name: "exceptions",
           title: "Exceptions",
-          description: "Add any days with different hours",
+          description: "Add any days with custom times/values",
           type: "array",
           of: [
             {
@@ -151,11 +276,13 @@ export default defineType({
                   name: "hours",
                   title: "Hours",
                   type: "string",
-                  description: "Format: HH:MM AM - HH:MM PM",
-                  validation: (Rule) =>
-                    Rule.regex(
-                      /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM) - (0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/
-                    ).error('Please use format like "9:00 AM - 5:00 PM"'),
+                  description: "Custom Time/Value",
+                }),
+                defineField({
+                  name: "message",
+                  title: "Message",
+                  type: "string",
+                  description: "Optional",
                 }),
               ],
             },
@@ -217,7 +344,7 @@ export default defineType({
         defineField({
           name: "exceptions",
           title: "Exceptions",
-          description: "Add any days with different hours",
+          description: "Add any days with custom times/values",
           type: "array",
           of: [
             {
@@ -243,15 +370,38 @@ export default defineType({
                   name: "hours",
                   title: "Hours",
                   type: "string",
-                  description: "Format: HH:MM AM - HH:MM PM",
-                  validation: (Rule) =>
-                    Rule.regex(
-                      /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM) - (0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/
-                    ).error('Please use format like "9:00 AM - 5:00 PM"'),
+                  description: "Custom Time/Value",
+                }),
+                defineField({
+                  name: "message",
+                  title: "Message",
+                  type: "string",
+                  description: "Optional",
                 }),
               ],
             },
           ],
+        }),
+      ],
+    }),
+    defineField({
+      name: "contactForm",
+      title: "Contact Form",
+      type: "object",
+      fields: [
+        defineField({
+          name: "image",
+          title: "Image",
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+        }),
+        defineField({
+          name: "alt",
+          title: "Alt Text",
+          description: fieldDescriptions.altImageDescription,
+          type: "string",
         }),
       ],
     }),

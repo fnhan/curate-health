@@ -17,13 +17,13 @@ const ExploreYourOptions = ({
   return (
     <section className="bg-white py-14">
       <div className="container flex justify-center py-24 lg:justify-between">
-        <div className="relative hidden flex-1 overflow-hidden lg:block xl:left-52">
+        <div className="relative hidden flex-1 overflow-hidden lg:block xl:left-44">
           <Image
             src={exploreYourOptions?.image?.asset?.url!}
             alt=""
             fill
-            objectPosition="100% 18%"
-            className="scale-110 object-cover"
+            objectPosition="100% 50%"
+            className="object-cover"
           />
         </div>
         <div className="z-10 flex flex-col gap-6 text-primary">

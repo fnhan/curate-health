@@ -18,7 +18,7 @@ const CurateLifestyle = ({
 
   return (
     <section
-      className="bg-white text-primary 2xl:pl-[210px]"
+      className="section-grey-border bg-white text-primary 2xl:pl-[210px]"
       id="curate-lifestyle"
     >
       <div className="two-color-border container relative px-10 pt-52">

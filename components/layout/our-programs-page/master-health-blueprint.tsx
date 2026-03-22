@@ -15,10 +15,11 @@ const MasterHealthBlueprint = ({
 
   return (
     <section
-      className="bg-white text-primary 2xl:pl-[210px]"
+      className="section-grey-border relative bg-white text-primary 2xl:pl-[210px]"
       id="master-health-blueprint"
     >
-      <div className="single-color-border container px-10 pt-52">
+      <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-[210px] bg-our-programs-border-3 2xl:block"></div>
+      <div className="container px-10 pt-52">
         <div className="relative flex flex-col items-center justify-between gap-20 pb-5 xl:flex-row xl:gap-16">
           <div className="flex max-w-[450px] flex-col gap-16">
             <h2 className="text-3xl capitalize leading-[52px] lg:text-[40px]">

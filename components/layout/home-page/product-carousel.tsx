@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
@@ -31,6 +31,7 @@ export function ProductCarousel({
     altText: string | null;
   }>;
 }) {
+  const router = useRouter();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -70,31 +71,28 @@ export function ProductCarousel({
           {products?.map((product, idx: number) => (
             <CarouselItem
               key={idx}
-              className="border-b-2 border-transparent transition-all duration-300 hover:border-secondary md:basis-1/2 lg:basis-1/3"
+              className="cursor-pointer border-b-2 border-transparent transition-all duration-300 hover:border-secondary md:basis-1/2 lg:basis-1/3"
+              onClick={() => router.push(`/products/${product.slug}`)}
             >
-              <Link href={`/products/${product.slug}`}>
-                <Card className="flex h-full w-full flex-col rounded-none border-none shadow-none">
-                  <CardContent className="mb-4 flex items-center justify-center p-0 2xl:h-64">
-                    <Link href={`/products/${product.slug}`}>
-                      <Image
-                        src={product.image ?? ""}
-                        width={200}
-                        height={200}
-                        alt={product.altText ?? ""}
-                        className="mx-auto object-contain"
-                      />
-                    </Link>
-                  </CardContent>
-                  <CardHeader className="mx-auto w-2/3 p-0">
-                    <CardTitle className="mb-3 p-0 text-center text-base font-light md:text-2xl">
-                      {product.title}
-                    </CardTitle>
-                    <CardDescription className="text-pretty pb-4 text-center text-sm">
-                      {product.description}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              </Link>
+              <Card className="flex h-full w-full flex-col rounded-none border-none shadow-none">
+                <CardContent className="mb-4 flex items-center justify-center p-0 2xl:h-64">
+                  <Image
+                    src={product.image ?? ""}
+                    width={200}
+                    height={200}
+                    alt={product.altText ?? ""}
+                    className="mx-auto object-contain"
+                  />
+                </CardContent>
+                <CardHeader className="mx-auto w-2/3 p-0">
+                  <CardTitle className="mb-3 p-0 text-center text-base font-light md:text-2xl">
+                    {product.title}
+                  </CardTitle>
+                  <CardDescription className="text-pretty pb-4 text-center text-sm">
+                    {product.description}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
             </CarouselItem>
           ))}
         </CarouselContent>

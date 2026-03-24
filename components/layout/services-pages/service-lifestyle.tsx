@@ -674,7 +674,7 @@ export default function ServiceLifestyleContent({
                       {faq.title}
                     </h4>
                   </AccordionTrigger>
-                  <AccordionContent className="prose">
+                  <AccordionContent className="prose max-w-none">
                     <PortableText value={faq.description!} />
                   </AccordionContent>
                 </AccordionItem>

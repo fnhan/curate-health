@@ -52,7 +52,7 @@ const FaqSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
                     {faqItem.title}
                   </h4>
                 </AccordionTrigger>
-                <AccordionContent className="leading-7hh prose pb-12 font-light">
+                <AccordionContent className="leading-7hh prose max-w-none pb-12 font-light">
                   <PortableText value={faqItem.description!} />
                 </AccordionContent>
               </AccordionItem>

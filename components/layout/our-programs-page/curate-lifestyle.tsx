@@ -105,7 +105,7 @@ const CurateLifestyle = ({
                 <p className="text-base font-semibold max-xl:mt-10">Outcome</p>
                 <p className="mt-10">{curateLifestyle?.outcome}</p>
               </div>
-              <div className="flex flex-col gap-3 text-center font-semibold">
+              <div className="flex flex-col gap-3 text-center font-semibold xl:mb-7">
                 <a
                   href={curateLifestyle?.referral_form_pdf?.asset?.url ?? ""}
                   className="border-2 border-[#878E76] p-6 text-[#6B6B6B]"

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import Script from "next/script";
 import { draftMode } from "next/headers";
 
 import { VisualEditing } from "next-sanity";
@@ -91,6 +92,20 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${poppins.variable} ${poppins.className}`}>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-MJMZWNNWVP"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MJMZWNNWVP');
+          `}
+        </Script>
+      </head>
       <CSPostHogProvider>
         <body className="flex min-h-screen flex-col overflow-x-hidden bg-background antialiased">
           {children}

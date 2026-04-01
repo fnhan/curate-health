@@ -1,5 +1,7 @@
 import { defineField, defineType } from "sanity";
 
+import { getBlogAuthorDisplayName } from "@/lib/author-team-link";
+
 import { fieldDescriptions } from "../schema-helpers";
 
 export default defineType({
@@ -122,12 +124,16 @@ export default defineType({
   preview: {
     select: {
       title: "title",
-      author: "author.name",
+      authorLink: "author.linkedTeamMemberName",
       media: "mainImage",
     },
-    prepare(selection) {
-      const { author } = selection;
-      return { ...selection, subtitle: author && `by ${author}` };
+    prepare({ title, authorLink, media }) {
+      const byline = getBlogAuthorDisplayName(authorLink);
+      return {
+        title,
+        media,
+        subtitle: byline ? `by ${byline}` : undefined,
+      };
     },
   },
 });

@@ -746,6 +746,11 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
   },
 }`;
 
+/** Primary site phone for global UI (floating call button). */
+export const SITE_SETTINGS_PHONE_QUERY = groq`*[_type == "siteSettings"][0]{
+  "phone": contactInfo.phone
+}`;
+
 export const CONTACT_PAGE_QUERY = groq`{
   "contactInfo": ${CONTACT_INFO_QUERY},
   "page": *[_type == "contactPage"][0]{
@@ -822,7 +827,7 @@ export const GET_ALL_POSTS_QUERY = groq`*[_type == "post" && published == true] 
   "slug": slug.current,
   excerpt,
   "author": author->{
-    name,
+    linkedTeamMemberName,
     image {
       asset-> {
         url
@@ -840,7 +845,7 @@ export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == tru
   publishedAt,
   slug,
   "author": author->{
-    name,
+    linkedTeamMemberName,
     image {
       asset-> {
         url
@@ -871,6 +876,18 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
      alt
    }
  },
+ introSection{
+   title,
+   subheading,
+   description
+ },
+ quoteSection{
+   quoteImage{
+     "image": image.asset->url,
+     alt
+   },
+   quoteText
+ },
  additionalSections[]{
     sectionTitle,
     sectionParagraph,
@@ -879,6 +896,29 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
       alt
     }
   },
+ menuDownloadSection{
+    headline,
+    description,
+    buttonLabel,
+    "featureImage": {
+      "url": featureImage.image.asset->url,
+      "alt": featureImage.alt
+    },
+    "menuFile": menuPdf.asset->{
+      url,
+      originalFilename,
+      mimeType
+    }
+ },
+ ctaBandSection{
+    "backgroundImage": {
+      "url": backgroundImage.image.asset->url,
+      "alt": backgroundImage.alt
+    },
+    headline,
+    body,
+    closingLine
+ },
   ${SEO_QUERY}
 }`;
 

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import BlogAuthorByline, {
+  blogAuthorShouldRender,
+} from "@/components/shared/blog-author-byline";
 import {
   Card,
   CardDescription,
@@ -49,15 +51,12 @@ export default async function BlogPage() {
               </CardDescription>
             </CardHeader>
             <CardFooter className="flex w-full flex-col items-start gap-6 pb-0 text-secondary">
-              <div className="flex items-center gap-4">
-                <Avatar>
-                  <AvatarImage src={post.author?.image?.asset?.url || ""} />
-                  <AvatarFallback className="bg-white text-black">
-                    {post.author?.name?.slice(0, 2) || ""}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm">{post.author?.name}</span>
-              </div>
+              {blogAuthorShouldRender(post.author) ? (
+                <BlogAuthorByline
+                  author={post.author!}
+                  className="text-secondary"
+                />
+              ) : null}
               <div className="flex w-full items-center justify-between">
                 <span className="text-sm">
                   {formatDate(post.publishedAt || "")}

@@ -54,13 +54,14 @@ export default function SiteNav({
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="max-w-[300px] border-none pt-[142px] text-white sm:pl-[86px] md:max-w-[416px]"
+                className="flex max-w-[300px] flex-col overflow-hidden border-none pt-[142px] text-white sm:pl-[86px] md:max-w-[416px]"
               >
-                <div
-                  className="flex flex-col gap-6 text-left"
-                  id="nav-items"
-                  aria-labelledby="nav-items nav-menu"
-                >
+                <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain pr-1 scrollbar-thin scrollbar-track-secondary scrollbar-thumb-primary scrollbar-thumb-rounded-full">
+                  <div
+                    className="flex flex-col gap-6 pb-6 text-left"
+                    id="nav-items"
+                    aria-labelledby="nav-items nav-menu"
+                  >
                   <Link
                     className="text-2xl hover:underline"
                     href={"/"}
@@ -198,6 +199,7 @@ export default function SiteNav({
                       {link.title}
                     </Link>
                   ))}
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>

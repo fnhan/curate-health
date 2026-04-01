@@ -1,6 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { CafeCtaBandSection } from "@/components/layout/cafe-page/cafe-cta-band";
+import {
+  CafeIntroSection,
+  CafeQuoteSection,
+} from "@/components/layout/cafe-page/cafe-intro-and-quote";
+import { CafeMenuDownloadSection } from "@/components/layout/cafe-page/cafe-menu-download";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { CAFE_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -15,10 +21,17 @@ export default async function CafePage() {
     return notFound();
   }
 
-  const { heroSection, additionalSections } = cafePage;
+  const {
+    heroSection,
+    introSection,
+    quoteSection,
+    additionalSections,
+    menuDownloadSection,
+    ctaBandSection,
+  } = cafePage;
 
   return (
-    <>
+    <main className="font-poppins">
       <Image
         width={1920}
         height={1080}
@@ -29,8 +42,16 @@ export default async function CafePage() {
         alt={heroSection?.heroImage?.alt || ""}
         className="h-[400px] w-full object-cover md:h-[550px]"
       />
-      <AlternatingSections sections={additionalSections!} />
-    </>
+      <CafeIntroSection intro={introSection} />
+      <CafeQuoteSection quote={quoteSection} />
+      <AlternatingSections
+        sections={additionalSections!}
+        sectionClassName="font-poppins"
+        proseClassName="font-poppins prose-headings:font-poppins prose-p:font-poppins"
+      />
+      <CafeMenuDownloadSection data={menuDownloadSection} />
+      <CafeCtaBandSection data={ctaBandSection} />
+    </main>
   );
 }
 

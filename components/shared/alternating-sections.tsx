@@ -2,6 +2,8 @@ import Image from "next/image";
 
 import { PortableText } from "@portabletext/react";
 
+import { cn } from "@/lib/utils";
+
 interface Section {
   sectionTitle: string | null;
   sectionParagraph: any | null;
@@ -13,13 +15,26 @@ interface Section {
 
 interface AlternatingSectionsProps {
   sections: Section[] | null;
+  /** Merged onto the outer section (e.g. font-poppins for cafe page). */
+  sectionClassName?: string;
+  /** Merged onto the PortableText prose wrapper. */
+  proseClassName?: string;
 }
 
-export const AlternatingSections = ({ sections }: AlternatingSectionsProps) => {
+export const AlternatingSections = ({
+  sections,
+  sectionClassName,
+  proseClassName,
+}: AlternatingSectionsProps) => {
   if (!sections || sections.length === 0) return null;
 
   return (
-    <section className="relative isolate bg-white py-28 text-primary">
+    <section
+      className={cn(
+        "relative isolate bg-white py-28 text-primary",
+        sectionClassName,
+      )}
+    >
       <div className="flex flex-col gap-20 md:gap-28">
         {sections.map((section, index) => (
           <div
@@ -51,7 +66,13 @@ export const AlternatingSections = ({ sections }: AlternatingSectionsProps) => {
               <h2 className="text-balance text-2xl font-light">
                 {section.sectionTitle}
               </h2>
-              <div className="prose max-w-[80ch]">
+              <div
+                className={cn(
+                  "prose max-w-[80ch]",
+                  proseClassName,
+                )}
+              >
+
                 <PortableText value={section.sectionParagraph!} />
               </div>
             </div>

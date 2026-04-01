@@ -3,14 +3,21 @@ import { Poppins } from "next/font/google";
 import { draftMode } from "next/headers";
 
 import { VisualEditing } from "next-sanity";
-import { SITE_METADATA_QUERYResult } from "sanity.types";
+import {
+  SITE_METADATA_QUERYResult,
+  SITE_SETTINGS_PHONE_QUERYResult,
+} from "sanity.types";
 
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
+import { FloatingCallButton } from "@/components/shared/floating-call-button";
 import SanityDisablePreviewButton from "@/components/shared/sanity-disable-preview-button";
 import { Toaster } from "@/components/ui/toaster";
 
 import { sanityFetch } from "../sanity/lib/client";
-import { SITE_METADATA_QUERY } from "../sanity/lib/queries";
+import {
+  SITE_METADATA_QUERY,
+  SITE_SETTINGS_PHONE_QUERY,
+} from "../sanity/lib/queries";
 import "./globals.css";
 import { BASEURL } from "./site-settings";
 
@@ -77,11 +84,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const phoneSettings = await sanityFetch<SITE_SETTINGS_PHONE_QUERYResult>({
+    query: SITE_SETTINGS_PHONE_QUERY,
+  });
+  const callPhone = phoneSettings?.phone?.trim() ?? "";
+
   return (
-    <html lang="en" className={poppins.className}>
+    <html lang="en" className={`${poppins.variable} ${poppins.className}`}>
       <CSPostHogProvider>
-        <body className="flex min-h-screen flex-col bg-background antialiased">
+        <body className="flex min-h-screen flex-col overflow-x-hidden bg-background antialiased">
           {children}
+          {callPhone ? <FloatingCallButton phone={callPhone} /> : null}
           {draftMode().isEnabled && (
             <>
               <SanityDisablePreviewButton />

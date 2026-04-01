@@ -95,6 +95,9 @@ interface TeamMember {
   } | null;
 }
 
+const teamPhotoClassName =
+  "h-full w-full object-cover grayscale transition-all duration-300 hover:cursor-pointer hover:grayscale-0";
+
 interface TeamMembersSectionProps {
   teamMembers: TeamMember[];
 }
@@ -112,17 +115,15 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
   useEffect(() => {
     const memberParam = searchParams.get("member");
     if (memberParam && teamMembers) {
-      // Find the team member by name (case-insensitive)
       const targetMember = teamMembers.find(
         (member) =>
-          getTeamMemberUrlId(member.name || "") === memberParam.toLowerCase()
+          getTeamMemberUrlId(member.name || "") === memberParam.toLowerCase(),
       );
 
       if (targetMember) {
         const memberId = `member-${getTeamMemberUrlId(targetMember.name || "")}`;
         setOpenAccordion(memberId);
 
-        // Scroll to the team member after a short delay to ensure rendering
         setTimeout(() => {
           const element = teamMemberRefs.current[memberId];
           if (element) {
@@ -141,7 +142,7 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
       <Masonry
         breakpointCols={breakpointColumns}
         className="container flex"
-        columnClassName="flex flex-col gap-4 ml-4"
+        columnClassName="ml-4 flex flex-col gap-4"
       >
         {teamMembers?.map((teamMember) => {
           const memberId = `member-${getTeamMemberUrlId(teamMember.name || "")}`;
@@ -155,7 +156,7 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
             >
               <div className="h-[300px]">
                 <Image
-                  className="h-full w-full object-cover hover:cursor-pointer"
+                  className={teamPhotoClassName}
                   src={teamMember.image?.asset?.url ?? ""}
                   alt={teamMember.name ?? ""}
                   width={400}
@@ -213,7 +214,7 @@ export default function TeamMembersSection({
               >
                 <div className="h-[300px]">
                   <Image
-                    className="h-full w-full object-cover"
+                    className={teamPhotoClassName}
                     src={teamMember.image?.asset?.url ?? ""}
                     alt={teamMember.name ?? ""}
                     width={400}

@@ -2,7 +2,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import BlogAuthorByline, {
+  blogAuthorShouldRender,
+} from "@/components/shared/blog-author-byline";
 import { formatDate } from "@/lib/utils";
 import { GET_POST_BY_SLUG_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -44,15 +46,9 @@ export default async function BlogPostPage({
             {title}
           </h1>
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-4">
-              <Avatar>
-                <AvatarImage src={author?.image?.asset?.url!} />
-                <AvatarFallback className="bg-white text-black">
-                  {author?.name?.slice(0, 2)!}
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm">{author?.name}</span>
-            </div>
+            {blogAuthorShouldRender(author) ? (
+              <BlogAuthorByline author={author!} />
+            ) : null}
             <div className="text-balance text-sm">
               Published: {formatDate(publishedAt!)}
             </div>

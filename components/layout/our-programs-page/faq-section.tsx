@@ -48,11 +48,11 @@ const FaqSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
                 key={faqItem.title}
               >
                 <AccordionTrigger className="py-6">
-                  <h4 className="text-left text-lg font-light italic xl:text-2xl">
+                  <h4 className="pr-10 text-left text-lg font-light italic xl:text-2xl">
                     {faqItem.title}
                   </h4>
                 </AccordionTrigger>
-                <AccordionContent className="leading-7hh prose max-w-none pb-12 font-light">
+                <AccordionContent className="leading-7hh prose max-w-none pb-12 pr-10 font-light">
                   <PortableText value={faqItem.description!} />
                 </AccordionContent>
               </AccordionItem>

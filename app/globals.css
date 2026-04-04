@@ -13,7 +13,21 @@
 }
 
 .li-exclamation-mark {
-  list-style-image: url("../public/images/exclamation-mark.svg");
+  list-style: none;
+  position: relative;
+}
+
+.li-exclamation-mark::before {
+  content: "";
+  background-image: url("../public/images/exclamation-mark.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 16px;
+  height: 26px;
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .li-checkmark-dark-green {

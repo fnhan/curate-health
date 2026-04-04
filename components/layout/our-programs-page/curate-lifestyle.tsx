@@ -22,8 +22,8 @@ const CurateLifestyle = ({
       id="curate-lifestyle"
     >
       <div className="two-color-border container relative px-10 pt-52">
-        <div className="flex flex-col justify-end gap-8 pb-5 lg:items-center xl:flex-row">
-          <div className="relative md:left-0 2xl:absolute 2xl:-left-[210px]">
+        <div className="flex flex-col justify-end gap-8 pb-5 lg:items-center xl:flex-row 2xl:justify-start 2xl:pl-[488px]">
+          <div className="relative shrink-0 md:left-0 2xl:absolute 2xl:-left-[210px]">
             <div className="absolute -top-14 left-0 h-14 w-5/6 bg-our-programs-border-2"></div>
             <Image
               src={curateLifestyle?.image?.asset?.url!}
@@ -32,7 +32,7 @@ const CurateLifestyle = ({
               width={700}
             />
           </div>
-          <div className="flex max-w-[540px] flex-col gap-16 max-xl:mx-auto 2xl:mr-48">
+          <div className="flex min-w-0 max-w-[540px] flex-col gap-16 max-xl:mx-auto">
             <h2 className="text-3xl capitalize lg:text-[40px]">
               Curate Lifestyle
             </h2>
@@ -89,11 +89,11 @@ const CurateLifestyle = ({
                   </tr>
                   <tr>
                     <th>Entry</th>
-                    <td>{curateLifestyle?.structure?.entry}</td>
+                    <td className="!pb-[2px]">{curateLifestyle?.structure?.entry}</td>
                   </tr>
                 </tbody>
               </table>
-              <p className="mt-24 text-[10px] leading-[18px] max-xl:text-center">
+              <p className="mt-[72px] text-[10px] leading-[18px] max-xl:text-center">
                 *Bonuses available to be booked throughout the program, and up
                 to one month following graduation <br />
                 **Partially covered by OHIP - referral required. ***May also be
@@ -108,13 +108,13 @@ const CurateLifestyle = ({
               <div className="flex flex-col gap-3 text-center font-semibold">
                 <a
                   href={curateLifestyle?.referral_form_pdf?.asset?.url ?? ""}
-                  className="border-2 border-[#878E76] p-6 text-[#6B6B6B]"
+                  className="border-2 border-[#878E76] p-6 text-[#6B6B6B] transition-colors duration-300 hover:bg-[#878E76] hover:text-white"
                 >
-                  Referral Form
+                  Referral Form [PDF Download]
                 </a>
                 <Link
                   href="/services/curate-lifestyle"
-                  className="flex justify-center gap-x-2 bg-[#878E76] p-6 text-white shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] lg:justify-between"
+                  className="flex justify-center gap-x-2 border-2 border-transparent bg-[#878E76] p-6 text-white shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-colors duration-300 hover:border-[#878E76] hover:bg-white hover:text-[#6B6B6B] lg:justify-between"
                 >
                   {curateLifestyle?.call_to_action}
                   <img src={arrow.src} alt="" width={25} height={20} />

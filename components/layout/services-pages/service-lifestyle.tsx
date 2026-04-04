@@ -670,11 +670,11 @@ export default function ServiceLifestyleContent({
                   key={faq.title}
                 >
                   <AccordionTrigger className="py-6">
-                    <h4 className="text-left text-lg font-light italic xl:text-xl">
+                    <h4 className="pr-10 text-left text-lg font-light italic xl:text-xl">
                       {faq.title}
                     </h4>
                   </AccordionTrigger>
-                  <AccordionContent className="prose">
+                  <AccordionContent className="prose max-w-none pr-10">
                     <PortableText value={faq.description!} />
                   </AccordionContent>
                 </AccordionItem>

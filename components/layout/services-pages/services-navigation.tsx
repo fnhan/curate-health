@@ -31,7 +31,7 @@ export function ServicesNavigation({
             </Link>
           </li>
           <div className="text-primary">|</div>
-          {services.map((service) => (
+          {services.filter((service) => service.slug !== "curate-lifestyle").map((service) => (
             <li key={service.slug}>
               <Link
                 href={`/services/${service.slug}`}

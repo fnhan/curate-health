@@ -61,6 +61,28 @@
     }
   }
 
+  .essential-series-border {
+    position: relative;
+    @screen 2xl {
+      box-shadow:
+        -70px 0 0 0 hsl(73, 9%, 51%),
+        -140px 0 0 0 hsl(77, 27%, 65%);
+    }
+  }
+
+  .essential-series-border::before {
+    @screen 2xl {
+      content: "";
+      position: absolute;
+      top: 56px;
+      left: -210px;
+      width: 70px;
+      height: calc(100% - 56px);
+      background: hsl(var(--our-programs-border-3));
+      pointer-events: none;
+    }
+  }
+
   .two-color-border {
     @screen 2xl {
       box-shadow:

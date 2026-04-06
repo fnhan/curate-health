@@ -155,10 +155,18 @@ export default defineType({
         "Optional PDF for guests to download. The section appears on the site only when a file is uploaded.",
       fields: [
         defineField({
+          name: "eyebrow",
+          title: "Eyebrow label",
+          type: "string",
+          description: 'Small label beside the icon, e.g. "Health Café".',
+        }),
+        defineField({
           name: "headline",
           title: "Headline",
           type: "string",
           description: 'e.g. "Seasonal café menu"',
+          validation: (Rule) =>
+            Rule.required().error("A headline is required for the menu section"),
         }),
         defineField({
           name: "description",
@@ -166,33 +174,20 @@ export default defineType({
           type: "text",
           rows: 3,
           description: "Short supporting line under the headline.",
+          validation: (Rule) =>
+            Rule.required().error(
+              "A description is required for the menu section",
+            ),
         }),
         defineField({
           name: "buttonLabel",
           title: "Button label",
           type: "string",
           description: 'e.g. "Download PDF menu"',
-        }),
-        defineField({
-          name: "featureImage",
-          title: "Feature image",
-          type: "object",
-          description:
-            "Shown beside the download card on large screens; on mobile it appears above the card.",
-          fields: [
-            defineField({
-              name: "image",
-              title: "Image",
-              type: "image",
-              options: { hotspot: true },
-            }),
-            defineField({
-              name: "alt",
-              title: "Alternative text",
-              type: "string",
-              description: fieldDescriptions.altImageDescription,
-            }),
-          ],
+          validation: (Rule) =>
+            Rule.required().error(
+              "A button label is required for the menu section",
+            ),
         }),
         defineField({
           name: "menuPdf",

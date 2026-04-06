@@ -897,13 +897,10 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
     }
   },
  menuDownloadSection{
+    eyebrow,
     headline,
     description,
     buttonLabel,
-    "featureImage": {
-      "url": featureImage.image.asset->url,
-      "alt": featureImage.alt
-    },
     "menuFile": menuPdf.asset->{
       url,
       originalFilename,

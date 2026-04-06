@@ -596,7 +596,9 @@ export default function ServiceLifestyleContent({
               </div>
             </Card>
           )}
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            className={`grid w-full grid-cols-1 gap-4 md:grid-cols-2 ${teamMembers.length <= 2 ? "lg:grid-cols-2" : "lg:grid-cols-3"}`}
+          >
             {teamMembers?.map((teamMember) => (
               <Card
                 key={teamMember.name}

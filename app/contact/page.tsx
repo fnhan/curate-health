@@ -313,7 +313,7 @@ export default async function ContactPage() {
                 method="POST"
                 className="space-y-4 text-black"
               >
-                <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="relative space-y-2">
                     {/* <Label
                       htmlFor="name"

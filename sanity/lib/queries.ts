@@ -928,9 +928,9 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
     }
  },
  ctaBandSection{
-    "backgroundImage": {
-      "url": backgroundImage.image.asset->url,
-      "alt": backgroundImage.alt
+    backgroundImage{
+      "url": image.asset->url,
+      alt
     },
     headline,
     body,

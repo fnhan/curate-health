@@ -679,6 +679,25 @@ export const NEWSLETTER_SECTION_QUERY = groq`*[_type == "newsletterSection"][0]{
   bold,
 }`;
 
+const OUR_PROGRAMS_SECTION_QUERY = groq`*[_type == "ourProgramsSection"][0]{
+  sectionTitle,
+  "bgImage": {
+    "asset": bgImage.asset->{
+      _id,
+      url
+    },
+    "alt": bgImage.alt
+  },
+  programs[]{
+    name,
+    href,
+    barColor,
+    isLink
+  },
+  hoverLinkText,
+  hoverLinkHref
+}`;
+
 // * Home Page Sections Queries
 
 export const HERO_SECTION_QUERY = groq`*[_type == "heroSection"][0]{
@@ -707,11 +726,12 @@ export const LAYOUT_QUERY = groq`{
 
 export const HOME_PAGE_QUERY = groq`{
   "heroSection": ${HERO_SECTION_QUERY},
-  "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY}, 
+  "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY},
   "aboutSection": ${ABOUT_SECTION_QUERY},
   "clinicSection": ${CLINIC_SECTION_QUERY},
   "productsSection": ${PRODUCTS_SECTION_QUERY},
   "servicesSection": ${SERVICES_SECTION_QUERY},
+  "ourProgramsSection": ${OUR_PROGRAMS_SECTION_QUERY},
   "cafeSection": ${CAFE_QUERY},
   "blogSection": ${BLOG_SECTION_QUERY},
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},

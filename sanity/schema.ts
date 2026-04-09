@@ -13,6 +13,7 @@ import legalPages from "./schemas/legalPages";
 import missionAndValues from "./schemas/missionAndValues";
 import newsletter from "./schemas/newsletter";
 import ourPrograms from "./schemas/ourPrograms";
+import ourProgramsSection from "./schemas/ourProgramsSection";
 import ourStory from "./schemas/ourStory";
 import ourTeam from "./schemas/ourTeam";
 import pillarsOfHealth from "./schemas/pillarsOfHealth";
@@ -71,5 +72,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     serviceCurateLifestyle,
     serviceCurateLifestyleProgram,
     ourPrograms,
+    ourProgramsSection,
   ],
 };

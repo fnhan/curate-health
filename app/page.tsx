@@ -27,6 +27,7 @@ export default async function Home() {
     clinicSection,
     productsSection,
     servicesSection,
+    ourProgramsSection,
     cafeSection,
     blogSection,
     sustainabilitySection,
@@ -41,7 +42,7 @@ export default async function Home() {
       <AboutSection aboutSection={aboutSection} />
       <ClinicSection clinicSection={clinicSection} />
       <ServicesSection servicesSection={servicesSection} />
-      <OurProgramsSection />
+      <OurProgramsSection ourProgramsSection={ourProgramsSection} />
       <ProductsSection productsSection={productsSection} />
       <CafeSection cafeSection={cafeSection} />
       <BlogSection blogSection={blogSection} />

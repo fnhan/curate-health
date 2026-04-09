@@ -1,8 +1,14 @@
 import Image from "next/image";
 
-import type { CAFE_PAGE_QUERYResult } from "@/sanity.types";
-
-type CtaBand = NonNullable<CAFE_PAGE_QUERYResult>["ctaBandSection"];
+type CtaBand = {
+  backgroundImage?: {
+    url?: string | null;
+    alt?: string | null;
+  } | null;
+  headline?: string | null;
+  body?: string | null;
+  closingLine?: string | null;
+} | null;
 
 export function CafeCtaBandSection({ data }: { data: CtaBand }) {
   if (!data) return null;

@@ -1,9 +1,17 @@
 import { FileDown, UtensilsCrossed } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import type { CAFE_PAGE_QUERYResult } from "@/sanity.types";
-
-type MenuSection = NonNullable<CAFE_PAGE_QUERYResult>["menuDownloadSection"];
+type MenuSection = {
+  eyebrow?: string | null;
+  headline?: string | null;
+  description?: string | null;
+  buttonLabel?: string | null;
+  menuFile?: {
+    url?: string | null;
+    originalFilename?: string | null;
+    mimeType?: string | null;
+  } | null;
+} | null;
 
 export function CafeMenuDownloadSection({ data }: { data: MenuSection }) {
   if (data == null) return null;

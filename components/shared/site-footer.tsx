@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -37,42 +38,51 @@ export default function SiteFooter({
       <div className="flex flex-col text-white">
         <div className="container flex flex-col gap-10 py-14 lg:flex-row lg:justify-between lg:py-40">
           {/* Contact Info */}
-          <address className="space-y-2 text-sm not-italic md:text-base">
-            <h6 className="w-fit font-semibold hover:underline">
-              <Link href="/contact">Contact</Link>
-            </h6>
-            <a
-              className="flex items-start gap-2 hover:underline"
-              href={contactInfo?.mapLink!}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <MapPinIcon size={20} className="mt-1" />
-              <div>
-                {contactInfo?.address?.street}
-                <br />
-                {contactInfo?.address?.city}
-                {contactInfo?.address?.state}
-                {contactInfo?.address?.zip}
+          <div className="flex flex-col gap-6">
+            <address className="space-y-2 text-sm not-italic md:text-base">
+              <h6 className="w-fit font-semibold hover:underline">
+                <Link href="/contact">Contact</Link>
+              </h6>
+              <a
+                className="flex items-start gap-2 hover:underline"
+                href={contactInfo?.mapLink!}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MapPinIcon size={20} className="mt-1" />
+                <div>
+                  {contactInfo?.address?.street}
+                  <br />
+                  {contactInfo?.address?.city}
+                  {contactInfo?.address?.state}
+                  {contactInfo?.address?.zip}
+                </div>
+              </a>
+              <div className="space-y-2">
+                <a
+                  className="flex w-fit items-center gap-2 hover:underline"
+                  href={`mailto:${contactInfo?.email}`}
+                >
+                  <MailIcon size={20} />
+                  <span>{contactInfo?.email}</span>
+                </a>
+                <a
+                  className="flex w-fit items-center gap-2 hover:underline"
+                  href={`tel:${contactInfo?.phone}`}
+                >
+                  <PhoneIcon size={20} />
+                  <span>{contactInfo?.phone}</span>
+                </a>
               </div>
-            </a>
-            <div className="space-y-2">
-              <a
-                className="flex w-fit items-center gap-2 hover:underline"
-                href={`mailto:${contactInfo?.email}`}
-              >
-                <MailIcon size={20} />
-                <span>{contactInfo?.email}</span>
-              </a>
-              <a
-                className="flex w-fit items-center gap-2 hover:underline"
-                href={`tel:${contactInfo?.phone}`}
-              >
-                <PhoneIcon size={20} />
-                <span>{contactInfo?.phone}</span>
-              </a>
-            </div>
-          </address>
+            </address>
+            <Image
+              src="/images/B_Corp_Logo.png"
+              alt="Certified B Corporation"
+              width={44}
+              height={59}
+              className="brightness-0 invert"
+            />
+          </div>
           <div>
             <FooterMobileAccordion siteSettings={siteSettings} />
             <div className="hidden flex-col gap-2 lg:flex lg:flex-row lg:justify-end lg:gap-10">

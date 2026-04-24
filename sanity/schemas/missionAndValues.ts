@@ -87,15 +87,15 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "financialReportsSection",
-      title: "Financial Reports Section",
+      name: "annualReportsSection",
+      title: "Annual Reports Section",
       type: "object",
       fields: [
         defineField({
           name: "title",
           title: "Title",
           type: "string",
-          initialValue: "Financial reports",
+          initialValue: "Annual reports",
           validation: (Rule) => Rule.required().error("A title is required"),
         }),
         defineField({
@@ -141,7 +141,7 @@ export default defineType({
                 prepare({ title, subtitle }) {
                   return {
                     title: title ? String(title) : "Report",
-                    subtitle: subtitle || "Financial report",
+                    subtitle: subtitle || "Annual report",
                   };
                 },
               },

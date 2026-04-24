@@ -462,7 +462,7 @@ export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pa
       alt
     }
   },
-  financialReportsSection{
+  "annualReportsSection": coalesce(annualReportsSection, financialReportsSection){
     title,
     description,
     reports[]{

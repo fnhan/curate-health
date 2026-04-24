@@ -179,8 +179,10 @@ export default defineType({
           name: "url",
           title: "Google Sheets / survey link",
           type: "url",
+          description:
+            "Optional. Leave blank to hide the survey section on the website.",
           validation: (Rule) =>
-            Rule.required().uri({ allowRelative: false }).error("A valid URL is required"),
+            Rule.uri({ allowRelative: false }).error("A valid URL is required"),
         }),
       ],
     }),

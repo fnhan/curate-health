@@ -19,6 +19,7 @@ import {
   SITE_SETTINGS_QUERYResult,
 } from "@/sanity.types";
 
+import HeaderSearch from "./header-search";
 import PrimaryCTAButton from "./primary-cta-button";
 
 export default function SiteNav({
@@ -206,18 +207,21 @@ export default function SiteNav({
           </div>
         </div>
         <div className="flex flex-1 justify-center">
-          <Link href={"/"} onClick={() => setOpen(false)}>
-            <Image
-              src={siteLogo?.asset?.url!}
-              width={48}
-              height={48}
-              alt={`${brandName} Logo`}
-              className="size-[30px] transition-all duration-300 hover:opacity-75 sm:size-12"
-            />
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href={"/"} onClick={() => setOpen(false)}>
+              <Image
+                src={siteLogo?.asset?.url!}
+                width={48}
+                height={48}
+                alt={`${brandName} Logo`}
+                className="size-[30px] transition-all duration-300 hover:opacity-75 sm:size-12"
+              />
+            </Link>
+          </div>
         </div>
         {/* Primary CTA Button */}
-        <div className="flex flex-1 justify-end">
+        <div className="flex flex-1 items-center justify-end gap-3">
+          <HeaderSearch className="hidden w-[320px] lg:block" />
           <PrimaryCTAButton primaryCTAButton={primaryCTAButton} />
         </div>
       </div>

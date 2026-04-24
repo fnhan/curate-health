@@ -23,7 +23,7 @@ export default function PrimaryCTAButton({
         size={size}
         className={cn(
           `rounded-none border border-white bg-card text-xl font-normal text-card-foreground transition-all duration-300 hover:bg-transparent hover:text-card-foreground hover:text-white`,
-          size === "default" && "h-fit p-0 px-2 py-1 text-sm sm:text-base"
+          size === "default" && "h-10 px-4 py-2 text-sm sm:text-base"
         )}
       >
         {ctaButton?.ctaText}

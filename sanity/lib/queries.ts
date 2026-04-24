@@ -462,6 +462,25 @@ export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pa
       alt
     }
   },
+  "annualReportsSection": coalesce(annualReportsSection, financialReportsSection){
+    title,
+    description,
+    reports[]{
+      year,
+      label,
+      "file": file.asset->{
+        url,
+        originalFilename,
+        mimeType
+      }
+    }
+  },
+  feedbackSurvey{
+    title,
+    description,
+    buttonText,
+    url
+  },
   ${SEO_QUERY}
 }`;
 

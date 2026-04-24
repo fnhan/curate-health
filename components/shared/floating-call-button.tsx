@@ -23,12 +23,12 @@ export function FloatingCallButton({ phone }: { phone: string }) {
 
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-end p-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] pl-4 pr-[max(1rem,env(safe-area-inset-right,0px))] pt-4 md:p-6 md:pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] md:pr-[max(1.5rem,env(safe-area-inset-right,0px))]"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex justify-end p-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] pl-4 pr-[env(safe-area-inset-right,0px)] pt-4 md:p-6 md:pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] md:pr-[env(safe-area-inset-right,0px)]"
       role="presentation"
     >
       <a
         href={`tel:${trimmed}`}
-        className="pointer-events-auto inline-flex size-14 shrink-0 items-center justify-center border border-primary/20 bg-primary text-primary-foreground shadow-lg transition-[opacity,box-shadow] hover:opacity-95 hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        className="pointer-events-auto inline-flex size-14 shrink-0 translate-x-7 items-center justify-center border-2 border-white bg-primary text-primary-foreground shadow-lg transition-[transform,opacity,box-shadow] duration-200 ease-out hover:translate-x-0 hover:opacity-95 hover:shadow-xl focus-visible:translate-x-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         aria-label={`Call ${trimmed}`}
       >
         <Phone className="size-7 shrink-0" aria-hidden strokeWidth={1.5} />

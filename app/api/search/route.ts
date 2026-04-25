@@ -5,11 +5,41 @@ import { groq } from "next-sanity";
 
 type SearchResultItem = {
   type: string;
+  group?: "featured_products" | "featured_services";
   title: string;
   excerpt?: string | null;
   href: string;
   score: number;
 };
+
+const FEATURED_QUERY = groq`
+{
+  "featuredProducts": *[
+    _type == "product" &&
+    isActive == true &&
+    defined(slug.current)
+  ] | order(coalesce(_updatedAt, _createdAt) desc)[0...$limit]{
+    "type": "product",
+    "group": "featured_products",
+    "title": coalesce(title, "Untitled product"),
+    "excerpt": coalesce(description, null),
+    "href": "/products/" + slug.current,
+    "score": 1
+  },
+  "featuredServices": *[
+    _type == "service" &&
+    isActive == true &&
+    defined(slug.current)
+  ] | order(coalesce(_updatedAt, _createdAt) desc)[0...$limit]{
+    "type": "service",
+    "group": "featured_services",
+    "title": coalesce(title, "Untitled service"),
+    "excerpt": null,
+    "href": "/services/" + slug.current,
+    "score": 1
+  }
+}
+`;
 
 const SEARCH_QUERY = groq`
 {
@@ -363,14 +393,37 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const raw = searchParams.get("q") ?? "";
   const qRaw = normalizeQuery(raw).replace(/^"(.+)"$/, "$1");
+  const featured = searchParams.get("featured") === "1";
 
   const limitParam = Number(searchParams.get("limit") ?? 8);
   const limit = Number.isFinite(limitParam)
     ? Math.min(Math.max(limitParam, 3), 12)
     : 8;
 
+  if (featured) {
+    const data = await sanityFetch<{
+      featuredProducts?: SearchResultItem[];
+      featuredServices?: SearchResultItem[];
+    }>({
+      query: FEATURED_QUERY,
+      params: { limit: Math.min(limit, 6) },
+      revalidate: 60,
+      tags: ["search"],
+    });
+
+    const results = [
+      ...(data?.featuredProducts ?? []),
+      ...(data?.featuredServices ?? []),
+    ].slice(0, Math.min(limit, 12));
+
+    return NextResponse.json({ query: qRaw, results });
+  }
+
   if (qRaw.length < 2) {
-    return NextResponse.json({ query: qRaw, results: [] satisfies SearchResultItem[] });
+    return NextResponse.json({
+      query: qRaw,
+      results: [] satisfies SearchResultItem[],
+    });
   }
 
   // Sanity `match` supports wildcard `*`. Make it prefix-friendly for multi-word queries.

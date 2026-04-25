@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 type SearchResultItem = {
   type: "blog" | "product" | "service" | "treatment" | "page" | string;
+  group?: "featured_products" | "featured_services";
   title: string;
   excerpt?: string | null;
   href: string;
@@ -85,9 +86,15 @@ function typeLabel(t: SearchResultItem["type"]) {
 export default function HeaderSearch({
   className,
   placeholder = "Search pages, products, blog…",
+  variant = "header",
+  showFeatured = false,
+  resultsPlacement = "overlay",
 }: {
   className?: string;
   placeholder?: string;
+  variant?: "header" | "modal";
+  showFeatured?: boolean;
+  resultsPlacement?: "overlay" | "inline";
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -117,8 +124,10 @@ export default function HeaderSearch({
 
   useEffect(() => {
     if (!canSearch) {
-      setItems([]);
-      setLoading(false);
+      if (!showFeatured) {
+        setItems([]);
+        setLoading(false);
+      }
       return;
     }
 
@@ -152,6 +161,39 @@ export default function HeaderSearch({
   }, [canSearch, debouncedQuery]);
 
   useEffect(() => {
+    if (!showFeatured) return;
+    if (query.trim().length > 0) return;
+
+    let cancelled = false;
+    const controller = new AbortController();
+
+    async function run() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/search?featured=1&limit=6`, {
+          signal: controller.signal,
+        });
+        const json = (await res.json()) as { results?: SearchResultItem[] };
+        if (cancelled) return;
+        setItems(Array.isArray(json.results) ? json.results : []);
+        setOpen(true);
+      } catch {
+        if (cancelled) return;
+        setItems([]);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    run();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [showFeatured, query]);
+
+  useEffect(() => {
+    if (resultsPlacement !== "overlay") return;
     function onPointerDown(e: PointerEvent) {
       const el = rootRef.current;
       if (!el) return;
@@ -162,22 +204,109 @@ export default function HeaderSearch({
     }
     window.addEventListener("pointerdown", onPointerDown);
     return () => window.removeEventListener("pointerdown", onPointerDown);
-  }, []);
+  }, [resultsPlacement]);
 
   function clear() {
     setQuery("");
-    setItems([]);
-    setOpen(false);
+    if (!showFeatured) setItems([]);
+    setOpen(showFeatured);
     setActiveIndex(-1);
     inputRef.current?.focus();
   }
 
-  const showPanel = open && (loading || items.length > 0 || canSearch);
+  const shouldShowPanelContent =
+    loading || items.length > 0 || canSearch || (showFeatured && !query.trim());
+
+  const showPanel =
+    resultsPlacement === "inline" ? shouldShowPanelContent : open && shouldShowPanelContent;
+
+  const inputClassName =
+    variant === "modal"
+      ? "h-10 w-full rounded-none border border-slate-200 bg-white pl-9 pr-10 text-slate-900 placeholder:text-slate-500 focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-0"
+      : "h-10 w-full rounded-none border border-border bg-white pl-9 pr-10 text-slate-900 placeholder:text-slate-500 focus-visible:ring-1 focus-visible:ring-primary/30 focus-visible:ring-offset-0";
+
+  const iconClassName =
+    variant === "modal"
+      ? "pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
+      : "pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500";
+
+  const clearButtonClassName =
+    variant === "modal"
+      ? "absolute right-1.5 top-1/2 h-8 w-8 -translate-y-1/2 rounded-none text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+      : "absolute right-1.5 top-1/2 h-8 w-8 -translate-y-1/2 rounded-none text-slate-500 hover:bg-muted hover:text-slate-900";
+
+  const inlineIsLight = resultsPlacement === "inline" && variant === "modal";
+  const pillsAreLight = resultsPlacement === "overlay" || inlineIsLight;
+
+  const panelClassName =
+    resultsPlacement === "inline"
+      ? inlineIsLight
+        ? cn(
+            "mt-4 overflow-hidden rounded-none border border-border bg-white text-slate-900 shadow-none"
+          )
+        : cn(
+            "mt-4 overflow-hidden rounded-none border border-white/10 bg-black/30 text-white backdrop-blur-sm shadow-none"
+          )
+      : "absolute left-0 right-0 top-[calc(100%+10px)] z-50 overflow-hidden rounded-none border border-border bg-white text-slate-900 shadow-none";
+
+  const scrollClassName =
+    resultsPlacement === "inline"
+      ? "max-h-[45vh] overflow-auto overscroll-y-contain py-2 pr-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary scrollbar-thumb-rounded-full"
+      : "max-h-[340px] overflow-auto overscroll-y-contain py-2 pr-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary scrollbar-thumb-rounded-full";
+
+  const emptyTextClassName = inlineIsLight
+    ? "text-slate-600"
+    : resultsPlacement === "inline"
+      ? "text-white/80"
+      : "text-slate-600";
+
+  const emptyStrongTextClassName = inlineIsLight
+    ? "text-slate-900"
+    : resultsPlacement === "inline"
+      ? "text-white"
+      : "text-slate-900";
+
+  const groupHeaderClassName = inlineIsLight
+    ? "text-slate-500"
+    : resultsPlacement === "inline"
+      ? "text-white/70"
+      : "text-slate-500";
+
+  const rowClassName = (active: boolean) =>
+    resultsPlacement === "inline"
+      ? inlineIsLight
+        ? cn(
+            "flex items-start gap-3 px-4 py-3 transition-colors",
+            active ? "bg-muted" : "hover:bg-muted/60"
+          )
+        : cn(
+            "flex items-start gap-3 px-4 py-3 transition-colors",
+            active ? "bg-white/10" : "hover:bg-white/5"
+          )
+      : cn(
+          "flex items-start gap-3 px-4 py-3 transition-colors",
+          active ? "bg-muted" : "hover:bg-muted/60"
+        );
+
+  const pillClassName =
+    resultsPlacement === "inline"
+      ? inlineIsLight
+        ? "mt-0.5 inline-flex min-w-[74px] items-center justify-center rounded-none border border-green-200 bg-green-50 px-2 py-0.5 text-[11px] font-medium text-green-800"
+        : "mt-0.5 inline-flex min-w-[74px] items-center justify-center rounded-none border border-white/15 bg-white/5 px-2 py-0.5 text-[11px] font-medium text-white/80"
+      : pillsAreLight
+        ? "mt-0.5 inline-flex min-w-[74px] items-center justify-center rounded-none border border-green-200 bg-green-50 px-2 py-0.5 text-[11px] font-medium text-green-800"
+        : "mt-0.5 inline-flex min-w-[74px] items-center justify-center rounded-none border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600";
+
+  const excerptClassName = inlineIsLight
+    ? "text-slate-600"
+    : resultsPlacement === "inline"
+      ? "text-white/75"
+      : "text-slate-600";
 
   return (
     <div ref={rootRef} className={cn("relative", className)}>
       <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/80" />
+        <Search className={iconClassName} />
         <Input
           ref={inputRef}
           value={query}
@@ -187,6 +316,10 @@ export default function HeaderSearch({
             if (e.target.value.trim().length < 2) setOpen(false);
           }}
           onFocus={() => {
+            if (showFeatured && query.trim().length === 0 && items.length > 0) {
+              setOpen(true);
+              return;
+            }
             if (query.trim().length >= 2) setOpen(true);
           }}
           onKeyDown={(e) => {
@@ -224,7 +357,7 @@ export default function HeaderSearch({
           aria-expanded={showPanel}
           aria-controls={resultsId}
           aria-autocomplete="list"
-          className="h-10 w-full rounded-none border-white/15 bg-white/10 pl-9 pr-10 text-white placeholder:text-white/70 focus-visible:border-white/30 focus-visible:ring-1 focus-visible:ring-white/30 focus-visible:ring-offset-0"
+          className={inputClassName}
         />
 
         {query.length > 0 ? (
@@ -234,7 +367,7 @@ export default function HeaderSearch({
             size="icon"
             onClick={clear}
             aria-label="Clear search"
-            className="absolute right-1.5 top-1/2 h-8 w-8 -translate-y-1/2 rounded-none text-white/90 hover:bg-white/10 hover:text-white"
+            className={clearButtonClassName}
           >
             <X className="h-4 w-4" />
           </Button>
@@ -245,18 +378,18 @@ export default function HeaderSearch({
         <div
           id={resultsId}
           role="listbox"
-          className="absolute left-0 right-0 top-[calc(100%+10px)] z-50 overflow-hidden rounded-none border border-border bg-white text-slate-900 shadow-2xl"
+          className={panelClassName}
         >
-          <div className="max-h-[340px] overflow-auto overscroll-y-contain py-2 pr-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-primary scrollbar-thumb-rounded-full">
+          <div className={scrollClassName}>
             {loading ? (
-              <div className="flex items-center gap-2 px-4 py-3 text-sm text-slate-600">
+              <div className={cn("flex items-center gap-2 px-4 py-3 text-sm", emptyTextClassName)}>
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Searching…</span>
               </div>
             ) : items.length === 0 ? (
-              <div className="px-4 py-3 text-sm text-slate-600">
+              <div className={cn("px-4 py-3 text-sm", emptyTextClassName)}>
                 No results for{" "}
-                <span className="font-medium text-slate-900">
+                <span className={cn("font-medium", emptyStrongTextClassName)}>
                   {debouncedQuery.trim()}
                 </span>
                 .
@@ -264,33 +397,40 @@ export default function HeaderSearch({
             ) : (
               items.map((item, idx) => {
                 const active = idx === activeIndex;
+                const prevGroup = idx > 0 ? items[idx - 1]?.group : undefined;
+                const showGroupHeader = item.group && item.group !== prevGroup;
                 return (
-                  <Link
-                    key={`${item.type}-${item.href}-${idx}`}
-                    href={item.href}
-                    role="option"
-                    aria-selected={active}
-                    onMouseEnter={() => setActiveIndex(idx)}
-                    onClick={() => setOpen(false)}
-                    className={cn(
-                      "flex items-start gap-3 px-4 py-3 transition-colors",
-                      active ? "bg-muted" : "hover:bg-muted/60"
-                    )}
-                  >
-                    <span className="mt-0.5 inline-flex min-w-[74px] items-center justify-center rounded-none border border-slate-200 bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-600">
-                      {typeLabel(item.type)}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium">
-                        {highlightMatches(item.title, debouncedQuery)}
+                  <div key={`${item.type}-${item.href}-${idx}`}>
+                    {showGroupHeader ? (
+                      <div className={cn("px-4 pb-2 pt-3 text-xs font-semibold uppercase tracking-wide", groupHeaderClassName)}>
+                        {item.group === "featured_products"
+                          ? "Featured products"
+                          : "Featured services"}
+                      </div>
+                    ) : null}
+                    <Link
+                      href={item.href}
+                      role="option"
+                      aria-selected={active}
+                      onMouseEnter={() => setActiveIndex(idx)}
+                      onClick={() => setOpen(false)}
+                      className={rowClassName(active)}
+                    >
+                      <span className={pillClassName}>
+                        {typeLabel(item.type)}
                       </span>
-                      {item.excerpt ? (
-                        <span className="mt-0.5 block line-clamp-2 text-xs text-slate-600">
-                          {highlightMatches(item.excerpt, debouncedQuery)}
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium">
+                          {highlightMatches(item.title, debouncedQuery)}
                         </span>
-                      ) : null}
-                    </span>
-                  </Link>
+                        {item.excerpt ? (
+                          <span className={cn("mt-0.5 block line-clamp-2 text-xs", excerptClassName)}>
+                            {highlightMatches(item.excerpt, debouncedQuery)}
+                          </span>
+                        ) : null}
+                      </span>
+                    </Link>
+                  </div>
                 );
               })
             )}

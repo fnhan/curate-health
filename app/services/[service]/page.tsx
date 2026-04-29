@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import ServiceContent from "@/components/layout/services-pages/service-content";
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
@@ -27,7 +29,7 @@ export default async function ServicePage({
   });
 
   if (!service) {
-    return null;
+    return notFound();
   }
 
   const { hero_image, hero_alt } = service;
@@ -57,11 +59,10 @@ export async function generateMetadata({
     params: { slug: params.service },
   });
 
-  const { seo } = servicePage!;
-
   const fallbackTitle = "Services";
   const fallbackDescription =
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
+  const seo = servicePage?.seo;
 
   return {
     title: seo?.pageTitle || fallbackTitle,

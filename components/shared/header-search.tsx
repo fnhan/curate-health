@@ -27,14 +27,9 @@ function highlightMatches(text: string, rawQuery: string) {
   const q = rawQuery.trim().replace(/\s+/g, " ");
   if (!q) return text;
 
-  const tokens = q
-    .split(" ")
-    .map((t) => t.trim())
-    .filter((t) => t.length >= 2);
+  if (q.length < 2) return text;
 
-  if (!tokens.length) return text;
-
-  const pattern = tokens.map(escapeRegExp).join("|");
+  const pattern = escapeRegExp(q);
   const re = new RegExp(`(${pattern})`, "gi");
 
   const parts = text.split(re);

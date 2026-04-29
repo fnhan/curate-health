@@ -253,7 +253,6 @@ export default function SiteNav({
               <HeaderSearch
                 variant="modal"
                 placeholder="Search"
-                showFeatured
                 resultsPlacement="inline"
                 className="w-full"
               />

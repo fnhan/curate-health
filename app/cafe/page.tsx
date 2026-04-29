@@ -8,7 +8,6 @@ import {
 } from "@/components/layout/cafe-page/cafe-intro-and-quote";
 import { CafeMenuDownloadSection } from "@/components/layout/cafe-page/cafe-menu-download";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
-import { JsonLdScript, buildCafeJsonLd } from "@/lib/structured-data";
 import { CAFE_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { CAFE_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -33,7 +32,6 @@ export default async function CafePage() {
 
   return (
     <main className="font-poppins">
-      <JsonLdScript data={buildCafeJsonLd(cafePage)} id="cafe-json-ld" />
       <Image
         width={1920}
         height={1080}

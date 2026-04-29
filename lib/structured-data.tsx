@@ -244,21 +244,30 @@ export function buildCafeJsonLd(cafePage: CAFE_PAGE_QUERYResult) {
     return null;
   }
 
+  const cafe = cafePage as {
+    seo?: { pageDescription?: string | null } | null;
+    heroSection?: {
+      heroImage?: { image?: { asset?: { url?: string | null } | null } | null } | null;
+    } | null;
+    ctaBandSection?: {
+      body?: string | null;
+      backgroundImage?: { url?: string | null } | null;
+    } | null;
+    menuDownloadSection?: { menuFile?: { url?: string | null } | null } | null;
+  };
+
   return stripEmpty({
     "@context": "https://schema.org",
     "@type": ["CafeOrCoffeeShop", "LocalBusiness"],
     "@id": `${BASEURL}/cafe#cafe`,
     name: "Curate Cafe",
-    description:
-      cafePage.seo?.pageDescription ||
-      cafePage.introSection?.description ||
-      cafePage.ctaBandSection?.body,
+    description: cafe.seo?.pageDescription || cafe.ctaBandSection?.body,
     image:
-      cafePage.heroSection?.heroImage?.image?.asset?.url ||
-      cafePage.ctaBandSection?.backgroundImage?.url,
+      cafe.heroSection?.heroImage?.image?.asset?.url ||
+      cafe.ctaBandSection?.backgroundImage?.url,
     url: `${BASEURL}/cafe`,
     parentOrganization: { "@id": `${BASEURL}/#organization` },
-    menu: cafePage.menuDownloadSection?.menuFile?.url,
+    menu: cafe.menuDownloadSection?.menuFile?.url,
     areaServed: {
       "@type": "City",
       name: "Toronto",

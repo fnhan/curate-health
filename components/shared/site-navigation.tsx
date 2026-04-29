@@ -5,7 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
+import { Search } from "lucide-react";
+
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "components/ui/sheet";
 import { Menu } from "lucide-react";
 
 import {
@@ -19,6 +21,9 @@ import {
   SITE_SETTINGS_QUERYResult,
 } from "@/sanity.types";
 
+import { Button } from "@/components/ui/button";
+
+import HeaderSearch from "./header-search";
 import PrimaryCTAButton from "./primary-cta-button";
 
 export default function SiteNav({
@@ -30,6 +35,7 @@ export default function SiteNav({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   if (pathname === "/coming-soon" || pathname === "/login") {
     return null;
@@ -206,18 +212,52 @@ export default function SiteNav({
           </div>
         </div>
         <div className="flex flex-1 justify-center">
-          <Link href={"/"} onClick={() => setOpen(false)}>
-            <Image
-              src={siteLogo?.asset?.url!}
-              width={48}
-              height={48}
-              alt={`${brandName} Logo`}
-              className="size-[30px] transition-all duration-300 hover:opacity-75 sm:size-12"
-            />
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href={"/"} onClick={() => setOpen(false)}>
+              <Image
+                src={siteLogo?.asset?.url!}
+                width={48}
+                height={48}
+                alt={`${brandName} Logo`}
+                className="size-[30px] transition-all duration-300 hover:opacity-75 sm:size-12"
+              />
+            </Link>
+          </div>
         </div>
         {/* Primary CTA Button */}
-        <div className="flex flex-1 justify-end">
+        <div className="flex flex-1 items-center justify-end gap-3">
+          <HeaderSearch className="hidden w-[320px] lg:block" />
+          <Sheet open={searchOpen} onOpenChange={setSearchOpen}>
+            <SheetTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 rounded-none border border-white/20 text-white hover:bg-white/10 lg:hidden"
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="top"
+              overlayClassName="bg-black/30"
+              closeButtonClassName="left-auto right-4 top-4 rounded-none border border-slate-200 bg-white hover:bg-slate-50"
+              className="left-4 right-4 top-4 rounded-none border border-slate-200 bg-white p-6 text-slate-900 shadow-none"
+            >
+              <SheetHeader className="mb-4 space-y-0 text-left">
+                <SheetTitle className="text-xl font-semibold text-slate-900">
+                  Search
+                </SheetTitle>
+              </SheetHeader>
+              <HeaderSearch
+                variant="modal"
+                placeholder="Search"
+                resultsPlacement="inline"
+                className="w-full"
+              />
+            </SheetContent>
+          </Sheet>
           <PrimaryCTAButton primaryCTAButton={primaryCTAButton} />
         </div>
       </div>

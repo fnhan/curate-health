@@ -5,8 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-import { Search } from "lucide-react";
-
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "components/ui/sheet";
 import { Menu } from "lucide-react";
 
@@ -22,8 +20,8 @@ import {
 } from "@/sanity.types";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-import HeaderSearch from "./header-search";
 import PrimaryCTAButton from "./primary-cta-button";
 
 export default function SiteNav({
@@ -35,7 +33,6 @@ export default function SiteNav({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
 
   if (pathname === "/coming-soon" || pathname === "/login") {
     return null;
@@ -207,6 +204,27 @@ export default function SiteNav({
                   ))}
                   </div>
                 </div>
+                <div className="mt-auto border-t border-white/15 px-1 pb-6 pt-6">
+                  <form
+                    action="/search"
+                    method="get"
+                    onSubmit={() => setOpen(false)}
+                    className="space-y-3"
+                  >
+                    <Input
+                      name="q"
+                      placeholder="Search"
+                      className="h-10 rounded-none border-white/20 bg-white/10 text-white placeholder:text-white/70 focus-visible:ring-1 focus-visible:ring-white/30 focus-visible:ring-offset-0"
+                    />
+                    <Button
+                      type="submit"
+                      variant="secondary"
+                      className="h-10 w-full rounded-none border border-white/20 bg-white/10 text-white hover:bg-white/15"
+                    >
+                      Search
+                    </Button>
+                  </form>
+                </div>
               </SheetContent>
             </Sheet>
           </div>
@@ -226,38 +244,6 @@ export default function SiteNav({
         </div>
         {/* Primary CTA Button */}
         <div className="flex flex-1 items-center justify-end gap-3">
-          <HeaderSearch className="hidden w-[320px] lg:block" />
-          <Sheet open={searchOpen} onOpenChange={setSearchOpen}>
-            <SheetTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-10 w-10 rounded-none border border-white/20 text-white hover:bg-white/10 lg:hidden"
-                aria-label="Search"
-              >
-                <Search className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="top"
-              overlayClassName="bg-black/30"
-              closeButtonClassName="left-auto right-4 top-4 rounded-none border border-slate-200 bg-white hover:bg-slate-50"
-              className="left-4 right-4 top-4 rounded-none border border-slate-200 bg-white p-6 text-slate-900 shadow-none"
-            >
-              <SheetHeader className="mb-4 space-y-0 text-left">
-                <SheetTitle className="text-xl font-semibold text-slate-900">
-                  Search
-                </SheetTitle>
-              </SheetHeader>
-              <HeaderSearch
-                variant="modal"
-                placeholder="Search"
-                resultsPlacement="inline"
-                className="w-full"
-              />
-            </SheetContent>
-          </Sheet>
           <PrimaryCTAButton primaryCTAButton={primaryCTAButton} />
         </div>
       </div>

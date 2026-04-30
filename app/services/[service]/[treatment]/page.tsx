@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
+import { JsonLdScript, buildTreatmentJsonLd } from "@/lib/structured-data";
 import {
   ALL_SERVICES_QUERYResult,
   PRIMARY_CTA_BUTTON_QUERYResult,
@@ -41,6 +42,10 @@ export default async function TreatmentPage({
 
   return (
     <>
+      <JsonLdScript
+        data={buildTreatmentJsonLd(params.service, treatment)}
+        id={`treatment-${params.treatment}-json-ld`}
+      />
       <TreatmentHeroSection
         hero_image={{
           asset: { url: heroImage?.asset?.url! },

@@ -1,5 +1,7 @@
 import React from "react";
 
+import { JsonLdScript, buildSiteJsonLd } from "@/lib/structured-data";
+
 import { LAYOUT_QUERYResult } from "../../sanity.types";
 import NewsletterSection from "./newsletter-section";
 import PopupBanner from "./popup-banner";
@@ -18,6 +20,7 @@ export default function Layout({
 
   return (
     <div className="flex flex-1 flex-col">
+      <JsonLdScript data={buildSiteJsonLd(siteSettings)} id="site-json-ld" />
       <SiteNavigation
         siteSettings={siteSettings}
         primaryCTAButton={primaryCTAButton}

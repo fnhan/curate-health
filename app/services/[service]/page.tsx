@@ -1,6 +1,7 @@
 import ServiceContent from "@/components/layout/services-pages/service-content";
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
+import { JsonLdScript, buildServiceJsonLd } from "@/lib/structured-data";
 import {
   ALL_SERVICES_QUERYResult,
   SERVICE_BY_SLUG_QUERYResult,
@@ -33,6 +34,10 @@ export default async function ServicePage({
 
   return (
     <>
+      <JsonLdScript
+        data={buildServiceJsonLd(service)}
+        id={`service-${params.service}-json-ld`}
+      />
       <ServiceHeroSection
         hero_image={{ asset: { url: hero_image! }, alt: hero_alt! }}
       />

@@ -58,6 +58,51 @@ const MONTH_NAMES = [
 ] as const;
 const TIME_PATTERN = /\b(\d{1,2})(?::(\d{2}))?\s*([AP])\.?M\.?\b/gi;
 
+/** Jane SPA discipline ids for Curate Health Eglinton (shared book SPA); treatment id is resolved per offering. */
+const JANE_BOOKING_HASH_BY_MODALITY: Readonly<{ id: number; pattern: RegExp }[]> =
+  [
+    { id: 10, pattern: /\b(massage|registered\s+massage|\brmt\b)/i },
+    { id: 12, pattern: /\b(naturopath|naturopathic)/i },
+    { id: 13, pattern: /\b(personal\s+training|personal\s+trainer|fitness\s+(training|assessment))\b/i },
+    { id: 16, pattern: /\b(physio|physiotherapy)\b/i },
+    {
+      id: 19,
+      pattern:
+        /\b(psychotherapy|psychotherapist|counse?l(?:l)?ing|cognitive\s+behav(?:iour|ior)al)\b/i,
+    },
+    { id: 22, pattern: /\b(recovery\s+sanctuary|sanctuary\s+class|cold\s+plunge|sauna|\bpilates\b|\byoga\s+class)\b/i },
+    { id: 23, pattern: /\b(custom\s+products?|orthotic|compression\s+stocking)\b/i },
+    { id: 24, pattern: /\bflowpresso\b/i },
+    {
+      id: 1,
+      pattern: /\b(chiro|chiropractic|chiropractor|spinal\b)/i,
+    },
+  ];
+
+function stripJaneHash(bookingUrl: string) {
+  const hashStart = bookingUrl.indexOf("#");
+  return hashStart < 0 ? bookingUrl.trim() : bookingUrl.slice(0, hashStart).trim();
+}
+
+/** Resolve Jane `#/discipline/:id` for a service label; null if unknown — stay on landing book URL. */
+export function disciplineHashForJaneService(serviceLabel: string): number | null {
+  for (const { id, pattern } of JANE_BOOKING_HASH_BY_MODALITY) {
+    if (pattern.test(serviceLabel)) return id;
+  }
+
+  return null;
+}
+
+export function bookingUrlWithJaneDiscipline(
+  bookingUrl: string,
+  serviceLabel: string
+) {
+  const id = disciplineHashForJaneService(serviceLabel);
+  if (id == null) return bookingUrl.trim();
+
+  return `${stripJaneHash(bookingUrl)}#/discipline/${id}`;
+}
+
 const cache = new Map<string, CacheEntry>();
 const serviceOptionsCache = new Map<string, ServiceOptionsCacheEntry>();
 
@@ -154,6 +199,72 @@ async function dismissOverlays(page: Page) {
   }
 }
 
+/** Jane SPA often opens promotional / onboarding modals (`Modal__*`) that intercept pointer events. */
+async function dismissBlockingModals(page: Page) {
+  for (let round = 0; round < 6; round += 1) {
+    await dismissOverlays(page);
+
+    const namedClose = page.getByRole("button", {
+      name: /close|dismiss|got it|continue to|accept all|accept|ok\b|sure|maybe later|not now/i,
+    });
+
+    const namedCount = Math.min(await namedClose.count().catch(() => 0), 12);
+
+    for (let index = 0; index < namedCount; index += 1) {
+      const btn = namedClose.nth(index);
+      if (!(await btn.isVisible().catch(() => false))) continue;
+
+      await btn.click({ timeout: 2_000 }).catch(() => undefined);
+      await page.waitForTimeout(350);
+    }
+
+    const ariaClose = page.locator(
+      '[aria-label="Close" i], [aria-label*="close" i]'
+    );
+
+    const acCount = Math.min(await ariaClose.count().catch(() => 0), 8);
+
+    for (let index = 0; index < acCount; index += 1) {
+      const btn = ariaClose.nth(index);
+      if (!(await btn.isVisible().catch(() => false))) continue;
+
+      await btn.click({ timeout: 1_500 }).catch(() => undefined);
+      await page.waitForTimeout(300);
+    }
+
+    const modalFooters = page.locator('div[class*="Modal__"] button');
+    const mfCount = Math.min(await modalFooters.count().catch(() => 0), 15);
+
+    for (let index = 0; index < mfCount; index += 1) {
+      const btn = modalFooters.nth(index);
+      if (!(await btn.isVisible().catch(() => false))) continue;
+
+      const label =
+        `${(await btn.getAttribute("aria-label")) ?? ""} ${(await btn.innerText()).trim()}`.trim();
+
+      if (
+        /^×$|^✕$/i.test(label) ||
+        /close|dismiss|continue|got it|accept|^(ok)$/i.test(label)
+      ) {
+        await btn.click({ timeout: 2_000 }).catch(() => undefined);
+        await page.waitForTimeout(350);
+        break;
+      }
+    }
+
+    await page.keyboard.press("Escape").catch(() => undefined);
+    await page.waitForTimeout(200);
+
+    const blocking = await page
+      .locator('div[class*="Modal__"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+
+    if (!blocking) return;
+  }
+}
+
 async function clickFirstVisible(locator: Locator) {
   const count = Math.min(await locator.count().catch(() => 0), 10);
 
@@ -161,7 +272,11 @@ async function clickFirstVisible(locator: Locator) {
     const item = locator.nth(index);
     if (await item.isVisible().catch(() => false)) {
       await item.scrollIntoViewIfNeeded().catch(() => undefined);
-      await item.click({ timeout: 5_000 });
+      try {
+        await item.click({ timeout: 5_000 });
+      } catch {
+        await item.click({ timeout: 5_000, force: true });
+      }
       return true;
     }
   }
@@ -258,13 +373,39 @@ function serviceOptionMatchesCategory(option: JaneServiceOption, categoryName: s
   const category = categoryName.toLowerCase();
   const name = option.name.toLowerCase();
 
-  if (category.includes("massage")) return /massage|rmt/.test(name);
+  if (category.includes("massage") || category.includes("registered massage"))
+    return /massage|aromatherapy|\brmt\b/.test(name);
   if (category.includes("chiro")) return /chiro/.test(name);
   if (category.includes("physio")) return /physio/.test(name);
-  if (category.includes("naturopath")) return /naturopath/.test(name);
-  if (category.includes("psychotherapy")) return /psychotherapy|therapy/.test(name);
+  if (category.includes("naturopath")) return /naturopath|discovery call/i.test(name);
+  if (
+    category.includes("recovery") ||
+    category.includes("sanctuary classes")
+  ) {
+    return (
+      /cold plunge|pilates|yoga class|sauna|mat pilates|group of/i.test(name) &&
+      !/orthotic/i.test(name)
+    );
+  }
+  if (category.includes("custom products"))
+    return (
+      /orthotic|compression stocking|recasting|customized orthotics fitting/i.test(name)
+    );
+  if (category.includes("flowpresso")) return /flowpresso/i.test(name);
+  if (
+    category.includes("personal training") ||
+    category.includes("fitness")
+  ) {
+    return /fitness training|fitness assessment/i.test(name);
+  }
+  if (category.includes("psychotherapy")) {
+    return (
+      /\bpsychotherapy\b|\bcouples therapy\b|\bdiscovery call\b/i.test(name) &&
+      !/massage|physio|occupational|\brmt\b|naturopath/i.test(name)
+    );
+  }
 
-  return name.includes(category);
+  return name.includes(category.replace(/\s+/g, " "));
 }
 
 async function scrapeJaneServiceOptions(
@@ -280,10 +421,15 @@ async function scrapeJaneServiceOptions(
   page.setDefaultTimeout(DEFAULT_TIMEOUT_MS);
 
   try {
-    console.info(
-      `[jane-availability] Scraping service options for ${input.categoryName}`
+    const entryUrl = bookingUrlWithJaneDiscipline(
+      input.bookingUrl.trim(),
+      input.categoryName
     );
-    await page.goto(input.bookingUrl.trim(), {
+
+    console.info(
+      `[jane-availability] Scraping service options for ${input.categoryName} at ${entryUrl}`
+    );
+    await page.goto(entryUrl, {
       waitUntil: "domcontentloaded",
       timeout: DEFAULT_TIMEOUT_MS,
     });
@@ -533,19 +679,35 @@ export async function checkJaneAvailability(
   page.setDefaultTimeout(DEFAULT_TIMEOUT_MS);
 
   try {
-    console.info(`[jane-availability] Opening ${bookingUrl}`);
-    await page.goto(bookingUrl, {
+    const entryUrl = bookingUrlWithJaneDiscipline(bookingUrl, serviceName);
+
+    console.info(`[jane-availability] Opening ${entryUrl}`);
+    await page.goto(entryUrl, {
       waitUntil: "domcontentloaded",
       timeout: DEFAULT_TIMEOUT_MS,
     });
     await waitAfterInteraction(page);
+    await dismissBlockingModals(page);
 
     const exactServiceBookingUrl = await getExactServiceBookingUrl(
       page,
       serviceName
     );
 
-    await clickByVisibleText(page, serviceName, "service");
+    if (exactServiceBookingUrl && /\/treatment\/\d+/i.test(exactServiceBookingUrl)) {
+      console.info(
+        `[jane-availability] Navigating to treatment (skip click): ${exactServiceBookingUrl}`
+      );
+      await page.goto(exactServiceBookingUrl, {
+        waitUntil: "domcontentloaded",
+        timeout: DEFAULT_TIMEOUT_MS,
+      });
+      await waitAfterInteraction(page);
+      await dismissBlockingModals(page);
+    } else {
+      await dismissBlockingModals(page);
+      await clickByVisibleText(page, serviceName, "service");
+    }
 
     if (practitionerName) {
       await clickByVisibleText(page, practitionerName, "practitioner");

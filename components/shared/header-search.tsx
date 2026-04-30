@@ -29,28 +29,21 @@ function highlightMatches(text: string, rawQuery: string) {
 
   if (q.length < 2) return text;
 
-  // Highlight only full contiguous query substring, not individual words.
-  const pattern = escapeRegExp(q);
-  const re = new RegExp(`(${pattern})`, "gi");
+  // Exact phrase highlighting (case-insensitive), matching the API behavior.
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx === -1) return text;
 
-  const parts = text.split(re);
-  if (parts.length === 1) return text;
+  const before = text.slice(0, idx);
+  const match = text.slice(idx, idx + q.length);
+  const after = text.slice(idx + q.length);
 
-  return parts.map((part, i) => {
-    const isHit = re.test(part);
-    // Reset lastIndex since `test` with /g is stateful
-    re.lastIndex = 0;
-    return isHit ? (
-      <mark
-        key={i}
-        className="bg-yellow-200 px-0.5 text-slate-900"
-      >
-        {part}
-      </mark>
-    ) : (
-      <span key={i}>{part}</span>
-    );
-  });
+  return (
+    <>
+      {before}
+      <mark className="bg-yellow-200 px-0.5 text-slate-900">{match}</mark>
+      {after}
+    </>
+  );
 }
 
 function useDebouncedValue<T>(value: T, delayMs: number) {

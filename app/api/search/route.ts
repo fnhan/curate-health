@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { sanityFetch } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
+
+import { sanityFetch } from "@/sanity/lib/client";
 
 type SearchResultItem = {
   type: string;
@@ -12,8 +13,7 @@ type SearchResultItem = {
   score: number;
 };
 
-type GenericDoc = Record<string, unknown> & {
-  _id?: string;
+type IndexDoc = Record<string, unknown> & {
   _type?: string;
   title?: string;
   name?: string;
@@ -54,7 +54,11 @@ const FEATURED_QUERY = groq`
 }
 `;
 
-const PAGE_INDEX_QUERY = groq`
+/**
+ * Fetch all relevant docs WITHOUT `match` and without unsupported functions.
+ * We'll extract strings and build URLs in Node.
+ */
+const INDEX_DOCS_QUERY = groq`
 *[
   _type in [
     "heroSection",
@@ -122,46 +126,16 @@ const SEARCH_QUERY = groq`
     (
       title match $q ||
       description match $q ||
-      slug.current match $q ||
-      image.alt match $q ||
-      banner.alt match $q ||
-      accordioninfo[].title match $q ||
-      pt::text(accordioninfo[].description) match $q ||
-      callToAction.ctaText match $q ||
-      callToAction.ctaSectionTitle match $q ||
-      callToAction.ctaSectionDescription match $q ||
-      callToAction.ctaLink match $q ||
-      seo.pageTitle match $q ||
-      seo.pageDescription match $q ||
-      seo.socialMeta.title match $q ||
-      seo.socialMeta.description match $q ||
       pt::text(indepthblockinfo) match $q
     )
   ][0...$limit]{
     "type": "product",
     "title": coalesce(title, "Untitled product"),
-    "excerpt": coalesce(
-      description,
-      callToAction.ctaSectionDescription,
-      seo.pageDescription,
-      null
-    ),
+    "excerpt": coalesce(description, null),
     "href": "/products/" + slug.current,
     "score": (
-      select(title match $q => 8, 0) +
-      select(description match $q => 4, 0) +
-      select(slug.current match $q => 3, 0) +
-      select(accordioninfo[].title match $q => 2, 0) +
-      select(pt::text(accordioninfo[].description) match $q => 2, 0) +
-      select(callToAction.ctaSectionTitle match $q => 2, 0) +
-      select(callToAction.ctaSectionDescription match $q => 2, 0) +
-      select(callToAction.ctaText match $q => 1, 0) +
-      select(seo.pageTitle match $q => 2, 0) +
-      select(seo.pageDescription match $q => 1, 0) +
-      select(seo.socialMeta.title match $q => 1, 0) +
-      select(seo.socialMeta.description match $q => 1, 0) +
-      select(image.alt match $q => 1, 0) +
-      select(banner.alt match $q => 1, 0) +
+      select(title match $q => 6, 0) +
+      select(description match $q => 3, 0) +
       select(pt::text(indepthblockinfo) match $q => 1, 0)
     )
   },
@@ -443,8 +417,12 @@ const SEARCH_QUERY = groq`
       "href": "/about/sustainability",
       "score": (
         select("sustainability" match $q => 6, 0) +
+        select(pt::text(heroSection.heroTitle) match $q => 2, 0) +
+        select(pt::text(heroSection.heroParagraph) match $q => 2, 0) +
         select(pt::text(additionalSections[].sectionTitle) match $q => 2, 0) +
-        select(pt::text(additionalSections[].sectionParagraph) match $q => 1, 0)
+        select(pt::text(additionalSections[].sectionParagraph) match $q => 1, 0) +
+        select(pt::text(ctaSection.ctaSectionTitle) match $q => 1, 0) +
+        select(pt::text(ctaSection.ctaSectionParagraph) match $q => 1, 0)
       )
     },
     *[_type == "pillarsOfHealth" && pageActive == true][0]{
@@ -465,11 +443,23 @@ const SEARCH_QUERY = groq`
 function normalizeQuery(raw: string) {
   const q = raw.trim().replace(/\s+/g, " ");
   // Avoid pathological/very slow match patterns.
-  return q.slice(0, 80);
+  return q.slice(0, 500);
 }
 
 function normalizeText(value: string) {
-  return value.toLowerCase().replace(/\s+/g, " ").trim();
+  return value
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[\u2018\u2019\u2032]/g, "'")
+    .replace(/[\u201C\u201D\u2033]/g, '"')
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/[^a-z0-9'\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function collapseWhitespace(value: string) {
+  return value.replace(/\s+/g, " ").trim();
 }
 
 function collectStringsDeep(value: unknown, out: string[] = []): string[] {
@@ -491,8 +481,9 @@ function collectStringsDeep(value: unknown, out: string[] = []): string[] {
   return out;
 }
 
-function buildHrefForDoc(doc: GenericDoc): string | null {
+function buildHrefForDoc(doc: IndexDoc): string | null {
   switch (doc._type) {
+    // Home sections
     case "heroSection":
     case "aboutSection":
     case "clinic":
@@ -502,19 +493,24 @@ function buildHrefForDoc(doc: GenericDoc): string | null {
     case "blogSection":
     case "sustainabilitySection":
       return "/";
+    // Blog
     case "post":
       return doc.slugCurrent ? `/blog/${doc.slugCurrent}` : null;
+    // Products
     case "product":
       return doc.slugCurrent ? `/products/${doc.slugCurrent}` : null;
+    // Services
     case "service":
       return doc.slugCurrent ? `/services/${doc.slugCurrent}` : null;
     case "treatments":
       return doc.serviceSlugCurrent && doc.treatmentSlugCurrent
         ? `/services/${doc.serviceSlugCurrent}/${doc.treatmentSlugCurrent}`
         : null;
+    // Lifestyle pages
     case "serviceLifestyle":
     case "serviceLifestyleProgram":
       return doc.slugCurrent ? `/services/${doc.slugCurrent}` : null;
+    // About
     case "ourStory":
       return "/about/our-story";
     case "ourTeam":
@@ -525,6 +521,7 @@ function buildHrefForDoc(doc: GenericDoc): string | null {
       return "/about/sustainability";
     case "pillarsOfHealth":
       return "/about/pillars-of-health";
+    // Other pages
     case "cafePage":
       return "/cafe";
     case "contactPage":
@@ -540,7 +537,7 @@ function buildHrefForDoc(doc: GenericDoc): string | null {
   }
 }
 
-function buildTitleForDoc(doc: GenericDoc): string {
+function buildTitleForDoc(doc: IndexDoc): string {
   if (typeof doc.title === "string" && doc.title.trim()) return doc.title;
   if (typeof doc.name === "string" && doc.name.trim()) return doc.name;
   switch (doc._type) {
@@ -574,16 +571,6 @@ function buildTitleForDoc(doc: GenericDoc): string {
     default:
       return "Untitled";
   }
-}
-
-function buildExcerpt(strings: string[]): string | null {
-  const candidate = strings.find((s) => s.length >= 40);
-  return candidate ? candidate.slice(0, 220) : null;
-}
-
-function scoreTextMatch(haystack: string, normalizedQuery: string) {
-  if (!haystack) return 0;
-  return haystack.includes(normalizedQuery) ? 8 : 0;
 }
 
 export async function GET(req: Request) {
@@ -623,38 +610,16 @@ export async function GET(req: Request) {
     });
   }
 
-  // Sanity `match` supports wildcard `*`. Make it prefix-friendly for multi-word queries.
-  // Enforce contiguous-substring contains matching for the full query string.
-  const q = `*${qRaw}*`;
-  const normalizedQuery = normalizeText(qRaw);
-
-  const data = await sanityFetch<{
-    posts?: SearchResultItem[];
-    products?: SearchResultItem[];
-    services?: SearchResultItem[];
-    treatments?: SearchResultItem[];
-    lifestyleServices?: SearchResultItem[];
-    lifestylePrograms?: SearchResultItem[];
-    contact?: SearchResultItem;
-    cafe?: SearchResultItem;
-    ourPrograms?: SearchResultItem;
-    servicesLanding?: SearchResultItem;
-    legalPages?: SearchResultItem[];
-    aboutPages?: SearchResultItem[];
-  }>({
-    query: SEARCH_QUERY,
-    params: { q, limit },
-    revalidate: 60,
-    tags: ["search"],
+  // Exact phrase search (no punctuation/quote normalization).
+  // We only collapse whitespace to make copy/paste across line breaks work.
+  const needle = collapseWhitespace(qRaw).toLowerCase();
+  const docs = await sanityFetch<IndexDoc[]>({
+    query: INDEX_DOCS_QUERY,
+    revalidate: 300,
+    tags: ["search-index"],
   });
 
-  const indexDocs = await sanityFetch<GenericDoc[]>({
-    query: PAGE_INDEX_QUERY,
-    revalidate: 60,
-    tags: ["search"],
-  });
-
-  const deepMatches: SearchResultItem[] = (indexDocs ?? [])
+  const matches = (docs ?? [])
     .filter((doc) => doc && doc._type)
     .filter((doc) => doc.isActive !== false)
     .filter((doc) => doc.pageActive !== false)
@@ -662,60 +627,36 @@ export async function GET(req: Request) {
     .map((doc) => {
       const href = buildHrefForDoc(doc);
       if (!href) return null;
-
       const textParts = collectStringsDeep(doc);
-      const haystack = normalizeText(textParts.join(" "));
-      const score = scoreTextMatch(haystack, normalizedQuery);
-      if (score <= 0) return null;
-
+      const haystack = collapseWhitespace(textParts.join(" ")).toLowerCase();
+      const ok = haystack.includes(needle);
+      if (!ok) return null;
       return {
         type:
           doc._type === "post"
             ? "blog"
             : doc._type === "product"
               ? "product"
-              : doc._type === "service" || doc._type === "treatments"
+              : doc._type === "service"
                 ? "service"
-                : "page",
+                : doc._type === "treatments"
+                  ? "treatment"
+                  : "page",
         title: buildTitleForDoc(doc),
-        excerpt: buildExcerpt(textParts),
+        excerpt: null,
         href,
-        score,
+        score: 8,
       } satisfies SearchResultItem;
     })
     .filter(Boolean) as SearchResultItem[];
 
-  const merged = [
-    ...(data?.posts ?? []),
-    ...(data?.products ?? []),
-    ...(data?.services ?? []),
-    ...(data?.treatments ?? []),
-    ...(data?.lifestyleServices ?? []),
-    ...(data?.lifestylePrograms ?? []),
-    ...(data?.contact ? [data.contact] : []),
-    ...(data?.cafe ? [data.cafe] : []),
-    ...(data?.ourPrograms ? [data.ourPrograms] : []),
-    ...(data?.servicesLanding ? [data.servicesLanding] : []),
-    ...(data?.legalPages ?? []),
-    ...((data?.aboutPages ?? []).filter(Boolean) as SearchResultItem[]),
-    ...deepMatches,
-  ]
-    .filter((r) => r?.href && r?.title && (r.score ?? 0) > 0)
+  const merged = matches
+    .filter((r) => r?.href && r?.title)
     .reduce<SearchResultItem[]>((acc, item) => {
       const existingIndex = acc.findIndex((v) => v.href === item.href);
-      if (existingIndex === -1) {
-        acc.push(item);
-      } else {
-        const existing = acc[existingIndex]!;
-        if ((item.score ?? 0) > (existing.score ?? 0)) {
-          acc[existingIndex] = { ...existing, ...item };
-        } else if (!existing.excerpt && item.excerpt) {
-          acc[existingIndex] = { ...existing, excerpt: item.excerpt };
-        }
-      }
+      if (existingIndex === -1) acc.push(item);
       return acc;
     }, [])
-    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     .slice(0, limit);
 
   return NextResponse.json({
@@ -723,4 +664,3 @@ export async function GET(req: Request) {
     results: merged,
   });
 }
-

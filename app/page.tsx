@@ -3,6 +3,7 @@ import BlogSection from "@/components/layout/home-page/blog-section";
 import CafeSection from "@/components/layout/home-page/cafe-section";
 import ClinicSection from "@/components/layout/home-page/clinic-section";
 import HeroSection from "@/components/layout/home-page/hero-section";
+import OurProgramsSection from "@/components/layout/home-page/our-programs-section";
 import ProductsSection from "@/components/layout/home-page/products-section";
 import ServicesSection from "@/components/layout/home-page/services-section";
 import SustainabilitySection from "@/components/layout/home-page/sustainability-section";
@@ -26,6 +27,7 @@ export default async function Home() {
     clinicSection,
     productsSection,
     servicesSection,
+    ourProgramsSection,
     cafeSection,
     blogSection,
     sustainabilitySection,
@@ -40,6 +42,7 @@ export default async function Home() {
       <AboutSection aboutSection={aboutSection} />
       <ClinicSection clinicSection={clinicSection} />
       <ServicesSection servicesSection={servicesSection} />
+      <OurProgramsSection ourProgramsSection={ourProgramsSection} />
       <ProductsSection productsSection={productsSection} />
       <CafeSection cafeSection={cafeSection} />
       <BlogSection blogSection={blogSection} />

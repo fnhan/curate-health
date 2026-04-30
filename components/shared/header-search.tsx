@@ -29,27 +29,21 @@ function highlightMatches(text: string, rawQuery: string) {
 
   if (q.length < 2) return text;
 
-  const pattern = escapeRegExp(q);
-  const re = new RegExp(`(${pattern})`, "gi");
+  // Exact phrase highlighting (case-insensitive), matching the API behavior.
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx === -1) return text;
 
-  const parts = text.split(re);
-  if (parts.length === 1) return text;
+  const before = text.slice(0, idx);
+  const match = text.slice(idx, idx + q.length);
+  const after = text.slice(idx + q.length);
 
-  return parts.map((part, i) => {
-    const isHit = re.test(part);
-    // Reset lastIndex since `test` with /g is stateful
-    re.lastIndex = 0;
-    return isHit ? (
-      <mark
-        key={i}
-        className="bg-yellow-200 px-0.5 text-slate-900"
-      >
-        {part}
-      </mark>
-    ) : (
-      <span key={i}>{part}</span>
-    );
-  });
+  return (
+    <>
+      {before}
+      <mark className="bg-yellow-200 px-0.5 text-slate-900">{match}</mark>
+      {after}
+    </>
+  );
 }
 
 function useDebouncedValue<T>(value: T, delayMs: number) {
@@ -213,7 +207,9 @@ export default function HeaderSearch({
     loading || items.length > 0 || canSearch || (showFeatured && !query.trim());
 
   const showPanel =
-    resultsPlacement === "inline" ? shouldShowPanelContent : open && shouldShowPanelContent;
+    resultsPlacement === "inline"
+      ? shouldShowPanelContent
+      : open && shouldShowPanelContent;
 
   const inputClassName =
     variant === "modal"
@@ -370,14 +366,15 @@ export default function HeaderSearch({
       </div>
 
       {showPanel ? (
-        <div
-          id={resultsId}
-          role="listbox"
-          className={panelClassName}
-        >
+        <div id={resultsId} role="listbox" className={panelClassName}>
           <div className={scrollClassName}>
             {loading ? (
-              <div className={cn("flex items-center gap-2 px-4 py-3 text-sm", emptyTextClassName)}>
+              <div
+                className={cn(
+                  "flex items-center gap-2 px-4 py-3 text-sm",
+                  emptyTextClassName
+                )}
+              >
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Searching…</span>
               </div>
@@ -397,7 +394,12 @@ export default function HeaderSearch({
                 return (
                   <div key={`${item.type}-${item.href}-${idx}`}>
                     {showGroupHeader ? (
-                      <div className={cn("px-4 pb-2 pt-3 text-xs font-semibold uppercase tracking-wide", groupHeaderClassName)}>
+                      <div
+                        className={cn(
+                          "px-4 pb-2 pt-3 text-xs font-semibold uppercase tracking-wide",
+                          groupHeaderClassName
+                        )}
+                      >
                         {item.group === "featured_products"
                           ? "Featured products"
                           : "Featured services"}
@@ -419,7 +421,12 @@ export default function HeaderSearch({
                           {highlightMatches(item.title, debouncedQuery)}
                         </span>
                         {item.excerpt ? (
-                          <span className={cn("mt-0.5 block line-clamp-2 text-xs", excerptClassName)}>
+                          <span
+                            className={cn(
+                              "mt-0.5 line-clamp-2 block text-xs",
+                              excerptClassName
+                            )}
+                          >
                             {highlightMatches(item.excerpt, debouncedQuery)}
                           </span>
                         ) : null}
@@ -435,4 +442,3 @@ export default function HeaderSearch({
     </div>
   );
 }
-

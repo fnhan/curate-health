@@ -1,9 +1,18 @@
 import Image from "next/image";
 
-import type { CAFE_PAGE_QUERYResult } from "@/sanity.types";
+type Intro = {
+  title?: string | null;
+  subheading?: string | null;
+  description?: string | null;
+} | null;
 
-type Intro = NonNullable<CAFE_PAGE_QUERYResult>["introSection"];
-type Quote = NonNullable<CAFE_PAGE_QUERYResult>["quoteSection"];
+type Quote = {
+  quoteText?: string | null;
+  quoteImage?: {
+    image?: string | null;
+    alt?: string | null;
+  } | null;
+} | null;
 
 export function CafeIntroSection({ intro }: { intro: Intro | null }) {
   if (!intro) return null;

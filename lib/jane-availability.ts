@@ -1,5 +1,7 @@
 import { type Browser, type Locator, type Page, chromium } from "playwright";
 
+import { canonicalJaneOfferingNames } from "./jane-service-catalog";
+
 export type CheckJaneAvailabilityInput = {
   bookingUrl: string;
   serviceName: string;
@@ -205,7 +207,7 @@ async function dismissBlockingModals(page: Page) {
     await dismissOverlays(page);
 
     const namedClose = page.getByRole("button", {
-      name: /close|dismiss|got it|continue to|accept all|accept|ok\b|sure|maybe later|not now/i,
+      name: /close|dismiss|got it|continue to|accept all|accept|ok\b|sure|maybe later|not now|i understand/i,
     });
 
     const namedCount = Math.min(await namedClose.count().catch(() => 0), 12);
@@ -244,7 +246,7 @@ async function dismissBlockingModals(page: Page) {
 
       if (
         /^×$|^✕$/i.test(label) ||
-        /close|dismiss|continue|got it|accept|^(ok)$/i.test(label)
+        /close|dismiss|continue|got it|accept|^(ok)$|i understand/i.test(label)
       ) {
         await btn.click({ timeout: 2_000 }).catch(() => undefined);
         await page.waitForTimeout(350);
@@ -262,6 +264,39 @@ async function dismissBlockingModals(page: Page) {
       .catch(() => false);
 
     if (!blocking) return;
+  }
+}
+
+async function expandShowMoreSessions(page: Page) {
+  const candidates = [
+    page.getByRole("button", { name: /show more sessions/i }),
+    page.getByRole("button", { name: /show more/i }),
+    page.getByRole("button", { name: /more sessions/i }),
+    page.getByRole("button", { name: /view more/i }),
+    page.getByRole("button", { name: /see more/i }),
+    page.getByRole("button", { name: /load more/i }),
+  ];
+
+  for (let round = 0; round < 4; round += 1) {
+    await dismissBlockingModals(page);
+    let clickedAny = false;
+
+    for (const locator of candidates) {
+      const count = Math.min(await locator.count().catch(() => 0), 6);
+      for (let index = 0; index < count; index += 1) {
+        const button = locator.nth(index);
+        if (!(await button.isVisible().catch(() => false))) continue;
+        if (!(await button.isEnabled().catch(() => false))) continue;
+
+        console.info("[jane-availability] Expanding: show more sessions");
+        await button.scrollIntoViewIfNeeded().catch(() => undefined);
+        await button.click({ timeout: 5_000 }).catch(() => undefined);
+        await waitAfterInteraction(page);
+        clickedAny = true;
+      }
+    }
+
+    if (!clickedAny) return;
   }
 }
 
@@ -335,6 +370,7 @@ async function clickByVisibleText(page: Page, text: string, label: string) {
 
 async function getExactServiceBookingUrl(page: Page, serviceName: string) {
   const normalizedServiceName = serviceName.toLowerCase();
+  const needle = compactLetters(serviceName);
   const links = await page.locator("a[href]").evaluateAll((anchors) =>
     anchors.map((anchor) => ({
       text: (anchor.textContent || "").replace(/\s+/g, " ").trim(),
@@ -342,28 +378,98 @@ async function getExactServiceBookingUrl(page: Page, serviceName: string) {
     }))
   );
 
-  const match = links.find(
-    (link) =>
-      link.href.includes("/treatment/") &&
-      link.text.toLowerCase().startsWith(normalizedServiceName)
+  const treatmentLinks = links.filter(
+    (link) => link.href.includes("/treatment/") && Boolean(link.text)
   );
 
-  return match?.href;
+  // 1) Exact-ish prefix match (original behavior).
+  const prefixMatch = treatmentLinks.find((link) =>
+    link.text.toLowerCase().startsWith(normalizedServiceName)
+  );
+  if (prefixMatch?.href) return prefixMatch.href;
+
+  // 2) Canonical title mapping: if the link text can be normalized to a canonical offering,
+  // use it when it equals the requested serviceName.
+  for (const link of treatmentLinks) {
+    const canon = matchCanonicalJaneOfferingTitle(link.text);
+    if (canon && canon === serviceName) return link.href;
+  }
+
+  // 3) Fuzzy match: compare compacted strings (handles missing punctuation / parens).
+  const fuzzy = treatmentLinks.find((link) => {
+    const hay = compactLetters(link.text);
+    if (needle.length > 10 && hay.includes(needle)) return true;
+    if (hay.length > 10 && needle.includes(hay)) return true;
+    return false;
+  });
+
+  return fuzzy?.href;
+}
+
+function compactLetters(value: string) {
+  return value.replace(/[\s()'".·:]+/g, "").toLowerCase();
+}
+
+const CANONICAL_JANE_TITLE_PREFIXES_DESC = [...canonicalJaneOfferingNames()].sort(
+  (a, b) => compactLetters(b).length - compactLetters(a).length
+);
+
+/** Resolve noisy Jane anchor text onto a catalogue title when marketing prose is welded to the anchor label. */
+function matchCanonicalJaneOfferingTitle(blob: string): string | undefined {
+  let cropped = blob.replace(/\s+/g, " ").trim();
+
+  const readMoreIndex = cropped.search(/\bread\s+more\b/i);
+  if (readMoreIndex > 10) cropped = cropped.slice(0, readMoreIndex).trim();
+
+  const offeredIndex = cropped.search(/\bOffered by\b/i);
+  if (offeredIndex > 10) cropped = cropped.slice(0, offeredIndex).trim();
+
+  const haystack = compactLetters(cropped);
+
+  for (const title of CANONICAL_JANE_TITLE_PREFIXES_DESC) {
+    const prefix = compactLetters(title);
+    if (prefix.length > 8 && haystack.startsWith(prefix)) return title;
+
+    const loose = cropped.replace(/\s+/g, "");
+    const looseCanon = title.replace(/\s+/g, "");
+    if (
+      looseCanon.length > 12 &&
+      loose.toLowerCase().startsWith(looseCanon.toLowerCase())
+    ) {
+      return title;
+    }
+  }
+
+  return undefined;
+}
+
+function truncateOfferNoise(text: string) {
+  if (text.length <= 88) return text;
+  const space = text.lastIndexOf(" ", 88);
+
+  return `${(space > 40 ? text.slice(0, space) : text.slice(0, 88)).trim()} …`;
 }
 
 function extractJaneServiceOption(text: string, bookingUrl: string): JaneServiceOption {
   const normalized = text.replace(/\s+/g, " ").trim();
-  const offeredByIndex = normalized.search(/\bOffered by\b/i);
-  const name =
-    offeredByIndex > 0 ? normalized.slice(0, offeredByIndex).trim() : normalized;
-  const practitioner = normalized.match(/\bOffered by\s+(.+?)\s+\d+\s+minutes\b/i)?.[1];
+  const canon = matchCanonicalJaneOfferingTitle(normalized);
+  let name = canon ?? truncateOfferNoise(normalized);
+  const offeredByIndex = name.search(/\bOffered by\b/i);
+  if (offeredByIndex > 10) name = name.slice(0, offeredByIndex).trim();
+
+  const practitionerMatch = normalized.match(
+    /\bOffered by\s+(.+?)(?=\s+\d+\s+minutes\b|\$\d+)/i
+  );
   const duration = normalized.match(/\b(\d+\s+minutes)\b/i)?.[1];
-  const price = normalized.match(/\$\d+(?:\.\d{2})?/)?.[0];
+  const priceMatches = [...normalized.matchAll(/\$\d+(?:\.\d{2})?/g)];
+  const price = priceMatches[priceMatches.length - 1]?.[0];
 
   return {
     name,
     bookingUrl,
-    ...(practitioner ? { practitioner } : {}),
+    ...(practitionerMatch?.[1]?.trim()
+      ? { practitioner: practitionerMatch[1].trim().replace(/\s+/g, " ") }
+      : {}),
     ...(duration ? { duration } : {}),
     ...(price ? { price } : {}),
   };
@@ -626,6 +732,99 @@ async function waitForSlotsOrEmptyState(page: Page) {
   }
 }
 
+function sortSlotsChronologically(slots: string[]) {
+  const toMinutes = (value: string) => {
+    const match = value.match(/\b(\d{1,2}):(\d{2})\s*([AP])M\b/i);
+    if (!match) return Number.POSITIVE_INFINITY;
+    let hour = Number(match[1]);
+    const minute = Number(match[2]);
+    const period = match[3].toUpperCase();
+    if (hour === 12) hour = 0;
+    const base = hour * 60 + minute;
+    return period === "P" ? base + 12 * 60 : base;
+  };
+
+  return [...slots].sort((a, b) => toMinutes(a) - toMinutes(b));
+}
+
+async function extractSlotsForDate(page: Page, dateIso: string, limit?: number) {
+  await waitForSlotsOrEmptyState(page);
+
+  // Prefer structured extraction from the week view, keyed by the day header's href:
+  // `#/treatments/<treatmentId>/YYYY-MM-DD`.
+  const daySlots = await page.evaluate((dateString) => {
+    const result: string[] = [];
+
+    const dayComponents = Array.from(
+      document.querySelectorAll('[data-testid="day-component"]')
+    );
+
+    const matchingDay = dayComponents.find((day) => {
+      const link = day.querySelector<HTMLAnchorElement>(
+        '.day-header a[href*="/treatments/"]'
+      );
+      if (!link?.getAttribute("href")) return false;
+      return link.getAttribute("href")!.includes(`/${dateString}`);
+    });
+
+    if (!matchingDay) return { found: false as const, slots: result };
+
+    const openings = Array.from(
+      matchingDay.querySelectorAll<HTMLElement>(
+        '[data-testid="positioned-opening-li"], [data-testid="item_opening"]'
+      )
+    );
+
+    for (const opening of openings) {
+      const aria = opening.getAttribute("aria-label") ?? "";
+      // Many Jane nodes have the time in aria-label, but also in text.
+      const text = (opening.textContent ?? "").replace(/\s+/g, " ").trim();
+      const merged = `${aria} ${text}`.trim();
+      if (merged) result.push(merged);
+    }
+
+    return { found: true as const, slots: result };
+  }, dateIso);
+
+  const slots = new Set<string>();
+
+  if (daySlots.found) {
+    for (const blob of daySlots.slots) {
+      for (const match of blob.matchAll(TIME_PATTERN)) {
+        const normalized = normalizeTime(match[0]);
+        if (normalized) slots.add(normalized);
+      }
+    }
+  } else {
+    // Fallback: scan visible clickable text (less accurate date-wise).
+    const visibleTexts: string[] = [];
+    const clickable = page.locator('button, a, [role="button"], [role="link"]');
+    const count = Math.min(await clickable.count().catch(() => 0), 250);
+
+    for (let index = 0; index < count; index += 1) {
+      const item = clickable.nth(index);
+      if (!(await item.isVisible().catch(() => false))) continue;
+
+      const text = await item.innerText().catch(() => "");
+      if (text) visibleTexts.push(text);
+    }
+
+    if (!visibleTexts.length) {
+      visibleTexts.push(await page.locator("body").innerText().catch(() => ""));
+    }
+
+    for (const text of visibleTexts) {
+      for (const match of text.matchAll(TIME_PATTERN)) {
+        const normalized = normalizeTime(match[0]);
+        if (normalized) slots.add(normalized);
+      }
+    }
+  }
+
+  const allSlots = sortSlotsChronologically([...slots]);
+  return typeof limit === "number" ? allSlots.slice(0, limit) : allSlots;
+}
+
 async function extractSlots(page: Page, limit?: number) {
   await waitForSlotsOrEmptyState(page);
 
@@ -654,7 +853,7 @@ async function extractSlots(page: Page, limit?: number) {
     }
   }
 
-  const allSlots = [...slots];
+  const allSlots = sortSlotsChronologically([...slots]);
   return typeof limit === "number" ? allSlots.slice(0, limit) : allSlots;
 }
 
@@ -688,6 +887,7 @@ export async function checkJaneAvailability(
     });
     await waitAfterInteraction(page);
     await dismissBlockingModals(page);
+    await expandShowMoreSessions(page);
 
     const exactServiceBookingUrl = await getExactServiceBookingUrl(
       page,
@@ -704,8 +904,10 @@ export async function checkJaneAvailability(
       });
       await waitAfterInteraction(page);
       await dismissBlockingModals(page);
+      await expandShowMoreSessions(page);
     } else {
       await dismissBlockingModals(page);
+      await expandShowMoreSessions(page);
       await clickByVisibleText(page, serviceName, "service");
     }
 
@@ -715,7 +917,7 @@ export async function checkJaneAvailability(
 
     await navigateToDate(page, input.date);
 
-    const slots = await extractSlots(page, input.limit);
+    const slots = await extractSlotsForDate(page, input.date, input.limit);
     console.info(
       `[jane-availability] Found ${slots.length} slot(s) for ${serviceName} on ${input.date}`
     );

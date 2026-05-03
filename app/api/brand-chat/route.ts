@@ -4,7 +4,15 @@ import { z } from "zod";
 
 import { BASEURL } from "@/app/site-settings";
 import { getBrandAiContext } from "@/lib/brand-ai-context";
+import { groqChatCompletion } from "@/lib/groq";
 import {
+  assistantPromptedBookingWizardDate,
+  buildBookingWizardReply,
+  categoryForOffering,
+  inferExactJaneOfferingFromMessages,
+} from "@/lib/booking-wizard";
+import {
+  isExactJaneOfferingName,
   janeBookingCatalogMarkdown,
   needsJaneSessionPick,
   sessionClarificationMessage,
@@ -70,6 +78,7 @@ const AiRoutingSchema = z.object({
 type AiRouting = z.infer<typeof AiRoutingSchema>;
 
 const MODEL = "gemini-2.5-flash";
+const GROQ_DEFAULT_MODEL = "llama-3.1-70b-versatile";
 const MAX_MESSAGES = 10;
 const MAX_MESSAGE_LENGTH = 1200;
 const INTERNAL_ASSET_URL_PATTERN = /https?:\/\/cdn\.sanity\.io\/[^\s)>"']+/gi;
@@ -93,6 +102,47 @@ const JANE_LOCATIONS: Record<
 const LEGACY_PATIENT_PORTAL_URL_PATTERN =
   /https?:\/\/curatehealth\.embodiaapp\.com\/[^\s)>"']*/gi;
 const DATE_PATTERN = /\b(\d{4}-\d{2}-\d{2})\b/;
+const RESTART_BOOKING_PATTERN =
+  /\b(start over|restart|reset)\b|\b(another|different|new)\s+(service|appointment|booking)\b|\b(change|switch)\s+(service|appointment|booking)\b|\blet'?s\s+try\s+another\s+service\b|\btry\s+another\s+service\b/i;
+
+/** User-facing fallback when the model tier throttles; warm tone, no quotas or vendors named. */
+const QUOTA_FRIENDLY_CHAT_MESSAGE =
+  `Curate Assistant didn't finish that reply just now—sorry about that.
+
+Please try again in a moment. Whenever you're ready, you can book through Jane (${CANONICAL_BOOKING_URL}) or reach the team using the contacts on ${BASEURL}.`;
+
+function friendlyBrandChatFailure(error: unknown): {
+  status: number;
+  errorBody: string;
+} {
+  let combined = "";
+
+  if (typeof error === "object" && error !== null && "message" in error) {
+    const raw = (error as { message: unknown }).message;
+    combined =
+      typeof raw === "string" ? raw : JSON.stringify(raw);
+  } else {
+    combined = String(error ?? "");
+  }
+
+  const quotaLimited =
+    /429|RESOURCE_EXHAUSTED|"code"\s*:\s*429|quota\s+exceeded|generate_content_free_tier|GenerateRequestsPerDay|rate\s*limits?/i.test(
+      combined
+    );
+
+  if (quotaLimited) {
+    return {
+      status: 429,
+      errorBody: QUOTA_FRIENDLY_CHAT_MESSAGE,
+    };
+  }
+
+  return {
+    status: 500,
+    errorBody:
+      "Curate Assistant bumped into something unexpected on our side. Please try again in a moment—we're grateful for your patience.",
+  };
+}
 
 function normalizeMessages(value: unknown): ChatMessage[] {
   if (!Array.isArray(value)) {
@@ -148,6 +198,62 @@ function sanitizeAssistantMessage(message: string) {
   return message
     .replace(INTERNAL_ASSET_URL_PATTERN, `${BASEURL}/cafe`)
     .replace(LEGACY_PATIENT_PORTAL_URL_PATTERN, CANONICAL_BOOKING_URL);
+}
+
+function shouldFallbackToGroq(error: unknown) {
+  const msg =
+    typeof error === "object" && error && "message" in error
+      ? String((error as { message?: unknown }).message ?? "")
+      : String(error ?? "");
+
+  return /429|RESOURCE_EXHAUSTED|quota\s+exceeded|rate\s*limits?|timeout|ETIMEDOUT|ECONNRESET|ENOTFOUND|socket|503|502|504/i.test(
+    msg
+  );
+}
+
+async function generateTextWithGeminiOrGroq(input: {
+  ai: GoogleGenAI;
+  geminiModel: string;
+  geminiContents: Parameters<GoogleGenAI["models"]["generateContent"]>[0]["contents"];
+  geminiConfig?: Parameters<GoogleGenAI["models"]["generateContent"]>[0]["config"];
+  groqSystemInstruction?: string;
+  groqMessages: Array<{ role: "user" | "assistant"; content: string }>;
+  groqTemperature?: number;
+  groqMaxTokens?: number;
+  groqJsonMode?: boolean;
+}) {
+  try {
+    const response = await input.ai.models.generateContent({
+      model: input.geminiModel,
+      contents: input.geminiContents,
+      ...(input.geminiConfig ? { config: input.geminiConfig } : {}),
+    });
+    const text = response.text?.trim();
+    if (!text) throw new Error("Gemini returned empty response.");
+    return text;
+  } catch (error) {
+    const groqKey = process.env.GROQ_API_KEY;
+    if (!groqKey || !shouldFallbackToGroq(error)) {
+      throw error;
+    }
+
+    const groqModel = process.env.GROQ_MODEL || GROQ_DEFAULT_MODEL;
+    const groqMessages = [
+      ...(input.groqSystemInstruction
+        ? [{ role: "system" as const, content: input.groqSystemInstruction }]
+        : []),
+      ...input.groqMessages.map((m) => ({ role: m.role, content: m.content })),
+    ];
+
+    return await groqChatCompletion({
+      apiKey: groqKey,
+      model: groqModel,
+      messages: groqMessages,
+      temperature: input.groqTemperature ?? 0.3,
+      maxTokens: input.groqMaxTokens ?? 1024,
+      ...(input.groqJsonMode ? { responseFormat: { type: "json_object" } } : {}),
+    });
+  }
 }
 
 function todayAtMidnight() {
@@ -288,7 +394,7 @@ function inferServiceCategory(conversationText: string) {
 function inferLocation(conversationText: string): JaneLocation | undefined {
   const text = conversationText.toLowerCase();
 
-  if (/\b(downtown|777|bay street|bay st|bay)\b/.test(text)) return "downtown";
+  if (/\b(downtown|777|bay\s+street|bay\s*st)\b/.test(text)) return "downtown";
   if (
     /\b(eglinton|989|york|uptown|midtown|main clinic|curate health clinic|glinton)\b/.test(
       text
@@ -299,6 +405,58 @@ function inferLocation(conversationText: string): JaneLocation | undefined {
   }
 
   return undefined;
+}
+
+function inferLocationFromUserMessages(messages: ChatMessage[]): JaneLocation | undefined {
+  const userOnly = messages
+    .filter((message) => message.role === "user")
+    .map((message) => message.content)
+    .join("\n");
+
+  return inferLocation(userOnly);
+}
+
+function applyJaneIntentEnrichment(
+  messages: ChatMessage[],
+  intent: AvailabilityIntent,
+  routedJaneServiceName?: string | null
+): AvailabilityIntent {
+  let next = { ...intent };
+  const routedExact =
+    routedJaneServiceName?.trim() &&
+    isExactJaneOfferingName(routedJaneServiceName.trim())
+      ? routedJaneServiceName.trim()
+      : undefined;
+  const exact = routedExact ?? inferExactJaneOfferingFromMessages(messages);
+  if (exact) {
+    next.serviceName = exact;
+    const cat = categoryForOffering(exact);
+    if (!next.serviceCategory && cat) {
+      next.serviceCategory = cat;
+    }
+  }
+
+  const latest =
+    [...messages].reverse().find((message) => message.role === "user")
+      ?.content ?? "";
+
+  const wizardDateContinuation =
+    assistantPromptedBookingWizardDate(messages) &&
+    Boolean(inferLocationFromUserMessages(messages)) &&
+    Boolean(inferExactJaneOfferingFromMessages(messages)) &&
+    Boolean(parseRequestedDate(latest) ?? parseRequestedDates(latest)?.length);
+
+  if (!wizardDateContinuation) {
+    return next;
+  }
+
+  next.wantsAvailability = true;
+  const multi = parseRequestedDates(latest);
+  const parsedSingle = parseRequestedDate(latest);
+  next.date = parsedSingle ?? next.date ?? multi?.[0];
+  next.dates = multi ?? (next.date ? [next.date] : next.dates);
+
+  return next;
 }
 
 function serviceIsAvailableAtLocation(
@@ -347,18 +505,23 @@ function formatServiceOptionsResponse(
 
   const optionLines = options
     .map((option, index) => {
-      const details = [option.duration, option.practitioner, option.price]
-        .filter(Boolean)
-        .join(" · ");
+      const nameLc = option.name.toLowerCase();
+      const extras = [
+        option.duration &&
+        !nameLc.includes(option.duration.replace(/\s+/g, "").toLowerCase())
+          ? option.duration
+          : null,
+        option.price,
+      ].filter(Boolean);
 
-      return `${index + 1}. ${option.name}${details ? ` (${details})` : ""}`;
+      return `${index + 1}. ${option.name}${extras.length ? ` · ${extras.join(" · ")}` : ""}`;
     })
     .join("\n");
 
   return [
-    `I found these ${categoryName} appointment options at ${location.label}:`,
+    `${categoryName} (${location.label}):`,
     optionLines,
-    "Which option would you like, and what date should I check?",
+    "Reply with the option number plus a date (today, tomorrow, or YYYY-MM-DD).",
   ].join("\n\n");
 }
 
@@ -373,17 +536,16 @@ function inferNumberedOptionServiceName(messages: ChatMessage[]) {
     .find(
       (message) =>
         message.role === "assistant" &&
-        /Which option would you like/i.test(message.content)
+        /Which option would you like|reply with the option number/i.test(
+          message.content
+        )
     );
 
   const optionLine = previousOptionsMessage?.content
     .split("\n")
     .find((line) => line.trim().startsWith(`${optionNumber}.`));
 
-  return optionLine
-    ?.replace(/^\s*\d+\.\s*/, "")
-    .replace(/\s*\(.+$/, "")
-    .trim();
+  return optionLine?.replace(/^\s*\d+\.\s*/, "").trim();
 }
 
 function todayIsoInToronto() {
@@ -456,26 +618,30 @@ async function runIntentClassification(
     .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
     .join("\n\n");
   try {
-    const response = await ai.models.generateContent({
-      model: MODEL,
-      contents: [
+    const routerUserText = `${ROUTER_PROMPT}\n\n${janeBookingCatalogMarkdown()}\n\nToday in Toronto is ${todayIsoInToronto()} (YYYY-MM-DD).\n\n---\n\nConversation (oldest first):\n\n${transcript}`;
+
+    const text = await generateTextWithGeminiOrGroq({
+      ai,
+      geminiModel: MODEL,
+      geminiContents: [
         {
           role: "user",
-          parts: [
-            {
-              text: `${ROUTER_PROMPT}\n\n${janeBookingCatalogMarkdown()}\n\nToday in Toronto is ${todayIsoInToronto()} (YYYY-MM-DD).\n\n---\n\nConversation (oldest first):\n\n${transcript}`,
-            },
-          ],
+          parts: [{ text: routerUserText }],
         },
       ],
-      config: {
+      geminiConfig: {
         systemInstruction:
           "You output only compact JSON routing objects for Curate Health chat. Never add markdown or prose.",
         temperature: 0.1,
         maxOutputTokens: 256,
       },
+      groqSystemInstruction:
+        "You output only compact JSON routing objects for Curate Health chat. Never add markdown or prose.",
+      groqMessages: [{ role: "user", content: routerUserText }],
+      groqTemperature: 0.1,
+      groqMaxTokens: 256,
+      groqJsonMode: true,
     });
-    const text = response.text?.trim();
 
     if (!text) return null;
 
@@ -510,7 +676,7 @@ function availabilityIntentFromRouting(
     inferServiceName(conversationText);
   const location =
     (routing.location as JaneLocation | undefined) ??
-    inferLocation(conversationText);
+    inferLocationFromUserMessages(messages);
 
   let date: string | undefined;
   let dates: string[] | undefined;
@@ -568,6 +734,19 @@ function availabilityIntentFromRouting(
 
 function getAvailabilityIntent(messages: ChatMessage[]): AvailabilityIntent {
   const latest = messages[messages.length - 1]?.content ?? "";
+  const latestNormalized = latest.trim().toLowerCase();
+
+  const latestSignalsRestartBooking =
+    /\b(start over|restart|reset)\b/i.test(latestNormalized) ||
+    /\b(another|different|new)\s+(service|appointment|booking)\b/i.test(
+      latestNormalized
+    ) ||
+    /\b(change|switch)\s+(service|appointment|booking)\b/i.test(
+      latestNormalized
+    ) ||
+    /\blet'?s\s+try\s+another\s+service\b/i.test(latestNormalized) ||
+    /\btry\s+another\s+service\b/i.test(latestNormalized);
+
   const latestDate = parseRequestedDate(latest);
   const latestDates = parseRequestedDates(latest);
   const latestLocation = inferLocation(latest);
@@ -647,7 +826,7 @@ function getAvailabilityIntent(messages: ChatMessage[]): AvailabilityIntent {
   const assistantAskedForOptionAndDate = messages.some(
     (message) =>
       message.role === "assistant" &&
-      /Which option would you like, and what date should I check/i.test(
+      /reply with the option number|Which option would you like|what date/i.test(
         message.content
       )
   );
@@ -673,7 +852,7 @@ function getAvailabilityIntent(messages: ChatMessage[]): AvailabilityIntent {
     parseRequestedDate(conversationText) ?? parseRequestedDates(conversationText)?.[0];
   const bookingThreadHasServiceLocationAndDate =
     Boolean(conversationServiceName) &&
-    Boolean(inferLocation(conversationText)) &&
+    Boolean(inferLocation(userText)) &&
     Boolean(parsedConversationDate);
   const latestCompletesLocationAfterLocationPrompt =
     Boolean(latestLocation) &&
@@ -682,7 +861,7 @@ function getAvailabilityIntent(messages: ChatMessage[]): AvailabilityIntent {
   const latestAvailabilityContinuationWithContext =
     latestRequestsAvailabilityBare &&
     Boolean(conversationServiceName) &&
-    Boolean(inferLocation(conversationText));
+    Boolean(inferLocation(userText));
   const wantsAvailabilityTriggeredByDatePlusCare =
     bookingThreadHasServiceLocationAndDate &&
     (mentionsAvailabilityPhrase ||
@@ -706,7 +885,19 @@ function getAvailabilityIntent(messages: ChatMessage[]): AvailabilityIntent {
     latestLocation ??
     (latestSwitchesServiceInAvailabilityFlow
       ? undefined
-      : inferLocation(conversationText));
+      : inferLocation(userText));
+
+  if (latestSignalsRestartBooking) {
+    return {
+      wantsAvailability: false,
+      wantsBooking: true,
+      serviceCategory: undefined,
+      serviceName: undefined,
+      date: undefined,
+      dates: undefined,
+      location,
+    };
+  }
 
   return {
     wantsAvailability,
@@ -807,31 +998,75 @@ export async function POST(request: Request) {
 
   try {
     const ai = new GoogleGenAI({ apiKey });
+    const heuristic = getAvailabilityIntent(messages);
     const routed = await runIntentClassification(ai, messages);
-    const heuristicFallback =
-      routed == null ? getAvailabilityIntent(messages) : null;
+    const heuristicFallback = routed == null ? heuristic : null;
+
+    // Hard reset: if the user explicitly asks to restart/change services, return booking wizard
+    // immediately (do not reuse earlier service/category inference from the thread).
+    if (RESTART_BOOKING_PATTERN.test(latestUserMessage.content.trim())) {
+      const inferredLocation = inferLocationFromUserMessages(messages);
+      const supportedLocations: JaneLocation[] = ["eglinton", "downtown"];
+
+      if (!inferredLocation) {
+        return NextResponse.json({
+          message: "Choose a location to continue booking:",
+          bookingPicker: {
+            step: "location",
+            choices: [
+              {
+                id: "loc-eglinton",
+                label: "Curate Health Eglinton — 989 Eglinton Ave W",
+              },
+              {
+                id: "loc-downtown",
+                label: "Curate Health Downtown — 777 Bay St (chiropractic only)",
+              },
+            ],
+          },
+        });
+      }
+
+      return NextResponse.json({
+        message:
+          inferredLocation === "downtown"
+            ? "Downtown offers chiropractic visits. Choose a session type, or book other services at Eglinton."
+            : "What type of appointment are you booking?",
+        bookingPicker: {
+          step: "modality",
+          choices:
+            inferredLocation === "downtown"
+              ? BOOKING_MODALITY_CHOICES.filter((c) => c.label === "Chiropractic")
+              : BOOKING_MODALITY_CHOICES,
+        },
+      });
+    }
 
     const useGeneralChat =
-      routed?.intent === "general" ||
-      (!routed &&
-        heuristicFallback &&
-        !heuristicFallback.wantsBooking &&
-        !heuristicFallback.wantsAvailability);
+      (routed?.intent === "general" &&
+        !heuristic.wantsBooking &&
+        !heuristic.wantsAvailability) ||
+      (!routed && !heuristic.wantsBooking && !heuristic.wantsAvailability);
 
     if (useGeneralChat) {
       const context = await getBrandAiContext();
-      const response = await ai.models.generateContent({
-        model: MODEL,
-        contents: messages.map((message) => ({
+      const systemInstruction = buildSystemInstruction(context);
+      const message = await generateTextWithGeminiOrGroq({
+        ai,
+        geminiModel: MODEL,
+        geminiContents: messages.map((message) => ({
           role: message.role === "assistant" ? "model" : "user",
           parts: [{ text: message.content }],
         })),
-        config: {
-          systemInstruction: buildSystemInstruction(context),
+        geminiConfig: {
+          systemInstruction,
           temperature: 0.3,
         },
+        groqSystemInstruction: systemInstruction,
+        groqMessages: messages.map((m) => ({ role: m.role, content: m.content })),
+        groqTemperature: 0.3,
+        groqMaxTokens: 1024,
       });
-      const message = response.text?.trim();
 
       if (!message) {
         return NextResponse.json(
@@ -843,13 +1078,47 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: sanitizeAssistantMessage(message) });
     }
 
-    const availabilityIntent: AvailabilityIntent =
+    let availabilityIntent: AvailabilityIntent =
       routed && routed.intent !== "general"
         ? availabilityIntentFromRouting(routed, messages)
-        : (heuristicFallback ?? {
+        : (heuristicFallback ?? heuristic ?? {
             wantsAvailability: false,
             wantsBooking: false,
           });
+
+    availabilityIntent = applyJaneIntentEnrichment(
+      messages,
+      availabilityIntent,
+      routed?.jane_service_name ?? null
+    );
+
+    const userOnlyText = messages
+      .filter((message) => message.role === "user")
+      .map((message) => message.content)
+      .join("\n");
+
+    const mergedCategory =
+      availabilityIntent.serviceCategory ??
+      inferServiceCategory(userOnlyText) ??
+      normalizeServiceCategory(routed?.service_category ?? undefined);
+
+    const wizardReply = buildBookingWizardReply({
+      messages,
+      availabilityIntent,
+      routedLocation: routed?.location ?? null,
+      inferLocationFromUserMessages,
+      mergedCategory,
+      mergedServiceName: availabilityIntent.serviceName,
+      mergedDates:
+        availabilityIntent.dates ??
+        (availabilityIntent.date ? [availabilityIntent.date] : undefined),
+      inferNumberedOptionServiceName,
+      routedJaneServiceName: routed?.jane_service_name ?? null,
+    });
+
+    if (wizardReply) {
+      return NextResponse.json(wizardReply);
+    }
 
     const sessionClarify = tryJaneSessionClarificationReply(
       routed,
@@ -861,22 +1130,34 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: sessionClarify });
     }
 
+    const datesToCheck = availabilityIntent.dates?.length
+      ? availabilityIntent.dates
+      : availabilityIntent.date
+        ? [availabilityIntent.date]
+        : [];
+
+    const exactJaneService =
+      availabilityIntent.serviceName?.trim() &&
+      isExactJaneOfferingName(availabilityIntent.serviceName.trim())
+        ? availabilityIntent.serviceName.trim()
+        : undefined;
+
+    const bookingAsksJaneSlots =
+      availabilityIntent.wantsBooking &&
+      Boolean(exactJaneService && datesToCheck.length);
+
     if (
       availabilityIntent.wantsBooking &&
-      !availabilityIntent.serviceCategory
+      availabilityIntent.serviceCategory &&
+      !exactJaneService
     ) {
-      return NextResponse.json({
-        message:
-          "Great — we can sort that here. Which modality are you booking? For example chiropractic, massage (RMT), physiotherapy, naturopathic, psychotherapy, personal training, recovery sanctuary, custom orthotics/compression stocking, Flowpresso—then we will narrow to the exact session length Jane lists. Optionally add today/tomorrow or a YYYY-MM-DD date.",
-      });
-    }
-
-    if (availabilityIntent.wantsBooking && availabilityIntent.serviceCategory) {
       const supportedLocations = getSupportedLocationsForService(
         availabilityIntent.serviceName ?? availabilityIntent.serviceCategory
       );
       const resolvedLocationKey =
         availabilityIntent.location ??
+        inferLocationFromUserMessages(messages) ??
+        routed?.location ??
         (supportedLocations.length === 1 ? supportedLocations[0] : undefined);
 
       if (!resolvedLocationKey) {
@@ -903,19 +1184,21 @@ export async function POST(request: Request) {
       });
     }
 
-    if (availabilityIntent.wantsAvailability) {
-      if (!availabilityIntent.serviceName) {
+    if (availabilityIntent.wantsAvailability || bookingAsksJaneSlots) {
+      const resolvedServiceName = exactJaneService ?? availabilityIntent.serviceName;
+
+      if (!resolvedServiceName) {
         return NextResponse.json({
           message:
             "I can check availability for you. Which service would you like to book?",
         });
       }
 
-      const supportedLocations = getSupportedLocationsForService(
-        availabilityIntent.serviceName
-      );
+      const supportedLocations = getSupportedLocationsForService(resolvedServiceName);
       const resolvedLocationKey =
+        inferLocationFromUserMessages(messages) ??
         availabilityIntent.location ??
+        routed?.location ??
         (supportedLocations.length === 1 ? supportedLocations[0] : undefined);
 
       if (!resolvedLocationKey) {
@@ -927,23 +1210,14 @@ export async function POST(request: Request) {
       }
 
       if (
-        !serviceIsAvailableAtLocation(
-          availabilityIntent.serviceName,
-          resolvedLocationKey
-        )
+        !serviceIsAvailableAtLocation(resolvedServiceName, resolvedLocationKey)
       ) {
         return NextResponse.json({
-          message: `${availabilityIntent.serviceName} is available through ${formatLocationOptions(
+          message: `${resolvedServiceName} is available through ${formatLocationOptions(
             supportedLocations
           )}. Would you like me to check that location?`,
         });
       }
-
-      const datesToCheck = availabilityIntent.dates?.length
-        ? availabilityIntent.dates
-        : availabilityIntent.date
-          ? [availabilityIntent.date]
-          : [];
 
       if (!datesToCheck.length) {
         return NextResponse.json({
@@ -953,22 +1227,35 @@ export async function POST(request: Request) {
       }
 
       const location = JANE_LOCATIONS[resolvedLocationKey];
-      let availability = await getCachedJaneAvailability({
-        bookingUrl: location.bookingUrl,
-        serviceName: availabilityIntent.serviceName,
-        date: datesToCheck[0],
-        limit: 8,
-      });
+      let availability: Awaited<typeof getCachedJaneAvailability>;
+      try {
+        availability = await getCachedJaneAvailability({
+          bookingUrl: location.bookingUrl,
+          serviceName: resolvedServiceName,
+          date: datesToCheck[0],
+          limit: 8,
+        });
+      } catch {
+        return NextResponse.json({
+          message: `I tried checking Jane for ${resolvedServiceName} at ${location.label}, but I couldn't load the live booking slots just now. You can book directly here: ${location.bookingUrl}`,
+        });
+      }
 
       for (const date of datesToCheck.slice(1)) {
         if (availability.slots.length) break;
 
-        availability = await getCachedJaneAvailability({
-          bookingUrl: location.bookingUrl,
-          serviceName: availabilityIntent.serviceName,
-          date,
-          limit: 8,
-        });
+        try {
+          availability = await getCachedJaneAvailability({
+            bookingUrl: location.bookingUrl,
+            serviceName: resolvedServiceName,
+            date,
+            limit: 8,
+          });
+        } catch {
+          return NextResponse.json({
+            message: `I tried checking Jane for ${resolvedServiceName} at ${location.label}, but I couldn't load the live booking slots just now. You can book directly here: ${location.bookingUrl}`,
+          });
+        }
       }
 
       return NextResponse.json({
@@ -984,18 +1271,23 @@ export async function POST(request: Request) {
       "brand-chat POST: routed Jane intent without actionable branch; falling back to model"
     );
     const context = await getBrandAiContext();
-    const response = await ai.models.generateContent({
-      model: MODEL,
-      contents: messages.map((message) => ({
+    const systemInstruction = buildSystemInstruction(context);
+    const message = await generateTextWithGeminiOrGroq({
+      ai,
+      geminiModel: MODEL,
+      geminiContents: messages.map((message) => ({
         role: message.role === "assistant" ? "model" : "user",
         parts: [{ text: message.content }],
       })),
-      config: {
-        systemInstruction: buildSystemInstruction(context),
+      geminiConfig: {
+        systemInstruction,
         temperature: 0.3,
       },
+      groqSystemInstruction: systemInstruction,
+      groqMessages: messages.map((m) => ({ role: m.role, content: m.content })),
+      groqTemperature: 0.3,
+      groqMaxTokens: 1024,
     });
-    const message = response.text?.trim();
 
     if (!message) {
       return NextResponse.json(
@@ -1007,10 +1299,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: sanitizeAssistantMessage(message) });
   } catch (error) {
     console.error("Brand chat failed", error);
+    const { status, errorBody } = friendlyBrandChatFailure(error);
 
-    return NextResponse.json(
-      { error: "Curate Assistant is temporarily unavailable." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: errorBody }, { status });
   }
 }

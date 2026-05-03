@@ -128,15 +128,20 @@ export function sessionClarificationMessage(category: string): string | null {
 
   const bullets = offerings.map((name) => `• ${name}`).join("\n");
 
-  return [
-    `Before we check live openings, which session are you booking in ${category}? You can paste the Jane title verbatim, or describe it clearly ("60-minute massage", "initial chiro", "couples therapy 90", "cold plunge singles", etc.).`,
-
+  const lines = [
+    `${category}: which session row from Jane below — paste its title exactly, or name the workout + length.`,
     "",
-    `Sessions listed in Jane (${category}):`,
     bullets,
-    "",
-    "At Bay / Downtown, chiropractic still has multiple visit lengths—tell us initial vs subsequent vs extended if relevant.",
-  ].join("\n");
+  ];
+
+  if (category === "Chiropractic") {
+    lines.push(
+      "",
+      "Our Downtown chiropractor-only site (777 Bay) still uses several chiropractic lengths — say initial, follow-up, or extended."
+    );
+  }
+
+  return lines.join("\n");
 }
 
 /** Reference block for Gemini (routing + conversational answers). Compact but authoritative. */

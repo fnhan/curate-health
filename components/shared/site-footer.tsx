@@ -38,9 +38,9 @@ export default function SiteFooter({
         <div className="container flex flex-col gap-10 py-14 lg:flex-row lg:justify-between lg:py-40">
           {/* Contact Info */}
           <address className="space-y-2 text-sm not-italic md:text-base">
-            <h6 className="w-fit font-semibold hover:underline">
+            <h2 className="w-fit font-semibold hover:underline">
               <Link href="/contact">Contact</Link>
-            </h6>
+            </h2>
             <a
               className="flex items-start gap-2 hover:underline"
               href={contactInfo?.mapLink!}
@@ -78,7 +78,7 @@ export default function SiteFooter({
             <div className="hidden flex-col gap-2 lg:flex lg:flex-row lg:justify-end lg:gap-10">
               {/* Services Section */}
               <div className="border-b border-white pb-2 lg:border-none">
-                <h6 className="pl-3 font-semibold md:mb-3">Services</h6>
+                <h2 className="pl-3 font-semibold md:mb-3">Services</h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {services?.map(
                     (service, index) =>
@@ -96,7 +96,7 @@ export default function SiteFooter({
               </div>
               {/* About Pages Section */}
               <div className="border-b border-white pb-2 lg:border-none">
-                <h6 className="pl-3 font-semibold md:mb-3">About</h6>
+                <h2 className="pl-3 font-semibold md:mb-3">About</h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {aboutPages
                     ?.filter(Boolean) // Remove null/undefined values
@@ -117,9 +117,9 @@ export default function SiteFooter({
                   key={index}
                   className="border-b border-white pb-2 md:border-none"
                 >
-                  <h6 className="pl-3 font-semibold md:mb-3">
+                  <h2 className="pl-3 font-semibold md:mb-3">
                     {group.groupTitle}
-                  </h6>
+                  </h2>
                   <div className="hidden flex-col gap-1 pl-3 md:flex">
                     {group.links?.map((link, linkIndex) => (
                       <Link
@@ -135,7 +135,7 @@ export default function SiteFooter({
               ))}
               {/* Social Links Section */}
               <div>
-                <h6 className="pl-3 font-semibold md:mb-3">Connect</h6>
+                <h2 className="pl-3 font-semibold md:mb-3">Connect</h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {socialMedia
                     ?.filter((link) => link.isActive)

@@ -46,7 +46,7 @@ export default function SiteNav({
     <nav className="sticky top-0 z-50 border-b bg-primary/25 text-white backdrop-blur-3xl">
       <div className="flex items-center justify-between px-4 sm:container">
         <div className="flex flex-1 items-center">
-          <div className="flex py-10" aria-label="menu toggle">
+          <div className="flex py-10">
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger
                 aria-label="navigation menu"
@@ -214,6 +214,7 @@ export default function SiteNav({
                     <Input
                       name="q"
                       placeholder="Search"
+                      aria-label="Search the site"
                       className="h-10 rounded-none border-white/20 bg-white/10 text-white placeholder:text-white/70 focus-visible:ring-1 focus-visible:ring-white/30 focus-visible:ring-offset-0"
                     />
                     <Button

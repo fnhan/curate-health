@@ -78,9 +78,11 @@ export function ProductCarousel({
                 <CardContent className="mb-4 flex items-center justify-center p-0 2xl:h-64">
                   <Image
                     src={product.image ?? ""}
-                    width={200}
-                    height={200}
+                    width={350}
+                    height={350}
                     alt={product.altText ?? ""}
+                    sizes="(min-width: 1536px) 350px, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 80vw"
+                    quality={75}
                     className="mx-auto object-contain"
                   />
                 </CardContent>

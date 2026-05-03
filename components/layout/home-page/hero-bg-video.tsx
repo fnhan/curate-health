@@ -4,13 +4,32 @@ import { useEffect, useRef, useState } from "react";
 
 import MuxPlayer from "@/components/ui/mux-player";
 
+function ensureMuxDialogsHaveNames(player: any) {
+  const root = player?.shadowRoot as ShadowRoot | null | undefined;
+  if (!root) return false;
+
+  const dialog = root.querySelector(
+    'media-error-dialog,[slot="dialog"][role="dialog"],[role="alertdialog"]'
+  ) as HTMLElement | null;
+
+  if (!dialog) return false;
+
+  // If Mux/Media Chrome ever adds proper names internally, do not override them.
+  if (dialog.getAttribute("aria-label") || dialog.getAttribute("aria-labelledby")) {
+    return true;
+  }
+
+  dialog.setAttribute("aria-label", "Media playback error");
+  return true;
+}
+
 export default function HeroBgVideo({ playbackId }: { playbackId: string }) {
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [initTime, setInitTime] = useState<number | null>(null);
   const [isSafari, setIsSafari] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg?time=0`;
+  const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.webp?time=0&width=1280&fit_mode=preserve`;
 
   useEffect(() => {
     const checkBrowser = () => {
@@ -24,6 +43,16 @@ export default function HeroBgVideo({ playbackId }: { playbackId: string }) {
 
     const player = playerRef.current;
     if (!player) return;
+
+    // Mux Player uses Shadow DOM; label internal dialogs for a11y audits.
+    let tries = 0;
+    const dialogTimer = window.setInterval(() => {
+      tries += 1;
+      const done = ensureMuxDialogsHaveNames(player);
+      if (done || tries >= 20) {
+        window.clearInterval(dialogTimer);
+      }
+    }, 250);
 
     const attemptPlay = async () => {
       try {
@@ -75,6 +104,7 @@ export default function HeroBgVideo({ playbackId }: { playbackId: string }) {
     }
 
     return () => {
+      window.clearInterval(dialogTimer);
       player.removeEventListener("loadedmetadata", handleLoadedMetadata);
       player.removeEventListener("ended", handleEnded);
       if (isSafari) {

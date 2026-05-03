@@ -31,7 +31,9 @@ export function OurProgramsNavigation() {
               Our Programs
             </Link>
           </li>
-          <div className="text-primary">|</div>
+          <li aria-hidden="true" className="text-primary">
+            |
+          </li>
           {[
             {
               title: "Essential Series",
@@ -47,12 +49,14 @@ export function OurProgramsNavigation() {
             },
           ].map((program) =>
             program.href.includes("#") ? (
-              <li
-                key={program.title}
-                className={hoverEffect}
-                onClick={() => scrollToSection(program.href.slice(1))}
-              >
-                {program.title}
+              <li key={program.title}>
+                <button
+                  type="button"
+                  className={hoverEffect}
+                  onClick={() => scrollToSection(program.href.slice(1))}
+                >
+                  {program.title}
+                </button>
               </li>
             ) : (
               <li key={program.title}>

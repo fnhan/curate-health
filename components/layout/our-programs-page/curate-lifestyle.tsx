@@ -117,7 +117,13 @@ const CurateLifestyle = ({
                   className="flex justify-center gap-x-2 border-2 border-transparent bg-[#878E76] p-6 text-white shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-colors duration-300 hover:border-[#878E76] hover:bg-white hover:text-[#6B6B6B] lg:justify-between"
                 >
                   {curateLifestyle?.call_to_action}
-                  <img src={arrow.src} alt="" width={25} height={20} />
+                  <img
+                    src={arrow.src}
+                    alt=""
+                    aria-hidden="true"
+                    width={25}
+                    height={20}
+                  />
                 </Link>
               </div>
             </div>

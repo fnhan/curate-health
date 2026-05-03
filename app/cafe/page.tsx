@@ -32,7 +32,7 @@ export default async function CafePage() {
   } = cafePage;
 
   return (
-    <main className="font-poppins">
+    <div className="font-poppins">
       <JsonLdScript data={buildCafeJsonLd(cafePage)} id="cafe-json-ld" />
       <Image
         width={1920}
@@ -53,7 +53,7 @@ export default async function CafePage() {
       />
       <CafeMenuDownloadSection data={menuDownloadSection} />
       <CafeCtaBandSection data={ctaBandSection} />
-    </main>
+    </div>
   );
 }
 

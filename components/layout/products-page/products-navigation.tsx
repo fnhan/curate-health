@@ -30,7 +30,9 @@ export function ProductsNavigation({
               Our Products
             </Link>
           </li>
-          <div className="text-primary">|</div>
+          <li aria-hidden="true" className="text-primary">
+            |
+          </li>
           {products.map((product) => (
             <li key={product.slug}>
               <Link

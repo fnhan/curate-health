@@ -66,7 +66,7 @@ function Post({ post }: { post: POST_QUERYResult }) {
             className="italic text-secondary transition-all duration-300 hover:text-white hover:underline"
             href={`/blog/${slug?.current}`}
           >
-            Read More
+            Read more about {title}
           </Link>
         </div>
       </div>

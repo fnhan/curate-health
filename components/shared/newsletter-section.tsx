@@ -85,6 +85,7 @@ export default function NewsletterSection({
             type="email"
             name="email"
             placeholder="Email"
+            aria-label="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="rounded-none bg-transparent text-white placeholder:text-white"

@@ -55,6 +55,24 @@ export async function GET() {
       priority: 1,
     },
     {
+      url: `${BASEURL}/services`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${BASEURL}/our-programs`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASEURL}/blog`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
       url: `${BASEURL}/contact`,
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly",

@@ -12,7 +12,6 @@ import {
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
 import { BrandChatbot } from "@/components/shared/brand-chatbot";
 import { FloatingCallButton } from "@/components/shared/floating-call-button";
-import PageJsonLd from "@/components/shared/page-json-ld";
 import SanityDisablePreviewButton from "@/components/shared/sanity-disable-preview-button";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -110,7 +109,6 @@ export default async function RootLayout({
       </head>
       <CSPostHogProvider>
         <body className="flex min-h-screen flex-col overflow-x-hidden bg-background antialiased">
-          <PageJsonLd />
           {children}
           <BrandChatbot />
           {callPhone ? <FloatingCallButton phone={callPhone} /> : null}

@@ -42,7 +42,7 @@ interface Treatment {
   slug: string;
 }
 
-const Heading = ({
+const PageTitle = ({
   children,
   className,
 }: {
@@ -56,7 +56,7 @@ const Heading = ({
   );
 };
 
-const SubHeading = ({
+const Heading = ({
   children,
   className,
 }: {
@@ -72,6 +72,25 @@ const SubHeading = ({
     >
       {children}
     </h2>
+  );
+};
+
+const SubHeading = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <h3
+      className={cn(
+        "text-xl md:text-2xl md:font-light 2xl:text-3xl",
+        className
+      )}
+    >
+      {children}
+    </h3>
   );
 };
 
@@ -186,7 +205,7 @@ export default function ServiceLifestyleContent({
         <div className="container flex flex-col gap-12 md:grid md:grid-cols-2 md:items-center">
           <div className="flex flex-col gap-8">
             <div className="space-y-4 md:space-y-6 2xl:space-y-8">
-              <Heading>{title}</Heading>
+              <PageTitle>{title}</PageTitle>
               <div className="max-w-[80ch] text-pretty font-light">
                 <PortableText value={content!} />
               </div>
@@ -216,11 +235,11 @@ export default function ServiceLifestyleContent({
               alt={content_alt!}
             />
           </div>
-          <div className="col-span-2 h-32 border-l border-l-2 border-primary"></div>
+          <div className="col-span-2 h-32 border-l-2 border-primary"></div>
           <div className="col-span-2 pt-12">
-            <h1 className="text-xl md:text-4xl 2xl:text-6xl">
+            <Heading className="text-xl md:text-4xl 2xl:text-6xl">
               {hero_secondary_title}
-            </h1>
+            </Heading>
             <LargeText className="mt-12 max-w-2xl">{hero_large_text}</LargeText>
           </div>
         </div>
@@ -243,9 +262,9 @@ export default function ServiceLifestyleContent({
       </section>
 
       <section className="bg-white py-16 text-primary md:py-44">
-        <SubHeading className="container md:text-center">
+        <Heading className="container md:text-center">
           {block_3_title}
-        </SubHeading>
+        </Heading>
         <div className="container flex flex-col items-center gap-12">
           {/* Group conditions into columns */}
           {(() => {
@@ -278,9 +297,11 @@ export default function ServiceLifestyleContent({
                       const isOpen = hovered[colIdx] === rowIdx;
                       if (!condition.title) return null;
                       return (
-                        <div
+                        <button
                           key={condition.title}
                           className="flex cursor-pointer flex-col items-center border border-primary bg-white py-3 transition-all duration-300"
+                          type="button"
+                          aria-expanded={isOpen}
                           onMouseEnter={() =>
                             setHovered((prev) =>
                               prev.map((v, i) => (i === colIdx ? rowIdx : v))
@@ -291,7 +312,6 @@ export default function ServiceLifestyleContent({
                               prev.map((v, i) => (i === colIdx ? null : v))
                             )
                           }
-                          tabIndex={0}
                           onFocus={() =>
                             setHovered((prev) =>
                               prev.map((v, i) => (i === colIdx ? rowIdx : v))
@@ -313,7 +333,7 @@ export default function ServiceLifestyleContent({
                               <PortableText value={condition.description!} />
                             </div>
                           </div>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
@@ -371,7 +391,7 @@ export default function ServiceLifestyleContent({
         <div className="container relative z-20 flex w-full flex-col items-center justify-center md:flex-row">
           <div className="flex flex-1 justify-end">
             <div className="max-w-xl">
-              <SubHeading>What Makes Our Program Unique?</SubHeading>
+              <Heading>What Makes Our Program Unique?</Heading>
               <ul className="ml-4 mt-10 list-disc text-pretty pr-8 font-light leading-7">
                 <li>
                   Overseen by a team of healthcare professionals, including
@@ -406,12 +426,12 @@ export default function ServiceLifestyleContent({
 
       <section className="bg-white py-16 text-primary md:py-24">
         <div className="container flex flex-col gap-y-14">
-          <SubHeading className="text-center">Additional Benefits</SubHeading>
+          <Heading className="text-center">Additional Benefits</Heading>
           <div className="mx-auto grid w-full grid-cols-1 gap-1 md:grid-cols-2 md:px-12 lg:grid-cols-3">
             {benefits?.map((benefit) => (
               <div
                 key={benefit.title}
-                className="group relative flex min-h-80 w-full cursor-pointer flex-col justify-end gap-y-4 overflow-hidden p-6 transition-all duration-300"
+                className="group relative flex min-h-80 w-full flex-col justify-end gap-y-4 overflow-hidden p-6 transition-all duration-300"
                 style={{
                   backgroundImage: benefit.image
                     ? `url(${benefit.image})`
@@ -490,7 +510,7 @@ export default function ServiceLifestyleContent({
             />
           </div>
           <div className="mt-8 flex flex-1 flex-col gap-y-6 pb-24">
-            <SubHeading>How to Join</SubHeading>
+            <Heading>How to Join</Heading>
             <div className="flex max-w-lg flex-col gap-y-12 md:mt-6">
               <div className="flex flex-col gap-y-6">
                 <h3 className="text-xl md:text-2xl 2xl:text-3xl">
@@ -557,9 +577,9 @@ export default function ServiceLifestyleContent({
       </section>
 
       <section className="bg-white py-16 text-primary md:py-24">
-        <SubHeading className="container px-4 pb-6 md:col-span-2 md:mb-8 lg:col-span-3">
+        <Heading className="container px-4 pb-6 md:col-span-2 md:mb-8 lg:col-span-3">
           Meet Your Team
-        </SubHeading>
+        </Heading>
         <div className="container flex flex-col items-center gap-y-4">
           {mainMember && mainMember.length > 0 && (
             <Card className="flex h-full w-full flex-col rounded-none md:max-w-screen-md md:flex-row xl:max-w-screen-lg">
@@ -668,7 +688,7 @@ export default function ServiceLifestyleContent({
 
       <section className="bg-white py-16 text-primary md:py-44">
         <div className="container mx-auto space-y-12 md:pb-12 2xl:px-12">
-          <SubHeading>Frequently Asked Questions</SubHeading>
+          <Heading>Frequently Asked Questions</Heading>
           <Accordion type="multiple">
             {faq?.map((faq, index) => {
               return (

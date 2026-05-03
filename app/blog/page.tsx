@@ -65,7 +65,7 @@ export default async function BlogPage() {
                   href={`/blog/${post.slug}`}
                   className="italic text-white hover:underline"
                 >
-                  Read More
+                  Read more about {post.title}
                 </Link>
               </div>
             </CardFooter>

@@ -30,20 +30,24 @@ export function ServicesNavigation({
               Our Services
             </Link>
           </li>
-          <div className="text-primary">|</div>
-          {services.filter((service) => service.slug !== "curate-lifestyle").map((service) => (
-            <li key={service.slug}>
-              <Link
-                href={`/services/${service.slug}`}
-                className={`${hoverEffect} ${
-                  pathname?.endsWith(`/services/${service.slug}`) &&
-                  "after:origin-bottom-left after:scale-x-100"
-                }`}
-              >
-                {service.title}
-              </Link>
-            </li>
-          ))}
+          <li aria-hidden="true" className="text-primary">
+            |
+          </li>
+          {services
+            .filter((service) => service.slug !== "curate-lifestyle")
+            .map((service) => (
+              <li key={service.slug}>
+                <Link
+                  href={`/services/${service.slug}`}
+                  className={`${hoverEffect} ${
+                    pathname?.endsWith(`/services/${service.slug}`) &&
+                    "after:origin-bottom-left after:scale-x-100"
+                  }`}
+                >
+                  {service.title}
+                </Link>
+              </li>
+            ))}
         </ul>
       </nav>
     </div>

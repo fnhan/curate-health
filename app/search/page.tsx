@@ -204,12 +204,12 @@ export default async function SearchPage({
 
   if (!needle) {
     return (
-      <main className="bg-white py-14 text-black">
+      <div className="bg-white py-14 text-black">
         <div className="container">
           <h1 className="text-3xl">Search</h1>
           <p className="mt-4 text-black/70">Enter a search query.</p>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -281,7 +281,7 @@ export default async function SearchPage({
     .filter((g) => g.hits.length > 0);
 
   return (
-    <main className="bg-white py-14 text-black">
+    <div className="bg-white py-14 text-black">
       <div className="container">
         <h1 className="text-3xl">Search</h1>
         <p className="mt-2 text-black/70">
@@ -323,7 +323,7 @@ export default async function SearchPage({
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }
 

@@ -51,7 +51,7 @@ export default function HeroSection({
 }
 
 async function ThumbnailBackground({ playbackId }: { playbackId: string }) {
-  const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg?time=0`;
+  const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.webp?time=0&width=1280&fit_mode=preserve`;
 
   if (!playbackId) return null;
 
@@ -59,6 +59,9 @@ async function ThumbnailBackground({ playbackId }: { playbackId: string }) {
     <img
       src={thumbnailUrl}
       alt=""
+      aria-hidden="true"
+      loading="eager"
+      fetchPriority="high"
       className="absolute inset-0 h-full w-full object-cover"
     />
   );

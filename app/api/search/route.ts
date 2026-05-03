@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { sanityFetch } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
+
+import { sanityFetch } from "@/sanity/lib/client";
 
 type SearchResultItem = {
   type: string;
@@ -663,4 +664,3 @@ export async function GET(req: Request) {
     results: merged,
   });
 }
-

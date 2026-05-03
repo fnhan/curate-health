@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
+
 import { groq } from "next-sanity";
 
-import { BRAND_NAME, BASEURL } from "@/app/site-settings";
+import { BASEURL, BRAND_NAME } from "@/app/site-settings";
 import { sanityFetch } from "@/sanity/lib/client";
 
 export const revalidate = 3600;
@@ -129,7 +130,13 @@ function formatAddress(data: LlmsData) {
     return "";
   }
 
-  return [address.street, address.city, address.state, address.zip, address.country]
+  return [
+    address.street,
+    address.city,
+    address.state,
+    address.zip,
+    address.country,
+  ]
     .map(compact)
     .filter(Boolean)
     .join(", ");

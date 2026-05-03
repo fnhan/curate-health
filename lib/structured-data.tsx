@@ -1,4 +1,4 @@
-import { BRAND_NAME, BASEURL } from "@/app/site-settings";
+import { BASEURL, BRAND_NAME } from "@/app/site-settings";
 import {
   CAFE_PAGE_QUERYResult,
   SERVICE_BY_SLUG_QUERYResult,
@@ -247,7 +247,9 @@ export function buildCafeJsonLd(cafePage: CAFE_PAGE_QUERYResult) {
   const cafe = cafePage as {
     seo?: { pageDescription?: string | null } | null;
     heroSection?: {
-      heroImage?: { image?: { asset?: { url?: string | null } | null } | null } | null;
+      heroImage?: {
+        image?: { asset?: { url?: string | null } | null } | null;
+      } | null;
     } | null;
     ctaBandSection?: {
       body?: string | null;

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { Menu } from "lucide-react";
 
 import {
@@ -14,13 +14,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   PRIMARY_CTA_BUTTON_QUERYResult,
   SITE_SETTINGS_QUERYResult,
 } from "@/sanity.types";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 import PrimaryCTAButton from "./primary-cta-button";
 
@@ -59,149 +58,149 @@ export default function SiteNav({
                 side="left"
                 className="flex max-w-[300px] flex-col overflow-hidden border-none pt-[142px] text-white sm:pl-[86px] md:max-w-[416px]"
               >
-                <div className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain pr-1 scrollbar-thin scrollbar-track-secondary scrollbar-thumb-primary scrollbar-thumb-rounded-full">
+                <div className="scrollbar-thumb-rounded-full min-h-0 flex-1 overflow-y-auto overscroll-y-contain pr-1 scrollbar-thin scrollbar-track-secondary scrollbar-thumb-primary">
                   <div
                     className="flex flex-col gap-6 pb-6 text-left"
                     id="nav-items"
                     aria-labelledby="nav-items nav-menu"
                   >
-                  <Link
-                    className="text-2xl hover:underline"
-                    href={"/"}
-                    onClick={() => setOpen(false)}
-                  >
-                    Home
-                  </Link>
-                  {/* Services */}
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem
-                      value="services"
-                      className="border-none text-2xl"
+                    <Link
+                      className="text-2xl hover:underline"
+                      href={"/"}
+                      onClick={() => setOpen(false)}
                     >
-                      <AccordionTrigger className="mr-20 p-0 font-normal">
-                        Services
-                      </AccordionTrigger>
-                      <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                        {services?.map((service, index) => {
-                          return service.treatments &&
-                            service.treatments.length > 0 ? (
-                            <div key={index}>
-                              <Accordion
-                                type="single"
-                                collapsible
-                                className="w-full"
-                              >
-                                <AccordionItem
-                                  value={`service-${index}`}
-                                  className="border-none"
-                                >
-                                  <AccordionTrigger className="mr-20 p-0 pr-4 text-base font-normal">
-                                    {service.title}
-                                  </AccordionTrigger>
-                                  <AccordionContent className="ml-4 flex flex-col gap-2 pt-4">
-                                    {service.treatments.map(
-                                      (treatment, treatmentIndex) => (
-                                        <Link
-                                          key={treatmentIndex}
-                                          className="text-sm hover:underline"
-                                          href={`/services/${service.slug}/${treatment.slug}`}
-                                          onClick={() => setOpen(false)}
-                                        >
-                                          {treatment.title}
-                                        </Link>
-                                      )
-                                    )}
-                                  </AccordionContent>
-                                </AccordionItem>
-                              </Accordion>
-                            </div>
-                          ) : null;
-                        })}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                  {/* About Pages */}
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem
-                      value="about-pages"
-                      className="border-none text-2xl"
-                    >
-                      <AccordionTrigger
-                        className="mr-20 p-0 font-normal"
-                        aria-label="about-pages"
-                        aria-controls="about-items"
-                        id="about-menu"
+                      Home
+                    </Link>
+                    {/* Services */}
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value="services"
+                        className="border-none text-2xl"
                       >
-                        About
-                      </AccordionTrigger>
-                      <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                        {aboutPages
-                          ?.filter(Boolean) // Remove null/undefined values
-                          .map((page, index) => (
+                        <AccordionTrigger className="mr-20 p-0 font-normal">
+                          Services
+                        </AccordionTrigger>
+                        <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
+                          {services?.map((service, index) => {
+                            return service.treatments &&
+                              service.treatments.length > 0 ? (
+                              <div key={index}>
+                                <Accordion
+                                  type="single"
+                                  collapsible
+                                  className="w-full"
+                                >
+                                  <AccordionItem
+                                    value={`service-${index}`}
+                                    className="border-none"
+                                  >
+                                    <AccordionTrigger className="mr-20 p-0 pr-4 text-base font-normal">
+                                      {service.title}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="ml-4 flex flex-col gap-2 pt-4">
+                                      {service.treatments.map(
+                                        (treatment, treatmentIndex) => (
+                                          <Link
+                                            key={treatmentIndex}
+                                            className="text-sm hover:underline"
+                                            href={`/services/${service.slug}/${treatment.slug}`}
+                                            onClick={() => setOpen(false)}
+                                          >
+                                            {treatment.title}
+                                          </Link>
+                                        )
+                                      )}
+                                    </AccordionContent>
+                                  </AccordionItem>
+                                </Accordion>
+                              </div>
+                            ) : null;
+                          })}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                    {/* About Pages */}
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value="about-pages"
+                        className="border-none text-2xl"
+                      >
+                        <AccordionTrigger
+                          className="mr-20 p-0 font-normal"
+                          aria-label="about-pages"
+                          aria-controls="about-items"
+                          id="about-menu"
+                        >
+                          About
+                        </AccordionTrigger>
+                        <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
+                          {aboutPages
+                            ?.filter(Boolean) // Remove null/undefined values
+                            .map((page, index) => (
+                              <Link
+                                key={index}
+                                className="text-base hover:underline"
+                                href={`/about/${page?.slug}`}
+                                onClick={() => setOpen(false)}
+                              >
+                                {page?.title}
+                              </Link>
+                            ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                    {/* Programs */}
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value="about-pages"
+                        className="border-none text-2xl"
+                      >
+                        <AccordionTrigger
+                          className="mr-20 p-0 font-normal"
+                          aria-label="about-pages"
+                          aria-controls="about-items"
+                          id="about-menu"
+                        >
+                          Programs
+                        </AccordionTrigger>
+                        <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
+                          {[
+                            {
+                              title: "Essential Series",
+                              href: "/our-programs#essential-series",
+                            },
+                            {
+                              title: "Curate Lifestyle",
+                              href: "/services/curate-lifestyle",
+                            },
+                            {
+                              title: "Master Health Blueprint",
+                              href: "/our-programs#master-health-blueprint",
+                            },
+                          ].map((page, index) => (
                             <Link
                               key={index}
                               className="text-base hover:underline"
-                              href={`/about/${page?.slug}`}
+                              href={page.href}
                               onClick={() => setOpen(false)}
                             >
-                              {page?.title}
+                              {page.title}
                             </Link>
                           ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                  {/* Programs */}
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem
-                      value="about-pages"
-                      className="border-none text-2xl"
-                    >
-                      <AccordionTrigger
-                        className="mr-20 p-0 font-normal"
-                        aria-label="about-pages"
-                        aria-controls="about-items"
-                        id="about-menu"
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                    {/* Additional Links */}
+                    {navLinks?.map((link, index) => (
+                      <Link
+                        key={index}
+                        className="text-2xl hover:underline"
+                        href={link.href!}
+                        onClick={() => setOpen(false)}
                       >
-                        Programs
-                      </AccordionTrigger>
-                      <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                        {[
-                          {
-                            title: "Essential Series",
-                            href: "/our-programs#essential-series",
-                          },
-                          {
-                            title: "Curate Lifestyle",
-                            href: "/services/curate-lifestyle",
-                          },
-                          {
-                            title: "Master Health Blueprint",
-                            href: "/our-programs#master-health-blueprint",
-                          },
-                        ].map((page, index) => (
-                          <Link
-                            key={index}
-                            className="text-base hover:underline"
-                            href={page.href}
-                            onClick={() => setOpen(false)}
-                          >
-                            {page.title}
-                          </Link>
-                        ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                  {/* Additional Links */}
-                  {navLinks?.map((link, index) => (
-                    <Link
-                      key={index}
-                      className="text-2xl hover:underline"
-                      href={link.href!}
-                      onClick={() => setOpen(false)}
-                    >
-                      {link.title}
-                    </Link>
-                  ))}
+                        {link.title}
+                      </Link>
+                    ))}
                   </div>
                 </div>
                 <div className="mt-auto border-t border-white/15 px-1 pb-6 pt-6">

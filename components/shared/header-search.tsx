@@ -207,7 +207,9 @@ export default function HeaderSearch({
     loading || items.length > 0 || canSearch || (showFeatured && !query.trim());
 
   const showPanel =
-    resultsPlacement === "inline" ? shouldShowPanelContent : open && shouldShowPanelContent;
+    resultsPlacement === "inline"
+      ? shouldShowPanelContent
+      : open && shouldShowPanelContent;
 
   const inputClassName =
     variant === "modal"
@@ -364,14 +366,15 @@ export default function HeaderSearch({
       </div>
 
       {showPanel ? (
-        <div
-          id={resultsId}
-          role="listbox"
-          className={panelClassName}
-        >
+        <div id={resultsId} role="listbox" className={panelClassName}>
           <div className={scrollClassName}>
             {loading ? (
-              <div className={cn("flex items-center gap-2 px-4 py-3 text-sm", emptyTextClassName)}>
+              <div
+                className={cn(
+                  "flex items-center gap-2 px-4 py-3 text-sm",
+                  emptyTextClassName
+                )}
+              >
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Searching…</span>
               </div>
@@ -391,7 +394,12 @@ export default function HeaderSearch({
                 return (
                   <div key={`${item.type}-${item.href}-${idx}`}>
                     {showGroupHeader ? (
-                      <div className={cn("px-4 pb-2 pt-3 text-xs font-semibold uppercase tracking-wide", groupHeaderClassName)}>
+                      <div
+                        className={cn(
+                          "px-4 pb-2 pt-3 text-xs font-semibold uppercase tracking-wide",
+                          groupHeaderClassName
+                        )}
+                      >
                         {item.group === "featured_products"
                           ? "Featured products"
                           : "Featured services"}
@@ -413,7 +421,12 @@ export default function HeaderSearch({
                           {highlightMatches(item.title, debouncedQuery)}
                         </span>
                         {item.excerpt ? (
-                          <span className={cn("mt-0.5 block line-clamp-2 text-xs", excerptClassName)}>
+                          <span
+                            className={cn(
+                              "mt-0.5 line-clamp-2 block text-xs",
+                              excerptClassName
+                            )}
+                          >
                             {highlightMatches(item.excerpt, debouncedQuery)}
                           </span>
                         ) : null}
@@ -429,4 +442,3 @@ export default function HeaderSearch({
     </div>
   );
 }
-

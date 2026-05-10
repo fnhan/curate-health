@@ -78,12 +78,14 @@ export default function HeaderSearch({
   variant = "header",
   showFeatured = false,
   resultsPlacement = "overlay",
+  autoFocus = false,
 }: {
   className?: string;
   placeholder?: string;
   variant?: "header" | "modal";
   showFeatured?: boolean;
   resultsPlacement?: "overlay" | "inline";
+  autoFocus?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -110,6 +112,11 @@ export default function HeaderSearch({
     setOpen(false);
     setActiveIndex(-1);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!autoFocus) return;
+    inputRef.current?.focus();
+  }, [autoFocus]);
 
   useEffect(() => {
     if (!canSearch) {

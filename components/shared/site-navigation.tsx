@@ -145,36 +145,6 @@ export default function SiteNav({
                         </AccordionContent>
                       </AccordionItem>
                     </Accordion>
-                    {/* About Pages */}
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem
-                        value="about-pages"
-                        className="border-none text-2xl"
-                      >
-                        <AccordionTrigger
-                          className="mr-20 p-0 font-normal"
-                          aria-label="about-pages"
-                          aria-controls="about-items"
-                          id="about-menu"
-                        >
-                          About
-                        </AccordionTrigger>
-                        <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
-                          {aboutPages
-                            ?.filter(Boolean) // Remove null/undefined values
-                            .map((page, index) => (
-                              <Link
-                                key={index}
-                                className="text-base hover:underline"
-                                href={`/about/${page?.slug}`}
-                                onClick={() => setOpen(false)}
-                              >
-                                {page?.title}
-                              </Link>
-                            ))}
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
                     {/* Programs */}
                     <Accordion type="single" collapsible className="w-full">
                       <AccordionItem
@@ -216,6 +186,36 @@ export default function SiteNav({
                               {program.title}
                             </Link>
                           ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                    {/* About Pages */}
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value="about-pages"
+                        className="border-none text-2xl"
+                      >
+                        <AccordionTrigger
+                          className="mr-20 p-0 font-normal"
+                          aria-label="about-pages"
+                          aria-controls="about-items"
+                          id="about-menu"
+                        >
+                          About
+                        </AccordionTrigger>
+                        <AccordionContent className="ml-4 flex flex-col gap-2 pt-6">
+                          {aboutPages
+                            ?.filter(Boolean) // Remove null/undefined values
+                            .map((page, index) => (
+                              <Link
+                                key={index}
+                                className="text-base hover:underline"
+                                href={`/about/${page?.slug}`}
+                                onClick={() => setOpen(false)}
+                              >
+                                {page?.title}
+                              </Link>
+                            ))}
                         </AccordionContent>
                       </AccordionItem>
                     </Accordion>

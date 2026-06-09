@@ -175,6 +175,50 @@ export default function SiteNav({
                         </AccordionContent>
                       </AccordionItem>
                     </Accordion>
+                    {/* Programs */}
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem
+                        value="programs"
+                        className="border-none text-2xl"
+                      >
+                        <AccordionTrigger
+                          className="mr-20 p-0 font-normal"
+                          aria-label="programs"
+                          aria-controls="programs-items"
+                          id="programs-menu"
+                        >
+                          Programs
+                        </AccordionTrigger>
+                        <AccordionContent
+                          id="programs-items"
+                          className="ml-4 flex flex-col gap-2 pt-6"
+                        >
+                          {[
+                            {
+                              title: "Essential Series",
+                              href: "/our-programs#essential-series",
+                            },
+                            {
+                              title: "Curate Lifestyle",
+                              href: "/services/curate-lifestyle",
+                            },
+                            {
+                              title: "Master Health Blueprint",
+                              href: "/our-programs#master-health-blueprint",
+                            },
+                          ].map((program, index) => (
+                            <Link
+                              key={index}
+                              className="text-base hover:underline"
+                              href={program.href}
+                              onClick={() => setOpen(false)}
+                            >
+                              {program.title}
+                            </Link>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                     {/* Additional Links */}
                     {navLinks?.map((link, index) => (
                       <div key={index} className="flex flex-col gap-2">

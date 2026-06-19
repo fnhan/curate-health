@@ -1130,7 +1130,13 @@ export const OUR_PROGRAMS_QUERY = groq`
  heroImage {
     asset->{
       url,
-      alt
+      alt,
+      metadata {
+        dimensions {
+          width,
+          height
+        }
+      }
     },
     heroAlt
   },

@@ -12,7 +12,6 @@ type ServiceHeroSectionProps = {
 export default async function ServiceHeroSection({
   hero_image,
 }: ServiceHeroSectionProps) {
-  
   const { asset, alt } = hero_image;
 
   return (

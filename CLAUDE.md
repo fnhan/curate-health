@@ -23,6 +23,10 @@ Site is 44 URLs in the sitemap. Health and wellness clinic with an attached cafe
 
 **Branch and preview, never push to production directly.** One branch per ticket group. Vercel preview deploy for every branch. Frank reviews the preview before merge.
 
+**Claude Code opens pull requests, Frank merges them.** Claude Code may create a PR and read its status, its checks and its review state. It must never merge one, and should not ask to. Frank reviews the diff and merges by hand.
+
+Branch protection on `main` enforces this, so the rule is not the only thing standing in the way. The rule is here to record why the protection exists, because a setting can be relaxed later by someone who no longer remembers the reason. The human read of the diff is the point, not the button.
+
 **Back up Sanity before any mutation.** Export with `sanity dataset export production <file>.tar.gz` and keep the file outside the repository. Exports are large, 1.43 GB for the current one, so they never belong in git.
 
 **Backups live outside the repo, so stop looking for one in the working tree.** The current restore point is `sanity-backup-2026-08-17.tar.gz`, in Frank's Documents folder with a cloud copy. Nothing matching `backup-*` will ever appear beside the source, and its absence is not evidence that no backup was taken. Ask rather than warn.

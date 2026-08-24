@@ -39,6 +39,25 @@ export default async function ContactPage() {
     contactForm,
   } = page;
 
+  // Gate the second-location section on address content, not on the existence
+  // of the contactInfo2 object. An object holding only a mapLink is truthy, so
+  // the old `contactInfo2 &&` test rendered the section with a blank heading
+  // and an address line reading "undefined, undefined, undefined undefined".
+  // Building the line from the fields that are actually present means a
+  // partially filled address degrades instead of printing undefined. See CH-025.
+  const secondLocationAddress = [
+    [contactInfo2?.address?.street, contactInfo2?.address?.city]
+      .filter(Boolean)
+      .join(", "),
+    [contactInfo2?.address?.state, contactInfo2?.address?.zip]
+      .filter(Boolean)
+      .join(" "),
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const hasSecondLocationAddress = secondLocationAddress.length > 0;
+
   return (
     <>
       <section className="relative">
@@ -222,7 +241,7 @@ export default async function ContactPage() {
         )}
       </section>
 
-      {contactInfo2 && (
+      {hasSecondLocationAddress && (
         <section className="space-y-16 bg-white py-14 text-black md:py-28">
           <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
             <div className="flex flex-col gap-8">
@@ -231,12 +250,7 @@ export default async function ContactPage() {
                 {contactInfo2?.address?.locationInfo && (
                   <p>{contactInfo2?.address?.locationInfo}</p>
                 )}
-                <address className="not-italic">
-                  {`${contactInfo2?.address?.street},
-                  ${contactInfo2?.address?.city},
-                  ${contactInfo2?.address?.state}
-                  ${contactInfo2?.address?.zip}`}
-                </address>
+                <address className="not-italic">{secondLocationAddress}</address>
               </div>
               <div className="flex flex-col gap-4">
                 {/* Hours */}

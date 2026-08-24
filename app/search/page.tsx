@@ -1,7 +1,8 @@
 import Link from "next/link";
+
 import { groq } from "next-sanity";
 
-import { sanityFetch } from "@/sanity/lib/client";
+import { SEARCH_REVALIDATE_SECONDS, sanityFetch } from "@/sanity/lib/client";
 
 type IndexDoc = Record<string, unknown> & {
   _type?: string;
@@ -215,7 +216,7 @@ export default async function SearchPage({
 
   const docs = await sanityFetch<IndexDoc[]>({
     query: INDEX_DOCS_QUERY,
-    revalidate: 300,
+    revalidate: SEARCH_REVALIDATE_SECONDS,
     tags: ["search-index"],
   });
 
@@ -303,7 +304,10 @@ export default async function SearchPage({
                 </div>
                 <div className="flex flex-col gap-6">
                   {group.hits.map((hit) => (
-                    <div key={hit.href} className="border-b border-black/10 pb-6">
+                    <div
+                      key={hit.href}
+                      className="border-b border-black/10 pb-6"
+                    >
                       <Link href={hit.href} className="text-xl hover:underline">
                         {highlightExact(hit.title, needle)}
                       </Link>
@@ -326,4 +330,3 @@ export default async function SearchPage({
     </div>
   );
 }
-

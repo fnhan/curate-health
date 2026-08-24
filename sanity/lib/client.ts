@@ -17,6 +17,22 @@ export const client = createClient({
   },
 });
 
+/**
+ * Backstop window, in seconds, for the tag-purged search queries. See CH-026.
+ *
+ * The webhook at `app/api/revalidate` is what keeps search fresh in practice,
+ * firing within seconds of a publish. This window exists for one reason: to
+ * bound how long stale content is served if that webhook silently stops
+ * firing. It is not the freshness mechanism and it is not redundant with the
+ * webhook. Do not remove it.
+ *
+ * One hour is deliberate. Shorter, and the fixed cadence does the webhook's job
+ * and masks its failure completely, so a dead webhook would never be noticed.
+ * Longer, and newly published practitioner pages and blog posts stay missing
+ * from site search long enough to look like the content does not exist.
+ */
+export const SEARCH_REVALIDATE_SECONDS = 3600;
+
 export async function sanityFetch<QueryResponse>({
   query,
   params = {},
@@ -33,14 +49,17 @@ export async function sanityFetch<QueryResponse>({
     throw new Error("Missing environment variable SANITY_API_READ_TOKEN");
   }
 
-  let dynamicRevalidate = revalidate;
-  if (isDraftMode) {
-    // Do not cache in Draft Mode
-    dynamicRevalidate = 0;
-  } else if (tags.length) {
-    // Cache indefinitely if tags supplied, purge with revalidateTag()
-    dynamicRevalidate = false;
-  }
+  // Draft Mode is never cached. Otherwise the caller's revalidate stands.
+  //
+  // This used to force `revalidate: false` whenever tags were supplied, on the
+  // theory that revalidateTag() would purge them. Nothing ever called
+  // revalidateTag and no webhook existed, so tagged queries were cached
+  // indefinitely and the search index only refreshed on redeploy. See CH-026.
+  //
+  // Tags are still attached, so app/api/revalidate can purge on publish. The
+  // caller's time window is the backstop for that webhook failing silently,
+  // which is why both mechanisms are here.
+  const dynamicRevalidate = isDraftMode ? 0 : revalidate;
 
   return client.fetch<QueryResponse>(query, params, {
     ...(isDraftMode &&

@@ -6,13 +6,13 @@ This file briefs Claude Code on the codebase, the constraints, and the work. Rea
 
 ## Stack
 
-| Layer | Detail |
-|-------|--------|
-| Frontend | Next.js App Router |
-| Hosting | Vercel |
-| CMS | Sanity, project `rwc5kyvy`, dataset `production` |
-| Media | Sanity CDN for images, Mux for video |
-| Booking | Jane, external at `curatehealth.janeapp.com` |
+| Layer        | Detail                                                  |
+| ------------ | ------------------------------------------------------- |
+| Frontend     | Next.js App Router                                      |
+| Hosting      | Vercel                                                  |
+| CMS          | Sanity, project `rwc5kyvy`, dataset `production`        |
+| Media        | Sanity CDN for images, Mux for video                    |
+| Booking      | Jane, external at `curatehealth.janeapp.com`            |
 | Serving host | `https://www.curatehealth.ca` (apex 308-redirects here) |
 
 Site is 44 URLs in the sitemap. Health and wellness clinic with an attached cafe at 989 Eglinton Ave W, Suite 2, Toronto.
@@ -80,15 +80,15 @@ Tone: scientific and evidence-based, thoughtful, warm, understated. A trusted cl
 
 ### Practitioners
 
-| Name | Credentials |
-|------|-------------|
-| Dr. Frank Nhan | Doctor of Chiropractic, Acupuncture Provider, Strength and Conditioning Specialist, Yoga Teacher |
-| Safa Karoumi | Registered Psychotherapist (Qualifying), MSc Communications |
-| Dr. David Gabriele | Doctor of Naturopathic Medicine, Registered Acupuncturist |
-| Dr. Eric Leong | MD, FRCPC, Gastroenterologist, Hepatologist, Therapeutic Endoscopist, Lifestyle Medicine Physician |
-| Andrew Huynh | Registered Massage Therapist |
-| Ariel Zohar | Registered Physiotherapist |
-| Claire | Pilates instructor, 1-on-1 private sessions. Not currently on the team page |
+| Name               | Credentials                                                                                        |
+| ------------------ | -------------------------------------------------------------------------------------------------- |
+| Dr. Frank Nhan     | Doctor of Chiropractic, Acupuncture Provider, Strength and Conditioning Specialist, Yoga Teacher   |
+| Safa Karoumi       | Registered Psychotherapist (Qualifying), MSc Communications                                        |
+| Dr. David Gabriele | Doctor of Naturopathic Medicine, Registered Acupuncturist                                          |
+| Dr. Eric Leong     | MD, FRCPC, Gastroenterologist, Hepatologist, Therapeutic Endoscopist, Lifestyle Medicine Physician |
+| Andrew Huynh       | Registered Massage Therapist                                                                       |
+| Ariel Zohar        | Registered Physiotherapist                                                                         |
+| Claire             | Pilates instructor, 1-on-1 private sessions. Not currently on the team page                        |
 
 ### Out of scope, do not build
 
@@ -109,10 +109,10 @@ This is live in Google's index right now. The snippet for `/contact` displays th
 
 **Surveyed 2026-08-17.** The dataset holds 680 documents, 113 of them content documents and 567 `sanity.*` system documents, mostly image assets. Contamination is confined to three documents:
 
-| Document | Type |
-|----------|------|
-| `731dc48e-5025-4709-8a00-aaa49f84812c` | `siteSettings` |
-| `ba90a190-6e64-4230-b483-7134689d667d` | `contactPage` |
+| Document                                      | Type                 |
+| --------------------------------------------- | -------------------- |
+| `731dc48e-5025-4709-8a00-aaa49f84812c`        | `siteSettings`       |
+| `ba90a190-6e64-4230-b483-7134689d667d`        | `contactPage`        |
 | `drafts.731dc48e-5025-4709-8a00-aaa49f84812c` | `siteSettings` draft |
 
 and to two fields on each, `contactInfo.address.street` (1,906 Cf) and `contactInfo.address.zip` (4 Cf). 5,730 Cf characters in total, all of them `U+200B`, `U+200C`, `U+200D` or `U+FEFF`. No portable text block, title, description, SEO field or alt text is affected.
@@ -278,7 +278,7 @@ Also fix: `/`, `/our-programs` and `/blog` share the homepage title and meta des
 
 **Second location retired, 2026-08-18.** The downtown location, "Curate Health - Downtown" at 777 Bay St inside the Centre for Sport and Recreational Medicine, is closed and is not returning. `contactInfo2` was removed from `siteSettings`, its draft and `contactPage`, and `branchName2` from `contactPage`, by `scripts/retire-second-location.js`.
 
-One trap that script had to handle, worth knowing if the address model is touched again. `contactPage` held two map values and both were wrong for the element reading them. `contactInfo.mapLink` was a Google Maps *embed* URL, byte-identical to `mapURL`, rendered as an `<a href>` at `app/contact/page.tsx:74` and `:186`, so the main Get Directions button opened a bare embed frame. The only real directions URL in the document, the only one carrying a `daddr`, was `contactInfo2.mapLink`, and it pointed at 989 Eglinton rather than 777 Bay. The working link for the main location was inside the object being deleted. The script retyped its `daddr` to the CH-021 address and moved it to `contactInfo.mapLink` before unsetting anything, preserving the `geocode` parameter that pins the Google place id.
+One trap that script had to handle, worth knowing if the address model is touched again. `contactPage` held two map values and both were wrong for the element reading them. `contactInfo.mapLink` was a Google Maps _embed_ URL, byte-identical to `mapURL`, rendered as an `<a href>` at `app/contact/page.tsx:74` and `:186`, so the main Get Directions button opened a bare embed frame. The only real directions URL in the document, the only one carrying a `daddr`, was `contactInfo2.mapLink`, and it pointed at 989 Eglinton rather than 777 Bay. The working link for the main location was inside the object being deleted. The script retyped its `daddr` to the CH-021 address and moved it to `contactInfo.mapLink` before unsetting anything, preserving the `geocode` parameter that pins the Google place id.
 
 The truthiness gate on that section was also fixed. It tested `contactInfo2 &&`, and an object holding only a `mapLink` is truthy, so the section rendered with a blank heading and an address line reading `undefined, undefined, undefined undefined`. It now tests for address content, and the address line is assembled from the fields that are present.
 
@@ -288,10 +288,10 @@ Re-running `scripts/retire-second-location.js` now exits 2 with "Could not find 
 
 **Two Google place ids for one clinic, found 2026-08-23.** Resolve this before further map, `geo` or `hasMap` work. It may be a duplicate Google Maps entity rather than stale data.
 
-| Place id | Reached from | Resolves to |
-|----------|--------------|-------------|
-| `0x882b33a0bc00ca61:0x432786dbaf32d810` | `siteSettings.contactInfo.mapLink`, `contactPage.mapURL`, and the `geocode` on the rescued `contactPage.contactInfo.mapLink` | `maps/place/Curate+Health`, the named business entity |
-| `0x882b339f39d8e7ff:0xce828e8fdd1a6e50` | the two orphaned documents below | `989 Eglinton Ave W, York, ON M6C 2C6`, a plain address pin |
+| Place id                                | Reached from                                                                                                                 | Resolves to                                                 |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `0x882b33a0bc00ca61:0x432786dbaf32d810` | `siteSettings.contactInfo.mapLink`, `contactPage.mapURL`, and the `geocode` on the rescued `contactPage.contactInfo.mapLink` | `maps/place/Curate+Health`, the named business entity       |
+| `0x882b339f39d8e7ff:0xce828e8fdd1a6e50` | the two orphaned documents below                                                                                             | `989 Eglinton Ave W, York, ON M6C 2C6`, a plain address pin |
 
 Everything live points at the first id, the business entity, which is the correct one. The `geo` coordinates specified in CH-008 match it. The second id is a bare address pin, it is the last place "York" survives anywhere in the dataset, and it sits about 30 m away, longitude `-79.4302559` against `-79.4306470`.
 
@@ -305,13 +305,60 @@ Still open: `contactPage.contactInfo` remains a duplicate of `siteSettings.conta
 
 ### CH-026 Tagged fetches can never be purged
 
-`sanityFetch` in `sanity/lib/client.ts` sets `revalidate: false` whenever `tags` are supplied, which caches the result indefinitely and makes `revalidateTag()` the only way to purge it. There is no `revalidateTag` call anywhere in the codebase, and no revalidation webhook from Sanity. The comment at `sanity/lib/client.ts:41` describes a purge mechanism that was never built.
+As found: `sanityFetch` in `sanity/lib/client.ts` forced `revalidate: false` whenever `tags` were supplied, which cached the result indefinitely and made `revalidateTag()` the only way to purge it. Nothing in the codebase called `revalidateTag`, and no revalidation webhook existed, so the comment in that file described a purge mechanism that was never built.
 
-Three call sites are affected, all of them search: `app/api/search/route.ts` with tags `search` and `search-index`, and `app/search/page.tsx` with `search-index`. The practical effect is that the search index only refreshes on redeploy. Everything else uses the 60 second default and self-heals.
+Three call sites were affected, all of them search: `app/api/search/route.ts` with tags `search` and `search-index`, and `app/search/page.tsx` with `search-index`. The search index only refreshed on redeploy. Everything else used the 60 second default and self-heals.
 
-This blocks CH-104 and CH-105. Practitioner pages and blog posts published through Sanity will not appear in site search until someone triggers a deploy, which makes the content look missing to anyone who searches for it.
+This blocked CH-104 and CH-105. Practitioner pages and blog posts published through Sanity would not have appeared in site search until someone triggered a deploy, which makes the content look missing to anyone who searches for it.
 
-Fix is a webhook from Sanity to a route that calls `revalidateTag` for the affected tags, or dropping the tags and accepting the 60 second revalidate on those queries.
+**Resolved 2026-08-24 on `fix/search-cache-revalidation`.** Both halves were built. They are not redundant with each other.
+
+_The webhook._ `app/api/revalidate/route.ts` accepts signed POSTs from Sanity and calls `revalidateTag` for `search` and `search-index`. This is what keeps search fresh in practice, within seconds of a publish.
+
+_The time window._ `SEARCH_REVALIDATE_SECONDS` in `sanity/lib/client.ts`, currently 3600, applied at all three search call sites. **This exists as the backstop for the webhook failing silently. Do not remove it as redundant.** A webhook that stops firing emits no signal. Without the window, search would sit frozen on whatever it last saw, indefinitely, with nothing surfacing the fault.
+
+One hour was chosen against the question "how long am I willing to serve stale content if the webhook silently stops firing", not "how fresh does content need to be". Restoring the old 60 and 300 second values would re-query on a fixed cadence regardless of the webhook, which makes the webhook decorative and masks its failure completely, so nobody would ever learn it had died. Much longer and newly published practitioner pages and blog posts stay missing from search long enough to look like the content does not exist.
+
+**The endpoint fails closed.** With no `SANITY_REVALIDATE_SECRET` it returns 500 and purges nothing. A missing signature, a malformed header, the wrong secret, or a body altered after signing each return 401 and purge nothing.
+
+**It does not reject stale deliveries, and must not be described as if it does.** `@sanity/webhook` verifies by re-encoding with the timestamp carried in the header, so a correctly signed delivery stays valid indefinitely. That is a replay window. It is acceptable here only because replaying a delivery just purges a cache that did not need purging.
+
+**Purging is deliberately not routed by document type.** Every accepted delivery purges both tags. On a 44 page site a redundant purge costs one query against Sanity, while routing logic that silently misses a type costs content that never appears in search.
+
+**Middleware trap.** The matcher in `middleware.ts` catches `/api/*`, and `publicPaths` did not include the new route. Left alone, switching coming soon mode on would have redirected the webhook POST to `/coming-soon` so the purge never ran, which is precisely the silent failure the time window exists to cover. `/api/revalidate` is now on the allowlist. The endpoint authenticates by signature and does not need that gate.
+
+```powershell
+# Acceptance, with the target running and SANITY_REVALIDATE_SECRET matching it
+node scripts/test-revalidate-endpoint.js
+node scripts/test-revalidate-endpoint.js https://www.curatehealth.ca
+```
+
+Seven checks. Signatures are produced with `@sanity/webhook`'s own `encodeSignatureHeader`, the same code Sanity signs with, so a pass means the endpoint agrees with the real sender rather than only with the test. A hand-rolled verifier tested against a hand-rolled signer would be self-consistent and could still be wrong about the real sender, which is why the official package is a dependency here.
+
+**Log lines carry a `[revalidate]` prefix** so they can be grepped in the Vercel log stream.
+
+```
+[revalidate] ok, purged=search,search-index doc=contactPage/ba90a190-... ms=2
+[revalidate] rejected, reason=missing-signature
+[revalidate] rejected, reason=WebhookSignatureValueError
+[revalidate] misconfigured, SANITY_REVALIDATE_SECRET is not set
+```
+
+**Configured by hand, not by Claude Code.** The webhook lives at sanity.io/manage under project `rwc5kyvy`, API, Webhooks.
+
+| Setting     | Value                                                        |
+| ----------- | ------------------------------------------------------------ |
+| URL         | `https://www.curatehealth.ca/api/revalidate`                 |
+| Dataset     | `production`                                                 |
+| Trigger on  | Create, Update, Delete                                       |
+| Filter      | `!(_id in path("drafts.**")) && !(_id in path("sanity.**"))` |
+| Projection  | `{_id, _type}`                                               |
+| HTTP method | POST                                                         |
+| Secret      | the `SANITY_REVALIDATE_SECRET` value                         |
+
+The filter excludes drafts, which autosave constantly in the Studio and would otherwise fire a delivery per keystroke burst, and `sanity.*` system documents, mostly image assets. It is deliberately coarse rather than a list of the 24 indexed types in `INDEX_DOCS_QUERY`, for the same reason the endpoint does not route by type.
+
+`SANITY_REVALIDATE_SECRET` goes in three places, same value in each: the Vercel project environment variables, `.env.local` for local runs, and the Secret field on the webhook itself. Preview deployments are behind Vercel Deployment Protection and return a 302 to SSO, so the webhook can only be pointed at production.
 
 ### CH-013 Resolve the exercise therapy duplication
 
@@ -471,16 +518,16 @@ One page covering transit access, walking directions from both stations, and whi
 
 ## Phase 5: cleanup
 
-| ID | Task |
-|----|------|
-| CH-110 | `lang="en-CA"` instead of `lang="en"` |
-| CH-111 | `dateModified` in schema plus a visible "last updated" on content pages |
-| CH-112 | Helpful 404 page with search and links to main hubs. Currently the Next.js default |
-| CH-113 | GA4 conversion events on every Book Now click. Nothing is tracked today |
-| CH-114 | IndexNow submission on publish. Bing's index is what ChatGPT search runs on |
-| CH-115 | Remove the legacy `meta keywords` tag. Google has ignored it for years |
+| ID     | Task                                                                                                                                                               |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| CH-110 | `lang="en-CA"` instead of `lang="en"`                                                                                                                              |
+| CH-111 | `dateModified` in schema plus a visible "last updated" on content pages                                                                                            |
+| CH-112 | Helpful 404 page with search and links to main hubs. Currently the Next.js default                                                                                 |
+| CH-113 | GA4 conversion events on every Book Now click. Nothing is tracked today                                                                                            |
+| CH-114 | IndexNow submission on publish. Bing's index is what ChatGPT search runs on                                                                                        |
+| CH-115 | Remove the legacy `meta keywords` tag. Google has ignored it for years                                                                                             |
 | CH-029 | Downsample oversized Sanity assets. 95 exceed 2,600px, worst is a 6500x3846 PNG appearing on 29 pages. CH-007 solves most of the delivery cost, so this is cleanup |
-| CH-030 | Add Claire to the team page and to CH-104 |
+| CH-030 | Add Claire to the team page and to CH-104                                                                                                                          |
 
 ---
 

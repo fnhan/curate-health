@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
-import { sanityFetch } from "@/sanity/lib/client";
 import { groq } from "next-sanity";
+
+import { SEARCH_REVALIDATE_SECONDS, sanityFetch } from "@/sanity/lib/client";
 
 type SearchResultItem = {
   type: string;
@@ -590,7 +591,7 @@ export async function GET(req: Request) {
     }>({
       query: FEATURED_QUERY,
       params: { limit: Math.min(limit, 6) },
-      revalidate: 60,
+      revalidate: SEARCH_REVALIDATE_SECONDS,
       tags: ["search"],
     });
 
@@ -614,7 +615,7 @@ export async function GET(req: Request) {
   const needle = collapseWhitespace(qRaw).toLowerCase();
   const docs = await sanityFetch<IndexDoc[]>({
     query: INDEX_DOCS_QUERY,
-    revalidate: 300,
+    revalidate: SEARCH_REVALIDATE_SECONDS,
     tags: ["search-index"],
   });
 
@@ -663,4 +664,3 @@ export async function GET(req: Request) {
     results: merged,
   });
 }
-

@@ -45,6 +45,11 @@ export async function middleware(request: NextRequest) {
   const publicPaths = [
     "/login",
     "/api/login",
+    // The Sanity revalidation webhook. Without this the matcher below catches
+    // it, and when coming soon mode is on the POST is redirected to
+    // /coming-soon and the purge never runs. The endpoint authenticates itself
+    // by signature, so it does not need the coming soon gate. See CH-026.
+    "/api/revalidate",
     "/studio",
     "/coming-soon",
     "sitemap.xml",
@@ -64,8 +69,8 @@ export async function middleware(request: NextRequest) {
       return new NextResponse(null, {
         status: 503,
         headers: {
-          'Retry-After': '86400', // 24 hours
-        }
+          "Retry-After": "86400", // 24 hours
+        },
       });
     }
 

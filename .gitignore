@@ -39,3 +39,8 @@ next-env.d.ts
 # sanity
 .sanity
 dist
+.env*
+!.env.example
+
+# claude code
+.claude/

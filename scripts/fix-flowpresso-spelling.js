@@ -27,14 +27,18 @@
  *   pageDescription is what /llms.txt emits, the third defect listed in CH-032,
  *   and it renders eight times on /services/recovery-sanctuary.
  *
- * NOT IN SCOPE, reported by the dry run rather than patched:
+ *   Section C, the orphaned `metadatas` document. It holds a fourth copy,
+ *   "Flowspresso Therapy", and a slug of
+ *   /services/recovery-sanctuary/flowspresso-therapy. That type is not
+ *   registered in sanity/schema.ts and no query reads it, so nothing renders
+ *   it and correcting it changes nothing on the live site. It was originally
+ *   left alone as out of scope, same class as the orphaned 2024 documents in
+ *   CH-025, and was added on 2026-08-25 when Frank asked for every Flowspresso
+ *   to be corrected. The document is edited, not deleted. Deleting still needs
+ *   sign-off.
  *
- *   The orphaned `metadatas` document holds a fourth copy, "Flowspresso
- *   Therapy", and a slug of /services/recovery-sanctuary/flowspresso-therapy.
- *   That type is not registered in sanity/schema.ts and no query reads it, so
- *   nothing renders it. Same class as the two orphaned 2024 documents in
- *   CH-025: invisible to the site, so not a live defect, and deleting
- *   documents needs sign-off and a fresh export.
+ *   The array item is addressed by _key, not by index, so a reorder in the
+ *   Studio cannot make this patch land on the wrong entry.
  *
  * Patches carry ifRevisionID, so a concurrent Studio edit fails the mutation
  * instead of overwriting it.
@@ -46,6 +50,7 @@ const TREATMENT_ID = "15127b12-484d-41fb-8491-c6d85b6ad404";
 const SERVICE_ID = "b9816e30-cb14-431e-a92f-d3c00adb4eda";
 const SERVICE_DRAFT_ID = `drafts.${SERVICE_ID}`;
 const ORPHAN_METADATAS_ID = "f56a180f-edc9-47ff-b080-7a7dff7558cb";
+const ORPHAN_ENTRY_KEY = "e615bc7764fe";
 
 /** What the layout appends to every page title. See TARGET_PAGE_TITLE. */
 const TITLE_SUFFIX = " | Curate Health";
@@ -68,9 +73,20 @@ const TITLE_SUFFIX = " | Curate Health";
  */
 const TARGET_PAGE_TITLE = "FLOWpresso Therapy Toronto";
 
-/** The wrong spellings, and the one correct one. */
-const WRONG = ["Flowpesso", "Flowspresso"];
-const RIGHT = "Flowpresso";
+/**
+ * Wrong spelling to right spelling, listed rather than derived.
+ *
+ * Case matters and is not inferred. The orphan document in Section C carries
+ * the misspelling inside a slug, "flowspresso-therapy", where the correction
+ * has to stay lowercase. A single case-insensitive rule would have written
+ * "Flowpresso" into the middle of a URL path.
+ */
+const RESPELLINGS = [
+  ["Flowpesso", "Flowpresso"],
+  ["Flowspresso", "Flowpresso"],
+  ["flowpesso", "flowpresso"],
+  ["flowspresso", "flowpresso"],
+];
 
 const RULE = "=".repeat(78);
 const THIN = "-".repeat(78);
@@ -81,7 +97,7 @@ const THIN = "-".repeat(78);
  * category Cc and so invisible to the CH-020 Cf audit, hence the ASCII test.
  */
 function assertTargetsAreClean() {
-  const values = { TARGET_PAGE_TITLE, RIGHT, TITLE_SUFFIX, ...WRONG };
+  const values = { TARGET_PAGE_TITLE, TITLE_SUFFIX, ...RESPELLINGS.flat() };
 
   for (const [name, value] of Object.entries(values)) {
     if (typeof value !== "string") continue;
@@ -110,8 +126,8 @@ function respell(value) {
   if (typeof value !== "string") return null;
 
   let out = value;
-  for (const wrong of WRONG) {
-    out = out.split(wrong).join(RIGHT);
+  for (const [wrong, right] of RESPELLINGS) {
+    out = out.split(wrong).join(right);
   }
 
   return out === value ? null : out;
@@ -227,26 +243,44 @@ async function main() {
   }
 
   console.log(`\n${THIN}`);
-  console.log("NOT PATCHED, reported only");
+  console.log("CH-023  Section C, the orphaned metadatas document");
   console.log(THIN);
 
   const orphan = await query(
-    `*[_id == $id][0]{_id, _type, "entry": datas[24]{title, "slug": slug.current}}`,
-    { id: ORPHAN_METADATAS_ID }
+    `*[_id == $id][0]{_id, _type, _rev, "entry": datas[_key == $key][0]{_key, title, "slug": slug.current}}`,
+    { id: ORPHAN_METADATAS_ID, key: ORPHAN_ENTRY_KEY }
   );
 
-  if (orphan) {
-    console.log(`  ${orphan._type} ${orphan._id}`);
-    console.log(
-      `      datas[24].title = ${JSON.stringify(orphan.entry?.title)}`
-    );
-    console.log(
-      `      datas[24].slug  = ${JSON.stringify(orphan.entry?.slug)}`
-    );
-    console.log("      Type is not in sanity/schema.ts and no query reads it,");
-    console.log(
-      "      so nothing renders these. Same class as CH-025 orphans."
-    );
+  if (!orphan || !orphan.entry) {
+    console.log("  absent, skipping");
+  } else {
+    console.log(`  ${orphan._type} ${orphan._id}  rev ${orphan._rev}`);
+    console.log("      No query reads this type and it is not registered in");
+    console.log("      sanity/schema.ts, so nothing renders it. Hygiene only,");
+    console.log("      it changes nothing on the live site.");
+
+    const set = {};
+    const base = `datas[_key=="${ORPHAN_ENTRY_KEY}"]`;
+
+    const fixedTitle = respell(orphan.entry.title);
+    if (fixedTitle) {
+      show("  datas[].title", orphan.entry.title, fixedTitle);
+      set[`${base}.title`] = fixedTitle;
+    }
+
+    const fixedSlug = respell(orphan.entry.slug);
+    if (fixedSlug) {
+      show("  datas[].slug.current", orphan.entry.slug, fixedSlug);
+      set[`${base}.slug.current`] = fixedSlug;
+    }
+
+    if (Object.keys(set).length) {
+      mutations.push({
+        patch: { id: orphan._id, ifRevisionID: orphan._rev, set },
+      });
+    } else {
+      console.log("      already correct, nothing to do");
+    }
   }
 
   if (!mutations.length) {

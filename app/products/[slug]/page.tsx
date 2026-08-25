@@ -129,7 +129,16 @@ export async function generateMetadata({
     params: { slug: params.slug },
   });
 
-  const { seo } = productPage!;
+  // Same shape as the CH-001 defect on the services route: destructuring a
+  // null result throws. Here the component below calls notFound() and that
+  // currently wins, so unknown slugs already return 404 rather than 500,
+  // verified against production. The guard makes the 404 explicit instead of
+  // leaving it to depend on which error surfaces first.
+  if (!productPage) {
+    notFound();
+  }
+
+  const { seo } = productPage;
 
   return {
     title: seo?.pageTitle,

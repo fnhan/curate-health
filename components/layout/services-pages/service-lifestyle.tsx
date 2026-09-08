@@ -31,6 +31,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getAssetDownloadUrl } from "@/lib/asset-download";
 import { cleanSlug, cn, getTeamMemberUrlId } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
 
@@ -262,9 +263,7 @@ export default function ServiceLifestyleContent({
       </section>
 
       <section className="bg-white py-16 text-primary md:py-44">
-        <Heading className="container md:text-center">
-          {block_3_title}
-        </Heading>
+        <Heading className="container md:text-center">{block_3_title}</Heading>
         <div className="container flex flex-col items-center gap-12">
           {/* Group conditions into columns */}
           {(() => {
@@ -521,7 +520,7 @@ export default function ServiceLifestyleContent({
                   for a referral to our Curate Lifestyle Program. Your doctor
                   can use our{" "}
                   <a
-                    href={referral_form_pdf?.asset?.url ?? ""}
+                    href={getAssetDownloadUrl(referral_form_pdf?.asset)}
                     className="underline"
                   >
                     Referral Form
@@ -770,7 +769,7 @@ export default function ServiceLifestyleContent({
               <p className="text-center text-sm md:text-base">
                 Want to refer a patient?{" "}
                 <a
-                  href={referral_form_pdf?.asset?.url ?? ""}
+                  href={getAssetDownloadUrl(referral_form_pdf?.asset)}
                   className="underline"
                 >
                   Click Here

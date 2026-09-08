@@ -1000,6 +1000,7 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
     referral_form_pdf {
       asset-> {
         url,
+        originalFilename,
       }
     },
     block_2_title,
@@ -1105,6 +1106,7 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
   referral_form_pdf {
     asset-> {
       url,
+        originalFilename,
     }
   },
   cta {
@@ -1182,6 +1184,7 @@ export const OUR_PROGRAMS_QUERY = groq`
     referral_form_pdf {
       asset-> {
         url,
+        originalFilename,
       }
     },
     call_to_action

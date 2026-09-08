@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { groq } from "next-sanity";
 
+import { treatmentPath } from "@/lib/service-urls";
 import { SEARCH_REVALIDATE_SECONDS, sanityFetch } from "@/sanity/lib/client";
 
 type SearchResultItem = {
@@ -172,7 +173,8 @@ const SEARCH_QUERY = groq`
     "type": "treatment",
     "title": coalesce(title, "Untitled treatment"),
     "excerpt": null,
-    "href": "/services/" + service->slug.current + "/" + treatmentSlug.current,
+    "serviceSlug": service->slug.current,
+    "treatmentSlug": treatmentSlug.current,
     "score": (
       select(title match $q => 6, 0) +
       select(pt::text(content) match $q => 1, 0)
@@ -504,7 +506,7 @@ function buildHrefForDoc(doc: IndexDoc): string | null {
       return doc.slugCurrent ? `/services/${doc.slugCurrent}` : null;
     case "treatments":
       return doc.serviceSlugCurrent && doc.treatmentSlugCurrent
-        ? `/services/${doc.serviceSlugCurrent}/${doc.treatmentSlugCurrent}`
+        ? treatmentPath(doc.serviceSlugCurrent, doc.treatmentSlugCurrent)
         : null;
     // Lifestyle pages
     case "serviceLifestyle":

@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
+
 import { groq } from "next-sanity";
 
-import { BRAND_NAME, BASEURL } from "@/app/site-settings";
+import { BASEURL, BRAND_NAME } from "@/app/site-settings";
+import { treatmentPath } from "@/lib/service-urls";
 import { sanityFetch } from "@/sanity/lib/client";
 
 export const revalidate = 3600;
@@ -129,7 +131,13 @@ function formatAddress(data: LlmsData) {
     return "";
   }
 
-  return [address.street, address.city, address.state, address.zip, address.country]
+  return [
+    address.street,
+    address.city,
+    address.state,
+    address.zip,
+    address.country,
+  ]
     .map(compact)
     .filter(Boolean)
     .join(", ");
@@ -144,7 +152,7 @@ function formatService(service: LlmsData["services"][number]) {
   const treatmentLines = service.treatments
     .filter((treatment) => treatment.title && treatment.slug)
     .map((treatment) => {
-      const treatmentUrl = `${url}/${treatment.slug}`;
+      const treatmentUrl = `${BASEURL}${treatmentPath(service.slug, treatment.slug)}`;
       const description = compact(treatment.description);
 
       return `  - [${treatment.title}](${treatmentUrl})${description ? `: ${description}` : ""}`;

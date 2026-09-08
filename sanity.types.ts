@@ -49,6 +49,36 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type OurProgramsSection = {
+  _id: string;
+  _type: "ourProgramsSection";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  sectionTitle?: string;
+  bgImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  programs?: Array<{
+    name?: string;
+    href?: string;
+    barColor?: string;
+    isLink?: boolean;
+    _key: string;
+  }>;
+  hoverLinkText?: string;
+  hoverLinkHref?: string;
+};
+
 export type OurPrograms = {
   _id: string;
   _type: "ourPrograms";
@@ -864,28 +894,6 @@ export type ServiceLifestyle = {
   seo?: Seo;
 };
 
-export type SanityFileAsset = {
-  _id: string;
-  _type: "sanity.fileAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  source?: SanityAssetSourceData;
-};
-
 export type LegalPage = {
   _id: string;
   _type: "legalPage";
@@ -912,6 +920,132 @@ export type LegalPage = {
     _type: "block";
     _key: string;
   }>;
+  seo?: Seo;
+};
+
+export type Program = {
+  _id: string;
+  _type: "program";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  isActive?: boolean;
+  summary?: string;
+  approach?: string;
+  focus?: string;
+  whoItIsFor?: string;
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+        _key: string;
+      }
+  >;
+  faq?: Array<{
+    question?: string;
+    answer?: string;
+    _type: "entry";
+    _key: string;
+  }>;
+  practitioners?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "practitioner";
+  }>;
+  seo?: Seo;
+};
+
+export type Practitioner = {
+  _id: string;
+  _type: "practitioner";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  isActive?: boolean;
+  credentials?: Array<string>;
+  photo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  fullBio?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+        _key: string;
+      }
+  >;
+  languages?: Array<string>;
+  commonlyTreats?: Array<string>;
+  janeBookingUrl?: string;
+  bookingNote?: string;
+  bookingCtaLabel?: string;
+  bookingCtaTarget?: "curateLifestyleReferralForm" | "curateLifestyleProgram";
   seo?: Seo;
 };
 
@@ -1004,7 +1138,7 @@ export type Author = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  name?: string;
+  linkedTeamMemberName?: string;
   image?: {
     asset?: {
       _ref: string;
@@ -1040,6 +1174,28 @@ export type CafePage = {
       };
       alt?: string;
     };
+  };
+  introSection?: {
+    title?: string;
+    subheading?: string;
+    description?: string;
+  };
+  quoteSection?: {
+    quoteImage?: {
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      alt?: string;
+    };
+    quoteText?: string;
   };
   additionalSections?: Array<{
     sectionTitle?: string;
@@ -1092,6 +1248,40 @@ export type CafePage = {
     };
     _key: string;
   }>;
+  menuDownloadSection?: {
+    eyebrow?: string;
+    headline?: string;
+    description?: string;
+    buttonLabel?: string;
+    menuPdf?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+      };
+      _type: "file";
+    };
+  };
+  ctaBandSection?: {
+    backgroundImage?: {
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      alt?: string;
+    };
+    headline?: string;
+    body?: string;
+    closingLine?: string;
+  };
   seo?: Seo;
 };
 
@@ -1203,6 +1393,13 @@ export type Treatments = {
     ctaText?: string;
     ctaButtonText?: string;
   };
+  practitioners?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "practitioner";
+  }>;
   seo?: Seo;
 };
 
@@ -1750,7 +1947,53 @@ export type MissionAndValues = {
     };
     _key: string;
   }>;
+  annualReportsSection?: {
+    title?: string;
+    description?: string;
+    reports?: Array<{
+      year?: number;
+      label?: string;
+      file?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+        };
+        _type: "file";
+      };
+      _key: string;
+    }>;
+  };
+  feedbackSurvey?: {
+    title?: string;
+    description?: string;
+    buttonText?: string;
+    url?: string;
+  };
   seo?: Seo;
+};
+
+export type SanityFileAsset = {
+  _id: string;
+  _type: "sanity.fileAsset";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  originalFilename?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  altText?: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
+  uploadId?: string;
+  path?: string;
+  url?: string;
+  source?: SanityAssetSourceData;
 };
 
 export type OurTeam = {
@@ -1845,6 +2088,13 @@ export type OurTeam = {
     };
     _type: "teamMember";
     _key: string;
+  }>;
+  practitioners?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "practitioner";
   }>;
   seo?: Seo;
 };
@@ -2633,11 +2883,13 @@ export type AllSanitySchemaTypes =
   | SanityImagePalette
   | SanityImageDimensions
   | Geopoint
+  | OurProgramsSection
   | OurPrograms
   | ServiceLifestyleProgram
   | ServiceLifestyle
-  | SanityFileAsset
   | LegalPage
+  | Program
+  | Practitioner
   | Post
   | Author
   | CafePage
@@ -2650,6 +2902,7 @@ export type AllSanitySchemaTypes =
   | PillarsOfHealth
   | Sustainability
   | MissionAndValues
+  | SanityFileAsset
   | OurTeam
   | OurStory
   | ServicesHeroSection
@@ -2682,6 +2935,2373 @@ export type AllSanitySchemaTypes =
   | MuxPlaybackId
   | MuxTrack;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./app/llms.txt/route.ts
+// Variable: LLMS_TXT_QUERY
+// Query: {  "siteMetadata": *[_type == "siteMetadata"][0]{    homePageTitle,    defaultDescription,    keywords  },  "siteSettings": *[_type == "siteSettings"][0]{    brandName,    contactInfo{      email,      phone,      address{        street,        city,        state,        zip,        country,        locationInfo      },      mapLink    },    socialMedia[]{      platform,      url,      isActive    }  },  "services": *[_type == "service" && isActive == true] | order(title asc){    title,    "slug": slug.current,    "description": coalesce(seo.pageDescription, pt::text(content)),    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(title asc){      title,      "slug": treatmentSlug.current,      "description": coalesce(seo.pageDescription, intro.introParagraph, quoteContent)    }  },  "cafe": *[_type == "cafePage" && pageActive == true][0]{    "introTitle": introSection.title,    "description": introSection.description,    "menuUrl": menuDownloadSection.menuPdf.asset->url,    "seoDescription": seo.pageDescription  },  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[]{    name,    role  },  "posts": *[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc)[0...10]{    title,    "slug": slug.current,    excerpt  }}
+export type LLMS_TXT_QUERYResult = {
+  siteMetadata: {
+    homePageTitle: string | null;
+    defaultDescription: string | null;
+    keywords: Array<string> | null;
+  } | null;
+  siteSettings: {
+    brandName: string | null;
+    contactInfo: {
+      email: string | null;
+      phone: string | null;
+      address: {
+        street: string | null;
+        city: string | null;
+        state: string | null;
+        zip: string | null;
+        country: string | null;
+        locationInfo: string | null;
+      } | null;
+      mapLink: string | null;
+    } | null;
+    socialMedia: Array<{
+      platform: string | null;
+      url: string | null;
+      isActive: boolean | null;
+    }> | null;
+  } | null;
+  services: Array<{
+    title: string | null;
+    slug: string | null;
+    description: string;
+    treatments: Array<{
+      title: string | null;
+      slug: string | null;
+      description: string | null;
+    }>;
+  }>;
+  cafe: {
+    introTitle: string | null;
+    description: string | null;
+    menuUrl: string | null;
+    seoDescription: string | null;
+  } | null;
+  team: Array<{
+    name: string | null;
+    role: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+          _key: string;
+        }
+    > | null;
+  }> | null;
+  posts: Array<{
+    title: string | null;
+    slug: string | null;
+    excerpt: string | null;
+  }>;
+};
+
+// Source: ./app/search/page.tsx
+// Variable: INDEX_DOCS_QUERY
+// Query: *[  _type in [    "heroSection",    "aboutSection",    "clinic",    "productsSection",    "servicesSection",    "cafeSection",    "blogSection",    "sustainabilitySection",    "post",    "product",    "service",    "treatments",    "serviceLifestyle",    "serviceLifestyleProgram",    "ourStory",    "ourTeam",    "missionAndValues",    "sustainability",    "pillarsOfHealth",    "cafePage",    "contactPage",    "ourPrograms",    "servicesHeroSection",    "legalPage"  ]]{  ...,  "slugCurrent": slug.current,  "treatmentSlugCurrent": treatmentSlug.current,  "serviceSlugCurrent": service->slug.current}
+export type INDEX_DOCS_QUERYResult = Array<
+  | {
+      _id: string;
+      _type: "aboutSection";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      aboutImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      title1?: string;
+      title2?: string;
+      hoverLinkText?: string;
+      hoverLinkHref?: string;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "blogSection";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      sectionTitle?: string;
+      hoverLinkText?: string;
+      hoverLinkHref?: string;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "cafePage";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      pageActive?: boolean;
+      heroSection?: {
+        heroImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+      };
+      introSection?: {
+        title?: string;
+        subheading?: string;
+        description?: string;
+      };
+      quoteSection?: {
+        quoteImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        quoteText?: string;
+      };
+      additionalSections?: Array<{
+        sectionTitle?: string;
+        sectionParagraph?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        sectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        _key: string;
+      }>;
+      menuDownloadSection?: {
+        eyebrow?: string;
+        headline?: string;
+        description?: string;
+        buttonLabel?: string;
+        menuPdf?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+          };
+          _type: "file";
+        };
+      };
+      ctaBandSection?: {
+        backgroundImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        headline?: string;
+        body?: string;
+        closingLine?: string;
+      };
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "cafeSection";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      cafeImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      title?: string;
+      content?: Array<
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt?: string;
+            _type: "image";
+            _key: string;
+          }
+      >;
+      hoverLinkText?: string;
+      hoverLinkHref?: string;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "clinic";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      clinicImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      content?: Array<
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt?: string;
+            _type: "image";
+            _key: string;
+          }
+      >;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "contactPage";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      heroSection?: {
+        title?: string;
+        heroImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+      };
+      branchName?: string;
+      contactInfo?: {
+        email?: string;
+        phone?: string;
+        address?: {
+          street?: string;
+          city?: string;
+          state?: string;
+          zip?: string;
+          country?: string;
+          locationInfo?: string;
+        };
+        mapLink?: string;
+      };
+      branchName2?: string;
+      contactInfo2?: {
+        address?: {
+          street?: string;
+          city?: string;
+          state?: string;
+          zip?: string;
+          country?: string;
+          locationInfo?: string;
+        };
+        mapLink?: string;
+      };
+      mapURL?: string;
+      mapURL2?: string;
+      parking?: string;
+      howToGetHere?: string;
+      businessHours?: {
+        standardHours?:
+          | "10:00 AM - 7:00 PM"
+          | "8:00 AM - 4:00 PM"
+          | "9:00 AM - 5:00 PM"
+          | "9:00 AM - 6:00 PM"
+          | "9:00 AM - 7:00 PM"
+          | "custom";
+        customStandardHours?: string;
+        daysOpen?: Array<string>;
+        exceptions?: Array<{
+          day?:
+            | "friday"
+            | "monday"
+            | "saturday"
+            | "sunday"
+            | "thursday"
+            | "tuesday"
+            | "wednesday";
+          hours?: string;
+          message?: string;
+          _key: string;
+        }>;
+      };
+      businessHours2?: {
+        standardHours?:
+          | "10:00 AM - 7:00 PM"
+          | "8:00 AM - 4:00 PM"
+          | "9:00 AM - 5:00 PM"
+          | "9:00 AM - 6:00 PM"
+          | "9:00 AM - 7:00 PM"
+          | "custom";
+        customStandardHours?: string;
+        daysOpen?: Array<string>;
+        exceptions?: Array<{
+          day?:
+            | "friday"
+            | "monday"
+            | "saturday"
+            | "sunday"
+            | "thursday"
+            | "tuesday"
+            | "wednesday";
+          hours?: string;
+          message?: string;
+          _key: string;
+        }>;
+      };
+      contactForm?: {
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+      };
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "heroSection";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      videoFile?: MuxVideo;
+      heroText?: Array<
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt?: string;
+            _type: "image";
+            _key: string;
+          }
+      >;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "legalPage";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      slug?: Slug;
+      body?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          | "blockquote"
+          | "h1"
+          | "h2"
+          | "h3"
+          | "h4"
+          | "h5"
+          | "h6"
+          | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }>;
+      seo?: Seo;
+      slugCurrent: string | null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "missionAndValues";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      pageActive?: boolean;
+      heroSection?: {
+        heroImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+      };
+      additionalSections?: Array<{
+        sectionTitle?: string;
+        sectionParagraph?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        sectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        _key: string;
+      }>;
+      annualReportsSection?: {
+        title?: string;
+        description?: string;
+        reports?: Array<{
+          year?: number;
+          label?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            _type: "file";
+          };
+          _key: string;
+        }>;
+      };
+      feedbackSurvey?: {
+        title?: string;
+        description?: string;
+        buttonText?: string;
+        url?: string;
+      };
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "ourPrograms";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      isActive?: boolean;
+      title?: string;
+      heroImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        heroAlt?: string;
+        _type: "image";
+      };
+      intro?: {
+        subtitle?: string;
+        introParagraph?: string;
+      };
+      programs?: Array<{
+        programName?: string;
+        description?: string;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+        };
+        _key: string;
+      }>;
+      essentialSeries?: {
+        description?: string;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+        };
+        tableContent?: {
+          includesSessions?: Array<number>;
+          bonusSessions?: Array<number>;
+          bonusTransferable?: Array<boolean>;
+        };
+        listContent?: Array<string>;
+      };
+      curateLifestyle?: {
+        description?: string;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+        };
+        structure?: {
+          length?: string;
+          format?: string;
+          focus?: string;
+          bonus?: Array<string>;
+          entry?: string;
+        };
+        outcome?: string;
+        referral_form_pdf?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+          };
+          _type: "file";
+        };
+        call_to_action?: string;
+      };
+      masterHealthBlueprint?: {
+        description?: string;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          alt?: string;
+          _type: "image";
+        };
+        structure?: {
+          kickOff?: string;
+          team?: string;
+          plan?: string;
+          programIncludes?: Array<string>;
+          privileges?: Array<string>;
+        };
+        outcome?: string;
+      };
+      exploreYourOptions?: {
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        contactMessage?: string;
+      };
+      faq?: Array<{
+        title?: string;
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        _type: "question";
+        _key: string;
+      }>;
+      threePaths?: {
+        heading?: string;
+        subtitle?: string;
+        paragraph?: string;
+        tableContent?: {
+          bestFor?: Array<string>;
+          approach?: Array<string>;
+          focus?: Array<string>;
+          extras?: {
+            essentialSeries?: Array<string>;
+            curateLifestyle?: Array<string>;
+            masterHealthBlueprint?: Array<string>;
+          };
+          pricing?: {
+            essentialSeries?: string;
+            curateLifestyle?: Array<string>;
+            masterHealthBlueprint?: string;
+          };
+        };
+      };
+      ctaSection?: {
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        heading?: string;
+        paragraph?: string;
+        buttonText?: string;
+      };
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "ourStory";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      pageActive?: boolean;
+      heroSection?: {
+        heroImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        heroTitle?: string;
+        heroSubtitle?: string;
+      };
+      quoteSection?: {
+        quoteImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        quoteText?: string;
+      };
+      additionalSections?: Array<{
+        sectionTitle?: string;
+        sectionParagraph?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        sectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        _key: string;
+      }>;
+      ctaSection?: {
+        ctaSectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        ctaSectionTitle?: string;
+        ctaSectionParagraph?: string;
+        ctaButton?: {
+          buttonText?: string;
+          buttonLink?: string;
+        };
+      };
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "ourTeam";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      pageActive?: boolean;
+      heroSection?: {
+        heroTitle?: string;
+        heroParagraph?: string;
+      };
+      teamMembers?: Array<{
+        name?: string;
+        role?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        bio?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        _type: "teamMember";
+        _key: string;
+      }>;
+      practitioners?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "practitioner";
+      }>;
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "pillarsOfHealth";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      pageActive?: boolean;
+      heroSection?: {
+        heroTitle?: string;
+        heroParagraph?: string;
+        heroImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+      };
+      pillars?: Array<{
+        pillarName?: string;
+        pillarDescription?: string;
+        _key: string;
+      }>;
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "post";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      publishedAt?: string;
+      published?: boolean;
+      slug?: Slug;
+      author?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "author";
+      };
+      excerpt?: string;
+      mainImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      sections?: Array<{
+        sectionTitle?: string;
+        sectionParagraph?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        sectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        _key: string;
+      }>;
+      seo?: Seo;
+      slugCurrent: string | null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "product";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      isActive?: boolean;
+      title?: string;
+      slug?: Slug;
+      description?: string;
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      banner?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      accordioninfo?: Array<{
+        title?: string;
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        _type: "accordionitems";
+        _key: string;
+      }>;
+      callToAction?: {
+        ctaText?: string;
+        ctaLink?: string;
+        ctaSectionTitle?: string;
+        ctaSectionDescription?: string;
+      };
+      seo?: Seo;
+      slugCurrent: string | null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "productsSection";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      sectionTitle?: string;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "service";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      isActive?: boolean;
+      content?: Array<
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt?: string;
+            _type: "image";
+            _key: string;
+          }
+      >;
+      title?: string;
+      slug?: Slug;
+      hero_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      content_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      seo?: Seo;
+      slugCurrent: string | null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "serviceLifestyle";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      isActive?: boolean;
+      content?: Array<
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt?: string;
+            _type: "image";
+            _key: string;
+          }
+      >;
+      title?: string;
+      slug?: Slug;
+      hero_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      content_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      hero_secondary_title?: string;
+      hero_large_text?: string;
+      referral_form_pdf?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+        };
+        _type: "file";
+      };
+      block_2_title?: string;
+      block_2_content?: Array<
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt?: string;
+            _type: "image";
+            _key: string;
+          }
+      >;
+      block_2_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      block_3_title?: string;
+      block_3_content?: Array<{
+        title?: string;
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        _type: "condition";
+        _key: string;
+      }>;
+      block_4_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      pillars?: Array<{
+        title?: string;
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        _type: "pillar";
+        _key: string;
+      }>;
+      block_5_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      benefits?: Array<{
+        title?: string;
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        tint_percentage?: string;
+        tint_percentage_hover?: string;
+        _type: "benefit";
+        _key: string;
+      }>;
+      block_7_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      block_9_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      timeline?: Array<{
+        title?: string;
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        _type: "timeline_item";
+        _key: string;
+      }>;
+      block_11_image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      faq?: Array<{
+        title?: string;
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        _type: "question";
+        _key: string;
+      }>;
+      call_to_action?: string;
+      testimonials?: Array<{
+        name?: string;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        _type: "testimonial";
+        _key: string;
+      }>;
+      seo?: Seo;
+      slugCurrent: string | null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "serviceLifestyleProgram";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      isActive?: boolean;
+      slug?: Slug;
+      title?: string;
+      heroImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        heroAlt?: string;
+        _type: "image";
+      };
+      intro?: {
+        subtitle?: string;
+        introParagraph?: string;
+      };
+      additionalSections?: Array<{
+        sectionTitle?: string;
+        sectionParagraph?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        sectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        _key: string;
+      }>;
+      additionalCheckinTitle?: string;
+      additionalCheckin?: Array<{
+        checkinDescription?: string;
+        checkinCount?: number;
+        _key: string;
+      }>;
+      groupSectionTitle?: string;
+      groupSectionDescription?: string;
+      groupSections?: Array<{
+        description?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        image?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        _key: string;
+      }>;
+      assistanceSectionTitle?: string;
+      assistanceSectionDescription?: string;
+      assistanceSectionImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      cta?: {
+        ctaBg?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        ctaBgAlt?: string;
+        ctaTitle?: string;
+        ctaText?: string;
+        ctaButtonText?: string;
+      };
+      referral_form_pdf?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+        };
+        _type: "file";
+      };
+      seo?: Seo;
+      slugCurrent: string | null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "servicesHeroSection";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      subtitle?: string;
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "servicesSection";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      sectionTitle?: string;
+      hoverLinkText?: string;
+      hoverLinkHref?: string;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "sustainability";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      pageActive?: boolean;
+      heroSection?: {
+        heroTitle?: string;
+        heroParagraph?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        heroImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+      };
+      additionalSections?: Array<{
+        sectionTitle?: string;
+        sectionParagraph?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        sectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        _key: string;
+      }>;
+      ctaSection?: {
+        ctaSectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        ctaSectionTitle?: string;
+        ctaSectionParagraph?: string;
+        ctaButton?: {
+          buttonText?: string;
+          buttonLink?: string;
+        };
+      };
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "sustainabilitySection";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      bgImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      };
+      sustainText?: Array<
+        | {
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }
+        | {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            alt?: string;
+            _type: "image";
+            _key: string;
+          }
+      >;
+      slugCurrent: null;
+      treatmentSlugCurrent: null;
+      serviceSlugCurrent: null;
+    }
+  | {
+      _id: string;
+      _type: "treatments";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      isActive?: boolean;
+      service?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "service";
+      };
+      treatmentSlug?: Slug;
+      heroImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        heroAlt?: string;
+        _type: "image";
+      };
+      intro?: {
+        subtitle?: string;
+        introParagraph?: string;
+      };
+      quoteContent?: string;
+      additionalSections?: Array<{
+        sectionTitle?: string;
+        sectionParagraph?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet" | "number";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              alt?: string;
+              _type: "image";
+              _key: string;
+            }
+        >;
+        sectionImage?: {
+          image?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+        };
+        _key: string;
+      }>;
+      benefits?: {
+        title?: string;
+        benefitsList?: Array<{
+          title?: string;
+          subtitle?: string;
+          _key: string;
+        }>;
+      };
+      cta?: {
+        ctaBg?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        ctaBgAlt?: string;
+        ctaTitle?: string;
+        ctaText?: string;
+        ctaButtonText?: string;
+      };
+      practitioners?: Array<{
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: "practitioner";
+      }>;
+      seo?: Seo;
+      slugCurrent: null;
+      treatmentSlugCurrent: string | null;
+      serviceSlugCurrent: string | null;
+    }
+>;
+
 // Source: ./sanity/lib/queries.ts
 // Variable: SEO_QUERY
 // Query: seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }
@@ -3165,11 +5785,12 @@ export type TREATMENTS_QUERYResult = Array<{
   content: null;
 }>;
 // Variable: TREATMENT_BY_SLUG_QUERY
-// Query: *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {  title,  treatmentSlug,  "serviceName": service->title,  heroImage {    asset->{      url,          },    heroAlt  },  intro {    subtitle,    introParagraph  },  quoteContent,  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },    benefits {    title,    benefitsList[] {      title,      subtitle    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
+// Query: *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {  title,  treatmentSlug,  "serviceName": service->title,  "serviceSlug": service->slug.current,  heroImage {    asset->{      url,          },    heroAlt  },  intro {    subtitle,    introParagraph  },  quoteContent,  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },    benefits {    title,    benefitsList[] {      title,      subtitle    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
 export type TREATMENT_BY_SLUG_QUERYResult = {
   title: string | null;
   treatmentSlug: Slug | null;
   serviceName: string | null;
+  serviceSlug: string | null;
   heroImage: {
     asset: {
       url: string | null;
@@ -3727,7 +6348,7 @@ export type OUR_TEAM_PAGE_QUERYResult = {
   } | null;
 } | null;
 // Variable: MISSION_AND_VALUES_QUERY
-// Query: *[_type == "missionAndValues" && pageActive == true][0]{ heroSection{   heroImage{     image{       asset->     },     alt   } }, additionalSections[]{    sectionTitle,    sectionParagraph,    sectionImage{      "image": image.asset->url,      alt    }  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
+// Query: *[_type == "missionAndValues" && pageActive == true][0]{ heroSection{   heroImage{     image{       asset->     },     alt   } }, additionalSections[]{    sectionTitle,    sectionParagraph,    sectionImage{      "image": image.asset->url,      alt    }  },  "annualReportsSection": coalesce(annualReportsSection, financialReportsSection){    title,    description,    reports[]{      year,      label,      "file": file.asset->{        url,        originalFilename,        mimeType      }    }  },  feedbackSurvey{    title,    description,    buttonText,    url  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
 export type MISSION_AND_VALUES_QUERYResult = {
   heroSection: {
     heroImage: {
@@ -3798,6 +6419,25 @@ export type MISSION_AND_VALUES_QUERYResult = {
       alt: string | null;
     } | null;
   }> | null;
+  annualReportsSection: {
+    title: string | null;
+    description: string | null;
+    reports: Array<{
+      year: number | null;
+      label: string | null;
+      file: {
+        url: string | null;
+        originalFilename: string | null;
+        mimeType: string | null;
+      } | null;
+    }> | null;
+  } | null;
+  feedbackSurvey: {
+    title: string | null;
+    description: string | null;
+    buttonText: string | null;
+    url: string | null;
+  } | null;
   seo: {
     pageTitle: string | null;
     pageDescription: string | null;
@@ -4156,7 +6796,24 @@ export type NEWSLETTER_SECTION_QUERYResult = {
 } | null;
 // Variable: OUR_PROGRAMS_SECTION_QUERY
 // Query: *[_type == "ourProgramsSection"][0]{  sectionTitle,  "bgImage": {    "asset": bgImage.asset->{      _id,      url    },    "alt": bgImage.alt  },  programs[]{    name,    href,    barColor,    isLink  },  hoverLinkText,  hoverLinkHref}
-export type OUR_PROGRAMS_SECTION_QUERYResult = null;
+export type OUR_PROGRAMS_SECTION_QUERYResult = {
+  sectionTitle: string | null;
+  bgImage: {
+    asset: {
+      _id: string;
+      url: string | null;
+    } | null;
+    alt: string | null;
+  };
+  programs: Array<{
+    name: string | null;
+    href: string | null;
+    barColor: string | null;
+    isLink: boolean | null;
+  }> | null;
+  hoverLinkText: string | null;
+  hoverLinkHref: string | null;
+} | null;
 // Variable: HERO_SECTION_QUERY
 // Query: *[_type == "heroSection"][0]{  videoID,  videoFile {    asset-> {      playbackId    }  },  heroText,}
 export type HERO_SECTION_QUERYResult = {
@@ -4473,7 +7130,24 @@ export type HOME_PAGE_QUERYResult = {
       hero_alt: string | null;
     }>;
   } | null;
-  ourProgramsSection: null;
+  ourProgramsSection: {
+    sectionTitle: string | null;
+    bgImage: {
+      asset: {
+        _id: string;
+        url: string | null;
+      } | null;
+      alt: string | null;
+    };
+    programs: Array<{
+      name: string | null;
+      href: string | null;
+      barColor: string | null;
+      isLink: boolean | null;
+    }> | null;
+    hoverLinkText: string | null;
+    hoverLinkHref: string | null;
+  } | null;
   cafeSection: {
     cafeImage: {
       asset: {
@@ -4756,7 +7430,7 @@ export type GET_ALL_POSTS_QUERYResult = Array<{
   slug: string | null;
   excerpt: string | null;
   author: {
-    linkedTeamMemberName: null;
+    linkedTeamMemberName: string | null;
     image: {
       asset: {
         url: string | null;
@@ -4796,7 +7470,7 @@ export type GET_POST_BY_SLUG_QUERYResult = {
   publishedAt: string | null;
   slug: Slug | null;
   author: {
-    linkedTeamMemberName: null;
+    linkedTeamMemberName: string | null;
     image: {
       asset: {
         url: string | null;
@@ -4898,8 +7572,18 @@ export type CAFE_PAGE_QUERYResult = {
       alt: string | null;
     } | null;
   } | null;
-  introSection: null;
-  quoteSection: null;
+  introSection: {
+    title: string | null;
+    subheading: string | null;
+    description: string | null;
+  } | null;
+  quoteSection: {
+    quoteImage: {
+      image: string | null;
+      alt: string | null;
+    } | null;
+    quoteText: string | null;
+  } | null;
   additionalSections: Array<{
     sectionTitle: string | null;
     sectionParagraph: Array<
@@ -4940,8 +7624,26 @@ export type CAFE_PAGE_QUERYResult = {
       alt: string | null;
     } | null;
   }> | null;
-  menuDownloadSection: null;
-  ctaBandSection: null;
+  menuDownloadSection: {
+    eyebrow: string | null;
+    headline: string | null;
+    description: string | null;
+    buttonLabel: string | null;
+    menuFile: {
+      url: string | null;
+      originalFilename: string | null;
+      mimeType: string | null;
+    } | null;
+  } | null;
+  ctaBandSection: {
+    backgroundImage: {
+      url: string | null;
+      alt: string | null;
+    } | null;
+    headline: string | null;
+    body: string | null;
+    closingLine: string | null;
+  } | null;
   seo: {
     pageTitle: string | null;
     pageDescription: string | null;
@@ -5032,7 +7734,7 @@ export type LEGAL_PAGE_BY_SLUG_QUERYResult = {
   } | null;
 } | null;
 // Variable: SERVICE_LIFESTYLE_BY_SLUG_QUERY
-// Query: *[_type == "serviceLifestyle" && slug.current == $slug][0]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt,    "content_image": content_image.asset->url,    "content_alt": content_image.alt,    content,    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{      _id,      title,      "slug": treatmentSlug.current,      "rawSlug": treatmentSlug    },    hero_secondary_title,    hero_large_text,    referral_form_pdf {      asset-> {        url,      }    },    block_2_title,    block_2_content,    block_2_image {      asset-> {        url,      }    },    block_3_title,    block_3_content,    "block_4_image": block_4_image.asset->url,    "block_5_image": block_5_image.asset->url,    benefits[] {      title,      description,      "image": image.asset->url,      tint_percentage,      tint_percentage_hover    },    "block_7_image": block_7_image.asset->url,    "block_9_image": block_9_image.asset->url,    timeline[] {      title,      description    },    "block_11_image": block_11_image.asset->url,    faq[] {      title,      description    },    call_to_action,    pillars[] {      title,      description    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  },    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{      teamMembers[] {        name,        role,        bio,        image {          asset-> {            url          }        }      }    },    testimonials[] {      name,      description,      image {        asset-> {          url        }      }    }  }
+// Query: *[_type == "serviceLifestyle" && slug.current == $slug][0]{    title,    "slug": slug.current,    "hero_image": hero_image.asset->url,    "hero_alt": hero_image.alt,    "content_image": content_image.asset->url,    "content_alt": content_image.alt,    content,    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{      _id,      title,      "slug": treatmentSlug.current,      "rawSlug": treatmentSlug    },    hero_secondary_title,    hero_large_text,    referral_form_pdf {      asset-> {        url,        originalFilename,      }    },    block_2_title,    block_2_content,    block_2_image {      asset-> {        url,      }    },    block_3_title,    block_3_content,    "block_4_image": block_4_image.asset->url,    "block_5_image": block_5_image.asset->url,    benefits[] {      title,      description,      "image": image.asset->url,      tint_percentage,      tint_percentage_hover    },    "block_7_image": block_7_image.asset->url,    "block_9_image": block_9_image.asset->url,    timeline[] {      title,      description    },    "block_11_image": block_11_image.asset->url,    faq[] {      title,      description    },    call_to_action,    pillars[] {      title,      description    },      seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  },    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{      teamMembers[] {        name,        role,        bio,        image {          asset-> {            url          }        }      }    },    testimonials[] {      name,      description,      image {        asset-> {          url        }      }    }  }
 export type SERVICE_LIFESTYLE_BY_SLUG_QUERYResult = {
   title: string | null;
   slug: string | null;
@@ -5084,6 +7786,7 @@ export type SERVICE_LIFESTYLE_BY_SLUG_QUERYResult = {
   referral_form_pdf: {
     asset: {
       url: string | null;
+      originalFilename: string | null;
     } | null;
   } | null;
   block_2_title: string | null;
@@ -5454,7 +8157,7 @@ export type SERVICE_LIFESTYLE_BY_SLUG_QUERYResult = {
   }> | null;
 } | null;
 // Variable: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY
-// Query: *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{ title,  "slug": slug.current,  heroImage {    asset->{      url,    },    heroAlt  },  intro {    subtitle,    introParagraph  },  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },  additionalCheckinTitle,  additionalCheckin[] {    checkinDescription,    checkinCount  },  groupSectionTitle,  groupSectionDescription,  groupSections[] {    description,    "image": image.asset->url,    "alt": image.alt  },  assistanceSectionTitle,  assistanceSectionDescription,  assistanceSectionImage {    asset-> {      url,    }  },  referral_form_pdf {    asset-> {      url,    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
+// Query: *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{ title,  "slug": slug.current,  heroImage {    asset->{      url,    },    heroAlt  },  intro {    subtitle,    introParagraph  },  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      alt    }  },  additionalCheckinTitle,  additionalCheckin[] {    checkinDescription,    checkinCount  },  groupSectionTitle,  groupSectionDescription,  groupSections[] {    description,    "image": image.asset->url,    "alt": image.alt  },  assistanceSectionTitle,  assistanceSectionDescription,  assistanceSectionImage {    asset-> {      url,    }  },  referral_form_pdf {    asset-> {      url,        originalFilename,    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      ogImage{        asset-> {          url,          alt        }      },      twitterImage{        asset-> {          url,          alt        }      }    }  }}
 export type SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult = {
   title: string | null;
   slug: string | null;
@@ -5562,6 +8265,7 @@ export type SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult = {
   referral_form_pdf: {
     asset: {
       url: string | null;
+      originalFilename: string | null;
     } | null;
   } | null;
   cta: {
@@ -5598,7 +8302,7 @@ export type SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult = {
   } | null;
 } | null;
 // Variable: OUR_PROGRAMS_QUERY
-// Query: *[_type == "ourPrograms" && isActive == true][0]{ title, heroImage {    asset->{      url,      alt    },    heroAlt  },  intro {    subtitle,    introParagraph  },  programs[] {    image {        asset->{          url        },      alt    },    programName,    description  },  essentialSeries {    description,    image {        asset->{          url        },      alt    },    tableContent {      includesSessions[],      bonusSessions[],      bonusTransferable[]    },    listContent[]  },  curateLifestyle {    description,    image {        asset->{          url        },      alt    },    structure {      length,      format,      focus,      bonus[],      entry    },    outcome,    referral_form_pdf {      asset-> {        url,      }    },    call_to_action  },  masterHealthBlueprint {    description,    image {        asset->{          url        },      alt    },    structure {      kickOff,      team,      plan,      programIncludes[],      privileges[]    },    outcome  },  exploreYourOptions {    image {        asset->{          url        }    },    contactMessage  },  faq[] {      title,      description  },  threePaths {    heading,    subtitle,    paragraph,    tableContent {      bestFor[],      approach[],      focus[],      extras {        essentialSeries[],        curateLifestyle[],        masterHealthBlueprint[]      },      pricing {        essentialSeries,        curateLifestyle[],        masterHealthBlueprint      }    },  },  ctaSection {    image {        asset->{          url        }    },    heading,    paragraph,    buttonText  }}
+// Query: *[_type == "ourPrograms" && isActive == true][0]{ title, heroImage {    asset->{      url,      alt    },    heroAlt  },  intro {    subtitle,    introParagraph  },  programs[] {    image {        asset->{          url        },      alt    },    programName,    description  },  essentialSeries {    description,    image {        asset->{          url        },      alt    },    tableContent {      includesSessions[],      bonusSessions[],      bonusTransferable[]    },    listContent[]  },  curateLifestyle {    description,    image {        asset->{          url        },      alt    },    structure {      length,      format,      focus,      bonus[],      entry    },    outcome,    referral_form_pdf {      asset-> {        url,        originalFilename,      }    },    call_to_action  },  masterHealthBlueprint {    description,    image {        asset->{          url        },      alt    },    structure {      kickOff,      team,      plan,      programIncludes[],      privileges[]    },    outcome  },  exploreYourOptions {    image {        asset->{          url        }    },    contactMessage  },  faq[] {      title,      description  },  threePaths {    heading,    subtitle,    paragraph,    tableContent {      bestFor[],      approach[],      focus[],      extras {        essentialSeries[],        curateLifestyle[],        masterHealthBlueprint[]      },      pricing {        essentialSeries,        curateLifestyle[],        masterHealthBlueprint      }    },  },  ctaSection {    image {        asset->{          url        }    },    heading,    paragraph,    buttonText  }}
 export type OUR_PROGRAMS_QUERYResult = {
   title: string | null;
   heroImage: {
@@ -5656,6 +8360,7 @@ export type OUR_PROGRAMS_QUERYResult = {
     referral_form_pdf: {
       asset: {
         url: string | null;
+        originalFilename: string | null;
       } | null;
     } | null;
     call_to_action: string | null;
@@ -5755,6 +8460,8 @@ export type OUR_PROGRAMS_QUERYResult = {
 
 declare module "@sanity/client" {
   interface SanityQueries {
+    '{\n  "siteMetadata": *[_type == "siteMetadata"][0]{\n    homePageTitle,\n    defaultDescription,\n    keywords\n  },\n  "siteSettings": *[_type == "siteSettings"][0]{\n    brandName,\n    contactInfo{\n      email,\n      phone,\n      address{\n        street,\n        city,\n        state,\n        zip,\n        country,\n        locationInfo\n      },\n      mapLink\n    },\n    socialMedia[]{\n      platform,\n      url,\n      isActive\n    }\n  },\n  "services": *[_type == "service" && isActive == true] | order(title asc){\n    title,\n    "slug": slug.current,\n    "description": coalesce(seo.pageDescription, pt::text(content)),\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(title asc){\n      title,\n      "slug": treatmentSlug.current,\n      "description": coalesce(seo.pageDescription, intro.introParagraph, quoteContent)\n    }\n  },\n  "cafe": *[_type == "cafePage" && pageActive == true][0]{\n    "introTitle": introSection.title,\n    "description": introSection.description,\n    "menuUrl": menuDownloadSection.menuPdf.asset->url,\n    "seoDescription": seo.pageDescription\n  },\n  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[]{\n    name,\n    role\n  },\n  "posts": *[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc)[0...10]{\n    title,\n    "slug": slug.current,\n    excerpt\n  }\n}': LLMS_TXT_QUERYResult;
+    '\n*[\n  _type in [\n    "heroSection",\n    "aboutSection",\n    "clinic",\n    "productsSection",\n    "servicesSection",\n    "cafeSection",\n    "blogSection",\n    "sustainabilitySection",\n    "post",\n    "product",\n    "service",\n    "treatments",\n    "serviceLifestyle",\n    "serviceLifestyleProgram",\n    "ourStory",\n    "ourTeam",\n    "missionAndValues",\n    "sustainability",\n    "pillarsOfHealth",\n    "cafePage",\n    "contactPage",\n    "ourPrograms",\n    "servicesHeroSection",\n    "legalPage"\n  ]\n]{\n  ...,\n  "slugCurrent": slug.current,\n  "treatmentSlugCurrent": treatmentSlug.current,\n  "serviceSlugCurrent": service->slug.current\n}\n': INDEX_DOCS_QUERYResult;
     "\n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n": SEO_QUERYResult;
     '*[_type == "post" && defined(slug)]': POSTS_QUERYResult;
     '*[_type == "post" && slug.current == $slug][0]': POST_QUERYResult;
@@ -5771,7 +8478,7 @@ declare module "@sanity/client" {
     '*[_type == "service" && isActive == true && defined(slug.current)] {\n  "params": {"slug": slug.current}\n}': SERVICES_SLUG_QUERYResult;
     '\n  *[_type == "service" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  }\n': SERVICE_BY_SLUG_QUERYResult;
     '*[_type == "treatments" && isActive == true]{\n  title,\n  "treatmentSlug": treatmentSlug.current,\n  "service": service->{\n    title,\n    "slug": slug.current\n  },\n  "image": image.asset->url,\n  "altText": image.alt,\n  content,\n\n}': TREATMENTS_QUERYResult;
-    '\n*[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {\n  title,\n  treatmentSlug,\n  "serviceName": service->title,\n  heroImage {\n    asset->{\n      url,      \n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  quoteContent,\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },  \n  benefits {\n    title,\n    benefitsList[] {\n      title,\n      subtitle\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': TREATMENT_BY_SLUG_QUERYResult;
+    '\n*[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {\n  title,\n  treatmentSlug,\n  "serviceName": service->title,\n  "serviceSlug": service->slug.current,\n  heroImage {\n    asset->{\n      url,      \n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  quoteContent,\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },  \n  benefits {\n    title,\n    benefitsList[] {\n      title,\n      subtitle\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': TREATMENT_BY_SLUG_QUERYResult;
     '\n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n': FOOTER_QUERYResult;
     '*[_type == "productsSection"][0]{\n  sectionTitle,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n}': PRODUCTS_SECTION_QUERYResult;
     '*[_type == "product" && isActive == true] {\n  title,\n  indepthblockinfo,\n  description,\n  "slug" : slug.current,\n  "banner": banner.asset->url,\n  "image": image.asset->url,\n  "altText": image.alt,\n  meta {\n    title,\n    description\n  }\n}': PRODUCTS_QUERYResult;
@@ -5789,7 +8496,7 @@ declare module "@sanity/client" {
     '*[_type == "aboutPage" && isActive == true] | order(_createdAt desc){\n  title,\n  "slug": slug.current,\n}': ABOUT_PAGES_QUERYResult;
     '*[_type == "ourStory" && pageActive == true][0]{\n  heroSection{\n    heroImage{\n      "image": image.asset->url,\n      alt\n    },\n    heroTitle,\n    heroSubtitle\n  },\n  quoteSection{\n    quoteImage{\n      "image": image.asset->url,\n      alt\n    },\n    quoteText\n  },\n  additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  ctaSection{\n    ctaSectionImage{\n      "image": image.asset->url,\n      alt\n    },\n    ctaSectionTitle,\n    ctaSectionParagraph,\n    ctaButton{\n      buttonText,\n      buttonLink\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': OUR_STORY_PAGE_QUERYResult;
     '*[_type == "ourTeam" && pageActive == true][0]{\n  heroSection{\n    heroTitle,\n    heroParagraph\n  },\n  teamMembers[] {\n    name,\n    role,\n    bio,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': OUR_TEAM_PAGE_QUERYResult;
-    '*[_type == "missionAndValues" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': MISSION_AND_VALUES_QUERYResult;
+    '*[_type == "missionAndValues" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  "annualReportsSection": coalesce(annualReportsSection, financialReportsSection){\n    title,\n    description,\n    reports[]{\n      year,\n      label,\n      "file": file.asset->{\n        url,\n        originalFilename,\n        mimeType\n      }\n    }\n  },\n  feedbackSurvey{\n    title,\n    description,\n    buttonText,\n    url\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': MISSION_AND_VALUES_QUERYResult;
     '*[_type == "sustainability" && pageActive == true][0] {\n  heroSection {\n    heroTitle,\n    heroParagraph,\n    heroImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  ctaSection {\n    ctaSectionImage {\n      "image": image.asset->url,\n      alt\n    },\n    ctaSectionTitle,\n    ctaSectionParagraph,\n    ctaButton {\n      buttonText,\n      buttonLink\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SUSTAINABILITY_QUERYResult;
     '*[_type == "pillarsOfHealth" && pageActive == true][0] {\n  heroSection {\n    heroTitle,\n    heroParagraph,\n    heroImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  pillars[] {\n    pillarName,\n    pillarDescription\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PILLARS_OF_HEALTH_QUERYResult;
     '*[_type == "popupBanner" && isActive == true][0]{\n  title,\n  content,\n}': POPUP_BANNER_QUERYResult;
@@ -5811,8 +8518,8 @@ declare module "@sanity/client" {
     '*[_type == "cafePage" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n introSection{\n   title,\n   subheading,\n   description\n },\n quoteSection{\n   quoteImage{\n     "image": image.asset->url,\n     alt\n   },\n   quoteText\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n menuDownloadSection{\n    eyebrow,\n    headline,\n    description,\n    buttonLabel,\n    "menuFile": menuPdf.asset->{\n      url,\n      originalFilename,\n      mimeType\n    }\n },\n ctaBandSection{\n    backgroundImage{\n      "url": image.asset->url,\n      alt\n    },\n    headline,\n    body,\n    closingLine\n },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': CAFE_PAGE_QUERYResult;
     '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  "treatments": *[_type == "treatments" && isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
     '*[_type == "legalPage" && slug.current == $slug][0]{\n  title,\n  body,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': LEGAL_PAGE_BY_SLUG_QUERYResult;
-    '\n  *[_type == "serviceLifestyle" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    hero_secondary_title,\n    hero_large_text,\n    referral_form_pdf {\n      asset-> {\n        url,\n      }\n    },\n    block_2_title,\n    block_2_content,\n    block_2_image {\n      asset-> {\n        url,\n      }\n    },\n    block_3_title,\n    block_3_content,\n    "block_4_image": block_4_image.asset->url,\n    "block_5_image": block_5_image.asset->url,\n    benefits[] {\n      title,\n      description,\n      "image": image.asset->url,\n      tint_percentage,\n      tint_percentage_hover\n    },\n    "block_7_image": block_7_image.asset->url,\n    "block_9_image": block_9_image.asset->url,\n    timeline[] {\n      title,\n      description\n    },\n    "block_11_image": block_11_image.asset->url,\n    faq[] {\n      title,\n      description\n    },\n    call_to_action,\n    pillars[] {\n      title,\n      description\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{\n      teamMembers[] {\n        name,\n        role,\n        bio,\n        image {\n          asset-> {\n            url\n          }\n        }\n      }\n    },\n    testimonials[] {\n      name,\n      description,\n      image {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n': SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
-    '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
-    '\n  *[_type == "ourPrograms" && isActive == true][0]{\n title,\n heroImage {\n    asset->{\n      url,\n      alt\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  programs[] {\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    programName,\n    description\n  },\n  essentialSeries {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    tableContent {\n      includesSessions[],\n      bonusSessions[],\n      bonusTransferable[]\n    },\n    listContent[]\n  },\n  curateLifestyle {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      length,\n      format,\n      focus,\n      bonus[],\n      entry\n    },\n    outcome,\n    referral_form_pdf {\n      asset-> {\n        url,\n      }\n    },\n    call_to_action\n  },\n  masterHealthBlueprint {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      kickOff,\n      team,\n      plan,\n      programIncludes[],\n      privileges[]\n    },\n    outcome\n  },\n  exploreYourOptions {\n    image {\n        asset->{\n          url\n        }\n    },\n    contactMessage\n  },\n  faq[] {\n      title,\n      description\n  },\n  threePaths {\n    heading,\n    subtitle,\n    paragraph,\n    tableContent {\n      bestFor[],\n      approach[],\n      focus[],\n      extras {\n        essentialSeries[],\n        curateLifestyle[],\n        masterHealthBlueprint[]\n      },\n      pricing {\n        essentialSeries,\n        curateLifestyle[],\n        masterHealthBlueprint\n      }\n    },\n  },\n  ctaSection {\n    image {\n        asset->{\n          url\n        }\n    },\n    heading,\n    paragraph,\n    buttonText\n  }\n}': OUR_PROGRAMS_QUERYResult;
+    '\n  *[_type == "serviceLifestyle" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    hero_secondary_title,\n    hero_large_text,\n    referral_form_pdf {\n      asset-> {\n        url,\n        originalFilename,\n      }\n    },\n    block_2_title,\n    block_2_content,\n    block_2_image {\n      asset-> {\n        url,\n      }\n    },\n    block_3_title,\n    block_3_content,\n    "block_4_image": block_4_image.asset->url,\n    "block_5_image": block_5_image.asset->url,\n    benefits[] {\n      title,\n      description,\n      "image": image.asset->url,\n      tint_percentage,\n      tint_percentage_hover\n    },\n    "block_7_image": block_7_image.asset->url,\n    "block_9_image": block_9_image.asset->url,\n    timeline[] {\n      title,\n      description\n    },\n    "block_11_image": block_11_image.asset->url,\n    faq[] {\n      title,\n      description\n    },\n    call_to_action,\n    pillars[] {\n      title,\n      description\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{\n      teamMembers[] {\n        name,\n        role,\n        bio,\n        image {\n          asset-> {\n            url\n          }\n        }\n      }\n    },\n    testimonials[] {\n      name,\n      description,\n      image {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n': SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
+    '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n        originalFilename,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      ogImage{\n        asset-> {\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        asset-> {\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
+    '\n  *[_type == "ourPrograms" && isActive == true][0]{\n title,\n heroImage {\n    asset->{\n      url,\n      alt\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  programs[] {\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    programName,\n    description\n  },\n  essentialSeries {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    tableContent {\n      includesSessions[],\n      bonusSessions[],\n      bonusTransferable[]\n    },\n    listContent[]\n  },\n  curateLifestyle {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      length,\n      format,\n      focus,\n      bonus[],\n      entry\n    },\n    outcome,\n    referral_form_pdf {\n      asset-> {\n        url,\n        originalFilename,\n      }\n    },\n    call_to_action\n  },\n  masterHealthBlueprint {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      kickOff,\n      team,\n      plan,\n      programIncludes[],\n      privileges[]\n    },\n    outcome\n  },\n  exploreYourOptions {\n    image {\n        asset->{\n          url\n        }\n    },\n    contactMessage\n  },\n  faq[] {\n      title,\n      description\n  },\n  threePaths {\n    heading,\n    subtitle,\n    paragraph,\n    tableContent {\n      bestFor[],\n      approach[],\n      focus[],\n      extras {\n        essentialSeries[],\n        curateLifestyle[],\n        masterHealthBlueprint[]\n      },\n      pricing {\n        essentialSeries,\n        curateLifestyle[],\n        masterHealthBlueprint\n      }\n    },\n  },\n  ctaSection {\n    image {\n        asset->{\n          url\n        }\n    },\n    heading,\n    paragraph,\n    buttonText\n  }\n}': OUR_PROGRAMS_QUERYResult;
   }
 }

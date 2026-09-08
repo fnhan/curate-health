@@ -168,6 +168,7 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   title,
   treatmentSlug,
   "serviceName": service->title,
+  "serviceSlug": service->slug.current,
   heroImage {
     asset->{
       url,      

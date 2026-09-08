@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import ServiceContent from "@/components/layout/services-pages/service-content";
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
@@ -26,8 +28,10 @@ export default async function ServicePage({
     params: { slug: params.service },
   });
 
+  // An unknown slug is a 404, not an empty 200. This used to return null, which
+  // rendered a blank page under a 200. See CH-001.
   if (!service) {
-    return null;
+    notFound();
   }
 
   const { hero_image, hero_alt } = service;
@@ -57,7 +61,15 @@ export async function generateMetadata({
     params: { slug: params.service },
   });
 
-  const { seo } = servicePage!;
+  // This is where the 500 originated. Destructuring a null result threw before
+  // the component ever ran, so fixing the component body alone left the 5xx in
+  // place. Repeated 5xx responses cost crawl rate across the whole domain, a
+  // 404 does not. See CH-001.
+  if (!servicePage) {
+    notFound();
+  }
+
+  const { seo } = servicePage;
 
   const fallbackTitle = "Services";
   const fallbackDescription =

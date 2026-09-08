@@ -1,10 +1,11 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import ServiceContent from "@/components/layout/services-pages/service-content";
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
+import { renamedServicePath } from "@/lib/service-urls";
 import {
   JsonLdScript,
   buildServiceJsonLd,
@@ -49,6 +50,11 @@ async function resolve(slug: string) {
 
   if (service) return { kind: "service" as const, service };
 
+  // Before treatments, deliberately. A renamed category must redirect even if
+  // its old slug also matches a treatment, which "exercise-therapy" does.
+  const renamed = renamedServicePath(slug);
+  if (renamed) return { kind: "renamed" as const, to: renamed };
+
   const treatment = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
     query: TREATMENT_BY_SLUG_QUERY,
     params: { slug },
@@ -69,6 +75,10 @@ export default async function ServiceOrTreatmentPage({
   });
 
   const resolved = await resolve(params.slug);
+
+  if (resolved.kind === "renamed") {
+    permanentRedirect(resolved.to);
+  }
 
   // An unknown slug is a 404, not an empty 200. See CH-001.
   if (resolved.kind === "none") {
@@ -123,6 +133,10 @@ export async function generateMetadata({
   params: { slug: string };
 }) {
   const resolved = await resolve(params.slug);
+
+  if (resolved.kind === "renamed") {
+    permanentRedirect(resolved.to);
+  }
 
   // generateMetadata runs before the component, so an unguarded destructure
   // here throws a 500 before the 404 can happen. See CH-001.

@@ -19,6 +19,21 @@ import { fieldDescriptions } from "../schema-helpers";
  *   Short bio. No such copy exists for anyone, and Frank chose on 2026-09-07
  *   to drop the field rather than have one written. Cards show name and
  *   credentials.
+ *
+ * SERVICES OFFERED IS NOT A FIELD HERE, AND SHOULD NOT BECOME ONE
+ *
+ * Each treatment already carries a `practitioners` list saying who provides
+ * it. The services a practitioner offers is the same relationship read from
+ * the other end, so the page asks "which treatments reference this person"
+ * rather than storing a second copy:
+ *
+ *   *[_type == "treatments" && isActive == true && references(^._id)]
+ *
+ * A field here would be the same fact typed in two places. The moment someone
+ * adds a practitioner to a service page and forgets to come back here, the two
+ * disagree and there is no way to tell which is right. Editing the service
+ * page's practitioner list stays the single place this is controlled, and the
+ * practitioner page follows automatically.
  */
 export default defineType({
   name: "practitioner",
@@ -98,6 +113,27 @@ export default defineType({
         "The biography shown on this practitioner's own page. Migrated verbatim from the old team page.",
     }),
     defineField({
+      name: "languages",
+      title: "Languages",
+      type: "array",
+      of: [{ type: "string" }],
+      description:
+        "Languages this practitioner can treat in. One per entry, in the order they should be listed. Leave empty and the section is left off the page rather than showing an empty heading.",
+      validation: (Rule) =>
+        Rule.unique().error("That language is listed twice"),
+    }),
+    defineField({
+      name: "commonlyTreats",
+      title: "Commonly Treats",
+      type: "array",
+      of: [{ type: "string" }],
+      description:
+        "Conditions and presentations this practitioner sees often. One per entry. Keep these to what the practitioner actually treats: everything here reads as a clinical claim, so it needs their sign-off, not a guess from their bio. Leave empty and the section is left off the page.",
+      validation: (Rule) => Rule.unique().error("That entry is listed twice"),
+    }),
+    // No "Services Offered" field, deliberately. See the note at the bottom of
+    // this file: it is derived from the service pages rather than typed twice.
+    defineField({
       name: "janeBookingUrl",
       title: "Jane Booking URL",
       type: "url",
@@ -107,6 +143,14 @@ export default defineType({
         Rule.uri({ scheme: ["https"] }).error(
           "Must be a full https URL, or empty"
         ),
+    }),
+    defineField({
+      name: "bookingNote",
+      title: "Booking Note",
+      type: "text",
+      rows: 3,
+      description:
+        "Shown in place of the booking button when Jane Booking URL is empty. Explains how someone reaches this practitioner instead. Dr. Leong is the current case: he is not publicly bookable, patients come through the Curate Lifestyle Program, and the button points at that program rather than at Jane. Leave both this and the Jane URL empty and the whole block is omitted.",
     }),
     // Not in the restructure brief's field list, added deliberately. Every
     // other document type that backs a page carries this, and without it the

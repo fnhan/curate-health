@@ -1,5 +1,6 @@
 import { Button } from "components/ui/button";
 
+import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
 import { PRIMARY_CTA_BUTTON_QUERYResult } from "@/sanity.types";
 
@@ -17,7 +18,7 @@ export default function PrimaryCTAButton({
   const { ctaButton } = primaryCTAButton;
 
   return (
-    <a target="_blank" rel="noopener noreferrer" href={ctaButton?.ctaLink!}>
+    <a href={ctaButton?.ctaLink!} {...externalLinkProps(ctaButton?.ctaLink!)}>
       <Button
         variant={variant}
         size={size}

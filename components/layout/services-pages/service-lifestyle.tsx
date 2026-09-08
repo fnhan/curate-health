@@ -32,6 +32,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getAssetDownloadUrl } from "@/lib/asset-download";
+import { externalLinkProps } from "@/lib/links";
 import { cleanSlug, cn, getTeamMemberUrlId } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
 
@@ -521,6 +522,9 @@ export default function ServiceLifestyleContent({
                   can use our{" "}
                   <a
                     href={getAssetDownloadUrl(referral_form_pdf?.asset)}
+                    {...externalLinkProps(
+                      getAssetDownloadUrl(referral_form_pdf?.asset)
+                    )}
                     className="underline"
                   >
                     Referral Form
@@ -770,6 +774,9 @@ export default function ServiceLifestyleContent({
                 Want to refer a patient?{" "}
                 <a
                   href={getAssetDownloadUrl(referral_form_pdf?.asset)}
+                  {...externalLinkProps(
+                    getAssetDownloadUrl(referral_form_pdf?.asset)
+                  )}
                   className="underline"
                 >
                   Click Here

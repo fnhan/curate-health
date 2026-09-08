@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { externalLinkProps } from "@/lib/links";
 import {
   PRODUCTS_NAVIGATION_QUERYResult,
   PRODUCT_BY_SLUG_QUERYResult,
@@ -108,7 +109,7 @@ export default async function ProductPage({
               asChild
               className="rounded-none border border-primary bg-primary text-white hover:bg-transparent hover:text-primary"
             >
-              <a target="_blank" href={ctaLink}>
+              <a href={ctaLink} {...externalLinkProps(ctaLink)}>
                 {ctaText}
               </a>
             </Button>

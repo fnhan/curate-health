@@ -1,6 +1,8 @@
 import { FileDown, UtensilsCrossed } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { externalLinkProps } from "@/lib/links";
+
 type MenuSection = {
   eyebrow?: string | null;
   headline?: string | null;
@@ -64,12 +66,7 @@ export function CafeMenuDownloadSection({ data }: { data: MenuSection }) {
             size="lg"
             className="h-12 gap-2 rounded-none px-8 text-base font-normal transition-opacity hover:opacity-90"
           >
-            <a
-              href={url}
-              download={filename}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={url} {...externalLinkProps(url)} download={filename}>
               <FileDown className="size-5 shrink-0" aria-hidden />
               {buttonLabel}
             </a>

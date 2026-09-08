@@ -8,6 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { externalLinkProps } from "@/lib/links";
 import { sanityFetch } from "@/sanity/lib/client";
 import { MISSION_AND_VALUES_QUERY } from "@/sanity/lib/queries";
 
@@ -120,9 +121,8 @@ export default async function MissionAndValuesPage() {
                               <a
                                 key={`${year}-${url}`}
                                 href={url}
+                                {...externalLinkProps(url)}
                                 download={filename}
-                                target="_blank"
-                                rel="noreferrer"
                                 className="group/link inline-flex items-center justify-between gap-3 border border-primary/10 bg-white px-4 py-3 transition-colors hover:bg-secondary/30"
                               >
                                 <span className="font-medium">{label}</span>
@@ -158,8 +158,7 @@ export default async function MissionAndValuesPage() {
                   <div className="mt-1 flex flex-wrap items-center gap-3">
                     <a
                       href={feedbackSurvey.url!}
-                      target="_blank"
-                      rel="noreferrer"
+                      {...externalLinkProps(feedbackSurvey.url!)}
                       className="inline-flex items-center justify-center border border-primary bg-white px-6 py-3 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
                     >
                       {feedbackSurvey.buttonText}

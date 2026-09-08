@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
+import { externalLinkProps } from "@/lib/links";
 import { OUR_STORY_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_STORY_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -78,7 +79,10 @@ export default async function OurStoryPage() {
               asChild
               className="mx-auto w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
             >
-              <a target="_blank" href={ctaSection?.ctaButton?.buttonLink!}>
+              <a
+                href={ctaSection?.ctaButton?.buttonLink!}
+                {...externalLinkProps(ctaSection?.ctaButton?.buttonLink!)}
+              >
                 {ctaSection?.ctaButton?.buttonText}
               </a>
             </Button>

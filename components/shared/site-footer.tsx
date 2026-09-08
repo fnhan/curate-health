@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { MailIcon, MapPinIcon, MoveUpRightIcon, PhoneIcon } from "lucide-react";
 
+import { externalLinkProps } from "@/lib/links";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
 import { FooterMobileAccordion } from "./footer-mobile-accordion";
@@ -44,8 +45,7 @@ export default function SiteFooter({
             <a
               className="flex items-start gap-2 hover:underline"
               href={contactInfo?.mapLink!}
-              target="_blank"
-              rel="noopener noreferrer"
+              {...externalLinkProps(contactInfo?.mapLink!)}
             >
               <MapPinIcon size={20} className="mt-1" />
               <div>
@@ -142,9 +142,9 @@ export default function SiteFooter({
                     .map((link, linkIndex) => (
                       <a
                         key={linkIndex}
-                        target="_blank"
                         className="flex items-center hover:underline"
                         href={link.url!}
+                        {...externalLinkProps(link.url!)}
                       >
                         <span>{link.platform}</span>
                         <MoveUpRightIcon size={16} />

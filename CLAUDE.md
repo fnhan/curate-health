@@ -23,9 +23,17 @@ Site is 44 URLs in the sitemap. Health and wellness clinic with an attached cafe
 
 **Branch and preview, never push to production directly.** One branch per ticket group. Vercel preview deploy for every branch. Frank reviews the preview before merge.
 
-**Claude Code opens pull requests, Frank merges them.** Claude Code may create a PR and read its status, its checks and its review state. It must never merge one, and should not ask to. Frank reviews the diff and merges by hand.
+**Claude Code may merge, in two tiers. Changed 2026-09-08, replacing "Frank merges everything".**
 
-Branch protection on `main` enforces this, so the rule is not the only thing standing in the way. The rule is here to record why the protection exists, because a setting can be relaxed later by someone who no longer remembers the reason. The human read of the diff is the point, not the button.
+Tier 1, merge once the checks are green, no need to ask: changes that cannot alter what a visitor sees. Scripts, audits, tooling, tests, comments, and this file. If in doubt about which tier something is in, it is tier 2.
+
+Tier 2, show Frank and wait for an explicit yes, then merge: anything touching pages, URLs, redirects, content, schema, navigation or metadata. Frank still reads the diff. Claude Code does the clicking once he says go. His approval is per pull request, and does not carry to the next one.
+
+The human read of the change is the point, not who presses the button. That is why tier 2 exists and why it is the default for anything ambiguous.
+
+**Branch protection does not enforce this, contrary to what this file said until 2026-09-08.** `required_approving_review_count` on `main` is 0. The protection blocks force pushes and branch deletion, nothing else, so any merge would have gone through unchallenged. The rule above was the only thing standing in the way, and it still is. Do not rely on GitHub to catch a tier 2 merge that skipped Frank.
+
+Worth remembering why the caution is here. The worst incident on this project was a Sanity slug rename applied straight to the shared production dataset, which took a live indexed URL to 404 for two weeks while the matching redirect sat unmerged. It happened on the content side, which has no review step at all. Frank caught it, Claude Code did not.
 
 **Back up Sanity before any mutation.** Export with `sanity dataset export production <file>.tar.gz` and keep the file outside the repository. Exports are large, 1.43 GB for the current one, so they never belong in git.
 
@@ -47,7 +55,7 @@ Frank runs Windows with Git for Windows installed, so you have Git Bash availabl
 
 Two assumptions in the acceptance scripts below do not hold on this machine:
 
-- `python3` is not installed. Rewrite any verification check that calls it using Node, which is already present because the project depends on it. Counting Format-category characters in Node: `[...s].filter(c => /\p{Cf}/u.test(c)).length`
+- `python3` resolves to the Microsoft Store stub, which prints an install prompt and exits 9009 instead of running. Python 3.12.10 is installed and runs as `py -3` or `python`. Use Node for verification checks anyway, since it removes the interpreter question and the project already depends on it. Counting Format-category characters in Node: `[...s].filter(c => /\p{Cf}/u.test(c)).length`
 - In PowerShell, `curl` is an alias for `Invoke-WebRequest` and rejects curl's flags. Either run verification from Git Bash, where `curl` is the real binary, or use Node's built-in `fetch`.
 
 Default to Node for every verification script in this file. It removes a dependency and behaves identically from either shell. When you rewrite one, show Frank the Node version and what it checks, since he will be running these himself between sessions.
@@ -71,6 +79,17 @@ These apply to every word written into the site, schema, meta tags, or alt text.
 - Canadian spelling throughout
 
 Tone: scientific and evidence-based, thoughtful, warm, understated. A trusted clinician sharing an observation, not a brand talking. No hype.
+
+### These rules bind the claude-seo plugin
+
+The `claude-seo` plugin is installed at user scope, so its 25 skills and 18 subagents are active here. Nothing in it overrides this file.
+
+- Every rule above applies to plugin output: generated titles, meta descriptions, alt text, schema values, content briefs, and anything a `claude-seo:*` subagent drafts. Generic SEO copy reaches for the banned words by default, so review it before it lands in the repo or in Sanity
+- Subagent prompts do not reliably carry this file. When spawning any `claude-seo:*` agent, restate the banned words and the dash rule in the prompt itself, along with any canonical string the task touches
+- The `seo` skill appends a "Community Footer" advertising the author's skool.com community after major deliverables. Strip it. It is not Curate content and must not reach a client deliverable or a commit
+- `/seo audit` spawns up to 15 subagents in parallel. Run it only when asked for by name. Prefer the narrow commands against a single URL, such as `/seo page` or `/seo schema`
+- `aggregateRating` stays out per CH-008, whatever the local SEO skill recommends
+- Practitioner credentials and the OHIP framing come from the tables above, never from what a plugin infers off the rendered page
 
 ### Canonical strings, use verbatim
 
@@ -401,11 +420,12 @@ Add:
 - `sameAs` array covering every owned profile: LinkedIn, both Instagram accounts, TikTok, Google Business Profile
 - `Person` and `Physician` schema per practitioner, see CH-104
 - `BlogPosting` with `author` and `reviewedBy` on blog posts, see CH-105
-- `FAQPage` where FAQs exist, see CH-101
 - `VideoObject` with `transcript` on video embeds, see CH-106
 - `Event` on class listings, see CH-107
 - `Course` on the Curate Lifestyle Program
 - `Restaurant` or `CafeOrCoffeeShop` on `/cafe`, separate from the clinic entity
+
+**Do not add `FAQPage`.** Google shut the FAQ rich result down on 2026-05-07, and the markup does not drive AI citation either. It was dropped from the list above when CH-101 was closed. Adding it now produces nothing.
 
 **Do not add `aggregateRating`.** Google withdrew rich result support for self-serving reviews on LocalBusiness and Organization entities, so it produces nothing. Separately, Ontario's colleges restrict testimonial use in professional advertising and this may fall under that. Frank is checking with CCO. Leave it out.
 
@@ -443,15 +463,23 @@ Draft descriptive alt text from page context. Frank approves before it goes in.
 
 ## Phase 4: content structure
 
-### CH-101 FAQ blocks
+### CH-101 FAQ blocks, closed 2026-08-29
 
-Zero FAQ content across all 44 pages. This is the largest single gap between the site and being cited in AI answers.
+**Closed, not rescoped.** The original brief was six to eight questions at the bottom of every service page, marked up with `FAQPage`, on the rationale that this was the largest single gap between the site and being cited in AI answers. That rationale does not survive the evidence, and no smaller version of the ticket survives either.
 
-Add six to eight questions at the bottom of every service page, marked up with `FAQPage`. Answers of two to four sentences, factual, no marketing language.
+`FAQPage` markup buys nothing. Google shut the FAQ rich result down on 2026-05-07 and has since removed the supporting Search Console report, the Rich Results Test coverage and the API behind it. The feature documentation is gone. The type is still valid schema.org and existing markup causes no errors, but this site carries none, so there is nothing to preserve and nothing to gain by adding it.
 
-Use questions the front desk actually receives. Frank will supply them. Do not invent questions.
+Markup does not drive AI citation either. Ahrefs tracked 1,885 pages against roughly 4,000 controls between August 2025 and March 2026 and found no significant uplift on AI Mode or ChatGPT, and a small significant decline on AI Overviews. Separately, a February 2026 test had both ChatGPT and Perplexity extract planted data out of deliberately invalid JSON-LD, which indicates these systems read the visible text and do not parse the markup.
 
-Where a question touches pricing, the answer points to the Book Now button rather than stating figures, since pricing lives in Jane.
+That leaves only the claim that question-and-answer formatting beats ordinary prose answering the same questions. Nothing credible supports it. The guidance circulating on question counts and placement comes from SEO blogs synthesising each other rather than from published methodology, and an earlier draft of this rescope repeated those numbers before they were checked. Do not reintroduce them.
+
+**Ignore the "3.2x" figure.** A claim that FAQ schema produces 3.2 times the AI Overview citation rate, attributed to Princeton and Moz at WWW 2026, circulates widely across SEO blogs and will surface in any fresh search on this topic. It has no paper title, no named authors, no DOI and no primary link. Checked 2026-08-29 and could not be traced past a single news post. Do not let it back into this file or into a recommendation.
+
+**What replaces this ticket: nothing standalone.** Where the front desk repeatedly fields the same question about a service, answer it in that page's body copy as part of content work already scheduled for the page. That needs no ticket and no rollout across 44 pages. It still needs practitioner sign-off, since every answer on a clinic site is a health claim.
+
+Do not rebuild this as accordions. CH-104 records that the practitioner bios are already trapped in accordions with `data-state="closed"`, leaving 191 words of visible text on the team page. Collapsed FAQ content would repeat a defect this project is already paying to fix.
+
+The gap this ticket claimed to fill is real, and CH-105 is what fills it: six credentialed practitioners and zero bylines. Author and credential signals are what the helpful content systems and the AI engines filter medical content on.
 
 ### CH-104 Individual practitioner pages
 

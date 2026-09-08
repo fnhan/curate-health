@@ -94,6 +94,16 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "practitioners",
+      title: "Practitioners",
+      type: "array",
+      description:
+        "The team, in the order they appear on the page. Drag to reorder, the same as the list above. Each entry points at a practitioner record, so editing someone's credentials or photo happens once and updates every page that shows them.",
+      of: [{ type: "reference", to: [{ type: "practitioner" }] }],
+      validation: (Rule) =>
+        Rule.unique().error("The same practitioner is listed twice"),
+    }),
+    defineField({
       name: "seo",
       title: "SEO",
       type: "seo",

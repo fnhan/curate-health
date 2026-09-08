@@ -55,18 +55,13 @@ export default defineType({
       validation: (Rule) =>
         Rule.required().error("Is Active status is required"),
     }),
-    defineField({
-      name: "displayOrder",
-      title: "Display Order",
-      type: "number",
-      description:
-        "Lowest first, on the team page and in the practitioner grid on service pages. Set this explicitly. It is not the order the old team page happened to store them in.",
-      validation: (Rule) =>
-        Rule.required()
-          .integer()
-          .min(1)
-          .error("A whole number of 1 or more is required"),
-    }),
+    // No display order field, deliberately. Order is set by dragging, in the
+    // reference list on "About | Our Team Page", exactly as the old embedded
+    // list worked. A number field here would mean editing seven documents to
+    // move one person, and would silently fight the drag order.
+    //
+    // Each service page carries its own practitioners list, so a service can
+    // order its providers differently from the team page without any conflict.
     defineField({
       name: "credentials",
       title: "Credentials",
@@ -126,9 +121,9 @@ export default defineType({
   ],
   orderings: [
     {
-      title: "Display order",
-      name: "displayOrderAsc",
-      by: [{ field: "displayOrder", direction: "asc" }],
+      title: "Name",
+      name: "nameAsc",
+      by: [{ field: "name", direction: "asc" }],
     },
   ],
   preview: {

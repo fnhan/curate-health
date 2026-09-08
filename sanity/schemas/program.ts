@@ -48,18 +48,11 @@ export default defineType({
       validation: (Rule) =>
         Rule.required().error("Is Active status is required"),
     }),
-    defineField({
-      name: "displayOrder",
-      title: "Display Order",
-      type: "number",
-      description:
-        "Lowest first, on the programs hub and the homepage section.",
-      validation: (Rule) =>
-        Rule.required()
-          .integer()
-          .min(1)
-          .error("A whole number of 1 or more is required"),
-    }),
+    // No display order field, same reasoning as practitioner. Order will come
+    // from a draggable reference list on the programs hub once that document is
+    // rewired. Its existing `programs` field holds embedded objects and is
+    // still what the live hub renders, so the reference list is added there in
+    // the step that migrates it, not here.
     defineField({
       name: "summary",
       title: "Summary",
@@ -146,9 +139,9 @@ export default defineType({
   ],
   orderings: [
     {
-      title: "Display order",
-      name: "displayOrderAsc",
-      by: [{ field: "displayOrder", direction: "asc" }],
+      title: "Title",
+      name: "titleAsc",
+      by: [{ field: "title", direction: "asc" }],
     },
   ],
   preview: {

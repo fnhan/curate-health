@@ -19,9 +19,11 @@ import ourTeam from "./schemas/ourTeam";
 import pillarsOfHealth from "./schemas/pillarsOfHealth";
 import popupBanner from "./schemas/popupBanner";
 import post from "./schemas/post";
+import practitioner from "./schemas/practitioner";
 import primaryCTAButton from "./schemas/primaryCTAButton";
 import products from "./schemas/products";
 import productsSection from "./schemas/productsSection";
+import program from "./schemas/program";
 import seo from "./schemas/seo";
 import serviceCurateLifestyle from "./schemas/service-curate-lifestyle";
 import serviceCurateLifestyleProgram from "./schemas/service-curate-lifestyle-program";
@@ -68,6 +70,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     cafePage /* Uses SEO Type */,
     post /* Uses SEO Type */,
     author,
+    practitioner,
+    program /* Uses SEO Type, references practitioner */,
     legalPages,
     serviceCurateLifestyle,
     serviceCurateLifestyleProgram,

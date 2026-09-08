@@ -223,6 +223,14 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "practitioners",
+      title: "Practitioners",
+      type: "array",
+      description:
+        "Who provides this treatment. Shown as a grid of cards on the page. Referenced rather than copied, so changing a credential once updates every service page, and unticking someone's Is Active removes them site-wide without editing anything here.",
+      of: [{ type: "reference", to: [{ type: "practitioner" }] }],
+    }),
+    defineField({
       name: "seo",
       title: "SEO",
       type: "seo",

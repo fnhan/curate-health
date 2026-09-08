@@ -144,6 +144,14 @@ export default defineType({
           "Must be a full https URL, or empty"
         ),
     }),
+    defineField({
+      name: "bookingNote",
+      title: "Booking Note",
+      type: "text",
+      rows: 3,
+      description:
+        "Shown in place of the booking button when Jane Booking URL is empty. Explains how someone reaches this practitioner instead. Dr. Leong is the current case: he is not publicly bookable, patients come through the Curate Lifestyle Program, and the button points at that program rather than at Jane. Leave both this and the Jane URL empty and the whole block is omitted.",
+    }),
     // Not in the restructure brief's field list, added deliberately. Every
     // other document type that backs a page carries this, and without it the
     // seven new practitioner pages would ship with no title and no meta

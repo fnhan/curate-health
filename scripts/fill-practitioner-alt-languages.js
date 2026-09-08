@@ -29,6 +29,13 @@
  * "Vietnamese" is written where Frank wrote "Vietnam". The country is not the
  * language, and this list renders on a public clinical page.
  *
+ * Rooj has English and Urdu only, not the fuller list Frank gestured at. See
+ * the note on her entry.
+ *
+ * Frank corrected the description of his own photo on 2026-09-08: it is him
+ * coaching the cat cow exercise, not performing an adjustment. Worth keeping
+ * in mind that a photo can be read wrongly with complete confidence.
+ *
  * Patches use `set`, so re-running restores these values if someone clears
  * them, and a deliberate later edit by Frank will be overwritten. That is the
  * intended trade for a field he asked to be pre-filled. Once practitioners
@@ -39,7 +46,7 @@ const { mutate, query } = require("./lib/sanity-cli");
 
 const PRACTITIONERS = {
   "practitioner-dr-frank-nhan": {
-    alt: "Dr. Frank Nhan performing a chiropractic adjustment on a patient lying face down in the clinic.",
+    alt: "Dr. Frank Nhan guiding a patient through the cat cow exercise in the clinic.",
     languages: ["English", "Cantonese", "Vietnamese"],
   },
   "practitioner-safa-karoumi": {
@@ -64,7 +71,13 @@ const PRACTITIONERS = {
   },
   "practitioner-rooj-hussain": {
     alt: "Rooj Hussain balancing in an arm balance yoga pose on a mat beside a potted palm.",
-    languages: ["English"],
+    // Urdu only. Frank asked for "the typical Pakistani languages", which is a
+    // guess at one person's background rather than something she has said.
+    // Urdu is the national language and the safe part of that; Punjabi, Pashto,
+    // Sindhi and Saraiki are not interchangeable and are not implied by
+    // nationality. A patient books expecting to be understood, so the rest
+    // waits for her own answer.
+    languages: ["English", "Urdu"],
   },
 };
 

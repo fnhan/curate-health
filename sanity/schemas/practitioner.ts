@@ -34,6 +34,18 @@ import { fieldDescriptions } from "../schema-helpers";
  * disagree and there is no way to tell which is right. Editing the service
  * page's practitioner list stays the single place this is controlled, and the
  * practitioner page follows automatically.
+ *
+ * THE BOOKING BUTTON DESTINATION IS A CHOICE, NOT A URL, FOR THE SAME REASON
+ *
+ * `bookingCtaTarget` picks from a list. The page resolves the actual link at
+ * render time from `serviceLifestyle.referral_form_pdf`, which is the same
+ * asset the Curate Lifestyle page already serves and which `serviceLifestyle`,
+ * `serviceLifestyleProgram` and `ourPrograms` all reference today.
+ *
+ * Storing the CDN URL here instead would make a fourth copy. Sanity mints a
+ * new URL when a file is replaced, so the day someone uploads a new version of
+ * the referral form, three pages would update and this one would quietly keep
+ * serving the old PDF. A referral form is the wrong thing to be silently stale.
  */
 export default defineType({
   name: "practitioner",
@@ -150,7 +162,34 @@ export default defineType({
       type: "text",
       rows: 3,
       description:
-        "Shown in place of the booking button when Jane Booking URL is empty. Explains how someone reaches this practitioner instead. Dr. Leong is the current case: he is not publicly bookable, patients come through the Curate Lifestyle Program, and the button points at that program rather than at Jane. Leave both this and the Jane URL empty and the whole block is omitted.",
+        "Shown in place of the booking button when Jane Booking URL is empty. Explains how someone reaches this practitioner instead. Dr. Leong is the current case: he is not publicly bookable and patients come through the Curate Lifestyle Program. Leave both this and the Jane URL empty and the whole block is omitted.",
+    }),
+    defineField({
+      name: "bookingCtaLabel",
+      title: "Booking Button Label",
+      type: "string",
+      description:
+        "Text on the button shown with the Booking Note, for example Curate Lifestyle Referral Form. Ignored when a Jane Booking URL is set, since that button reads Book with {name}.",
+    }),
+    defineField({
+      name: "bookingCtaTarget",
+      title: "Booking Button Destination",
+      type: "string",
+      description:
+        "Where the button goes. Chosen from a list rather than typed as a link so that replacing the referral form on the Curate Lifestyle page updates this button too, instead of leaving it pointing at the old file.",
+      options: {
+        list: [
+          {
+            title: "Curate Lifestyle referral form (the PDF)",
+            value: "curateLifestyleReferralForm",
+          },
+          {
+            title: "Curate Lifestyle program page",
+            value: "curateLifestyleProgram",
+          },
+        ],
+        layout: "radio",
+      },
     }),
     // Not in the restructure brief's field list, added deliberately. Every
     // other document type that backs a page carries this, and without it the

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { groq } from "next-sanity";
 
+import { treatmentPath } from "@/lib/service-urls";
 import { SEARCH_REVALIDATE_SECONDS, sanityFetch } from "@/sanity/lib/client";
 
 type IndexDoc = Record<string, unknown> & {
@@ -94,7 +95,7 @@ function buildHrefForDoc(doc: IndexDoc): string | null {
       return doc.slugCurrent ? `/services/${doc.slugCurrent}` : null;
     case "treatments":
       return doc.serviceSlugCurrent && doc.treatmentSlugCurrent
-        ? `/services/${doc.serviceSlugCurrent}/${doc.treatmentSlugCurrent}`
+        ? treatmentPath(doc.serviceSlugCurrent, doc.treatmentSlugCurrent)
         : null;
     case "serviceLifestyle":
     case "serviceLifestyleProgram":

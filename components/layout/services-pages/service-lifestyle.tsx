@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/card";
 import { getAssetDownloadUrl } from "@/lib/asset-download";
 import { externalLinkProps } from "@/lib/links";
+import { treatmentPath } from "@/lib/service-urls";
 import { cleanSlug, cn, getTeamMemberUrlId } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
 
@@ -219,7 +220,10 @@ export default function ServiceLifestyleContent({
                     className="flex w-fit items-center gap-2 italic hover:underline"
                     key={treatment._id}
                     // * Clean slug is used when sanity preview mode is enabled
-                    href={`/services/${cleanSlug(slug!)}/${cleanSlug(treatment.slug!)}`}
+                    href={treatmentPath(
+                      cleanSlug(slug!),
+                      cleanSlug(treatment.slug!)
+                    )}
                   >
                     {treatment.title}
                     <ArrowRightIcon size={16} />

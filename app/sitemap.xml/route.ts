@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { treatmentPath } from "@/lib/service-urls";
 import { SITEMAP_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { SITEMAP_QUERY } from "@/sanity/lib/queries";
@@ -128,7 +129,7 @@ export async function GET() {
 
   const treatmentRoutes: Url[] = treatments.map(
     (treatment: { serviceSlug: string; treatmentSlug: string }) => ({
-      url: `${BASEURL}/services/${treatment.serviceSlug}/${treatment.treatmentSlug}`,
+      url: `${BASEURL}${treatmentPath(treatment.serviceSlug, treatment.treatmentSlug)}`,
       lastModified: new Date().toISOString(),
       changeFrequency: "weekly",
       priority: 0.7,

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { treatmentPath } from "@/lib/service-urls";
 import {
   PRIMARY_CTA_BUTTON_QUERYResult,
   SITE_SETTINGS_QUERYResult,
@@ -129,7 +130,10 @@ export default function SiteNav({
                                           <Link
                                             key={treatmentIndex}
                                             className="text-sm hover:underline"
-                                            href={`/services/${service.slug}/${treatment.slug}`}
+                                            href={treatmentPath(
+                                              service.slug,
+                                              treatment.slug
+                                            )}
                                             onClick={() => setOpen(false)}
                                           >
                                             {treatment.title}

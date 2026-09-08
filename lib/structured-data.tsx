@@ -1,4 +1,5 @@
-import { BRAND_NAME, BASEURL } from "@/app/site-settings";
+import { BASEURL, BRAND_NAME } from "@/app/site-settings";
+import { treatmentPath } from "@/lib/service-urls";
 import {
   CAFE_PAGE_QUERYResult,
   SERVICE_BY_SLUG_QUERYResult,
@@ -93,7 +94,7 @@ function getActiveServiceNodes(siteSettings: SITE_SETTINGS_QUERYResult) {
                       "@type": "Service",
                       name: treatment.title,
                       url: absoluteUrl(
-                        `/services/${service.slug}/${treatment.slug}`
+                        treatmentPath(service.slug, treatment.slug)
                       ),
                     },
                   })),
@@ -201,7 +202,7 @@ export function buildServiceJsonLd(service: SERVICE_BY_SLUG_QUERYResult) {
               itemOffered: {
                 "@type": "Service",
                 name: treatment.title,
-                url: absoluteUrl(`/services/${service.slug}/${treatment.slug}`),
+                url: absoluteUrl(treatmentPath(service.slug, treatment.slug)),
               },
             })),
         }
@@ -209,27 +210,32 @@ export function buildServiceJsonLd(service: SERVICE_BY_SLUG_QUERYResult) {
   }) as JsonLdObject;
 }
 
-export function buildTreatmentJsonLd(
-  serviceSlug: string,
-  treatment: TREATMENT_BY_SLUG_QUERYResult
-) {
+/**
+ * The canonical URL comes from the treatment itself, via treatmentPath, rather
+ * than from a service slug the caller happens to have. The caller no longer
+ * knows the category: treatments are served from /services/{treatment} and
+ * only Recovery Sanctuary children stay nested.
+ */
+export function buildTreatmentJsonLd(treatment: TREATMENT_BY_SLUG_QUERYResult) {
   const treatmentSlug = treatment?.treatmentSlug?.current;
 
   if (!treatment?.title || !treatmentSlug) {
     return null;
   }
 
+  const path = treatmentPath(treatment.serviceSlug, treatmentSlug);
+
   return stripEmpty({
     "@context": "https://schema.org",
     "@type": "Service",
-    "@id": `${absoluteUrl(`/services/${serviceSlug}/${treatmentSlug}`)}#service`,
+    "@id": `${absoluteUrl(path)}#service`,
     name: treatment.title,
     description:
       treatment.seo?.pageDescription ||
       treatment.intro?.introParagraph ||
       treatment.quoteContent,
     image: treatment.heroImage?.asset?.url,
-    url: absoluteUrl(`/services/${serviceSlug}/${treatmentSlug}`),
+    url: absoluteUrl(path),
     provider: { "@id": `${BASEURL}/#medicalclinic` },
     serviceType: treatment.serviceName,
     areaServed: {
@@ -247,7 +253,9 @@ export function buildCafeJsonLd(cafePage: CAFE_PAGE_QUERYResult) {
   const cafe = cafePage as {
     seo?: { pageDescription?: string | null } | null;
     heroSection?: {
-      heroImage?: { image?: { asset?: { url?: string | null } | null } | null } | null;
+      heroImage?: {
+        image?: { asset?: { url?: string | null } | null } | null;
+      } | null;
     } | null;
     ctaBandSection?: {
       body?: string | null;

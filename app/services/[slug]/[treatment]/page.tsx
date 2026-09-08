@@ -1,3 +1,16 @@
+/**
+ * Nested treatment pages, for Recovery Sanctuary only.
+ *
+ * Every other treatment now lives flat at /services/{treatment} and is served
+ * by the parent route. Recovery Sanctuary keeps the category in its children
+ * URLs deliberately: the name is a permanent brand asset, and
+ * /services/recovery-sanctuary/flowpresso-therapy is the strongest ranking URL
+ * on the site. See lib/service-urls.ts.
+ *
+ * This route still matches any /services/{a}/{b}, because two categories have
+ * not been moved yet. next.config.mjs redirects the flattened ones, and
+ * redirects run before routing, so those never reach here.
+ */
 import { notFound } from "next/navigation";
 
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
@@ -19,7 +32,7 @@ import {
 export default async function TreatmentPage({
   params,
 }: {
-  params: { service: string; treatment: string };
+  params: { slug: string; treatment: string };
 }) {
   const services = await sanityFetch<ALL_SERVICES_QUERYResult>({
     query: ALL_SERVICES_QUERY,
@@ -43,7 +56,7 @@ export default async function TreatmentPage({
   return (
     <>
       <JsonLdScript
-        data={buildTreatmentJsonLd(params.service, treatment)}
+        data={buildTreatmentJsonLd(treatment)}
         id={`treatment-${params.treatment}-json-ld`}
       />
       <TreatmentHeroSection
@@ -61,15 +74,17 @@ export default async function TreatmentPage({
 export async function generateMetadata({
   params,
 }: {
-  params: { service: string; treatment: string };
+  params: { slug: string; treatment: string };
 }) {
   const treatmentPage = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
     query: TREATMENT_BY_SLUG_QUERY,
     params: { slug: params.treatment },
   });
 
+  // generateMetadata runs before the component, so returning null here left
+  // the page with no metadata rather than a 404. See CH-001.
   if (!treatmentPage) {
-    return null;
+    notFound();
   }
 
   const { seo } = treatmentPage!;

@@ -74,6 +74,32 @@ const nextConfig = {
         statusCode: 301,
       },
 
+      // Renamed categories, applied to Sanity on 2026-09-08.
+      //
+      // These were served by RENAMED_SERVICE_SLUGS in
+      // app/services/[slug]/page.tsx while the rename happened, which is what
+      // made it gap-free: that alias only fires once the Sanity slug changes,
+      // so neither ordering could break the old URL.
+      //
+      // Now that the new slugs exist, the redirect belongs here instead. A
+      // config redirect is served before rendering rather than after a Sanity
+      // round trip, and permanentRedirect from next/navigation emits 308 while
+      // every other redirect on this site is 301. Google treats the two the
+      // same, but one convention is easier to audit than two.
+      //
+      // The alias stays in the route as a backstop, so dropping an entry here
+      // still redirects rather than 404s.
+      {
+        source: "/services/rehab",
+        destination: "/services/one-on-one-care",
+        statusCode: 301,
+      },
+      {
+        source: "/services/exercise-therapy",
+        destination: "/services/movement-and-training",
+        statusCode: 301,
+      },
+
       // Legacy URLs that never matched a page, kept from CH-002.
       //
       // /services/chiropractic points straight at the flat URL rather than
@@ -83,9 +109,13 @@ const nextConfig = {
       // /services/physiotherapy and /services/massage-therapy are gone from
       // this list on purpose: they are real pages now, and redirecting them
       // would have pointed each at itself.
+      //
+      // /services/primary-care now points at the renamed category directly.
+      // It used to point at /services/rehab, which became a redirect the
+      // moment the rename landed, making it a two hop chain.
       {
         source: "/services/primary-care",
-        destination: "/services/rehab",
+        destination: "/services/one-on-one-care",
         statusCode: 301,
       },
       {

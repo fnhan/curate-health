@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
+import { externalLinkProps } from "@/lib/links";
 import {
   PRIMARY_CTA_BUTTON_QUERYResult,
   TREATMENT_BY_SLUG_QUERYResult,
@@ -107,7 +108,10 @@ export default function TreatmentContent({
               asChild
               className="w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
             >
-              <a target="_blank" href={ctaButton?.ctaLink!}>
+              <a
+                href={ctaButton?.ctaLink!}
+                {...externalLinkProps(ctaButton?.ctaLink!)}
+              >
                 {ctaButtonText}
               </a>
             </Button>

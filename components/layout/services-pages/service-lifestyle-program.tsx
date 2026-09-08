@@ -6,6 +6,7 @@ import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getAssetDownloadUrl } from "@/lib/asset-download";
+import { externalLinkProps } from "@/lib/links";
 import { SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult } from "@/sanity.types";
 
 export default function ServiceLifestyleProgramContent({
@@ -219,8 +220,10 @@ export default function ServiceLifestyleProgramContent({
               className="w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
             >
               <a
-                target="_blank"
                 href={getAssetDownloadUrl(referral_form_pdf?.asset)}
+                {...externalLinkProps(
+                  getAssetDownloadUrl(referral_form_pdf?.asset)
+                )}
               >
                 {ctaButtonText}
               </a>

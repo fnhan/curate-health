@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
+import { externalLinkProps } from "@/lib/links";
 
 type CTAButton = {
   buttonText: string | null;
@@ -51,7 +52,10 @@ export default function CTASection({ ctaSection }: CTASectionProps) {
             asChild
             className="mx-auto w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
           >
-            <a target="_blank" href={ctaButton?.buttonLink!}>
+            <a
+              href={ctaButton?.buttonLink!}
+              {...externalLinkProps(ctaButton?.buttonLink!)}
+            >
               {ctaButton?.buttonText}
             </a>
           </Button>

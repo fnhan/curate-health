@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { getAssetDownloadUrl } from "@/lib/asset-download";
+import { externalLinkProps } from "@/lib/links";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 
 import arrow from "../../../public/images/cta-arrow.svg";
@@ -112,6 +113,11 @@ const CurateLifestyle = ({
                 <a
                   href={getAssetDownloadUrl(
                     curateLifestyle?.referral_form_pdf?.asset
+                  )}
+                  {...externalLinkProps(
+                    getAssetDownloadUrl(
+                      curateLifestyle?.referral_form_pdf?.asset
+                    )
                   )}
                   className="border-2 border-[#878E76] p-6 text-[#6B6B6B] transition-colors duration-300 hover:bg-[#878E76] hover:text-white"
                 >

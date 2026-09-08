@@ -8,6 +8,7 @@ import {
 } from "components/ui/accordion";
 import { MoveUpRightIcon } from "lucide-react";
 
+import { externalLinkProps } from "@/lib/links";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
 export function FooterMobileAccordion({
@@ -100,8 +101,7 @@ export function FooterMobileAccordion({
                   key={index}
                   className="flex items-center gap-2 hover:underline"
                   href={link.url!}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...externalLinkProps(link.url!)}
                 >
                   <span>{link.platform}</span>
                   <MoveUpRightIcon size={16} />

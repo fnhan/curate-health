@@ -5,6 +5,7 @@ import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { externalLinkProps } from "@/lib/links";
 import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -91,7 +92,7 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     href={contactInfo?.mapLink ?? ""}
-                    target="_blank"
+                    {...externalLinkProps(contactInfo?.mapLink ?? "")}
                     className="not-italic hover:underline md:text-3xl"
                   >
                     {contactInfo?.address?.street} {contactInfo?.address?.city}
@@ -108,7 +109,6 @@ export default async function ContactPage() {
                 </div>
                 <div className="pl-8">
                   <a
-                    target="_blank"
                     href={`mailto:${contactInfo?.email}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
@@ -124,7 +124,6 @@ export default async function ContactPage() {
                 </div>
                 <div className="pl-8">
                   <a
-                    target="_blank"
                     href={`tel:${contactInfo?.phone}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
@@ -140,7 +139,6 @@ export default async function ContactPage() {
                 </div>
                 <div className="pl-8">
                   <a
-                    target="_blank"
                     href={`tel:${contactInfo?.phone}`}
                     className="not-italic hover:underline md:text-3xl"
                   >
@@ -203,7 +201,7 @@ export default async function ContactPage() {
             >
               <a
                 href={contactInfo?.mapLink ?? ""}
-                target="_blank"
+                {...externalLinkProps(contactInfo?.mapLink ?? "")}
                 className="flex items-center justify-center gap-2"
               >
                 <MapPinIcon className="h-4 w-4" />
@@ -250,7 +248,9 @@ export default async function ContactPage() {
                 {contactInfo2?.address?.locationInfo && (
                   <p>{contactInfo2?.address?.locationInfo}</p>
                 )}
-                <address className="not-italic">{secondLocationAddress}</address>
+                <address className="not-italic">
+                  {secondLocationAddress}
+                </address>
               </div>
               <div className="flex flex-col gap-4">
                 {/* Hours */}
@@ -287,7 +287,7 @@ export default async function ContactPage() {
               >
                 <a
                   href={contactInfo2?.mapLink ?? ""}
-                  target="_blank"
+                  {...externalLinkProps(contactInfo2?.mapLink ?? "")}
                   className="flex items-center justify-center gap-2"
                 >
                   <MapPinIcon className="h-4 w-4" />

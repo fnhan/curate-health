@@ -68,3 +68,39 @@ export function treatmentPath(
     ? `/services/${service}/${treatment}`
     : `/services/${treatment}`;
 }
+
+/**
+ * Category slugs that have been renamed, old to new.
+ *
+ * These exist so the rename never opens a gap. A redirect in next.config.mjs
+ * would have to ship either before the Sanity slug changes, pointing at a page
+ * that does not exist yet, or after, leaving a live indexed URL on 404 in
+ * between. Neither window is acceptable on a category hub.
+ *
+ * Resolving the alias in the route removes the window entirely. While Sanity
+ * still says "rehab", /services/rehab matches a real service and this is never
+ * consulted. The moment the slug changes, the same URL stops matching and
+ * falls through to here, which redirects it. Nothing is ever broken, in either
+ * order, and the deploy and the content change do not have to be simultaneous.
+ *
+ * Checked before treatments on purpose. "exercise-therapy" is also a treatment
+ * slug on the orphaned lifestyle-medicine branch, so without this ordering the
+ * old category URL would quietly start serving that treatment page instead of
+ * redirecting to the renamed hub.
+ *
+ * These entries are permanent. The old URLs were indexed, so they keep
+ * redirecting rather than being cleaned up later.
+ */
+export const RENAMED_SERVICE_SLUGS: Record<string, string> = {
+  rehab: "one-on-one-care",
+  "exercise-therapy": "movement-and-training",
+};
+
+/** The new home of a renamed category, or null if the slug was not renamed. */
+export function renamedServicePath(
+  slug: string | null | undefined
+): string | null {
+  const target = RENAMED_SERVICE_SLUGS[clean(slug)];
+
+  return target ? servicePath(target) : null;
+}

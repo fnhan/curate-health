@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import Pillars from "@/components/layout/about-pages/pillars";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { PILLARS_OF_HEALTH_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { PILLARS_OF_HEALTH_QUERY } from "@/sanity/lib/queries";
@@ -48,24 +49,5 @@ export async function generateMetadata() {
 
   const { seo } = pillarsOfHealth!;
 
-  return {
-    title: seo?.pageTitle,
-    description: seo?.pageDescription,
-    openGraph: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

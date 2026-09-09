@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { formatDate } from "@/lib/utils";
 import { GET_ALL_POSTS_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -74,4 +75,22 @@ export default async function BlogPage() {
       </div>
     </div>
   );
+}
+
+/**
+ * /blog had no metadata of its own, so it inherited the root layout and shared
+ * the homepage's title and description verbatim. Three pages presenting as one
+ * page is CH-006.
+ *
+ * Written here rather than pulled from Sanity because `blogSection` carries no
+ * seo object and adding one is a schema change. Worth doing when the blog work
+ * in CH-105 happens; until then this is the page's own identity rather than
+ * the homepage's.
+ */
+export async function generateMetadata() {
+  return buildPageMetadata(null, {
+    title: "Blog",
+    description:
+      "Articles on movement, recovery and lifestyle medicine from the practitioners at Curate Health in Midtown Toronto.",
+  });
 }

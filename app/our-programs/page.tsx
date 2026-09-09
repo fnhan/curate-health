@@ -9,6 +9,7 @@ import { OurProgramsNavigation } from "@/components/layout/our-programs-page/our
 import ThreePaths from "@/components/layout/our-programs-page/three-paths";
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import HoverLink from "@/components/shared/hover-link";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_PROGRAMS_QUERY } from "@/sanity/lib/queries";
@@ -51,4 +52,21 @@ export default async function OurProgramsPage() {
       </div>
     </>
   );
+}
+
+/**
+ * Same gap as /blog: no metadata of its own, so it inherited the homepage's
+ * title and description. See CH-006.
+ *
+ * The ourPrograms document has no seo object either, which is why
+ * scripts/audit-seo-fields.js missed it at first: that audit only looked at
+ * documents that already had one, so a document missing it entirely was
+ * invisible. Frank caught that.
+ */
+export async function generateMetadata() {
+  return buildPageMetadata(null, {
+    title: "Health Programs Toronto",
+    description:
+      "Three structured health programs at Curate Health in Midtown Toronto, from self-directed access to physician-led care.",
+  });
 }

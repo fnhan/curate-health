@@ -121,7 +121,7 @@ export default function SiteNav({
                                     value={`service-${index}`}
                                     className="border-none"
                                   >
-                                    <AccordionTrigger className="mr-20 p-0 pr-4 text-base font-normal">
+                                    <AccordionTrigger className="mr-4 whitespace-nowrap p-0 pr-4 text-base font-normal">
                                       {service.title}
                                     </AccordionTrigger>
                                     <AccordionContent className="ml-4 flex flex-col gap-2 pt-4">

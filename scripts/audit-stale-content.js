@@ -148,7 +148,9 @@ async function main() {
   console.log("Stale and mis-copied content");
   console.log(RULE);
   console.log(`${documents.length} documents scanned`);
-  console.log("LIVE means a visitor can reach it. dead means nothing renders it.\n");
+  console.log(
+    "LIVE means a visitor can reach it. dead means nothing renders it.\n"
+  );
 
   let live = 0;
   let dead = 0;
@@ -157,7 +159,9 @@ async function main() {
     const liveCount = lines.filter((l) => l.includes("[LIVE]")).length;
     live += liveCount;
     dead += lines.length - liveCount;
-    console.log(`${heading}  (${liveCount} live, ${lines.length - liveCount} dead)`);
+    console.log(
+      `${heading}  (${liveCount} live, ${lines.length - liveCount} dead)`
+    );
     lines.forEach((l) => console.log(l));
     console.log("");
   };
@@ -244,7 +248,8 @@ async function main() {
 
   for (const doc of documents) {
     for (const [path, value] of walkStrings(doc)) {
-      if (DEAD_FIELDS.test(path) || /slug|url|link|_ref|_key/i.test(path)) continue;
+      if (DEAD_FIELDS.test(path) || /slug|url|link|_ref|_key/i.test(path))
+        continue;
       if (!/[—–]/.test(value)) continue;
 
       if (META_PATHS.test(path)) {
@@ -276,7 +281,10 @@ async function main() {
   for (const doc of documents) {
     for (const [path, value] of walkStrings(doc)) {
       if (!/title$/i.test(path) || !META_PATHS.test(path)) continue;
-      if (value.length > 60 && /\b(image|photo|showing|depicting|a dense|close-up)\b/i.test(value)) {
+      if (
+        value.length > 60 &&
+        /\b(image|photo|showing|depicting|a dense|close-up)\b/i.test(value)
+      ) {
         captionHits.push(mark(doc, path, value));
       }
     }
@@ -284,7 +292,9 @@ async function main() {
   report("ALT TEXT pasted into a title field", captionHits);
 
   console.log(RULE);
-  console.log(`${live} live finding(s) to fix, ${dead} in records nothing renders.`);
+  console.log(
+    `${live} live finding(s) to fix, ${dead} in records nothing renders.`
+  );
 
   process.exit(live ? 1 : 0);
 }

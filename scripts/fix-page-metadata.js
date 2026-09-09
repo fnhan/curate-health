@@ -244,7 +244,11 @@ const ALT_TEXT = [
     slug: "psychotherapy",
     path: "seo.socialMeta.twitterImage.alt",
   },
-  { type: "service", slug: "mental-health", path: "seo.socialMeta.ogImage.alt" },
+  {
+    type: "service",
+    slug: "mental-health",
+    path: "seo.socialMeta.ogImage.alt",
+  },
   {
     type: "service",
     slug: "mental-health",
@@ -483,9 +487,11 @@ async function main() {
       continue;
     }
 
-    const fixed = current.replace(/counseling/gi, (m) =>
-      m[0] === "C" ? "Counselling" : "counselling"
-    ).trim();
+    const fixed = current
+      .replace(/counseling/gi, (m) =>
+        m[0] === "C" ? "Counselling" : "counselling"
+      )
+      .trim();
 
     console.log(`\n  ${item.slug}  ${item.path}`);
     console.log(`    was: ${JSON.stringify(current)}`);
@@ -519,7 +525,11 @@ async function main() {
 
     // Skip anything COPY is already rewriting, so one document does not get
     // two patches setting the same field.
-    if (mutations.some((m) => m.patch.id === doc._id && m.patch.set?.["seo.pageDescription"])) {
+    if (
+      mutations.some(
+        (m) => m.patch.id === doc._id && m.patch.set?.["seo.pageDescription"]
+      )
+    ) {
       continue;
     }
 
@@ -531,73 +541,6 @@ async function main() {
     });
   }
   console.log(trimmed ? `  ${trimmed} description(s) trimmed` : "  none");
-
-  console.log(`\n${RULE}`);
-  console.log("SOCIAL TITLE AND DESCRIPTION");
-  console.log(`
-  Nothing renders these. SEO_QUERY selects socialMeta's two images and not its
-  title or description, so og:title and twitter:title both come from
-  seo.pageTitle instead. The fields have been quietly diverging ever since:
-  clinical-care's social title still says "Rehab", nutritional-counselling's
-  still spells counselling with one L, and psychotherapy's holds a photo
-  caption where a title should be.
-
-  Setting both to match the page title and description makes the Studio stop
-  showing values that are wrong, and means that if these are ever wired up
-  they publish the right thing rather than a snapshot of 2024. See the note in
-  scripts/audit-seo-fields.js for why leaving them as they are is the one
-  option that carries real risk.
-`);
-
-  const socialDocs = await query(
-    `*[defined(seo.socialMeta) && !(_id in path("drafts.**")) && !(_id in path("sanity.**"))]{
-      _id, _type,
-      "name": coalesce(title, name, "(untitled)"),
-      "pageTitle": seo.pageTitle,
-      "pageDescription": seo.pageDescription,
-      "socialTitle": seo.socialMeta.title,
-      "socialDescription": seo.socialMeta.description
-    }`
-  );
-
-  let synced = 0;
-  for (const doc of socialDocs) {
-    // Read through the pending patches, so a document COPY is rewriting syncs
-    // to its new title rather than the one being replaced.
-    const pending = mutations.find((m) => m.patch.id === doc._id)?.patch.set ?? {};
-    const title = (pending["seo.pageTitle"] ?? doc.pageTitle ?? "").trim();
-    const description = (
-      pending["seo.pageDescription"] ??
-      doc.pageDescription ??
-      ""
-    ).trim();
-
-    if (!title && !description) continue;
-
-    const set = {};
-    if (title && doc.socialTitle !== title) set["seo.socialMeta.title"] = title;
-    if (description && doc.socialDescription !== description) {
-      set["seo.socialMeta.description"] = description;
-    }
-    if (!Object.keys(set).length) continue;
-
-    synced++;
-    console.log(`  ${doc._type}  ${doc.name}`);
-    if (set["seo.socialMeta.title"]) {
-      console.log(`      title was: ${JSON.stringify(doc.socialTitle)}`);
-      console.log(`      title now: ${JSON.stringify(title)}`);
-    }
-    if (set["seo.socialMeta.description"]) {
-      console.log(
-        `      desc  was: ${JSON.stringify((doc.socialDescription || "").slice(0, 70))}`
-      );
-    }
-
-    const existing = mutations.find((m) => m.patch.id === doc._id);
-    if (existing) Object.assign(existing.patch.set, set);
-    else mutations.push({ patch: { id: doc._id, set } });
-  }
-  console.log(`\n  ${synced} document(s) whose social fields disagreed.`);
 
   console.log(`\n${RULE}`);
 

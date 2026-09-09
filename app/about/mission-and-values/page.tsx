@@ -82,6 +82,21 @@ export default async function MissionAndValuesPage() {
         alt={heroSection?.heroImage?.alt || ""}
         className="h-[400px] w-full object-cover md:h-[550px]"
       />
+      {/*
+        This page had no H1 at all, which CH-011 records. Every other page
+        takes its heading from a `heroTitle` field in Sanity, but this
+        document has no such field, and adding one to the schema to hold a
+        value that can only ever be "Mission and Values" is more moving parts
+        than the problem needs. The sections below it are H2s, so this is the
+        right level.
+      */}
+      <div className="bg-white pt-14 md:pt-32">
+        <div className="container">
+          <h1 className="text-2xl font-light text-primary md:text-4xl 2xl:text-6xl">
+            Mission and Values
+          </h1>
+        </div>
+      </div>
       <AlternatingSections sections={additionalSections!} />
 
       {(hasReports || hasSurveyLink) && (

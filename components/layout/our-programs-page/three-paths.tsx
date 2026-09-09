@@ -3,6 +3,13 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 
+/**
+ * An h2, not an h1.
+ *
+ * This is a section heading part way down /our-programs, and the page already
+ * has an h1 from IntroSection. Two h1s leaves the page's subject ambiguous,
+ * which is CH-011. Nothing about the styling changes.
+ */
 const Heading = ({
   children,
   className,
@@ -11,9 +18,9 @@ const Heading = ({
   className?: string;
 }) => {
   return (
-    <h1 className={cn("text-xl font-light md:text-4xl", className)}>
+    <h2 className={cn("text-xl font-light md:text-4xl", className)}>
       {children}
-    </h1>
+    </h2>
   );
 };
 
@@ -59,16 +66,18 @@ const ThreePaths = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
           <LargeText className="max-w-3xl text-center italic">
             Which Program Is Right for You?
           </LargeText>
+          {/*
+            Rewritten to the content rules. The previous version carried four
+            banned words in one paragraph, "transformative", "elevate",
+            "seamlessly" and an em dash, plus two rule-of-three lists. It said
+            the same thing at twice the length.
+          */}
           <p className="max-w-[700px] text-center font-light leading-7">
-            From self-directed care to fully curated support, our three programs
-            reflect different levels of structure, guidance, and commitment.
-            Whether you’re looking for flexible access to services, focused
-            guidance to reverse chronic conditions, or a concierge-style
-            transformative experience, each path is rooted in clinical expertise
-            and built to support where you are, and elevate you to where you
-            want to be. The more curated the program, the more seamlessly
-            integrated the care — helping you progress step by step toward
-            long-term health and vitality.
+            Our three programs differ in how much structure and guidance they
+            carry, from self-directed care through to fully curated support.
+            Each is built on the same clinical foundation and starts from where
+            you are now. The more curated the program, the more closely the care
+            is coordinated across the team.
           </p>
         </div>
       </div>

@@ -136,3 +136,61 @@ export function renamedTreatmentSlug(
 ): string | null {
   return RENAMED_TREATMENT_SLUGS[clean(slug)] ?? null;
 }
+
+/**
+ * Product slugs that have been renamed, old to new.
+ *
+ * Same mechanism as the two maps above, applied to /products/{slug}.
+ *
+ * "profession-grade-supplements" was a typo. The page's heading said
+ * "Profession Grade Supplements" and its title said "Professional", so the
+ * page could not agree with itself about the name of the thing it sells. The
+ * heading and title are fixed as content; the URL needs this, because it is
+ * indexed and an address cannot be corrected in place without breaking it.
+ *
+ * Permanent, for the same reason as the others. Whatever links to the old
+ * spelling keeps working.
+ */
+export const RENAMED_PRODUCT_SLUGS: Record<string, string> = {
+  "profession-grade-supplements": "professional-grade-supplements",
+};
+
+/**
+ * Every slug a product URL might be trying to reach, in order.
+ *
+ * Both directions of a rename, which is safe here in a way it would not be in
+ * next.config.mjs, and useful in two ways.
+ *
+ * The route looks the slug up in Sanity first and only consults this when
+ * nothing matched, so exactly one direction is ever reachable at a time. While
+ * Sanity says "profession-grade", that URL resolves and the forward entry is
+ * never read; the reverse entry sends the correctly spelled URL to it. The
+ * moment the slug changes, those swap. Neither order of deploying breaks
+ * anything.
+ *
+ * It also means the correct spelling works from today rather than from
+ * whenever the rename lands. "Professional" is what anyone typing or linking
+ * by hand will write, and it 404s right now.
+ *
+ * The caller must confirm the target actually exists before redirecting. That
+ * is what makes a two-way map safe: if neither slug resolves, a blind redirect
+ * would bounce between them forever.
+ */
+export function productAliasTargets(slug: string | null | undefined): string[] {
+  const from = clean(slug);
+  const targets: string[] = [];
+
+  for (const [oldSlug, newSlug] of Object.entries(RENAMED_PRODUCT_SLUGS)) {
+    if (from === oldSlug) targets.push(newSlug);
+    if (from === newSlug) targets.push(oldSlug);
+  }
+
+  return targets;
+}
+
+/** Where a product lives. */
+export function productPath(slug: string | null | undefined): string {
+  const product = clean(slug);
+
+  return product ? `/products/${product}` : "/products";
+}

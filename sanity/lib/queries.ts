@@ -140,7 +140,7 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     "content_image": content_image.asset->url,
     "content_alt": content_image.alt,
     content,
-    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{
+    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){
       _id,
       title,
       "slug": treatmentSlug.current,
@@ -599,7 +599,7 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     title,
     "slug": slug.current,
     isActive,
-    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{
+    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){
       _id,
       title,
       "slug": treatmentSlug.current,
@@ -990,7 +990,7 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
     "content_image": content_image.asset->url,
     "content_alt": content_image.alt,
     content,
-    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true]{
+    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){
       _id,
       title,
       "slug": treatmentSlug.current,

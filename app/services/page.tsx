@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import ServicesHeroSection from "@/components/layout/services-pages/services-hero-section";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
+import HoverLink from "@/components/shared/hover-link";
 import {
   ALL_SERVICES_QUERYResult,
   SERVICES_PAGE_QUERYResult,
@@ -53,6 +54,17 @@ export default async function ServicesPage() {
           ))}
         </div>
       </section>
+      {/* Programs are not services, so they are not in the grid above. This is
+          the route across, and it sits directly above the survey section that
+          the shared layout renders next.
+
+          Wrapped in bg-primary because HoverLink draws white text and the grid
+          above it is bg-white. On the homepage this component always sits on a
+          dark section, which is where its white-on-dark, lighten-on-hover
+          behaviour comes from. */}
+      <div className="bg-primary">
+        <HoverLink href="/our-programs" text="Explore Our Programs" />
+      </div>
     </>
   );
 }

@@ -223,6 +223,15 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "displayOrder",
+      title: "Display Order",
+      type: "number",
+      description:
+        "Lowest first, wherever this category lists its treatments: the sidebar menu, the category page and llms.txt. Leave empty and it sorts to the end alphabetically, so a new treatment appears last rather than jumping into the middle of a deliberate order.",
+      validation: (Rule) =>
+        Rule.integer().min(1).error("A whole number of 1 or more, or empty"),
+    }),
+    defineField({
       name: "practitioners",
       title: "Practitioners",
       type: "array",

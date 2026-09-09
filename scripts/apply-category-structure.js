@@ -79,9 +79,19 @@ const RETITLE_SERVICE = [
 
 /** Frank's order, per category. Lowest first. */
 const ORDER = {
+  "clinical-care": [
+    "acupuncture",
+    "chiropractic-care",
+    "massage-therapy",
+    "naturopathy",
+    "physiotherapy",
+    "psychotherapy",
+  ],
+  // Frank revised this on 2026-09-09. It was fitness, exercise rehab,
+  // performance; it is now exercise rehab first.
   "movement-and-training": [
-    "fitness-training",
     "exercise-rehab",
+    "fitness-training",
     "performance-training",
   ],
   "recovery-sanctuary": [

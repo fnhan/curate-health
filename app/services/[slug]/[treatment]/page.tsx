@@ -7,15 +7,18 @@
  * /services/recovery-sanctuary/flowpresso-therapy is the strongest ranking URL
  * on the site. See lib/service-urls.ts.
  *
- * This route still matches any /services/{a}/{b}, because two categories have
- * not been moved yet. next.config.mjs redirects the flattened ones, and
- * redirects run before routing, so those never reach here.
+ * This route matches any /services/{a}/{b}, and used to look the treatment up
+ * by its slug alone, ignoring the category segment completely. That meant
+ * /services/anything-at-all/physiotherapy served the physiotherapy page, so
+ * every treatment was reachable at an unlimited number of URLs. Canonical
+ * enforcement below is what closes that.
  */
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
+import { treatmentPath } from "@/lib/service-urls";
 import { JsonLdScript, buildTreatmentJsonLd } from "@/lib/structured-data";
 import {
   ALL_SERVICES_QUERYResult,
@@ -42,6 +45,22 @@ export default async function TreatmentPage({
     query: TREATMENT_BY_SLUG_QUERY,
     params: { slug: params.treatment },
   });
+
+  // One treatment, one canonical URL, decided by its own category rather than
+  // by whatever category the visitor happened to type. Anything else redirects.
+  //
+  // This also means a treatment moving between categories needs no
+  // hand-written redirect. Its old URL simply stops being canonical and starts
+  // redirecting on its own, which is the whole reason the category came out of
+  // child URLs in the first place.
+  if (treatment) {
+    const canonical = treatmentPath(treatment.serviceSlug, params.treatment);
+    const requested = `/services/${params.slug}/${params.treatment}`;
+
+    if (canonical !== requested) {
+      permanentRedirect(canonical);
+    }
+  }
 
   const primaryCTA = await sanityFetch<PRIMARY_CTA_BUTTON_QUERYResult>({
     query: PRIMARY_CTA_BUTTON_QUERY,

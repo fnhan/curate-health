@@ -194,6 +194,7 @@ async function main() {
       h1s: tagText(html, "h1").filter(Boolean),
       description: meta(html, "description"),
       ogTitle: meta(html, "og:title"),
+      ogDescription: meta(html, "og:description"),
       twitterTitle: meta(html, "twitter:title"),
       canonical:
         (html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/i) ||
@@ -246,15 +247,40 @@ async function main() {
       );
     }
 
+    // og:title and twitter:title are allowed to differ from the page title,
+    // and usually should. They come from seo.socialMeta.title, which exists so
+    // a share card can lead with a reason to click rather than with the
+    // keyword a search result needs. What matters is that the two agree with
+    // each other and that neither is empty or doubled.
+    if (
+      page.ogTitle &&
+      page.twitterTitle &&
+      page.ogTitle !== page.twitterTitle
+    ) {
+      add(
+        "FAIL",
+        `og:title and twitter:title disagree\n` +
+          `        og:      ${JSON.stringify(page.ogTitle)}\n` +
+          `        twitter: ${JSON.stringify(page.twitterTitle)}`
+      );
+    }
+
     for (const [label, value] of [
       ["og:title", page.ogTitle],
       ["twitter:title", page.twitterTitle],
+      ["og:description", page.ogDescription],
     ]) {
-      if (value && page.title && decode(value) !== page.title) {
-        add(
-          "WARN",
-          `${label} differs from the title\n        ${label}: ${JSON.stringify(value)}`
-        );
+      if (!value) {
+        add("WARN", `no ${label}, the share card will be built from guesswork`);
+        continue;
+      }
+      if (value.split(BRAND).length - 1 > 1) {
+        add("FAIL", `${label} says "${BRAND}" twice: ${JSON.stringify(value)}`);
+      }
+      for (const word of BANNED) {
+        if (new RegExp(`\\b${word}`, "i").test(value)) {
+          add("WARN", `${label} carries the banned word "${word}"`);
+        }
       }
     }
 

@@ -5,14 +5,22 @@ export const SEO_QUERY = groq`
     pageTitle,
     pageDescription,
     socialMeta{
+      title,
+      description,
       ogImage{
+        crop,
+        hotspot,
         asset-> {
+          _id,
           url,
           alt
         }
       },
       twitterImage{
+        crop,
+        hotspot,
         asset-> {
+          _id,
           url,
           alt
         }

@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 
+import {
+  SHARE_IMAGE_HEIGHT,
+  SHARE_IMAGE_WIDTH,
+  urlForShareImage,
+} from "@/sanity/lib/image";
+
 /**
  * Builds the metadata block for a page from its Sanity `seo` object.
  *
@@ -44,13 +50,21 @@ export function stripBrand(title: string | null | undefined): string {
 }
 
 type SeoImage = {
-  asset?: { url?: string | null; alt?: string | null } | null;
+  asset?: {
+    _id?: string | null;
+    url?: string | null;
+    alt?: string | null;
+  } | null;
+  crop?: Record<string, number> | null;
+  hotspot?: Record<string, number> | null;
 } | null;
 
 type SeoObject = {
   pageTitle?: string | null;
   pageDescription?: string | null;
   socialMeta?: {
+    title?: string | null;
+    description?: string | null;
     ogImage?: SeoImage;
     twitterImage?: SeoImage;
   } | null;
@@ -87,7 +101,27 @@ function imageEntry(image: SeoImage | undefined, alt: string) {
   const url = image?.asset?.url?.trim();
   if (!url) return undefined;
 
-  return [{ url, alt: image?.asset?.alt?.trim() || alt }];
+  // Sized and cropped to 1200x630, honouring any crop set in the Studio. The
+  // raw asset URL is the fallback for the case where the query did not select
+  // the asset id, so a missing _id degrades to the old behaviour rather than
+  // dropping the tag.
+  const shareUrl = image?.asset?._id
+    ? urlForShareImage({
+        _type: "image",
+        asset: { _type: "reference", _ref: image.asset._id },
+        ...(image.crop ? { crop: image.crop } : {}),
+        ...(image.hotspot ? { hotspot: image.hotspot } : {}),
+      } as never) || url
+    : url;
+
+  return [
+    {
+      url: shareUrl,
+      alt: image?.asset?.alt?.trim() || alt,
+      width: SHARE_IMAGE_WIDTH,
+      height: SHARE_IMAGE_HEIGHT,
+    },
+  ];
 }
 
 export function buildPageMetadata(
@@ -100,20 +134,42 @@ export function buildPageMetadata(
     fallbacks.description ||
     DEFAULT_DESCRIPTION;
 
-  const ogImages = imageEntry(seo?.socialMeta?.ogImage, title);
-  const twitterImages = imageEntry(seo?.socialMeta?.twitterImage, title);
+  /**
+   * A share card does a different job from a search result.
+   *
+   * A search result is answering "is this the thing I typed?", so its title
+   * leads with the keyword. A share card is competing with everything else in
+   * a feed, where nobody is looking for you, so its title has to give someone
+   * a reason to stop. "Our Story" is a fine search result and a dead share
+   * card. "The Heart Condition That Started Curate Health" is the reverse.
+   *
+   * These two fields have existed in the schema all along and nothing read
+   * them, so they were free to rot: clinical-care's still said "Rehab" a
+   * category rename later, and psychotherapy's held a caption describing a
+   * forest. They were corrected and written for sharing before this was
+   * wired up, in that order, because wiring them up first would have
+   * published every one of those.
+   *
+   * Empty falls back to the page's own title and description, so a page with
+   * nothing written for it still shares correctly rather than sharing blank.
+   */
+  const socialTitle = stripBrand(seo?.socialMeta?.title) || title;
+  const socialDescription = seo?.socialMeta?.description?.trim() || description;
+
+  const ogImages = imageEntry(seo?.socialMeta?.ogImage, socialTitle);
+  const twitterImages = imageEntry(seo?.socialMeta?.twitterImage, socialTitle);
 
   return {
     title,
     description,
     openGraph: {
-      title,
-      description,
+      title: socialTitle,
+      description: socialDescription,
       ...(ogImages ? { images: ogImages } : {}),
     },
     twitter: {
-      title,
-      description,
+      title: socialTitle,
+      description: socialDescription,
       ...(twitterImages ? { images: twitterImages } : {}),
     },
   };

@@ -8,6 +8,7 @@ import {
 } from "@/components/layout/cafe-page/cafe-intro-and-quote";
 import { CafeMenuDownloadSection } from "@/components/layout/cafe-page/cafe-menu-download";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { JsonLdScript, buildCafeJsonLd } from "@/lib/structured-data";
 import { CAFE_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -64,24 +65,5 @@ export async function generateMetadata() {
 
   const { seo } = cafePage!;
 
-  return {
-    title: seo?.pageTitle,
-    description: seo?.pageDescription,
-    openGraph: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

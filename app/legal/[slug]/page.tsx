@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PortableText } from "next-sanity";
 
 import Layout from "@/components/shared/layout";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   LAYOUT_QUERYResult,
   LEGAL_PAGE_BY_SLUG_QUERYResult,
@@ -59,24 +60,5 @@ export async function generateMetadata({
 
   const { seo } = legalPage!;
 
-  return {
-    title: seo?.pageTitle,
-    description: seo?.pageDescription,
-    openGraph: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

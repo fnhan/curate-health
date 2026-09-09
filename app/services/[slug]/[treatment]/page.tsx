@@ -18,6 +18,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { renamedTreatmentSlug, treatmentPath } from "@/lib/service-urls";
 import { JsonLdScript, buildTreatmentJsonLd } from "@/lib/structured-data";
 import {
@@ -147,24 +148,5 @@ export async function generateMetadata({
 
   const { seo } = resolved.treatment;
 
-  return {
-    title: seo?.pageTitle,
-    description: seo?.pageDescription,
-    openGraph: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

@@ -1,14 +1,15 @@
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import ServiceLifestyleContent from "@/components/layout/services-pages/service-lifestyle";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   ALL_SERVICES_QUERYResult,
-  SERVICE_LIFESTYLE_BY_SLUG_QUERYResult
+  SERVICE_LIFESTYLE_BY_SLUG_QUERYResult,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
   ALL_SERVICES_QUERY,
-  SERVICE_LIFESTYLE_BY_SLUG_QUERY
+  SERVICE_LIFESTYLE_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
 
 export default async function ServiceLifestylePage() {
@@ -50,24 +51,5 @@ export async function generateMetadata() {
   const fallbackDescription =
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
 
-  return {
-    title: seo?.pageTitle || fallbackTitle,
-    description: seo?.pageDescription || fallbackDescription,
-    openGraph: {
-      title: seo?.pageTitle || fallbackTitle,
-      description: seo?.pageDescription || fallbackDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle || fallbackTitle,
-      description: seo?.pageDescription || fallbackDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

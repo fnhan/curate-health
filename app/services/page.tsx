@@ -4,6 +4,7 @@ import Link from "next/link";
 import ServicesHeroSection from "@/components/layout/services-pages/services-hero-section";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import HoverLink from "@/components/shared/hover-link";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   ALL_SERVICES_QUERYResult,
   SERVICES_PAGE_QUERYResult,
@@ -80,24 +81,5 @@ export async function generateMetadata() {
   const fallbackDescription =
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
 
-  return {
-    title: seo?.pageTitle || fallbackTitle,
-    description: seo?.pageDescription || fallbackDescription,
-    openGraph: {
-      title: seo?.pageTitle || fallbackTitle,
-      description: seo?.pageDescription || fallbackDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle || fallbackTitle,
-      description: seo?.pageDescription || fallbackDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

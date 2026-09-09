@@ -5,6 +5,7 @@ import { PortableText } from "@portabletext/react";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import CtaFooterSection from "@/components/shared/cta-footer-section";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { SUSTAINABILITY_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { SUSTAINABILITY_QUERY } from "@/sanity/lib/queries";
@@ -55,24 +56,5 @@ export async function generateMetadata() {
 
   const { seo } = sustainability!;
 
-  return {
-    title: seo?.pageTitle,
-    description: seo?.pageDescription,
-    openGraph: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

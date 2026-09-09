@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
-
 import TeamMembersSection from "@/app/about/our-team/team-members-section";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { OUR_TEAM_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_TEAM_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -41,24 +41,5 @@ export async function generateMetadata() {
 
   const { seo } = ourStory!;
 
-  return {
-    title: seo?.pageTitle,
-    description: seo?.pageDescription,
-    openGraph: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

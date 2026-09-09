@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { externalLinkProps } from "@/lib/links";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { sanityFetch } from "@/sanity/lib/client";
 import { MISSION_AND_VALUES_QUERY } from "@/sanity/lib/queries";
 
@@ -181,24 +182,5 @@ export async function generateMetadata() {
 
   const { seo } = missionAndValues!;
 
-  return {
-    title: seo?.pageTitle,
-    description: seo?.pageDescription,
-    openGraph: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.ogImage?.asset?.url!,
-        alt: seo?.socialMeta?.ogImage?.asset?.alt!,
-      },
-    },
-    twitter: {
-      title: seo?.pageTitle,
-      description: seo?.pageDescription,
-      images: {
-        url: seo?.socialMeta?.twitterImage?.asset?.url!,
-        alt: seo?.socialMeta?.twitterImage?.asset?.alt!,
-      },
-    },
-  };
+  return buildPageMetadata(seo);
 }

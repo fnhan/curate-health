@@ -5,7 +5,11 @@ import ServiceHeroSection from "@/components/layout/services-pages/service-hero-
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
-import { renamedServicePath, treatmentPath } from "@/lib/service-urls";
+import {
+  renamedServicePath,
+  renamedTreatmentSlug,
+  treatmentPath,
+} from "@/lib/service-urls";
 import {
   JsonLdScript,
   buildServiceJsonLd,
@@ -71,6 +75,23 @@ async function resolve(slug: string) {
     }
 
     return { kind: "treatment" as const, treatment };
+  }
+
+  // Nothing matched the slug as given. It may be a treatment that has since
+  // been renamed, in which case send the visitor to wherever it lives now.
+  const newSlug = renamedTreatmentSlug(slug);
+  if (newSlug) {
+    const renamedTreatment = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
+      query: TREATMENT_BY_SLUG_QUERY,
+      params: { slug: newSlug },
+    });
+
+    if (renamedTreatment) {
+      return {
+        kind: "renamed" as const,
+        to: treatmentPath(renamedTreatment.serviceSlug, newSlug),
+      };
+    }
   }
 
   return { kind: "none" as const };

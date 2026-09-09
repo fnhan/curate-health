@@ -18,7 +18,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
-import { treatmentPath } from "@/lib/service-urls";
+import { renamedTreatmentSlug, treatmentPath } from "@/lib/service-urls";
 import { JsonLdScript, buildTreatmentJsonLd } from "@/lib/structured-data";
 import {
   ALL_SERVICES_QUERYResult,
@@ -59,6 +59,21 @@ export default async function TreatmentPage({
 
     if (canonical !== requested) {
       permanentRedirect(canonical);
+    }
+  } else {
+    // No treatment by that slug. It may have been renamed, in which case send
+    // the visitor wherever it lives now rather than 404ing an indexed URL.
+    const newSlug = renamedTreatmentSlug(params.treatment);
+
+    if (newSlug) {
+      const renamed = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
+        query: TREATMENT_BY_SLUG_QUERY,
+        params: { slug: newSlug },
+      });
+
+      if (renamed) {
+        permanentRedirect(treatmentPath(renamed.serviceSlug, newSlug));
+      }
     }
   }
 

@@ -105,6 +105,40 @@ const nextConfig = {
         statusCode: 301,
       },
 
+      // Retired categories. Both documents are kept, but neither is listed
+      // and neither hub should be reachable.
+      //
+      // Mental Health is unpublished, not deleted, for when
+      // /help-with/mental-health is built. It goes to /services rather than
+      // to /services/psychotherapy: someone searching for mental health
+      // support is asking a broader question than one modality answers, and
+      // pointing the URL at a single service forfeits the broader query.
+      // Retarget it at the concern page once that exists.
+      //
+      // Lifestyle Medicine was a second service taxonomy contradicting the
+      // main one: live, indexed, in no sitemap, and reachable by no internal
+      // link. It goes to /our-programs, the closest live ancestor of where
+      // the restructure brief wants it, /our-programs/curate-lifestyle.
+      // Retarget when that page exists.
+      {
+        source: "/services/mental-health",
+        destination: "/services",
+        statusCode: 301,
+      },
+      {
+        source: "/services/lifestyle-medicine",
+        destination: "/our-programs",
+        statusCode: 301,
+      },
+      // Straight to the hub rather than via /services/exercise-therapy, which
+      // is itself a redirect. Its content was compared against all three
+      // Movement and Training pages and holds nothing they do not.
+      {
+        source: "/services/lifestyle-medicine/exercise-therapy",
+        destination: "/services/movement-and-training",
+        statusCode: 301,
+      },
+
       // Legacy URLs that never matched a page, kept from CH-002.
       //
       // /services/chiropractic points straight at the flat URL rather than

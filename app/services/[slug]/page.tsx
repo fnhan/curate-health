@@ -5,7 +5,7 @@ import ServiceHeroSection from "@/components/layout/services-pages/service-hero-
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
-import { renamedServicePath } from "@/lib/service-urls";
+import { renamedServicePath, treatmentPath } from "@/lib/service-urls";
 import {
   JsonLdScript,
   buildServiceJsonLd,
@@ -60,7 +60,18 @@ async function resolve(slug: string) {
     params: { slug },
   });
 
-  if (treatment) return { kind: "treatment" as const, treatment };
+  if (treatment) {
+    // A treatment has exactly one canonical URL, decided by its category.
+    // Recovery Sanctuary children live nested, everything else lives flat.
+    // Serving a treatment here that belongs nested would put the same page at
+    // two addresses, so redirect instead.
+    const canonical = treatmentPath(treatment.serviceSlug, slug);
+    if (canonical !== `/services/${slug}`) {
+      return { kind: "renamed" as const, to: canonical };
+    }
+
+    return { kind: "treatment" as const, treatment };
+  }
 
   return { kind: "none" as const };
 }

@@ -91,12 +91,17 @@ const nextConfig = {
       // still redirects rather than 404s.
       {
         source: "/services/rehab",
-        destination: "/services/one-on-one-care",
+        destination: "/services/clinical-care",
         statusCode: 301,
       },
       {
         source: "/services/exercise-therapy",
         destination: "/services/movement-and-training",
+        statusCode: 301,
+      },
+      {
+        source: "/services/one-on-one-care",
+        destination: "/services/clinical-care",
         statusCode: 301,
       },
 
@@ -115,7 +120,7 @@ const nextConfig = {
       // moment the rename landed, making it a two hop chain.
       {
         source: "/services/primary-care",
-        destination: "/services/one-on-one-care",
+        destination: "/services/clinical-care",
         statusCode: 301,
       },
       {

@@ -94,6 +94,7 @@ export function treatmentPath(
 export const RENAMED_SERVICE_SLUGS: Record<string, string> = {
   rehab: "one-on-one-care",
   "exercise-therapy": "movement-and-training",
+  "one-on-one-care": "clinical-care",
 };
 
 /** The new home of a renamed category, or null if the slug was not renamed. */

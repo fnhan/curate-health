@@ -8,6 +8,7 @@ import MasterHealthBlueprint from "@/components/layout/our-programs-page/master-
 import { OurProgramsNavigation } from "@/components/layout/our-programs-page/our-programs-navigation";
 import ThreePaths from "@/components/layout/our-programs-page/three-paths";
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
+import HoverLink from "@/components/shared/hover-link";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_PROGRAMS_QUERY } from "@/sanity/lib/queries";
@@ -40,6 +41,14 @@ export default async function OurProgramsPage() {
       <ExploreYourOptions program={program} />
       <FaqSection program={program} />
       <CtaSection program={program} />
+      {/* The mirror of Explore Our Programs at the foot of /services. Programs
+          and services are separate now, so each hub offers the way across.
+
+          Wrapped in bg-primary for the same reason as the other one: HoverLink
+          draws white text and needs a dark section under it. */}
+      <div className="bg-primary">
+        <HoverLink href="/services" text="Explore Our Services" />
+      </div>
     </>
   );
 }

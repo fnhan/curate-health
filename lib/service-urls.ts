@@ -105,3 +105,34 @@ export function renamedServicePath(
 
   return target ? servicePath(target) : null;
 }
+
+/**
+ * Treatment slugs that have been renamed, old to new.
+ *
+ * Same job as RENAMED_SERVICE_SLUGS, and the same reason for living in the
+ * route rather than in next.config.mjs: a config redirect has no safe moment
+ * to ship. Before the Sanity slug changes it points at a page that does not
+ * exist; after, the old URL is already dead. Resolving here closes the window
+ * in both directions, because the lookup only reaches this map when the old
+ * slug stops matching a treatment, which is exactly when the rename lands.
+ *
+ * The canonical rule cannot cover these. It decides nested against flat from
+ * the category, so it handles a treatment moving between categories on its
+ * own. A slug that changes spelling is a different fact, and nothing in the
+ * dataset records what a document used to be called.
+ *
+ * Permanent. These URLs were indexed.
+ */
+export const RENAMED_TREATMENT_SLUGS: Record<string, string> = {
+  // Renamed for consistency with its siblings, which all carry "outdoor".
+  "cold-plunge": "outdoor-cold-plunge",
+  // Canadian spelling, per the content rules.
+  "nutritional-counseling": "nutritional-counselling",
+};
+
+/** The new slug for a renamed treatment, or null if it was not renamed. */
+export function renamedTreatmentSlug(
+  slug: string | null | undefined
+): string | null {
+  return RENAMED_TREATMENT_SLUGS[clean(slug)] ?? null;
+}

@@ -102,14 +102,14 @@ const COLLAGE_FRAMING = {
   // between them, which keeps most of the near hand and reaches the far one.
   // A first pass at 150 sat on the fingers and the fabric and lost the second
   // hand completely.
-  "clinical-care": 1500,
+  "clinical-care": 1200,
   // The right edge of the window lands just past the right of his head, so the
   // frame holds his left side and drops his right. A first pass at 760 did the
   // opposite of what was asked.
   "movement-and-training": 400,
   // The sauna door, plus the near edge of the cold plunge. Sitting only on the
   // door read as a photograph of a shed.
-  "recovery-sanctuary": 600,
+  "recovery-sanctuary": 760,
 };
 
 /**

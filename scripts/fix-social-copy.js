@@ -299,7 +299,11 @@ const COPY = [
   {
     type: "treatments",
     slug: "flowpresso-therapy",
-    title: "Flowpresso, Compression and Deep Heat",
+    // The registered symbol goes in titles, per Frank on 2026-09-10. His own
+    // wording for the Recovery Sanctuary card above is left exactly as he sent
+    // it, without the symbol, because that is a description rather than a
+    // title and it is his sentence.
+    title: "Flowpresso®, Compression and Deep Heat",
     description:
       "Flowpresso combines compression and infrared heat in one session. Available at Curate Health in Midtown Toronto.",
   },

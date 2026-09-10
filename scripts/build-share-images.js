@@ -97,24 +97,32 @@ async function fetchBuffer(url) {
  * so only the horizontal position is a choice.
  */
 const COLLAGE_FRAMING = {
-  // Shifted left, to show the fingers rather than the fabric beside them.
-  "clinical-care": 150,
-  // Shifted left, so less of the right side of his body is in frame.
-  "movement-and-training": 760,
-  // Shifted left, onto the sauna cabin. The tub is on the right of this photo
-  // and is what the automatic crop was choosing.
-  "recovery-sanctuary": 300,
+  // Both hands. They span about 3,000px of a 3,840px-wide photograph and the
+  // window is only 1,619 wide, so both cannot be shown whole; this centres
+  // between them, which keeps most of the near hand and reaches the far one.
+  // A first pass at 150 sat on the fingers and the fabric and lost the second
+  // hand completely.
+  "clinical-care": 1500,
+  // The right edge of the window lands just past the right of his head, so the
+  // frame holds his left side and drops his right. A first pass at 760 did the
+  // opposite of what was asked.
+  "movement-and-training": 400,
+  // The sauna door, plus the near edge of the cold plunge. Sitting only on the
+  // door read as a photograph of a shed.
+  "recovery-sanctuary": 600,
 };
 
 /**
- * Three photographs side by side, each cropped to a third of the card.
+ * Three photographs side by side, each a third of the card, edge to edge.
  *
- * A hairline gap between them, in the brand green, so the strips read as three
- * things rather than one panorama that happens to be discontinuous.
+ * An earlier version put a hairline of brand green between them to mark them
+ * as three photographs rather than one. Frank asked for it gone: at the size a
+ * share card is actually seen, the lines read as damage rather than as
+ * structure, and the three subjects are different enough to separate
+ * themselves.
  */
 async function buildCollage(categories) {
-  const gap = 4;
-  const strip = Math.floor((W - gap * 2) / 3);
+  const strip = W / 3;
 
   const strips = await Promise.all(
     categories.map(async (c) => {
@@ -148,9 +156,7 @@ async function buildCollage(categories) {
   });
 
   return canvas
-    .composite(
-      strips.map((input, i) => ({ input, left: i * (strip + gap), top: 0 }))
-    )
+    .composite(strips.map((input, i) => ({ input, left: i * strip, top: 0 })))
     .png()
     .toBuffer();
 }

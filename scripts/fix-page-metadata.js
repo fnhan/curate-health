@@ -141,11 +141,10 @@ const COPY = [
     // CH-023 in CLAUDE.md, which specified "FLOWpresso Therapy Toronto" and
     // has been corrected to match.
     //
-    // The registered symbol stays out of the title. It is carried in the body
-    // copy where the trademark is actually asserted, and a title is the one
-    // string Google truncates hardest, so the two characters are better spent
-    // on words. Say the word and it goes in.
-    pageTitle: "Flowpresso Therapy Toronto",
+    // The registered symbol goes in the title too, confirmed by Frank on
+    // 2026-09-10 after it was first left out. It costs two characters of a
+    // title Google truncates at about 60, and this one has room.
+    pageTitle: "Flowpresso® Therapy Toronto",
   },
   {
     type: "treatments",

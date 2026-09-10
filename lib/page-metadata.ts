@@ -73,6 +73,19 @@ type SeoObject = {
 type Fallbacks = {
   title?: string;
   description?: string;
+  /**
+   * A different name to end the title with, instead of "Curate Health".
+   *
+   * app/layout.tsx appends the brand to every page through a title template.
+   * The cafe is its own name, and Frank asked for "| Curate Cafe" there on
+   * 2026-09-10, so that one page opts out of the template and states its full
+   * title itself.
+   *
+   * Only pass this for something that genuinely trades under its own name. A
+   * page that sets it stops inheriting any future change to the site-wide
+   * brand, which is the cost of the exception.
+   */
+  brand?: string;
 };
 
 /**
@@ -159,16 +172,21 @@ export function buildPageMetadata(
   const ogImages = imageEntry(seo?.socialMeta?.ogImage, socialTitle);
   const twitterImages = imageEntry(seo?.socialMeta?.twitterImage, socialTitle);
 
+  // `absolute` is what stops Next applying the layout's title template, so a
+  // page ending in its own name does not also collect "| Curate Health".
+  const asTitle = (value: string) =>
+    fallbacks.brand ? { absolute: `${value} | ${fallbacks.brand}` } : value;
+
   return {
-    title,
+    title: asTitle(title),
     description,
     openGraph: {
-      title: socialTitle,
+      title: asTitle(socialTitle),
       description: socialDescription,
       ...(ogImages ? { images: ogImages } : {}),
     },
     twitter: {
-      title: socialTitle,
+      title: asTitle(socialTitle),
       description: socialDescription,
       ...(twitterImages ? { images: twitterImages } : {}),
     },

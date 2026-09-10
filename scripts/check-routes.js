@@ -14,7 +14,10 @@
 
 const DEFAULT_BASE = "https://www.curatehealth.ca";
 
-const FLOWPRESSO_TITLE = "FLOWpresso Therapy Toronto | Curate Health";
+// Frank corrected this on 2026-09-10: "It's Flowpresso, never FLOWpresso."
+// CH-023 originally specified the all-caps form, copied from the
+// manufacturer's styling. CLAUDE.md has been updated to match.
+const FLOWPRESSO_TITLE = "Flowpresso Therapy Toronto | Curate Health";
 
 /**
  * Every check is {ticket, path, expect}. `expect` is one of:

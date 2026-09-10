@@ -85,7 +85,6 @@ const CARD_ALT = {
 };
 
 const BANNED = [
-  "journey",
   "dive in",
   "unlock",
   "elevate",

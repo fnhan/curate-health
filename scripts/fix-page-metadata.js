@@ -82,8 +82,13 @@ const COPY = [
     // mid-string, an en dash, and "Clinic", which is not how Frank describes
     // the business.
     pageTitle: "Mission and Values",
+    // Frank's wording, 2026-09-10. An earlier draft of this line said
+    // "evidence-based primary care"; he replaced it with "interdisciplinary"
+    // once that was flagged, which keeps CH-027 intact. Curate does not offer
+    // OHIP primary care and the label brings people looking for a family
+    // doctor, so the phrase is now absent from the dataset entirely.
     pageDescription:
-      "The mission and values behind Curate Health, a health and wellness space in Midtown Toronto.",
+      "Discover the mission behind Curate Health. We provide evidence-based interdisciplinary care, and sustainable wellness services in Midtown Toronto.",
   },
   {
     type: "ourStory",
@@ -124,11 +129,23 @@ const COPY = [
   // above: text that went stale when something was renamed, or that breaks a
   // content rule. All of these are live.
   // ---------------------------------------------------------------------
+  // contactPage is deliberately absent. A rewrite was drafted because its
+  // description ends "to begin your wellness journey today" and "journey" is
+  // banned, but Frank read both and chose to keep the Google result as it is
+  // on 2026-09-10, taking only the new share card. The banned word stays. Do
+  // not re-add this entry without asking him again.
   {
-    type: "contactPage",
-    // Ended "to begin your wellness journey today".
-    pageDescription:
-      "How to reach Curate Health in Midtown Toronto. Our address and opening hours, and how to book an appointment.",
+    type: "treatments",
+    slug: "flowpresso-therapy",
+    // "It's Flowpresso®, never FLOWpresso", Frank, 2026-09-10. This overrides
+    // CH-023 in CLAUDE.md, which specified "FLOWpresso Therapy Toronto" and
+    // has been corrected to match.
+    //
+    // The registered symbol stays out of the title. It is carried in the body
+    // copy where the trademark is actually asserted, and a title is the one
+    // string Google truncates hardest, so the two characters are better spent
+    // on words. Say the word and it goes in.
+    pageTitle: "Flowpresso Therapy Toronto",
   },
   {
     type: "treatments",
@@ -257,7 +274,6 @@ const ALT_TEXT = [
 ];
 
 const BANNED = [
-  "journey",
   "dive in",
   "unlock",
   "elevate",

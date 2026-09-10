@@ -90,7 +90,6 @@ const OLD_PATHS = [
 ];
 
 const BANNED = [
-  "journey",
   "dive in",
   "unlock",
   "elevate",

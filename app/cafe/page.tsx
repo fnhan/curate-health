@@ -65,5 +65,7 @@ export async function generateMetadata() {
 
   const { seo } = cafePage!;
 
-  return buildPageMetadata(seo);
+  // The cafe ends its title with its own name rather than the site's, per
+  // Frank on 2026-09-10. It is the only page that does.
+  return buildPageMetadata(seo, { brand: "Curate Cafe" });
 }

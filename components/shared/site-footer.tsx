@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { MailIcon, MapPinIcon, MoveUpRightIcon, PhoneIcon } from "lucide-react";
 
+import { addressLines } from "@/lib/address";
 import { externalLinkProps } from "@/lib/links";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
@@ -49,11 +50,11 @@ export default function SiteFooter({
             >
               <MapPinIcon size={20} className="mt-1" />
               <div>
-                {contactInfo?.address?.street}
-                <br />
-                {contactInfo?.address?.city}
-                {contactInfo?.address?.state}
-                {contactInfo?.address?.zip}
+                {addressLines(contactInfo?.address).map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
               </div>
             </a>
             <div className="space-y-2">

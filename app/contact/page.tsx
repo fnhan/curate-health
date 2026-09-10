@@ -5,6 +5,7 @@ import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { addressLines, addressOneLine } from "@/lib/address";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
@@ -96,9 +97,7 @@ export default async function ContactPage() {
                     {...externalLinkProps(contactInfo?.mapLink ?? "")}
                     className="not-italic hover:underline md:text-3xl"
                   >
-                    {contactInfo?.address?.street} {contactInfo?.address?.city}
-                    {contactInfo?.address?.state}
-                    {contactInfo?.address?.zip}
+                    {addressOneLine(contactInfo?.address)}
                   </a>
                 </div>
               </div>
@@ -161,10 +160,11 @@ export default async function ContactPage() {
             <div className="space-y-4">
               <h2 className="text-2xl font-medium">{branchName}</h2>
               <address className="not-italic">
-                {`${contactInfo?.address?.street},
-                  ${contactInfo?.address?.city},
-                  ${contactInfo?.address?.state}
-                  ${contactInfo?.address?.zip}`}
+                {addressLines(contactInfo?.address).map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
               </address>
             </div>
             <div className="flex flex-col gap-4">

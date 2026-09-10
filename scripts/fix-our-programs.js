@@ -20,32 +20,18 @@
  *
  * THE SHARE IMAGE
  *
- * The current one is a stock photograph of two people doing a seated twist in
- * a yoga studio. It is warm, and it is not this page: /our-programs is about
- * structured programs run by clinicians, and the card says "yoga class".
+ * It was a stock photograph of two people doing a seated twist in a yoga
+ * studio. Warm, and not this page: /our-programs is about structured programs,
+ * and the card said "yoga class".
  *
- * Replaced with OCA-Nhan-51, from Curate's own shoot, which shows Frank
- * coaching a patient through a resistance band exercise in the training area.
- * Right subject, real space, real practitioner.
+ * It went through one intermediate choice, a photograph of Frank coaching
+ * someone through a resistance band exercise, before Frank picked the notebook
+ * shot on 2026-09-10. See the note on SHARE_ASSET for what that one is and
+ * why it is smaller than a share card wants.
  *
- * WHY THIS ONE NEEDS A CROP
- *
- * That photograph is 3733x5599, portrait. Share cards are 1.91:1. Every
- * automatic crop of it cuts both heads off: `crop=entropy` picks the busiest
- * region, which is the resistance band and the equipment behind it, and
- * `crop=center` lands on two torsos. Both were rendered and looked at before
- * choosing to set the crop by hand.
- *
- * The crop below is the region from y=700 to y=2660 of the original, which
- * holds both faces and Frank's hands on her shoulder. Sanity stores a crop as
- * the fraction trimmed from each edge, so:
- *
- *   top    =     700 / 5599  = 0.125022
- *   bottom = 1 - 2660 / 5599 = 0.524915
- *
- * urlForShareImage honours this, so the framing is now a thing Frank can
- * change by dragging the crop box in the Studio rather than by asking for a
- * code change.
+ * urlForShareImage honours a crop set in the Studio, so where framing matters
+ * it can be changed by dragging a box rather than by editing this file. This
+ * particular photograph needs none.
  */
 
 const { mutate, query } = require("./lib/sanity-cli");

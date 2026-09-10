@@ -74,18 +74,18 @@ type Fallbacks = {
   title?: string;
   description?: string;
   /**
-   * A different name to end the title with, instead of "Curate Health".
+   * A different name to end the SHARE title with, instead of "Curate Health".
    *
-   * app/layout.tsx appends the brand to every page through a title template.
-   * The cafe is its own name, and Frank asked for "| Curate Cafe" there on
-   * 2026-09-10, so that one page opts out of the template and states its full
-   * title itself.
+   * The cafe trades under its own name, and Frank asked for its share card to
+   * read "An Organic Cafe Where Food Is Medicine | Curate Cafe" on 2026-09-10.
    *
-   * Only pass this for something that genuinely trades under its own name. A
-   * page that sets it stops inheriting any future change to the site-wide
-   * brand, which is the cost of the exception.
+   * Share card only, deliberately. A first version applied this to the page
+   * title too, and the cafe's page title is "Introducing Curate Cafe", so the
+   * tab and the Google result read "Introducing Curate Cafe | Curate Cafe":
+   * the doubled brand CH-006 exists to remove, in a new costume. The request
+   * was about the share card, so that is all it touches.
    */
-  brand?: string;
+  shareBrand?: string;
 };
 
 /**
@@ -173,20 +173,21 @@ export function buildPageMetadata(
   const twitterImages = imageEntry(seo?.socialMeta?.twitterImage, socialTitle);
 
   // `absolute` is what stops Next applying the layout's title template, so a
-  // page ending in its own name does not also collect "| Curate Health".
-  const asTitle = (value: string) =>
-    fallbacks.brand ? { absolute: `${value} | ${fallbacks.brand}` } : value;
+  // share card ending in its own name does not also collect "| Curate Health".
+  const shareTitle = fallbacks.shareBrand
+    ? { absolute: `${socialTitle} | ${fallbacks.shareBrand}` }
+    : socialTitle;
 
   return {
-    title: asTitle(title),
+    title,
     description,
     openGraph: {
-      title: asTitle(socialTitle),
+      title: shareTitle,
       description: socialDescription,
       ...(ogImages ? { images: ogImages } : {}),
     },
     twitter: {
-      title: asTitle(socialTitle),
+      title: shareTitle,
       description: socialDescription,
       ...(twitterImages ? { images: twitterImages } : {}),
     },

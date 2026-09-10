@@ -18,11 +18,17 @@
  *
  * WHAT IS HERE, AND WHAT IS NOT
  *
- * Frank marked five photos to swap on 2026-09-10. Two have a clear answer and
- * are below. The other three do not: the asset library holds nothing that is
- * obviously better for the services hub, Our Story or Pillars of Health, and
- * picking a replacement is a content decision rather than a mechanical one.
- * They stay on the list until he says what they should show.
+ * Frank marked five photos to swap on 2026-09-10 and then said what each should
+ * show. Three are here: TENS Machines and Our Story take a different
+ * photograph, and the supplements photo keeps its own and gains a crop.
+ *
+ * Two more crops were added the same day, both his framing rather than mine:
+ * the orthotic centred vertically, and the compression stockings moved up so
+ * both feet are in shot.
+ *
+ * The services hub and Pillars of Health are not here. Neither wanted a
+ * photograph that exists, so both are drawn and uploaded by
+ * scripts/build-share-images.js.
  */
 
 const { mutate, query } = require("./lib/sanity-cli");
@@ -67,6 +73,68 @@ const CHANGES = [
       height: 0.26,
     },
   },
+  {
+    type: "ourStory",
+    what: "swap",
+    // Frank asked for the barbell photograph, 2026-09-10. It is already on
+    // this page, in the first section, and at 4096x2731 it needs no crop.
+    //
+    // It replaces the photograph of him treating a patient, which was chosen
+    // for this page in #216 and is a better fit for Clinical Care than for a
+    // founder's story that begins with his own heart surgery at 17.
+    asset: "image-d92d69ad043cf8e17015386312d73dd263c1ff7f-4096x2731-jpg",
+    alt: "A man lifting a barbell overhead in a bright gym.",
+  },
+  {
+    type: "product",
+    slug: "custom-foot-orthotics",
+    what: "crop",
+    // Frank asked for it centred vertically, 2026-09-10. The image is 418x400
+    // and the insole sits just below the middle, so a plain centre crop left
+    // white space above it and clipped the toe.
+    //
+    // The window is 220 of 400 tall, which is the 1.91:1 a card wants against
+    // a 418 width, placed to centre on the insole at 0.465.
+    crop: {
+      _type: "sanity.imageCrop",
+      top: 0.19,
+      bottom: 0.26,
+      left: 0,
+      right: 0,
+    },
+    hotspot: {
+      _type: "sanity.imageHotspot",
+      x: 0.5,
+      y: 0.465,
+      width: 1,
+      height: 0.55,
+    },
+  },
+  {
+    type: "product",
+    slug: "compression-stockings",
+    what: "crop",
+    // Frank asked to move it up so both feet show, 2026-09-10. The centre crop
+    // of this 500x500 was landing on knees and mid-calf and cutting both feet
+    // off, which is an odd thing to show for a product worn on the foot.
+    //
+    // Taking the window from 0.44 down to 0.964 keeps both feet with a little
+    // clearance under the front toe.
+    crop: {
+      _type: "sanity.imageCrop",
+      top: 0.44,
+      bottom: 0.036,
+      left: 0,
+      right: 0,
+    },
+    hotspot: {
+      _type: "sanity.imageHotspot",
+      x: 0.5,
+      y: 0.702,
+      width: 1,
+      height: 0.524,
+    },
+  },
 ];
 
 function check(alt) {
@@ -90,14 +158,20 @@ async function main() {
   let problems = 0;
 
   for (const item of CHANGES) {
+    // ourStory is a singleton with no slug, so the filter has to drop the slug
+    // comparison rather than compare against an empty string and match nothing.
+    const filter = item.slug
+      ? `_type == $type && coalesce(slug.current, treatmentSlug.current) == $slug`
+      : `_type == $type`;
+
     const doc = await query(
-      `*[_type == $type && coalesce(slug.current, treatmentSlug.current) == $slug && !(_id in path("drafts.**"))][0]{
+      `*[${filter} && !(_id in path("drafts.**"))][0]{
         _id, title, name,
         "asset": seo.socialMeta.ogImage.asset->{_id, originalFilename, "w": metadata.dimensions.width, "h": metadata.dimensions.height},
         "alt": seo.socialMeta.ogImage.alt,
         "crop": seo.socialMeta.ogImage.crop
       }`,
-      { type: item.type, slug: item.slug }
+      { type: item.type, slug: item.slug ?? "" }
     );
 
     if (!doc) {
@@ -105,7 +179,8 @@ async function main() {
       process.exit(2);
     }
 
-    console.log(`\n  ${doc.title || doc.name}`);
+    // Singletons carry neither title nor name, so fall back to the type.
+    console.log(`\n  ${doc.title || doc.name || item.type}`);
     console.log(
       `    now: ${doc.asset ? `${doc.asset.originalFilename} ${doc.asset.w}x${doc.asset.h}` : "no image"}`
     );
@@ -137,9 +212,12 @@ async function main() {
     }
 
     // A crop, so the photograph and its alt text stay exactly as they are.
-    console.log(
-      `    crop: keeping the top ${Math.round((1 - item.crop.bottom) * 100)}%, where the subject is`
-    );
+    // Say which slice of the photograph the card ends up showing. "the top
+    // 74%" was the first wording here and it was wrong for any crop that also
+    // trims from the top, which two of these do.
+    const from = Math.round(item.crop.top * 100);
+    const to = Math.round((1 - item.crop.bottom) * 100);
+    console.log(`    crop: showing ${from}% to ${to}% down the photograph`);
 
     if (JSON.stringify(doc.crop || null) === JSON.stringify(item.crop)) {
       console.log("    already set");
@@ -160,15 +238,12 @@ async function main() {
   }
 
   console.log(`\n${RULE}`);
-  console.log("STILL OPEN, WAITING ON FRANK");
+  console.log("HANDLED ELSEWHERE");
   console.log(`
-  Our Services      An olive branch. Nothing in the library says "everything
-                    we offer"; the FrontPage_Clinic_* files are stock
-                    landscapes rather than photographs of the space.
-  Our Story         Currently Frank treating a patient. The alternatives in
-                    the library are variations of the same shot.
-  Pillars of Health Water ripples. Correctly shaped and abstract, which suits
-                    an abstract subject, so there is nothing to fix mechanically.
+  Our Services      A three-strip collage of the category photographs, and
+  Pillars of Health the five-circle diagram from the page. Neither of those
+                    exists as a file, so both are drawn and uploaded by
+                    scripts/build-share-images.js rather than picked here.
 `);
 
   if (problems) {

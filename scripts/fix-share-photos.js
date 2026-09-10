@@ -50,27 +50,57 @@ const CHANGES = [
     type: "product",
     slug: "profession-grade-supplements",
     what: "crop",
-    // Keeps the photograph. It is 5142x7709, and the centre crop lands on
-    // empty background below the hand. The subject, a hand holding a capsule,
-    // sits in the top third, so the crop takes the top 26% and the card shows
-    // the capsule instead of white space.
+    // Keeps the photograph, 5142x7709, and moves the window onto the hand.
     //
-    // 0.74 from the bottom leaves 0.26 of 7709, which is 2004 pixels against a
-    // 5142 width. That is 2.57:1, wider than a card needs, so nothing is lost
-    // at the sides.
+    // The first attempt took the top 26% and produced a completely white card.
+    // The reasoning was wrong twice over: a test render used crop=top, which
+    // crops the scaled image rather than the original, and the hand is not near
+    // the top at all. It sits between about 42% and 76% down, under a large
+    // area of empty background.
+    //
+    // 2700 of 7709 is the 1.91:1 a card wants against a 5142 width, placed to
+    // centre on the hand and the capsule. Rendered and looked at this time.
     crop: {
       _type: "sanity.imageCrop",
-      top: 0,
-      bottom: 0.74,
+      top: 0.4128,
+      bottom: 0.237,
       left: 0,
       right: 0,
     },
     hotspot: {
       _type: "sanity.imageHotspot",
       x: 0.5,
-      y: 0.13,
+      y: 0.5879,
       width: 1,
-      height: 0.26,
+      height: 0.3502,
+    },
+  },
+  {
+    type: "service",
+    slug: "recovery-sanctuary",
+    what: "swap",
+    // Frank asked for the sauna and the cold plunge, 2026-09-10. It was
+    // sharing a stock photograph of a woman in a sauna interior that is not
+    // this sauna.
+    //
+    // This is the photograph the category card already uses, and it holds both
+    // the cedar cabin and the plunge tub, in the real space. The crop below
+    // trims height only, so nothing is lost from either side.
+    asset: "image-ee230e7ba114b5beea8abf2bafb82abef4342f2e-2601x1611-jpg",
+    alt: "The cedar sauna cabin and the outdoor cold plunge in the Recovery Sanctuary.",
+    crop: {
+      _type: "sanity.imageCrop",
+      top: 0.0745,
+      bottom: 0.0776,
+      left: 0,
+      right: 0,
+    },
+    hotspot: {
+      _type: "sanity.imageHotspot",
+      x: 0.5,
+      y: 0.4985,
+      width: 1,
+      height: 0.8479,
     },
   },
   {
@@ -193,10 +223,22 @@ async function main() {
       console.log(`    new: ${item.asset}`);
       console.log(`    alt: ${JSON.stringify(item.alt)}`);
 
+      // A swap may also carry framing. Recovery Sanctuary is one: a different
+      // photograph AND a crop, because the new one is 1.61:1 and a card is
+      // 1.91:1, so something has to give and it should be height rather than
+      // either end of the space.
+      if (item.crop) {
+        const from = Math.round(item.crop.top * 100);
+        const to = Math.round((1 - item.crop.bottom) * 100);
+        console.log(`    crop: showing ${from}% to ${to}% down the photograph`);
+      }
+
       const image = {
         _type: "image",
         asset: { _type: "reference", _ref: item.asset },
         alt: item.alt,
+        ...(item.crop ? { crop: item.crop } : {}),
+        ...(item.hotspot ? { hotspot: item.hotspot } : {}),
       };
 
       mutations.push({

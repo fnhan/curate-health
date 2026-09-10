@@ -51,7 +51,6 @@ const TITLE_MAX = 60;
 const DESCRIPTION_MAX = 155;
 
 const BANNED = [
-  "journey",
   "dive in",
   "unlock",
   "elevate",

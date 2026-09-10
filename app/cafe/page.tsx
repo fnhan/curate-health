@@ -65,5 +65,8 @@ export async function generateMetadata() {
 
   const { seo } = cafePage!;
 
-  return buildPageMetadata(seo);
+  // The cafe's share card ends with its own name rather than the site's, per
+  // Frank on 2026-09-10. Its page title keeps the usual ending. It is the only
+  // page that does either.
+  return buildPageMetadata(seo, { shareBrand: "Curate Cafe" });
 }

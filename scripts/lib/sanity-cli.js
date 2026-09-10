@@ -129,6 +129,46 @@ async function mutate(mutations) {
   return response.json();
 }
 
+/**
+ * Uploads an image and returns the created asset document.
+ *
+ * Adds a file to the dataset that was not there before, so it belongs behind
+ * the same --apply gate as any other write. Sanity deduplicates by content
+ * hash, so uploading the same bytes twice returns the existing asset rather
+ * than making a second copy.
+ *
+ * The filename is only a label. It is worth setting properly anyway, because
+ * it is what shows in the Studio's media browser and it is the only clue the
+ * next person gets about where a generated image came from. Note that Sanity
+ * will not let it be changed later: an edit to originalFilename does not reach
+ * the CDN, which this project has already learned the hard way.
+ */
+async function uploadImage(buffer, filename, contentType = "image/png") {
+  const config = getConfig();
+  requireValue(config.writeToken, "SANITY_API_WRITE_TOKEN");
+
+  const url =
+    `https://${config.projectId}.api.sanity.io/v${config.apiVersion}` +
+    `/assets/images/${config.dataset}?filename=${encodeURIComponent(filename)}`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": contentType,
+      Authorization: `Bearer ${config.writeToken}`,
+    },
+    body: buffer,
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Sanity upload failed: ${response.status} ${await response.text()}`
+    );
+  }
+
+  return (await response.json()).document;
+}
+
 function codepoint(character) {
   return (
     "U+" + character.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")
@@ -212,5 +252,6 @@ module.exports = {
   getConfig,
   mutate,
   query,
+  uploadImage,
   walkStrings,
 };

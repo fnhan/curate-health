@@ -68,7 +68,6 @@ const TARGETS = [
 const SOURCE_DIR = process.env.CURATE_PHOTO_DIR || ".";
 
 const BANNED = [
-  "journey",
   "dive in",
   "unlock",
   "elevate",

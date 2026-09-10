@@ -71,7 +71,8 @@ These apply to every word written into the site, schema, meta tags, or alt text.
 - No emojis
 - No tricolons or rule-of-three lists
 - No fabricated statistics, study citations, or quotes
-- Banned words: journey, dive in, unlock, elevate, harness the power of, complimentary, transformative, seamless, holistic wellness journey
+- Banned words: dive in, unlock, elevate, harness the power of, complimentary, transformative, seamless, holistic wellness journey
+- **"journey" is allowed, cleared by Frank on 2026-09-10.** It was on this list and has been removed from it and from the banned array in every script. "holistic wellness journey" stays banned as a phrase. Do not put the bare word back on the strength of an older copy of this file
 - Never use "complimentary" for anything Curate offers. Use "included" or "bonus"
 - OHIP framing is exactly: "partially covered by OHIP and most benefit programs"
 - The outdoor space is always "Recovery Sanctuary." Never "outdoor terrace" or any variant
@@ -224,7 +225,13 @@ This page ranks first in Canada for "Flowpresso Toronto." It has a typo in its t
 
 There are three spellings live across the site: "Flowpesso" in the title, "flowpresso" in the URL, "Flowspresso" in llms.txt. Correct spelling is **Flowpresso**. Grep the whole codebase and dataset for all three.
 
-New title: `FLOWpresso Therapy Toronto | Curate Health`
+New title: `Flowpresso® Therapy Toronto | Curate Health`
+
+**Corrected 2026-09-10.** This ticket originally specified `FLOWpresso Therapy Toronto`, with the all-caps FLOW copied from the manufacturer's own styling, and `scripts/fix-flowpresso-spelling.js` applied it. Frank's ruling is "It's Flowpresso®, never FLOWpresso." Four spellings have now been live at various points, so treat this line as the only correct one and do not restore the all-caps form from an older reading of this ticket.
+
+`scripts/fix-flowpresso-capitalisation.js` fixes the ten occurrences in Sanity. The registered symbol goes everywhere, titles included. It was first left out of `seo.pageTitle` on the reasoning that a title is the string Google truncates hardest; Frank confirmed on 2026-09-10 that he wants it there, and the title has room.
+
+That script also reports four things on the same page that need a decision rather than a replace, and leaves them alone: a grammatical slip in `benefits.title`, "transformative" in `cta.ctaText`, "clinics" in a benefit subtitle, and an "FDA Approved" claim. The last is a compliance question, not a copy one. Flowpresso is a New Zealand device and FDA clearance is a specific regulatory status rather than a synonym for approved, so confirm it before it stays.
 
 ### CH-032 Regenerate llms.txt
 

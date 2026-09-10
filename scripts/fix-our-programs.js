@@ -20,62 +20,51 @@
  *
  * THE SHARE IMAGE
  *
- * The current one is a stock photograph of two people doing a seated twist in
- * a yoga studio. It is warm, and it is not this page: /our-programs is about
- * structured programs run by clinicians, and the card says "yoga class".
+ * It was a stock photograph of two people doing a seated twist in a yoga
+ * studio. Warm, and not this page: /our-programs is about structured programs,
+ * and the card said "yoga class".
  *
- * Replaced with OCA-Nhan-51, from Curate's own shoot, which shows Frank
- * coaching a patient through a resistance band exercise in the training area.
- * Right subject, real space, real practitioner.
+ * It went through one intermediate choice, a photograph of Frank coaching
+ * someone through a resistance band exercise, before Frank picked the notebook
+ * shot on 2026-09-10. See the note on SHARE_ASSET for what that one is and
+ * why it is smaller than a share card wants.
  *
- * WHY THIS ONE NEEDS A CROP
- *
- * That photograph is 3733x5599, portrait. Share cards are 1.91:1. Every
- * automatic crop of it cuts both heads off: `crop=entropy` picks the busiest
- * region, which is the resistance band and the equipment behind it, and
- * `crop=center` lands on two torsos. Both were rendered and looked at before
- * choosing to set the crop by hand.
- *
- * The crop below is the region from y=700 to y=2660 of the original, which
- * holds both faces and Frank's hands on her shoulder. Sanity stores a crop as
- * the fraction trimmed from each edge, so:
- *
- *   top    =     700 / 5599  = 0.125022
- *   bottom = 1 - 2660 / 5599 = 0.524915
- *
- * urlForShareImage honours this, so the framing is now a thing Frank can
- * change by dragging the crop box in the Studio rather than by asking for a
- * code change.
+ * urlForShareImage honours a crop set in the Studio, so where framing matters
+ * it can be changed by dragging a box rather than by editing this file. This
+ * particular photograph needs none.
  */
 
 const { mutate, query } = require("./lib/sanity-cli");
 
 const RULE = "=".repeat(78);
 
-/** OCA-Nhan-51.jpg, 3733x5599, from Curate's own shoot. */
+/**
+ * Rectangle 520.png, the person writing in a notebook, 352x344.
+ *
+ * Frank chose this on 2026-09-10 over the resistance band photograph that was
+ * here before. It is the Curate Lifestyle card image on this same page, and it
+ * suits a programs page: someone working through their own plan rather than
+ * being trained.
+ *
+ * IT IS SMALLER THAN A SHARE CARD AND WILL LOOK SOFT
+ *
+ * A card is 1200x630 and this is 352x344, so it is enlarged about three and a
+ * half times. It holds up at the size a link preview is usually seen in a feed,
+ * around 550px wide, and goes visibly soft at full size. Frank was told and
+ * chose it anyway. Replace the asset with a larger version of the same shot if
+ * one ever turns up and this needs nothing else changed.
+ *
+ * No crop. It is nearly square, and a centred 1.91:1 window already lands on
+ * the hands and the notebook.
+ */
 const SHARE_ASSET =
-  "image-f47a2baf1ce47d6fdd3ef479ff7d58e4ec7d7498-3733x5599-jpg";
+  "image-c52df25353053b8de09d4ae64ad6021513a61782-352x344-png";
 
 const SHARE_ALT =
-  "Dr. Frank Nhan guiding a patient through a resistance band exercise in the training area.";
+  "A person writing in a notebook, resting it on their knee during a session.";
 
-/** The region holding both faces. See the note above for the arithmetic. */
-const SHARE_CROP = {
-  _type: "sanity.imageCrop",
-  top: 0.125022,
-  bottom: 0.524915,
-  left: 0,
-  right: 0,
-};
-
-/** Centre of that region, in fractions of the whole image. */
-const SHARE_HOTSPOT = {
-  _type: "sanity.imageHotspot",
-  x: 0.5,
-  y: 0.300054,
-  width: 1,
-  height: 0.350063,
-};
+const SHARE_CROP = null;
+const SHARE_HOTSPOT = null;
 
 const HEADING = "Personalized Programs for Every Stage of Life";
 
@@ -85,7 +74,6 @@ const CARD_ALT = {
 };
 
 const BANNED = [
-  "journey",
   "dive in",
   "unlock",
   "elevate",
@@ -161,12 +149,15 @@ async function main() {
   });
 
   // 3. The share image.
+  // Only send crop and hotspot when there is one. Writing nulls would clear
+  // any framing already set in the Studio, which is not the same as leaving it
+  // alone.
   const image = {
     _type: "image",
     asset: { _type: "reference", _ref: SHARE_ASSET },
     alt: SHARE_ALT,
-    crop: SHARE_CROP,
-    hotspot: SHARE_HOTSPOT,
+    ...(SHARE_CROP ? { crop: SHARE_CROP } : {}),
+    ...(SHARE_HOTSPOT ? { hotspot: SHARE_HOTSPOT } : {}),
   };
 
   const altFaults = check("share alt", SHARE_ALT, 125);
@@ -178,7 +169,9 @@ async function main() {
   console.log(`  now:  ${SHARE_ASSET}`);
   console.log(`  alt:  ${JSON.stringify(SHARE_ALT)}`);
   console.log(
-    `  crop: top ${SHARE_CROP.top}, bottom ${SHARE_CROP.bottom}, keeping both faces`
+    SHARE_CROP
+      ? `  crop: top ${SHARE_CROP.top}, bottom ${SHARE_CROP.bottom}`
+      : "  crop: none, a centred window already lands on the subject"
   );
 
   if (doc.ogAsset !== SHARE_ASSET || doc.ogAlt !== SHARE_ALT) {

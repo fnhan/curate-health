@@ -73,6 +73,19 @@ type SeoObject = {
 type Fallbacks = {
   title?: string;
   description?: string;
+  /**
+   * A different name to end the SHARE title with, instead of "Curate Health".
+   *
+   * The cafe trades under its own name, and Frank asked for its share card to
+   * read "An Organic Cafe Where Food Is Medicine | Curate Cafe" on 2026-09-10.
+   *
+   * Share card only, deliberately. A first version applied this to the page
+   * title too, and the cafe's page title is "Introducing Curate Cafe", so the
+   * tab and the Google result read "Introducing Curate Cafe | Curate Cafe":
+   * the doubled brand CH-006 exists to remove, in a new costume. The request
+   * was about the share card, so that is all it touches.
+   */
+  shareBrand?: string;
 };
 
 /**
@@ -159,16 +172,22 @@ export function buildPageMetadata(
   const ogImages = imageEntry(seo?.socialMeta?.ogImage, socialTitle);
   const twitterImages = imageEntry(seo?.socialMeta?.twitterImage, socialTitle);
 
+  // `absolute` is what stops Next applying the layout's title template, so a
+  // share card ending in its own name does not also collect "| Curate Health".
+  const shareTitle = fallbacks.shareBrand
+    ? { absolute: `${socialTitle} | ${fallbacks.shareBrand}` }
+    : socialTitle;
+
   return {
     title,
     description,
     openGraph: {
-      title: socialTitle,
+      title: shareTitle,
       description: socialDescription,
       ...(ogImages ? { images: ogImages } : {}),
     },
     twitter: {
-      title: socialTitle,
+      title: shareTitle,
       description: socialDescription,
       ...(twitterImages ? { images: twitterImages } : {}),
     },

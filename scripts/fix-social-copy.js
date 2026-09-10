@@ -74,9 +74,10 @@ const COPY = [
   // ------------------------------------------------------------------ pages
   {
     type: "cafePage",
-    title: "A Cafe With No Industrial Seed Oils",
+    // Frank's wording, 2026-09-10.
+    title: "An Organic Cafe Where Food Is Medicine",
     description:
-      "Seasonal Ontario ingredients, sweetened with maple and honey rather than refined sugar. The cafe attached to Curate Health in Midtown Toronto.",
+      "Local, seasonal ingredients when possible. No refined sugars or seed oils. Microplastic-conscious.",
   },
   {
     type: "contactPage",
@@ -86,9 +87,12 @@ const COPY = [
   },
   {
     type: "missionAndValues",
-    title: "Why We Treat the Whole Person",
+    // Frank asked for the same wording on both the search result and the share
+    // card here, 2026-09-10. This is the one page where they match on purpose.
+    // See the note in fix-page-metadata.js about "primary care".
+    title: "Mission and Values",
     description:
-      "Care that treats the whole person rather than one complaint at a time. The thinking behind a health and wellness space in Midtown Toronto.",
+      "Discover the mission behind Curate Health. We provide evidence-based interdisciplinary care, and sustainable wellness services in Midtown Toronto.",
   },
   {
     type: "ourPrograms",
@@ -104,8 +108,9 @@ const COPY = [
   {
     type: "ourStory",
     title: "The Heart Condition That Started It All",
+    // Frank's wording, 2026-09-10.
     description:
-      "Open-heart surgery at 17, and a recovery that shaped how Frank Nhan thinks about care. The story behind Curate Health.",
+      "Discover how a personal health journey led to the story of Curate Health. Holistic, interdisciplinary care focused on all five pillars of health and wellness",
   },
   {
     type: "ourTeam",
@@ -114,8 +119,9 @@ const COPY = [
     // added. This whole exercise exists because values nobody re-reads go
     // stale, so do not plant another one.
     title: "One Team, Working From One Plan",
+    // Frank's wording, 2026-09-10.
     description:
-      "Chiropractic, naturopathic medicine, physiotherapy, massage, psychotherapy and lifestyle medicine, under one roof in Midtown Toronto.",
+      "Lifestyle Medicine, Naturopathic Medicine, Chiropractic, Physiotherapy, Massage, Psychotherapy and more, all in one space in Midtown Toronto.",
   },
   {
     type: "pillarsOfHealth",
@@ -136,8 +142,9 @@ const COPY = [
     pageDescription:
       "Clinical care, movement and training, the Recovery Sanctuary and the Curate Lifestyle program, all at Curate Health in Midtown Toronto.",
     title: "All of Our Services in One Place",
+    // Frank's wording, 2026-09-10.
     description:
-      "Clinical care, movement and training, the Recovery Sanctuary and Curate Lifestyle, in one health and wellness space in Midtown Toronto.",
+      "Clinical care, Movement and Training, the Recovery Sanctuary, Curate Lifestyle and more, in one health and wellness space in Midtown Toronto.",
   },
   // ------------------------------------------------------------------ legal
   {
@@ -188,8 +195,10 @@ const COPY = [
     type: "product",
     slug: "custom-foot-orthotics",
     title: "Orthotics Made for Your Feet",
+    // Frank's wording, 2026-09-10. "True custom" separates these from the
+    // off-the-shelf inserts sold as custom elsewhere.
     description:
-      "Custom foot orthotics cast and fitted at Curate Health in Midtown Toronto, for comfort and support through the day.",
+      "True custom foot orthotics cast and fitted at Curate Health in Midtown Toronto, for comfort and support through the day.",
   },
   {
     type: "product",
@@ -216,9 +225,10 @@ const COPY = [
   {
     type: "service",
     slug: "clinical-care",
-    title: "Hands-On Care Under One Roof",
+    // Frank's wording, 2026-09-10.
+    title: "One-on-One Healthcare Services",
     description:
-      "Chiropractic, physiotherapy, massage, acupuncture, naturopathic medicine and psychotherapy at Curate Health in Midtown Toronto.",
+      "Chiropractic, Physiotherapy, Massage, Acupuncture, Naturopathic Medicine and Psychotherapy at Curate Health in Midtown Toronto.",
   },
   {
     type: "service",
@@ -231,8 +241,9 @@ const COPY = [
     type: "service",
     slug: "recovery-sanctuary",
     title: "Inside the Recovery Sanctuary",
+    // Frank's wording, 2026-09-10.
     description:
-      "Flowpresso, sauna, cold plunge and yoga therapy in our outdoor space in Midtown Toronto.",
+      "Flowpresso, Outdoor Sauna & Cold Plunge, Classes and more in Midtown Toronto.",
   },
   {
     type: "serviceLifestyle",
@@ -280,14 +291,19 @@ const COPY = [
   {
     type: "treatments",
     slug: "fitness-training",
-    title: "Training With a Clinician in the Building",
+    // Frank's wording, 2026-09-10.
+    title: "Training With a Clinician as your coach",
     description:
       "Fitness training at Curate Health in Midtown Toronto, planned with your history and any injuries in mind.",
   },
   {
     type: "treatments",
     slug: "flowpresso-therapy",
-    title: "Flowpresso, Compression and Deep Heat",
+    // The registered symbol goes in titles, per Frank on 2026-09-10. His own
+    // wording for the Recovery Sanctuary card above is left exactly as he sent
+    // it, without the symbol, because that is a description rather than a
+    // title and it is his sentence.
+    title: "Flowpresso®, Compression and Deep Heat",
     description:
       "Flowpresso combines compression and infrared heat in one session. Available at Curate Health in Midtown Toronto.",
   },
@@ -343,7 +359,12 @@ const COPY = [
   {
     type: "treatments",
     slug: "outdoor-yoga-therapy",
-    title: "Yoga Therapy Outdoors",
+    // Frank's wording, 2026-09-10. "Class" rather than "therapy" throughout,
+    // for the search title too. The page heading still reads "Outdoor Yoga
+    // Therapy", so the two now disagree and audit-metadata.js will say so
+    // until the heading is renamed to match. Flagged to Frank, his call.
+    pageTitle: "Outdoor Yoga Class & Services",
+    title: "Yoga Outdoors",
     description:
       "Yoga therapy in the Recovery Sanctuary at Curate Health in Midtown Toronto, adapted to what your body needs that day.",
   },
@@ -371,7 +392,6 @@ const COPY = [
 ];
 
 const BANNED = [
-  "journey",
   "dive in",
   "unlock",
   "elevate",
@@ -397,7 +417,17 @@ const BRAND = "Curate Health";
 const TITLE_MAX = 70;
 const DESCRIPTION_MAX = 160;
 
-function checkCopy(label, value, max) {
+/**
+ * @param allowBanned words this entry may use anyway.
+ *
+ * Nothing uses it at the moment. It exists because the one case that needed it
+ * turned out to be a rule that had changed rather than a copy mistake: Frank
+ * cleared "journey" for use on 2026-09-10 and it came off the banned list
+ * everywhere. Keeping the escape hatch means the next genuine exception can be
+ * recorded here by name, rather than someone quietly loosening the check for
+ * everything.
+ */
+function checkCopy(label, value, max, allowBanned = []) {
   const problems = [];
 
   if (value.length > max) problems.push(`${value.length} chars, over ${max}`);
@@ -412,6 +442,7 @@ function checkCopy(label, value, max) {
   }
   if (/counseling/i.test(value)) problems.push("counseling, should be two Ls");
   for (const word of BANNED) {
+    if (allowBanned.includes(word)) continue;
     if (new RegExp(`\\b${word}`, "i").test(value)) {
       problems.push(`banned word "${word}"`);
     }
@@ -470,7 +501,7 @@ async function main() {
       const value = item[field];
       if (!value) continue;
 
-      const faults = checkCopy(human, value, max);
+      const faults = checkCopy(human, value, max, item.allowBanned || []);
       problems += faults.length;
       faults.forEach((f) => lines.push(`    PROBLEM ${f}`));
 

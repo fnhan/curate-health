@@ -1256,5 +1256,6 @@ export const OUR_PROGRAMS_QUERY = groq`
     heading,
     paragraph,
     buttonText
-  }
+  },
+  ${SEO_QUERY}
 }`;

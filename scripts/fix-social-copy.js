@@ -209,7 +209,7 @@ const COPY = [
   },
   {
     type: "product",
-    slug: "profession-grade-supplements",
+    slug: "professional-grade-supplements",
     title: "Supplements You Cannot Buy Off a Shelf",
     description:
       "Professional grade supplements available through our practitioners at Curate Health in Midtown Toronto.",

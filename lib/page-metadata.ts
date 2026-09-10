@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import type { SanityImageCrop, SanityImageHotspot } from "@/sanity.types";
 import {
   SHARE_IMAGE_HEIGHT,
   SHARE_IMAGE_WIDTH,
@@ -55,8 +56,11 @@ type SeoImage = {
     url?: string | null;
     alt?: string | null;
   } | null;
-  crop?: Record<string, number> | null;
-  hotspot?: Record<string, number> | null;
+  // Sanity's own shapes. These were Record<string, number> until the generated
+  // types were refreshed, which exposed that a real crop also carries a
+  // _type string and would not have fitted.
+  crop?: SanityImageCrop | null;
+  hotspot?: SanityImageHotspot | null;
 } | null;
 
 type SeoObject = {

@@ -45,3 +45,4 @@ dist
 # claude code
 .claude/
 .share-images/
+.tmp/

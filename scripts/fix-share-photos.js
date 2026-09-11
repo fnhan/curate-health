@@ -48,7 +48,7 @@ const CHANGES = [
   },
   {
     type: "product",
-    slug: "profession-grade-supplements",
+    slug: "professional-grade-supplements",
     what: "crop",
     // Keeps the photograph, 5142x7709, and moves the window onto the hand.
     //
@@ -167,6 +167,24 @@ const CHANGES = [
   },
 ];
 
+/**
+ * Whether a stored crop already matches the wanted one.
+ *
+ * Compared by the four edges, not by JSON.stringify. Sanity hands a stored
+ * crop back with its own key order, so a string comparison said every crop
+ * differed and a dry run after applying reported six changes that were
+ * already in place. A dry run that cannot tell done from not done teaches
+ * people to stop reading it.
+ */
+function sameCrop(stored, wanted) {
+  if (!stored && !wanted) return true;
+  if (!stored || !wanted) return false;
+
+  return ["top", "bottom", "left", "right"].every(
+    (edge) => Math.abs((stored[edge] ?? 0) - (wanted[edge] ?? 0)) < 1e-6
+  );
+}
+
 function check(alt) {
   const problems = [];
   if (alt.length < 25) problems.push(`alt is ${alt.length} chars, under 25`);
@@ -241,6 +259,15 @@ async function main() {
         ...(item.hotspot ? { hotspot: item.hotspot } : {}),
       };
 
+      if (
+        doc.asset?._id === item.asset &&
+        doc.alt === item.alt &&
+        sameCrop(doc.crop, item.crop)
+      ) {
+        console.log("    already set");
+        continue;
+      }
+
       mutations.push({
         patch: {
           id: doc._id,
@@ -261,7 +288,7 @@ async function main() {
     const to = Math.round((1 - item.crop.bottom) * 100);
     console.log(`    crop: showing ${from}% to ${to}% down the photograph`);
 
-    if (JSON.stringify(doc.crop || null) === JSON.stringify(item.crop)) {
+    if (sameCrop(doc.crop, item.crop)) {
       console.log("    already set");
       continue;
     }

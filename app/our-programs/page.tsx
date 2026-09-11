@@ -55,16 +55,24 @@ export default async function OurProgramsPage() {
 }
 
 /**
- * Same gap as /blog: no metadata of its own, so it inherited the homepage's
- * title and description. See CH-006.
+ * Reads the page's own seo object from Sanity, like every other page.
  *
- * The ourPrograms document has no seo object either, which is why
- * scripts/audit-seo-fields.js missed it at first: that audit only looked at
- * documents that already had one, so a document missing it entirely was
- * invisible. Frank caught that.
+ * It used to pass null here with the title and description written into the
+ * code, because the ourPrograms document had no seo object at the time. It has
+ * one now, holding a title, a description, share copy and a share photo Frank
+ * approved on 2026-09-10, and none of it was reaching the page: the share card
+ * had no image at all. That was only caught by fetching the live page, because
+ * every check up to then had read what was stored rather than what rendered.
+ *
+ * The values that used to be hard-coded stay as fallbacks, so an empty field
+ * in the Studio still produces a sensible title rather than the site default.
  */
 export async function generateMetadata() {
-  return buildPageMetadata(null, {
+  const program = await sanityFetch<OUR_PROGRAMS_QUERYResult>({
+    query: OUR_PROGRAMS_QUERY,
+  });
+
+  return buildPageMetadata(program?.seo ?? null, {
     title: "Health Programs Toronto",
     description:
       "Three structured health programs at Curate Health in Midtown Toronto, from self-directed access to physician-led care.",

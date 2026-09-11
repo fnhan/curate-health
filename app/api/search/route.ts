@@ -58,6 +58,19 @@ const FEATURED_QUERY = groq`
 /**
  * Fetch all relevant docs WITHOUT `match` and without unsupported functions.
  * We'll extract strings and build URLs in Node.
+ *
+ * Leaves out retired pages. This used to index every document of these types,
+ * so a search for "exercise therapy" on 2026-09-11 offered
+ * /services/exercise-therapy, whose address forwards to Movement & Training.
+ * A treatment needs two checks: Exercise Therapy was itself switched on, but
+ * it hangs off the switched-off Lifestyle Medicine category.
+ *
+ * The switch is only trusted for the three types where it genuinely decides
+ * whether a page exists: service, treatments and product. It is NOT applied to
+ * everything, deliberately. serviceLifestyleProgram is switched off in Sanity
+ * and its page at /services/curate-lifestyle-program is live regardless, so a
+ * blanket isActive filter would have hidden a working page from search. That
+ * mismatch is Frank's to resolve; this should not paper over it either way.
  */
 const INDEX_DOCS_QUERY = groq`
 *[
@@ -87,6 +100,8 @@ const INDEX_DOCS_QUERY = groq`
     "servicesHeroSection",
     "legalPage"
   ]
+  && !(_type in ["service", "treatments", "product"] && isActive == false)
+  && !(_type == "treatments" && service->isActive == false)
 ]{
   ...,
   "slugCurrent": slug.current,

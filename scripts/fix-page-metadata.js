@@ -115,7 +115,7 @@ const COPY = [
   },
   {
     type: "product",
-    slug: "profession-grade-supplements",
+    slug: "professional-grade-supplements",
     // The heading read "Profession Grade Supplements" while the title read
     // "Professional". The heading was the typo. The slug keeps the typo for
     // now, because changing it changes a live address and that is Frank's
@@ -216,26 +216,26 @@ const COPY = [
 ];
 
 /** Share images, chosen from what each page already uses. */
+/**
+ * Only Mission and Values is still decided here.
+ *
+ * This list originally set four share images. Frank replaced three of them on
+ * 2026-09-10, and the replacements live in other scripts:
+ *
+ *   Our Story          the barbell photograph, scripts/fix-share-photos.js
+ *   Pillars of Health  the five-circle diagram, scripts/build-share-images.js
+ *   Our Programs       the notebook photograph, scripts/fix-our-programs.js
+ *
+ * They were taken out of this list rather than left in, because this script
+ * writes whatever the list says whenever the stored image differs from it.
+ * Left in, the next run of this file would have quietly put back the three
+ * photographs he had just replaced.
+ */
 const IMAGES = [
-  {
-    type: "ourStory",
-    sourcePath: "additionalSections[1].sectionImage.image.asset._ref",
-    alt: "Dr. Frank Nhan treating a patient lying on a treatment table in the clinic.",
-  },
   {
     type: "missionAndValues",
     sourcePath: "heroSection.heroImage.image.asset._ref",
     alt: "Sunlight through the trunks of a green forest.",
-  },
-  {
-    type: "pillarsOfHealth",
-    sourcePath: "heroSection.heroImage.image.asset._ref",
-    alt: "Overlapping ripples spreading across the surface of still water.",
-  },
-  {
-    type: "ourPrograms",
-    sourcePath: "heroImage.asset._ref",
-    alt: "Two people stretching on mats in a bright studio with plants and tall windows.",
   },
 ];
 

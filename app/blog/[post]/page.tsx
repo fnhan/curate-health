@@ -82,5 +82,5 @@ export async function generateMetadata({
 
   const { seo } = post;
 
-  return buildPageMetadata(seo);
+  return buildPageMetadata(seo, { path: `/blog/${params.post}` });
 }

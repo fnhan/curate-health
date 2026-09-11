@@ -41,5 +41,5 @@ export async function generateMetadata() {
 
   const { seo } = ourStory!;
 
-  return buildPageMetadata(seo);
+  return buildPageMetadata(seo, { path: "/about/our-team" });
 }

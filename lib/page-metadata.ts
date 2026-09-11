@@ -17,8 +17,8 @@ import {
  * because renaming the page in Sanity changes `title` and nothing makes
  * `seo.pageTitle` follow.
  *
- * One function instead. It is also the single place to add canonical tags when
- * CH-003 is done, rather than fifteen.
+ * One function instead. It is also where every page's canonical tag comes
+ * from, CH-003, so that is one place rather than seventeen.
  *
  * THE BRAND IS APPENDED ONCE, NEVER TWICE
  *
@@ -75,6 +75,22 @@ type SeoObject = {
 } | null;
 
 type Fallbacks = {
+  /**
+   * This page's own address, relative, e.g. "/services/physiotherapy". CH-003.
+   *
+   * Becomes the canonical tag and the share card's og:url, both resolved to
+   * https://www.curatehealth.ca by the metadataBase in app/layout.tsx.
+   *
+   * Required on purpose. Before 2026-09-11 no page had a canonical, and every
+   * page's share address was either missing or, on the homepage, the only
+   * one set. Making this required means a new page cannot be added without
+   * stating its address; TypeScript refuses the call.
+   *
+   * Pass the page's CANONICAL address, not whatever the visitor typed. For the
+   * dynamic routes that means the one resolve() settled on, since any other
+   * spelling of the URL has already been redirected by then.
+   */
+  path: string;
   title?: string;
   description?: string;
   /**
@@ -143,7 +159,7 @@ function imageEntry(image: SeoImage | undefined, alt: string) {
 
 export function buildPageMetadata(
   seo: SeoObject,
-  fallbacks: Fallbacks = {}
+  fallbacks: Fallbacks
 ): Metadata {
   const title = stripBrand(seo?.pageTitle) || fallbacks.title || DEFAULT_TITLE;
   const description =
@@ -185,7 +201,9 @@ export function buildPageMetadata(
   return {
     title,
     description,
+    alternates: { canonical: fallbacks.path },
     openGraph: {
+      url: fallbacks.path,
       title: shareTitle,
       description: socialDescription,
       ...(ogImages ? { images: ogImages } : {}),

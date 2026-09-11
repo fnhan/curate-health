@@ -81,5 +81,5 @@ export async function generateMetadata() {
   const fallbackDescription =
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
 
-  return buildPageMetadata(seo);
+  return buildPageMetadata(seo, { path: "/services" });
 }

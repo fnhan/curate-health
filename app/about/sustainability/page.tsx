@@ -56,5 +56,5 @@ export async function generateMetadata() {
 
   const { seo } = sustainability!;
 
-  return buildPageMetadata(seo);
+  return buildPageMetadata(seo, { path: "/about/sustainability" });
 }

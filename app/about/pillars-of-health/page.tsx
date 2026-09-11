@@ -49,5 +49,5 @@ export async function generateMetadata() {
 
   const { seo } = pillarsOfHealth!;
 
-  return buildPageMetadata(seo);
+  return buildPageMetadata(seo, { path: "/about/pillars-of-health" });
 }

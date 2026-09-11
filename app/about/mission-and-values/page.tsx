@@ -197,5 +197,5 @@ export async function generateMetadata() {
 
   const { seo } = missionAndValues!;
 
-  return buildPageMetadata(seo);
+  return buildPageMetadata(seo, { path: "/about/mission-and-values" });
 }

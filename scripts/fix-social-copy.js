@@ -96,9 +96,11 @@ const COPY = [
   },
   {
     type: "ourPrograms",
-    // This document had no seo values at all, so the page has been running on
-    // buildPageMetadata's generic fallback.
-    pageTitle: "Our Programs",
+    // "Health Programs Toronto", Frank's choice on 2026-09-11 over "Our
+    // Programs": it is what people type into a search. It was also the title
+    // production had been showing all along, because the page ignored its
+    // seo object and used a hard-coded fallback until #220 fixed that.
+    pageTitle: "Health Programs Toronto",
     pageDescription:
       "Structured health programs at Curate Health in Midtown Toronto, built around lasting change rather than short term results.",
     title: "Programs Built for Change That Lasts",

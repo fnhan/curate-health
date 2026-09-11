@@ -969,7 +969,11 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
 
 export const SITEMAP_QUERY = groq`{
   "services": *[_type == "service" && isActive == true].slug.current,
-  "treatments": *[_type == "treatments" && isActive == true]{
+  // A treatment is only a live page if its category is live too. Exercise
+  // Therapy was switched on under the switched-off Lifestyle Medicine
+  // category, so the sitemap kept listing an address that forwards
+  // elsewhere. Caught by audit-metadata.js on 2026-09-11.
+  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{
     "serviceSlug": service->slug.current,
     "treatmentSlug": treatmentSlug.current
   },

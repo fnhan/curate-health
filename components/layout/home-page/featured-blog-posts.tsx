@@ -85,6 +85,7 @@ function CoverImage({
 }) {
   const image = (
     <Image
+      sizes="(min-width: 1280px) 512px, (min-width: 1024px) 448px, (min-width: 640px) 50vw, 100vw"
       width={2000}
       height={1000}
       alt={`Cover Image for ${title}`}

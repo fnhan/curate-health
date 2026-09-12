@@ -406,9 +406,60 @@ Use "Rehabilitation" throughout. Drop "Primary Care" entirely, on this page, in 
 
 ### CH-007 Image sizes
 
-Every `next/image` requests `w=3840` with no `srcset`. A phone downloads a 4K-sized file. Largest measured transfer was 890 KB.
+**Done 2026-09-12.** 32 of the 53 `next/image` tags carried no `sizes`. 21
+already had one.
 
-Add a `sizes` prop to every instance so Next generates a proper srcset.
+The mechanism is worth stating correctly, because the original brief for this
+ticket said "no `srcset`" and that is not what was happening. Without a `sizes` prop Next emits
+a DPR-based srcset, `1x` and `2x`, sized off the declared `width`. Every phone
+has a device pixel ratio of 2 or 3, so every phone took the `2x` candidate of a
+desktop-width image. With `sizes` present Next switches to a width-based srcset
+with `w` descriptors and the browser picks against the space it actually paints.
+There was always a srcset. It was the wrong kind.
+
+Three patterns, chosen by the layout rather than applied uniformly. Full-bleed
+heroes and backgrounds take `100vw`. Card grids take a share of the viewport
+matching the column count at each breakpoint. Anything with a fixed rendered
+size states that size in pixels, read off its own size classes.
+
+**A `sizes` that is too small is worse than none.** The browser picks a
+candidate narrower than the width it paints and the photo renders blurry, while
+a source grep still reports the image as fixed. That is why each value was read
+off the element's Tailwind classes and its parent container rather than
+defaulted to `100vw`, and it is the thing to check first if an image looks soft.
+
+One case records a decision rather than a measurement. The image in
+`components/layout/our-programs-page/explore-your-options.tsx` sits in a
+`hidden lg:block` container, so the honest value is
+`(min-width: 1024px) 50vw, 0px`. It is plain `50vw` instead: a `0px` branch
+tells the browser the image needs no pixels at all, and anything fetching it
+before the container becomes visible takes the smallest candidate in the set and
+keeps it.
+
+```bash
+# Acceptance. Exits 1 if any next/image renders without a sizes hint.
+node scripts/audit-image-sizes.js http://localhost:3000
+node scripts/audit-image-sizes.js https://www.curatehealth.ca
+node scripts/audit-image-sizes.js http://localhost:3000 --bytes   # weigh them
+```
+
+Measured with that script across 11 pages covering every image template:
+
+|                    | next/image tags | with a sizes hint |
+| ------------------ | --------------- | ----------------- |
+| Before, production | 85              | 21                |
+| After              | 85              | 85                |
+
+`--bytes` on 33 of those images: 16.34 MB at the widest candidate against 1.88
+MB at phone width.
+
+**The script refuses a preview URL behind Vercel Deployment Protection** rather
+than reporting zero images. The SSO page answers 200, so a counting check reads
+as "nothing on this page" instead of "you were never shown this page". Verify on
+a local dev server, per the preview note in the working rules.
+
+Three images remain over 100 KB at phone width. Those are oversized source
+assets in Sanity, which is CH-029, and no `sizes` value reaches them.
 
 ### CH-012 Security headers
 

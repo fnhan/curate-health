@@ -32,6 +32,7 @@ const MasterHealthBlueprint = ({
           <div className="relative">
             <div className="absolute -top-14 right-0 h-14 w-3/4 bg-our-programs-border-3"></div>
             <Image
+              sizes="(min-width: 768px) 700px, 100vw"
               src={masterHealthBlueprint?.image?.asset?.url!}
               alt={masterHealthBlueprint?.image?.alt ?? ""}
               height={550}

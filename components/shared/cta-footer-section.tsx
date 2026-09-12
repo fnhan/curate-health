@@ -31,6 +31,7 @@ export default function CTASection({ ctaSection }: CTASectionProps) {
   return (
     <section className="relative h-full md:h-[calc(100vh-100px)]">
       <Image
+        sizes="100vw"
         loading="lazy"
         src={ctaSectionImage?.image || ""}
         alt={ctaSectionImage?.alt || ""}

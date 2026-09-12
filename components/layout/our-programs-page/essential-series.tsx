@@ -35,6 +35,7 @@ const EssentialSeries = ({
               <div className="relative flex justify-end">
                 <div className="absolute -top-14 right-0 h-14 w-3/4 bg-our-programs-border"></div>
                 <Image
+                  sizes="(min-width: 768px) 700px, 100vw"
                   src={essentialSeries?.image?.asset?.url!}
                   alt={essentialSeries?.image?.alt ?? ""}
                   height={550}
@@ -60,7 +61,9 @@ const EssentialSeries = ({
                   </thead>
                   <tbody className="[&_td]:text-center [&_th]:whitespace-nowrap [&_th]:pr-5">
                     <tr>
-                      <th className="text-left font-normal">Included Sessions</th>
+                      <th className="text-left font-normal">
+                        Included Sessions
+                      </th>
                       {essentialSeries?.tableContent?.includesSessions?.map(
                         (num) => {
                           return <td key={num}>{num}</td>;
@@ -98,7 +101,9 @@ const EssentialSeries = ({
                       )}
                     </tr>
                     <tr className="[&>td]:text-5xl [&>td]:font-light">
-                      <th className="text-left font-semibold">Total Sessions</th>
+                      <th className="text-left font-semibold">
+                        Total Sessions
+                      </th>
                       {essentialSeries?.tableContent?.includesSessions?.map(
                         (num, i) => {
                           let bonusSessions = essentialSeries.tableContent
@@ -151,13 +156,13 @@ const EssentialSeries = ({
             service. **Eligible services include the full range of services
             offered at Curate Health. ***Included Sessions are for the primary
             participant and may be eligible for extended healthcare insurance
-            coverage. Included sessions do not expire. †Bonus Sessions may be used
-            by the participant or extended as a gift to a friend or family member.
-            These sessions are not eligible for extended healthcare insurance
-            coverage. Bonus sessions may be applied to both initial assessments
-            (for new guests of Curate Health) and regular sessions of the
-            purchased service. Valid for 12 months (Tier 1), 18 months (Tier 2),
-            or 24 months (Tier 3).{" "}
+            coverage. Included sessions do not expire. †Bonus Sessions may be
+            used by the participant or extended as a gift to a friend or family
+            member. These sessions are not eligible for extended healthcare
+            insurance coverage. Bonus sessions may be applied to both initial
+            assessments (for new guests of Curate Health) and regular sessions
+            of the purchased service. Valid for 12 months (Tier 1), 18 months
+            (Tier 2), or 24 months (Tier 3).{" "}
           </p>
         </div>
       </div>

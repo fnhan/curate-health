@@ -389,6 +389,7 @@ export default async function ContactPage() {
             </div>
           </div>
           <Image
+            sizes="(min-width: 768px) 50vw, 100vw"
             src={contactForm?.image ?? ""}
             alt={contactForm?.alt ?? ""}
             fill

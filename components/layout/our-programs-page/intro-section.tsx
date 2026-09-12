@@ -54,6 +54,7 @@ const IntroSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
               >
                 <div className="relative flex-1">
                   <Image
+                    sizes="(min-width: 1280px) 350px, (min-width: 768px) 45vw, 90vw"
                     src={image?.asset?.url!}
                     alt={image?.alt ?? ""}
                     fill

@@ -24,6 +24,7 @@ export default function SurveySection({ surveySection }) {
     <>
       <section className="relative h-[400px] bg-platinum md:h-[705px]">
         <Image
+          sizes="100vw"
           width={1440}
           height={594}
           alt={`${bgImage.alt}`}

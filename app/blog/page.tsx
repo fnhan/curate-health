@@ -41,6 +41,7 @@ export default async function BlogPage() {
                 </Link>
               </CardTitle>
               <Image
+                sizes="(min-width: 1536px) 30vw, (min-width: 768px) 45vw, 90vw"
                 src={post.mainImage?.asset?.url || ""}
                 alt={post.mainImage?.alt ?? ""}
                 width={300}

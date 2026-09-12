@@ -19,6 +19,7 @@ const ExploreYourOptions = ({
       <div className="container flex justify-center py-24 lg:justify-between">
         <div className="relative hidden flex-1 overflow-hidden lg:block xl:left-52">
           <Image
+            sizes="50vw"
             src={exploreYourOptions?.image?.asset?.url!}
             alt=""
             fill

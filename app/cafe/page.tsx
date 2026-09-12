@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { CafeCtaBandSection } from "@/components/layout/cafe-page/cafe-cta-band";
+import { CafeHours } from "@/components/layout/cafe-page/cafe-hours";
 import {
   CafeIntroSection,
   CafeQuoteSection,
@@ -64,6 +65,7 @@ export default async function CafePage() {
         sectionClassName="font-poppins"
         proseClassName="font-poppins prose-headings:font-poppins prose-p:font-poppins"
       />
+      <CafeHours siteSettings={siteSettings} />
       <CafeMenuDownloadSection data={menuDownloadSection} />
       <CafeCtaBandSection data={ctaBandSection} />
     </div>

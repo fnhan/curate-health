@@ -485,15 +485,29 @@ export function buildCafeJsonLd(
       longitude: -79.4306,
     },
     /**
-     * No openingHoursSpecification here, deliberately.
+     * The clinic's hours, on purpose, and not a copy of them.
      *
-     * An earlier version handed the cafe the clinic's hours, which asserts the
-     * cafe opens and closes exactly when the clinic does. Nobody has said that
-     * is true, and a cafe attached to a clinic is the kind of place that opens
-     * earlier. The cafe has its own Google listing carrying its own hours, so
-     * a wrong answer here would contradict the right one there. Add these when
-     * the cafe has a field of its own to hold them.
+     * These were taken out for one round, on the reasoning that handing the
+     * cafe the clinic's hours asserts something nobody had confirmed. Frank
+     * confirmed it on 2026-09-12: the cafe keeps the clinic's hours, and when
+     * the clinic's change the cafe's should change with them.
+     *
+     * So it reads the same function rather than a second field. A field of its
+     * own would let the two drift the moment somebody edited one, which is the
+     * failure CH-025 spent a whole ticket undoing for the address. If the cafe
+     * ever keeps its own hours, that is the point to give it its own field, and
+     * to update its Google listing in the same change.
      */
+    openingHoursSpecification: siteSettings
+      ? buildOpeningHours(siteSettings)
+      : undefined,
+    /**
+     * The clinic's number, for the same reason and on the same terms. The cafe
+     * has no line of its own, and a LocalBusiness with no telephone is weaker
+     * than one with. Read from the same place the footer and the clinic entity
+     * read it, so there is one phone number in the dataset.
+     */
+    telephone: siteSettings?.contactInfo?.phone,
     // The cafe's own profiles, not the clinic's. Attaching the clinic's here
     // would tell Google the two businesses are one account.
     sameAs: siteSettings

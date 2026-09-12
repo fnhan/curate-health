@@ -723,13 +723,24 @@ sits on the cafe entity's `sameAs`. That listing is worth more than the
 Instagram split on its own, because a correct `sameAs` on a thin entity is still
 thin.
 
-**The cafe deliberately carries no `openingHoursSpecification`.** A first version
-handed it the clinic's hours, which asserts the cafe opens and closes exactly
-when the clinic does. Nobody has said that is true, and a cafe attached to a
-clinic is the kind of place that opens earlier. Its own Google listing carries
-its own hours, so a wrong answer here would contradict the right one there. It
-has no phone of its own either. Give the cafe a hours field of its own before
-adding these.
+**The cafe follows the clinic, reversed 2026-09-12.** An earlier pass removed
+the cafe's `openingHoursSpecification` on the reasoning that giving it the
+clinic's hours asserted something nobody had confirmed. Frank then confirmed it:
+the cafe keeps the clinic's hours, address and phone, and when the clinic's
+change the cafe's change with them.
+
+So the cafe reads the same fields rather than holding copies. It has no hours
+field, no phone field and no address of its own, on purpose. A second set would
+let the two drift the moment somebody edited one, which is the failure CH-025
+spent a whole ticket undoing for the address. Give the cafe its own fields at
+the point it genuinely keeps its own hours, and update its Google listing in the
+same change.
+
+`components/layout/cafe-page/cafe-hours.tsx` shows them on `/cafe`, with the
+address and phone, because the cafe's Google listing now points at that page and
+it previously answered none of those questions. It also keeps the page honest:
+the `CafeOrCoffeeShop` entity there publishes `openingHoursSpecification`, and
+markup is supposed to describe what the page shows.
 
 _The footer._ Social links now carry brand icons, via
 `components/shared/social-icon.tsx`. `lucide-react` has Instagram, Facebook,

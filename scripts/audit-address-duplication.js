@@ -158,16 +158,22 @@ async function main() {
     problems.push("contactPage.contactInfo still exists (phase 2 not applied)");
   }
 
-  if (onlyOnPage.length) {
-    problems.push(
-      `${onlyOnPage.length} value(s) exist only on contactPage and would be destroyed by phase 2: ${onlyOnPage.join(", ")}`
-    );
-  }
+  // Only meaningful while there are still two copies to compare. Once phase 2
+  // has run, every field "differs" because the contactPage side is absent,
+  // which is the goal rather than a fault. An earlier version of this check
+  // reported the finished state as seven disagreements.
+  if (!duplicateGone) {
+    if (onlyOnPage.length) {
+      problems.push(
+        `${onlyOnPage.length} value(s) exist only on contactPage and would be destroyed by phase 2: ${onlyOnPage.join(", ")}`
+      );
+    }
 
-  if (disagreements.length) {
-    problems.push(
-      `${disagreements.length} shared field(s) disagree, so the two copies are not interchangeable: ${disagreements.join(", ")}`
-    );
+    if (disagreements.length) {
+      problems.push(
+        `${disagreements.length} shared field(s) disagree, so the two copies are not interchangeable: ${disagreements.join(", ")}`
+      );
+    }
   }
 
   if (problems.length) {

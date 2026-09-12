@@ -100,6 +100,21 @@ function getActiveSocialUrls(
 const GOOGLE_BUSINESS_PROFILE =
   "https://maps.google.com/?cid=4838984602728192016";
 
+/**
+ * The cafe's own Google listing, confirmed to exist by Frank on 2026-09-12.
+ *
+ * This is the strongest signal that the cafe is a business in its own right and
+ * not a page on the clinic's site, and it is worth more than the Instagram
+ * split on its own: a correct sameAs on a thin entity is still thin. Its place
+ * id, 0x882b3331c51bdd03:0xbc4f43925e7428c, is genuinely distinct from the
+ * clinic's, so Google already holds them apart.
+ *
+ * Derived from the share link Frank sent, then opened in a browser and
+ * confirmed to load "Curate Cafe" at 989 Eglinton.
+ */
+const CAFE_GOOGLE_BUSINESS_PROFILE =
+  "https://maps.google.com/?cid=848071156138721932";
+
 /** Keys are what Sanity stores, values are what schema.org expects. */
 const DAY_NAMES: Record<string, string> = {
   monday: "Monday",
@@ -145,8 +160,22 @@ function parseHourRange(range: string | null | undefined) {
  * these in the knowledge panel and in Maps where nobody cross-checks them.
  *
  * A day carrying an exception with hours uses those. A day in daysOpen with no
- * exception uses the standard range. Days that appear nowhere are left out
- * entirely, which states nothing rather than asserting closed.
+ * exception uses the standard range.
+ *
+ * EVERY DAY IS STATED, INCLUDING THE CLOSED ONES
+ *
+ * A day left out of the specification says nothing about itself, and nothing
+ * cannot be told apart from "we forgot to mention it". schema.org has a way to
+ * say closed, opens and closes both at 00:00, so the closed days say it.
+ *
+ * Which days those are comes from daysOpen, whose meaning is exactly that: a
+ * day absent from Days Open is a day the clinic is not open. Deriving it rather
+ * than storing a second list means the two can never disagree.
+ *
+ * Worth knowing what this does and does not buy. Google fills the hours in the
+ * knowledge panel and in Maps from the Google Business Profile, not from a
+ * page, so this changes little there. It matters to everything that reads the
+ * page directly, which is the surface CH-032 cares about.
  */
 function buildOpeningHours(siteSettings: SITE_SETTINGS_QUERYResult) {
   const hours = siteSettings?.businessHours;
@@ -163,22 +192,36 @@ function buildOpeningHours(siteSettings: SITE_SETTINGS_QUERYResult) {
       .map((e) => [e.day!.toLowerCase(), e.hours])
   );
 
-  // Every day named anywhere, so a day that only exists as an exception is
-  // still published. Sunday was exactly that case.
-  const days = new Set([
+  // Every day named anywhere counts as open, so a day that exists only as an
+  // exception is still published. Sunday was exactly that case.
+  const open = new Set([
     ...(hours.daysOpen ?? []).map((d) => d.toLowerCase()),
     ...exceptions.keys(),
   ]);
 
-  const specs = [...days]
-    .map((day) => {
-      const name = DAY_NAMES[day];
-      if (!name) return undefined;
+  // Nothing to say at all is better than asserting seven closed days, which is
+  // what an empty daysOpen would otherwise produce.
+  if (!open.size) return undefined;
+
+  const specs = Object.entries(DAY_NAMES)
+    .map(([day, name]) => {
+      if (!open.has(day)) {
+        return {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: `https://schema.org/${name}`,
+          opens: "00:00",
+          closes: "00:00",
+        };
+      }
 
       const range = exceptions.has(day)
         ? (exceptions.get(day) ?? standard)
         : standard;
       const parsed = parseHourRange(range);
+
+      // An open day whose hours will not parse is left out rather than
+      // published wrong, and is deliberately not reported as closed: sending
+      // somebody to a closed door is the failure this guards against.
       if (!parsed) return undefined;
 
       return {
@@ -431,14 +474,34 @@ export function buildCafeJsonLd(
     // than a second copy of it. Without an address a LocalBusiness cannot be
     // placed, which is most of what the type is for.
     address: siteSettings ? buildPostalAddress(siteSettings) : undefined,
-    openingHoursSpecification: siteSettings
-      ? buildOpeningHours(siteSettings)
-      : undefined,
-    // The cafe's own Instagram, not the clinic's. Attaching the clinic's
-    // profiles here would tell Google the two businesses are one account.
+    /**
+     * Same building as the clinic, so the same coordinates, but read off the
+     * cafe's own Google place rather than copied across: 43.6997418,
+     * -79.4306373, rounded to the precision the clinic entity uses.
+     */
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 43.6997,
+      longitude: -79.4306,
+    },
+    /**
+     * No openingHoursSpecification here, deliberately.
+     *
+     * An earlier version handed the cafe the clinic's hours, which asserts the
+     * cafe opens and closes exactly when the clinic does. Nobody has said that
+     * is true, and a cafe attached to a clinic is the kind of place that opens
+     * earlier. The cafe has its own Google listing carrying its own hours, so
+     * a wrong answer here would contradict the right one there. Add these when
+     * the cafe has a field of its own to hold them.
+     */
+    // The cafe's own profiles, not the clinic's. Attaching the clinic's here
+    // would tell Google the two businesses are one account.
     sameAs: siteSettings
-      ? getActiveSocialUrls(siteSettings, "cafe")
-      : undefined,
+      ? [
+          ...getActiveSocialUrls(siteSettings, "cafe"),
+          CAFE_GOOGLE_BUSINESS_PROFILE,
+        ]
+      : [CAFE_GOOGLE_BUSINESS_PROFILE],
     servesCuisine: "Functional nutrition",
     areaServed: {
       "@type": "City",

@@ -112,7 +112,7 @@ export function FooterMobileAccordion({
                     {...externalLinkProps(link.url!)}
                   >
                     <SocialIcon platform={link.platform} size={16} />
-                    <span>{link.platform}</span>
+                    <span>{link.label || link.platform}</span>
                   </a>
                 ))}
             </div>

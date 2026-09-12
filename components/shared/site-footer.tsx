@@ -156,7 +156,7 @@ export default function SiteFooter({
                           "Instagram (Cafe)" are the same mark and not the same
                           account.
                         */}
-                        <span>{link.platform}</span>
+                        <span>{link.label || link.platform}</span>
                       </a>
                     ))}
                 </div>

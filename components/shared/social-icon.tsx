@@ -37,6 +37,15 @@ import {
  */
 type IconProps = { className?: string; size?: string | number };
 
+/**
+ * Drawn to match the others rather than to match TikTok's own artwork.
+ *
+ * The first version of this was TikTok's solid glyph, which sat wrong beside
+ * three outlines: one filled mark among strokes reads as a mistake at 16px.
+ * This is a single stroked path on lucide's grid, 24 by 24 with a 2px round
+ * cap, so the five marks in the footer share one weight. One arc for the note
+ * head, a stem, one arc for the flag.
+ */
 function TikTokIcon({ className, size = 16 }: IconProps) {
   return (
     <svg
@@ -46,10 +55,14 @@ function TikTokIcon({ className, size = 16 }: IconProps) {
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      fill="currentColor"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className={className}
     >
-      <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 1 1 .77-5.06v-3.1a5.66 5.66 0 0 0-.77-.05A5.66 5.66 0 1 0 15.54 15.4V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.28 4.28 0 0 1-3.24-1.48z" />
+      <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
     </svg>
   );
 }

@@ -672,13 +672,24 @@ hours, and Google shows these in the knowledge panel and in Maps where nobody
 cross-checks them.
 
 Frank confirmed on 2026-09-12: Monday to Friday 9:00 to 18:00, **Sunday 9:00 to
-13:00**, Saturday closed and not worth listing. The stored data disagreed:
+13:00**, Saturday closed. The stored data disagreed:
 `daysOpen` held Monday to Friday only, and Sunday existed as an exception with
 no hours, so `/contact` rendered nothing for a day the clinic is open. That was
 a visible bug on the page, not only a schema gap. Fixed by
-`scripts/add-social-and-hours.js`. Saturday stays absent, which states nothing
-rather than asserting closed; that is the weaker of the two and is what was
-asked for.
+`scripts/add-social-and-hours.js`.
+
+**All seven days are stated, the closed ones included.** A day left out says
+nothing about itself, and nothing cannot be told apart from "we forgot to
+mention it". schema.org has a way to say closed, `opens` and `closes` both at
+`00:00`, so Saturday says it. Which days those are is derived from `daysOpen`,
+whose meaning is exactly that, rather than stored as a second list the first can
+drift away from. An open day whose hours will not parse is left out rather than
+published wrong, and deliberately not reported as closed: sending somebody to a
+closed door is the failure this guards against.
+
+Be clear about what that buys. Google fills the hours in the knowledge panel and
+in Maps from the Google Business Profile, not from the page, so this changes
+little there. It matters to everything that reads the page directly.
 
 _Geo._ `43.6997, -79.4306`, taken from the Google place entity the map link
 resolves to rather than from geocoding the address string. This address has two
@@ -690,7 +701,7 @@ profile and a business are the same entity, so an array has to describe one
 entity rather than the group. `socialMedia` entries carry an `entity` field,
 `clinic` or `cafe`, and `lib/structured-data.tsx` splits on it. The clinic gets
 LinkedIn, the clinic Instagram, TikTok, Facebook and the Google Business
-Profile. The cafe gets its own Instagram. Entries with no `entity` set count as
+Profile. The cafe gets its own Instagram and its own Google listing. Entries with no `entity` set count as
 the clinic, which is what every profile stored before the field existed is.
 
 Every URL was fetched and confirmed to resolve before being written. The TikTok
@@ -704,6 +715,21 @@ in the footer beside the address, which already links to the same listing. The
 CID is the second half of the place id above converted to decimal, and it was
 opened in a browser and confirmed to load "Curate Health" at 989 Eglinton rather
 than trusted from the arithmetic.
+
+**The cafe has its own Google listing**, confirmed by Frank on 2026-09-12 and
+verified in a browser: place id `0x882b3331c51bdd03:0xbc4f43925e7428c`, which is
+genuinely distinct from the clinic's, so Google already holds the two apart. It
+sits on the cafe entity's `sameAs`. That listing is worth more than the
+Instagram split on its own, because a correct `sameAs` on a thin entity is still
+thin.
+
+**The cafe deliberately carries no `openingHoursSpecification`.** A first version
+handed it the clinic's hours, which asserts the cafe opens and closes exactly
+when the clinic does. Nobody has said that is true, and a cafe attached to a
+clinic is the kind of place that opens earlier. Its own Google listing carries
+its own hours, so a wrong answer here would contradict the right one there. It
+has no phone of its own either. Give the cafe a hours field of its own before
+adding these.
 
 _The footer._ Social links now carry brand icons, via
 `components/shared/social-icon.tsx`. `lucide-react` has Instagram, Facebook,

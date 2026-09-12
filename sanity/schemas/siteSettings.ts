@@ -242,8 +242,25 @@ export default defineType({
               name: "platform",
               type: "string",
               title: "Platform",
+              description:
+                "Which network this is. Chooses the icon, so keep the platform's own name in it: Instagram, TikTok, Facebook, LinkedIn.",
               validation: (Rule) =>
                 Rule.required().error("Platform is required"),
+            }),
+            defineField({
+              /**
+               * What the footer prints, when that is not the platform's name.
+               *
+               * Two Instagram accounts means the same mark twice, so the label
+               * has to say which account rather than which network. Kept apart
+               * from platform because platform is what picks the icon: renaming
+               * it to "Curate Cafe" would lose the Instagram mark.
+               */
+              name: "label",
+              type: "string",
+              title: "Footer label",
+              description:
+                "Optional. What the link reads as in the footer. Leave empty to use the platform name. Set for the two Instagram accounts, so they read as the business rather than twice as Instagram.",
             }),
             // defineField({
             //   name: 'platformLogo',

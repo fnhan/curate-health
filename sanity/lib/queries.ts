@@ -667,6 +667,7 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     },
     isActive,
     entity,
+    label,
     url
   },
   // Opening hours live on contactPage, where editors manage them, and are

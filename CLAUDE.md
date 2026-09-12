@@ -371,6 +371,19 @@ node scripts/dedupe-address.js --apply --phase=2  # removes what nothing reads n
 node scripts/audit-address-duplication.js         # exits 1 until both have landed
 ```
 
+**Both phases applied 2026-09-12.** Phase 1 in transaction
+`ldqkD6gmBMFeJ0vzgrM4W3`, then #225 merged and deployed, then phase 2 in
+`IIedXCuABj7j5F8r3FOnO0`. Verified on production: the contact page renders the
+address, email and phone from `siteSettings`, the hero address opens the Google
+listing, Get Directions carries the daddr, one map, no "undefined", no "York".
+The footer address and `addressLocality: Toronto` in the schema graph are
+unchanged. `node scripts/audit-address-duplication.js` exits 0.
+
+One trap in that acceptance check, fixed after it fired. It compared the two
+copies field by field, so once phase 2 deleted one of them every field read as
+a disagreement and the finished state reported seven failures. The comparison
+now only runs while there are still two copies to compare.
+
 Phase 1 also patches the `siteSettings` draft, which autosaves in the Studio and
 would otherwise put the old shape back on the next publish.
 

@@ -31,7 +31,7 @@ Tier 2, show Frank and wait for an explicit yes, then merge: anything touching p
 
 The human read of the change is the point, not who presses the button. That is why tier 2 exists and why it is the default for anything ambiguous.
 
-**Branch protection does not enforce this, contrary to what this file said until 2026-09-08.** `required_approving_review_count` on `main` is 0. The protection blocks force pushes and branch deletion, nothing else, so any merge would have gone through unchallenged. The rule above was the only thing standing in the way, and it still is. Do not rely on GitHub to catch a tier 2 merge that skipped Frank.
+**Branch protection does not enforce the tier rule.** Read 2026-09-12 from the API, and it has changed since the last time this file described it, so read it again rather than trusting this paragraph: `enforce_admins` is on, force pushes and deletions are blocked, and a pull request is now required, which is new. A direct `git push` to `main` is rejected with GH006. What has not changed is the part that matters: `required_approving_review_count` is **0** and `required_status_checks` is **null**, so a pull request can be opened and merged by the same person in one move, with a red build. GitHub will not catch a tier 2 merge that skipped Frank, and it will not catch a failing check either. The rule above is still the only thing standing in the way.
 
 Worth remembering why the caution is here. The worst incident on this project was a Sanity slug rename applied straight to the shared production dataset, which took a live indexed URL to 404 for two weeks while the matching redirect sat unmerged. It happened on the content side, which has no review step at all. Frank caught it, Claude Code did not.
 
@@ -557,6 +557,13 @@ Studio policy allows neither googletagmanager nor the collect endpoints.
 node scripts/audit-security-headers.js http://localhost:3000 --dev
 node scripts/audit-security-headers.js https://www.curatehealth.ca
 ```
+
+**Verified on production 2026-09-12**, after merge. All eight paths pass
+without `--dev`, which is the run that proves `'unsafe-eval'` is absent from
+the public policy: the dev server adds it on purpose, so only a production
+response can show it gone. Checked in a browser at the same time: zero CSP
+violations, `gtag` defined, the Mux hero at `readyState` 4 with no error, the
+map iframe rendered, the Formspree action intact.
 
 **The audit is necessary and not sufficient.** It reads headers, so it cannot
 see a directive that blocks something the page needs. That part was checked by

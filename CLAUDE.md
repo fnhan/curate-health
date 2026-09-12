@@ -331,7 +331,61 @@ Two ids is not automatically two listings, a place pin and a business entity can
 
 They are invisible to the site, so they are not live defects. Deleting documents is destructive and needs Frank's sign-off plus a fresh export first. They do surface in a dataset export and through the Sanity API, so retire them eventually rather than never. Do not let a future "York" grep treat them as an outstanding CH-021 failure.
 
-Still open: `contactPage.contactInfo` remains a duplicate of `siteSettings.contactInfo`, which is the ticket above. The `contactInfo2` and `branchName2` fields remain defined in `sanity/schemas/siteSettings.ts` and `sanity/schemas/contactPage.ts` and in `sanity/lib/queries.ts`. Removing them is safe now that the gate is correct, but it regenerates `sanity.types.ts`, so it belongs with the de-duplication work rather than on its own.
+**The two copies were not interchangeable, found 2026-09-12.** Every address
+field matched byte for byte, as did email and phone. `mapLink` did not:
+
+| Document       | Value                       | What it is                    |
+| -------------- | --------------------------- | ----------------------------- |
+| `siteSettings` | `maps.app.goo.gl/SGhuvv...` | the Curate Health listing     |
+| `contactPage`  | `...?daddr=989+Eglinton`    | directions, starts navigation |
+
+Two different links sharing one field name, not a duplicate. The directions one
+is the URL rescued out of the second location above, and it is the only working
+Get Directions URL on the site, so deleting `contactPage.contactInfo` outright
+would have taken it with it and left the button opening a bare listing. None of
+that is visible in the schema, which is why `scripts/audit-address-duplication.js`
+asks the dataset rather than reading field definitions.
+
+Resolved by giving `siteSettings.contactInfo` two named fields. `mapLink` is the
+place link, read by the footer, by `hasMap` in the schema graph and by llms.txt.
+`directionsLink` carries the daddr and is read by the Get Directions button.
+
+**`siteSettings.contactInfo` was marked `deprecated` and `readOnly`,** with the
+reason "Moved to Contact Page". That was backwards. It is the copy
+`lib/structured-data.tsx`, the footer and llms.txt all read, so an editor
+correcting the address on the contact page changed none of them, and could not
+correct the one that mattered because the Studio had it locked. Both flags are
+gone.
+
+**Apply in two phases, one deploy apart.** `scripts/dedupe-address.js` refuses
+to run both at once, because neither single ordering is safe: the whole mutation
+before the code merges takes the address off the live contact page until the
+deploy lands, and merging the code first leaves the Get Directions button
+pointing at an empty `directionsLink`.
+
+```bash
+node scripts/dedupe-address.js                    # dry run, writes nothing
+node scripts/dedupe-address.js --apply --phase=1  # additive, nothing reads it yet
+#   merge the code, let it deploy
+node scripts/dedupe-address.js --apply --phase=2  # removes what nothing reads now
+node scripts/audit-address-duplication.js         # exits 1 until both have landed
+```
+
+Phase 1 also patches the `siteSettings` draft, which autosaves in the Studio and
+would otherwise put the old shape back on the next publish.
+
+**Also removed, schema and query only.** `contactInfo2`, `branchName2`,
+`mapURL2` and `businessHours2` were still defined on the schemas and selected by
+`CONTACT_PAGE_QUERY` long after the data went. The second-location section of
+`app/contact/page.tsx` went with them: it sat behind a gate that could never
+open. `sanity.types.ts` and `schema.json` were regenerated, which is the reason
+this could not be split into a smaller change.
+
+**Regenerate with plain `sanity schema extract`.** Adding
+`--enforce-required-fields`, which the committed file was not generated with,
+flips roughly 5,000 optional fields to required across `sanity.types.ts` and
+quietly removes the null-checking pressure from the whole codebase. `tsc` stays
+green either way, so nothing catches it.
 
 ### CH-026 Tagged fetches can never be purged
 

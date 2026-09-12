@@ -37,10 +37,12 @@ export default defineType({
       name: "contactInfo",
       type: "object",
       title: "Contact Information",
-      deprecated: {
-        reason: "Moved to Contact Page.",
-      },
-      readOnly: true,
+      // Not deprecated, and not read only, though the schema said both until
+      // CH-025. "Moved to Contact Page" was backwards: this is the copy that
+      // lib/structured-data.tsx, the site footer and llms.txt all read. An
+      // editor correcting the address on the contact page changed none of
+      // them, and could not correct the one that mattered because it was
+      // locked. The contact page's copy is gone now and this is the address.
       fields: [
         defineField({
           name: "email",
@@ -94,67 +96,28 @@ export default defineType({
         defineField({
           name: "mapLink",
           type: "url",
-          title: "Google Map Link",
-          description: "Link to the Google Map",
-        }),
-      ],
-    }),
-    defineField({
-      name: "contactInfo2",
-      type: "object",
-      title: "Contact Information 2",
-      deprecated: {
-        reason: "Moved to Contact Page.",
-      },
-      readOnly: true,
-      fields: [
-        defineField({
-          name: "address",
-          type: "object",
-          title: "Contact Address",
-          fields: [
-            defineField({
-              name: "street",
-              type: "string",
-              title: "Street",
-            }),
-            defineField({
-              name: "city",
-              type: "string",
-              title: "City",
-            }),
-            defineField({
-              name: "state",
-              type: "string",
-              title: "State / Province",
-            }),
-            defineField({
-              name: "zip",
-              type: "string",
-              title: "Zip",
-            }),
-            defineField({
-              name: "country",
-              type: "string",
-              title: "Country",
-            }),
-            defineField({
-              name: "locationInfo",
-              title: "Location Information",
-              type: "text",
-            }),
-          ],
+          title: "Google Maps Place Link",
+          description:
+            "Opens the Curate Health listing on Google Maps. Read by the site footer, by hasMap in the schema graph, and by llms.txt. This is not the directions link.",
         }),
         defineField({
-          name: "mapLink",
+          /**
+           * Two link fields, because there are two links doing two jobs, and
+           * one field was making them fight over it.
+           *
+           * mapLink opens the business listing. This one carries a daddr and
+           * starts navigation, which is what a Get Directions button has to
+           * do. Until CH-025 the directions URL lived on contactPage and the
+           * place link on siteSettings, both under the name mapLink, so the
+           * two looked like a duplicate that could be deleted. Deleting the
+           * contactPage copy without moving this value first would have taken
+           * the only working directions URL on the site with it.
+           */
+          name: "directionsLink",
           type: "url",
-          title: "Google Map Link",
-          description: "Link to the Google Map",
-        }),
-        defineField({
-          name: "brandName",
-          type: "string",
-          title: "Brand Name",
+          title: "Google Maps Directions Link",
+          description:
+            "Starts navigation to the clinic, so it has to carry a daddr parameter. Read by the Get Directions button on the contact page.",
         }),
       ],
     }),

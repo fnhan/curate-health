@@ -27,39 +27,29 @@ export default async function ContactPage() {
     return null;
   }
 
+  /**
+   * The address comes from siteSettings, not from this page. CH-025.
+   *
+   * CONTACT_PAGE_QUERY fetched both copies and this component used the
+   * contactPage one, so the address rendered here and the address in the
+   * schema graph, the footer and llms.txt came from different documents that
+   * had already drifted apart. The contactPage copy is gone.
+   *
+   * The second-location section went with it. That location closed in 2026 and
+   * its fields have been absent from the data since 2026-08-18, so the whole
+   * block was rendering nothing behind a gate that could never open.
+   */
+  const contactInfo = contactPage.contactInfo?.contactInfo;
+
   const {
     heroSection,
     branchName,
-    branchName2,
-    contactInfo,
-    contactInfo2,
     mapURL,
-    mapURL2,
     businessHours,
-    businessHours2,
     parking,
     howToGetHere,
     contactForm,
   } = page;
-
-  // Gate the second-location section on address content, not on the existence
-  // of the contactInfo2 object. An object holding only a mapLink is truthy, so
-  // the old `contactInfo2 &&` test rendered the section with a blank heading
-  // and an address line reading "undefined, undefined, undefined undefined".
-  // Building the line from the fields that are actually present means a
-  // partially filled address degrades instead of printing undefined. See CH-025.
-  const secondLocationAddress = [
-    [contactInfo2?.address?.street, contactInfo2?.address?.city]
-      .filter(Boolean)
-      .join(", "),
-    [contactInfo2?.address?.state, contactInfo2?.address?.zip]
-      .filter(Boolean)
-      .join(" "),
-  ]
-    .filter(Boolean)
-    .join(", ");
-
-  const hasSecondLocationAddress = secondLocationAddress.length > 0;
 
   return (
     <>
@@ -92,6 +82,13 @@ export default async function ContactPage() {
                   <p className="text-sm text-white/80 md:text-base">Location</p>
                 </div>
                 <div className="pl-8">
+                  {/*
+                    The listing, not directions. This used to start navigation,
+                    because it read the contactPage mapLink which held the
+                    directions URL. Now it matches the footer and opens the
+                    Google listing, and the Get Directions button below is the
+                    one that navigates. CH-025.
+                  */}
                   <a
                     href={contactInfo?.mapLink ?? ""}
                     {...externalLinkProps(contactInfo?.mapLink ?? "")}
@@ -200,9 +197,14 @@ export default async function ContactPage() {
               asChild
               className="rounded-none border border-primary transition-all duration-300 hover:bg-transparent hover:text-primary"
             >
+              {/*
+                directionsLink, not mapLink. mapLink opens the Google listing;
+                this one carries a daddr and starts navigation, which is what
+                this button says it does. They were one field until CH-025.
+              */}
               <a
-                href={contactInfo?.mapLink ?? ""}
-                {...externalLinkProps(contactInfo?.mapLink ?? "")}
+                href={contactInfo?.directionsLink ?? ""}
+                {...externalLinkProps(contactInfo?.directionsLink ?? "")}
                 className="flex items-center justify-center gap-2"
               >
                 <MapPinIcon className="h-4 w-4" />
@@ -239,76 +241,6 @@ export default async function ContactPage() {
           </div>
         )}
       </section>
-
-      {hasSecondLocationAddress && (
-        <section className="space-y-16 bg-white py-14 text-black md:py-28">
-          <div className="container flex flex-col gap-16 md:grid md:grid-cols-2">
-            <div className="flex flex-col gap-8">
-              <div className="space-y-4">
-                <h2 className="text-2xl font-medium">{branchName2}</h2>
-                {contactInfo2?.address?.locationInfo && (
-                  <p>{contactInfo2?.address?.locationInfo}</p>
-                )}
-                <address className="not-italic">
-                  {secondLocationAddress}
-                </address>
-              </div>
-              <div className="flex flex-col gap-4">
-                {/* Hours */}
-                <div className="space-y-2">
-                  {businessHours2?.daysOpen?.map((day) => {
-                    // Check if day has an exception
-                    const exception = businessHours2.exceptions?.find(
-                      (exc) => exc.day === day
-                    );
-
-                    // Use exception hours if they exist, otherwise use standard hours
-                    const hours =
-                      exception?.hours ??
-                      (businessHours2.standardHours === "custom"
-                        ? businessHours2.customStandardHours
-                        : businessHours2.standardHours);
-
-                    return (
-                      <div
-                        key={day}
-                        className="grid grid-cols-2 text-sm sm:text-base"
-                      >
-                        <span className="font-medium capitalize">{day}</span>
-                        <span className="text-right">{hours || "Closed"}</span>
-                        {exception?.message && <p>{exception.message}</p>}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <Button
-                asChild
-                className="rounded-none border border-primary transition-all duration-300 hover:bg-transparent hover:text-primary"
-              >
-                <a
-                  href={contactInfo2?.mapLink ?? ""}
-                  {...externalLinkProps(contactInfo2?.mapLink ?? "")}
-                  className="flex items-center justify-center gap-2"
-                >
-                  <MapPinIcon className="h-4 w-4" />
-                  <span>Get Directions</span>
-                </a>
-              </Button>
-            </div>
-            <div>
-              <iframe
-                src={mapURL2 ?? ""}
-                className="h-80 w-full md:h-full"
-                title="curate-health-google-maps"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen={false}
-              ></iframe>
-            </div>
-          </div>
-        </section>
-      )}
 
       <section className="relative bg-[#EBEBEB] py-14">
         <div className="container flex flex-col gap-16 py-24 md:grid md:grid-cols-2">

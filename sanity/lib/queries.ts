@@ -765,6 +765,16 @@ export const HOME_PAGE_QUERY = groq`{
   "sustainabilitySection": ${SUSTAINABILITY_SECTION_QUERY},
 }`;
 
+/**
+ * The address, and the only copy of it. CH-025.
+ *
+ * contactPage carried a second copy of this object and the two had already
+ * drifted: city was "York, " here and "York" there, country null here and
+ * "Canada" there, so CH-021 had to patch both. The contactPage copy is gone.
+ *
+ * contactInfo2, the retired downtown location, is gone from the projection
+ * too. It has been absent from the data since 2026-08-18.
+ */
 export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
   "brandName": brandName,
   contactInfo{
@@ -779,18 +789,7 @@ export const CONTACT_INFO_QUERY = groq`*[_type == "siteSettings"][0]{
       locationInfo
     },
     mapLink,
-  },
-  contactInfo2{
-    brandName,
-    address{
-      street,
-      city,
-      state,
-      zip,
-      country,
-      locationInfo
-    },
-    mapLink,
+    directionsLink,
   },
 }`;
 
@@ -810,47 +809,10 @@ export const CONTACT_PAGE_QUERY = groq`{
       }
     },
     branchName,
-  contactInfo{
-    email,
-    phone,
-    address{
-      street,
-      city,
-      state,
-      zip,
-      country,
-      locationInfo
-    },
-    mapLink,
-  },
-  branchName2,
-  contactInfo2{
-    brandName,
-    address{
-      street,
-      city,
-      state,
-      zip,
-      country,
-      locationInfo
-    },
-    mapLink,
-  },
     parking,
     howToGetHere,
     mapURL,
-    mapURL2,
     businessHours{
-      standardHours,
-      customStandardHours,
-      daysOpen,
-      exceptions[]{
-        day,
-        hours,
-        message
-      }
-    },
-    businessHours2{
       standardHours,
       customStandardHours,
       daysOpen,

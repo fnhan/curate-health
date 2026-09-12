@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { productAliasTargets, productPath } from "@/lib/service-urls";
+import { JsonLdScript, buildProductJsonLd } from "@/lib/structured-data";
 import {
   PRODUCTS_NAVIGATION_QUERYResult,
   PRODUCT_BY_SLUG_QUERYResult,
@@ -86,6 +87,22 @@ export default async function ProductPage({
 
   return (
     <>
+      {/*
+        Product schema, CH-010. The slug comes off the document rather than off
+        the URL, so the @id is the canonical address even when a visitor arrived
+        on an alias. Any other spelling has already been redirected by resolve()
+        anyway, but reading the document keeps the two from ever disagreeing.
+      */}
+      <JsonLdScript
+        data={buildProductJsonLd({
+          title,
+          slug: product.slug?.current,
+          description,
+          image: image?.asset?.url,
+          altText: image?.alt,
+        })}
+        id={`product-${product.slug?.current}-json-ld`}
+      />
       <section>
         <Image
           width={1920}

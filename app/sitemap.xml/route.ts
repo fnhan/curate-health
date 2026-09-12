@@ -85,6 +85,15 @@ export async function GET() {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    {
+      // The products hub, CH-010. Ranked with the other section indexes rather
+      // than with the product pages below it, since it is the page the
+      // navigation points at.
+      url: `${BASEURL}/products`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
   ];
 
   const aboutRoutes: Url[] = [

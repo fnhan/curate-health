@@ -787,6 +787,58 @@ Build a `/products` index linked from the main nav. Link the two lifestyle-medic
 
 Add `Product` schema to all five product pages. These also feed Google Business Profile's products field, which the agency is handling.
 
+**Done 2026-09-12.**
+
+**They were not orphaned for lack of a link. They were orphaned by two links
+that went nowhere.** The Products entry in the main navigation and the Products
+entry in the footer both pointed at `/#products`, an anchor to a carousel on the
+homepage. A crawler following either arrived back where it started, so the five
+product pages sat outside three hops with nothing but the sibling nav on the
+product pages themselves connecting them.
+
+That is why a grep would not have found this, and why the acceptance check is a
+crawl. Searching the navigation data for "products" finds both entries and
+concludes the pages are linked. Only following the link shows it is an anchor.
+
+`/products` is built and both navigation entries now point at it. Building the
+page alone would have fixed nothing.
+
+The two lifestyle-medicine children in the list above were already resolved by
+the category restructure, not by this ticket. `nutritional-counselling` lives
+under `clinical-care` and is reachable; `exercise-therapy` under the retired
+`lifestyle-medicine` is switched off, and `exercise-rehab` under
+`movement-and-training` is the live one.
+
+`Product` schema is on all five pages, **deliberately without an `Offer`**.
+Pricing is out of scope on this project and lives in Jane, so a price in markup
+would be a number the site itself cannot show, and a stale one is worse than
+none. These are also fitted rather than added to a basket. The index carries
+`ItemList` rather than five more Products, so the same entity is not declared on
+two URLs.
+
+`/products` is the only page on the site whose title and description are not
+editable in Sanity, because there is no `productsPage` document to hold them.
+Worth one eventually.
+
+```bash
+# Acceptance. Crawls three hops from the homepage and exits 1 on anything
+# in the sitemap it cannot reach.
+node scripts/audit-orphans.js http://localhost:3000
+node scripts/audit-orphans.js https://www.curatehealth.ca
+```
+
+Measured with that script, same run on both:
+
+|                   | sitemap URLs | unreachable |
+| ----------------- | ------------ | ----------- |
+| Production before | 41           | **5**       |
+| This branch       | 42           | **0**       |
+
+**The crawl ignores the React payload and strips anchors.** Following URLs out
+of the Flight data would credit the site with links a crawler never sees, and
+treating `/#products` as distinct from `/` is precisely the mistake that hid
+this for as long as it lasted.
+
 ### CH-028 Alt text
 
 23 images with missing or empty alt. Two are missing the attribute entirely, both using asset `a6cdfe9c...-4160x6240.jpg` on `/services` and `/services/curate-lifestyle`.

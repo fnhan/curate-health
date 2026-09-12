@@ -1,3 +1,5 @@
+import { securityHeaders } from "./lib/security-headers.mjs";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async redirects() {
@@ -169,6 +171,9 @@ const nextConfig = {
       },
     ];
   },
+  async headers() {
+    return securityHeaders;
+  },
   async rewrites() {
     return [
       {
@@ -195,6 +200,9 @@ const nextConfig = {
       },
     ],
   },
+  // Stops every response announcing the framework and its presence. Costs
+  // nothing and removes one line from an attacker's fingerprint.
+  poweredByHeader: false,
   experimental: {
     taint: true,
   },

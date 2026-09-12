@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { draftMode } from "next/headers";
-import Script from "next/script";
 
 import { VisualEditing } from "next-sanity";
 import {
@@ -11,6 +10,7 @@ import {
 
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
 import { FloatingCallButton } from "@/components/shared/floating-call-button";
+import { GoogleAnalytics } from "@/components/shared/google-analytics";
 import SanityDisablePreviewButton from "@/components/shared/sanity-disable-preview-button";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -103,18 +103,11 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${poppins.className}`}>
       <head>
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-MJMZWNNWVP"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-MJMZWNNWVP');
-          `}
-        </Script>
+        {/*
+          Moved out of here and behind a pathname check, so it does not run on
+          /studio. See components/shared/google-analytics.tsx for why.
+        */}
+        <GoogleAnalytics />
       </head>
       <CSPostHogProvider>
         <body className="flex min-h-screen flex-col overflow-x-hidden bg-background antialiased">

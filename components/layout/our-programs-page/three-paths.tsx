@@ -93,6 +93,7 @@ const ThreePaths = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
                       className={`relative h-[275px] w-[325px] overflow-hidden border-b-[12px] ${borderColor[i]}`}
                     >
                       <Image
+                        sizes="325px"
                         src={image?.asset?.url!}
                         alt={image?.alt ?? ""}
                         height={0}

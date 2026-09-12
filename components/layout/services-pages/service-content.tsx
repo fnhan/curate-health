@@ -57,6 +57,7 @@ export default function ServiceContent({
         </div>
         <div className="flex justify-center md:justify-end">
           <Image
+            sizes="(min-width: 1536px) 545px, (min-width: 768px) 320px, 256px"
             className="size-[256px] rounded-full object-cover md:size-[320px] 2xl:size-[545px]"
             width={545}
             height={545}

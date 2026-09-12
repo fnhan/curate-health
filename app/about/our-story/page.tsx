@@ -25,6 +25,7 @@ export default async function OurStoryPage() {
     <>
       <section>
         <Image
+          sizes="100vw"
           src={heroSection?.heroImage?.image || ""}
           alt={heroSection?.heroImage?.alt || ""}
           width={1440}
@@ -45,6 +46,7 @@ export default async function OurStoryPage() {
       <section className="bg-white">
         <div className="container flex flex-col items-center gap-7 py-14 md:gap-16 md:py-16 2xl:gap-20 2xl:py-24">
           <Image
+            sizes="(min-width: 1536px) 160px, (min-width: 768px) 80px, 64px"
             src={quoteSection?.quoteImage?.image || ""}
             alt={quoteSection?.quoteImage?.alt || ""}
             width={160}
@@ -59,6 +61,7 @@ export default async function OurStoryPage() {
       <AlternatingSections sections={additionalSections!} />
       <section className={`relative h-full md:h-[calc(100vh-100px)]`}>
         <Image
+          sizes="100vw"
           loading="lazy"
           src={ctaSection?.ctaSectionImage?.image || ""}
           alt={ctaSection?.ctaSectionImage?.alt || ""}

@@ -88,6 +88,7 @@ export default function TreatmentContent({
       </section>
       <section className={`relative h-[calc(100vh-100px)]`}>
         <Image
+          sizes="100vw"
           src={ctaBg?.asset?.url!}
           alt={ctaBgAlt!}
           width={1440}

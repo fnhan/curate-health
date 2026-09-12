@@ -117,7 +117,7 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
     if (memberParam && teamMembers) {
       const targetMember = teamMembers.find(
         (member) =>
-          getTeamMemberUrlId(member.name || "") === memberParam.toLowerCase(),
+          getTeamMemberUrlId(member.name || "") === memberParam.toLowerCase()
       );
 
       if (targetMember) {
@@ -156,6 +156,7 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
             >
               <div className="h-[300px]">
                 <Image
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 90vw"
                   className={teamPhotoClassName}
                   src={teamMember.image?.asset?.url ?? ""}
                   alt={teamMember.name ?? ""}
@@ -214,6 +215,7 @@ export default function TeamMembersSection({
               >
                 <div className="h-[300px]">
                   <Image
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 90vw"
                     className={teamPhotoClassName}
                     src={teamMember.image?.asset?.url ?? ""}
                     alt={teamMember.name ?? ""}

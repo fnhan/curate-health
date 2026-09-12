@@ -31,6 +31,7 @@ export default function AboutSection({
         <div className="flex justify-center">
           <div className="relative inline-block">
             <Image
+              sizes="(min-width: 1536px) 536px, (min-width: 768px) 375px, 250px"
               width={536}
               height={536}
               alt={aboutImage?.alt || ""}
@@ -42,6 +43,7 @@ export default function AboutSection({
               style={{ rotate }}
             >
               <Image
+                sizes="(min-width: 1536px) 287px, (min-width: 768px) 165px, 107px"
                 src={highlightCircleText}
                 width={287}
                 height={287}

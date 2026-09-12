@@ -12,11 +12,11 @@ type ServiceHeroSectionProps = {
 export default async function ServiceHeroSection({
   hero_image,
 }: ServiceHeroSectionProps) {
-  
   const { asset, alt } = hero_image;
 
   return (
     <Image
+      sizes="100vw"
       width={1080}
       height={1440}
       src={asset.url}

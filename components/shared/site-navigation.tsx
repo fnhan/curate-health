@@ -312,6 +312,7 @@ export default function SiteNav({
           <div className="flex items-center gap-4">
             <Link href={"/"} onClick={() => setOpen(false)}>
               <Image
+                sizes="(min-width: 640px) 48px, 30px"
                 src={siteLogo?.asset?.url!}
                 width={48}
                 height={48}

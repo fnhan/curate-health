@@ -32,7 +32,7 @@ export const AlternatingSections = ({
     <section
       className={cn(
         "relative isolate bg-white py-28 text-primary",
-        sectionClassName,
+        sectionClassName
       )}
     >
       <div className="flex flex-col gap-20 md:gap-28">
@@ -50,6 +50,7 @@ export const AlternatingSections = ({
                 }`}
               />
               <Image
+                sizes="(min-width: 768px) 45vw, 100vw"
                 loading="lazy"
                 src={section.sectionImage?.image || ""}
                 alt={section.sectionImage?.alt || ""}
@@ -66,13 +67,7 @@ export const AlternatingSections = ({
               <h2 className="text-balance text-2xl font-light">
                 {section.sectionTitle}
               </h2>
-              <div
-                className={cn(
-                  "prose max-w-[80ch]",
-                  proseClassName,
-                )}
-              >
-
+              <div className={cn("prose max-w-[80ch]", proseClassName)}>
                 <PortableText value={section.sectionParagraph!} />
               </div>
             </div>

@@ -28,6 +28,7 @@ const CurateLifestyle = ({
           <div className="relative shrink-0 md:left-0 2xl:absolute 2xl:-left-[210px]">
             <div className="absolute -top-14 left-0 h-14 w-5/6 bg-our-programs-border-2"></div>
             <Image
+              sizes="(min-width: 768px) 700px, 100vw"
               src={curateLifestyle?.image?.asset?.url!}
               alt={curateLifestyle?.image?.alt ?? ""}
               height={550}

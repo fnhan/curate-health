@@ -127,6 +127,7 @@ export default async function ProductPage({
               </div>
             </div>
             <Image
+              sizes="(min-width: 768px) 384px, 320px"
               width={1080}
               height={1440}
               src={image?.asset?.url || ""}

@@ -103,6 +103,7 @@ export default function ServiceLifestyleProgramContent({
                 </div>
                 <div className="size-24 shrink-0 rounded-full bg-primary">
                   <Image
+                    sizes="96px"
                     src={section.image!}
                     alt={section.alt!}
                     width={100}
@@ -119,6 +120,7 @@ export default function ServiceLifestyleProgramContent({
       <section className="relative bg-[#EBEBEB] py-14">
         {/* Background Image, flipped horizontally */}
         <Image
+          sizes="100vw"
           src={assistanceSectionImage?.asset?.url!}
           alt="Assistance Section Image"
           fill
@@ -199,6 +201,7 @@ export default function ServiceLifestyleProgramContent({
 
       <section className={`relative h-[calc(100vh-100px)]`}>
         <Image
+          sizes="100vw"
           src={ctaBg?.asset?.url!}
           alt={ctaBgAlt!}
           width={1440}

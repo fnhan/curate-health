@@ -60,6 +60,7 @@ export function CafeQuoteSection({ quote }: { quote: Quote | null }) {
       <div className="container flex min-h-[420px] w-full max-w-[832px] flex-col items-center justify-center gap-12 text-center md:min-h-[720px] md:gap-16">
         {imageUrl ? (
           <Image
+            sizes="(min-width: 1536px) 160px, (min-width: 768px) 80px, 64px"
             loading="lazy"
             src={imageUrl}
             alt={imageAlt}

@@ -71,8 +71,8 @@ These apply to every word written into the site, schema, meta tags, or alt text.
 - No emojis
 - No tricolons or rule-of-three lists
 - No fabricated statistics, study citations, or quotes
-- Banned words: dive in, unlock, elevate, harness the power of, complimentary, transformative, seamless, holistic wellness journey
-- **"journey" is allowed, cleared by Frank on 2026-09-10.** It was on this list and has been removed from it and from the banned array in every script. "holistic wellness journey" stays banned as a phrase. Do not put the bare word back on the strength of an older copy of this file
+- Banned words: dive in, unlock, elevate, harness the power of, complimentary, transformative, seamless
+- **"journey" is fine, in any form, including "holistic wellness journey". Cleared by Frank on 2026-09-10 and widened to the full phrase on 2026-09-12.** It is not a banned word, it is not a banned phrase, and it should not be reported as one. Older copies of this file banned the bare word, then banned the phrase while allowing the word; both are superseded. Do not reintroduce either restriction, and do not add "journey" back to the banned array in any script
 - Never use "complimentary" for anything Curate offers. Use "included" or "bonus"
 - OHIP framing is exactly: "partially covered by OHIP and most benefit programs"
 - The outdoor space is always "Recovery Sanctuary." Never "outdoor terrace" or any variant

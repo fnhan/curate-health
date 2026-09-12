@@ -263,6 +263,34 @@ export default defineType({
               validation: (Rule) => Rule.required().error("URL is required"),
             }),
             defineField({
+              /**
+               * Which business this profile belongs to. CH-008.
+               *
+               * Every one of these renders in the same footer, but they do not
+               * all describe the same entity, and sameAs is how Google confirms
+               * that a profile and a business are the same thing. Listing the
+               * cafe's Instagram on the clinic entity tells it the two are one
+               * account, which muddies both rather than strengthening either.
+               *
+               * So the footer reads the whole array and lib/structured-data.tsx
+               * splits it: clinic profiles go on the MedicalClinic entity, cafe
+               * profiles on CafeOrCoffeeShop.
+               */
+              name: "entity",
+              type: "string",
+              title: "Belongs to",
+              description:
+                "Which business this profile is for. Decides which entity it is attached to in the structured data. Defaults to the clinic.",
+              options: {
+                list: [
+                  { title: "Curate Health (the clinic)", value: "clinic" },
+                  { title: "Curate Cafe", value: "cafe" },
+                ],
+                layout: "radio",
+              },
+              initialValue: "clinic",
+            }),
+            defineField({
               name: "isActive",
               type: "boolean",
               title: "Is Active",

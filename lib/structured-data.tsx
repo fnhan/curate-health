@@ -59,12 +59,138 @@ function buildPostalAddress(siteSettings: SITE_SETTINGS_QUERYResult) {
   }) as JsonLdObject | undefined;
 }
 
-function getActiveSocialUrls(siteSettings: SITE_SETTINGS_QUERYResult) {
+/**
+ * The profiles belonging to one business, for its sameAs. CH-008.
+ *
+ * sameAs is how a search engine confirms that a profile and a business are the
+ * same entity, so the array has to describe one entity and not the group. The
+ * footer renders every link regardless; only this split cares which is which.
+ *
+ * Entries with no entity set count as the clinic, which is what every profile
+ * stored before this field existed is.
+ */
+function getActiveSocialUrls(
+  siteSettings: SITE_SETTINGS_QUERYResult,
+  entity: "clinic" | "cafe" = "clinic"
+) {
   return (
     siteSettings?.socialMedia
-      ?.filter((link) => link.isActive && link.url)
+      ?.filter(
+        (link) =>
+          link.isActive && link.url && (link.entity ?? "clinic") === entity
+      )
       .map((link) => link.url!) ?? []
   );
+}
+
+/**
+ * The Google Business Profile, for the clinic's sameAs. CH-008.
+ *
+ * In code rather than in Sanity because it is an identity claim rather than
+ * editorial copy, and because it would otherwise appear in the footer's Connect
+ * list next to the address, which already links to the same listing.
+ *
+ * The number is the CID of the business entity, taken from the place id
+ * recorded in the CH-025 notes, 0x882b33a0bc00ca61:0x432786dbaf32d810, whose
+ * second half converts to this decimal. That matters because there are two
+ * place ids for this address and the other one is a bare address pin. Opened in
+ * a browser on 2026-09-12 and confirmed to load "Curate Health" at 989
+ * Eglinton, rather than trusted from the arithmetic.
+ */
+const GOOGLE_BUSINESS_PROFILE =
+  "https://maps.google.com/?cid=4838984602728192016";
+
+/** Keys are what Sanity stores, values are what schema.org expects. */
+const DAY_NAMES: Record<string, string> = {
+  monday: "Monday",
+  tuesday: "Tuesday",
+  wednesday: "Wednesday",
+  thursday: "Thursday",
+  friday: "Friday",
+  saturday: "Saturday",
+  sunday: "Sunday",
+};
+
+/**
+ * "9:00 AM - 6:00 PM" into the 24 hour opens and closes schema.org wants.
+ *
+ * Returns undefined rather than guessing when the string is not in that shape.
+ * Publishing the wrong opening hours sends somebody to a closed door, so a
+ * missing specification is the better failure.
+ */
+function parseHourRange(range: string | null | undefined) {
+  const match = range
+    ?.trim()
+    .match(/^(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+
+  if (!match) return undefined;
+
+  const to24 = (hour: string, minute: string, meridiem: string) => {
+    let h = Number(hour) % 12;
+    if (meridiem.toUpperCase() === "PM") h += 12;
+    return `${String(h).padStart(2, "0")}:${minute}`;
+  };
+
+  return {
+    opens: to24(match[1], match[2], match[3]),
+    closes: to24(match[4], match[5], match[6]),
+  };
+}
+
+/**
+ * openingHoursSpecification, built from what the contact page actually shows.
+ *
+ * Same source as the visible hours table, deliberately. Hours that disagree
+ * with the page they sit on are worse than no hours at all, and Google shows
+ * these in the knowledge panel and in Maps where nobody cross-checks them.
+ *
+ * A day carrying an exception with hours uses those. A day in daysOpen with no
+ * exception uses the standard range. Days that appear nowhere are left out
+ * entirely, which states nothing rather than asserting closed.
+ */
+function buildOpeningHours(siteSettings: SITE_SETTINGS_QUERYResult) {
+  const hours = siteSettings?.businessHours;
+  if (!hours) return undefined;
+
+  const standard =
+    hours.standardHours === "custom"
+      ? hours.customStandardHours
+      : hours.standardHours;
+
+  const exceptions = new Map(
+    (hours.exceptions ?? [])
+      .filter((e) => e.day)
+      .map((e) => [e.day!.toLowerCase(), e.hours])
+  );
+
+  // Every day named anywhere, so a day that only exists as an exception is
+  // still published. Sunday was exactly that case.
+  const days = new Set([
+    ...(hours.daysOpen ?? []).map((d) => d.toLowerCase()),
+    ...exceptions.keys(),
+  ]);
+
+  const specs = [...days]
+    .map((day) => {
+      const name = DAY_NAMES[day];
+      if (!name) return undefined;
+
+      const range = exceptions.has(day)
+        ? (exceptions.get(day) ?? standard)
+        : standard;
+      const parsed = parseHourRange(range);
+      if (!parsed) return undefined;
+
+      return {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: `https://schema.org/${name}`,
+        opens: parsed.opens,
+        closes: parsed.closes,
+      };
+    })
+    .filter(Boolean);
+
+  return specs.length ? (specs as JsonLdObject[]) : undefined;
 }
 
 function getActiveServiceNodes(siteSettings: SITE_SETTINGS_QUERYResult) {
@@ -127,7 +253,10 @@ export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERYResult) {
         name: brandName,
         url: BASEURL,
         logo: siteSettings?.siteLogo?.asset?.url,
-        sameAs: getActiveSocialUrls(siteSettings),
+        sameAs: [
+          ...getActiveSocialUrls(siteSettings, "clinic"),
+          GOOGLE_BUSINESS_PROFILE,
+        ],
         contactPoint: {
           "@type": "ContactPoint",
           telephone: contact?.phone,
@@ -147,6 +276,25 @@ export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERYResult) {
         email: contact?.email,
         address: buildPostalAddress(siteSettings),
         hasMap: contact?.mapLink,
+        /**
+         * The clinic's own coordinates, CH-008.
+         *
+         * Taken from the Google place entity the map link resolves to, not
+         * from a geocode of the address string. There are two place ids for
+         * this address, a business entity and a bare address pin about 30 m
+         * apart, and the CH-025 notes record which is which. These are the
+         * business one.
+         */
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 43.6997,
+          longitude: -79.4306,
+        },
+        openingHoursSpecification: buildOpeningHours(siteSettings),
+        sameAs: [
+          ...getActiveSocialUrls(siteSettings, "clinic"),
+          GOOGLE_BUSINESS_PROFILE,
+        ],
         parentOrganization: { "@id": `${BASEURL}/#organization` },
         areaServed: {
           "@type": "City",
@@ -245,7 +393,10 @@ export function buildTreatmentJsonLd(treatment: TREATMENT_BY_SLUG_QUERYResult) {
   }) as JsonLdObject;
 }
 
-export function buildCafeJsonLd(cafePage: CAFE_PAGE_QUERYResult) {
+export function buildCafeJsonLd(
+  cafePage: CAFE_PAGE_QUERYResult,
+  siteSettings?: SITE_SETTINGS_QUERYResult
+) {
   if (!cafePage) {
     return null;
   }
@@ -276,6 +427,19 @@ export function buildCafeJsonLd(cafePage: CAFE_PAGE_QUERYResult) {
     url: `${BASEURL}/cafe`,
     parentOrganization: { "@id": `${BASEURL}/#organization` },
     menu: cafe.menuDownloadSection?.menuFile?.url,
+    // The cafe shares the clinic's address, so it gets the same one rather
+    // than a second copy of it. Without an address a LocalBusiness cannot be
+    // placed, which is most of what the type is for.
+    address: siteSettings ? buildPostalAddress(siteSettings) : undefined,
+    openingHoursSpecification: siteSettings
+      ? buildOpeningHours(siteSettings)
+      : undefined,
+    // The cafe's own Instagram, not the clinic's. Attaching the clinic's
+    // profiles here would tell Google the two businesses are one account.
+    sameAs: siteSettings
+      ? getActiveSocialUrls(siteSettings, "cafe")
+      : undefined,
+    servesCuisine: "Functional nutrition",
     areaServed: {
       "@type": "City",
       name: "Toronto",

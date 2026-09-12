@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "components/ui/accordion";
-import { MoveUpRightIcon } from "lucide-react";
 
+import { SocialIcon } from "@/components/shared/social-icon";
 import { externalLinkProps } from "@/lib/links";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
@@ -95,18 +95,26 @@ export function FooterMobileAccordion({
         <AccordionItem value="social-links">
           <AccordionTrigger className="font-semibold">Connect</AccordionTrigger>
           <AccordionContent>
-            <div className="flex flex-col gap-1 text-base">
-              {socialMedia?.map((link, index) => (
-                <a
-                  key={index}
-                  className="flex items-center gap-2 hover:underline"
-                  href={link.url!}
-                  {...externalLinkProps(link.url!)}
-                >
-                  <span>{link.platform}</span>
-                  <MoveUpRightIcon size={16} />
-                </a>
-              ))}
+            <div className="flex flex-col gap-2 text-base">
+              {/*
+                isActive was not being checked here, only in the desktop
+                footer, so switching a profile off in the Studio hid it on
+                desktop and left it showing on phones. Most visitors are on a
+                phone.
+              */}
+              {socialMedia
+                ?.filter((link) => link.isActive)
+                .map((link, index) => (
+                  <a
+                    key={index}
+                    className="flex items-center gap-2 hover:underline"
+                    href={link.url!}
+                    {...externalLinkProps(link.url!)}
+                  >
+                    <SocialIcon platform={link.platform} size={16} />
+                    <span>{link.platform}</span>
+                  </a>
+                ))}
             </div>
           </AccordionContent>
         </AccordionItem>

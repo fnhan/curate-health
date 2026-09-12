@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { MailIcon, MapPinIcon, MoveUpRightIcon, PhoneIcon } from "lucide-react";
+import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
 
+import { SocialIcon } from "@/components/shared/social-icon";
 import { addressLines } from "@/lib/address";
 import { externalLinkProps } from "@/lib/links";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
@@ -137,18 +138,25 @@ export default function SiteFooter({
               {/* Social Links Section */}
               <div>
                 <h2 className="pl-3 font-semibold md:mb-3">Connect</h2>
-                <div className="hidden flex-col gap-1 pl-3 md:flex">
+                <div className="hidden flex-col gap-2 pl-3 md:flex">
                   {socialMedia
                     ?.filter((link) => link.isActive)
                     .map((link, linkIndex) => (
                       <a
                         key={linkIndex}
-                        className="flex items-center hover:underline"
+                        className="flex items-center gap-2 hover:underline"
                         href={link.url!}
                         {...externalLinkProps(link.url!)}
                       >
+                        <SocialIcon platform={link.platform} size={16} />
+                        {/*
+                          The name stays beside the icon. Five marks in a
+                          column with no labels is a guessing game, and two of
+                          these now go to different businesses: "Instagram" and
+                          "Instagram (Cafe)" are the same mark and not the same
+                          account.
+                        */}
                         <span>{link.platform}</span>
-                        <MoveUpRightIcon size={16} />
                       </a>
                     ))}
                 </div>

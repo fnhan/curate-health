@@ -666,7 +666,18 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
       }
     },
     isActive,
+    entity,
     url
+  },
+  // Opening hours live on contactPage, where editors manage them, and are
+  // pulled in here rather than copied onto siteSettings. CH-025 had just
+  // finished deleting one duplicate of exactly this kind, so storing a second
+  // copy of the hours would be the same mistake under a different field name.
+  "businessHours": *[_type == "contactPage"][0].businessHours{
+    standardHours,
+    customStandardHours,
+    daysOpen,
+    exceptions[]{day, hours, message}
   }
 }[0]`;
 

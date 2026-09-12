@@ -661,6 +661,68 @@ Add:
 - `Course` on the Curate Lifestyle Program
 - `Restaurant` or `CafeOrCoffeeShop` on `/cafe`, separate from the clinic entity
 
+**Partly done 2026-09-12.** `openingHoursSpecification`, `geo`, `sameAs` and the
+cafe entity are live. `Person`/`Physician`, `BlogPosting`, `VideoObject`,
+`Event` and `Course` remain, and each is blocked on its own ticket.
+
+_Hours._ Built from `contactPage.businessHours`, the same source as the visible
+table on `/contact`, pulled into `SITE_SETTINGS_QUERY` rather than copied onto
+`siteSettings`. Hours that disagree with the page they sit on are worse than no
+hours, and Google shows these in the knowledge panel and in Maps where nobody
+cross-checks them.
+
+Frank confirmed on 2026-09-12: Monday to Friday 9:00 to 18:00, **Sunday 9:00 to
+13:00**, Saturday closed and not worth listing. The stored data disagreed:
+`daysOpen` held Monday to Friday only, and Sunday existed as an exception with
+no hours, so `/contact` rendered nothing for a day the clinic is open. That was
+a visible bug on the page, not only a schema gap. Fixed by
+`scripts/add-social-and-hours.js`. Saturday stays absent, which states nothing
+rather than asserting closed; that is the weaker of the two and is what was
+asked for.
+
+_Geo._ `43.6997, -79.4306`, taken from the Google place entity the map link
+resolves to rather than from geocoding the address string. This address has two
+place ids, a business entity and a bare address pin about 30 m apart, per the
+CH-025 notes. These are the business one.
+
+_sameAs, and why it is split._ `sameAs` is how a search engine confirms a
+profile and a business are the same entity, so an array has to describe one
+entity rather than the group. `socialMedia` entries carry an `entity` field,
+`clinic` or `cafe`, and `lib/structured-data.tsx` splits on it. The clinic gets
+LinkedIn, the clinic Instagram, TikTok, Facebook and the Google Business
+Profile. The cafe gets its own Instagram. Entries with no `entity` set count as
+the clinic, which is what every profile stored before the field existed is.
+
+Every URL was fetched and confirmed to resolve before being written. The TikTok
+URL is stored without the `?is_from_webapp=1&sender_device=pc` query string,
+which describes the browser session it was copied from rather than the profile.
+
+The Google Business Profile is `https://maps.google.com/?cid=4838984602728192016`,
+held in `lib/structured-data.tsx` rather than in Sanity because it is an
+identity claim rather than editorial copy, and because it would otherwise appear
+in the footer beside the address, which already links to the same listing. The
+CID is the second half of the place id above converted to decimal, and it was
+opened in a browser and confirmed to load "Curate Health" at 989 Eglinton rather
+than trusted from the arithmetic.
+
+_The footer._ Social links now carry brand icons, via
+`components/shared/social-icon.tsx`. `lucide-react` has Instagram, Facebook,
+LinkedIn and YouTube but **no TikTok**, so that one path is inline. Matching is
+loose, so "Instagram (Cafe)" finds the Instagram mark, and an unrecognised
+platform falls back to the arrow the footer used before, so a new platform
+renders as a plain link rather than as nothing.
+
+The platform name stays beside each icon. Five marks in a column with no labels
+is a guessing game, and two of these go to different businesses.
+
+`components/shared/footer-mobile-accordion.tsx` was not checking `isActive`,
+only the desktop footer was, so switching a profile off in the Studio hid it on
+desktop and left it live on phones.
+
+```bash
+node scripts/add-social-and-hours.js   # dry run, re-runnable, writes only what is missing
+```
+
 **Do not add `FAQPage`.** Google shut the FAQ rich result down on 2026-05-07, and the markup does not drive AI citation either. It was dropped from the list above when CH-101 was closed. Adding it now produces nothing.
 
 **Do not add `aggregateRating`.** Google withdrew rich result support for self-serving reviews on LocalBusiness and Organization entities, so it produces nothing. Separately, Ontario's colleges restrict testimonial use in professional advertising and this may fall under that. Frank is checking with CCO. Leave it out.

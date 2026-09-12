@@ -463,9 +463,109 @@ assets in Sanity, which is CH-029, and no `sizes` value reaches them.
 
 ### CH-012 Security headers
 
-No CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, or Permissions-Policy on any response. Add via `headers()` in `next.config.js`.
+**Done 2026-09-12.** Responses carried none of these. The only one present was
+the `Strict-Transport-Security` Vercel adds on its own, which is untouched.
 
-This is a PHIPA and general security item, not an SEO one. Do it, but don't let it be described as SEO work.
+PHIPA and general security, not SEO. Do not let it be reported as SEO work.
+
+Set in `lib/security-headers.mjs`, consumed by `headers()` in
+`next.config.mjs`. Kept in its own file because `next.config.mjs` is already
+200 lines of redirects. `poweredByHeader: false` went in at the same time, so
+responses stop announcing the framework.
+
+| Header                    | Value                                                           |
+| ------------------------- | --------------------------------------------------------------- |
+| `X-Content-Type-Options`  | `nosniff`                                                       |
+| `X-Frame-Options`         | `SAMEORIGIN`                                                    |
+| `Referrer-Policy`         | `strict-origin-when-cross-origin`                               |
+| `Permissions-Policy`      | camera, microphone, geolocation, payment and nine more, all off |
+| `Content-Security-Policy` | two policies, see below                                         |
+
+`strict-origin-when-cross-origin` is the referrer choice that matters on a
+clinic site: other sites get the origin and never the path, so nobody learns
+which condition a visitor was reading about.
+
+**Two policies, and exactly one per response.** Next applies every `headers()`
+entry whose source matches, and a second `Content-Security-Policy` is sent
+alongside the first rather than replacing it, at which point the browser
+enforces the intersection. A broad site rule plus a Studio rule would therefore
+hand the Studio both and break it, while the config looked right. The Studio
+matches first and the site rule excludes it by negative lookahead.
+
+**Write the lookahead against the segment, not the string.** The first version
+used `(?!studio)`, which is a prefix test, so `/studios-that-do-not-exist` and
+`/studio-ish` matched neither rule and shipped with **no security headers at
+all**. It is `(?!studio$|studio/)` now, and the acceptance check exercises a
+path shaped like that on purpose.
+
+**`'unsafe-inline'` on script-src is deliberate, and it is a real limit.** A
+nonce has to be minted per request, which makes every page dynamic, and this
+site is static and ISR. That trades the caching model for a stricter script
+policy on a marketing site with no authenticated surface. So do not describe
+this CSP as an XSS backstop. What it does carry: script is blocked from any
+origin not listed, plugin and object embedding are off, `<base>` is pinned, the
+forms cannot be repointed at another host, and the site cannot be framed.
+
+**`'unsafe-eval'` is scoped to `/studio`,** which needs it, and is added to the
+site policy in development only, because `next dev` compiles with eval.
+
+#### The allowlist is an inventory, not a guess
+
+Taken from rendered production HTML and from what runs in the browser. When an
+integration is added, add its origin in the same change.
+
+| Origin                                                               | Needed by                  |
+| -------------------------------------------------------------------- | -------------------------- |
+| `cdn.sanity.io`                                                      | every photo                |
+| `*.sanity.io`, `wss://*.api.sanity.io`                               | Studio, Presentation mode  |
+| `*.mux.com`                                                          | hero video, poster frames  |
+| `*.litix.io`                                                         | Mux playback analytics     |
+| `www.googletagmanager.com`                                           | gtag.js                    |
+| `*.google-analytics.com`, `*.analytics.google.com`, `www.google.com` | GA4 collect beacons        |
+| `www.gstatic.com`                                                    | Mux player's Cast SDK      |
+| `www.google.com`, `maps.google.com`                                  | the map on /contact        |
+| `formspree.io`                                                       | contact and programs forms |
+
+**PostHog is deliberately absent.** It is proxied through `/ingest` by the
+rewrites, so it is same-origin and `'self'` covers it. Adding
+`us.i.posthog.com` would let a later change talk to PostHog directly and
+quietly lose the proxy that keeps those requests past ad blockers.
+`NEXT_PUBLIC_POSTHOG_KEY` is not in `.env.local`, so this path could not be
+exercised locally. It cannot be blocked by this CSP either way.
+
+**The Mux wildcard is load-bearing.** `stream.mux.com` is only where the player
+asks. Mux redirects the manifest and every segment to a regional edge host
+assembled from the region and the CDN of the moment, for example
+`manifest-oci-us-ashburn-1-vop1.fastly.mux.com`, and the same playback switches
+between `fastly`, `cloudflare` and `edgemv`. The first version of this file
+listed the two literal hosts, and **the homepage hero video was blocked
+outright**: the player retried every quality level, failed each one, and the
+hero sat on its poster frame. Nothing in the source showed it. It took loading
+the page in a browser and reading the console.
+
+#### GA4 no longer runs in the Studio
+
+Found while writing the policy. `app/layout.tsx` is the root layout, so gtag.js
+loaded on `/studio` too, which meant editor sessions counted as site traffic in
+the same property the marketing numbers come from, and it meant widening the
+Studio policy to let the marketing stack through. Both are wrong. GA4 now sits
+in `components/shared/google-analytics.tsx` behind a pathname check, and the
+Studio policy allows neither googletagmanager nor the collect endpoints.
+
+```bash
+# Acceptance. Exits 1 on a missing header, a doubled CSP, or eval on a public page.
+node scripts/audit-security-headers.js http://localhost:3000 --dev
+node scripts/audit-security-headers.js https://www.curatehealth.ca
+```
+
+**The audit is necessary and not sufficient.** It reads headers, so it cannot
+see a directive that blocks something the page needs. That part was checked by
+loading the homepage, `/contact` scrolled to the map, `/cafe`, `/blog`,
+`/our-programs`, `/about/our-team`, a service page and `/studio` in a browser
+and reading the console: zero violations, `gtag` defined on the site and absent
+in the Studio, Mux at `readyState` 4 with no error, the map iframe rendered,
+the Formspree action intact. Do the same after changing a directive. A CSP
+regression is invisible from the terminal.
 
 ---
 

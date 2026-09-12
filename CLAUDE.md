@@ -558,6 +558,13 @@ node scripts/audit-security-headers.js http://localhost:3000 --dev
 node scripts/audit-security-headers.js https://www.curatehealth.ca
 ```
 
+**Verified on production 2026-09-12**, after merge. All eight paths pass
+without `--dev`, which is the run that proves `'unsafe-eval'` is absent from
+the public policy: the dev server adds it on purpose, so only a production
+response can show it gone. Checked in a browser at the same time: zero CSP
+violations, `gtag` defined, the Mux hero at `readyState` 4 with no error, the
+map iframe rendered, the Formspree action intact.
+
 **The audit is necessary and not sufficient.** It reads headers, so it cannot
 see a directive that blocks something the page needs. That part was checked by
 loading the homepage, `/contact` scrolled to the map, `/cafe`, `/blog`,

@@ -10,13 +10,22 @@ import { CafeMenuDownloadSection } from "@/components/layout/cafe-page/cafe-menu
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { JsonLdScript, buildCafeJsonLd } from "@/lib/structured-data";
-import { CAFE_PAGE_QUERYResult } from "@/sanity.types";
+import {
+  CAFE_PAGE_QUERYResult,
+  SITE_SETTINGS_QUERYResult,
+} from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
-import { CAFE_PAGE_QUERY } from "@/sanity/lib/queries";
+import { CAFE_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
 
 export default async function CafePage() {
   const cafePage = await sanityFetch<CAFE_PAGE_QUERYResult>({
     query: CAFE_PAGE_QUERY,
+  });
+
+  // For the cafe's structured data only: its address, hours and its own
+  // Instagram all live on siteSettings. CH-008.
+  const siteSettings = await sanityFetch<SITE_SETTINGS_QUERYResult>({
+    query: SITE_SETTINGS_QUERY,
   });
 
   if (!cafePage) {
@@ -34,7 +43,10 @@ export default async function CafePage() {
 
   return (
     <div className="font-poppins">
-      <JsonLdScript data={buildCafeJsonLd(cafePage)} id="cafe-json-ld" />
+      <JsonLdScript
+        data={buildCafeJsonLd(cafePage, siteSettings)}
+        id="cafe-json-ld"
+      />
       <Image
         width={1920}
         height={1080}

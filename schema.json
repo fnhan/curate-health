@@ -16798,10 +16798,34 @@
                 },
                 "optional": true
               },
+              "label": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                },
+                "optional": true
+              },
               "url": {
                 "type": "objectAttribute",
                 "value": {
                   "type": "string"
+                },
+                "optional": true
+              },
+              "entity": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "clinic"
+                    },
+                    {
+                      "type": "string",
+                      "value": "cafe"
+                    }
+                  ]
                 },
                 "optional": true
               },

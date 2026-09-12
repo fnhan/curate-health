@@ -661,6 +661,94 @@ Add:
 - `Course` on the Curate Lifestyle Program
 - `Restaurant` or `CafeOrCoffeeShop` on `/cafe`, separate from the clinic entity
 
+**Partly done 2026-09-12.** `openingHoursSpecification`, `geo`, `sameAs` and the
+cafe entity are live. `Person`/`Physician`, `BlogPosting`, `VideoObject`,
+`Event` and `Course` remain, and each is blocked on its own ticket.
+
+_Hours._ Built from `contactPage.businessHours`, the same source as the visible
+table on `/contact`, pulled into `SITE_SETTINGS_QUERY` rather than copied onto
+`siteSettings`. Hours that disagree with the page they sit on are worse than no
+hours, and Google shows these in the knowledge panel and in Maps where nobody
+cross-checks them.
+
+Frank confirmed on 2026-09-12: Monday to Friday 9:00 to 18:00, **Sunday 9:00 to
+13:00**, Saturday closed. The stored data disagreed:
+`daysOpen` held Monday to Friday only, and Sunday existed as an exception with
+no hours, so `/contact` rendered nothing for a day the clinic is open. That was
+a visible bug on the page, not only a schema gap. Fixed by
+`scripts/add-social-and-hours.js`.
+
+**All seven days are stated, the closed ones included.** A day left out says
+nothing about itself, and nothing cannot be told apart from "we forgot to
+mention it". schema.org has a way to say closed, `opens` and `closes` both at
+`00:00`, so Saturday says it. Which days those are is derived from `daysOpen`,
+whose meaning is exactly that, rather than stored as a second list the first can
+drift away from. An open day whose hours will not parse is left out rather than
+published wrong, and deliberately not reported as closed: sending somebody to a
+closed door is the failure this guards against.
+
+Be clear about what that buys. Google fills the hours in the knowledge panel and
+in Maps from the Google Business Profile, not from the page, so this changes
+little there. It matters to everything that reads the page directly.
+
+_Geo._ `43.6997, -79.4306`, taken from the Google place entity the map link
+resolves to rather than from geocoding the address string. This address has two
+place ids, a business entity and a bare address pin about 30 m apart, per the
+CH-025 notes. These are the business one.
+
+_sameAs, and why it is split._ `sameAs` is how a search engine confirms a
+profile and a business are the same entity, so an array has to describe one
+entity rather than the group. `socialMedia` entries carry an `entity` field,
+`clinic` or `cafe`, and `lib/structured-data.tsx` splits on it. The clinic gets
+LinkedIn, the clinic Instagram, TikTok, Facebook and the Google Business
+Profile. The cafe gets its own Instagram and its own Google listing. Entries with no `entity` set count as
+the clinic, which is what every profile stored before the field existed is.
+
+Every URL was fetched and confirmed to resolve before being written. The TikTok
+URL is stored without the `?is_from_webapp=1&sender_device=pc` query string,
+which describes the browser session it was copied from rather than the profile.
+
+The Google Business Profile is `https://maps.google.com/?cid=4838984602728192016`,
+held in `lib/structured-data.tsx` rather than in Sanity because it is an
+identity claim rather than editorial copy, and because it would otherwise appear
+in the footer beside the address, which already links to the same listing. The
+CID is the second half of the place id above converted to decimal, and it was
+opened in a browser and confirmed to load "Curate Health" at 989 Eglinton rather
+than trusted from the arithmetic.
+
+**The cafe has its own Google listing**, confirmed by Frank on 2026-09-12 and
+verified in a browser: place id `0x882b3331c51bdd03:0xbc4f43925e7428c`, which is
+genuinely distinct from the clinic's, so Google already holds the two apart. It
+sits on the cafe entity's `sameAs`. That listing is worth more than the
+Instagram split on its own, because a correct `sameAs` on a thin entity is still
+thin.
+
+**The cafe deliberately carries no `openingHoursSpecification`.** A first version
+handed it the clinic's hours, which asserts the cafe opens and closes exactly
+when the clinic does. Nobody has said that is true, and a cafe attached to a
+clinic is the kind of place that opens earlier. Its own Google listing carries
+its own hours, so a wrong answer here would contradict the right one there. It
+has no phone of its own either. Give the cafe a hours field of its own before
+adding these.
+
+_The footer._ Social links now carry brand icons, via
+`components/shared/social-icon.tsx`. `lucide-react` has Instagram, Facebook,
+LinkedIn and YouTube but **no TikTok**, so that one path is inline. Matching is
+loose, so "Instagram (Cafe)" finds the Instagram mark, and an unrecognised
+platform falls back to the arrow the footer used before, so a new platform
+renders as a plain link rather than as nothing.
+
+The platform name stays beside each icon. Five marks in a column with no labels
+is a guessing game, and two of these go to different businesses.
+
+`components/shared/footer-mobile-accordion.tsx` was not checking `isActive`,
+only the desktop footer was, so switching a profile off in the Studio hid it on
+desktop and left it live on phones.
+
+```bash
+node scripts/add-social-and-hours.js   # dry run, re-runnable, writes only what is missing
+```
+
 **Do not add `FAQPage`.** Google shut the FAQ rich result down on 2026-05-07, and the markup does not drive AI citation either. It was dropped from the list above when CH-101 was closed. Adding it now produces nothing.
 
 **Do not add `aggregateRating`.** Google withdrew rich result support for self-serving reviews on LocalBusiness and Organization entities, so it produces nothing. Separately, Ontario's colleges restrict testimonial use in professional advertising and this may fall under that. Frank is checking with CCO. Leave it out.

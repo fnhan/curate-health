@@ -242,8 +242,25 @@ export default defineType({
               name: "platform",
               type: "string",
               title: "Platform",
+              description:
+                "Which network this is. Chooses the icon, so keep the platform's own name in it: Instagram, TikTok, Facebook, LinkedIn.",
               validation: (Rule) =>
                 Rule.required().error("Platform is required"),
+            }),
+            defineField({
+              /**
+               * What the footer prints, when that is not the platform's name.
+               *
+               * Two Instagram accounts means the same mark twice, so the label
+               * has to say which account rather than which network. Kept apart
+               * from platform because platform is what picks the icon: renaming
+               * it to "Curate Cafe" would lose the Instagram mark.
+               */
+              name: "label",
+              type: "string",
+              title: "Footer label",
+              description:
+                "Optional. What the link reads as in the footer. Leave empty to use the platform name. Set for the two Instagram accounts, so they read as the business rather than twice as Instagram.",
             }),
             // defineField({
             //   name: 'platformLogo',
@@ -261,6 +278,34 @@ export default defineType({
               type: "url",
               title: "URL",
               validation: (Rule) => Rule.required().error("URL is required"),
+            }),
+            defineField({
+              /**
+               * Which business this profile belongs to. CH-008.
+               *
+               * Every one of these renders in the same footer, but they do not
+               * all describe the same entity, and sameAs is how Google confirms
+               * that a profile and a business are the same thing. Listing the
+               * cafe's Instagram on the clinic entity tells it the two are one
+               * account, which muddies both rather than strengthening either.
+               *
+               * So the footer reads the whole array and lib/structured-data.tsx
+               * splits it: clinic profiles go on the MedicalClinic entity, cafe
+               * profiles on CafeOrCoffeeShop.
+               */
+              name: "entity",
+              type: "string",
+              title: "Belongs to",
+              description:
+                "Which business this profile is for. Decides which entity it is attached to in the structured data. Defaults to the clinic.",
+              options: {
+                list: [
+                  { title: "Curate Health (the clinic)", value: "clinic" },
+                  { title: "Curate Cafe", value: "cafe" },
+                ],
+                layout: "radio",
+              },
+              initialValue: "clinic",
             }),
             defineField({
               name: "isActive",

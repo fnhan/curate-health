@@ -7,11 +7,13 @@ import { productPath } from "@/lib/service-urls";
 import { JsonLdScript, buildProductsIndexJsonLd } from "@/lib/structured-data";
 import {
   PRODUCTS_NAVIGATION_QUERYResult,
+  PRODUCTS_PAGE_QUERYResult,
   PRODUCTS_QUERYResult,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
   PRODUCTS_NAVIGATION_QUERY,
+  PRODUCTS_PAGE_QUERY,
   PRODUCTS_QUERY,
 } from "@/sanity/lib/queries";
 
@@ -28,6 +30,21 @@ import {
  * This page is the missing hub. The two navigation links now point here, which
  * is the change that actually un-orphans them; the page alone would not.
  */
+/**
+ * Used when the productsPage document does not exist, or exists with a field
+ * left empty. The page shipped with this copy hard coded, which made it the
+ * only page on the site needing a deploy to reword. It is a fallback now
+ * rather than the source, but it stays: a half filled document should not
+ * publish a blank heading.
+ */
+const FALLBACK = {
+  title: "Products",
+  intro:
+    "Braces, orthotics and clinical supplies fitted at the practice in Midtown Toronto. Each one is assessed and sized by a practitioner rather than sold off a shelf.",
+  description:
+    "Custom foot orthotics, knee braces, compression stockings, TENS machines and professional grade supplements, fitted at Curate Health in Midtown Toronto.",
+};
+
 export default async function ProductsPage() {
   const products = await sanityFetch<PRODUCTS_QUERYResult>({
     query: PRODUCTS_QUERY,
@@ -37,6 +54,10 @@ export default async function ProductsPage() {
   // pages use, so the two render an identical list.
   const productsNav = await sanityFetch<PRODUCTS_NAVIGATION_QUERYResult>({
     query: PRODUCTS_NAVIGATION_QUERY,
+  });
+
+  const page = await sanityFetch<PRODUCTS_PAGE_QUERYResult>({
+    query: PRODUCTS_PAGE_QUERY,
   });
 
   return (
@@ -49,12 +70,10 @@ export default async function ProductsPage() {
       <section className="bg-white pt-32 md:pt-40">
         <div className="container flex flex-col gap-6">
           <h1 className="text-3xl font-light text-primary md:text-5xl">
-            Products
+            {page?.title?.trim() || FALLBACK.title}
           </h1>
-          <p className="max-w-[65ch] font-light leading-7 text-primary">
-            Braces, orthotics and clinical supplies fitted at the practice in
-            Midtown Toronto. Each one is assessed and sized by a practitioner
-            rather than sold off a shelf.
+          <p className="max-w-[65ch] whitespace-pre-line font-light leading-7 text-primary">
+            {page?.intro?.trim() || FALLBACK.intro}
           </p>
         </div>
       </section>
@@ -100,18 +119,15 @@ export default async function ProductsPage() {
 }
 
 export async function generateMetadata() {
-  /**
-   * No seo object, because there is no productsPage document to hold one.
-   *
-   * Every other page reads its title and description from Sanity. This one has
-   * nowhere to read them from, so they are passed as fallbacks and are the only
-   * copy on the site that an editor cannot change without a deploy. Worth a
-   * productsPage document eventually; not worth blocking the hub on it.
-   */
-  return buildPageMetadata(null, {
+  const page = await sanityFetch<PRODUCTS_PAGE_QUERYResult>({
+    query: PRODUCTS_PAGE_QUERY,
+  });
+
+  // buildPageMetadata already prefers the seo object and drops to the fallbacks
+  // when a field is empty, so passing both is what makes the document optional.
+  return buildPageMetadata(page?.seo ?? null, {
     path: "/products",
-    title: "Products",
-    description:
-      "Custom foot orthotics, knee braces, compression stockings, TENS machines and professional grade supplements, fitted at Curate Health in Midtown Toronto.",
+    title: FALLBACK.title,
+    description: FALLBACK.description,
   });
 }

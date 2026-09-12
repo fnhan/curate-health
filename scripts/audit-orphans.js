@@ -20,6 +20,8 @@
  * treating a page as part of the site rather than a leftover.
  */
 
+const { assertChecked } = require("./lib/assert-checked");
+
 const DEFAULT_BASE = "http://localhost:3000";
 const MAX_HOPS = 3;
 
@@ -75,11 +77,14 @@ async function main() {
     ),
   ];
 
-  if (!sitemap.length) {
-    console.error("The sitemap yielded no URLs. Nothing was checked.");
-    process.exitCode = 2;
-    return;
-  }
+  assertChecked({
+    label: "sitemap URLs",
+    count: sitemap.length,
+    atLeast: 30,
+    hint:
+      "The sitemap publishes the production host whatever host served it, so " +
+      "filtering its URLs by origin discards every one of them.",
+  });
 
   const hops = new Map([["/", 0]]);
   let frontier = ["/"];

@@ -288,6 +288,19 @@ export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   }
 }`;
 
+/**
+ * The products index page copy. CH-010.
+ *
+ * Every field is optional in practice: app/products/page.tsx falls back for all
+ * of them, so the page renders correctly before this document is created and
+ * while it is half filled in.
+ */
+export const PRODUCTS_PAGE_QUERY = groq`*[_type == "productsPage"][0]{
+  title,
+  intro,
+  ${SEO_QUERY}
+}`;
+
 export const PRODUCTS_NAVIGATION_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
   "slug": slug.current,

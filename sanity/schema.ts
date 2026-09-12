@@ -22,6 +22,7 @@ import post from "./schemas/post";
 import practitioner from "./schemas/practitioner";
 import primaryCTAButton from "./schemas/primaryCTAButton";
 import products from "./schemas/products";
+import productsPage from "./schemas/productsPage";
 import productsSection from "./schemas/productsSection";
 import program from "./schemas/program";
 import seo from "./schemas/seo";
@@ -51,6 +52,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     aboutSection,
     clinicSection,
     servicesSection,
+    productsPage,
     productsSection,
     cafeSection,
     blogSection,

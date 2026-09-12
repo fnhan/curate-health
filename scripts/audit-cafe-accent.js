@@ -18,6 +18,7 @@
  * documents, which republish the old spelling the next time somebody publishes.
  */
 
+const { assertChecked } = require("./lib/assert-checked");
 const { query, walkStrings } = require("./lib/sanity-cli");
 
 const ACCENTED = /caf[\u00e9\u00c9]/g;
@@ -32,6 +33,7 @@ const isDraft = (id) => id.startsWith("drafts.");
 async function main() {
   const docs = await query(ALL);
 
+  let scanned = 0;
   const hits = [];
   const quotes = [];
 
@@ -42,6 +44,7 @@ async function main() {
     // the first version of this script missed every hit.
     for (const [path, value] of walkStrings(doc)) {
       if (typeof value !== "string") continue;
+      scanned++;
 
       if (ACCENTED.test(value)) {
         hits.push({
@@ -69,7 +72,27 @@ async function main() {
     }
   }
 
-  console.log(`Scanned ${docs.length} documents.\n`);
+  // The first version of this script reported a clean dataset it had never
+  // read, because walkStrings returns its pairs rather than taking a callback,
+  // so the callback became the path prefix and the loop body never ran. A count
+  // of documents alone would not have caught it either: the documents arrived
+  // fine, it was the strings inside them that went unexamined.
+  assertChecked({
+    label: "documents",
+    count: docs.length,
+    atLeast: 100,
+  });
+
+  assertChecked({
+    label: "strings inside those documents",
+    count: scanned,
+    atLeast: 1000,
+    hint:
+      "walkStrings returns its pairs rather than taking a callback, so passing " +
+      "one makes it the path prefix and the loop body never runs.",
+  });
+
+  console.log(`Scanned ${docs.length} documents, ${scanned} strings.\n`);
 
   console.log(`=== "café" with an accent: ${hits.length}`);
   for (const h of hits) {

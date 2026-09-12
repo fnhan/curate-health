@@ -409,5 +409,5 @@ export async function generateMetadata() {
 
   const { seo } = contactPage.page!;
 
-  return buildPageMetadata(seo);
+  return buildPageMetadata(seo, { path: "/contact" });
 }

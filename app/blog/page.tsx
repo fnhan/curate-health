@@ -89,6 +89,7 @@ export default async function BlogPage() {
  */
 export async function generateMetadata() {
   return buildPageMetadata(null, {
+    path: "/blog",
     title: "Blog",
     description:
       "Articles on movement, recovery and lifestyle medicine from the practitioners at Curate Health in Midtown Toronto.",

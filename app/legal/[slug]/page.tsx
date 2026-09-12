@@ -60,5 +60,5 @@ export async function generateMetadata({
 
   const { seo } = legalPage!;
 
-  return buildPageMetadata(seo);
+  return buildPageMetadata(seo, { path: `/legal/${params.slug}` });
 }

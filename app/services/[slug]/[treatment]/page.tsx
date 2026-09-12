@@ -148,5 +148,9 @@ export async function generateMetadata({
 
   const { seo } = resolved.treatment;
 
-  return buildPageMetadata(seo);
+  // Derived the same way resolve() decided this was the canonical address,
+  // which is also why any other spelling of it has already been redirected.
+  return buildPageMetadata(seo, {
+    path: treatmentPath(resolved.treatment.serviceSlug, params.treatment),
+  });
 }

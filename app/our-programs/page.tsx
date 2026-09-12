@@ -73,6 +73,7 @@ export async function generateMetadata() {
   });
 
   return buildPageMetadata(program?.seo ?? null, {
+    path: "/our-programs",
     title: "Health Programs Toronto",
     description:
       "Three structured health programs at Curate Health in Midtown Toronto, from self-directed access to physician-led care.",

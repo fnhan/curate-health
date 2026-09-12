@@ -267,6 +267,8 @@ Write a correct description under 155 characters. Then check every other page fo
 
 Zero canonicals across all 44 pages. Add via Next metadata, absolute URLs on `https://www.curatehealth.ca`.
 
+**Done 2026-09-11.** Every page states its own address through `buildPageMetadata`, whose `path` option is now required, so TypeScript refuses a page added without one. The same value becomes `og:url`, which was missing on every page but the homepage. The homepage sets `/` in `app/page.tsx`. Never set a canonical in `app/layout.tsx`: it would be inherited by any page that forgot its own, declaring that page a copy of the homepage. Dynamic routes pass the address `resolve()` settled on, not the typed URL.
+
 ### CH-004 Unify the host
 
 The site serves `www`. The sitemap, robots.txt, `og:url`, and every schema `@id` use the bare domain.
@@ -274,6 +276,8 @@ The site serves `www`. The sitemap, robots.txt, `og:url`, and every schema `@id`
 Pick `https://www.curatehealth.ca` since it's already serving. Update `metadataBase`, the sitemap generator, robots.txt, all `og:url`, all schema `@id` and `url`. Confirm the primary domain in Vercel.
 
 The host has a single source: `BASEURL` in `app/site-settings.ts`, currently the bare domain. It is consumed by `app/robots.ts`, `app/sitemap.xml/route.ts`, `app/llms.txt/route.ts`, `app/layout.tsx`, and `lib/structured-data.tsx`. Changing that one constant covers all five. `metadataBase` is absent from `app/layout.tsx` and still has to be added.
+
+**Done 2026-09-11.** `BASEURL` is `https://www.curatehealth.ca` and `metadataBase` is set from it. That one change also closed CH-005 (sitemap on www) and the last CH-032 defect (llms.txt links on the bare domain). Verified on a local render: 41 of 41 sitemap pages carry a canonical and `og:url` equal to their own www address, robots.txt and all 24 llms.txt links use www, and the schema graph's `@id` values do too. Still to confirm in the Vercel dashboard that www is the primary domain.
 
 ### CH-005 Regenerate the sitemap
 

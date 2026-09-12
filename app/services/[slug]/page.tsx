@@ -9,6 +9,7 @@ import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   renamedServicePath,
   renamedTreatmentSlug,
+  servicePath,
   treatmentPath,
 } from "@/lib/service-urls";
 import {
@@ -186,7 +187,17 @@ export async function generateMetadata({
   const fallbackDescription =
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
 
+  // resolve() has already redirected any address that is not canonical, so
+  // whichever kind this is, the page is sitting at its own address. The
+  // helpers are used anyway so the canonical is derived the same way the
+  // redirect decision was, rather than trusting the URL that was typed.
+  const path =
+    resolved.kind === "treatment"
+      ? treatmentPath(resolved.treatment.serviceSlug, params.slug)
+      : servicePath(params.slug);
+
   return buildPageMetadata(seo, {
+    path,
     title: fallbackTitle,
     description: fallbackDescription,
   });

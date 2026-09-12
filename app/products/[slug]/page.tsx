@@ -179,7 +179,12 @@ export async function generateMetadata({
     notFound();
   }
 
-  const { seo } = resolved.product;
+  const { seo, slug } = resolved.product;
 
-  return buildPageMetadata(seo);
+  // The product's own slug, not the one in the URL. They only differ during a
+  // rename, and resolve() redirects in that case, so this is belt and braces:
+  // a canonical must never point at the old supplements address.
+  return buildPageMetadata(seo, {
+    path: productPath(slug?.current ?? params.slug),
+  });
 }

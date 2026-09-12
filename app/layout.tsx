@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import Script from "next/script";
 import { draftMode } from "next/headers";
+import Script from "next/script";
 
 import { VisualEditing } from "next-sanity";
 import {
@@ -44,6 +44,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const { ogImage, twitterImage } = socialMeta!;
 
   return {
+    // Resolves every relative URL in page metadata, canonicals included,
+    // against the real host. Without it Next has no absolute base and warns
+    // at build time. CH-004.
+    //
+    // Canonical tags are deliberately NOT set here. Anything set in the layout
+    // is inherited by every page that does not override it, so a canonical
+    // here would tell Google that any page which forgot its own is a copy of
+    // the homepage. Each page states its own, through buildPageMetadata, which
+    // requires one.
+    metadataBase: new URL(BASEURL),
     title: {
       template: `%s | ${templateTitlePrefix}`,
       default: homePageTitle!,

@@ -52,6 +52,15 @@ export function FooterMobileAccordion({
           <AccordionTrigger className="font-semibold">About</AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-1 text-base">
+              {/*
+                The hub goes in the list rather than on the trigger, because the
+                trigger has to stay a button that opens the accordion. Without
+                it, /about is reachable on desktop and not on a phone, which is
+                where most visitors are.
+              */}
+              <Link className="hover:underline" href="/about">
+                About Curate Health
+              </Link>
               {aboutPages
                 ?.filter(Boolean) // Remove null/undefined values
                 .map((page, index) => (

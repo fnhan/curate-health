@@ -1,5 +1,6 @@
 import { type SchemaTypeDefinition } from "sanity";
 
+import aboutIndexPage from "./schemas/aboutIndexPage";
 import aboutSection from "./schemas/aboutSection";
 import author from "./schemas/author";
 import blockContent from "./schemas/blockContent";
@@ -49,6 +50,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     newsletter,
     popupBanner,
     heroSection,
+    aboutIndexPage,
     aboutSection,
     clinicSection,
     servicesSection,

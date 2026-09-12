@@ -2419,6 +2419,17 @@ export type AboutSection = {
   hoverLinkHref?: string;
 };
 
+export type AboutIndexPage = {
+  _id: string;
+  _type: "aboutIndexPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  intro?: string;
+  seo?: Seo;
+};
+
 export type HeroSection = {
   _id: string;
   _type: "heroSection";
@@ -2867,6 +2878,7 @@ export type AllSanitySchemaTypes =
   | ServicesSection
   | Clinic
   | AboutSection
+  | AboutIndexPage
   | HeroSection
   | PopupBanner
   | NewsletterSection
@@ -3520,6 +3532,72 @@ export type PRODUCTS_QUERYResult = Array<{
   altText: string | null;
   meta: null;
 }>;
+// Variable: ABOUT_INDEX_QUERY
+// Query: {  "page": *[_type == "aboutIndexPage"][0]{    title,    intro,      seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      }    }  }  },  "children": [    *[_type == "ourStory" && pageActive == true][0]{      "title": "Our Story",      "slug": "our-story",      "description": seo.pageDescription    },    *[_type == "ourTeam" && pageActive == true][0]{      "title": "Our Team",      "slug": "our-team",      "description": seo.pageDescription    },    *[_type == "missionAndValues" && pageActive == true][0]{      "title": "Mission and Values",      "slug": "mission-and-values",      "description": seo.pageDescription    },    *[_type == "pillarsOfHealth" && pageActive == true][0]{      "title": "Pillars of Health",      "slug": "pillars-of-health",      "description": seo.pageDescription    },    *[_type == "sustainability" && pageActive == true][0]{      "title": "Sustainability",      "slug": "sustainability",      "description": seo.pageDescription    }  ]}
+export type ABOUT_INDEX_QUERYResult = {
+  page: {
+    title: string | null;
+    intro: string | null;
+    seo: {
+      pageTitle: string | null;
+      pageDescription: string | null;
+      socialMeta: {
+        title: string | null;
+        description: string | null;
+        ogImage: {
+          crop: SanityImageCrop | null;
+          hotspot: SanityImageHotspot | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            alt: null;
+          } | null;
+        } | null;
+        twitterImage: {
+          crop: SanityImageCrop | null;
+          hotspot: SanityImageHotspot | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            alt: null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+  children: Array<
+    | {
+        title: "Mission and Values";
+        slug: "mission-and-values";
+        description: string | null;
+      }
+    | null
+    | {
+        title: "Our Story";
+        slug: "our-story";
+        description: string | null;
+      }
+    | null
+    | {
+        title: "Our Team";
+        slug: "our-team";
+        description: string | null;
+      }
+    | null
+    | {
+        title: "Pillars of Health";
+        slug: "pillars-of-health";
+        description: string | null;
+      }
+    | null
+    | {
+        title: "Sustainability";
+        slug: "sustainability";
+        description: string | null;
+      }
+    | null
+  >;
+};
 // Variable: PRODUCTS_PAGE_QUERY
 // Query: *[_type == "productsPage"][0]{  title,  intro,    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      }    }  }}
 export type PRODUCTS_PAGE_QUERYResult = {
@@ -8518,6 +8596,7 @@ declare module "@sanity/client" {
     '\n  *[_type == "footer"][0] {\n    contactInfo {\n      sectionTitle,\n      details[] {\n        label,\n        value\n      }\n    },\n    servicesSection[]-> {\n      title,\n      "slug": slug.current,\n      image {\n        asset-> {\n          _id,\n          url\n        },\n        alt\n      }\n    },\n    sections[] {\n      title,\n      links[] {\n        text,\n        href\n      }\n    },\n    socialLinksSection {\n      title,\n      links[] {\n        platform,\n        url\n      }\n    },\n    privacy {\n      links[] {\n        title,\n        href\n      }\n    }\n  }\n': FOOTER_QUERYResult;
     '*[_type == "productsSection"][0]{\n  sectionTitle,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n}': PRODUCTS_SECTION_QUERYResult;
     '*[_type == "product" && isActive == true] {\n  title,\n  indepthblockinfo,\n  description,\n  "slug" : slug.current,\n  "banner": banner.asset->url,\n  "image": image.asset->url,\n  "altText": image.alt,\n  meta {\n    title,\n    description\n  }\n}': PRODUCTS_QUERYResult;
+    '{\n  "page": *[_type == "aboutIndexPage"][0]{\n    title,\n    intro,\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n  "children": [\n    *[_type == "ourStory" && pageActive == true][0]{\n      "title": "Our Story",\n      "slug": "our-story",\n      "description": seo.pageDescription\n    },\n    *[_type == "ourTeam" && pageActive == true][0]{\n      "title": "Our Team",\n      "slug": "our-team",\n      "description": seo.pageDescription\n    },\n    *[_type == "missionAndValues" && pageActive == true][0]{\n      "title": "Mission and Values",\n      "slug": "mission-and-values",\n      "description": seo.pageDescription\n    },\n    *[_type == "pillarsOfHealth" && pageActive == true][0]{\n      "title": "Pillars of Health",\n      "slug": "pillars-of-health",\n      "description": seo.pageDescription\n    },\n    *[_type == "sustainability" && pageActive == true][0]{\n      "title": "Sustainability",\n      "slug": "sustainability",\n      "description": seo.pageDescription\n    }\n  ]\n}': ABOUT_INDEX_QUERYResult;
     '*[_type == "productsPage"][0]{\n  title,\n  intro,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRODUCTS_PAGE_QUERYResult;
     '*[_type == "product" && isActive == true] {\n  title,\n  "slug": slug.current,\n}': PRODUCTS_NAVIGATION_QUERYResult;
     '*[_type == "product" && slug.current == $slug && isActive == true][0] {\n  title,\n  slug,\n  description,\n  image {\n    asset->,\n    alt\n  },\n  banner {\n    asset->,\n    alt\n  },\n  accordioninfo[] {\n    title,\n    description\n  },\n  callToAction,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRODUCT_BY_SLUG_QUERYResult;

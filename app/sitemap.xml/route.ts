@@ -97,6 +97,19 @@ export async function GET() {
   ];
 
   const aboutRoutes: Url[] = [
+    {
+      // The hub itself, which returned 404 while all five pages below it were
+      // live, so every one of them had a parent that did not exist.
+      //
+      // Unconditional, unlike its children. Those are gated on their document
+      // being active, and this one has no such document to be gated on: it
+      // renders from aboutIndexPage when that exists and from its own fallback
+      // when it does not.
+      url: `${BASEURL}/about`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
     team.length > 0 && {
       url: `${BASEURL}/about/our-team`,
       lastModified: new Date().toISOString(),

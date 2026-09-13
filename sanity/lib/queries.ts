@@ -214,6 +214,62 @@ export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   }
 }`;
 
+/**
+ * The products index page copy. CH-010.
+ *
+ * Every field is optional in practice: app/products/page.tsx falls back for all
+ * of them, so the page renders correctly before this document is created and
+ * while it is half filled in.
+ */
+/**
+ * The about hub copy, plus the five pages it links to. CH-009 groundwork.
+ *
+ * The children come from the same documents SITE_SETTINGS_QUERY builds the
+ * navigation from, and carry their own seo description, so the hub describes
+ * each page in the pages own words rather than in a second set written here
+ * that would drift from them.
+ */
+export const ABOUT_INDEX_QUERY = groq`{
+  "page": *[_type == "aboutIndexPage"][0]{
+    title,
+    intro,
+    ${SEO_QUERY}
+  },
+  "children": [
+    *[_type == "ourStory" && pageActive == true][0]{
+      "title": "Our Story",
+      "slug": "our-story",
+      "description": seo.pageDescription
+    },
+    *[_type == "ourTeam" && pageActive == true][0]{
+      "title": "Our Team",
+      "slug": "our-team",
+      "description": seo.pageDescription
+    },
+    *[_type == "missionAndValues" && pageActive == true][0]{
+      "title": "Mission and Values",
+      "slug": "mission-and-values",
+      "description": seo.pageDescription
+    },
+    *[_type == "pillarsOfHealth" && pageActive == true][0]{
+      "title": "Pillars of Health",
+      "slug": "pillars-of-health",
+      "description": seo.pageDescription
+    },
+    *[_type == "sustainability" && pageActive == true][0]{
+      "title": "Sustainability",
+      "slug": "sustainability",
+      "description": seo.pageDescription
+    }
+  ]
+}`;
+
+export const PRODUCTS_PAGE_QUERY = groq`*[_type == "productsPage"][0]{
+  title,
+  intro,
+  ${SEO_QUERY}
+}`;
+
 export const PRODUCTS_NAVIGATION_QUERY = groq`*[_type == "product" && isActive == true] {
   title,
   "slug": slug.current,

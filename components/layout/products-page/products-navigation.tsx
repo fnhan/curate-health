@@ -25,7 +25,7 @@ export function ProductsNavigation({
                 pathname?.endsWith(`/products`) &&
                 "after:origin-bottom-left after:scale-x-100"
               }`}
-              href="/#products"
+              href="/products"
             >
               Our Products
             </Link>

@@ -98,7 +98,16 @@ export default function SiteFooter({
               </div>
               {/* About Pages Section */}
               <div className="border-b border-white pb-2 lg:border-none">
-                <h2 className="pl-3 font-semibold md:mb-3">About</h2>
+                {/*
+                  A link, like the Contact heading above it, because /about is
+                  a page now. Without this nothing on the site points at the
+                  hub: the nav lists its five children and skips the parent, so
+                  the page that exists to be those pages' parent was itself
+                  unreachable. Caught by scripts/audit-orphans.js.
+                */}
+                <h2 className="w-fit pl-3 font-semibold hover:underline md:mb-3">
+                  <Link href="/about">About</Link>
+                </h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {aboutPages
                     ?.filter(Boolean) // Remove null/undefined values

@@ -543,3 +543,95 @@ export function JsonLdScript({
     />
   );
 }
+
+/**
+ * Product schema, CH-010.
+ *
+ * NO OFFER, NO PRICE, DELIBERATELY
+ *
+ * schema.org lets a Product carry an Offer with a price and availability, and
+ * Google's product rich results want one. These do not get one, for two
+ * reasons that both matter here.
+ *
+ * Pricing is out of scope on this project by decision: it lives in Jane behind
+ * the Book Now button and there is no pricing page. Publishing a price in
+ * markup would put a number on the site that nothing on the site can show, and
+ * a stale price in structured data is worse than no price.
+ *
+ * These are also not things somebody adds to a basket. An orthotic is cast to a
+ * foot and a brace is fitted, so the honest markup is a product that exists and
+ * is described, not one that is for sale at a number.
+ *
+ * They still earn their place: this is what feeds Google Business Profile's
+ * products field, which the agency manages, and it gives each page an entity
+ * rather than leaving it as unlabelled prose.
+ */
+type ProductLike = {
+  title?: string | null;
+  slug?: string | null;
+  description?: string | null;
+  image?: string | null;
+  altText?: string | null;
+};
+
+function buildProductNode(product: ProductLike) {
+  if (!product.slug || !product.title) return undefined;
+
+  const url = absoluteUrl(`/products/${product.slug}`);
+
+  return stripEmpty({
+    "@type": "Product",
+    "@id": `${url}#product`,
+    name: product.title,
+    description: product.description,
+    image: product.image,
+    url,
+    // The clinic is the brand here rather than a manufacturer. These are
+    // supplied and fitted by Curate, which is what a visitor is choosing.
+    brand: { "@id": `${BASEURL}/#organization` },
+    category: "Medical device",
+  }) as JsonLdObject | undefined;
+}
+
+/** One Product, for a single product page. */
+export function buildProductJsonLd(product: ProductLike | null | undefined) {
+  if (!product) return null;
+
+  const node = buildProductNode(product);
+  if (!node) return null;
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    ...node,
+  }) as JsonLdObject;
+}
+
+/**
+ * The index, as an ItemList rather than a bag of Products.
+ *
+ * ItemList is what says "this page lists those pages", which is the job the
+ * index does. Declaring five full Product entities here instead would put the
+ * same entity on two URLs and leave a crawler to decide which one is canonical,
+ * so the items reference the product pages rather than restating them.
+ */
+export function buildProductsIndexJsonLd(products: ProductLike[] | null) {
+  const items = (products ?? [])
+    .filter((p) => p.slug && p.title)
+    .map((p, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: p.title,
+      url: absoluteUrl(`/products/${p.slug}`),
+    }));
+
+  if (!items.length) return null;
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${BASEURL}/products#list`,
+    name: "Products",
+    numberOfItems: items.length,
+    itemListElement: items,
+  }) as JsonLdObject;
+}

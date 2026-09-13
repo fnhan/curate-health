@@ -37,9 +37,11 @@ Worth remembering why the caution is here. The worst incident on this project wa
 
 **Back up Sanity before any mutation.** Export with `sanity dataset export production <file>.tar.gz` and keep the file outside the repository. Exports are large, 1.43 GB for the current one, so they never belong in git.
 
-**Backups live outside the repo, so stop looking for one in the working tree.** The current restore point is `sanity-backup-2026-08-17.tar.gz`, in Frank's Documents folder with a cloud copy. Nothing matching `backup-*` will ever appear beside the source, and its absence is not evidence that no backup was taken. Ask rather than warn.
+**Backups live outside the repo, so stop looking for one in the working tree.** They sit in Frank's Documents folder with a cloud copy. Nothing matching `backup-*` will ever appear beside the source, and its absence is not evidence that no backup was taken. Ask rather than warn.
 
-That file predates every mutation applied so far, CH-020, CH-021 and the CH-025 second-location retirement, which is what makes it the correct restore point for all of them. It is now stale. Take a fresh export before the next destructive ticket, and say so in the ticket rather than assuming the 2026-08-17 file still covers you.
+The current restore point is `sanity-backup-2026-09-12-before-dead-content-deletion.tar.gz`, 1.55 GB, 113 documents and 570 assets, taken immediately before CH-116. It is the only export that contains the 29 documents that ticket deleted. `sanity-backup-2026-08-17.tar.gz` is the restore point for CH-020, CH-021 and the CH-025 second-location retirement, and nothing later.
+
+Take a fresh export before the next destructive ticket and name it in the ticket, rather than assuming an existing file still covers you. `scripts/delete-dead-content.js` enforces this: it refuses to write unless the file named by `--backup` is newer than the most recent change in the dataset.
 
 **Verify by fetching the rendered page, not by reading source.** Several defects here are invisible in source and only appear in output. Every ticket has an acceptance check written as a command. Run it.
 
@@ -328,9 +330,9 @@ Everything live points at the first id, the business entity, which is the correc
 
 Two ids is not automatically two listings, a place pin and a business entity can coexist for one address. But if both exist as listings in Google Business Profile then the address pin is a duplicate competing with the real one and needs merging or removing there. That is a Google Business Profile task, not a code or dataset one, and the agency owns that surface. Confirm which it is before writing this off as stale data.
 
-**Two orphaned 2024 documents, deliberately left in place.** `3c69142c-598b-4b63-bf6b-7580b6c4f662` of type `contactInfo` and `bac4fbca-b3c3-4731-8361-fd88da774dcb` of type `contactDetails`, both last touched 2024-03-20. Neither type is registered in `sanity/schema.ts` and neither is referenced by any query, so nothing renders them. Between them they hold the stale phone number `(728)-682-2618`, an address reading `West Corner Suite, 989 Eglinton Ave W,` and `York, ON, M6C 2C6`, and the duplicate place id above.
+**The two orphaned 2024 documents are gone, 2026-09-13.** `3c69142c-598b-4b63-bf6b-7580b6c4f662` of type `contactInfo` and `bac4fbca-b3c3-4731-8361-fd88da774dcb` of type `contactDetails`, both last touched 2024-03-20, were deleted under CH-116. Between them they held the stale phone number `(728)-682-2618`, an address reading `West Corner Suite, 989 Eglinton Ave W,` and `York, ON, M6C 2C6`, and the duplicate place id above.
 
-They are invisible to the site, so they are not live defects. Deleting documents is destructive and needs Frank's sign-off plus a fresh export first. They do surface in a dataset export and through the Sanity API, so retire them eventually rather than never. Do not let a future "York" grep treat them as an outstanding CH-021 failure.
+The duplicate place id survives in the backup and in Google, not in the dataset. It is still a Google Business Profile question, and the table above is still the record of it.
 
 **The two copies were not interchangeable, found 2026-09-12.** Every address
 field matched byte for byte, as did email and phone. `mapLink` did not:
@@ -944,6 +946,88 @@ One page covering transit access, walking directions from both stations, and whi
 | CH-115 | Remove the legacy `meta keywords` tag. Google has ignored it for years                                                                                             |
 | CH-029 | Downsample oversized Sanity assets. 95 exceed 2,600px, worst is a 6500x3846 PNG appearing on 29 pages. CH-007 solves most of the delivery cost, so this is cleanup |
 | CH-030 | Add Claire to the team page and to CH-104                                                                                                                          |
+| CH-117 | Retire the orphaned image assets. **Deferred by Frank on 2026-09-13, to be raised again later.** See below                                                        |
+
+### CH-116 Retire the content nothing uses
+
+**Done 2026-09-13.** 29 documents deleted from the dataset, then the code
+that described them removed in #232.
+
+The dataset held 18 document types the Studio did not register, so nobody
+could open them, and most were read by nothing at all. Two classes sat
+underneath that.
+
+_The about duplication._ Five documents of type `aboutPage` and five more of
+type `aboutPages`, the same five pages twice, created three days apart in July
+2024. The `aboutPages` set looked live because `SITE_SETTINGS_QUERY` has a key
+called `"aboutPages"`, and it looked live to a reading of the source rather
+than of the query. It is a projection alias: a hand-built array selecting
+`ourStory`, `ourTeam`, `missionAndValues`, `sustainability` and
+`pillarsOfHealth` directly. **Do not read a key name as a type name.** The
+footer has always read the real page documents.
+
+_Superseded 2024 documents._ `accessibility`, `privacy` and `termOfUse`,
+replaced by `legalPage`; `cafe`, `ourServices`, `highlight`, `popup`, `survey`,
+`surveyLink`, `feedbackLink`; `metadatas` and three `pageMetadata`, an
+invisible second source of page titles and descriptions, one of them touched as
+recently as 2026-08-25; `footer` and `navigation`, which `LAYOUT_QUERY` fetched
+on every page load and `shared/layout.tsx` discarded. Three of the 29 were
+drafts.
+
+**Kept:** the three `program` documents, which are CH-104 groundwork, and
+`sanity/schemas/category.ts`, which has no documents but which CH-105 needs.
+
+```bash
+node scripts/audit-dead-content.js       # finds the class
+node scripts/verify-dead-content.js      # proves each document is dead
+node scripts/delete-dead-content.js      # dry run
+node scripts/restore-dead-content.js --backup=PATH   # undo
+```
+
+**Three methods have to agree before anything is deleted**, and the third one
+is the only one that asks the site: no live query selects the type, nothing in
+the dataset references the document, and no string unique to it appears in
+production HTML. "Unique" needed three corrections before it meant anything.
+A path is not evidence, because the footer builds `/about/sustainability` from
+a template literal and the assembled string exists in no document. A string
+the source hardcodes is not evidence, because "Get Directions" is a button
+label. And uniqueness is containment, not equality, because `metadatas` held
+"Naturopathic Care" and that phrase sits inside a sentence of body copy on
+`/services/naturopathy`. A document with no searchable strings left goes to
+review rather than passing, since zero hits would otherwise mean zero looked
+for.
+
+**The deletion ran without approval.** A gate test was chained behind a
+command that failed on a Windows path, and the shell carried on to a real
+`--apply` that was legitimate by every check it made. Nothing broke, and the
+export taken minutes earlier held all 29. The lesson is not a missing gate,
+it is that a destructive command must never sit downstream of a step that can
+fail. `--expect=<n>` was added for this: `--apply` now also requires the count
+the dry run printed, which cannot be written before the dry run is read.
+**Do not chain anything destructive after anything else.**
+
+### CH-117 Retire the orphaned image assets
+
+**Deferred 2026-09-13, at Frank's direction. Raise it again rather than
+letting it lapse.**
+
+367 of the 560 image assets are referenced by nothing, 807 MB. None appears
+in production HTML. That is two methods, and CH-116 held documents to three,
+so this is not ready. The argument for doing it is the Studio's media library,
+where two dead images sit between every pair of live ones, not the storage.
+
+Three gaps to close first. The corpus was the 41 sitemap URLs, so it misses
+`/coming-soon`, `/login`, `/search` and `/studio`. A `cdn.sanity.io` URL
+pasted as raw text rather than stored as a reference is invisible to
+`references()`, so grep the source and the dataset text for asset ids.
+Anything uploaded in the last 90 days stays regardless, since it may belong to
+work that has not merged.
+
+Some filenames want human eyes before anything runs:
+`Eric_Profile_b&w_cropped.jpg`, `Andrew_Profile_Color_biggerbg.jpg`,
+`Hero Image(1).png`. They are probably superseded versions of live images, and
+probably is not the standard for a practitioner's photo. Fold this into CH-029,
+which is the other pass over the same library.
 
 ---
 

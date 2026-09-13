@@ -20,6 +20,19 @@
  *
  * Read-only. Exits 0 whatever it finds: this reports, it does not gate a
  * build. Deleting anything it names is a separate, signed-off decision.
+ *
+ * IT READS THE BRANCH YOU ARE ON, AGAINST THE ONE SHARED DATASET
+ *
+ * The dataset is production either way, but the source is whatever is checked
+ * out, so the same run gives different answers on different branches. Run it
+ * on main while a feature branch is open and that branch's pages look like
+ * dead types: on 2026-09-13 main reported aboutIndexPage, productsPage and
+ * PRODUCTS_QUERY as unused, and all three are used by branches waiting to
+ * merge.
+ *
+ * So check what is open before believing a finding, and prefer running this
+ * with everything merged. A type this names is a question, not a verdict;
+ * scripts/verify-dead-content.js is what answers it.
  */
 
 const fs = require("fs");

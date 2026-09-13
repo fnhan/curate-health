@@ -31,8 +31,6 @@ export const SEO_QUERY = groq`
 
 export const POSTS_QUERY = groq`*[_type == "post" && defined(slug)]`;
 
-export const POST_QUERY = groq`*[_type == "post" && slug.current == $slug][0]`;
-
 export const SUSTAINABILITY_SECTION_QUERY = groq`*[_type == "sustainabilitySection"][0]{
   bgImage {
     asset->{
@@ -93,18 +91,6 @@ const BLOG_SECTION_QUERY = groq`*[_type == "blogSection"][0]{
   hoverLinkHref
 }`;
 
-export const OURSERVICES_QUERY = groq`*[_type == "ourServices"][0]{
-  title,
-  "image": image.asset->url,
-  content
-}`;
-
-export const SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
-  "slug": slug.current,
-  "hero_image": hero_image.asset->url,
-  "altText": hero_image.alt,
-  }`;
-
 export const ALL_SERVICES_QUERY = groq`*[_type == "service" && isActive == true]{
     title,
     "slug": slug.current,
@@ -135,10 +121,6 @@ export const SERVICES_SECTION_QUERY = groq`*[_type == "servicesSection"][0]{
   }
 }`;
 
-export const SERVICES_SLUG_QUERY = groq`*[_type == "service" && isActive == true && defined(slug.current)] {
-  "params": {"slug": slug.current}
-}`;
-
 export const SERVICE_BY_SLUG_QUERY = groq`
   *[_type == "service" && slug.current == $slug][0]{
     title,
@@ -157,19 +139,6 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     ${SEO_QUERY}
   }
 `;
-
-export const TREATMENTS_QUERY = groq`*[_type == "treatments" && isActive == true]{
-  title,
-  "treatmentSlug": treatmentSlug.current,
-  "service": service->{
-    title,
-    "slug": slug.current
-  },
-  "image": image.asset->url,
-  "altText": image.alt,
-  content,
-
-}`;
 
 export const TREATMENT_BY_SLUG_QUERY = groq`
 *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {
@@ -219,49 +188,6 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   },
   ${SEO_QUERY}
 }`;
-
-export const FOOTER_QUERY = groq`
-  *[_type == "footer"][0] {
-    contactInfo {
-      sectionTitle,
-      details[] {
-        label,
-        value
-      }
-    },
-    servicesSection[]-> {
-      title,
-      "slug": slug.current,
-      image {
-        asset-> {
-          _id,
-          url
-        },
-        alt
-      }
-    },
-    sections[] {
-      title,
-      links[] {
-        text,
-        href
-      }
-    },
-    socialLinksSection {
-      title,
-      links[] {
-        platform,
-        url
-      }
-    },
-    privacy {
-      links[] {
-        title,
-        href
-      }
-    }
-  }
-`;
 
 export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
   sectionTitle,
@@ -367,90 +293,6 @@ export const PRODUCT_BY_SLUG_QUERY = groq`*[_type == "product" && slug.current =
   },
   callToAction,
   ${SEO_QUERY}
-}`;
-
-export const PRODUCT_QUERY = groq`*[_type == "product" && slug.current == $slug][0]`;
-
-export const PRODUCT_SLUG_QUERY = groq`*[_type == "product" && isActive == true && defined(slug.current)] {
-  "params": {"slug": slug.current}
-}`;
-
-export const NAVIGATION_QUERY = groq`*[_type == "navigation"][0]{
-  serviceLinks[]->{
-    title,
-    "slug": slug.current
-  },
-  aboutLinks[]{
-    title,
-    href,
-  },
-  navItems[]{
-    linkText,
-    href,
-    isServiceLinks,
-    isAboutLinks
-  }
-}`;
-
-export const TERMS_OF_USE_QUERY = groq`*[_type == "termOfUse"][0] {
-  title,
-  content,
-  meta {
-    title,
-    description
-  }
-}`;
-
-export const PRIVACY_QUERY = groq`*[_type == "privacy"][0] {
-  title,
-  content,
-  meta {
-    title,
-    description
-  }
-}`;
-
-export const ACCESSIBILITY_QUERY = groq`*[_type == "accessibility"][0] {
-  title,
-  content,
-  meta {
-    title,
-    description
-  }
-}`;
-
-export const SURVEY_LINK_QUERY = groq`*[_type == "surveySection"][0]{
-  bgImage {
-    asset-> {
-      _id,
-      url
-    },
-    alt
-  },
-  cta,
-  youformId,
-  content,
-  bold,
-  meta {
-    title,
-    description
-  }
-}`;
-
-export const POPUP_CONTENT_QUERY = groq`*[_type == "popup" && isActive == true][0]{
-  title,
-  content,
-  isActive,
-}`;
-
-export const FEEDBACK_LINK_QUERY = groq`*[_type == "feedbackLink"][0]{
-  linkText,
-  youformId
-}`;
-
-export const ABOUT_PAGES_QUERY = groq`*[_type == "aboutPage" && isActive == true] | order(_createdAt desc){
-  title,
-  "slug": slug.current,
 }`;
 
 export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == true][0]{
@@ -761,20 +603,13 @@ export const SURVEY_SECTION_QUERY = groq`*[_type == "surveySection"][0]{
   bold,
 }`;
 
-export const NEWSLETTER_SECTION_QUERY = groq`*[_type == "newsletterSection"][0]{
-  bgImage {
-    asset-> {
-      _id,
-      url
-    },
-    alt
-  },
-  cta,
-  youformId,
-  content,
-  bold,
-}`;
-
+/**
+ * Not exported, unlike everything else here, because only HOME_PAGE_QUERY
+ * assembles it. Worth knowing: that is exactly what made it fragile. It used
+ * to sit inside the NEWSLETTER_SECTION_QUERY block, and a pass that removed
+ * the dead exports took this with it, because it does not begin with
+ * `export`.
+ */
 const OUR_PROGRAMS_SECTION_QUERY = groq`*[_type == "ourProgramsSection"][0]{
   sectionTitle,
   "bgImage": {
@@ -811,10 +646,7 @@ export const HERO_SECTION_QUERY = groq`*[_type == "heroSection"][0]{
 export const LAYOUT_QUERY = groq`{
   "siteSettings": ${SITE_SETTINGS_QUERY},
   "primaryCTAButton": ${PRIMARY_CTA_BUTTON_QUERY},
-  "navLinks": ${NAVIGATION_QUERY},
-  "newsletterSection": ${NEWSLETTER_SECTION_QUERY},
   "surveySection": ${SURVEY_SECTION_QUERY},
-  "footer": ${FOOTER_QUERY},
   "popupBanner": ${POPUP_BANNER_QUERY}
 }`;
 

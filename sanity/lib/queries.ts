@@ -771,7 +771,16 @@ export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == tru
     sectionParagraph,
     sectionImage {
       "image": image.asset->url,
-      "alt": image.alt
+      // alt sits on sectionImage, beside image, not inside it. This read
+      // image.alt, a field the post schema does not define, so every blog
+      // section rendered alt="" and typing alt text into the Studio would
+      // have changed nothing. The same projection in CAFE_PAGE_QUERY has
+      // always read it correctly. CH-028.
+      //
+      // Line comments only in here. A /* */ block inside the template
+      // literal parses as GROQ rather than as JavaScript and takes the whole
+      // query out, which shows up as a missing generated type.
+      alt
     }
   },
   ${SEO_QUERY}
@@ -1085,7 +1094,8 @@ export const OUR_PROGRAMS_QUERY = groq`
     image {
         asset->{
           url
-        }
+        },
+        alt
     },
     contactMessage
   },

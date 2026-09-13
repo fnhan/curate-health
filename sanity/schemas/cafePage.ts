@@ -164,9 +164,11 @@ export default defineType({
           name: "headline",
           title: "Headline",
           type: "string",
-          description: 'e.g. "Seasonal café menu"',
+          description: 'e.g. "Seasonal cafe menu"',
           validation: (Rule) =>
-            Rule.required().error("A headline is required for the menu section"),
+            Rule.required().error(
+              "A headline is required for the menu section"
+            ),
         }),
         defineField({
           name: "description",
@@ -176,7 +178,7 @@ export default defineType({
           description: "Short supporting line under the headline.",
           validation: (Rule) =>
             Rule.required().error(
-              "A description is required for the menu section",
+              "A description is required for the menu section"
             ),
         }),
         defineField({
@@ -186,14 +188,14 @@ export default defineType({
           description: 'e.g. "Download PDF menu"',
           validation: (Rule) =>
             Rule.required().error(
-              "A button label is required for the menu section",
+              "A button label is required for the menu section"
             ),
         }),
         defineField({
           name: "menuPdf",
           title: "Menu PDF",
           type: "file",
-          description: "Upload the current café menu as a PDF.",
+          description: "Upload the current cafe menu as a PDF.",
           options: {
             accept: "application/pdf",
           },
@@ -243,7 +245,8 @@ export default defineType({
           name: "closingLine",
           title: "Closing line",
           type: "string",
-          description: "Short line below the body (shown in italics), e.g. Visit us today!",
+          description:
+            "Short line below the body (shown in italics), e.g. Visit us today!",
         }),
       ],
     }),

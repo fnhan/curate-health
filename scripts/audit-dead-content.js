@@ -64,11 +64,43 @@ const appFiles = APP_DIRS.flatMap((dir) =>
  * documents was enough to make this script report that query as imported, so
  * the first run called five dead documents live. A note about a thing is not
  * a use of it.
+ *
+ * Order matters, and the wrong order is silent. queries.ts labels its
+ * sections with `//* Layout Query`, and that line contains a `/*` one
+ * character in. Stripping block comments first, a stray opener like that
+ * swallows everything up to the next real `*​/`, which here meant LAYOUT_QUERY
+ * vanished before it could be parsed and every query it assembles was
+ * reported dead. Line comments go first so `//*` is gone before anything
+ * looks for `/*`.
  */
 function stripComments(src) {
   return src
-    .replace(/\/\*[\s\S]*?\*\//g, " ")
-    .replace(/(^|[^:])\/\/.*$/gm, "$1");
+    .replace(/(^|[^:])\/\/.*$/gm, "$1")
+    .replace(/\/\*[\s\S]*?\*\//g, " ");
+}
+
+/**
+ * Refuses to continue if stripping lost a declaration.
+ *
+ * Three separate silent failures in this one file have come from source
+ * parsing rather than from the dataset, each reporting live content as dead.
+ * A wrong answer here proposes deleting something a page renders, so it stops
+ * instead of reporting.
+ */
+function assertNothingLost(raw, stripped, label) {
+  const count = (s) => (s.match(/export const \w+\s*=\s*groq/g) || []).length;
+  const before = count(raw);
+  const after = count(stripped);
+  if (before !== after) {
+    throw new Error(
+      `Refusing to report: comment stripping lost ${before - after} of ` +
+        `${before} query declarations in ${label}. Every check below reads ` +
+        `this, so the result would understate what is in use.`
+    );
+  }
+  if (before === 0) {
+    throw new Error(`Refusing to report: found no queries at all in ${label}.`);
+  }
 }
 
 const sourceOf = new Map(
@@ -118,13 +150,28 @@ const unregisteredFiles = schemaFiles.filter((s) => !importedBases.has(s.base));
  * Which queries select which types, and whether anything imports them.
  * ------------------------------------------------------------------ */
 
-const querySrc = stripComments(fs.readFileSync(QUERIES, "utf8"));
+const queryRaw = fs.readFileSync(QUERIES, "utf8");
+const querySrc = stripComments(queryRaw);
+assertNothingLost(queryRaw, querySrc, "sanity/lib/queries.ts");
 const queryBlocks = querySrc.split(/(?=export const \w+\s*=\s*groq)/);
 const queryNames = [...querySrc.matchAll(/export const (\w+)\s*=\s*groq/g)].map(
   (m) => m[1]
 );
 
-/** A query is live only if a file other than queries.ts names it. */
+/**
+ * Liveness is transitive, and getting that wrong is not a small error.
+ *
+ * Queries compose each other by interpolation inside this one file.
+ * LAYOUT_QUERY is assembled from SITE_SETTINGS_QUERY, NAVIGATION_QUERY,
+ * SURVEY_SECTION_QUERY, FOOTER_QUERY and POPUP_BANNER_QUERY, and only
+ * LAYOUT_QUERY is imported anywhere. A first version of this check called a
+ * query live only when a file outside queries.ts named it, which reported all
+ * five of those as dead and their types as unread. The popup banner, the
+ * footer and the whole navigation are not dead.
+ *
+ * So a query is live if something outside this file names it, or if a live
+ * query interpolates it, repeated until nothing new is added.
+ */
 const liveQueries = new Set(
   queryNames.filter((name) =>
     appFiles.some(
@@ -132,6 +179,27 @@ const liveQueries = new Set(
     )
   )
 );
+
+const bodyOf = new Map();
+for (const block of queryBlocks) {
+  const named = block.match(/export const (\w+)\s*=\s*groq/);
+  if (named) bodyOf.set(named[1], block);
+}
+
+for (let changed = true; changed; ) {
+  changed = false;
+  for (const name of [...liveQueries]) {
+    const body = bodyOf.get(name);
+    if (!body) continue;
+    for (const m of body.matchAll(/\$\{(\w+)\}/g)) {
+      if (bodyOf.has(m[1]) && !liveQueries.has(m[1])) {
+        liveQueries.add(m[1]);
+        changed = true;
+      }
+    }
+  }
+}
+
 const deadQueries = queryNames.filter((n) => !liveQueries.has(n));
 
 /**
@@ -211,10 +279,21 @@ async function main() {
     console.log("   none\n");
   } else {
     for (const t of notEditable) {
+      /**
+       * "Selected", not "renders". A live query can fetch a field the
+       * component then ignores: LAYOUT_QUERY pulls footer, navLinks and
+       * newsletterSection on every page and shared/layout.tsx destructures
+       * none of the three. Saying those documents render would be wrong, and
+       * would be the kind of overstatement that sends somebody looking for a
+       * bug that is not there. Whether the data reaches the page is a
+       * question this script cannot answer, so it does not claim to.
+       */
       const live = selectedTypes.has(t);
       console.log(
         `   ${t.padEnd(20)} ${String(byType.get(t).length).padStart(3)} docs   ` +
-          (live ? "RENDERS, and cannot be edited" : "read by nothing")
+          (live
+            ? "selected by a live query, and cannot be edited"
+            : "read by nothing")
       );
       if (live) for (const w of selectedBy.get(t)) console.log(`        read by ${w}`);
     }

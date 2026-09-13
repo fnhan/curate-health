@@ -6,7 +6,7 @@ import cn from "classnames";
 import { format, parseISO } from "date-fns";
 import { getMostRecentPosts } from "lib/utils";
 
-import { POSTS_QUERYResult, POST_QUERYResult } from "@/sanity.types";
+import { POSTS_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
 
@@ -30,7 +30,17 @@ export default async function FeaturedBlogPosts() {
   );
 }
 
-function Post({ post }: { post: POST_QUERYResult }) {
+/**
+ * The element type of the list this actually renders.
+ *
+ * It was typed as POST_QUERYResult, the result of a query fetching one post by
+ * slug, which this component never ran. The posts come from POSTS_QUERY, so a
+ * change to that projection could not reach this prop and the mismatch would
+ * have gone unreported.
+ */
+type FeaturedPost = POSTS_QUERYResult[number];
+
+function Post({ post }: { post: FeaturedPost }) {
   if (!post) {
     return null;
   }

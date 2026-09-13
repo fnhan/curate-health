@@ -5,6 +5,8 @@ import ServiceHeroSection from "@/components/layout/services-pages/service-hero-
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { serviceCrumbs, treatmentCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   renamedServicePath,
@@ -137,6 +139,20 @@ export default async function ServiceOrTreatmentPage({
             alt: treatment.heroImage?.heroAlt!,
           }}
         />
+        {/*
+          The category is in the trail even though it is not in the URL. The
+          restructure flattened treatments to /services/{treatment}, so this is
+          the only thing on the page that says Physiotherapy sits under
+          Clinical Care. See lib/breadcrumbs.ts.
+        */}
+        <Breadcrumbs
+          crumbs={treatmentCrumbs(
+            treatment.title!,
+            params.slug,
+            treatment.serviceName,
+            treatment.serviceSlug
+          )}
+        />
         <ServicesNavigation services={services} />
         <TreatmentContent treatment={treatment} primaryCTA={primaryCTA} />
       </>
@@ -155,6 +171,7 @@ export default async function ServiceOrTreatmentPage({
       <ServiceHeroSection
         hero_image={{ asset: { url: hero_image! }, alt: hero_alt! }}
       />
+      <Breadcrumbs crumbs={serviceCrumbs(service.title!, params.slug)} />
       <ServicesNavigation services={services} />
       <ServiceContent service={service} />
     </>

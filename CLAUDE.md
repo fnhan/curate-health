@@ -771,6 +771,56 @@ node scripts/add-social-and-hours.js   # dry run, re-runnable, writes only what 
 
 None anywhere, and no `BreadcrumbList` schema. Add a component on every page more than one level deep, with matching markup.
 
+**Done 2026-09-13.** 35 pages carry a trail, the 8 hubs carry none, and the
+homepage carries none.
+
+Every trail is decided in `lib/breadcrumbs.ts` and rendered by
+`components/shared/breadcrumbs.tsx`, which emits the visible list **and** the
+`BreadcrumbList` from the same `Crumb[]`. They cannot disagree, because there
+is no way to add one without the other. Google checks that the markup
+describes what the page shows.
+
+**The trail is the hierarchy, not the URL, and that is the point here.**
+Treatments live flat at `/services/physiotherapy`; the restructure took the
+category out of the URL. The category is still real, and after the flattening
+the breadcrumb is the only thing on the page that says Physiotherapy sits under
+Clinical Care. So the trail reads Home > Services > Clinical Care >
+Physiotherapy, four items over a two segment URL. schema.org and Google both
+treat `BreadcrumbList` as a statement about position in the site rather than a
+copy of the path, so this is allowed, and it puts back a signal the
+restructure threw away.
+
+**`/legal/*` omits the Legal level rather than rendering it unlinked.** There
+is no `/legal` index and none is planned. Google's guidance expects a URL on
+every item except the last, and an intermediate `ListItem` without one risks
+the trail not being shown at all, which is the only reason to build these. So
+it is Home > Terms of Use, which is both complete and true. If a `/legal`
+index is ever built, add the level in `lib/breadcrumbs.ts` and nowhere else.
+
+**Names come from the navigation, not from the page's own heading.** The five
+about pages are named in `ABOUT_PAGE_NAMES`, matching the strings in
+`SITE_SETTINGS_QUERY` and `ABOUT_INDEX_QUERY`. `/about/pillars-of-health`
+carries the heading "Redefining Holistic Wellness with the 5 Pillars of
+Health", and a crumb has to match the link the visitor followed. Rename one and
+rename it in all three.
+
+**Crumb names are trimmed.** `treatments.title` for Outdoor Pilates is stored
+as `"Outdoor Pilates "`. Untrimmed, the rendered HTML collapses that space and
+the JSON-LD keeps it, so the two disagree over an invisible character, which
+the acceptance check caught. Trailing whitespace in the dataset is a known
+leftover, see the CH-020 note.
+
+```bash
+# Acceptance. Exits 1 on a missing trail, a mismatch between what is shown and
+# what is published, an intermediate item with no URL, a crumb pointing at a
+# non-200, or a hub that grew a trail it should not have.
+node scripts/audit-breadcrumbs.js http://localhost:3000
+node scripts/audit-breadcrumbs.js https://www.curatehealth.ca
+```
+
+That check was run against production before the merge, where it reported all
+35 pages missing a trail, which is what proves it is looking.
+
 ### CH-010 Orphaned pages
 
 Seven pages are unreachable by internal link from the homepage within three hops:

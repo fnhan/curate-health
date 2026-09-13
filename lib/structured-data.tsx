@@ -1,4 +1,5 @@
 import { BASEURL, BRAND_NAME } from "@/app/site-settings";
+import type { Crumb } from "@/lib/breadcrumbs";
 import { treatmentPath } from "@/lib/service-urls";
 import {
   CAFE_PAGE_QUERYResult,
@@ -633,5 +634,50 @@ export function buildProductsIndexJsonLd(products: ProductLike[] | null) {
     name: "Products",
     numberOfItems: items.length,
     itemListElement: items,
+  }) as JsonLdObject;
+}
+
+/**
+ * BreadcrumbList, from the same crumbs the page renders. CH-009.
+ *
+ * Takes the Crumb[] that <Breadcrumbs> displays rather than rebuilding a trail
+ * from the path, so the markup cannot describe a hierarchy the page does not
+ * show. Google checks for exactly that.
+ *
+ * The last item carries a name and no item URL, which is the shape Google
+ * documents for the page being viewed. Every earlier item must have one: an
+ * intermediate ListItem without a URL is the case that risks the trail being
+ * dropped from the result entirely, which is why lib/breadcrumbs.ts leaves a
+ * level out rather than emitting one it cannot link.
+ *
+ * Fewer than two items produces nothing. A BreadcrumbList holding only Home
+ * states no position.
+ */
+export function buildBreadcrumbJsonLd(crumbs: Crumb[] | null | undefined) {
+  if (!crumbs || crumbs.length < 2) return null;
+
+  const itemListElement = crumbs.map((crumb, index) => {
+    const isLast = index === crumbs.length - 1;
+
+    return stripEmpty({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: isLast || !crumb.path ? undefined : absoluteUrl(crumb.path),
+    });
+  });
+
+  // A gap in the middle would publish a trail Google may refuse to show, so
+  // say nothing rather than say it badly.
+  const missingUrl = itemListElement
+    .slice(0, -1)
+    .some((item) => !(item as JsonLdObject).item);
+
+  if (missingUrl) return null;
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement,
   }) as JsonLdObject;
 }

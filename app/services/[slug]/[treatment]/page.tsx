@@ -18,6 +18,8 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { treatmentCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { renamedTreatmentSlug, treatmentPath } from "@/lib/service-urls";
 import { JsonLdScript, buildTreatmentJsonLd } from "@/lib/structured-data";
@@ -122,6 +124,14 @@ export default async function TreatmentPage({
           asset: { url: heroImage?.asset?.url! },
           alt: heroImage?.heroAlt!,
         }}
+      />
+      <Breadcrumbs
+        crumbs={treatmentCrumbs(
+          treatment.title!,
+          params.treatment,
+          treatment.serviceName,
+          treatment.serviceSlug
+        )}
       />
       <ServicesNavigation services={services} />
       <TreatmentContent treatment={treatment} primaryCTA={primaryCTA} />

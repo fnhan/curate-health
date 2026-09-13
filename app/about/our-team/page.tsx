@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 
 import TeamMembersSection from "@/app/about/our-team/team-members-section";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { aboutCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { OUR_TEAM_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -19,6 +21,7 @@ export default async function OurTeamPage() {
 
   return (
     <>
+      <Breadcrumbs crumbs={aboutCrumbs("our-team")} />
       <section className="bg-white">
         <div className="container space-y-4 py-12 font-light md:py-14 2xl:py-20">
           <h1 className="text-3xl text-primary md:text-4xl 2xl:text-6xl">

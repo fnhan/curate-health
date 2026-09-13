@@ -46,3 +46,4 @@ dist
 .claude/
 .share-images/
 .tmp/
+.dead-content-verified.json

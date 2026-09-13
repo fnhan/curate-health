@@ -899,6 +899,66 @@ Concentration: `/our-programs` 7, the two blog posts 6, `/services/curate-lifest
 
 Draft descriptive alt text from page context. Frank approves before it goes in.
 
+**Done 2026-09-13.** 20 blanks across 43 pages, now 0. Six were genuinely
+decorative and stay empty.
+
+**The alt text was written from the images, not from the page context this
+ticket describes.** Every photo was fetched and looked at. Writing a
+description of an image nobody opened is inventing content, and it shows: the
+first draft called the essential series photo a resistance band exercise, and
+Frank corrected it to a functional pulley machine.
+
+**Two of these would have gone nowhere as data, fixed in #235 first.**
+`GET_POST_BY_SLUG_QUERY` selected `"alt": image.alt` while the post schema
+stores it at `sectionImage.alt`, so all six blog values would have rendered
+empty whatever an editor typed. `ourPrograms.exploreYourOptions.image` had no
+alt field in the schema, the query or the component. Check the path end to
+end before drafting copy for a field.
+
+**Three alt shapes are in use across the schemas**, and a projection has to
+match its own:
+
+| Shape | Schemas |
+| ----------------------------------- | --- |
+| alt inside the image type | 17 |
+| alt beside it, in a wrapper object | 6, including `cafePage` and `treatment` |
+| a renamed sibling, `heroAlt`, `ctaBgAlt` | 3 |
+
+Not worth normalising. A migration touches every document and every query to
+change nothing a visitor sees, and would risk the exact bug it prevents. The
+defence is the check: stored alt was compared against rendered alt across 249
+images on 43 pages, and after #235 there are no other mismatches.
+
+**Two alt values were already live and wrong.** One misspelled kombucha. The
+other was an entire assistant reply pasted into the field, `Here's the alt
+text: Alt Text: "...`, preamble, label and unterminated quote, visible in the
+markup of `/cafe`. Read what goes into these fields.
+
+**"What we cook with" was merged into "Food Is Medicine",** cafe sections 6 to
+5. That section was added in #230 without an image, so it rendered a bare
+`<img>` with no source, and the library holds no photograph of ingredients in
+the cafe's own register: those five photos are phone shots of real items in
+the space, and a styled stock flat-lay sits visibly outside it. The specifics
+lead the merged paragraph, because straight concatenation opened on claims any
+cafe could make and buried the only lines nobody else can say. Split it back
+out when there is a real photograph of the ingredients.
+
+```bash
+# Acceptance. Exits 1 on any image without alt that is not on the
+# decorative list inside the script.
+node scripts/audit-alt-text.js https://www.curatehealth.ca
+node scripts/audit-alt-text.js --sanity   # names the document and field
+```
+
+**Patch the array, not its indexes.** `scripts/apply-alt-text.js` writes
+`additionalSections` whole, because removing one entry shifts every index
+after it. Its first run pushed three `additionalSections[n].sectionImage.alt`
+patches and then the array write in the same transaction; Sanity applied them
+in order and the array overwrote all three with the values it had read
+beforehand. The script reported success and three alt values were silently
+lost. Indexed patches to an array being rewritten in the same transaction are
+always lost. Fold them into the array instead.
+
 ---
 
 ## Phase 4: content structure

@@ -21,7 +21,7 @@ const ExploreYourOptions = ({
           <Image
             sizes="50vw"
             src={exploreYourOptions?.image?.asset?.url!}
-            alt=""
+            alt={exploreYourOptions?.image?.alt ?? ""}
             fill
             objectPosition="100% 18%"
             className="scale-110 object-cover"

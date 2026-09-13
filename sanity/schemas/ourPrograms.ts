@@ -391,6 +391,20 @@ export default defineType({
           name: "image",
           type: "image",
           title: "Background Image",
+          /*
+           * The other four blocks on this page each carry an alt field and
+           * this one did not, so its photo shipped with a hardcoded alt="".
+           * There was nowhere in the Studio to describe it. CH-028.
+           */
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Alt Text",
+              description:
+                "What the photo shows, for screen readers and search engines. Describe the subject rather than naming the file.",
+            },
+          ],
         },
         {
           name: "contactMessage",

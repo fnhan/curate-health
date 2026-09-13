@@ -2,12 +2,14 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { aboutCrumbs } from "@/lib/breadcrumbs";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -82,6 +84,7 @@ export default async function MissionAndValuesPage() {
         alt={heroSection?.heroImage?.alt || ""}
         className="h-[400px] w-full object-cover md:h-[550px]"
       />
+      <Breadcrumbs crumbs={aboutCrumbs("mission-and-values")} />
       {/*
         This page had no H1 at all, which CH-011 records. Every other page
         takes its heading from a `heroTitle` field in Sanity, but this

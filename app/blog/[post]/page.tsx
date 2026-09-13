@@ -5,6 +5,8 @@ import { AlternatingSections } from "@/components/shared/alternating-sections";
 import BlogAuthorByline, {
   blogAuthorShouldRender,
 } from "@/components/shared/blog-author-byline";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { postCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { formatDate } from "@/lib/utils";
 import { GET_POST_BY_SLUG_QUERYResult } from "@/sanity.types";
@@ -41,6 +43,7 @@ export default async function BlogPostPage({
           className="h-[400px] w-full object-cover md:h-[550px]"
         />
       </section>
+      <Breadcrumbs crumbs={postCrumbs(title!, params.post)} />
       <div className="pt-20">
         <div className="container flex flex-col items-center gap-8 text-primary md:flex-row md:items-start md:justify-between">
           <h1 className="text-balance text-center text-2xl md:text-left md:text-4xl">

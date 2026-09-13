@@ -2,7 +2,9 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { Button } from "@/components/ui/button";
+import { aboutCrumbs } from "@/lib/breadcrumbs";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { OUR_STORY_PAGE_QUERYResult } from "@/sanity.types";
@@ -32,6 +34,7 @@ export default async function OurStoryPage() {
           height={344}
           className="h-[344px] w-full object-cover md:h-[336px] lg:h-[344px]"
         />
+        <Breadcrumbs crumbs={aboutCrumbs("our-story")} />
         <div className="bg-secondary">
           <div className="container">
             <div className="max-w-[80ch] space-y-2 text-pretty py-14 font-light md:space-y-5 md:py-20 2xl:space-y-12">

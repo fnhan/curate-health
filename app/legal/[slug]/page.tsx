@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 
 import { PortableText } from "next-sanity";
 
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import Layout from "@/components/shared/layout";
+import { legalCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   LAYOUT_QUERYResult,
@@ -29,10 +31,16 @@ export default async function LegalPage({
     return notFound();
   }
 
-  const { body } = legalPage!;
+  const { body, title } = legalPage!;
 
   return (
     <Layout layout={layout}>
+      {/*
+        Home > Terms of Use, with no Legal level. There is no /legal index, so
+        a Legal crumb would be a dangling text node in a trail Google may then
+        refuse to show. See lib/breadcrumbs.ts.
+      */}
+      <Breadcrumbs crumbs={legalCrumbs(title!, params.slug)} />
       <div className="bg-white">
         <div className="container py-20">
           <div className="container prose">

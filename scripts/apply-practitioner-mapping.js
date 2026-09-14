@@ -66,17 +66,45 @@ const PROVIDERS = {
   "outdoor-sauna": [],
 };
 
-/** Jane addresses for the treatments that have their own booking page. */
+/**
+ * Jane addresses, read off the live booking site rather than guessed.
+ *
+ * Jane groups sessions under a discipline, and a discipline URL lands on that
+ * service with its own sessions listed, which is what a treatment page wants:
+ * the visitor picks the length once they are there. A treatment URL is used
+ * only where the service is a single bookable thing.
+ *
+ *   1 Chiropractic          16 Physiotherapy
+ *   10 Massage Therapy      19 Psychotherapy
+ *   12 Naturopathic         22 Recovery Sanctuary Classes
+ *   13 Personal Training    23 Custom Products
+ */
+const JANE = "https://curatehealth.janeapp.com/#";
+
 const BOOKING = {
-  "outdoor-yoga-therapy":
-    "https://curatehealth.janeapp.com/locations/curate-health-recovery-sanctuary/book#/discipline/22/treatment/80",
-  "outdoor-pilates":
-    "https://curatehealth.janeapp.com/locations/curate-health-recovery-sanctuary/book#/discipline/22/treatment/78",
-  "outdoor-cold-plunge":
-    "https://curatehealth.janeapp.com/locations/curate-health-recovery-sanctuary/book#/discipline/22/treatment/81",
-  // Outdoor Sauna is not here on purpose. Frank gave one URL for "cold plunge
-  // and sauna", and treatment/81 can only be one of them. Asking beats
-  // pointing the sauna button at a cold plunge booking.
+  "chiropractic-care": `${JANE}/discipline/1`,
+  "massage-therapy": `${JANE}/discipline/10`,
+  naturopathy: `${JANE}/discipline/12`,
+  "fitness-training": `${JANE}/discipline/13`,
+  "performance-training": `${JANE}/discipline/13`,
+  physiotherapy: `${JANE}/discipline/16`,
+  psychotherapy: `${JANE}/discipline/19`,
+  "outdoor-yoga-therapy": `${JANE}/discipline/22/treatment/80`,
+  "outdoor-pilates": `${JANE}/discipline/22/treatment/78`,
+  /*
+   * Cold plunge and sauna are one bookable service in Jane, "Cold Plunge &
+   * Sauna (Individual)". Booking either gets you both, so the two pages share
+   * the address rather than one of them falling back to the front page.
+   */
+  "outdoor-cold-plunge": `${JANE}/discipline/22/treatment/81`,
+  "outdoor-sauna": `${JANE}/discipline/22/treatment/81`,
+  /*
+   * Deliberately absent: acupuncture, nutritional counselling, exercise
+   * rehab, breathwork, meditation and Flowpresso have no discipline of their
+   * own on the public booking site. Their buttons fall back to the site-wide
+   * link, which is correct: sending someone to a discipline that does not
+   * cover what they read about is worse than sending them to the front page.
+   */
 };
 
 const TREATS = {
@@ -107,9 +135,23 @@ const TREATS = {
     "Nutrition",
     "Lifestyle counselling",
   ],
-  /* His, and only the three he named. "Include" means it is a partial list,
-     so it is left partial rather than padded out. */
-  "dr-eric-leong": ["Type 2 diabetes", "Liver cirrhosis", "Ulcer disease"],
+  /*
+   * The three he named, followed by the seven drafted for him. He said
+   * "include", meaning alongside the drafted list rather than instead of it,
+   * which a first pass read the other way round and left at three.
+   */
+  "dr-eric-leong": [
+    "Type 2 diabetes",
+    "Liver cirrhosis",
+    "Ulcer disease",
+    "Digestive and gastrointestinal concerns",
+    "Liver health",
+    "Metabolic health",
+    "Lifestyle change for long-term conditions",
+    "Nutrition as part of medical care",
+    "Preventive health",
+    "Ongoing symptom management",
+  ],
 
   /* Mine, to be replaced. */
   "dr-frank-nhan": [

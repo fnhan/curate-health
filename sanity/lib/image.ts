@@ -41,3 +41,42 @@ export const urlForShareImage = (source: Image) => {
     .auto("format")
     .url();
 };
+
+/**
+ * The one size every practitioner photo is shown at. CH-104.
+ *
+ * 4:5, because the seven source images range from 0.65 to 1.50 in ratio, from
+ * tall portraits to wide landscapes, and rendering them at their natural shape
+ * gave a team grid of seven different card heights.
+ *
+ * The crop is taken here rather than by CSS object-cover, and the difference
+ * matters. object-cover crops from the centre with no say in where, which on a
+ * 1.50 landscape cuts most of the frame away and can take part of a head with
+ * it. Asking Sanity for the crop honours the hotspot, which is already enabled
+ * on the field, so badly framed photos are fixed by dragging a box in the
+ * Studio rather than by asking for a code change.
+ *
+ * 800x1000 is double the largest size the photo is ever painted, so it stays
+ * sharp on a 2x screen. A source narrower than 800 is upscaled and will look
+ * soft: that is a photograph to replace, not a value to lower.
+ */
+export const PRACTITIONER_PHOTO_WIDTH = 800;
+export const PRACTITIONER_PHOTO_HEIGHT = 1000;
+
+export const urlForPractitionerPhoto = (source: Image) => {
+  /*
+   * The builder throws rather than returning null when the object it is
+   * handed carries no asset, so a `|| photo.url` fallback at the call site
+   * does not catch it. A projection that selected the url but not the asset
+   * reference 500'd all seven pages that way. A photo is never worth a 500.
+   */
+  if (!source || !(source as { asset?: unknown }).asset) return undefined;
+
+  return imageBuilder
+    ?.image(source)
+    .width(PRACTITIONER_PHOTO_WIDTH)
+    .height(PRACTITIONER_PHOTO_HEIGHT)
+    .fit("crop")
+    .auto("format")
+    .url();
+};

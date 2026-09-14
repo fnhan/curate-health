@@ -12,59 +12,66 @@ import { treatmentPath } from "@/lib/service-urls";
 import { JsonLdScript, buildPractitionerJsonLd } from "@/lib/structured-data";
 import { PRACTITIONER_BY_SLUG_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
+import {
+  PRACTITIONER_PHOTO_HEIGHT,
+  PRACTITIONER_PHOTO_WIDTH,
+  urlForPractitionerPhoto,
+} from "@/sanity/lib/image";
 import { PRACTITIONER_BY_SLUG_QUERY } from "@/sanity/lib/queries";
 
 /**
- * One page per practitioner. CH-104.
+ * One page per practitioner. CH-104, laid out to the approved mockup.
  *
- * Seven credentialed people shared one page, and their bios sat inside
- * collapsed accordions, which left 203 words of visible text for the whole
- * team. Searching any of them by name landed nowhere. This is the single
- * largest gap between what the clinic is and what a search engine can see.
+ * Two columns. The left is the photo, then whatever the booking situation is,
+ * then Languages. The right is the name, the credential list, the bio, then
+ * Commonly Treats. Services runs full width underneath both.
+ *
+ * That split is not arbitrary. Everything on the left is about reaching this
+ * person; everything on the right is who they are. A first version put the
+ * booking button in the right column above the bio, which pushed the bio, the
+ * thing this page exists for, down the page.
  *
  * WHAT IS DELIBERATELY NOT HERE
  *
  * Registration numbers. The restructure brief settled this: they belong on a
- * receipt, not a public page. CLAUDE.md's CH-104 text still asks for them and
- * is stale on that point.
+ * receipt, not a public page. Availability, which lives in Jane and would go
+ * stale here in a week. A short bio, which exists for nobody.
  *
- * Availability. It lives in Jane and would go stale here the first week.
- *
- * A short bio. No such copy exists for anyone, and Frank chose to drop the
- * field rather than have one written.
- *
- * Commonly treats and the services list are both allowed to be empty, and
- * their sections are left out rather than rendered as a heading with nothing
- * under it. Everything under commonly treats reads as a clinical claim and
- * needs the practitioner's own sign-off.
+ * Commonly Treats and Services are both allowed to be empty, and their
+ * sections are left out rather than rendered as a heading over nothing.
  */
 
 /**
  * Where the booking button goes when someone has no Jane profile.
  *
  * A choice rather than a URL, so replacing the referral form updates this
- * button with it instead of leaving it on the old file.
+ * with it instead of leaving the button on the old file.
  */
 const CTA_TARGETS: Record<string, string> = {
   curateLifestyleReferralForm: "/services/curate-lifestyle#referral",
   curateLifestyleProgram: "/services/curate-lifestyle",
 };
 
-/*
- * No generateStaticParams, deliberately.
- *
- * It would need the slug list at build time, and sanityFetch reads
- * draftMode(), which throws outside a request scope: "draftMode was called
- * outside a request scope", and the whole route fails to build. Every other
- * dynamic route here does the same thing and renders on demand with ISR,
- * which also means adding a practitioner in the Studio publishes their page
- * without a deploy.
- */
+/** The first name, for "Book with Ariel" and "Services Ariel offers". */
+function firstName(name: string) {
+  const parts = name.replace(/^Dr\.?\s+/i, "").split(/\s+/);
+  return parts[0] || name;
+}
+
 function fetchPractitioner(slug: string) {
   return sanityFetch<PRACTITIONER_BY_SLUG_QUERYResult>({
     query: PRACTITIONER_BY_SLUG_QUERY,
     params: { slug },
   });
+}
+
+/** A small caps label, used for Languages and Commonly Treats. */
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+      {children}
+    </p>
+  );
 }
 
 export default async function PractitionerPage({
@@ -96,6 +103,7 @@ export default async function PractitionerPage({
 
   const ctaHref = bookingCtaTarget ? CTA_TARGETS[bookingCtaTarget] : undefined;
   const services = (provides ?? []).filter((t) => t.title && t.slug);
+  const given = firstName(name!);
 
   return (
     <>
@@ -105,138 +113,145 @@ export default async function PractitionerPage({
       />
       <Breadcrumbs crumbs={practitionerCrumbs(name!, params.practitioner)} />
 
-      <article className="bg-white pb-20 pt-8 text-primary md:pb-28">
-        <div className="container flex flex-col gap-12 md:flex-row md:gap-16">
-          {photo?.url ? (
-            <div className="md:w-[320px] md:shrink-0 lg:w-[380px]">
-              <Image
-                src={photo.url}
-                alt={photo.alt || name || ""}
-                width={760}
-                height={950}
-                priority
-                sizes="(min-width: 1024px) 380px, (min-width: 768px) 320px, 100vw"
-                className="w-full object-cover"
-              />
-            </div>
-          ) : null}
-
-          <div className="flex max-w-[70ch] flex-col gap-8">
-            <header className="flex flex-col gap-3">
-              <h1 className="text-3xl font-light md:text-5xl">{name}</h1>
-              {credentials?.length ? (
-                <ul className="flex flex-col gap-1 text-base font-light text-primary/80">
-                  {credentials.map((credential) => (
-                    <li key={credential}>{credential}</li>
-                  ))}
-                </ul>
+      <article className="bg-white pb-16 pt-6 text-primary md:pb-24">
+        <div className="container">
+          <div className="flex flex-col gap-10 md:flex-row md:gap-14">
+            {/* Left: photo, how to reach them, languages. */}
+            <div className="flex flex-col gap-6 md:w-[340px] md:shrink-0 lg:w-[400px]">
+              {photo?.url ? (
+                <Image
+                  src={urlForPractitionerPhoto(photo as never) || photo.url}
+                  alt={photo.alt || name || ""}
+                  width={PRACTITIONER_PHOTO_WIDTH}
+                  height={PRACTITIONER_PHOTO_HEIGHT}
+                  priority
+                  sizes="(min-width: 1024px) 400px, (min-width: 768px) 340px, 100vw"
+                  className="aspect-[4/5] w-full object-cover grayscale"
+                />
               ) : null}
-              {languages?.length ? (
-                <p className="text-sm font-light text-primary/60">
-                  Speaks {languages.join(", ")}
-                </p>
-              ) : null}
-            </header>
 
-            {/*
-              The booking block has three states and the third one matters.
-              A Jane URL gives a button straight to that person's own booking
-              page. No Jane URL but a note explains how someone reaches them
-              instead, which is Dr. Leong: he is not publicly bookable and
-              patients come through the Curate Lifestyle Program. Neither, and
-              the block is omitted rather than pointing somewhere generic,
-              which is the case for anyone who does not take bookings.
-              Dr. Leong is configured with the button but no note, so the
-              block renders on the strength of the button alone rather than
-              disappearing. A referral form with a label is meaningful without
-              a paragraph explaining it; an empty bordered box is not.
-            */}
-            {janeBookingUrl ? (
-              <div>
+              {/*
+                Three booking states. A Jane URL gives a button straight to
+                that person. No Jane URL gives the note and whatever the
+                record's CTA points at, which is Dr. Leong: he has no bookable
+                session in Jane and is reached through the Curate Lifestyle
+                Program. Neither gives nothing at all, rather than a button
+                pointing somewhere generic.
+              */}
+              {janeBookingUrl ? (
                 <a
                   href={janeBookingUrl}
                   {...externalLinkProps(janeBookingUrl)}
-                  className="inline-flex border border-primary bg-primary px-8 py-3 text-base font-light text-white transition-colors hover:bg-transparent hover:text-primary"
+                  className="block w-full border border-primary bg-primary px-6 py-4 text-center text-base font-medium text-white transition-colors hover:bg-transparent hover:text-primary"
                 >
-                  Book with {name}
+                  Book with {given}
                 </a>
-              </div>
-            ) : bookingNote || (ctaHref && bookingCtaLabel) ? (
-              <div className="flex flex-col items-start gap-4 border border-secondary bg-platinum/40 p-6">
-                {bookingNote ? (
-                  <p className="text-pretty font-light leading-7">
-                    {bookingNote}
-                  </p>
-                ) : null}
-                {ctaHref && bookingCtaLabel ? (
-                  <Link
-                    href={ctaHref}
-                    className="inline-flex border border-primary px-6 py-2.5 text-base font-light transition-colors hover:bg-primary hover:text-white"
-                  >
-                    {bookingCtaLabel}
-                  </Link>
-                ) : null}
-              </div>
-            ) : null}
-
-            {fullBio?.length ? (
-              <div className="prose max-w-none text-primary prose-p:font-light prose-p:leading-7">
-                <PortableText value={fullBio} />
-              </div>
-            ) : null}
-
-            {commonlyTreats?.length ? (
-              <section className="flex flex-col gap-3">
-                {/*
-                  The heading is editable because "Commonly treats" is wrong
-                  for anyone who is not a regulated health professional. A
-                  yoga teacher does not treat people, and that heading over a
-                  list of class focuses would read as a clinical claim nobody
-                  made.
-                */}
-                <h2 className="text-xl font-medium">
-                  {commonlyTreatsLabel || "Commonly treats"}
-                </h2>
-                <ul className="flex flex-wrap gap-2">
-                  {commonlyTreats.map((item) => (
-                    <li
-                      key={item}
-                      className="border border-secondary px-3 py-1 text-sm font-light"
+              ) : bookingNote || (ctaHref && bookingCtaLabel) ? (
+                <div className="flex flex-col gap-4">
+                  {bookingNote ? (
+                    <div className="border border-border bg-platinum/40 p-5">
+                      <p className="text-pretty text-sm font-light leading-6">
+                        {bookingNote}
+                      </p>
+                    </div>
+                  ) : null}
+                  {ctaHref && bookingCtaLabel ? (
+                    <Link
+                      href={ctaHref}
+                      className="block w-full border border-primary px-6 py-4 text-center text-base font-medium transition-colors hover:bg-primary hover:text-white"
                     >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
+                      {bookingCtaLabel}
+                    </Link>
+                  ) : null}
+                </div>
+              ) : null}
 
-            {services.length ? (
-              <section className="flex flex-col gap-3">
-                <h2 className="text-xl font-medium">Services</h2>
-                <ul className="flex flex-col gap-1">
-                  {services.map((service) => (
-                    <li key={service.slug}>
-                      <Link
-                        className="font-light hover:underline"
-                        href={treatmentPath(service.serviceSlug, service.slug!)}
+              {languages?.length ? (
+                <div className="space-y-1">
+                  <FieldLabel>Languages</FieldLabel>
+                  <p className="font-light">{languages.join(", ")}</p>
+                </div>
+              ) : null}
+            </div>
+
+            {/* Right: who they are. */}
+            <div className="flex max-w-[72ch] flex-col gap-6">
+              <header className="space-y-3">
+                <h1 className="text-4xl font-light md:text-6xl">{name}</h1>
+                {credentials?.length ? (
+                  <ul className="space-y-0.5 text-base font-light text-muted-foreground">
+                    {credentials.map((credential) => (
+                      <li key={credential}>{credential}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </header>
+
+              {fullBio?.length ? (
+                <div className="prose max-w-none text-primary prose-p:font-light prose-p:leading-7">
+                  <PortableText value={fullBio} />
+                </div>
+              ) : null}
+
+              {commonlyTreats?.length ? (
+                <section className="space-y-3 pt-2">
+                  {/*
+                    The heading is editable because "Commonly treats" is wrong
+                    for anyone who is not a regulated health professional. A
+                    yoga teacher does not treat people, and that heading over
+                    a list of class focuses would read as a clinical claim
+                    nobody made.
+                  */}
+                  <FieldLabel>
+                    {commonlyTreatsLabel || "Commonly treats"}
+                  </FieldLabel>
+                  <ul className="flex flex-wrap gap-2">
+                    {commonlyTreats.map((item) => (
+                      <li
+                        key={item}
+                        className="border border-border px-3 py-1.5 text-sm font-light"
                       >
-                        {service.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
-
-            <p className="pt-2">
-              <Link
-                href="/about/our-team"
-                className="font-light hover:underline"
-              >
-                Back to the team
-              </Link>
-            </p>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ) : null}
+            </div>
           </div>
+
+          {/* Full width, below both columns. */}
+          {services.length ? (
+            <section className="mt-14 border-t border-border pt-12 md:mt-20">
+              <h2 className="mb-6 text-2xl font-light md:text-3xl">
+                Services {given} offers
+              </h2>
+              <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {services.map((service) => (
+                  <li key={service.slug}>
+                    <Link
+                      href={treatmentPath(service.serviceSlug, service.slug!)}
+                      className="group flex h-full items-center justify-between gap-4 border border-border bg-white p-6 transition-colors hover:bg-platinum/40"
+                    >
+                      <span className="space-y-1">
+                        <span className="block text-lg font-light group-hover:underline">
+                          {service.title}
+                        </span>
+                        {service.serviceName ? (
+                          <span className="block text-sm text-muted-foreground">
+                            {service.serviceName}
+                          </span>
+                        ) : null}
+                      </span>
+                      <span aria-hidden="true" className="text-lg">
+                        &rsaquo;
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
         </div>
       </article>
     </>
@@ -254,13 +269,6 @@ export async function generateMetadata({
   // throws a 500 before the 404 can happen. See CH-001.
   if (!person) notFound();
 
-  /*
-   * The fallbacks are built from the record rather than left generic, because
-   * none of the seven has seo filled in yet and a page that says only
-   * "Curate Health" in the result is the defect CH-024 exists to fix. A title
-   * of "{name}, {first credential}" is what somebody searching a name expects
-   * to see.
-   */
   const lead = person.credentials?.[0];
 
   /*
@@ -269,12 +277,10 @@ export async function generateMetadata({
    * "| Curate Health" costs 15 of the 60 characters Google shows, so the page
    * title has 45. "Safa Karoumi, Registered Psychotherapist (Qualifying)" is
    * 53 and would be cut mid-credential, which reads worse in a result than
-   * the name on its own. The credential is on the page either way, in the h1
-   * block and in the markup.
+   * the name on its own. The credential is on the page either way.
    *
-   * All of this is a fallback. Filling seo.pageTitle on the practitioner
-   * record overrides it, and that is the right answer for anyone whose
-   * credential does not fit.
+   * All of this is a fallback. Filling seo.pageTitle on the record overrides
+   * it, and that is the right answer for anyone whose credential does not fit.
    */
   const withCredential = lead ? `${person.name}, ${lead}` : person.name;
   const title =

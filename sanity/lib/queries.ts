@@ -159,6 +159,22 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   },
   quoteContent,
   janeBookingUrl,
+  // Who provides this, for the block at the foot of the page. Dereferenced
+  // rather than stored on the page, so a practitioner switched off in the
+  // Studio drops out of every service that lists them.
+  practitioners[]->{
+    name,
+    "slug": slug.current,
+    credentials,
+    // The whole image object, not just a URL, so urlForPractitionerPhoto can
+    // read the hotspot and crop an editor set in the Studio.
+    photo{
+      ...,
+      "url": asset->url,
+      alt
+    },
+    isActive
+  },
   additionalSections[] {
     sectionTitle,
     sectionParagraph,
@@ -360,7 +376,10 @@ export const TEAM_PAGE_QUERY = groq`{
     name,
     "slug": slug.current,
     credentials,
+    // The whole image object, not just a URL, so urlForPractitionerPhoto can
+    // read the hotspot and crop an editor set in the Studio.
     photo{
+      ...,
       "url": asset->url,
       alt
     }
@@ -389,7 +408,10 @@ export const PRACTITIONER_BY_SLUG_QUERY = groq`
   commonlyTreats,
   commonlyTreatsLabel,
   fullBio,
+  // The whole image object, not just a URL, so urlForPractitionerPhoto can
+  // read the hotspot and crop an editor set in the Studio.
   photo{
+    ...,
     "url": asset->url,
     alt
   },
@@ -401,7 +423,8 @@ export const PRACTITIONER_BY_SLUG_QUERY = groq`
     | order(title asc){
       title,
       "slug": treatmentSlug.current,
-      "serviceSlug": service->slug.current
+      "serviceSlug": service->slug.current,
+      "serviceName": service->title
     },
   ${SEO_QUERY}
 }`;

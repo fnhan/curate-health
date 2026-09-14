@@ -1070,14 +1070,42 @@ site-wide link when not.
 
 **Three things still open, all of them Frank's:**
 
-- Outdoor Sauna has no booking URL. One address was given for "cold plunge and
-  sauna", and `treatment/81` can only be one of them, so the sauna button
-  still falls back rather than pointing at a cold plunge booking.
-- Outdoor Pilates has a booking link and no practitioner. It is Claire, who
-  has no record yet: CH-030 needs her surname, a photo and a bio before a page
-  would be worth having.
-- Dr. Leong named three conditions and said "include", so the list is
-  deliberately left partial rather than padded out.
+- **Claire Kim teaches Mat Pilates and is deliberately left off the site for
+  now.** Frank's call on 2026-09-14: leave her out of Outdoor Pilates and off
+  the team page until she is up and running, then add her everywhere at once.
+  Her surname comes from Jane, "Mat Pilates Class with Claire Kim". **Raise
+  this again rather than letting it lapse**, and do CH-030 in the same pass.
+- **Ariel Zohar's photograph is 1001x685**, below the 800x1000 the crop needs,
+  so it is upscaled and looks soft. A photograph to replace, not a value to
+  lower. `scripts/audit-practitioners.js` names anyone in this state.
+- **Jane's own address reads "989 Eglinton Avenue West - Suite 2, Suite 2,
+  York"**, with the doubled suite and the "York" that CH-021 spent a ticket
+  removing from the site. Local search reads the two as one business, so the
+  mismatch costs something. Jane is not in this repository: it is a change
+  somebody makes in the Jane settings.
+
+**The design came from a mockup, and the first attempt ignored it.** Frank
+supplied `curate_practitioner_final.pdf` on 2026-09-14 after seeing what
+shipped. The team card was redrawn when it should not have been: the card was
+never the problem, the accordion was. The card is the one that was already
+there, same grid, same grayscale photo that colours on hover, credentials one
+per line, "Learn More" at the foot, and the only change is that the foot is
+now a link rather than an accordion trigger. `components/shared/practitioner-card.tsx`
+is that card, used on the team page, on service pages and anywhere else a
+person is shown.
+
+**Every practitioner photo is cropped by Sanity to one 4:5 frame at 800x1000.**
+The seven sources range from 0.65 to 1.50 in ratio and gave a grid of seven
+different card heights. The crop is taken through `urlForPractitionerPhoto`
+rather than by CSS `object-cover`, because object-cover crops from the centre
+with no say in where, and on a 1.50 landscape that can take part of a head.
+Asking Sanity honours the hotspot, which is already enabled on the field, so
+framing is fixed by dragging a box in the Studio.
+
+**The image builder throws rather than returning null** when handed an object
+with no asset, so a `|| photo.url` fallback at the call site does not catch
+it. A projection that selected the url but not the asset reference 500'd all
+seven pages. `urlForPractitionerPhoto` guards before calling the builder now.
 
 ### CH-105 Blog architecture
 

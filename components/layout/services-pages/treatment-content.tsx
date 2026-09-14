@@ -1,9 +1,9 @@
 import Image from "next/image";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { LastUpdated } from "@/components/shared/last-updated";
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
-import { LastUpdated } from "@/components/shared/last-updated";
 import {
   PRIMARY_CTA_BUTTON_QUERYResult,
   TREATMENT_BY_SLUG_QUERYResult,
@@ -25,6 +25,18 @@ export default function TreatmentContent({
   const { title: benefitsTitle, benefitsList } = benefits || {};
   const { ctaBg, ctaBgAlt, ctaTitle, ctaText, ctaButtonText } = cta || {};
   const { ctaButton } = primaryCTA || {};
+
+  /*
+   * This treatment's own Jane page when it has one, the site-wide link when
+   * it does not.
+   *
+   * Every treatment Book button used to land on the Jane front page, leaving
+   * the visitor to find the thing they had just been reading about. The
+   * Recovery Sanctuary bookings are the clearest case: cold plunge, sauna,
+   * yoga and Pilates each have a treatment address in Jane, and sending
+   * someone to the front page instead is a step where people leave.
+   */
+  const bookingHref = treatment.janeBookingUrl || ctaButton?.ctaLink;
 
   return (
     <div className="text-primary">
@@ -111,10 +123,7 @@ export default function TreatmentContent({
               asChild
               className="w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
             >
-              <a
-                href={ctaButton?.ctaLink!}
-                {...externalLinkProps(ctaButton?.ctaLink!)}
-              >
+              <a href={bookingHref!} {...externalLinkProps(bookingHref!)}>
                 {ctaButtonText}
               </a>
             </Button>

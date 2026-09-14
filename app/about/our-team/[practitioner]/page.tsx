@@ -84,6 +84,7 @@ export default async function PractitionerPage({
     credentials,
     languages,
     commonlyTreats,
+    commonlyTreatsLabel,
     fullBio,
     photo,
     janeBookingUrl,
@@ -186,7 +187,16 @@ export default async function PractitionerPage({
 
             {commonlyTreats?.length ? (
               <section className="flex flex-col gap-3">
-                <h2 className="text-xl font-medium">Commonly treats</h2>
+                {/*
+                  The heading is editable because "Commonly treats" is wrong
+                  for anyone who is not a regulated health professional. A
+                  yoga teacher does not treat people, and that heading over a
+                  list of class focuses would read as a clinical claim nobody
+                  made.
+                */}
+                <h2 className="text-xl font-medium">
+                  {commonlyTreatsLabel || "Commonly treats"}
+                </h2>
                 <ul className="flex flex-wrap gap-2">
                   {commonlyTreats.map((item) => (
                     <li

@@ -127,7 +127,6 @@ export default defineType({
       type: "string",
     }),
 
-
     defineField({
       name: "additionalCheckin",
       title: "Additional Checkins",
@@ -146,7 +145,7 @@ export default defineType({
               title: "Checkin Count",
               type: "number",
             }),
-          ]
+          ],
         },
       ],
     }),
@@ -182,7 +181,7 @@ export default defineType({
               type: "image",
             }),
           ],
-        }
+        },
       ],
     }),
 

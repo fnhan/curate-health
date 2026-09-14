@@ -1046,6 +1046,39 @@ node scripts/audit-practitioners.js https://www.curatehealth.ca
 Six checks, all against rendered pages. Run before this merged, it reported
 all seven as 404, which is what proves it looks.
 
+**The mapping was filled in 2026-09-14**, by
+`scripts/apply-practitioner-mapping.js`. Three different provenances, and they
+should not be confused when anyone revisits this:
+
+| Source | What |
+| --- | --- |
+| Frank, against a corrected chart | every treatment to practitioner assignment, and the Recovery Sanctuary booking links |
+| Dr. Gabriele and Dr. Leong, relayed | their own `commonlyTreats` lists, 24 items and 3 |
+| Claude Code, at Frank's request | the other four clinical lists, written narrow and ordinary for the profession, **to be replaced** when each practitioner sends their own |
+
+**Rooj's entry is not a clinical list.** She is a yoga teacher, not a regulated
+health professional, so `commonlyTreatsLabel` is set to "Class focus" on her
+record and the items are what her classes are for. That field exists for
+exactly this: "Commonly treats" over a list of class focuses would read as a
+clinical claim nobody made.
+
+**Treatments now carry their own `janeBookingUrl`.** Every treatment's Book
+button used to land on the Jane front page, leaving the visitor to find the
+thing they had just been reading about. Recovery Sanctuary bookings each have
+a treatment address in Jane; the button uses it when set and falls back to the
+site-wide link when not.
+
+**Three things still open, all of them Frank's:**
+
+- Outdoor Sauna has no booking URL. One address was given for "cold plunge and
+  sauna", and `treatment/81` can only be one of them, so the sauna button
+  still falls back rather than pointing at a cold plunge booking.
+- Outdoor Pilates has a booking link and no practitioner. It is Claire, who
+  has no record yet: CH-030 needs her surname, a photo and a bio before a page
+  would be worth having.
+- Dr. Leong named three conditions and said "include", so the list is
+  deliberately left partial rather than padded out.
+
 ### CH-105 Blog architecture
 
 Conditions will be covered in blog posts rather than standalone pages, so the blog needs to actually work. Currently two posts, last updated 16 December 2024, no taxonomy, no author attribution.

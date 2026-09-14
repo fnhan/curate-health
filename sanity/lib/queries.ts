@@ -158,6 +158,7 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     introParagraph
   },
   quoteContent,
+  janeBookingUrl,
   additionalSections[] {
     sectionTitle,
     sectionParagraph,
@@ -386,6 +387,7 @@ export const PRACTITIONER_BY_SLUG_QUERY = groq`
   credentials,
   languages,
   commonlyTreats,
+  commonlyTreatsLabel,
   fullBio,
   photo{
     "url": asset->url,

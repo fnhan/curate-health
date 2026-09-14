@@ -135,6 +135,13 @@ export default defineType({
         Rule.unique().error("That language is listed twice"),
     }),
     defineField({
+      name: "commonlyTreatsLabel",
+      title: "Heading For That List",
+      type: "string",
+      description:
+        'Defaults to "Commonly treats". Change it for anyone who is not a regulated health professional: a yoga teacher does not treat people, so "Commonly treats" over a list of class focuses reads as a clinical claim nobody made. "Class focus" is the current case.',
+    }),
+    defineField({
       name: "commonlyTreats",
       title: "Commonly Treats",
       type: "array",

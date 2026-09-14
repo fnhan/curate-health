@@ -165,3 +165,18 @@ export function postCrumbs(title: string, slug: string): Crumb[] {
 export function legalCrumbs(title: string, slug: string): Crumb[] {
   return trail({ name: title, path: `/legal/${slug}` });
 }
+
+/**
+ * /about/our-team/{practitioner}. CH-104.
+ *
+ * Four levels, because the team page is a real hub with its own address and a
+ * visitor who lands on a practitioner from search needs the route back to the
+ * rest of the team, not just to /about.
+ */
+export function practitionerCrumbs(name: string, slug: string): Crumb[] {
+  return trail(
+    { name: "About", path: "/about" },
+    { name: "Our Team", path: "/about/our-team" },
+    { name, path: `/about/our-team/${slug}` }
+  );
+}

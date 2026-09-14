@@ -3,6 +3,7 @@ import type { Crumb } from "@/lib/breadcrumbs";
 import { treatmentPath } from "@/lib/service-urls";
 import {
   CAFE_PAGE_QUERYResult,
+  PRACTITIONER_BY_SLUG_QUERYResult,
   SERVICE_BY_SLUG_QUERYResult,
   SITE_SETTINGS_QUERYResult,
   TREATMENT_BY_SLUG_QUERYResult,
@@ -679,5 +680,52 @@ export function buildBreadcrumbJsonLd(crumbs: Crumb[] | null | undefined) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement,
+  }) as JsonLdObject;
+}
+
+/**
+ * A practitioner, as Person or Physician. CH-104.
+ *
+ * WHICH TYPE, AND WHY IT IS NOT A GUESS FROM THE JOB TITLE
+ *
+ * schema.org Physician is a MedicalOrganization subtype meaning a medical
+ * practice, not "someone with a doctorate". Using it for a chiropractor or a
+ * naturopath would describe them as a clinic. Person with hasCredential and
+ * an explicit knowsAbout is both accurate and what Google reads for author
+ * and expertise signals, so everyone gets Person, and the credentials carry
+ * the distinction rather than the type name.
+ *
+ * worksFor points at the clinic node the site graph already publishes, which
+ * is what ties the person to the business rather than leaving them floating.
+ */
+export function buildPractitionerJsonLd(
+  person: PRACTITIONER_BY_SLUG_QUERYResult
+) {
+  if (!person?.name || !person.slug) return null;
+
+  const url = absoluteUrl(`/about/our-team/${person.slug}`);
+
+  const credentials = (person.credentials ?? []).map((credential) => ({
+    "@type": "EducationalOccupationalCredential",
+    name: credential,
+  }));
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${url}#person`,
+    name: person.name,
+    url,
+    image: person.photo?.url,
+    // The first credential is the one a person searching would recognise.
+    jobTitle: person.credentials?.[0],
+    hasCredential: credentials.length ? credentials : undefined,
+    knowsLanguage: person.languages?.length ? person.languages : undefined,
+    // Empty until a practitioner signs off on what they treat, and left out
+    // rather than filled from their bio.
+    knowsAbout: person.commonlyTreats?.length
+      ? person.commonlyTreats
+      : undefined,
+    worksFor: { "@id": `${BASEURL}/#medicalclinic` },
   }) as JsonLdObject;
 }

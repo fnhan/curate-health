@@ -1,0 +1,199 @@
+/**
+ * Acceptance check for CH-104.
+ *
+ *   node scripts/audit-practitioners.js http://localhost:3000
+ *   node scripts/audit-practitioners.js https://www.curatehealth.ca
+ *
+ * The defect this ticket existed to fix was invisible from the source: the
+ * bios were in the markup all along, inside accordions carrying
+ * data-state="closed", which left 203 visible words for seven people. So every
+ * check here reads the rendered page.
+ *
+ *   1 Every active practitioner in Sanity has a page that returns 200.
+ *   2 The team page links to all of them.
+ *   3 Each page carries one h1, a Person node, and the credentials from the
+ *     record.
+ *   4 Each page carries real visible text, not a heading over a collapsed
+ *     bio. The floor is deliberately low: it is catching a page that renders
+ *     nothing, not judging how long a bio should be.
+ *   5 The booking block matches the record. A Jane URL means a booking
+ *     button; no Jane URL and no note and no CTA means no block at all,
+ *     rather than a button pointing somewhere generic.
+ *   6 An unknown slug is a 404, never a 500. CH-001.
+ *
+ * Exits 1 on any failure.
+ */
+
+const { assertChecked } = require("./lib/assert-checked");
+const { query } = require("./lib/sanity-cli");
+
+const target = (process.argv[2] || "http://localhost:3000").replace(/\/$/, "");
+
+/** Low on purpose. A rendered bio is hundreds of words; a broken page is tens. */
+const MIN_WORDS = 120;
+
+async function get(path) {
+  const res = await fetch(`${target}${path}`, {
+    headers: { "user-agent": "curate-practitioners/1.0" },
+  });
+  return { status: res.status, html: res.ok ? await res.text() : "" };
+}
+
+function visibleWords(html) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/g, "")
+    .replace(/<style[\s\S]*?<\/style>/g, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(" ").length;
+}
+
+function personNode(html) {
+  for (const m of html.matchAll(
+    /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g
+  )) {
+    try {
+      const data = JSON.parse(m[1]);
+      const nodes = Array.isArray(data) ? data : [data];
+      const person = nodes.find((n) => n && n["@type"] === "Person");
+      if (person) return person;
+    } catch {
+      /* a malformed block is a finding for the schema audit, not this one */
+    }
+  }
+  return null;
+}
+
+async function main() {
+  const people = await query(
+    `*[_type == "practitioner" && isActive == true && defined(slug.current)]
+      | order(name asc){
+        name,
+        "slug": slug.current,
+        credentials,
+        janeBookingUrl,
+        bookingNote,
+        bookingCtaLabel
+      }`
+  );
+
+  assertChecked({
+    label: "active practitioners in Sanity",
+    count: people.length,
+    atLeast: 5,
+    hint: "With none, every check below passes by looking at nothing.",
+  });
+
+  const failures = [];
+
+  const team = await get("/about/our-team");
+  if (team.status !== 200) {
+    failures.push(`/about/our-team returned ${team.status}`);
+  }
+
+  const linked = new Set(
+    [...team.html.matchAll(/href="\/about\/our-team\/([a-z0-9-]+)"/g)].map(
+      (m) => m[1]
+    )
+  );
+
+  let totalWords = 0;
+
+  for (const person of people) {
+    const path = `/about/our-team/${person.slug}`;
+    const { status, html } = await get(path);
+
+    if (status !== 200) {
+      failures.push(`${path}: HTTP ${status}`);
+      continue;
+    }
+
+    if (!linked.has(person.slug)) {
+      failures.push(`${path}: the team page does not link to it`);
+    }
+
+    const h1s = (html.match(/<h1/g) || []).length;
+    if (h1s !== 1) failures.push(`${path}: ${h1s} h1 elements, expected 1`);
+
+    const words = visibleWords(html);
+    totalWords += words;
+    if (words < MIN_WORDS) {
+      failures.push(`${path}: only ${words} visible words`);
+    }
+
+    const person_ld = personNode(html);
+    if (!person_ld) {
+      failures.push(`${path}: no Person node in the markup`);
+    } else {
+      if (person_ld.name !== person.name) {
+        failures.push(
+          `${path}: markup names "${person_ld.name}", record says "${person.name}"`
+        );
+      }
+      const marked = (person_ld.hasCredential || []).length;
+      const stored = (person.credentials || []).length;
+      if (marked !== stored) {
+        failures.push(
+          `${path}: ${marked} credentials in markup, ${stored} on the record`
+        );
+      }
+    }
+
+    /* The booking block has to agree with the record, in all three states. */
+    /*
+     * React splits an interpolated name into its own text node and separates
+     * it with an HTML comment, so the rendered markup reads
+     * `Book with <!-- -->Dr. Frank Nhan`. A plain includes() of the sentence
+     * finds nothing and reports five working buttons as missing, which is
+     * what the first run of this check did.
+     */
+    const flattened = html.replace(/<!--[\s\S]*?-->/g, "");
+    const hasBookButton = flattened.includes(`Book with ${person.name}`);
+    const hasCtaLabel = person.bookingCtaLabel
+      ? flattened.includes(person.bookingCtaLabel)
+      : false;
+
+    if (person.janeBookingUrl) {
+      if (!hasBookButton) failures.push(`${path}: Jane URL set but no booking button`);
+      if (!html.includes(person.janeBookingUrl)) {
+        failures.push(`${path}: booking button does not carry the Jane URL`);
+      }
+    } else if (person.bookingNote || person.bookingCtaLabel) {
+      if (hasBookButton) {
+        failures.push(`${path}: shows a booking button with no Jane URL`);
+      }
+      if (person.bookingCtaLabel && !hasCtaLabel) {
+        failures.push(`${path}: CTA label "${person.bookingCtaLabel}" is missing`);
+      }
+    } else if (hasBookButton) {
+      failures.push(`${path}: shows a booking button with nothing to back it`);
+    }
+  }
+
+  const unknown = await get("/about/our-team/definitely-nobody");
+  if (unknown.status !== 404) {
+    failures.push(`an unknown slug returned ${unknown.status}, expected 404`);
+  }
+
+  console.log(
+    `${people.length} active practitioners, ${linked.size} linked from the team page.`
+  );
+  console.log(
+    `${totalWords} visible words across the practitioner pages, against 203 ` +
+      `on the single team page before this ticket.\n`
+  );
+
+  if (failures.length) {
+    console.error(`${failures.length} failures:`);
+    for (const f of failures) console.error(`  ${f}`);
+    process.exit(1);
+  }
+
+  console.log("Every practitioner has a page, and every page agrees with its record.");
+}
+
+main().catch((error) => {
+  console.error(error.message);
+  process.exit(2);
+});

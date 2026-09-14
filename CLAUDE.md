@@ -997,6 +997,55 @@ Dr. Leong's page is the priority. His triple certification is the strongest diff
 
 Add Claire, who is missing from the team page entirely.
 
+**Done 2026-09-14.** Seven pages at `/about/our-team/{slug}`, the team page is
+a hub of links, and the accordions are gone.
+
+Measured on the rendered page, which is the only place the defect was ever
+visible: **203 visible words on one team page, now 2,164 across seven.** The
+bios were always in the markup, inside accordions carrying
+`data-state="closed"`.
+
+**Two lines of this ticket are stale and were not built.** Registration
+numbers: the restructure brief settled that they belong on a receipt, not a
+public page, and `sanity/schemas/practitioner.ts` says so at the top. A short
+bio: no such copy exists for anyone and Frank chose on 2026-09-07 to drop the
+field rather than have one written.
+
+**Services offered is derived, not stored.** A treatment lists who provides
+it, and the practitioner page asks which treatments point back. There is
+deliberately no field holding the same fact twice. **No treatment names a
+practitioner yet**, so that section is empty on all seven until someone fills
+the `practitioners` list on the treatment documents.
+
+**Commonly treats is empty on all seven, and that is the correct state.**
+Everything in it reads as a clinical claim and needs the practitioner's own
+sign-off. Do not draft it from their bios.
+
+**The booking block has three states**, and the third is the one to preserve.
+A Jane URL gives a button to that person's own booking page. No Jane URL gives
+the note and the CTA the record carries, which is Dr. Leong: not publicly
+bookable, reached through the Curate Lifestyle Program. Neither gives no block
+at all rather than a button pointing somewhere generic, which is Rooj.
+
+**`generateStaticParams` cannot be used on this route.** It needs the slugs at
+build time, and `sanityFetch` reads `draftMode()`, which throws outside a
+request scope and fails the whole route build. Every other dynamic route here
+renders on demand with ISR, which also means adding a practitioner in the
+Studio publishes their page without a deploy.
+
+**The fallback title drops the credential when it will not fit.** `| Curate
+Health` costs 15 of the 60 characters Google shows, so the page title has 45.
+"Safa Karoumi, Registered Psychotherapist (Qualifying)" is 53 and would be cut
+mid-credential. Filling `seo.pageTitle` on the record overrides this.
+
+```bash
+node scripts/audit-practitioners.js http://localhost:3000
+node scripts/audit-practitioners.js https://www.curatehealth.ca
+```
+
+Six checks, all against rendered pages. Run before this merged, it reported
+all seven as 404, which is what proves it looks.
+
 ### CH-105 Blog architecture
 
 Conditions will be covered in blog posts rather than standalone pages, so the blog needs to actually work. Currently two posts, last updated 16 December 2024, no taxonomy, no author attribution.

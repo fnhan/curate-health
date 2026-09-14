@@ -1,6 +1,9 @@
 import { defineField, defineType } from "sanity";
 
+
+
 import { fieldDescriptions } from "../schema-helpers";
+
 
 export default defineType({
   name: "pillarsOfHealth",

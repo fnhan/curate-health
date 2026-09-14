@@ -34,7 +34,8 @@ export default defineType({
       media: "image",
     },
     prepare({ linkedTeamMemberName, media }) {
-      const title = getBlogAuthorDisplayName(linkedTeamMemberName) || "Author";
+      const title =
+        getBlogAuthorDisplayName(linkedTeamMemberName) || "Author";
       return { title, media };
     },
   },

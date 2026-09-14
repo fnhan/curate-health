@@ -19,8 +19,7 @@ export default defineType({
       title: "Background Image",
       type: "image",
       options: { hotspot: true },
-      validation: (Rule) =>
-        Rule.required().error("A background image is required"),
+      validation: (Rule) => Rule.required().error("A background image is required"),
       fields: [
         {
           name: "alt",
@@ -52,8 +51,7 @@ export default defineType({
               name: "href",
               title: "Link URL",
               type: "string",
-              description:
-                "The URL this program links to (e.g. /our-programs#essential-series)",
+              description: "The URL this program links to (e.g. /our-programs#essential-series)",
               validation: (Rule) =>
                 Rule.required().error("Link URL is required"),
             },
@@ -61,8 +59,7 @@ export default defineType({
               name: "barColor",
               title: "Bar Color",
               type: "string",
-              description:
-                "Hex color for the decorative vertical bar (e.g. #888D76)",
+              description: "Hex color for the decorative vertical bar (e.g. #888D76)",
               validation: (Rule) =>
                 Rule.required().error("Bar color is required"),
             },
@@ -70,8 +67,7 @@ export default defineType({
               name: "isLink",
               title: "Is Clickable Link",
               type: "boolean",
-              description:
-                "Whether this program entry is a clickable link or just display text",
+              description: "Whether this program entry is a clickable link or just display text",
               initialValue: true,
             },
           ],
@@ -94,7 +90,8 @@ export default defineType({
       title: "Hover Link URL",
       type: "string",
       description: "URL for the bottom hover bar (e.g. /our-programs)",
-      validation: (Rule) => Rule.required().error("Hover link URL is required"),
+      validation: (Rule) =>
+        Rule.required().error("Hover link URL is required"),
     }),
   ],
   preview: {

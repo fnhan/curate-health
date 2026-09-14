@@ -56,10 +56,9 @@ const PROVIDERS = {
    */
   "flowpresso-therapy": ["dr-frank-nhan", "ariel-zohar"],
   /*
-   * Deliberately nobody. Outdoor Pilates is Claire, who has no practitioner
-   * record yet: that is CH-030 and needs her surname, a photo and a bio
-   * before a page would be worth having. Cold plunge and sauna are
-   * self-directed.
+   * Deliberately nobody. Outdoor Pilates is Claire Kim, left off the site at
+   * Frank's direction on 2026-09-14 until she is up and running, then added
+   * everywhere at once with CH-030. Cold plunge and sauna are self-directed.
    */
   "outdoor-pilates": [],
   "outdoor-cold-plunge": [],
@@ -99,11 +98,24 @@ const BOOKING = {
   "outdoor-cold-plunge": `${JANE}/discipline/22/treatment/81`,
   "outdoor-sauna": `${JANE}/discipline/22/treatment/81`,
   /*
-   * Deliberately absent: acupuncture, nutritional counselling, exercise
-   * rehab, breathwork, meditation and Flowpresso have no discipline of their
-   * own on the public booking site. Their buttons fall back to the site-wide
-   * link, which is correct: sending someone to a discipline that does not
-   * cover what they read about is worse than sending them to the front page.
+   * Added 2026-09-14 once both went live in Jane. Flowpresso sits under
+   * Recovery Sanctuary Classes as treatment 42, behind that section's "Show
+   * more", which is why a first read of the page missed it. Acupuncture has
+   * a section of its own with no sessions listed, only "Book by
+   * Practitioner", so the link is the section itself, the same #/acupuncture
+   * anchor Jane's own navigation uses. Both were opened in a browser and
+   * confirmed to land on the right thing.
+   *
+   * Frank pasted treatment/81 for Flowpresso. That is Cold Plunge & Sauna.
+   */
+  "flowpresso-therapy": `${JANE}/discipline/22/treatment/42`,
+  acupuncture: `${JANE}/acupuncture`,
+  /*
+   * Still deliberately absent: nutritional counselling, exercise rehab,
+   * breathwork and meditation have no section of their own on the public
+   * booking site. Their buttons fall back to the site-wide link, which is
+   * correct: sending someone to a discipline that does not cover what they
+   * read about is worse than sending them to the front page.
    */
 };
 

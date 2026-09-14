@@ -34,7 +34,7 @@ import {
 import { getAssetDownloadUrl } from "@/lib/asset-download";
 import { externalLinkProps } from "@/lib/links";
 import { treatmentPath } from "@/lib/service-urls";
-import { cleanSlug, cn, getTeamMemberUrlId } from "@/lib/utils";
+import { cleanSlug, cn, getPractitionerSlugFromName } from "@/lib/utils";
 import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
 
 import PillarsModified from "./pillars-modified";
@@ -614,7 +614,7 @@ export default function ServiceLifestyleContent({
                 </CardHeader>
                 <CardContent className="relative">
                   <Link
-                    href={`/about/our-team?member=${getTeamMemberUrlId(mainMember[0]?.name || "")}`}
+                    href={`/about/our-team/${getPractitionerSlugFromName(mainMember[0]?.name || "")}`}
                     className="mt-8 flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
                   >
                     Learn More
@@ -660,7 +660,7 @@ export default function ServiceLifestyleContent({
                 </CardHeader>
                 <CardContent className="relative">
                   <Link
-                    href={`/about/our-team?member=${getTeamMemberUrlId(teamMember.name || "")}`}
+                    href={`/about/our-team/${getPractitionerSlugFromName(teamMember.name || "")}`}
                     className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
                   >
                     Learn More

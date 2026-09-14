@@ -1083,24 +1083,61 @@ site-wide link when not.
   removing from the site. Local search reads the two as one business, so the
   mismatch costs something. Jane is not in this repository: it is a change
   somebody makes in the Jane settings.
+- **Jane offers acupuncture with Dr. Frank Nhan only.** The site lists Dr.
+  Gabriele, Dr. Nhan and Ariel Zohar as providers, per Frank's chart. Someone
+  who reads that Ariel does acupuncture and clicks Book finds only Frank. One of
+  the two needs to change, and which is Frank's call.
 
-**The design came from a mockup, and the first attempt ignored it.** Frank
-supplied `curate_practitioner_final.pdf` on 2026-09-14 after seeing what
-shipped. The team card was redrawn when it should not have been: the card was
-never the problem, the accordion was. The card is the one that was already
-there, same grid, same grayscale photo that colours on hover, credentials one
-per line, "Learn More" at the foot, and the only change is that the foot is
-now a link rather than an accordion trigger. `components/shared/practitioner-card.tsx`
-is that card, used on the team page, on service pages and anywhere else a
-person is shown.
+**The design came from a mockup, and it took two attempts to follow it.**
+Frank supplied `curate_practitioner_final.pdf` on 2026-09-14. It says of the
+team hub, in as many words: cards stay exactly as they are, design, order and
+spacing unchanged, and the one change is that the card wrapper becomes a link
+and the accordion is removed.
 
-**Every practitioner photo is cropped by Sanity to one 4:5 frame at 800x1000.**
-The seven sources range from 0.65 to 1.50 in ratio and gave a grid of seven
-different card heights. The crop is taken through `urlForPractitionerPhoto`
-rather than by CSS `object-cover`, because object-cover crops from the centre
-with no say in where, and on a 1.50 landscape that can take part of a head.
-Asking Sanity honours the hotspot, which is already enabled on the field, so
-framing is fixed by dragging a box in the Studio.
+The first attempt redrew the card. The second rebuilt it as a lookalike, with a
+4:5 photo, a CSS grid and no `Card` component, and described that as a revert.
+It was not one. The third restored the pre-#238 component from git and changed
+only the footer. Verified against the rendered page at 1280px: Masonry at three
+columns, every card 384 by 580, every photo box 300px, the original section
+padding, the trigger row's own classes on "Learn More", and the hero above the
+grid byte-identical to the original. **When a change is meant to be invisible,
+restore the old markup from git and diff against it. Do not rebuild it from
+memory.** `components/shared/practitioner-card.tsx` is that restored card, used
+on the team hub and in the "Practitioners offering this service" block on
+treatment pages, labelled "Learn More" and "View Profile" respectively.
+
+**The team order comes from `ourTeam.practitioners`**, the drag-to-reorder
+list set in #205. #238 sorted by name, which moved Safa ahead of Dr. Gabriele
+and Andrew ahead of Ariel. Masonry lays cards out column first, so the DOM order
+is not the visual order: check the order by position on the page, not by
+reading the HTML top to bottom.
+
+**`?member=` links now go to the practitioner page.** `getTeamMemberUrl` in
+`lib/utils.ts` and the two Learn More links on `/services/curate-lifestyle`
+built `/about/our-team?member={name}`, which only ever opened an accordion.
+The slug strips the dot from an honorific, since "Dr. Frank Nhan" is
+`dr-frank-nhan` on the record.
+
+**Photos.** The individual practitioner pages crop through Sanity to one 4:5
+frame at 800x1000, because they rendered each photo at its natural ratio and the
+seven sources range from 0.65 to 1.50. The hub keeps the original fixed 300px
+frame, which was already uniform, and honours a hotspot when one is set.
+`urlForPractitionerPhoto` is the page crop.
+
+**Jane links were read off the live booking site, not guessed.** Flowpresso is
+`#/discipline/22/treatment/42`, under Recovery Sanctuary Classes behind that
+section's "Show more". Acupuncture has a section of its own with no sessions,
+only "Book by Practitioner", so its link is the section anchor Jane's own
+navigation uses, `#/acupuncture`. Frank pasted `treatment/81` for Flowpresso;
+that is Cold Plunge & Sauna. After writing a booking link to Sanity, a local
+build can keep serving the old one for 60 seconds: request the page twice
+before concluding the link did not land.
+
+**The mockup commit went unpushed for a turn.** `git push origin <branch>`
+pushes the local branch of that name, not the one checked out. A commit made on
+`feat/practitioner-design` and pushed as `feat/treatment-booking-links` left
+PR #239 without it while it was described as included. Push with
+`git push origin HEAD:<pr-branch>` and confirm the remote log.
 
 **The image builder throws rather than returning null** when handed an object
 with no asset, so a `|| photo.url` fallback at the call site does not catch

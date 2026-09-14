@@ -372,8 +372,14 @@ export const TEAM_PAGE_QUERY = groq`{
     },
     ${SEO_QUERY}
   },
-  "practitioners": *[_type == "practitioner" && isActive == true] | order(name asc){
+  // In the order set on the team page document, the drag-to-reorder list
+  // from #205. #238 sorted by name instead, which moved Safa ahead of
+  // Dr. Gabriele and Andrew ahead of Ariel on a page whose order was chosen.
+  // isActive is selected rather than filtered here, and the component drops
+  // inactive and dangling references.
+  "practitioners": *[_type == "ourTeam" && pageActive == true][0].practitioners[]->{
     name,
+    isActive,
     "slug": slug.current,
     credentials,
     // The whole image object, not just a URL, so urlForPractitionerPhoto can

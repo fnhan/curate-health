@@ -1,36 +1,67 @@
-import { PractitionerGrid } from "@/components/shared/practitioner-card";
+"use client";
+
+import Masonry from "react-masonry-css";
+
+import { PractitionerCard } from "@/components/shared/practitioner-card";
 import { TEAM_PAGE_QUERYResult } from "@/sanity.types";
 
 /**
- * The team grid. CH-104.
+ * The team grid, restored. CH-104.
  *
- * The design is the one that was already here: same cards, same order, same
- * grayscale photo that colours on hover, credentials one per line, "Learn
- * More" at the foot. The only change is what that footer does. It used to
- * open an accordion holding the bio; it is now a link to the person's page.
+ * The same section, the same Masonry layout at three, two and one columns, the
+ * same spacing, and the same order. The only change from before #238 is inside
+ * the card: its footer is a link to the practitioner's page instead of an
+ * accordion holding their bio.
  *
- * That matters more than it sounds. The bios shipped inside accordions
- * carrying data-state="closed", which left the whole team page at 203 visible
- * words for seven people. The words were always in the markup and counted for
- * nothing.
+ * The bio in the accordion was the whole problem. It shipped with
+ * data-state="closed", so seven people's training and experience sat in the
+ * markup and counted for nothing: 203 visible words for the whole team page.
+ * The card around it was never the problem, and a first attempt at this
+ * redrew it anyway.
  *
- * A first attempt at this redrew the card, and it should not have. The card
- * was not the problem.
+ * The order comes from ourTeam.practitioners, the drag-to-reorder list set in
+ * #205, not from sorting by name. Sorting by name is what #238 did, and it
+ * moved Safa ahead of Dr. Gabriele and Andrew ahead of Ariel on a page whose
+ * order had been chosen.
+ *
+ * useSearchParams and the Suspense wrapper are gone with the accordion. They
+ * existed only to open a bio when a link arrived with ?member=, and those links
+ * now go straight to the practitioner page.
  */
 type Practitioner = NonNullable<TEAM_PAGE_QUERYResult["practitioners"]>[number];
+
+const breakpointColumns = {
+  default: 3,
+  1023: 2,
+  767: 1,
+};
 
 export function TeamMembersSection({
   practitioners,
 }: {
   practitioners: Practitioner[];
 }) {
-  if (!practitioners?.length) return null;
+  const visible = (practitioners ?? []).filter(
+    (person) => person?.isActive && person.slug && person.name
+  );
+
+  if (!visible.length) return null;
 
   return (
-    <section className="bg-white pb-20 md:pb-28">
-      <div className="container">
-        <PractitionerGrid practitioners={practitioners} label="Learn More" />
-      </div>
+    <section className="bg-white pb-24 pt-12 text-primary md:pb-28 md:pt-14 2xl:pb-40 2xl:pt-20">
+      <Masonry
+        breakpointCols={breakpointColumns}
+        className="container flex"
+        columnClassName="ml-4 flex flex-col gap-4"
+      >
+        {visible.map((person) => (
+          <PractitionerCard
+            key={person.slug}
+            person={person}
+            label="Learn More"
+          />
+        ))}
+      </Masonry>
     </section>
   );
 }

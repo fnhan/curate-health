@@ -353,46 +353,6 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
 }`;
 
 /**
- * The team page, reading the practitioner documents. CH-104.
- *
- * teamMembers, the array inside the ourTeam document, is no longer selected.
- * Array items cannot be referenced or given their own URL, which is the whole
- * reason the practitioners were migrated out of it in #205. Selecting both
- * would put the same seven people in the dataset twice with nothing keeping
- * them in step, which is the failure CH-025 and CH-116 were spent undoing.
- *
- * The page heading still comes from ourTeam, because that is page copy rather
- * than a person.
- */
-export const TEAM_PAGE_QUERY = groq`{
-  "page": *[_type == "ourTeam" && pageActive == true][0]{
-    heroSection{
-      heroTitle,
-      heroParagraph
-    },
-    ${SEO_QUERY}
-  },
-  // In the order set on the team page document, the drag-to-reorder list
-  // from #205. #238 sorted by name instead, which moved Safa ahead of
-  // Dr. Gabriele and Andrew ahead of Ariel on a page whose order was chosen.
-  // isActive is selected rather than filtered here, and the component drops
-  // inactive and dangling references.
-  "practitioners": *[_type == "ourTeam" && pageActive == true][0].practitioners[]->{
-    name,
-    isActive,
-    "slug": slug.current,
-    credentials,
-    // The whole image object, not just a URL, so urlForPractitionerPhoto can
-    // read the hotspot and crop an editor set in the Studio.
-    photo{
-      ...,
-      "url": asset->url,
-      alt
-    }
-  }
-}`;
-
-/**
  * One practitioner page.
  *
  * commonlyTreats and the services list are both allowed to come back empty,

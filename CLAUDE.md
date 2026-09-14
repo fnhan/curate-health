@@ -1088,35 +1088,35 @@ site-wide link when not.
   who reads that Ariel does acupuncture and clicks Book finds only Frank. One of
   the two needs to change, and which is Frank's call.
 
-**The design came from a mockup, and it took two attempts to follow it.**
-Frank supplied `curate_practitioner_final.pdf` on 2026-09-14. It says of the
-team hub, in as many words: cards stay exactly as they are, design, order and
-spacing unchanged, and the one change is that the card wrapper becomes a link
-and the accordion is removed.
+**The team hub is the backup, not a rebuild.** Frank asked twice for the hub to
+look exactly as it did before #238, and two attempts to reproduce it by hand
+both changed things: the first redrew the card, the second rebuilt it as a
+lookalike and also changed the order. On 2026-09-14 he asked for the original
+to be restored instead, and that is what shipped: `app/about/our-team/page.tsx`
+and `team-members-section.tsx` taken from `ffd80e0`, the commit live before
+#238, with one change. "Learn More" and the photo link to the practitioner's
+page rather than opening the bio in an accordion. `git diff ffd80e0` on those
+two files shows nothing else. **When Frank asks for a revert, restore the files
+from git and change only what he named.**
 
-The first attempt redrew the card. The second rebuilt it as a lookalike, with a
-4:5 photo, a CSS grid and no `Card` component, and described that as a revert.
-It was not one. The third restored the pre-#238 component from git and changed
-only the footer. Verified against the rendered page at 1280px: Masonry at three
-columns, every card 384 by 580, every photo box 300px, the original section
-padding, the trigger row's own classes on "Learn More", and the hero above the
-grid byte-identical to the original. **When a change is meant to be invisible,
-restore the old markup from git and diff against it. Do not rebuild it from
-memory.** `components/shared/practitioner-card.tsx` is that restored card, used
-on the team hub and in the "Practitioners offering this service" block on
-treatment pages, labelled "Learn More" and "View Profile" respectively.
+The hub still reads `ourTeam.teamMembers`, so its photos, credentials and order
+are exactly the originals: Dr. Nhan, Dr. Gabriele, Dr. Leong, Safa, Ariel,
+Andrew, Rooj. `ourTeam.practitioners` holds a different order and the hub does
+not use it. The practitioner pages read the practitioner records, and every
+team member name maps to one. Masonry lays cards out column first, so check the
+order by position on the page rather than by reading the HTML top to bottom.
 
-**The team order comes from `ourTeam.practitioners`**, the drag-to-reorder
-list set in #205. #238 sorted by name, which moved Safa ahead of Dr. Gabriele
-and Andrew ahead of Ariel. Masonry lays cards out column first, so the DOM order
-is not the visual order: check the order by position on the page, not by
-reading the HTML top to bottom.
+`components/shared/practitioner-card.tsx` is used only by the "Practitioners
+offering this service" block on treatment pages.
 
-**`?member=` links now go to the practitioner page.** `getTeamMemberUrl` in
-`lib/utils.ts` and the two Learn More links on `/services/curate-lifestyle`
-built `/about/our-team?member={name}`, which only ever opened an accordion.
-The slug strips the dot from an honorific, since "Dr. Frank Nhan" is
-`dr-frank-nhan` on the record.
+**Blog bylines were already built, by Frank's developer, and were not changed.**
+`components/shared/blog-author-byline.tsx` and `lib/author-team-link.ts`, from
+commit `18ea307` on 2026-03-31. An empty author shows no byline; the "Curate
+Health Team" option shows that name and links to `/about/our-team`; a named
+team member links to that person. The only change here is where a named member
+links, which was `/about/our-team?member={name}` and is now their page. Both
+posts use the "Curate Health Team" option, so nothing on the blog changed.
+`?member=` links on `/services/curate-lifestyle` were repointed the same way.
 
 **Photos.** The individual practitioner pages crop through Sanity to one 4:5
 frame at 800x1000, because they rendered each photo at its natural ratio and the

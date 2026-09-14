@@ -6,36 +6,16 @@ import { ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 /**
- * The team card, exactly as it was before the accordion came out. CH-104.
+ * The practitioner card for the "Practitioners offering this service" block on
+ * treatment pages, per page 1 of the approved mockup. CH-104.
  *
- * Restored from the component that shipped before #238, not redrawn. The
- * approved mockup says it in as many words: cards stay exactly as they are,
- * design, order and spacing unchanged, and the one change is that the card
- * wrapper becomes a link and the accordion is removed. A first pass at this
- * rebuilt the card as a lookalike with a different photo frame, no Card
- * component and a different footer row, and it read as a redesign because it
- * was one.
+ * The team hub does not use this. It runs the component that was live before
+ * #238, restored from git at Frank's direction, in
+ * app/about/our-team/team-members-section.tsx. This card copies that design
+ * (the Card, the 300px grayscale photo, the credentials list and the Learn More
+ * row) so a service page and the team page look like the same system.
  *
- * So everything here is the original markup and classes: the Card, the fixed
- * 300px photo in grayscale that colours on hover, the name in CardTitle, the
- * credentials one per line in the same prose wrapper, and the footer row with
- * the accordion trigger's own classes. Only three things differ, and none of
- * them is visible at rest:
- *
- *   The footer row is part of a link rather than a button that opened a bio,
- *   and its chevron points right, as the mockup draws it, because a down
- *   arrow on a link promises something opening in place.
- *
- *   The credentials sit in a div carrying CardDescription's classes rather
- *   than in CardDescription itself. That renders a paragraph, and the list
- *   inside it made invalid HTML the browser silently rearranged.
- *
- *   The photo takes its alt text from the record instead of the person's
- *   name, and honours a hotspot when one is set in the Studio. None is set
- *   today, so the crop is the original centre crop until someone drags one.
- *
- * The label is the only thing that varies by where the card appears: "Learn
- * More" on the team page, "View Profile" on a service page.
+ * The label varies by where it appears: "View Profile" on a service page.
  */
 export type PractitionerCardData = {
   name?: string | null;

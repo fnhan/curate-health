@@ -44,6 +44,7 @@ export async function GET() {
     team,
     story,
     missionValues,
+    practitioners,
     sustainability,
     pillarsHealth,
   } = sitemap!;
@@ -142,6 +143,15 @@ export async function GET() {
     },
   ].filter(Boolean) as Url[];
 
+  const practitionerRoutes: Url[] = (practitioners ?? []).map(
+    (slug: string) => ({
+      url: `${BASEURL}/about/our-team/${slug}`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    })
+  );
+
   const serviceRoutes: Url[] = services.map((slug: string) => ({
     url: `${BASEURL}/services/${slug}`,
     lastModified: new Date().toISOString(),
@@ -196,6 +206,7 @@ export async function GET() {
   const allUrls = [
     ...staticRoutes,
     ...aboutRoutes,
+    ...practitionerRoutes,
     ...serviceRoutes,
     ...treatmentRoutes,
     ...productRoutes,

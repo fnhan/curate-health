@@ -335,6 +335,79 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
   ${SEO_QUERY}
 }`;
 
+/**
+ * The team page, reading the practitioner documents. CH-104.
+ *
+ * teamMembers, the array inside the ourTeam document, is no longer selected.
+ * Array items cannot be referenced or given their own URL, which is the whole
+ * reason the practitioners were migrated out of it in #205. Selecting both
+ * would put the same seven people in the dataset twice with nothing keeping
+ * them in step, which is the failure CH-025 and CH-116 were spent undoing.
+ *
+ * The page heading still comes from ourTeam, because that is page copy rather
+ * than a person.
+ */
+export const TEAM_PAGE_QUERY = groq`{
+  "page": *[_type == "ourTeam" && pageActive == true][0]{
+    heroSection{
+      heroTitle,
+      heroParagraph
+    },
+    ${SEO_QUERY}
+  },
+  "practitioners": *[_type == "practitioner" && isActive == true] | order(name asc){
+    name,
+    "slug": slug.current,
+    credentials,
+    photo{
+      "url": asset->url,
+      alt
+    }
+  }
+}`;
+
+/**
+ * One practitioner page.
+ *
+ * commonlyTreats and the services list are both allowed to come back empty,
+ * and the page leaves those sections out rather than showing a heading with
+ * nothing under it. Everything under commonlyTreats reads as a clinical claim
+ * and needs the practitioner's sign-off, so an empty list is the correct
+ * state until someone confirms it, not a gap to fill from the bio.
+ *
+ * Services are derived from the other end of the relationship: a treatment
+ * lists who provides it, and this asks which treatments point back. There is
+ * deliberately no field on the practitioner holding the same fact.
+ */
+export const PRACTITIONER_BY_SLUG_QUERY = groq`
+*[_type == "practitioner" && isActive == true && slug.current == $slug][0]{
+  name,
+  "slug": slug.current,
+  credentials,
+  languages,
+  commonlyTreats,
+  fullBio,
+  photo{
+    "url": asset->url,
+    alt
+  },
+  janeBookingUrl,
+  bookingNote,
+  bookingCtaLabel,
+  bookingCtaTarget,
+  "provides": *[_type == "treatments" && isActive == true && references(^._id)]
+    | order(title asc){
+      title,
+      "slug": treatmentSlug.current,
+      "serviceSlug": service->slug.current
+    },
+  ${SEO_QUERY}
+}`;
+
+/** Slugs for generateStaticParams and the sitemap. */
+export const PRACTITIONER_SLUGS_QUERY = groq`
+*[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current`;
+
 export const OUR_TEAM_PAGE_QUERY = groq`*[_type == "ourTeam" && pageActive == true][0]{
   heroSection{
     heroTitle,
@@ -853,6 +926,10 @@ export const SITEMAP_QUERY = groq`{
   "products": *[_type == "product" && isActive == true].slug.current,
   "posts": *[_type == "post" && defined(slug)].slug.current,
   "team": *[_type == "ourTeam" && pageActive == true]{_id},
+  // One entry per practitioner page, CH-104. Gated on isActive, so
+  // switching someone off in the Studio takes their URL out of the sitemap
+  // rather than leaving it listed and 404ing.
+  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,
   "story": *[_type == "ourStory" && pageActive == true]{_id},
   "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},
   "sustainability": *[_type == "sustainability" && pageActive == true]{_id},

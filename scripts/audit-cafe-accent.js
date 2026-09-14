@@ -21,7 +21,20 @@
 const { assertChecked } = require("./lib/assert-checked");
 const { query, walkStrings } = require("./lib/sanity-cli");
 
-const ACCENTED = /caf[\u00e9\u00c9]/g;
+/**
+ * Two bugs lived on this one line, and between them they made the check
+ * report a clean dataset while "Caf\u00e9" sat on /cafe.
+ *
+ * It was /caf[\u00e9\u00c9]/g. Case sensitive on "caf", so a capitalised
+ * "Caf\u00e9" never matched, which is exactly how the word is written at the start
+ * of a sentence. The `i` flag fixes that.
+ *
+ * The `g` flag was worse. A global regex used with .test() keeps lastIndex
+ * between calls, so the same pattern reused across a loop returns true, then
+ * false, then true, alternating rather than answering the question asked.
+ * Never put `g` on a regex that is only ever passed to .test().
+ */
+const ACCENTED = /caf[\u00e9\u00c9]/i;
 
 /** Fields whose content is somebody's words rather than Curate's. */
 const QUOTE_FIELDS = ["quoteText", "testimonials", "quote", "testimonial"];

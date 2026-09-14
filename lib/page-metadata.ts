@@ -106,6 +106,20 @@ type Fallbacks = {
    * was about the share card, so that is all it touches.
    */
   shareBrand?: string;
+  /**
+   * Keeps the page out of the index, and drops its canonical with it.
+   *
+   * Only the 404 uses this, and it needs both halves. A 404 that is
+   * indexable competes with the pages that should rank for the same words,
+   * and a canonical on it would be worse: this page answers for every dead
+   * address on the site, so naming one address as its own tells a crawler
+   * that all of them are that page rather than gone.
+   *
+   * Do not reach for this to hide a thin page. Thin pages get fixed or
+   * removed; noindex on one leaves it live for visitors and invisible to the
+   * audits, which is how a page rots unnoticed.
+   */
+  noindex?: boolean;
 };
 
 /**
@@ -197,6 +211,16 @@ export function buildPageMetadata(
   const shareTitle = fallbacks.shareBrand
     ? { absolute: `${socialTitle} | ${fallbacks.shareBrand}` }
     : socialTitle;
+
+  if (fallbacks.noindex) {
+    return {
+      title,
+      description,
+      robots: { index: false, follow: true },
+      openGraph: { title: shareTitle, description: socialDescription },
+      twitter: { title: shareTitle, description: socialDescription },
+    };
+  }
 
   return {
     title,

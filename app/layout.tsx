@@ -9,6 +9,7 @@ import {
 } from "sanity.types";
 
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
+import { AnalyticsEvents } from "@/components/shared/analytics-events";
 import { FloatingCallButton } from "@/components/shared/floating-call-button";
 import { GoogleAnalytics } from "@/components/shared/google-analytics";
 import SanityDisablePreviewButton from "@/components/shared/sanity-disable-preview-button";
@@ -34,13 +35,8 @@ export async function generateMetadata(): Promise<Metadata> {
     query: SITE_METADATA_QUERY,
   });
 
-  const {
-    homePageTitle,
-    templateTitlePrefix,
-    defaultDescription,
-    socialMeta,
-    keywords,
-  } = siteMetadata!;
+  const { homePageTitle, templateTitlePrefix, defaultDescription, socialMeta } =
+    siteMetadata!;
   const { ogImage, twitterImage } = socialMeta!;
 
   return {
@@ -58,7 +54,15 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${templateTitlePrefix}`,
       default: homePageTitle!,
     },
-    keywords: keywords || [],
+    /*
+     * The meta keywords tag is deliberately not emitted. CH-115.
+     *
+     * Google has ignored it since 2009 and Bing treats it as a spam signal
+     * rather than a ranking one. The field stays in the Studio because
+     * editors have filled it in and deleting their work is not this
+     * ticket's job, but nothing renders it. Read siteMetadata.keywords here
+     * again only if some other surface genuinely needs the list.
+     */
     description: defaultDescription,
     openGraph: {
       siteName: templateTitlePrefix!,
@@ -101,13 +105,14 @@ export default async function RootLayout({
   const callPhone = phoneSettings?.phone?.trim() ?? "";
 
   return (
-    <html lang="en" className={`${poppins.variable} ${poppins.className}`}>
+    <html lang="en-CA" className={`${poppins.variable} ${poppins.className}`}>
       <head>
         {/*
           Moved out of here and behind a pathname check, so it does not run on
           /studio. See components/shared/google-analytics.tsx for why.
         */}
         <GoogleAnalytics />
+        <AnalyticsEvents />
       </head>
       <CSPostHogProvider>
         <body className="flex min-h-screen flex-col overflow-x-hidden bg-background antialiased">

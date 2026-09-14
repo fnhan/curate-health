@@ -142,6 +142,7 @@ export const SERVICE_BY_SLUG_QUERY = groq`
 
 export const TREATMENT_BY_SLUG_QUERY = groq`
 *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {
+  _updatedAt,
   title,
   treatmentSlug,
   "serviceName": service->title,
@@ -751,6 +752,7 @@ export const GET_ALL_POSTS_QUERY = groq`*[_type == "post" && published == true] 
 } | order(publishedAt desc)`;
 
 export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == true && slug.current == $slug][0] {
+  _updatedAt,
   title,
   publishedAt,
   slug,

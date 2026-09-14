@@ -3,6 +3,7 @@ import Image from "next/image";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
+import { LastUpdated } from "@/components/shared/last-updated";
 import {
   PRIMARY_CTA_BUTTON_QUERYResult,
   TREATMENT_BY_SLUG_QUERYResult,
@@ -40,6 +41,7 @@ export default function TreatmentContent({
               {intro?.subtitle}
             </h2>
             <p className="font-light">{intro?.introParagraph}</p>
+            <LastUpdated date={treatment._updatedAt} className="pt-2" />
           </div>
         </div>
       </section>

@@ -1048,14 +1048,57 @@ One page covering transit access, walking directions from both stations, and whi
 
 | ID     | Task                                                                                                                                                               |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| CH-110 | `lang="en-CA"` instead of `lang="en"`                                                                                                                              |
-| CH-111 | `dateModified` in schema plus a visible "last updated" on content pages                                                                                            |
-| CH-112 | Helpful 404 page with search and links to main hubs. Currently the Next.js default                                                                                 |
-| CH-113 | GA4 conversion events on every Book Now click. Nothing is tracked today                                                                                            |
+| CH-110 | **Done 2026-09-13.** `lang="en-CA"` in `app/layout.tsx` |
+| CH-111 | **Partly done 2026-09-13.** A visible "Last reviewed" line is on treatment and blog pages, from Sanity's `_updatedAt`. `dateModified` in markup waits for CH-105: Google reads it on `BlogPosting`, which does not exist yet, and putting it on a `Service` node would be markup nothing consumes |
+| CH-112 | **Done 2026-09-13.** Search form, six hub links, `noindex`, still a real 404. Deliberately not a redirect home: a soft 404 teaches a crawler a dead URL is a live page |
+| CH-113 | **Done 2026-09-13.** `book_now`, `call_click`, `email_click`, `directions_click` and `file_download`, from one delegated listener in `components/shared/analytics-events.tsx`. See below |
 | CH-114 | IndexNow submission on publish. Bing's index is what ChatGPT search runs on                                                                                        |
-| CH-115 | Remove the legacy `meta keywords` tag. Google has ignored it for years                                                                                             |
+| CH-115 | **Done 2026-09-13.** No longer emitted. The Studio field stays, since editors filled it in and deleting their work is not this ticket's job |
 | CH-029 | Downsample oversized Sanity assets. 95 exceed 2,600px, worst is a 6500x3846 PNG appearing on 29 pages. CH-007 solves most of the delivery cost, so this is cleanup |
 | CH-030 | Add Claire to the team page and to CH-104                                                                                                                          |
+
+### CH-113 Conversion events
+
+**Done 2026-09-13.** Nothing was tracked before this. gtag loaded and counted
+page views, so the numbers could say which pages were visited and never which
+ones produced an appointment.
+
+**One delegated listener, not a prop on every button.** Booking links are
+rendered by at least five components and some arrive as portable text out of
+Sanity, where there is no component to edit. A single capture-phase listener on
+the document reads the href of whatever was clicked, so a booking link is
+measured wherever it appears and whoever adds it next. `BOOKING_HOST` is the
+one line to change if Jane is ever replaced.
+
+**GA4 Enhanced Measurement is not the answer here.** It reports every outbound
+click under one event name, so a Jane booking is indistinguishable from a click
+on Instagram. It is also a property setting nobody controls from this
+repository, so it can be switched off without anything in the codebase
+changing.
+
+| Event | Fires on |
+| ------------------- | ----------------------------- |
+| `book_now` | any link to `janeapp.com` |
+| `call_click` | `tel:` |
+| `email_click` | `mailto:` |
+| `directions_click` | a URL carrying `daddr=` |
+| `file_download` | any `.pdf` |
+
+**Still to do by hand, and the events are worth little until it happens:** mark
+`book_now` as a key event in the GA4 property, at Admin, Events. Claude Code
+cannot do this from the repository.
+
+```bash
+node scripts/audit-conversion-events.js https://www.curatehealth.ca
+```
+
+That checks the code is still shipped and reachable from every page, by finding
+the event names in the JavaScript each page loads. It cannot prove an event
+fires. For that, load a page, run
+`window.gtag = (c, n, p) => console.log(n, p)` in the console, and click a Book
+Now link. Verified that way on the homepage and `/contact` before merge: all
+five fire, an internal link and an Instagram link correctly fire nothing, and a
+real Book Now button already in the markup fires without any component edit.
 | CH-117 | Retire the orphaned image assets. **Deferred by Frank on 2026-09-13, to be raised again later.** See below                                                        |
 
 ### CH-116 Retire the content nothing uses

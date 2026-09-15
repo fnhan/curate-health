@@ -23,6 +23,12 @@ Site is 44 URLs in the sitemap. Health and wellness clinic with an attached cafe
 
 **Branch and preview, never push to production directly.** One branch per ticket group. Vercel preview deploy for every branch. Frank reviews the preview before merge.
 
+**Every push is a stored deployment.** Vercel builds a full copy of the site for each push to a pull request branch and for each merge to main, and keeps it for up to 30 days. On 2026-09-15 the team hit 100% of the 10 GB of Deployment Storage the free Hobby plan includes: 158 copies held, 116 of them from the previous seven days, nearly all from this project's own pull requests. Push a branch once, when it is ready for Frank, rather than after every fix, and batch tier 1 changes instead of merging each on its own. `npx vercel list curate-health` shows what is held. Deleting deployments and changing the retention policy are Frank's to do in the dashboard.
+
+**The Hobby plan does not cover this site.** Vercel restricts Hobby to non-commercial personal use, and a clinic site that advertises its services is commercial use by Vercel's own definition. Frank was told on 2026-09-15. Moving to Pro is his decision; until he makes it, assume the 10 GB ceiling still applies.
+
+**Everything in `public/` ships inside every deployment, used or not.** Thirteen photos, 34 MB, had not been used since 2024 and were removed on 2026-09-15: no reference in the source, none in the rendered pages or the script and style bundles they load, none in the dataset. The files left in that folder are live. Several are imported by components or by `app/globals.css`, and an imported file is served under a hashed name, so searching rendered HTML for its original filename finds nothing. Search the source before calling a `public/` file unused.
+
 **Claude Code may merge, in two tiers. Changed 2026-09-08, replacing "Frank merges everything".**
 
 Tier 1, merge once the checks are green, no need to ask: changes that cannot alter what a visitor sees. Scripts, audits, tooling, tests, comments, and this file. If in doubt about which tier something is in, it is tier 2.
@@ -658,7 +664,7 @@ Add:
 - `geo` with `latitude: 43.6997`, `longitude: -79.4306`
 - `sameAs` array covering every owned profile: LinkedIn, both Instagram accounts, TikTok, Google Business Profile
 - `Person` and `Physician` schema per practitioner, see CH-104
-- `BlogPosting` with `author` and `reviewedBy` on blog posts, see CH-105
+- `BlogPosting` with `author` on blog posts, see CH-105. No `reviewedBy`, which Frank declined on 2026-09-15
 - `VideoObject` with `transcript` on video embeds, see CH-106
 - `Event` on class listings, see CH-107
 - `Course` on the Curate Lifestyle Program
@@ -1152,10 +1158,11 @@ Build:
 
 - Categories and tags for topic clustering
 - Author byline on every post, linked to the practitioner page from CH-104
-- A visible "Reviewed by {name}, {credentials}" line with a date
-- `BlogPosting` schema with `author`, `reviewedBy`, `datePublished`, `dateModified`
+- `BlogPosting` schema with `author`, `datePublished`, `dateModified`
 - Pagination
 - RSS feed at `/rss.xml`, currently 404
+
+**No reviewed-by line, decided 2026-09-15.** Frank declined the visible "Reviewed by {name}, {credentials}" line with a date, and the `reviewedBy` markup that went with it. Do not rebuild either, and do not report the absence as a gap. Nothing in search depended on it: Google's article markup does not read a reviewer, and schema.org defines `reviewedBy` on `WebPage` rather than on `BlogPosting`.
 
 The byline work is the highest-value E-E-A-T item available. Google's helpful content systems filter anonymous medical content, and the AI answer engines apply the same test. Six credentialed practitioners and zero bylines is the gap.
 
@@ -1380,5 +1387,5 @@ fetch("https://www.curatehealth.ca/llms.txt").then(r => r.text()).then(t => {
 - Every sitemap URL returns 200 with no redirect
 - One H1 per page, unique title and meta description per page
 - Every image carries meaningful alt text
-- Every blog post has a visible byline and review attribution
+- Every blog post has a visible byline
 - Frank has approved every piece of published copy

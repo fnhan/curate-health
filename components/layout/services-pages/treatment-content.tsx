@@ -1,9 +1,10 @@
 import Image from "next/image";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { LastUpdated } from "@/components/shared/last-updated";
+import { PractitionerGrid } from "@/components/shared/practitioner-card";
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
-import { LastUpdated } from "@/components/shared/last-updated";
 import {
   PRIMARY_CTA_BUTTON_QUERYResult,
   TREATMENT_BY_SLUG_QUERYResult,
@@ -25,6 +26,24 @@ export default function TreatmentContent({
   const { title: benefitsTitle, benefitsList } = benefits || {};
   const { ctaBg, ctaBgAlt, ctaTitle, ctaText, ctaButtonText } = cta || {};
   const { ctaButton } = primaryCTA || {};
+
+  /*
+   * This treatment's own Jane page when it has one, the site-wide link when
+   * it does not.
+   *
+   * Every treatment Book button used to land on the Jane front page, leaving
+   * the visitor to find the thing they had just been reading about. The
+   * Recovery Sanctuary bookings are the clearest case: cold plunge, sauna,
+   * yoga and Pilates each have a treatment address in Jane, and sending
+   * someone to the front page instead is a step where people leave.
+   */
+  const bookingHref = treatment.janeBookingUrl || ctaButton?.ctaLink;
+
+  // isActive is checked here rather than in the query, so a switched-off
+  // practitioner drops out of every service page at once.
+  const providers = (treatment.practitioners ?? []).filter(
+    (p) => p?.isActive && p?.slug && p?.name
+  );
 
   return (
     <div className="text-primary">
@@ -88,6 +107,24 @@ export default function TreatmentContent({
           </div>
         </div>
       </section>
+      {/*
+        Practitioners offering this service, per the approved mockup.
+        The same card as the team page, so somebody who has read about a
+        treatment can see who provides it without going back to /about.
+        Empty until the treatment names someone, and then the whole block is
+        left off rather than showing a heading over nothing.
+      */}
+      {providers.length ? (
+        <section className="bg-white pb-20 md:pb-28">
+          <div className="container flex flex-col gap-8">
+            <h2 className="text-2xl font-light md:text-4xl">
+              Practitioners offering this service
+            </h2>
+            <PractitionerGrid practitioners={providers} label="View Profile" />
+          </div>
+        </section>
+      ) : null}
+
       <section className={`relative h-[calc(100vh-100px)]`}>
         <Image
           sizes="100vw"
@@ -111,10 +148,7 @@ export default function TreatmentContent({
               asChild
               className="w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
             >
-              <a
-                href={ctaButton?.ctaLink!}
-                {...externalLinkProps(ctaButton?.ctaLink!)}
-              >
+              <a href={bookingHref!} {...externalLinkProps(bookingHref!)}>
                 {ctaButtonText}
               </a>
             </Button>

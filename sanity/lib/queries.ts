@@ -158,6 +158,23 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     introParagraph
   },
   quoteContent,
+  janeBookingUrl,
+  // Who provides this, for the block at the foot of the page. Dereferenced
+  // rather than stored on the page, so a practitioner switched off in the
+  // Studio drops out of every service that lists them.
+  practitioners[]->{
+    name,
+    "slug": slug.current,
+    credentials,
+    // The whole image object, not just a URL, so urlForPractitionerPhoto can
+    // read the hotspot and crop an editor set in the Studio.
+    photo{
+      ...,
+      "url": asset->url,
+      alt
+    },
+    isActive
+  },
   additionalSections[] {
     sectionTitle,
     sectionParagraph,
@@ -336,37 +353,6 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
 }`;
 
 /**
- * The team page, reading the practitioner documents. CH-104.
- *
- * teamMembers, the array inside the ourTeam document, is no longer selected.
- * Array items cannot be referenced or given their own URL, which is the whole
- * reason the practitioners were migrated out of it in #205. Selecting both
- * would put the same seven people in the dataset twice with nothing keeping
- * them in step, which is the failure CH-025 and CH-116 were spent undoing.
- *
- * The page heading still comes from ourTeam, because that is page copy rather
- * than a person.
- */
-export const TEAM_PAGE_QUERY = groq`{
-  "page": *[_type == "ourTeam" && pageActive == true][0]{
-    heroSection{
-      heroTitle,
-      heroParagraph
-    },
-    ${SEO_QUERY}
-  },
-  "practitioners": *[_type == "practitioner" && isActive == true] | order(name asc){
-    name,
-    "slug": slug.current,
-    credentials,
-    photo{
-      "url": asset->url,
-      alt
-    }
-  }
-}`;
-
-/**
  * One practitioner page.
  *
  * commonlyTreats and the services list are both allowed to come back empty,
@@ -386,8 +372,12 @@ export const PRACTITIONER_BY_SLUG_QUERY = groq`
   credentials,
   languages,
   commonlyTreats,
+  commonlyTreatsLabel,
   fullBio,
+  // The whole image object, not just a URL, so urlForPractitionerPhoto can
+  // read the hotspot and crop an editor set in the Studio.
   photo{
+    ...,
     "url": asset->url,
     alt
   },
@@ -399,7 +389,8 @@ export const PRACTITIONER_BY_SLUG_QUERY = groq`
     | order(title asc){
       title,
       "slug": treatmentSlug.current,
-      "serviceSlug": service->slug.current
+      "serviceSlug": service->slug.current,
+      "serviceName": service->title
     },
   ${SEO_QUERY}
 }`;

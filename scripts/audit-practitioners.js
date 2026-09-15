@@ -74,7 +74,9 @@ async function main() {
         credentials,
         janeBookingUrl,
         bookingNote,
-        bookingCtaLabel
+        bookingCtaLabel,
+        "photoWidth": photo.asset->metadata.dimensions.width,
+        "photoHeight": photo.asset->metadata.dimensions.height
       }`
   );
 
@@ -149,7 +151,13 @@ async function main() {
      * what the first run of this check did.
      */
     const flattened = html.replace(/<!--[\s\S]*?-->/g, "");
-    const hasBookButton = flattened.includes(`Book with ${person.name}`);
+    /*
+     * The button reads "Book with Ariel", not "Book with Ariel Zohar". The
+     * mockup uses the first name, and the honorific is dropped with it, so
+     * Dr. Frank Nhan's button says "Book with Frank".
+     */
+    const given = person.name.replace(/^Dr\.?\s+/i, "").split(/\s+/)[0];
+    const hasBookButton = flattened.includes(`Book with ${given}`);
     const hasCtaLabel = person.bookingCtaLabel
       ? flattened.includes(person.bookingCtaLabel)
       : false;
@@ -171,6 +179,19 @@ async function main() {
     }
   }
 
+  /*
+   * Every photo is cropped to one 4:5 frame at 800x1000. A source smaller
+   * than that in either dimension is upscaled, and upscaling a face is
+   * visible. This is a photograph to replace rather than a value to lower,
+   * so it is a warning with a name on it rather than a silent pass.
+   */
+  const soft = people.filter(
+    (p) =>
+      p.photoWidth &&
+      p.photoHeight &&
+      (p.photoWidth < 800 || p.photoHeight < 1000)
+  );
+
   const unknown = await get("/about/our-team/definitely-nobody");
   if (unknown.status !== 404) {
     failures.push(`an unknown slug returned ${unknown.status}, expected 404`);
@@ -191,6 +212,18 @@ async function main() {
   }
 
   console.log("Every practitioner has a page, and every page agrees with its record.");
+
+  if (soft.length) {
+    console.log(
+      `
+${soft.length} photograph${soft.length === 1 ? "" : "s"} below the ` +
+        `800x1000 the crop needs, so ${soft.length === 1 ? "it is" : "they are"} ` +
+        `upscaled and will look soft:`
+    );
+    for (const p of soft) {
+      console.log(`  ${p.name}: ${p.photoWidth}x${p.photoHeight}`);
+    }
+  }
 }
 
 main().catch((error) => {

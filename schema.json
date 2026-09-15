@@ -6932,6 +6932,13 @@
         },
         "optional": true
       },
+      "commonlyTreatsLabel": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "commonlyTreats": {
         "type": "objectAttribute",
         "value": {
@@ -9145,6 +9152,13 @@
               "optional": true
             }
           }
+        },
+        "optional": true
+      },
+      "janeBookingUrl": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
         },
         "optional": true
       },

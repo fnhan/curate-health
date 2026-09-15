@@ -39,10 +39,26 @@ export const getTeamMemberUrlId = (name: string): string => {
 /**
  * Generate a URL with team member parameter for opening accordion
  */
-export const getTeamMemberUrl = (baseUrl: string, memberName: string): string => {
-  const memberId = getTeamMemberUrlId(memberName);
-  return `${baseUrl}?member=${memberId}`;
-};
+/**
+ * The practitioner's own page address, from their display name. CH-104.
+ *
+ * Record slugs drop the dot in an honorific: "Dr. Frank Nhan" is
+ * dr-frank-nhan. getTeamMemberUrlId keeps it, giving "dr.-frank-nhan", which
+ * matches no page.
+ */
+export const getPractitionerSlugFromName = (name: string): string =>
+  name.toLowerCase().replace(/\./g, "").trim().replace(/\s+/g, "-");
+
+/**
+ * Where a link to a named team member goes.
+ *
+ * It used to return /about/our-team?member={id}, which the team page read to
+ * open that person's bio in an accordion. The accordion is gone and every
+ * practitioner has a page, so a link arriving with ?member= would land on the
+ * team page and open nothing. Blog author bylines are built here.
+ */
+export const getTeamMemberUrl = (baseUrl: string, memberName: string): string =>
+  `${baseUrl}/${getPractitionerSlugFromName(memberName)}`;
 
 /**
  * Extract only the first paragraph from PortableText content

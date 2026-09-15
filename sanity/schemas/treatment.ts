@@ -223,6 +223,17 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "janeBookingUrl",
+      title: "Jane Booking URL",
+      type: "url",
+      description:
+        "This treatment's own booking page in Jane, for example https://curatehealth.janeapp.com/locations/curate-health-recovery-sanctuary/book#/discipline/22/treatment/81. The Book button on this page uses it. Leave empty and the button falls back to the site-wide booking link, which lands on the Jane front page and makes the visitor find this treatment again themselves.",
+      validation: (Rule) =>
+        Rule.uri({ scheme: ["https"] }).error(
+          "Must be a full https URL, or empty"
+        ),
+    }),
+    defineField({
       name: "displayOrder",
       title: "Display Order",
       type: "number",

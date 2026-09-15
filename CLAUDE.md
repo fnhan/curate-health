@@ -1046,6 +1046,104 @@ node scripts/audit-practitioners.js https://www.curatehealth.ca
 Six checks, all against rendered pages. Run before this merged, it reported
 all seven as 404, which is what proves it looks.
 
+**The mapping was filled in 2026-09-14**, by
+`scripts/apply-practitioner-mapping.js`. Three different provenances, and they
+should not be confused when anyone revisits this:
+
+| Source | What |
+| --- | --- |
+| Frank, against a corrected chart | every treatment to practitioner assignment, and the Recovery Sanctuary booking links |
+| Dr. Gabriele and Dr. Leong, relayed | their own `commonlyTreats` lists, 24 items and 3 |
+| Claude Code, at Frank's request | the other four clinical lists, written narrow and ordinary for the profession, **to be replaced** when each practitioner sends their own |
+
+**Rooj's entry is not a clinical list.** She is a yoga teacher, not a regulated
+health professional, so `commonlyTreatsLabel` is set to "Class focus" on her
+record and the items are what her classes are for. That field exists for
+exactly this: "Commonly treats" over a list of class focuses would read as a
+clinical claim nobody made.
+
+**Treatments now carry their own `janeBookingUrl`.** Every treatment's Book
+button used to land on the Jane front page, leaving the visitor to find the
+thing they had just been reading about. Recovery Sanctuary bookings each have
+a treatment address in Jane; the button uses it when set and falls back to the
+site-wide link when not.
+
+**Three things still open, all of them Frank's:**
+
+- **Claire Kim teaches Mat Pilates and is deliberately left off the site for
+  now.** Frank's call on 2026-09-14: leave her out of Outdoor Pilates and off
+  the team page until she is up and running, then add her everywhere at once.
+  Her surname comes from Jane, "Mat Pilates Class with Claire Kim". **Raise
+  this again rather than letting it lapse**, and do CH-030 in the same pass.
+- **Ariel Zohar's photograph is 1001x685**, below the 800x1000 the crop needs,
+  so it is upscaled and looks soft. A photograph to replace, not a value to
+  lower. `scripts/audit-practitioners.js` names anyone in this state.
+- **Jane's own address reads "989 Eglinton Avenue West - Suite 2, Suite 2,
+  York"**, with the doubled suite and the "York" that CH-021 spent a ticket
+  removing from the site. Local search reads the two as one business, so the
+  mismatch costs something. Jane is not in this repository: it is a change
+  somebody makes in the Jane settings.
+- **Jane offers acupuncture with Dr. Frank Nhan only.** The site lists Dr.
+  Gabriele, Dr. Nhan and Ariel Zohar as providers, per Frank's chart. Someone
+  who reads that Ariel does acupuncture and clicks Book finds only Frank. One of
+  the two needs to change, and which is Frank's call.
+
+**The team hub is the backup, not a rebuild.** Frank asked twice for the hub to
+look exactly as it did before #238, and two attempts to reproduce it by hand
+both changed things: the first redrew the card, the second rebuilt it as a
+lookalike and also changed the order. On 2026-09-14 he asked for the original
+to be restored instead, and that is what shipped: `app/about/our-team/page.tsx`
+and `team-members-section.tsx` taken from `ffd80e0`, the commit live before
+#238, with one change. "Learn More" and the photo link to the practitioner's
+page rather than opening the bio in an accordion. `git diff ffd80e0` on those
+two files shows nothing else. **When Frank asks for a revert, restore the files
+from git and change only what he named.**
+
+The hub still reads `ourTeam.teamMembers`, so its photos, credentials and order
+are exactly the originals: Dr. Nhan, Dr. Gabriele, Dr. Leong, Safa, Ariel,
+Andrew, Rooj. `ourTeam.practitioners` holds a different order and the hub does
+not use it. The practitioner pages read the practitioner records, and every
+team member name maps to one. Masonry lays cards out column first, so check the
+order by position on the page rather than by reading the HTML top to bottom.
+
+`components/shared/practitioner-card.tsx` is used only by the "Practitioners
+offering this service" block on treatment pages.
+
+**Blog bylines were already built, by Frank's developer, and were not changed.**
+`components/shared/blog-author-byline.tsx` and `lib/author-team-link.ts`, from
+commit `18ea307` on 2026-03-31. An empty author shows no byline; the "Curate
+Health Team" option shows that name and links to `/about/our-team`; a named
+team member links to that person. The only change here is where a named member
+links, which was `/about/our-team?member={name}` and is now their page. Both
+posts use the "Curate Health Team" option, so nothing on the blog changed.
+`?member=` links on `/services/curate-lifestyle` were repointed the same way.
+
+**Photos.** The individual practitioner pages crop through Sanity to one 4:5
+frame at 800x1000, because they rendered each photo at its natural ratio and the
+seven sources range from 0.65 to 1.50. The hub keeps the original fixed 300px
+frame, which was already uniform, and honours a hotspot when one is set.
+`urlForPractitionerPhoto` is the page crop.
+
+**Jane links were read off the live booking site, not guessed.** Flowpresso is
+`#/discipline/22/treatment/42`, under Recovery Sanctuary Classes behind that
+section's "Show more". Acupuncture has a section of its own with no sessions,
+only "Book by Practitioner", so its link is the section anchor Jane's own
+navigation uses, `#/acupuncture`. Frank pasted `treatment/81` for Flowpresso;
+that is Cold Plunge & Sauna. After writing a booking link to Sanity, a local
+build can keep serving the old one for 60 seconds: request the page twice
+before concluding the link did not land.
+
+**The mockup commit went unpushed for a turn.** `git push origin <branch>`
+pushes the local branch of that name, not the one checked out. A commit made on
+`feat/practitioner-design` and pushed as `feat/treatment-booking-links` left
+PR #239 without it while it was described as included. Push with
+`git push origin HEAD:<pr-branch>` and confirm the remote log.
+
+**The image builder throws rather than returning null** when handed an object
+with no asset, so a `|| photo.url` fallback at the call site does not catch
+it. A projection that selected the url but not the asset reference 500'd all
+seven pages. `urlForPractitionerPhoto` guards before calling the builder now.
+
 ### CH-105 Blog architecture
 
 Conditions will be covered in blog posts rather than standalone pages, so the blog needs to actually work. Currently two posts, last updated 16 December 2024, no taxonomy, no author attribution.

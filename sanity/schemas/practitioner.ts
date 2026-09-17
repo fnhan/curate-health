@@ -74,13 +74,13 @@ export default defineType({
     }),
     defineField({
       name: "isActive",
-      title: "Is Active",
+      title: "Show on website",
       type: "boolean",
       description:
-        "Untick to remove this person from the team page, from every service page, and from their own page, without editing any of those pages.",
+        "Switch off to take this person off the website everywhere they appear, including the team page, their own page and service pages. Switch it back on to bring them back. The team page finds them by name, so keep this name the same as their entry under Our Team.",
       initialValue: true,
       validation: (Rule) =>
-        Rule.required().error("Is Active status is required"),
+        Rule.required().error("Choose whether this person shows on the website"),
     }),
     // No display order field, deliberately. Order is set by dragging, in the
     // reference list on "About | Our Team Page", exactly as the old embedded

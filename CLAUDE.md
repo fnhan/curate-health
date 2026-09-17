@@ -1115,6 +1115,22 @@ order by position on the page rather than by reading the HTML top to bottom.
 `components/shared/practitioner-card.tsx` is used only by the "Practitioners
 offering this service" block on treatment pages.
 
+**Every practitioner has a "Show on website" switch, since 2026-09-17.** Frank
+asked for it to take Safa Karoumi off the site temporarily, and asked for it to
+be standard for every practitioner, now and new ones. It is the `isActive`
+field on the practitioner record, on by default. Switched off, that person
+leaves the team page, their own page (which becomes a 404), the service pages
+that list them, the Curate Lifestyle page, site search, the sitemap and
+llms.txt, which catches up within the hour. Switched back on, all of it
+returns, with nothing else to edit.
+
+The team page and the Curate Lifestyle page read `ourTeam.teamMembers`, not
+the practitioner records, so their queries drop any member whose name matches
+a switched-off practitioner. **The two names must agree.**
+`scripts/audit-practitioners.js` fails when an Our Team entry has no
+practitioner record of the same name, and when anyone switched off still
+shows on the team page, their own page or the sitemap.
+
 **Blog bylines were already built, by Frank's developer, and were not changed.**
 `components/shared/blog-author-byline.tsx` and `lib/author-team-link.ts`, from
 commit `18ea307` on 2026-03-31. An empty author shows no byline; the "Curate

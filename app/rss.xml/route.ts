@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-import { groq } from "next-sanity";
-
 import { BASEURL } from "@/app/site-settings";
 import { getBlogAuthorDisplayName } from "@/lib/author-team-link";
 import {
@@ -24,7 +22,11 @@ import { sanityFetch } from "@/sanity/lib/client";
  */
 export const revalidate = 3600;
 
-const RSS_QUERY = groq`*[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc){
+// Deliberately not tagged with groq, so Sanity TypeGen skips it. The route
+// declares its own FeedPost type, and a fourth file of tagged queries reorders
+// the whole of sanity.types.ts, which buries the real change in a diff of
+// thousands of lines.
+const RSS_QUERY = `*[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc){
   title,
   "slug": slug.current,
   excerpt,

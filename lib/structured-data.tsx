@@ -1,8 +1,14 @@
 import { BASEURL, BRAND_NAME } from "@/app/site-settings";
+import {
+  AUTHOR_TEAM_PROFILE_PAGE_ONLY,
+  getBlogAuthorDisplayName,
+} from "@/lib/author-team-link";
 import type { Crumb } from "@/lib/breadcrumbs";
 import { treatmentPath } from "@/lib/service-urls";
+import { getPractitionerSlugFromName } from "@/lib/utils";
 import {
   CAFE_PAGE_QUERYResult,
+  GET_POST_BY_SLUG_QUERYResult,
   PRACTITIONER_BY_SLUG_QUERYResult,
   SERVICE_BY_SLUG_QUERYResult,
   SITE_SETTINGS_QUERYResult,
@@ -523,6 +529,66 @@ export function buildCafeJsonLd(
       "@type": "City",
       name: "Toronto",
     },
+  }) as JsonLdObject;
+}
+
+/**
+ * BlogPosting for a post page. CH-105.
+ *
+ * The two dates are the two the page shows. datePublished is the "Published"
+ * line, and dateModified is the "Last reviewed" line, which is Sanity's
+ * _updatedAt. Markup that disagrees with the dates a reader can see is worse
+ * than none, so both come from the same fields as the page. The caveat in
+ * components/shared/last-updated.tsx carries over: any save moves _updatedAt,
+ * a typo fix included.
+ *
+ * The author is whoever the byline shows. "Curate Health Team" is a byline for
+ * the clinic that links to the team page, so it is described as exactly that.
+ * A named team member points at the Person node their own practitioner page
+ * publishes, by the same @id. A post with no byline carries no author, rather
+ * than one the page never shows.
+ *
+ * No reviewedBy. Frank declined the reviewed-by line on 2026-09-15.
+ */
+export function buildBlogPostingJsonLd(post: GET_POST_BY_SLUG_QUERYResult) {
+  if (!post?.title || !post.slug?.current) return null;
+
+  const url = absoluteUrl(`/blog/${post.slug.current}`);
+  const byline = post.author?.linkedTeamMemberName?.trim();
+
+  let author: JsonLdObject | undefined;
+  if (byline === AUTHOR_TEAM_PROFILE_PAGE_ONLY) {
+    author = {
+      "@type": "Organization",
+      name: getBlogAuthorDisplayName(byline),
+      url: absoluteUrl("/about/our-team"),
+    };
+  } else if (byline) {
+    const personUrl = absoluteUrl(
+      `/about/our-team/${getPractitionerSlugFromName(byline)}`
+    );
+    author = {
+      "@type": "Person",
+      "@id": `${personUrl}#person`,
+      name: byline,
+      url: personUrl,
+    };
+  }
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${url}#blogposting`,
+    headline: post.title,
+    description: post.seo?.pageDescription?.trim() || post.excerpt,
+    image: post.mainImage?.image,
+    datePublished: post.publishedAt,
+    dateModified: post._updatedAt,
+    author,
+    publisher: { "@id": `${BASEURL}/#organization` },
+    mainEntityOfPage: url,
+    url,
+    inLanguage: "en-CA",
   }) as JsonLdObject;
 }
 

@@ -1129,7 +1129,15 @@ the practitioner records, so their queries drop any member whose name matches
 a switched-off practitioner. **The two names must agree.**
 `scripts/audit-practitioners.js` fails when an Our Team entry has no
 practitioner record of the same name, and when anyone switched off still
-shows on the team page, their own page or the sitemap.
+shows on the team page, their own page, the sitemap or site search.
+
+**Site search indexes whole documents, so it needs the filter too.** The first
+version filtered the pages and missed search: with Safa switched off on
+2026-09-17, her page, card and sitemap entry were gone, but searching "Safa"
+still returned the team page, because the search index read every string in
+the Our Team document, her bio included. Both `INDEX_DOCS_QUERY` copies, in
+`app/api/search/route.ts` and `app/search/page.tsx`, now filter
+`teamMembers` the same way.
 
 **Blog bylines were already built, by Frank's developer, and were not changed.**
 `components/shared/blog-author-byline.tsx` and `lib/author-team-link.ts`, from
@@ -1182,6 +1190,19 @@ Build:
 
 The byline work is the highest-value E-E-A-T item available. Google's helpful content systems filter anonymous medical content, and the AI answer engines apply the same test. Six credentialed practitioners and zero bylines is the gap.
 
+**Bylines already existed** when this ticket was picked up, built by Frank's developer, see CH-104. Both posts show "Curate Health Team".
+
+**Markup and feed built 2026-09-17.** Each post carries one `BlogPosting` node from `buildBlogPostingJsonLd` in `lib/structured-data.tsx`. Its dates are the two the page shows: `datePublished` is `publishedAt`, and `dateModified` is `_updatedAt`, the same value as the "Last reviewed" line, which finishes CH-111 for posts. The author is whoever the byline shows. The "Curate Health Team" byline becomes an Organization pointing at `/about/our-team`; a named team member becomes the Person node on their practitioner page, by the same `@id`; a post with no byline carries no author rather than one the page never shows.
+
+`/rss.xml` lists every published post, and `/blog` and every post point to it with a link tag. The feed's description and the `/blog` meta description are one string, in `lib/blog-feed.ts`.
+
+**Categories, tags and pagination are not built.** Proposed to Frank on 2026-09-17 to hold them until the blog has posts to fill them: with two posts, each category page would hold one or two, which reads as thin, and pagination would have nothing to page.
+
+```bash
+node scripts/audit-blog.js http://localhost:3000
+node scripts/audit-blog.js https://www.curatehealth.ca
+```
+
 ### CH-106 Video
 
 The site hosts Mux video with zero `VideoObject` markup.
@@ -1219,7 +1240,7 @@ One page covering transit access, walking directions from both stations, and whi
 | ID     | Task                                                                                                                                                               |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | CH-110 | **Done 2026-09-13.** `lang="en-CA"` in `app/layout.tsx` |
-| CH-111 | **Partly done 2026-09-13.** A visible "Last reviewed" line is on treatment and blog pages, from Sanity's `_updatedAt`. `dateModified` in markup waits for CH-105: Google reads it on `BlogPosting`, which does not exist yet, and putting it on a `Service` node would be markup nothing consumes |
+| CH-111 | **Done 2026-09-17.** A visible "Last reviewed" line is on treatment and blog pages, from Sanity's `_updatedAt`, since 2026-09-13. Blog posts carry the same date as `dateModified` in their `BlogPosting` markup, CH-105. Treatment pages carry no `dateModified`, because putting it on a `Service` node would be markup nothing consumes |
 | CH-112 | **Done 2026-09-13.** Search form, six hub links, `noindex`, still a real 404. Deliberately not a redirect home: a soft 404 teaches a crawler a dead URL is a live page |
 | CH-113 | **Done 2026-09-13.** `book_now`, `call_click`, `email_click`, `directions_click` and `file_download`, from one delegated listener in `components/shared/analytics-events.tsx`. See below |
 | CH-114 | IndexNow submission on publish. Bing's index is what ChatGPT search runs on                                                                                        |

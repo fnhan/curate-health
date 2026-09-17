@@ -47,6 +47,11 @@ const INDEX_DOCS_QUERY = groq`
   ]
 ]{
   ...,
+  // Search reads every string in a document, so a team member whose
+  // practitioner record has "Show on website" switched off has to come out
+  // of the Our Team document here too, or searching their name still lands
+  // on the team page. The same filter as OUR_TEAM_PAGE_QUERY.
+  "teamMembers": teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)],
   "slugCurrent": slug.current,
   "treatmentSlugCurrent": treatmentSlug.current,
   "serviceSlugCurrent": service->slug.current

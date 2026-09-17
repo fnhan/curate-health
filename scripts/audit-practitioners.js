@@ -24,8 +24,8 @@
  *     same name. The team page hides people by matching that name, so a
  *     mismatch would leave "Show on website" switched off to no effect.
  *   8 Anyone with "Show on website" switched off is really gone: the team
- *     page neither links to nor names them, their own page is a 404, and the
- *     sitemap does not list it.
+ *     page neither links to nor names them, their own page is a 404, the
+ *     sitemap does not list it, and site search finds nothing for their name.
  *
  * Exits 1 on any failure.
  */
@@ -246,6 +246,18 @@ async function main() {
       if (sitemap.html.includes(path)) {
         failures.push(`${path}: switched off, but still listed in the sitemap`);
       }
+      const search = await get(`/api/search?q=${encodeURIComponent(person.name)}`);
+      let found = 0;
+      try {
+        found = (JSON.parse(search.html).results || []).length;
+      } catch {
+        failures.push(`/api/search for ${person.name} did not return JSON`);
+      }
+      if (found) {
+        failures.push(
+          `${person.name}: switched off, but site search still finds ${found} result${found === 1 ? "" : "s"} for the name`
+        );
+      }
     }
   }
 
@@ -268,7 +280,7 @@ async function main() {
 
   console.log("Every practitioner has a page, and every page agrees with its record.");
   if (hidden.length) {
-    console.log("Everyone switched off is gone from the team page, their own page and the sitemap.");
+    console.log("Everyone switched off is gone from the team page, their own page, the sitemap and site search.");
   }
 
   if (soft.length) {

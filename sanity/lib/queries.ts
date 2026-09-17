@@ -827,6 +827,7 @@ export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == tru
   _updatedAt,
   title,
   publishedAt,
+  excerpt,
   slug,
   "author": author->{
     linkedTeamMemberName,

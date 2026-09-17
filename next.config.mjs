@@ -197,6 +197,11 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "cdn.sanity.io",
+        // Curate's own Sanity project only. With no pathname the resizer took
+        // images from any Sanity project, so anyone could spend this site's
+        // image allowance and choose the file the optimiser opens. Every
+        // resized image on the live site comes from this path.
+        pathname: "/images/rwc5kyvy/**",
       },
     ],
   },

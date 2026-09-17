@@ -7,8 +7,10 @@ import BlogAuthorByline, {
 } from "@/components/shared/blog-author-byline";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import { LastUpdated } from "@/components/shared/last-updated";
+import { withBlogFeed } from "@/lib/blog-feed";
 import { postCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
+import { JsonLdScript, buildBlogPostingJsonLd } from "@/lib/structured-data";
 import { formatDate } from "@/lib/utils";
 import { GET_POST_BY_SLUG_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -32,6 +34,10 @@ export default async function BlogPostPage({
 
   return (
     <div className="bg-white">
+      <JsonLdScript
+        data={buildBlogPostingJsonLd(post)}
+        id={`blogposting-${params.post}-json-ld`}
+      />
       <section>
         <Image
           src={mainImage?.image!}
@@ -87,5 +93,5 @@ export async function generateMetadata({
 
   const { seo } = post;
 
-  return buildPageMetadata(seo, { path: `/blog/${params.post}` });
+  return withBlogFeed(buildPageMetadata(seo, { path: `/blog/${params.post}` }));
 }

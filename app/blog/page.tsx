@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { BLOG_DESCRIPTION, withBlogFeed } from "@/lib/blog-feed";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { formatDate } from "@/lib/utils";
 import { GET_ALL_POSTS_QUERYResult } from "@/sanity.types";
@@ -84,15 +85,16 @@ export default async function BlogPage() {
  * page is CH-006.
  *
  * Written here rather than pulled from Sanity because `blogSection` carries no
- * seo object and adding one is a schema change. Worth doing when the blog work
- * in CH-105 happens; until then this is the page's own identity rather than
- * the homepage's.
+ * seo object and adding one is a schema change. The description lives in
+ * lib/blog-feed.ts because the RSS feed uses the same words. The feed link tag
+ * is CH-105.
  */
 export async function generateMetadata() {
-  return buildPageMetadata(null, {
-    path: "/blog",
-    title: "Blog",
-    description:
-      "Articles on movement, recovery and lifestyle medicine from the practitioners at Curate Health in Midtown Toronto.",
-  });
+  return withBlogFeed(
+    buildPageMetadata(null, {
+      path: "/blog",
+      title: "Blog",
+      description: BLOG_DESCRIPTION,
+    })
+  );
 }

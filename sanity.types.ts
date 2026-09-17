@@ -6212,7 +6212,7 @@ export type LLMS_TXT_QUERYResult = {
 
 // Source: ./app/search/page.tsx
 // Variable: INDEX_DOCS_QUERY
-// Query: *[  _type in [    "heroSection",    "aboutSection",    "clinic",    "productsSection",    "servicesSection",    "cafeSection",    "blogSection",    "sustainabilitySection",    "post",    "product",    "service",    "treatments",    "serviceLifestyle",    "serviceLifestyleProgram",    "ourStory",    "ourTeam",    "missionAndValues",    "sustainability",    "pillarsOfHealth",    "cafePage",    "contactPage",    "ourPrograms",    "servicesHeroSection",    "legalPage"  ]]{  ...,  "slugCurrent": slug.current,  "treatmentSlugCurrent": treatmentSlug.current,  "serviceSlugCurrent": service->slug.current}
+// Query: *[  _type in [    "heroSection",    "aboutSection",    "clinic",    "productsSection",    "servicesSection",    "cafeSection",    "blogSection",    "sustainabilitySection",    "post",    "product",    "service",    "treatments",    "serviceLifestyle",    "serviceLifestyleProgram",    "ourStory",    "ourTeam",    "missionAndValues",    "sustainability",    "pillarsOfHealth",    "cafePage",    "contactPage",    "ourPrograms",    "servicesHeroSection",    "legalPage"  ]]{  ...,  // Search reads every string in a document, so a team member whose  // practitioner record has "Show on website" switched off has to come out  // of the Our Team document here too, or searching their name still lands  // on the team page. The same filter as OUR_TEAM_PAGE_QUERY.  "teamMembers": teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)],  "slugCurrent": slug.current,  "treatmentSlugCurrent": treatmentSlug.current,  "serviceSlugCurrent": service->slug.current}
 export type INDEX_DOCS_QUERYResult = Array<
   | {
       _id: string;
@@ -6236,6 +6236,7 @@ export type INDEX_DOCS_QUERYResult = Array<
       title2?: string;
       hoverLinkText?: string;
       hoverLinkHref?: string;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6249,6 +6250,7 @@ export type INDEX_DOCS_QUERYResult = Array<
       sectionTitle?: string;
       hoverLinkText?: string;
       hoverLinkHref?: string;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6384,6 +6386,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         closingLine?: string;
       };
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6442,6 +6445,7 @@ export type INDEX_DOCS_QUERYResult = Array<
       >;
       hoverLinkText?: string;
       hoverLinkHref?: string;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6497,6 +6501,7 @@ export type INDEX_DOCS_QUERYResult = Array<
             _key: string;
           }
       >;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6567,6 +6572,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         alt?: string;
       };
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6611,6 +6617,7 @@ export type INDEX_DOCS_QUERYResult = Array<
             _key: string;
           }
       >;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6650,6 +6657,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         _key: string;
       }>;
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: string | null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6753,6 +6761,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         url?: string;
       };
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -6964,6 +6973,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         paragraph?: string;
         buttonText?: string;
       };
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -7084,6 +7094,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         };
       };
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -7099,7 +7110,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         heroTitle?: string;
         heroParagraph?: string;
       };
-      teamMembers?: Array<{
+      teamMembers: Array<{
         name?: string;
         role?: Array<
           | {
@@ -7180,7 +7191,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         };
         _type: "teamMember";
         _key: string;
-      }>;
+      }> | null;
       practitioners?: Array<{
         _ref: string;
         _type: "reference";
@@ -7224,6 +7235,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         _key: string;
       }>;
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -7309,6 +7321,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         _key: string;
       }>;
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: string | null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -7392,6 +7405,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         ctaSectionDescription?: string;
       };
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: string | null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -7403,6 +7417,7 @@ export type INDEX_DOCS_QUERYResult = Array<
       _updatedAt: string;
       _rev: string;
       sectionTitle?: string;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -7474,6 +7489,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         _type: "image";
       };
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: string | null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -7910,6 +7926,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         _key: string;
       }>;
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: string | null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -8085,6 +8102,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         _type: "file";
       };
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: string | null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -8110,6 +8128,7 @@ export type INDEX_DOCS_QUERYResult = Array<
       };
       subtitle?: string;
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -8123,6 +8142,7 @@ export type INDEX_DOCS_QUERYResult = Array<
       sectionTitle?: string;
       hoverLinkText?: string;
       hoverLinkHref?: string;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -8258,6 +8278,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         };
       };
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -8313,6 +8334,7 @@ export type INDEX_DOCS_QUERYResult = Array<
             _key: string;
           }
       >;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
       serviceSlugCurrent: null;
@@ -8435,6 +8457,7 @@ export type INDEX_DOCS_QUERYResult = Array<
         [internalGroqTypeReferenceTo]?: "practitioner";
       }>;
       seo?: Seo;
+      teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: string | null;
       serviceSlugCurrent: string | null;
@@ -8490,6 +8513,6 @@ declare module "@sanity/client" {
     '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n        originalFilename,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
     '\n  *[_type == "ourPrograms" && isActive == true][0]{\n title,\n heroImage {\n    asset->{\n      url,\n      alt\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  programs[] {\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    programName,\n    description\n  },\n  essentialSeries {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    tableContent {\n      includesSessions[],\n      bonusSessions[],\n      bonusTransferable[]\n    },\n    listContent[]\n  },\n  curateLifestyle {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      length,\n      format,\n      focus,\n      bonus[],\n      entry\n    },\n    outcome,\n    referral_form_pdf {\n      asset-> {\n        url,\n        originalFilename,\n      }\n    },\n    call_to_action\n  },\n  masterHealthBlueprint {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      kickOff,\n      team,\n      plan,\n      programIncludes[],\n      privileges[]\n    },\n    outcome\n  },\n  exploreYourOptions {\n    image {\n        asset->{\n          url\n        },\n        alt\n    },\n    contactMessage\n  },\n  faq[] {\n      title,\n      description\n  },\n  threePaths {\n    heading,\n    subtitle,\n    paragraph,\n    tableContent {\n      bestFor[],\n      approach[],\n      focus[],\n      extras {\n        essentialSeries[],\n        curateLifestyle[],\n        masterHealthBlueprint[]\n      },\n      pricing {\n        essentialSeries,\n        curateLifestyle[],\n        masterHealthBlueprint\n      }\n    },\n  },\n  ctaSection {\n    image {\n        asset->{\n          url\n        }\n    },\n    heading,\n    paragraph,\n    buttonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': OUR_PROGRAMS_QUERYResult;
     '{\n  "siteMetadata": *[_type == "siteMetadata"][0]{\n    homePageTitle,\n    defaultDescription,\n    keywords\n  },\n  "siteSettings": *[_type == "siteSettings"][0]{\n    brandName,\n    contactInfo{\n      email,\n      phone,\n      address{\n        street,\n        city,\n        state,\n        zip,\n        country,\n        locationInfo\n      },\n      mapLink\n    },\n    socialMedia[]{\n      platform,\n      url,\n      isActive\n    }\n  },\n  "services": *[_type == "service" && isActive == true] | order(title asc){\n    title,\n    "slug": slug.current,\n    "description": coalesce(seo.pageDescription, pt::text(content)),\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(title asc){\n      title,\n      "slug": treatmentSlug.current,\n      "description": coalesce(seo.pageDescription, intro.introParagraph, quoteContent)\n    }\n  },\n  "cafe": *[_type == "cafePage" && pageActive == true][0]{\n    "introTitle": introSection.title,\n    "description": introSection.description,\n    "menuUrl": menuDownloadSection.menuPdf.asset->url,\n    "seoDescription": seo.pageDescription\n  },\n  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)]{\n    name,\n    role\n  },\n  "posts": *[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc)[0...10]{\n    title,\n    "slug": slug.current,\n    excerpt\n  }\n}': LLMS_TXT_QUERYResult;
-    '\n*[\n  _type in [\n    "heroSection",\n    "aboutSection",\n    "clinic",\n    "productsSection",\n    "servicesSection",\n    "cafeSection",\n    "blogSection",\n    "sustainabilitySection",\n    "post",\n    "product",\n    "service",\n    "treatments",\n    "serviceLifestyle",\n    "serviceLifestyleProgram",\n    "ourStory",\n    "ourTeam",\n    "missionAndValues",\n    "sustainability",\n    "pillarsOfHealth",\n    "cafePage",\n    "contactPage",\n    "ourPrograms",\n    "servicesHeroSection",\n    "legalPage"\n  ]\n]{\n  ...,\n  "slugCurrent": slug.current,\n  "treatmentSlugCurrent": treatmentSlug.current,\n  "serviceSlugCurrent": service->slug.current\n}\n': INDEX_DOCS_QUERYResult;
+    '\n*[\n  _type in [\n    "heroSection",\n    "aboutSection",\n    "clinic",\n    "productsSection",\n    "servicesSection",\n    "cafeSection",\n    "blogSection",\n    "sustainabilitySection",\n    "post",\n    "product",\n    "service",\n    "treatments",\n    "serviceLifestyle",\n    "serviceLifestyleProgram",\n    "ourStory",\n    "ourTeam",\n    "missionAndValues",\n    "sustainability",\n    "pillarsOfHealth",\n    "cafePage",\n    "contactPage",\n    "ourPrograms",\n    "servicesHeroSection",\n    "legalPage"\n  ]\n]{\n  ...,\n  // Search reads every string in a document, so a team member whose\n  // practitioner record has "Show on website" switched off has to come out\n  // of the Our Team document here too, or searching their name still lands\n  // on the team page. The same filter as OUR_TEAM_PAGE_QUERY.\n  "teamMembers": teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)],\n  "slugCurrent": slug.current,\n  "treatmentSlugCurrent": treatmentSlug.current,\n  "serviceSlugCurrent": service->slug.current\n}\n': INDEX_DOCS_QUERYResult;
   }
 }

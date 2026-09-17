@@ -1129,7 +1129,15 @@ the practitioner records, so their queries drop any member whose name matches
 a switched-off practitioner. **The two names must agree.**
 `scripts/audit-practitioners.js` fails when an Our Team entry has no
 practitioner record of the same name, and when anyone switched off still
-shows on the team page, their own page or the sitemap.
+shows on the team page, their own page, the sitemap or site search.
+
+**Site search indexes whole documents, so it needs the filter too.** The first
+version filtered the pages and missed search: with Safa switched off on
+2026-09-17, her page, card and sitemap entry were gone, but searching "Safa"
+still returned the team page, because the search index read every string in
+the Our Team document, her bio included. Both `INDEX_DOCS_QUERY` copies, in
+`app/api/search/route.ts` and `app/search/page.tsx`, now filter
+`teamMembers` the same way.
 
 **Blog bylines were already built, by Frank's developer, and were not changed.**
 `components/shared/blog-author-byline.tsx` and `lib/author-team-link.ts`, from

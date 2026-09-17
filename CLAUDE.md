@@ -1336,6 +1336,38 @@ Some filenames want human eyes before anything runs:
 probably is not the standard for a practitioner's photo. Fold this into CH-029,
 which is the other pass over the same library.
 
+### Dependency security alerts
+
+**Triaged 2026-09-15.** GitHub listed 187 open Dependabot alerts on main: 7 critical, 86 high, 78 medium, 16 low. Only `next` reaches visitors. The rest sit in the Sanity CLI, ESLint, the build, the Studio or the draft preview overlay. That was checked against the build output rather than read off the package list, because GitHub labels every one of them "runtime": `next` is the only flagged package in the server function traces, lodash's `_.template` appears only in the Studio chunk, and the on-demand preview chunk carries nanoid and lodash internals but not the flawed functions. The build does contain three Server Actions, all from `next-sanity` preview tooling, so the Server Action advisories apply.
+
+**Next.js 14 gets no more security fixes.** 14.2.35 is the last 14.x release and the site is on it. Neither critical applies: one needs a Windows server, the other is in the built-in AVIF image optimiser, which Vercel does not run. What still applies is denial of service through Server Components and Server Actions, fixed only in 15.5.24 and 16.3.3. Version 15 leaves Maintenance LTS on 2026-10-21, so the upgrade target is 16. That is CH-118, below.
+
+**The image resizer only takes Curate's own images.** `images.remotePatterns` is limited to `/images/rwc5kyvy/**`. With no pathname it accepted any Sanity project's images, so anyone could spend the plan's image allowance and choose the file the optimiser opens. Every resized image on the live site already came from that path. A new image source has to be added there first.
+
+**Dependabot branches do not deploy.** `vercel.json` sets `git.deploymentEnabled` to false for `dependabot/**`, because every deployment is stored against the Hobby limit. Build those updates locally instead.
+
+**`@google/genai` is installed and imported nowhere.** Wajdy-E added it on 2026-04-25 with the search feature. It stays until Frank decides; the in-range update already cleared the protobufjs alerts it brought in.
+
+**ESLint is not set up.** `next lint` stops at its first-run configuration prompt, so `eslint-config-next` and everything under it is a tool nothing runs.
+
+**About 67 alerts are left after the update**, counted by matching the installed versions against each alert's range; GitHub recounts after merge. 25 are the Next.js ones that need version 16. The rest are inside the Sanity CLI and build tools and need larger Sanity upgrades. `decompress` and `parse-git-config` have no fix published.
+
+### CH-118 Upgrade to Next.js 16
+
+**Scheduled after the pressing SEO work, Frank's call on 2026-09-17.** Not 15, which leaves Maintenance LTS on 2026-10-21. Scoped on 2026-09-15:
+
+- React 18 to 19.2, with `@types/react` to match
+- Sanity Studio 3 to 6, reading each major's migration notes on the way. v6 needs Node 22.12, so the Vercel project's Node setting moves off 20.x
+- `next-sanity` 9 to 13, `@sanity/vision` 3 to 6, `sanity-plugin-mux-input` 2 to 5, and a `framer-motion` release that accepts React 19
+- Async request APIs: 87 uses of `params`, `searchParams`, `cookies()`, `headers()` and `draftMode()` across 18 files. `npx @next/codemod@canary next-async-request-api .` does most of it
+- `revalidateTag` needs a second argument, in `app/api/revalidate/route.ts`
+- `images.qualities` defaults to `[75]`, and 12 image components ask for 90 or 100. List those qualities, or accept the change on purpose
+- `middleware.ts` is deprecated in favour of `proxy.ts`, which cannot use the edge runtime
+- Turbopack builds by default. `next.config.mjs` has no custom webpack config to migrate
+- `next lint` is removed. ESLint was never set up here, so nothing is lost
+
+Take a fresh Sanity export first, work on one branch, verify every page, the Studio, preview mode, booking links and the forms on a local build, and push once.
+
 ---
 
 ## Full verification script

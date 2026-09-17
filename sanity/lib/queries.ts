@@ -399,12 +399,20 @@ export const PRACTITIONER_BY_SLUG_QUERY = groq`
 export const PRACTITIONER_SLUGS_QUERY = groq`
 *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current`;
 
+/**
+ * Everywhere the team is listed, a member whose practitioner record has "Show
+ * on website" switched off is left out. The two are matched by name, so the
+ * name on the Our Team entry and on the practitioner record must agree, and
+ * scripts/audit-practitioners.js fails if they drift apart. The same filter
+ * sits in the Curate Lifestyle query below, in app/llms.txt/route.ts and in
+ * app/api/search/route.ts.
+ */
 export const OUR_TEAM_PAGE_QUERY = groq`*[_type == "ourTeam" && pageActive == true][0]{
   heroSection{
     heroTitle,
     heroParagraph
   },
-  teamMembers[] {
+  teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)] {
     name,
     role,
     bio,
@@ -993,7 +1001,7 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
     },
     ${SEO_QUERY},
     "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{
-      teamMembers[] {
+      teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)] {
         name,
         role,
         bio,

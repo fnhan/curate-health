@@ -105,7 +105,7 @@ const LLMS_TXT_QUERY = groq`{
     "menuUrl": menuDownloadSection.menuPdf.asset->url,
     "seoDescription": seo.pageDescription
   },
-  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[]{
+  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)]{
     name,
     role
   },

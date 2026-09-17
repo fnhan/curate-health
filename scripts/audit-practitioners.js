@@ -20,6 +20,12 @@
  *     button; no Jane URL and no note and no CTA means no block at all,
  *     rather than a button pointing somewhere generic.
  *   6 An unknown slug is a 404, never a 500. CH-001.
+ *   7 Every member listed under Our Team has a practitioner record with the
+ *     same name. The team page hides people by matching that name, so a
+ *     mismatch would leave "Show on website" switched off to no effect.
+ *   8 Anyone with "Show on website" switched off is really gone: the team
+ *     page neither links to nor names them, their own page is a 404, and the
+ *     sitemap does not list it.
  *
  * Exits 1 on any failure.
  */
@@ -39,14 +45,17 @@ async function get(path) {
   return { status: res.status, html: res.ok ? await res.text() : "" };
 }
 
-function visibleWords(html) {
+function visibleText(html) {
   return html
     .replace(/<script[\s\S]*?<\/script>/g, "")
     .replace(/<style[\s\S]*?<\/style>/g, "")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ")
-    .trim()
-    .split(" ").length;
+    .trim();
+}
+
+function visibleWords(html) {
+  return visibleText(html).split(" ").length;
 }
 
 function personNode(html) {
@@ -66,11 +75,12 @@ function personNode(html) {
 }
 
 async function main() {
-  const people = await query(
-    `*[_type == "practitioner" && isActive == true && defined(slug.current)]
+  const records = await query(
+    `*[_type == "practitioner" && defined(slug.current)]
       | order(name asc){
         name,
         "slug": slug.current,
+        isActive,
         credentials,
         janeBookingUrl,
         bookingNote,
@@ -79,6 +89,12 @@ async function main() {
         "photoHeight": photo.asset->metadata.dimensions.height
       }`
   );
+  const people = records.filter((p) => p.isActive === true);
+  const hidden = records.filter((p) => p.isActive === false);
+  const teamNames =
+    (await query(
+      `*[_type == "ourTeam" && pageActive == true][0].teamMembers[].name`
+    )) || [];
 
   assertChecked({
     label: "active practitioners in Sanity",
@@ -197,8 +213,47 @@ async function main() {
     failures.push(`an unknown slug returned ${unknown.status}, expected 404`);
   }
 
+  /*
+   * The team page reads the Our Team list, not the practitioner records, and
+   * leaves out anyone whose record is switched off by matching the name. A
+   * member with no record of the same name can never be hidden, and nothing
+   * on the page would show it.
+   */
+  const recordNames = new Set(records.map((p) => p.name));
+  for (const name of teamNames) {
+    if (!recordNames.has(name)) {
+      failures.push(
+        `Our Team lists "${name}", but no practitioner record has that exact name, so "Show on website" cannot hide them`
+      );
+    }
+  }
+
+  if (hidden.length) {
+    const sitemap = await get("/sitemap.xml");
+    const teamText = visibleText(team.html);
+    for (const person of hidden) {
+      const path = `/about/our-team/${person.slug}`;
+      if (linked.has(person.slug)) {
+        failures.push(`${path}: switched off, but the team page still links to it`);
+      }
+      if (teamText.includes(person.name)) {
+        failures.push(`${person.name}: switched off, but still named on the team page`);
+      }
+      const page = await get(path);
+      if (page.status !== 404) {
+        failures.push(`${path}: switched off, but returned ${page.status} rather than 404`);
+      }
+      if (sitemap.html.includes(path)) {
+        failures.push(`${path}: switched off, but still listed in the sitemap`);
+      }
+    }
+  }
+
   console.log(
-    `${people.length} active practitioners, ${linked.size} linked from the team page.`
+    `${people.length} active practitioners, ${linked.size} linked from the team page` +
+      (hidden.length
+        ? `, ${hidden.length} switched off: ${hidden.map((p) => p.name).join(", ")}.`
+        : ".")
   );
   console.log(
     `${totalWords} visible words across the practitioner pages, against 203 ` +
@@ -212,6 +267,9 @@ async function main() {
   }
 
   console.log("Every practitioner has a page, and every page agrees with its record.");
+  if (hidden.length) {
+    console.log("Everyone switched off is gone from the team page, their own page and the sitemap.");
+  }
 
   if (soft.length) {
     console.log(

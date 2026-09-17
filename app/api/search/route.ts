@@ -412,7 +412,7 @@ const SEARCH_QUERY = groq`
       "href": "/about/our-team",
       "score": (
         select("our team" match $q => 6, 0) +
-        select(pt::text(teamMembers[].bio) match $q => 1, 0) +
+        select(pt::text(teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)].bio) match $q => 1, 0) +
         select(pt::text(heroSection.heroParagraph) match $q => 1, 0)
       )
     },

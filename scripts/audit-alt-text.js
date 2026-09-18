@@ -16,7 +16,7 @@
  *
  * An empty alt is not always wrong. alt="" is the correct markup for an image
  * that carries no information, and a screen reader announcing it would be
- * noise. Six on this site are genuinely decorative and are listed below by
+ * noise. Fifteen on this site are genuinely decorative and are listed below by
  * name, so the check can pass while still reporting anything new.
  *
  * Exits 1 if any unlisted image has no usable alt.
@@ -38,6 +38,22 @@ const DECORATIVE = [
   "cta-arrow",
   "thumbnail.webp", // the Mux hero poster
   "CircleText",
+  // The eight group session pictures on /services/curate-lifestyle-program,
+  // looked at 2026-09-18: small stock illustrations, tortilla chips for whole
+  // versus processed food, a stack of stones for stress management and so on,
+  // each beside a title that already names the session. They reached this
+  // check only when the page joined the sitemap that day.
+  "f93391e38ad5c8df299053cdbdacadf4ae0496cb",
+  "63a1dcfbb9fad4c25b9a1e23015f2efe32036280",
+  "a07c1be23e56809e3e253c1dcbcf892b99b234b6",
+  "d131fd8693c7b524b4c9e370f3a1c24faf2dad99",
+  "5707ae688065921a41274c8c21124eb8f933f98d",
+  "9736bab90a9e7fbcb5455a4224310bc46af42405",
+  "1e4488e3493f7b5c34f3d05a7f7b60a243554401",
+  "0886d06724359529d8d84270c024f5fd53378397",
+  // The line drawing of a figure in a circle behind the pillars quote on
+  // /services/curate-lifestyle. Its component already sets alt="".
+  "23be0c5a23210b72fad387c31380527dcf534704",
 ];
 
 function isDecorative(src) {
@@ -67,7 +83,13 @@ function assetOf(src) {
 
 async function rendered() {
   const sitemap = await get(`${target}/sitemap.xml`);
-  const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  // Onto the target's own host. The sitemap always names the live site, so
+  // reading its addresses as they stand checked production whatever target
+  // was given, and a local build was never checked at all. Found 2026-09-18,
+  // when an alt="" fixed locally still read as missing.
+  const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) =>
+    m[1].replace(/^https?:\/\/[^/]+/, target)
+  );
 
   assertChecked({
     label: "sitemap URLs",

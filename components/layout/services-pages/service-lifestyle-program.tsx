@@ -86,9 +86,10 @@ export default function ServiceLifestyleProgramContent({
 
       <section className="bg-white py-14">
         <div className="container flex flex-col items-center gap-12">
-          <h1 className="text-2xl capitalize md:text-4xl 2xl:text-5xl">
+          {/* An h2: the page has one h1, the program's name, above. */}
+          <h2 className="text-2xl capitalize md:text-4xl 2xl:text-5xl">
             {groupSectionTitle}
-          </h1>
+          </h2>
           <div className="mx-auto max-w-lg space-y-4 text-pretty text-center font-light">
             {groupSectionDescription}
           </div>
@@ -105,7 +106,9 @@ export default function ServiceLifestyleProgramContent({
                   <Image
                     sizes="96px"
                     src={section.image!}
-                    alt={section.alt!}
+                    // Decorative unless an editor writes one: the session's
+                    // title sits beside it and already says what it is.
+                    alt={section.alt ?? ""}
                     width={100}
                     height={100}
                     className="size-full rounded-full object-cover transition-all duration-300 md:grayscale group-hover:md:grayscale-0"

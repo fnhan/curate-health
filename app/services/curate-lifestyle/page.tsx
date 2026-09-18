@@ -1,7 +1,10 @@
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import ServiceLifestyleContent from "@/components/layout/services-pages/service-lifestyle";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { serviceCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
+import { JsonLdScript, buildLifestyleJsonLd } from "@/lib/structured-data";
 import {
   ALL_SERVICES_QUERYResult,
   SERVICE_LIFESTYLE_BY_SLUG_QUERYResult,
@@ -30,8 +33,23 @@ export default async function ServiceLifestylePage() {
 
   return (
     <>
+      <JsonLdScript
+        data={buildLifestyleJsonLd({
+          title: service.title,
+          path: "/services/curate-lifestyle",
+          description: service.seo?.pageDescription,
+          image: hero_image,
+        })}
+        id="curate-lifestyle-json-ld"
+      />
       <ServiceHeroSection
         hero_image={{ asset: { url: hero_image! }, alt: hero_alt! }}
+      />
+      <Breadcrumbs
+        crumbs={serviceCrumbs(
+          service.title?.trim() || "Curate Lifestyle",
+          "curate-lifestyle"
+        )}
       />
       <ServicesNavigation services={services} />
       <ServiceLifestyleContent service={service} />

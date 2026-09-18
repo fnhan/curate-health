@@ -958,7 +958,12 @@ export const SITEMAP_QUERY = groq`{
   "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},
   "sustainability": *[_type == "sustainability" && pageActive == true]{_id},
   "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},
-  "cafe": *[_type == "cafePage" && pageActive == true]{_id}
+  "cafe": *[_type == "cafePage" && pageActive == true]{_id},
+  // The two Curate Lifestyle pages have routes of their own rather than a
+  // slug under /services, so the services list above never included them.
+  // Both were live and missing from the sitemap until 2026-09-18.
+  "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,
+  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0
 }`;
 
 export const LEGAL_PAGE_BY_SLUG_QUERY = groq`*[_type == "legalPage" && slug.current == $slug][0]{

@@ -130,6 +130,22 @@ export function treatmentCrumbs(
   });
 }
 
+/**
+ * /services/curate-lifestyle-program, under the Curate Lifestyle page.
+ *
+ * Both Curate Lifestyle pages have routes of their own rather than a slug
+ * under /services, and the program is reached from the Curate Lifestyle page,
+ * so the trail runs through it. The Curate Lifestyle page itself takes
+ * serviceCrumbs.
+ */
+export function lifestyleProgramCrumbs(title: string): Crumb[] {
+  return trail(
+    { name: "Services", path: "/services" },
+    { name: "Curate Lifestyle", path: "/services/curate-lifestyle" },
+    { name: title, path: "/services/curate-lifestyle-program" }
+  );
+}
+
 /** /products/tens-machines and its four siblings. */
 export function productCrumbs(title: string, slug: string): Crumb[] {
   return trail(

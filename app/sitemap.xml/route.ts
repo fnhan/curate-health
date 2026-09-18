@@ -47,6 +47,8 @@ export async function GET() {
     practitioners,
     sustainability,
     pillarsHealth,
+    lifestyle,
+    lifestyleProgram,
   } = sitemap!;
 
   const staticRoutes: Url[] = [
@@ -168,6 +170,24 @@ export async function GET() {
     })
   );
 
+  // Curate Lifestyle has two pages with routes of their own, so the service
+  // slugs above never produced them. Listed when the document each page
+  // renders from exists.
+  const lifestyleRoutes: Url[] = [
+    lifestyle && {
+      url: `${BASEURL}/services/curate-lifestyle`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    lifestyleProgram && {
+      url: `${BASEURL}/services/curate-lifestyle-program`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+  ].filter(Boolean) as Url[];
+
   const productRoutes: Url[] = products.map((slug: string) => ({
     url: `${BASEURL}/products/${slug}`,
     lastModified: new Date().toISOString(),
@@ -209,6 +229,7 @@ export async function GET() {
     ...practitionerRoutes,
     ...serviceRoutes,
     ...treatmentRoutes,
+    ...lifestyleRoutes,
     ...productRoutes,
     ...blogRoutes,
     ...legalRoutes,

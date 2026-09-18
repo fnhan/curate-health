@@ -20,7 +20,7 @@ export default async function ServiceHeroSection({
       width={1080}
       height={1440}
       src={asset.url}
-      alt={alt}
+      alt={alt ?? ""}
       className="h-[400px] w-full object-cover md:h-[550px]"
     />
   );

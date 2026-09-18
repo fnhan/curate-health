@@ -410,6 +410,35 @@ export function buildServiceJsonLd(service: SERVICE_BY_SLUG_QUERYResult) {
 }
 
 /**
+ * The two Curate Lifestyle pages, which have routes of their own rather than
+ * being a category or a treatment. A Service, like every other page describing
+ * something the clinic offers, with the same provider and area.
+ */
+export function buildLifestyleJsonLd(page: {
+  title: string | null | undefined;
+  path: string;
+  description?: string | null;
+  image?: string | null;
+}) {
+  if (!page.title) return null;
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${absoluteUrl(page.path)}#service`,
+    name: page.title,
+    description: page.description,
+    image: page.image,
+    url: absoluteUrl(page.path),
+    provider: { "@id": `${BASEURL}/#medicalclinic` },
+    areaServed: {
+      "@type": "City",
+      name: "Toronto",
+    },
+  }) as JsonLdObject;
+}
+
+/**
  * The canonical URL comes from the treatment itself, via treatmentPath, rather
  * than from a service slug the caller happens to have. The caller no longer
  * knows the category: treatments are served from /services/{treatment} and

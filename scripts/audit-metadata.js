@@ -28,7 +28,8 @@
  *   Exactly one H1           Zero leaves the page's subject unstated, more than
  *                            one leaves it ambiguous. CH-011.
  *   Description present      Missing means Google invents a snippet. CH-024.
- *   Description length       Over 155 characters is cut mid-sentence.
+ *   Description length       Over 155 characters is cut mid-sentence, and
+ *                            under 70 is a label rather than a description.
  *   Description unique       Two pages sharing one is the copy-paste class of
  *                            error in CH-033.
  *   Title unique             Same reasoning.
@@ -57,6 +58,10 @@ const DEFAULT_BASE = "https://www.curatehealth.ca";
 const BRAND = "Curate Health";
 const TITLE_MAX = 60;
 const DESCRIPTION_MAX = 155;
+// Shorter than this is a label, not a description, and Google writes its own.
+// The Curate Lifestyle Program's read "Curate Lifestyle Program" until
+// 2026-09-18.
+const DESCRIPTION_MIN = 70;
 
 const BANNED = [
   "dive in",
@@ -277,7 +282,12 @@ async function main() {
     }
 
     if (!page.description) add("FAIL", "no meta description");
-    else if (page.description.length > DESCRIPTION_MAX) {
+    else if (page.description.length < DESCRIPTION_MIN) {
+      add(
+        "WARN",
+        `description is ${page.description.length} chars, too short to use: ${JSON.stringify(page.description)}`
+      );
+    } else if (page.description.length > DESCRIPTION_MAX) {
       add(
         "WARN",
         `description is ${page.description.length} chars, over ${DESCRIPTION_MAX}`

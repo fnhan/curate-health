@@ -15,13 +15,26 @@ This file briefs Claude Code on the codebase, the constraints, and the work. Rea
 | Booking      | Jane, external at `curatehealth.janeapp.com`            |
 | Serving host | `https://www.curatehealth.ca` (apex 308-redirects here) |
 
-Site is 44 URLs in the sitemap. Health and wellness clinic with an attached cafe at 989 Eglinton Ave W, Suite 2, Toronto.
+Site is 51 URLs in the sitemap as of 2026-09-18. Health and wellness clinic with an attached cafe at 989 Eglinton Ave W, Suite 2, Toronto.
 
 ---
 
 ## Working rules
 
 **Branch and preview, never push to production directly.** One branch per ticket group. Vercel preview deploy for every branch. Frank reviews the preview before merge.
+
+**Every page ships complete for search and AI answers. Hard rule, set by Frank on 2026-09-18.** A page without all of the following is unfinished, not merely unoptimised, and does not go to Frank for review. It applies to every new route, every new document type that produces pages, and every page added through the Studio.
+
+- A unique title, 60 characters or fewer including "| Curate Health", that agrees with the page's one H1, and a unique meta description of 155 characters or fewer. Both editable in the Studio through an `seo` field, with fallbacks in code, and set through `buildPageMetadata` with the page's own canonical path.
+- A share card: an `og:image` at 1200x630 that loads, with the title, description, `og:type` and site name. Default the image to a photo the page already shows, so nobody has to remember to pick one.
+- Structured data for what the page is, such as Person, BlogPosting, Product or Service, agreeing with what the page shows. Below a hub, a breadcrumb trail with its markup.
+- Listed in the sitemap, and in llms.txt with a one-line description. Taken out of both when the page is switched off.
+- Linked from a hub or the navigation, within three clicks of the homepage.
+- Text a crawler can read: in the HTML, not closed inside accordions or loaded only in the browser. Alt text on every image and `sizes` on every `next/image`.
+- For a new document type: a line in `pathsForDocument` in `lib/indexnow.ts`, so publishing it tells Bing, and a place in `INDEX_DOCS_QUERY` in both `app/api/search/route.ts` and `app/search/page.tsx`, so the site's own search finds it.
+- The content rules below.
+
+Acceptance is `node scripts/audit-seo-complete.js http://localhost:3000` passing against a local build that includes the page. State in the pull request that it passed. When a check fails on something already known and accepted, say so there rather than leaving it unexplained.
 
 **Every push is a stored deployment.** Vercel builds a full copy of the site for each push to a pull request branch and for each merge to main, and keeps it for up to 30 days. On 2026-09-15 the team hit 100% of the 10 GB of Deployment Storage the free Hobby plan includes: 158 copies held, 116 of them from the previous seven days, nearly all from this project's own pull requests. Push a branch once, when it is ready for Frank, rather than after every fix, and batch tier 1 changes instead of merging each on its own. `npx vercel list curate-health` shows what is held. Deleting deployments and changing the retention policy are Frank's to do in the dashboard.
 
@@ -261,6 +274,12 @@ Sixth defect, found 2026-08-17. The route runs the address through a whitespace 
 ```
 
 Two consequences. The gap and the doubled comma disappear once CH-020 and CH-021 land, so no separate fix is needed. But the `\s` behaviour means **any Cf audit run against rendered output under-reports**, by the `U+FEFF` count: `/llms.txt` shows 1,501 Cf where the stored value holds 1,906. Audit the dataset instead, see CH-020.
+
+**Two more defects, found and fixed 2026-09-18.** The file listed 24 of the 49 pages in the sitemap: none of the about pages, practitioner pages, products, hubs or legal pages, so every page built this year was missing. And it printed "[object Object]" for every practitioner's credentials, because `role` on Our Team is rich text and was read as a string. Practitioners now link to their pages with the credentials from their records. The About, Programs, Products and Optional sections are new, the last for the legal pages, per the llms.txt convention for links a reader can skip. Post descriptions use the meta description ahead of the excerpt, since the 2024 excerpts predate the content rules; one of them carries "unlocking".
+
+`node scripts/audit-llms.js` fails on a sitemap page missing from the file, a listed page that does not answer 200, and template debris such as "[object Object]". Run against production before the fix, it named all 25 pages and all six practitioners.
+
+The Curate Lifestyle pages, `/services/curate-lifestyle` and `/services/curate-lifestyle-program`, were live and missing from the sitemap as well as from this file. They have routes of their own rather than a slug under `/services`, so the sitemap's list of services never produced them. Both are in both now.
 
 ### CH-033 Fix the psychotherapy meta description
 
@@ -956,6 +975,8 @@ node scripts/audit-alt-text.js https://www.curatehealth.ca
 node scripts/audit-alt-text.js --sanity   # names the document and field
 ```
 
+**Until 2026-09-18 this check read production whatever address it was given.** It took the sitemap from the target and then fetched the addresses written in it, which always name the live site, so a run against a local build checked the live pages. Results reported against production stand. Any "passes locally" before that date was a production result. It now reads the target's own pages, like the other checks.
+
 **Patch the array, not its indexes.** `scripts/apply-alt-text.js` writes
 `additionalSections` whole, because removing one entry shifts every index
 after it. Its first run pushed three `additionalSections[n].sectionImage.alt`
@@ -1421,6 +1442,20 @@ The dry run refuses while the key file is not live, so it cannot be sent before 
 `scripts/audit-metadata.js` now fails a page with no `og:image`, one that does not load, or no `og:type`. Run against production before this change, it named all nine pages.
 
 It still fails on four pages whose title and heading differ, `/about/our-story`, `/our-programs`, one blog post and Outdoor Yoga Therapy, and warns on two 158 character descriptions. All of that is content in Sanity, raised with Frank on 2026-09-18.
+
+### The every-page rule, first run 2026-09-18
+
+`node scripts/audit-seo-complete.js` runs nine checks: metadata, llms.txt, breadcrumbs, reachability, alt text, image sizes, practitioner pages, the blog, and the content rules in the words on each page. The last is new, `scripts/audit-content-rules.js`, because no other check read the body of a page.
+
+**Brought up to the rule on the first run:** the two Curate Lifestyle pages, which joined the sitemap that day and so had never been checked. Both gained a breadcrumb trail, the program's through Curate Lifestyle, and a `Service` node from `buildLifestyleJsonLd`. The program page had two h1s; "Group Sessions" is an h2 now, with the same look. Its eight session pictures and the line drawing behind the pillars quote were looked at and listed as decorative in `audit-alt-text.js`. Images without alt text now render `alt=""` rather than no attribute.
+
+**Still failing at merge, all content waiting on Frank:**
+
+- Two photos on Curate Lifestyle need alt text: the almonds hero and the granola bowls with eucalyptus.
+- `/about` and `/products` need a share image chosen.
+- Four titles that differ from their headings, and two 158 character descriptions, listed under Share cards.
+- Three descriptions too short to be used, which `audit-metadata.js` now warns on below 70 characters: the Curate Lifestyle Program's reads "Curate Lifestyle Program", `/cafe`'s "A space where nourishment meets intention.", and Rooj's page runs on the code fallback until the practitioner descriptions are approved.
+- **The content rules: 88 breaks on 27 of 51 pages.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
 
 ### Dependency security alerts
 

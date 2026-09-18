@@ -1084,11 +1084,13 @@ site-wide link when not.
 - **Ariel Zohar's photograph is 1001x685**, below the 800x1000 the crop needs,
   so it is upscaled and looks soft. A photograph to replace, not a value to
   lower. `scripts/audit-practitioners.js` names anyone in this state.
-- **Jane's own address reads "989 Eglinton Avenue West - Suite 2, Suite 2,
-  York"**, with the doubled suite and the "York" that CH-021 spent a ticket
-  removing from the site. Local search reads the two as one business, so the
-  mismatch costs something. Jane is not in this repository: it is a change
-  somebody makes in the Jane settings.
+- **Jane's own address still says "York".** It read "989 Eglinton Avenue
+  West - Suite 2, Suite 2, York", with the doubled suite and the "York" that
+  CH-021 spent a ticket removing from the site. Frank fixed the doubled suite
+  on 2026-09-17; checked that day, it reads "989 Eglinton Avenue West, Suite
+  2, York", so "York" still disagrees with the site's "Toronto". Local search
+  reads the two as one business, so the mismatch costs something. Jane is not
+  in this repository: it is a change somebody makes in the Jane settings.
 - **Jane offers acupuncture with Dr. Frank Nhan only.** The site lists Dr.
   Gabriele, Dr. Nhan and Ariel Zohar as providers, per Frank's chart. Someone
   who reads that Ariel does acupuncture and clicks Book finds only Frank. One of
@@ -1196,7 +1198,7 @@ The byline work is the highest-value E-E-A-T item available. Google's helpful co
 
 `/rss.xml` lists every published post, and `/blog` and every post point to it with a link tag. The feed's description and the `/blog` meta description are one string, in `lib/blog-feed.ts`.
 
-**Categories, tags and pagination are not built.** Proposed to Frank on 2026-09-17 to hold them until the blog has posts to fill them: with two posts, each category page would hold one or two, which reads as thin, and pagination would have nothing to page.
+**Categories, tags and pagination are not built, by Frank's decision on 2026-09-17** to wait "further down the road", until the blog has posts to fill them: with two posts, each category page would hold one or two, which reads as thin, and pagination would have nothing to page. Raise it again once there are enough posts.
 
 ```bash
 node scripts/audit-blog.js http://localhost:3000
@@ -1233,6 +1235,10 @@ The LRT is open. Curate sits between Cedarvale and Forest Hill stations. Queries
 
 One page covering transit access, walking directions from both stations, and which services are available. The agency handles outreach to transit-adjacent businesses.
 
+**Closed 2026-09-17, not built.** Frank asked whether a separate page would help more than the contact page; the evidence says no. Searches like "clinic near Forest Hill station" are answered from the Google Business Profile, a second copy of the contact page's directions adds nothing, and a page that exists to catch one phrase edges toward Google's doorway rules. The one real gap was that neither station was named anywhere on the site.
+
+Folded into the contact page instead. `contactPage.howToGetHere` was rewritten in transaction `BDYd0dwqXI5F7Jzh2bQGWY`, after a documents-only backup, `sanity-backup-2026-09-17-before-contact-directions-documents.tar.gz`. It names Cedarvale and Forest Hill stations with walking directions from each, drops "Eglinton West Station", the old name, and the 32 bus, cut back to Mount Dennis when Line 5 opened on 2026-02-08, and loses an em dash. Frank approved the text, and the opening line about Lines 1 and 5 is his, lightly edited.
+
 ---
 
 ## Phase 5: cleanup
@@ -1243,7 +1249,7 @@ One page covering transit access, walking directions from both stations, and whi
 | CH-111 | **Done 2026-09-17.** A visible "Last reviewed" line is on treatment and blog pages, from Sanity's `_updatedAt`, since 2026-09-13. Blog posts carry the same date as `dateModified` in their `BlogPosting` markup, CH-105. Treatment pages carry no `dateModified`, because putting it on a `Service` node would be markup nothing consumes |
 | CH-112 | **Done 2026-09-13.** Search form, six hub links, `noindex`, still a real 404. Deliberately not a redirect home: a soft 404 teaches a crawler a dead URL is a live page |
 | CH-113 | **Done 2026-09-13.** `book_now`, `call_click`, `email_click`, `directions_click` and `file_download`, from one delegated listener in `components/shared/analytics-events.tsx`. See below |
-| CH-114 | IndexNow submission on publish. Bing's index is what ChatGPT search runs on                                                                                        |
+| CH-114 | **Built 2026-09-18.** IndexNow submission on publish. Bing's index is what ChatGPT search runs on. See below                                                        |
 | CH-115 | **Done 2026-09-13.** No longer emitted. The Studio field stays, since editors filled it in and deleting their work is not this ticket's job |
 | CH-029 | Downsample oversized Sanity assets. 95 exceed 2,600px, worst is a 6500x3846 PNG appearing on 29 pages. CH-007 solves most of the delivery cost, so this is cleanup |
 | CH-030 | Add Claire to the team page and to CH-104                                                                                                                          |
@@ -1373,6 +1379,49 @@ Some filenames want human eyes before anything runs:
 probably is not the standard for a practitioner's photo. Fold this into CH-029,
 which is the other pass over the same library.
 
+### CH-114 IndexNow
+
+**Built 2026-09-18.** A publish in the Studio now tells Bing which pages changed, so it fetches them again within minutes instead of on its own schedule. Bing's index is the one ChatGPT search and Copilot answer from. Google does not take part in IndexNow and is unaffected.
+
+It rides on the Sanity webhook from CH-026, `app/api/revalidate`. After the search purge, which is unchanged and still unconditional, the route reads the published document by id, works out its pages with `pathsForDocument` in `lib/indexnow.ts`, refreshes them, and submits them. A treatment gives its own page and its category's; a post, its page and `/blog`; a practitioner, their page and the team page.
+
+**The refresh comes first, on purpose.** Pages rebuild at most once a minute, and the first request after that minute is still served the old copy while the new one renders. On a quiet page that first request could be Bing, arriving because of the notice. `revalidatePath` purges the page outright instead. Checked on a local build: after a signed delivery for the contact page, the next request was a fresh render, while `/cafe`, not published, came back stale.
+
+**Routed by document type, unlike the search purge**, because an address cannot be announced without knowing it. A new page type needs a line in `pathsForDocument`. Missing one costs an unannounced change and the usual minute of delay, not missing content. Types with no page of their own, the site settings above all, announce nothing: they change every page at once, and IndexNow asks sites not to resubmit everything for that. A deleted document can no longer be read to find its address, so it is skipped too.
+
+**Production only.** Local runs and `scripts/test-revalidate-endpoint.js` refresh pages and log `reason=not-production`. The replay window described under CH-026 now also resubmits the same addresses, which is harmless; IndexNow may answer 429.
+
+**The key is public by design.** `public/4a160620565829dc8bb7833ab29d32cb.txt`, matching `INDEXNOW_KEY` in `lib/indexnow.ts`. IndexNow reads it back from the site before accepting a submission, and a submission can only name this site's pages. To change it, add the new file and change the constant in one commit, then remove the old file.
+
+```
+[indexnow] ok, status=200 paths=/blog/some-post,/blog doc=post/abc
+[indexnow] skipped, reason=no-page-for-type doc=siteSettings/731d...
+[indexnow] refused, status=403 ...     the key file did not match
+```
+
+**Once after merge, and after any code change that alters many pages:**
+
+```bash
+node scripts/indexnow-submit.js           # dry run: checks the live key file, lists the sitemap
+node scripts/indexnow-submit.js --apply   # sends every sitemap page
+```
+
+The dry run refuses while the key file is not live, so it cannot be sent before the deploy lands. 200 and 202 are both success; 202 means the key is still being checked, normal at first.
+
+### Share cards
+
+**Every page carries a share image, since 2026-09-18**, apart from `/about` and `/products`, which need a picture chosen in the Studio. Nine pages had none, all built this year: the six practitioner pages, `/blog`, `/about` and `/products`. A shared link to any of them showed a bare card.
+
+- A practitioner page uses the person's photo unless a share image is set under SEO. With no hotspot set, the card centres a third of the way down, where a face sits in a portrait; centred, the band cut through Dr. Nhan's and Andrew's foreheads. A hotspot dragged in the Studio replaces this. Checked by eye on all six.
+- A blog post uses its own photo, and `/blog` the newest post's. `/blog`'s search details live on "Home | Blog Section" in the Studio, under "SEO For The Blog Page", because the blog page has no document of its own. A description typed there also becomes the RSS feed's.
+- `og:site_name`, `og:locale` and `og:type` were missing from every page but the homepage. Next replaces the layout's `openGraph` with the page's rather than merging them, so the layout's values never reached any page with metadata of its own. `buildPageMetadata` sets all three now, and blog posts are `article` with their published and modified dates.
+- A query that selects an image's URL and not its asset id, the blog post query for one, still gets a 1200x630 card: the id is read back out of the URL.
+- `twitter:site` is gone. It held the brand name, where X expects a handle, and Curate has no X account.
+
+`scripts/audit-metadata.js` now fails a page with no `og:image`, one that does not load, or no `og:type`. Run against production before this change, it named all nine pages.
+
+It still fails on four pages whose title and heading differ, `/about/our-story`, `/our-programs`, one blog post and Outdoor Yoga Therapy, and warns on two 158 character descriptions. All of that is content in Sanity, raised with Frank on 2026-09-18.
+
 ### Dependency security alerts
 
 **Triaged 2026-09-15.** GitHub listed 187 open Dependabot alerts on main: 7 critical, 86 high, 78 medium, 16 low. Only `next` reaches visitors. The rest sit in the Sanity CLI, ESLint, the build, the Studio or the draft preview overlay. That was checked against the build output rather than read off the package list, because GitHub labels every one of them "runtime": `next` is the only flagged package in the server function traces, lodash's `_.template` appears only in the Studio chunk, and the on-demand preview chunk carries nanoid and lodash internals but not the flawed functions. The build does contain three Server Actions, all from `next-sanity` preview tooling, so the Server Action advisories apply.
@@ -1383,7 +1432,7 @@ which is the other pass over the same library.
 
 **Dependabot branches do not deploy.** `vercel.json` sets `git.deploymentEnabled` to false for `dependabot/**`, because every deployment is stored against the Hobby limit. Build those updates locally instead.
 
-**`@google/genai` is installed and imported nowhere.** Wajdy-E added it on 2026-04-25 with the search feature. It stays until Frank decides; the in-range update already cleared the protobufjs alerts it brought in.
+**`@google/genai` is installed and imported nowhere on main.** Wajdy-E added it on 2026-04-25 with the search feature, and his unmerged AI chatbot pull request, #192, imports it in `app/api/brand-chat/route.ts`, so removing it would break that branch. It stays until Frank decides; the in-range update already cleared the protobufjs alerts it brought in.
 
 **ESLint is not set up.** `next lint` stops at its first-run configuration prompt, so `eslint-config-next` and everything under it is a tool nothing runs.
 

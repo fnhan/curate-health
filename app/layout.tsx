@@ -79,8 +79,9 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: "en_CA",
     },
+    // No twitter:site. It takes an X handle, and this was the brand name, so
+    // X ignored it; Curate has no X account to name there.
     twitter: {
-      site: templateTitlePrefix!,
       title: {
         template: `%s | ${templateTitlePrefix}`,
         default: homePageTitle!,

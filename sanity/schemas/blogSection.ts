@@ -25,5 +25,12 @@ export default defineType({
       type: "string",
       validation: (Rule) => Rule.required().error("Hover link URL is required"),
     }),
+    defineField({
+      name: "seo",
+      title: "SEO For The Blog Page",
+      type: "seo",
+      description:
+        "Search and share details for the blog page at /blog. The fields above are the homepage's blog section; this one is the blog page's own. Leave the share image empty and the newest post's photo is used.",
+    }),
   ],
 });

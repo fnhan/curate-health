@@ -4,7 +4,9 @@ import type { Metadata } from "next";
  * The blog's feed, and the words it shares with the blog index. CH-105.
  *
  * The description is the one /blog already carries as its meta description,
- * kept in one place so the feed and the page cannot drift apart.
+ * kept in one place so the feed and the page cannot drift apart. A
+ * description typed into the Studio under "SEO For The Blog Page" replaces it
+ * in both, since 2026-09-18.
  */
 export const BLOG_FEED_PATH = "/rss.xml";
 export const BLOG_FEED_TITLE = "Curate Health Blog";

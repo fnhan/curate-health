@@ -91,7 +91,21 @@ export async function generateMetadata({
     notFound();
   }
 
-  const { seo } = post;
+  const { seo, mainImage } = post;
 
-  return withBlogFeed(buildPageMetadata(seo, { path: `/blog/${params.post}` }));
+  // The post's own photo is the share image when none is set under SEO, so a
+  // new post never goes out as a bare link. Its dates are the two the page
+  // shows, the same as its BlogPosting markup.
+  return withBlogFeed(
+    buildPageMetadata(seo, {
+      path: `/blog/${params.post}`,
+      image: mainImage?.image
+        ? { asset: { url: mainImage.image, alt: mainImage.alt } }
+        : undefined,
+      article: {
+        publishedTime: post.publishedAt,
+        modifiedTime: post._updatedAt,
+      },
+    })
+  );
 }

@@ -823,6 +823,30 @@ export const GET_ALL_POSTS_QUERY = groq`*[_type == "post" && published == true] 
   },
 } | order(publishedAt desc)`;
 
+/**
+ * The blog page's search and share details. CH-105.
+ *
+ * They sit on blogSection, the homepage's blog section, because /blog has no
+ * document of its own. Until a share image is set there, the newest post's
+ * photo is used. Ties on the publish date go to the post created last, so
+ * the choice does not change between requests.
+ */
+export const BLOG_PAGE_QUERY = groq`{
+  "page": *[_type == "blogSection"][0]{
+    ${SEO_QUERY}
+  },
+  "latestImage": *[_type == "post" && published == true && defined(mainImage.asset)]
+    | order(publishedAt desc, _createdAt desc)[0].mainImage{
+      crop,
+      hotspot,
+      alt,
+      asset->{
+        _id,
+        url
+      }
+    }
+}`;
+
 export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == true && slug.current == $slug][0] {
   _updatedAt,
   title,

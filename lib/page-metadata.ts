@@ -120,6 +120,25 @@ type Fallbacks = {
    * audits, which is how a page rots unnoticed.
    */
   noindex?: boolean;
+  /**
+   * A photo the page already shows, used as its share image when nobody has
+   * chosen one in the Studio.
+   *
+   * Nine pages shipped with no share image at all on 2026-09-18, so a shared
+   * link showed a bare card. A practitioner page passes that person's photo,
+   * and the blog passes its newest post's photo. A share image set in the
+   * Studio always wins over this.
+   */
+  image?: SeoImage;
+  /**
+   * Marks the page as an article for share cards, with its dates. Blog posts
+   * only. Every other page is a website, which is what share cards assume
+   * when told nothing.
+   */
+  article?: {
+    publishedTime?: string | null;
+    modifiedTime?: string | null;
+  };
 };
 
 /**
@@ -138,6 +157,19 @@ const DEFAULT_DESCRIPTION =
   "A curated health and wellness destination in Midtown Toronto.";
 
 /**
+ * The asset id inside a Sanity image URL, for queries that selected the URL
+ * and not the id. The blog post query is one: without this its photo went out
+ * at full upload size rather than as a 1200x630 card.
+ */
+const SANITY_IMAGE_URL =
+  /^https:\/\/cdn\.sanity\.io\/images\/[^/]+\/[^/]+\/([a-f0-9]+-\d+x\d+)\.([a-z]+)$/i;
+
+function assetIdFromUrl(url: string) {
+  const match = url.split("?")[0].match(SANITY_IMAGE_URL);
+  return match ? `image-${match[1]}-${match[2]}` : undefined;
+}
+
+/**
  * An image entry only if there is actually an image.
  *
  * The hand-written versions passed `url: undefined!` when the field was empty,
@@ -149,15 +181,16 @@ function imageEntry(image: SeoImage | undefined, alt: string) {
   if (!url) return undefined;
 
   // Sized and cropped to 1200x630, honouring any crop set in the Studio. The
-  // raw asset URL is the fallback for the case where the query did not select
-  // the asset id, so a missing _id degrades to the old behaviour rather than
-  // dropping the tag.
-  const shareUrl = image?.asset?._id
+  // raw asset URL is the fallback for an image that is not in Sanity at all,
+  // so an unexpected URL degrades to the old behaviour rather than dropping
+  // the tag.
+  const assetId = image?.asset?._id || assetIdFromUrl(url);
+  const shareUrl = assetId
     ? urlForShareImage({
         _type: "image",
-        asset: { _type: "reference", _ref: image.asset._id },
-        ...(image.crop ? { crop: image.crop } : {}),
-        ...(image.hotspot ? { hotspot: image.hotspot } : {}),
+        asset: { _type: "reference", _ref: assetId },
+        ...(image?.crop ? { crop: image.crop } : {}),
+        ...(image?.hotspot ? { hotspot: image.hotspot } : {}),
       } as never) || url
     : url;
 
@@ -203,8 +236,17 @@ export function buildPageMetadata(
   const socialTitle = stripBrand(seo?.socialMeta?.title) || title;
   const socialDescription = seo?.socialMeta?.description?.trim() || description;
 
-  const ogImages = imageEntry(seo?.socialMeta?.ogImage, socialTitle);
-  const twitterImages = imageEntry(seo?.socialMeta?.twitterImage, socialTitle);
+  const ownOgImages = imageEntry(seo?.socialMeta?.ogImage, socialTitle);
+  const fallbackImages = imageEntry(fallbacks.image, socialTitle);
+  const ogImages = ownOgImages ?? fallbackImages;
+
+  // X reads og:image when a page has no X image of its own, so a page with a
+  // chosen share image and no X image already shows the right picture there.
+  // Only a page with neither takes the fallback photo on X as well, or X
+  // would show the fallback in place of the image somebody chose.
+  const twitterImages =
+    imageEntry(seo?.socialMeta?.twitterImage, socialTitle) ??
+    (ownOgImages ? undefined : fallbackImages);
 
   // `absolute` is what stops Next applying the layout's title template, so a
   // share card ending in its own name does not also collect "| Curate Health".
@@ -212,21 +254,49 @@ export function buildPageMetadata(
     ? { absolute: `${socialTitle} | ${fallbacks.shareBrand}` }
     : socialTitle;
 
+  /*
+   * The site name and locale are repeated here because Next replaces the
+   * layout's openGraph object with the page's rather than merging the two.
+   * The layout sets both, and until 2026-09-18 every page but the homepage
+   * dropped them, along with the page type, the one of the four required
+   * share tags that was missing.
+   */
+  const shareSite = { siteName: BRAND, locale: "en_CA" };
+
   if (fallbacks.noindex) {
     return {
       title,
       description,
       robots: { index: false, follow: true },
-      openGraph: { title: shareTitle, description: socialDescription },
+      openGraph: {
+        ...shareSite,
+        type: "website",
+        title: shareTitle,
+        description: socialDescription,
+      },
       twitter: { title: shareTitle, description: socialDescription },
     };
   }
+
+  const shareType = fallbacks.article
+    ? {
+        type: "article" as const,
+        ...(fallbacks.article.publishedTime
+          ? { publishedTime: fallbacks.article.publishedTime }
+          : {}),
+        ...(fallbacks.article.modifiedTime
+          ? { modifiedTime: fallbacks.article.modifiedTime }
+          : {}),
+      }
+    : { type: "website" as const };
 
   return {
     title,
     description,
     alternates: { canonical: fallbacks.path },
     openGraph: {
+      ...shareSite,
+      ...shareType,
       url: fallbacks.path,
       title: shareTitle,
       description: socialDescription,

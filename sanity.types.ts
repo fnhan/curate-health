@@ -2256,6 +2256,7 @@ export type BlogSection = {
   sectionTitle?: string;
   hoverLinkText?: string;
   hoverLinkHref?: string;
+  seo?: Seo;
 };
 
 export type CafeSection = {
@@ -5081,6 +5082,47 @@ export type GET_ALL_POSTS_QUERYResult = Array<{
     alt: string | null;
   } | null;
 }>;
+// Variable: BLOG_PAGE_QUERY
+// Query: {  "page": *[_type == "blogSection"][0]{      seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      }    }  }  },  "latestImage": *[_type == "post" && published == true && defined(mainImage.asset)]    | order(publishedAt desc, _createdAt desc)[0].mainImage{      crop,      hotspot,      alt,      asset->{        _id,        url      }    }}
+export type BLOG_PAGE_QUERYResult = {
+  page: {
+    seo: {
+      pageTitle: string | null;
+      pageDescription: string | null;
+      socialMeta: {
+        title: string | null;
+        description: string | null;
+        ogImage: {
+          crop: SanityImageCrop | null;
+          hotspot: SanityImageHotspot | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            alt: null;
+          } | null;
+        } | null;
+        twitterImage: {
+          crop: SanityImageCrop | null;
+          hotspot: SanityImageHotspot | null;
+          asset: {
+            _id: string;
+            url: string | null;
+            alt: null;
+          } | null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+  latestImage: {
+    crop: SanityImageCrop | null;
+    hotspot: SanityImageHotspot | null;
+    alt: string | null;
+    asset: {
+      _id: string;
+      url: string | null;
+    } | null;
+  } | null;
+};
 // Variable: GET_POST_BY_SLUG_QUERY
 // Query: *[_type == "post" && published == true && slug.current == $slug][0] {  _updatedAt,  title,  publishedAt,  excerpt,  slug,  "author": author->{    linkedTeamMemberName,    image {      asset-> {        url      }    }  },  "mainImage": {    "image": mainImage.asset->url,    "alt": mainImage.alt  },  sections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      // alt sits on sectionImage, beside image, not inside it. This read      // image.alt, a field the post schema does not define, so every blog      // section rendered alt="" and typing alt text into the Studio would      // have changed nothing. The same projection in CAFE_PAGE_QUERY has      // always read it correctly. CH-028.      //      // Line comments only in here. A /* */ block inside the template      // literal parses as GROQ rather than as JavaScript and takes the whole      // query out, which shows up as a missing generated type.      alt    }  },    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      }    }  }}
 export type GET_POST_BY_SLUG_QUERYResult = {
@@ -5300,7 +5342,7 @@ export type CAFE_PAGE_QUERYResult = {
   } | null;
 } | null;
 // Variable: SITEMAP_QUERY
-// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  // A treatment is only a live page if its category is live too. Exercise  // Therapy was switched on under the switched-off Lifestyle Medicine  // category, so the sitemap kept listing an address that forwards  // elsewhere. Caught by audit-metadata.js on 2026-09-11.  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  // One entry per practitioner page, CH-104. Gated on isActive, so  // switching someone off in the Studio takes their URL out of the sitemap  // rather than leaving it listed and 404ing.  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},  "cafe": *[_type == "cafePage" && pageActive == true]{_id}}
+// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  // A treatment is only a live page if its category is live too. Exercise  // Therapy was switched on under the switched-off Lifestyle Medicine  // category, so the sitemap kept listing an address that forwards  // elsewhere. Caught by audit-metadata.js on 2026-09-11.  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  // One entry per practitioner page, CH-104. Gated on isActive, so  // switching someone off in the Studio takes their URL out of the sitemap  // rather than leaving it listed and 404ing.  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},  "cafe": *[_type == "cafePage" && pageActive == true]{_id},  // The two Curate Lifestyle pages have routes of their own rather than a  // slug under /services, so the services list above never included them.  // Both were live and missing from the sitemap until 2026-09-18.  "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0}
 export type SITEMAP_QUERYResult = {
   services: Array<string | null>;
   treatments: Array<{
@@ -5328,6 +5370,8 @@ export type SITEMAP_QUERYResult = {
   cafe: Array<{
     _id: string;
   }>;
+  lifestyle: boolean;
+  lifestyleProgram: boolean;
 };
 // Variable: LEGAL_PAGE_BY_SLUG_QUERY
 // Query: *[_type == "legalPage" && slug.current == $slug][0]{  title,  body,    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      }    }  }}
@@ -6123,7 +6167,7 @@ export type OUR_PROGRAMS_QUERYResult = {
 
 // Source: ./app/llms.txt/route.ts
 // Variable: LLMS_TXT_QUERY
-// Query: {  "siteMetadata": *[_type == "siteMetadata"][0]{    homePageTitle,    defaultDescription,    keywords  },  "siteSettings": *[_type == "siteSettings"][0]{    brandName,    contactInfo{      email,      phone,      address{        street,        city,        state,        zip,        country,        locationInfo      },      mapLink    },    socialMedia[]{      platform,      url,      isActive    }  },  "services": *[_type == "service" && isActive == true] | order(title asc){    title,    "slug": slug.current,    "description": coalesce(seo.pageDescription, pt::text(content)),    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(title asc){      title,      "slug": treatmentSlug.current,      "description": coalesce(seo.pageDescription, intro.introParagraph, quoteContent)    }  },  "cafe": *[_type == "cafePage" && pageActive == true][0]{    "introTitle": introSection.title,    "description": introSection.description,    "menuUrl": menuDownloadSection.menuPdf.asset->url,    "seoDescription": seo.pageDescription  },  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)]{    name,    role  },  "posts": *[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc)[0...10]{    title,    "slug": slug.current,    excerpt  }}
+// Query: {  "siteMetadata": *[_type == "siteMetadata"][0]{    homePageTitle,    defaultDescription,    keywords  },  "siteSettings": *[_type == "siteSettings"][0]{    brandName,    contactInfo{      email,      phone,      address{        street,        city,        state,        zip,        country,        locationInfo      },      mapLink    },    socialMedia[]{      platform,      url,      isActive    }  },  "services": *[_type == "service" && isActive == true] | order(title asc){    title,    "slug": slug.current,    "description": coalesce(seo.pageDescription, pt::text(content)),    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(title asc){      title,      "slug": treatmentSlug.current,      "description": coalesce(seo.pageDescription, intro.introParagraph, quoteContent)    }  },  "cafe": *[_type == "cafePage" && pageActive == true][0]{    "introTitle": introSection.title,    "description": introSection.description,    "menuUrl": menuDownloadSection.menuPdf.asset->url,    "seoDescription": seo.pageDescription  },  // Role is rich text in the Studio, one line per role. Read as plain text  // here, it printed as "[object Object]" for every member until 2026-09-18.  // The practitioner record's credentials are preferred, since they are  // plain strings and the same ones the practitioner page shows.  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)]{    name,    "role": pt::text(role),    "practitioner": *[_type == "practitioner" && isActive == true && name == ^.name][0]{      "slug": slug.current,      credentials    }  },  // The meta description first: the excerpts on the two 2024 posts predate  // the content rules.  "posts": *[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc)[0...10]{    title,    "slug": slug.current,    "description": coalesce(seo.pageDescription, excerpt)  },  // Every page in the sitemap is listed here, the hubs included. 25 of 49  // were missing until 2026-09-18, every page built that year among them.  "pages": {    "services": *[_type == "servicesHeroSection"][0].seo.pageDescription,    "contact": *[_type == "contactPage"][0].seo.pageDescription,    "blog": *[_type == "blogSection"][0].seo.pageDescription,    "ourPrograms": *[_type == "ourPrograms" && isActive == true][0]{      "description": seo.pageDescription    },    "lifestyle": *[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"][0]{      "description": seo.pageDescription    },    "lifestyleProgram": *[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"][0]{      "description": seo.pageDescription    },    "about": *[_type == "aboutIndexPage"][0].seo.pageDescription,    "products": *[_type == "productsPage"][0].seo.pageDescription  },  "about": [    *[_type == "ourStory" && pageActive == true][0]{      "title": "Our Story",      "path": "/about/our-story",      "description": seo.pageDescription    },    *[_type == "ourTeam" && pageActive == true][0]{      "title": "Our Team",      "path": "/about/our-team",      "description": seo.pageDescription    },    *[_type == "missionAndValues" && pageActive == true][0]{      "title": "Mission and Values",      "path": "/about/mission-and-values",      "description": seo.pageDescription    },    *[_type == "pillarsOfHealth" && pageActive == true][0]{      "title": "Pillars of Health",      "path": "/about/pillars-of-health",      "description": seo.pageDescription    },    *[_type == "sustainability" && pageActive == true][0]{      "title": "Sustainability",      "path": "/about/sustainability",      "description": seo.pageDescription    }  ],  "products": *[_type == "product" && isActive == true && defined(slug.current)] | order(title asc){    title,    "slug": slug.current,    "description": coalesce(seo.pageDescription, description)  },  "legal": *[_type == "legalPage" && defined(slug.current)] | order(title asc){    title,    "slug": slug.current  }}
 export type LLMS_TXT_QUERYResult = {
   siteMetadata: {
     homePageTitle: string | null;
@@ -6169,44 +6213,73 @@ export type LLMS_TXT_QUERYResult = {
   } | null;
   team: Array<{
     name: string | null;
-    role: Array<
-      | {
-          children?: Array<{
-            marks?: Array<string>;
-            text?: string;
-            _type: "span";
-            _key: string;
-          }>;
-          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-          listItem?: "bullet" | "number";
-          markDefs?: Array<{
-            href?: string;
-            _type: "link";
-            _key: string;
-          }>;
-          level?: number;
-          _type: "block";
-          _key: string;
-        }
-      | {
-          asset?: {
-            _ref: string;
-            _type: "reference";
-            _weak?: boolean;
-            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-          };
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          alt?: string;
-          _type: "image";
-          _key: string;
-        }
-    > | null;
+    role: string;
+    practitioner: {
+      slug: string | null;
+      credentials: Array<string> | null;
+    } | null;
   }> | null;
   posts: Array<{
     title: string | null;
     slug: string | null;
-    excerpt: string | null;
+    description: string | null;
+  }>;
+  pages: {
+    services: string | null;
+    contact: string | null;
+    blog: string | null;
+    ourPrograms: {
+      description: null;
+    } | null;
+    lifestyle: {
+      description: string | null;
+    } | null;
+    lifestyleProgram: {
+      description: string | null;
+    } | null;
+    about: string | null;
+    products: string | null;
+  };
+  about: Array<
+    | {
+        title: "Mission and Values";
+        path: "/about/mission-and-values";
+        description: string | null;
+      }
+    | null
+    | {
+        title: "Our Story";
+        path: "/about/our-story";
+        description: string | null;
+      }
+    | null
+    | {
+        title: "Our Team";
+        path: "/about/our-team";
+        description: string | null;
+      }
+    | null
+    | {
+        title: "Pillars of Health";
+        path: "/about/pillars-of-health";
+        description: string | null;
+      }
+    | null
+    | {
+        title: "Sustainability";
+        path: "/about/sustainability";
+        description: string | null;
+      }
+    | null
+  >;
+  products: Array<{
+    title: string | null;
+    slug: string | null;
+    description: string | null;
+  }>;
+  legal: Array<{
+    title: string | null;
+    slug: string | null;
   }>;
 };
 
@@ -6250,6 +6323,7 @@ export type INDEX_DOCS_QUERYResult = Array<
       sectionTitle?: string;
       hoverLinkText?: string;
       hoverLinkHref?: string;
+      seo?: Seo;
       teamMembers: null;
       slugCurrent: null;
       treatmentSlugCurrent: null;
@@ -8505,14 +8579,15 @@ declare module "@sanity/client" {
     '*[_type == "siteSettings"][0]{\n  "phone": contactInfo.phone\n}': SITE_SETTINGS_PHONE_QUERYResult;
     '{\n  "contactInfo": *[_type == "siteSettings"][0]{\n  "brandName": brandName,\n  contactInfo{\n    email,\n    phone,\n    address{\n      street,\n      city,\n      state,\n      zip,\n      country,\n      locationInfo\n    },\n    mapLink,\n    directionsLink,\n  },\n},\n  "page": *[_type == "contactPage"][0]{\n    heroSection{\n      title,\n      heroImage {\n        "image": image.asset->url,\n        alt\n      }\n    },\n    branchName,\n    parking,\n    howToGetHere,\n    mapURL,\n    businessHours{\n      standardHours,\n      customStandardHours,\n      daysOpen,\n      exceptions[]{\n        day,\n        hours,\n        message\n      }\n    },\n    contactForm{\n      "image": image.asset->url,\n      alt\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n}': CONTACT_PAGE_QUERYResult;
     '*[_type == "post" && published == true] {\n  _id,\n  title,\n  publishedAt,\n  "slug": slug.current,\n  excerpt,\n  "author": author->{\n    linkedTeamMemberName,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  mainImage {\n    asset->,\n    alt\n  },\n} | order(publishedAt desc)': GET_ALL_POSTS_QUERYResult;
+    '{\n  "page": *[_type == "blogSection"][0]{\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n  "latestImage": *[_type == "post" && published == true && defined(mainImage.asset)]\n    | order(publishedAt desc, _createdAt desc)[0].mainImage{\n      crop,\n      hotspot,\n      alt,\n      asset->{\n        _id,\n        url\n      }\n    }\n}': BLOG_PAGE_QUERYResult;
     '*[_type == "post" && published == true && slug.current == $slug][0] {\n  _updatedAt,\n  title,\n  publishedAt,\n  excerpt,\n  slug,\n  "author": author->{\n    linkedTeamMemberName,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  "mainImage": {\n    "image": mainImage.asset->url,\n    "alt": mainImage.alt\n  },\n  sections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      // alt sits on sectionImage, beside image, not inside it. This read\n      // image.alt, a field the post schema does not define, so every blog\n      // section rendered alt="" and typing alt text into the Studio would\n      // have changed nothing. The same projection in CAFE_PAGE_QUERY has\n      // always read it correctly. CH-028.\n      //\n      // Line comments only in here. A /* */ block inside the template\n      // literal parses as GROQ rather than as JavaScript and takes the whole\n      // query out, which shows up as a missing generated type.\n      alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': GET_POST_BY_SLUG_QUERYResult;
     '*[_type == "cafePage" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n introSection{\n   title,\n   subheading,\n   description\n },\n quoteSection{\n   quoteImage{\n     "image": image.asset->url,\n     alt\n   },\n   quoteText\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n menuDownloadSection{\n    eyebrow,\n    headline,\n    description,\n    buttonLabel,\n    "menuFile": menuPdf.asset->{\n      url,\n      originalFilename,\n      mimeType\n    }\n },\n ctaBandSection{\n    backgroundImage{\n      "url": image.asset->url,\n      alt\n    },\n    headline,\n    body,\n    closingLine\n },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': CAFE_PAGE_QUERYResult;
-    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  // A treatment is only a live page if its category is live too. Exercise\n  // Therapy was switched on under the switched-off Lifestyle Medicine\n  // category, so the sitemap kept listing an address that forwards\n  // elsewhere. Caught by audit-metadata.js on 2026-09-11.\n  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  // One entry per practitioner page, CH-104. Gated on isActive, so\n  // switching someone off in the Studio takes their URL out of the sitemap\n  // rather than leaving it listed and 404ing.\n  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id}\n}': SITEMAP_QUERYResult;
+    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  // A treatment is only a live page if its category is live too. Exercise\n  // Therapy was switched on under the switched-off Lifestyle Medicine\n  // category, so the sitemap kept listing an address that forwards\n  // elsewhere. Caught by audit-metadata.js on 2026-09-11.\n  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  // One entry per practitioner page, CH-104. Gated on isActive, so\n  // switching someone off in the Studio takes their URL out of the sitemap\n  // rather than leaving it listed and 404ing.\n  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id},\n  // The two Curate Lifestyle pages have routes of their own rather than a\n  // slug under /services, so the services list above never included them.\n  // Both were live and missing from the sitemap until 2026-09-18.\n  "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,\n  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0\n}': SITEMAP_QUERYResult;
     '*[_type == "legalPage" && slug.current == $slug][0]{\n  title,\n  body,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': LEGAL_PAGE_BY_SLUG_QUERYResult;
     '\n  *[_type == "serviceLifestyle" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    hero_secondary_title,\n    hero_large_text,\n    referral_form_pdf {\n      asset-> {\n        url,\n        originalFilename,\n      }\n    },\n    block_2_title,\n    block_2_content,\n    block_2_image {\n      asset-> {\n        url,\n      }\n    },\n    block_3_title,\n    block_3_content,\n    "block_4_image": block_4_image.asset->url,\n    "block_5_image": block_5_image.asset->url,\n    benefits[] {\n      title,\n      description,\n      "image": image.asset->url,\n      tint_percentage,\n      tint_percentage_hover\n    },\n    "block_7_image": block_7_image.asset->url,\n    "block_9_image": block_9_image.asset->url,\n    timeline[] {\n      title,\n      description\n    },\n    "block_11_image": block_11_image.asset->url,\n    faq[] {\n      title,\n      description\n    },\n    call_to_action,\n    pillars[] {\n      title,\n      description\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{\n      teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)] {\n        name,\n        role,\n        bio,\n        image {\n          asset-> {\n            url\n          }\n        }\n      }\n    },\n    testimonials[] {\n      name,\n      description,\n      image {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n': SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
     '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n        originalFilename,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
     '\n  *[_type == "ourPrograms" && isActive == true][0]{\n title,\n heroImage {\n    asset->{\n      url,\n      alt\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  programs[] {\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    programName,\n    description\n  },\n  essentialSeries {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    tableContent {\n      includesSessions[],\n      bonusSessions[],\n      bonusTransferable[]\n    },\n    listContent[]\n  },\n  curateLifestyle {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      length,\n      format,\n      focus,\n      bonus[],\n      entry\n    },\n    outcome,\n    referral_form_pdf {\n      asset-> {\n        url,\n        originalFilename,\n      }\n    },\n    call_to_action\n  },\n  masterHealthBlueprint {\n    description,\n    image {\n        asset->{\n          url\n        },\n      alt\n    },\n    structure {\n      kickOff,\n      team,\n      plan,\n      programIncludes[],\n      privileges[]\n    },\n    outcome\n  },\n  exploreYourOptions {\n    image {\n        asset->{\n          url\n        },\n        alt\n    },\n    contactMessage\n  },\n  faq[] {\n      title,\n      description\n  },\n  threePaths {\n    heading,\n    subtitle,\n    paragraph,\n    tableContent {\n      bestFor[],\n      approach[],\n      focus[],\n      extras {\n        essentialSeries[],\n        curateLifestyle[],\n        masterHealthBlueprint[]\n      },\n      pricing {\n        essentialSeries,\n        curateLifestyle[],\n        masterHealthBlueprint\n      }\n    },\n  },\n  ctaSection {\n    image {\n        asset->{\n          url\n        }\n    },\n    heading,\n    paragraph,\n    buttonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': OUR_PROGRAMS_QUERYResult;
-    '{\n  "siteMetadata": *[_type == "siteMetadata"][0]{\n    homePageTitle,\n    defaultDescription,\n    keywords\n  },\n  "siteSettings": *[_type == "siteSettings"][0]{\n    brandName,\n    contactInfo{\n      email,\n      phone,\n      address{\n        street,\n        city,\n        state,\n        zip,\n        country,\n        locationInfo\n      },\n      mapLink\n    },\n    socialMedia[]{\n      platform,\n      url,\n      isActive\n    }\n  },\n  "services": *[_type == "service" && isActive == true] | order(title asc){\n    title,\n    "slug": slug.current,\n    "description": coalesce(seo.pageDescription, pt::text(content)),\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(title asc){\n      title,\n      "slug": treatmentSlug.current,\n      "description": coalesce(seo.pageDescription, intro.introParagraph, quoteContent)\n    }\n  },\n  "cafe": *[_type == "cafePage" && pageActive == true][0]{\n    "introTitle": introSection.title,\n    "description": introSection.description,\n    "menuUrl": menuDownloadSection.menuPdf.asset->url,\n    "seoDescription": seo.pageDescription\n  },\n  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)]{\n    name,\n    role\n  },\n  "posts": *[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc)[0...10]{\n    title,\n    "slug": slug.current,\n    excerpt\n  }\n}': LLMS_TXT_QUERYResult;
+    '{\n  "siteMetadata": *[_type == "siteMetadata"][0]{\n    homePageTitle,\n    defaultDescription,\n    keywords\n  },\n  "siteSettings": *[_type == "siteSettings"][0]{\n    brandName,\n    contactInfo{\n      email,\n      phone,\n      address{\n        street,\n        city,\n        state,\n        zip,\n        country,\n        locationInfo\n      },\n      mapLink\n    },\n    socialMedia[]{\n      platform,\n      url,\n      isActive\n    }\n  },\n  "services": *[_type == "service" && isActive == true] | order(title asc){\n    title,\n    "slug": slug.current,\n    "description": coalesce(seo.pageDescription, pt::text(content)),\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(title asc){\n      title,\n      "slug": treatmentSlug.current,\n      "description": coalesce(seo.pageDescription, intro.introParagraph, quoteContent)\n    }\n  },\n  "cafe": *[_type == "cafePage" && pageActive == true][0]{\n    "introTitle": introSection.title,\n    "description": introSection.description,\n    "menuUrl": menuDownloadSection.menuPdf.asset->url,\n    "seoDescription": seo.pageDescription\n  },\n  // Role is rich text in the Studio, one line per role. Read as plain text\n  // here, it printed as "[object Object]" for every member until 2026-09-18.\n  // The practitioner record\'s credentials are preferred, since they are\n  // plain strings and the same ones the practitioner page shows.\n  "team": *[_type == "ourTeam" && pageActive == true][0].teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)]{\n    name,\n    "role": pt::text(role),\n    "practitioner": *[_type == "practitioner" && isActive == true && name == ^.name][0]{\n      "slug": slug.current,\n      credentials\n    }\n  },\n  // The meta description first: the excerpts on the two 2024 posts predate\n  // the content rules.\n  "posts": *[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc)[0...10]{\n    title,\n    "slug": slug.current,\n    "description": coalesce(seo.pageDescription, excerpt)\n  },\n  // Every page in the sitemap is listed here, the hubs included. 25 of 49\n  // were missing until 2026-09-18, every page built that year among them.\n  "pages": {\n    "services": *[_type == "servicesHeroSection"][0].seo.pageDescription,\n    "contact": *[_type == "contactPage"][0].seo.pageDescription,\n    "blog": *[_type == "blogSection"][0].seo.pageDescription,\n    "ourPrograms": *[_type == "ourPrograms" && isActive == true][0]{\n      "description": seo.pageDescription\n    },\n    "lifestyle": *[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"][0]{\n      "description": seo.pageDescription\n    },\n    "lifestyleProgram": *[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"][0]{\n      "description": seo.pageDescription\n    },\n    "about": *[_type == "aboutIndexPage"][0].seo.pageDescription,\n    "products": *[_type == "productsPage"][0].seo.pageDescription\n  },\n  "about": [\n    *[_type == "ourStory" && pageActive == true][0]{\n      "title": "Our Story",\n      "path": "/about/our-story",\n      "description": seo.pageDescription\n    },\n    *[_type == "ourTeam" && pageActive == true][0]{\n      "title": "Our Team",\n      "path": "/about/our-team",\n      "description": seo.pageDescription\n    },\n    *[_type == "missionAndValues" && pageActive == true][0]{\n      "title": "Mission and Values",\n      "path": "/about/mission-and-values",\n      "description": seo.pageDescription\n    },\n    *[_type == "pillarsOfHealth" && pageActive == true][0]{\n      "title": "Pillars of Health",\n      "path": "/about/pillars-of-health",\n      "description": seo.pageDescription\n    },\n    *[_type == "sustainability" && pageActive == true][0]{\n      "title": "Sustainability",\n      "path": "/about/sustainability",\n      "description": seo.pageDescription\n    }\n  ],\n  "products": *[_type == "product" && isActive == true && defined(slug.current)] | order(title asc){\n    title,\n    "slug": slug.current,\n    "description": coalesce(seo.pageDescription, description)\n  },\n  "legal": *[_type == "legalPage" && defined(slug.current)] | order(title asc){\n    title,\n    "slug": slug.current\n  }\n}': LLMS_TXT_QUERYResult;
     '\n*[\n  _type in [\n    "heroSection",\n    "aboutSection",\n    "clinic",\n    "productsSection",\n    "servicesSection",\n    "cafeSection",\n    "blogSection",\n    "sustainabilitySection",\n    "post",\n    "product",\n    "service",\n    "treatments",\n    "serviceLifestyle",\n    "serviceLifestyleProgram",\n    "ourStory",\n    "ourTeam",\n    "missionAndValues",\n    "sustainability",\n    "pillarsOfHealth",\n    "cafePage",\n    "contactPage",\n    "ourPrograms",\n    "servicesHeroSection",\n    "legalPage"\n  ]\n]{\n  ...,\n  // Search reads every string in a document, so a team member whose\n  // practitioner record has "Show on website" switched off has to come out\n  // of the Our Team document here too, or searching their name still lands\n  // on the team page. The same filter as OUR_TEAM_PAGE_QUERY.\n  "teamMembers": teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)],\n  "slugCurrent": slug.current,\n  "treatmentSlugCurrent": treatmentSlug.current,\n  "serviceSlugCurrent": service->slug.current\n}\n': INDEX_DOCS_QUERYResult;
   }
 }

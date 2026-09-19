@@ -239,7 +239,7 @@ export default function ServiceLifestyleContent({
               width={545}
               height={545}
               src={content_image!}
-              alt={content_alt!}
+              alt={content_alt ?? ""}
             />
           </div>
           <div className="col-span-2 h-32 border-l-2 border-primary"></div>

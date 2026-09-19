@@ -28,7 +28,8 @@
  *   Exactly one H1           Zero leaves the page's subject unstated, more than
  *                            one leaves it ambiguous. CH-011.
  *   Description present      Missing means Google invents a snippet. CH-024.
- *   Description length       Over 155 characters is cut mid-sentence.
+ *   Description length       Over 155 characters is cut mid-sentence, and
+ *                            under 70 is a label rather than a description.
  *   Description unique       Two pages sharing one is the copy-paste class of
  *                            error in CH-033.
  *   Title unique             Same reasoning.
@@ -36,6 +37,14 @@
  *                            with the page title.
  *   Canonical                Currently absent everywhere. CH-003.
  *   Banned words             The content rules apply to meta text too.
+ *   Share image              A shared link with no og:image shows a bare card.
+ *                            Nine pages had none on 2026-09-18, all of them
+ *                            pages built this year. It has to load, too: a tag
+ *                            pointing at nothing is worse than no tag.
+ *   Share type and site      og:type is one of the four tags a share card
+ *                            requires, and og:site_name is what puts "Curate
+ *                            Health" on the card. Every page but the homepage
+ *                            was dropping both until 2026-09-18.
  *
  * The H1 comparison is deliberately loose. It asks whether the first
  * meaningful words of the heading appear in the title, not whether the strings
@@ -49,6 +58,10 @@ const DEFAULT_BASE = "https://www.curatehealth.ca";
 const BRAND = "Curate Health";
 const TITLE_MAX = 60;
 const DESCRIPTION_MAX = 155;
+// Shorter than this is a label, not a description, and Google writes its own.
+// The Curate Lifestyle Program's read "Curate Lifestyle Program" until
+// 2026-09-18.
+const DESCRIPTION_MIN = 70;
 
 const BANNED = [
   "dive in",
@@ -143,6 +156,32 @@ function titleMatchesHeading(title, heading) {
   return headingWords.every((w) => titleWords.has(w));
 }
 
+/** Each share image is fetched once, however many pages use it. */
+const imageChecks = new Map();
+
+/**
+ * Returns null when the URL serves an image, or what went wrong. A share
+ * image tag that points at a 404 is worse than none: the card renders broken.
+ */
+function checkImage(url) {
+  if (!imageChecks.has(url)) {
+    imageChecks.set(
+      url,
+      fetch(url)
+        .then(async (response) => {
+          const type = response.headers.get("content-type") || "";
+          await response.arrayBuffer();
+          if (response.status !== 200) return `${response.status} from ${url}`;
+          if (!type.startsWith("image/")) return `${type || "no type"} from ${url}`;
+          return null;
+        })
+        .catch((error) => `${error.message} from ${url}`)
+    );
+  }
+
+  return imageChecks.get(url);
+}
+
 async function collectUrls(base) {
   const response = await fetch(`${base}/sitemap.xml`);
   const xml = await response.text();
@@ -195,6 +234,10 @@ async function main() {
       ogTitle: meta(html, "og:title"),
       ogDescription: meta(html, "og:description"),
       twitterTitle: meta(html, "twitter:title"),
+      ogImage: meta(html, "og:image"),
+      ogType: meta(html, "og:type"),
+      ogSiteName: meta(html, "og:site_name"),
+      twitterCard: meta(html, "twitter:card"),
       canonical:
         (html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/i) ||
           [])[1] || null,
@@ -239,7 +282,12 @@ async function main() {
     }
 
     if (!page.description) add("FAIL", "no meta description");
-    else if (page.description.length > DESCRIPTION_MAX) {
+    else if (page.description.length < DESCRIPTION_MIN) {
+      add(
+        "WARN",
+        `description is ${page.description.length} chars, too short to use: ${JSON.stringify(page.description)}`
+      );
+    } else if (page.description.length > DESCRIPTION_MAX) {
       add(
         "WARN",
         `description is ${page.description.length} chars, over ${DESCRIPTION_MAX}`
@@ -284,6 +332,21 @@ async function main() {
     }
 
     if (!page.canonical) add("WARN", "no canonical tag");
+
+    if (!page.ogImage) {
+      add("FAIL", "no og:image, a shared link shows a bare card");
+    } else {
+      const loaded = await checkImage(page.ogImage);
+      if (loaded) add("FAIL", `og:image does not load: ${loaded}`);
+    }
+    if (!page.ogType) add("FAIL", "no og:type");
+    if (!page.ogSiteName) add("WARN", "no og:site_name");
+    if (page.ogImage && page.twitterCard !== "summary_large_image") {
+      add(
+        "WARN",
+        `twitter:card is ${JSON.stringify(page.twitterCard)}, so X shows the image as a small thumbnail`
+      );
+    }
 
     for (const field of ["title", "description"]) {
       const value = page[field];

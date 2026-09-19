@@ -294,5 +294,42 @@ export async function generateMetadata({
     description: lead
       ? `${person.name}, ${lead} at Curate Health in Midtown Toronto.`
       : `${person.name} at Curate Health in Midtown Toronto.`,
+    image: shareImageFromPhoto(person.photo),
   });
+}
+
+/**
+ * Where a share card centres a photo that has no hotspot set: across the
+ * middle, and a third of the way down.
+ *
+ * A share card is 1200x630, far wider than most of these photos, so it keeps
+ * a band and cuts the rest. Centred, that band cut through Dr. Nhan's and
+ * Andrew's foreheads. A third of the way down is where a face sits in a
+ * portrait, and on the wide photos the band barely moves. A hotspot dragged
+ * in the Studio replaces this.
+ */
+const PORTRAIT_FOCUS = {
+  _type: "sanity.imageHotspot" as const,
+  x: 0.5,
+  y: 0.3,
+  width: 1,
+  height: 0.6,
+};
+
+/**
+ * The practitioner's own photo is their share image unless a different one
+ * is set under SEO in the Studio. Every practitioner, including anyone added
+ * later, gets a card with their face on it without anyone remembering to.
+ */
+function shareImageFromPhoto(
+  photo: NonNullable<PRACTITIONER_BY_SLUG_QUERYResult>["photo"]
+) {
+  const assetId = photo?.asset?._ref;
+  if (!assetId || !photo?.url) return undefined;
+
+  return {
+    asset: { _id: assetId, url: photo.url, alt: photo.alt },
+    crop: photo.crop ?? null,
+    hotspot: photo.hotspot ?? PORTRAIT_FOCUS,
+  };
 }

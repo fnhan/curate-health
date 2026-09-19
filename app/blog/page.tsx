@@ -14,9 +14,12 @@ import {
 import { BLOG_DESCRIPTION, withBlogFeed } from "@/lib/blog-feed";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { formatDate } from "@/lib/utils";
-import { GET_ALL_POSTS_QUERYResult } from "@/sanity.types";
+import {
+  BLOG_PAGE_QUERYResult,
+  GET_ALL_POSTS_QUERYResult,
+} from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
-import { GET_ALL_POSTS_QUERY } from "@/sanity/lib/queries";
+import { BLOG_PAGE_QUERY, GET_ALL_POSTS_QUERY } from "@/sanity/lib/queries";
 
 export default async function BlogPage() {
   const posts = await sanityFetch<GET_ALL_POSTS_QUERYResult>({
@@ -84,17 +87,35 @@ export default async function BlogPage() {
  * the homepage's title and description verbatim. Three pages presenting as one
  * page is CH-006.
  *
- * Written here rather than pulled from Sanity because `blogSection` carries no
- * seo object and adding one is a schema change. The description lives in
- * lib/blog-feed.ts because the RSS feed uses the same words. The feed link tag
- * is CH-105.
+ * Editable in the Studio under "SEO For The Blog Page" on the homepage's blog
+ * section, since 2026-09-18, when /blog was found sharing with no image. The
+ * title and description below are the fallbacks, and the description is the
+ * feed's too, see lib/blog-feed.ts. The share image falls back to the newest
+ * post's photo. The feed link tag is CH-105.
  */
 export async function generateMetadata() {
+  const data = await sanityFetch<BLOG_PAGE_QUERYResult>({
+    query: BLOG_PAGE_QUERY,
+  });
+
+  const latest = data?.latestImage;
+
   return withBlogFeed(
-    buildPageMetadata(null, {
+    buildPageMetadata(data?.page?.seo ?? null, {
       path: "/blog",
       title: "Blog",
       description: BLOG_DESCRIPTION,
+      image: latest?.asset?.url
+        ? {
+            asset: {
+              _id: latest.asset._id,
+              url: latest.asset.url,
+              alt: latest.alt,
+            },
+            crop: latest.crop ?? null,
+            hotspot: latest.hotspot ?? null,
+          }
+        : undefined,
     })
   );
 }

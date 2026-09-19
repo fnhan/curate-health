@@ -26,12 +26,18 @@ export const revalidate = 3600;
 // declares its own FeedPost type, and a fourth file of tagged queries reorders
 // the whole of sanity.types.ts, which buries the real change in a diff of
 // thousands of lines.
-const RSS_QUERY = `*[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc){
-  title,
-  "slug": slug.current,
-  excerpt,
-  publishedAt,
-  "byline": author->linkedTeamMemberName
+//
+// The description is the blog page's own, from the Studio when it is set
+// there, so the feed and /blog keep saying the same thing.
+const RSS_QUERY = `{
+  "description": *[_type == "blogSection"][0].seo.pageDescription,
+  "posts": *[_type == "post" && published == true && defined(slug.current)] | order(publishedAt desc){
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    "byline": author->linkedTeamMemberName
+  }
 }`;
 
 type FeedPost = {
@@ -40,6 +46,11 @@ type FeedPost = {
   excerpt: string | null;
   publishedAt: string | null;
   byline: string | null;
+};
+
+type Feed = {
+  description: string | null;
+  posts: FeedPost[] | null;
 };
 
 function escapeXml(value: string) {
@@ -56,7 +67,7 @@ function pubDate(date: string) {
   return Number.isNaN(parsed.getTime()) ? null : parsed.toUTCString();
 }
 
-function buildFeed(posts: FeedPost[]) {
+function buildFeed(posts: FeedPost[], description: string) {
   const items = posts
     .filter((post) => post.title && post.slug)
     .map((post) => {
@@ -86,7 +97,7 @@ function buildFeed(posts: FeedPost[]) {
     "  <channel>",
     `    <title>${escapeXml(BLOG_FEED_TITLE)}</title>`,
     `    <link>${BASEURL}/blog</link>`,
-    `    <description>${escapeXml(BLOG_DESCRIPTION)}</description>`,
+    `    <description>${escapeXml(description)}</description>`,
     "    <language>en-ca</language>",
     `    <atom:link href="${BASEURL}${BLOG_FEED_PATH}" rel="self" type="application/rss+xml"/>`,
     ...items,
@@ -96,12 +107,14 @@ function buildFeed(posts: FeedPost[]) {
 }
 
 export async function GET() {
-  const posts = await sanityFetch<FeedPost[]>({
+  const feed = await sanityFetch<Feed>({
     query: RSS_QUERY,
     revalidate,
   });
 
-  return new NextResponse(`${buildFeed(posts ?? [])}\n`, {
+  const description = feed?.description?.trim() || BLOG_DESCRIPTION;
+
+  return new NextResponse(`${buildFeed(feed?.posts ?? [], description)}\n`, {
     headers: {
       "Content-Type": "application/rss+xml; charset=utf-8",
       "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",

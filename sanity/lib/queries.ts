@@ -823,6 +823,30 @@ export const GET_ALL_POSTS_QUERY = groq`*[_type == "post" && published == true] 
   },
 } | order(publishedAt desc)`;
 
+/**
+ * The blog page's search and share details. CH-105.
+ *
+ * They sit on blogSection, the homepage's blog section, because /blog has no
+ * document of its own. Until a share image is set there, the newest post's
+ * photo is used. Ties on the publish date go to the post created last, so
+ * the choice does not change between requests.
+ */
+export const BLOG_PAGE_QUERY = groq`{
+  "page": *[_type == "blogSection"][0]{
+    ${SEO_QUERY}
+  },
+  "latestImage": *[_type == "post" && published == true && defined(mainImage.asset)]
+    | order(publishedAt desc, _createdAt desc)[0].mainImage{
+      crop,
+      hotspot,
+      alt,
+      asset->{
+        _id,
+        url
+      }
+    }
+}`;
+
 export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == true && slug.current == $slug][0] {
   _updatedAt,
   title,
@@ -934,7 +958,12 @@ export const SITEMAP_QUERY = groq`{
   "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},
   "sustainability": *[_type == "sustainability" && pageActive == true]{_id},
   "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},
-  "cafe": *[_type == "cafePage" && pageActive == true]{_id}
+  "cafe": *[_type == "cafePage" && pageActive == true]{_id},
+  // The two Curate Lifestyle pages have routes of their own rather than a
+  // slug under /services, so the services list above never included them.
+  // Both were live and missing from the sitemap until 2026-09-18.
+  "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,
+  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0
 }`;
 
 export const LEGAL_PAGE_BY_SLUG_QUERY = groq`*[_type == "legalPage" && slug.current == $slug][0]{

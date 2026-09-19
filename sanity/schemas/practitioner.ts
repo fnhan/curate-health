@@ -207,6 +207,8 @@ export default defineType({
       name: "seo",
       title: "SEO",
       type: "seo",
+      description:
+        "Leave the share images empty and the photo above is used. To frame it better on a shared link, set the photo's hotspot rather than uploading a second copy.",
     }),
   ],
   orderings: [

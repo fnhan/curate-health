@@ -125,7 +125,7 @@ const CurateLifestyle = ({
                   Referral Form [PDF Download]
                 </a>
                 <Link
-                  href="/services/curate-lifestyle"
+                  href="/programs/curate-lifestyle"
                   className="flex justify-center gap-x-2 border-2 border-transparent bg-[#878E76] p-6 text-white shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-colors duration-300 hover:border-[#878E76] hover:bg-white hover:text-[#6B6B6B] lg:justify-between"
                 >
                   {curateLifestyle?.call_to_action}

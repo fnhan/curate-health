@@ -174,7 +174,7 @@ export default function SiteNav({
                             },
                             {
                               title: "Curate Lifestyle",
-                              href: "/services/curate-lifestyle",
+                              href: "/programs/curate-lifestyle",
                             },
                             {
                               title: "Master Health Blueprint",

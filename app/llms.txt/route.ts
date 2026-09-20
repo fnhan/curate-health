@@ -329,14 +329,14 @@ function buildLlmsTxt(data: LlmsData) {
       pages?.lifestyle
         ? link(
             "Curate Lifestyle",
-            "/services/curate-lifestyle",
+            "/programs/curate-lifestyle",
             pages.lifestyle.description
           )
         : "",
       pages?.lifestyleProgram
         ? link(
             "Curate Lifestyle Program",
-            "/services/curate-lifestyle-program",
+            "/programs/curate-lifestyle-program",
             pages.lifestyleProgram.description
           )
         : "",

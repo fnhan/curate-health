@@ -1,8 +1,6 @@
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import ServiceLifestyleProgramContent from "@/components/layout/services-pages/service-lifestyle-program";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
-import { Breadcrumbs } from "@/components/shared/breadcrumbs";
-import { lifestyleProgramCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { JsonLdScript, buildLifestyleJsonLd } from "@/lib/structured-data";
 import {
@@ -37,7 +35,7 @@ export default async function ServiceLifestylePage() {
       <JsonLdScript
         data={buildLifestyleJsonLd({
           title: program.title,
-          path: "/services/curate-lifestyle-program",
+          path: "/programs/curate-lifestyle-program",
           description: program.seo?.pageDescription,
           image: heroImage?.asset?.url,
         })}
@@ -48,11 +46,6 @@ export default async function ServiceLifestylePage() {
           asset: { url: heroImage?.asset?.url! },
           alt: heroImage?.heroAlt!,
         }}
-      />
-      <Breadcrumbs
-        crumbs={lifestyleProgramCrumbs(
-          program.title?.trim() || "Curate Lifestyle Program"
-        )}
       />
       <ServicesNavigation services={services} />
       <ServiceLifestyleProgramContent program={program} />
@@ -77,5 +70,7 @@ export async function generateMetadata() {
   const fallbackDescription =
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
 
-  return buildPageMetadata(seo, { path: "/services/curate-lifestyle-program" });
+  return buildPageMetadata(seo, {
+    path: "/programs/curate-lifestyle-program",
+  });
 }

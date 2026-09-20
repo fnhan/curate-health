@@ -8,13 +8,23 @@ type HoverLinkProps = {
   textColor?: string;
 };
 
+/**
+ * The bar under the Program Timeline that opens the full breakdown.
+ *
+ * It rendered as dark text on the dark page background and read as an empty
+ * band, because next/link renders an inline <a>: "w-full" does nothing to an
+ * inline box, and the background painted nowhere, so the body's own dark
+ * colour showed through. The anchor is a block now, and carries the white of
+ * the Book Now button in the header, with that button's near-black text.
+ * Hovering still fills the bar with the sage green and turns the text white.
+ */
 export default function HoverLinkVariation({
   href,
   text,
-  textColor = "text-primary",
+  textColor = "text-card-foreground",
 }: HoverLinkProps) {
   return (
-    <Link className="w-full bg-platinum" href={href}>
+    <Link className="block w-full bg-card" href={href}>
       <span className="group block border-t py-5 text-right italic transition-all duration-300 hover:bg-secondary">
         <span className="container flex items-center justify-end gap-2 transition-all duration-300 hover:gap-20">
           <span className={`${textColor} text-lg group-hover:text-white`}>{text}</span>

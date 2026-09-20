@@ -48,8 +48,8 @@ import { PRACTITIONER_BY_SLUG_QUERY } from "@/sanity/lib/queries";
  * with it instead of leaving the button on the old file.
  */
 const CTA_TARGETS: Record<string, string> = {
-  curateLifestyleReferralForm: "/services/curate-lifestyle#referral",
-  curateLifestyleProgram: "/services/curate-lifestyle",
+  curateLifestyleReferralForm: "/programs/curate-lifestyle#referral",
+  curateLifestyleProgram: "/programs/curate-lifestyle",
 };
 
 /** The first name, for "Book with Ariel" and "Services Ariel offers". */

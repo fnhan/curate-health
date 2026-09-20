@@ -102,7 +102,13 @@ async function main() {
     hint: `Fetched ${target}/sitemap.xml and got ${urls.length} entries. Every check below would pass by looking at nothing.`,
   });
 
-  const deep = urls.filter((u) => depth(u) >= 1);
+  // Frank asked for the trail to come off the two Curate Lifestyle pages on
+  // 2026-09-19: each already shows the section navigation under the header.
+  // They keep no BreadcrumbList either, since markup has to describe what the
+  // page shows.
+  const NO_TRAIL = ["/programs/curate-lifestyle", "/programs/curate-lifestyle-program"];
+
+  const deep = urls.filter((u) => depth(u) >= 1 && !NO_TRAIL.includes(u));
   const shallow = urls.filter((u) => depth(u) < 1);
 
   assertChecked({ label: "pages more than one level deep", count: deep.length, atLeast: 10 });
@@ -174,7 +180,7 @@ async function main() {
     }
   }
 
-  for (const path of shallow) {
+  for (const path of [...shallow, ...NO_TRAIL.filter((p) => urls.includes(p))]) {
     const { html } = await get(`${target}${path}`);
     if (visibleTrail(html)) {
       failures.push(`${path}: hub page shows a trail, it should not`);

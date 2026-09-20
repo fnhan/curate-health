@@ -131,20 +131,13 @@ export function treatmentCrumbs(
 }
 
 /**
- * /services/curate-lifestyle-program, under the Curate Lifestyle page.
- *
- * Both Curate Lifestyle pages have routes of their own rather than a slug
- * under /services, and the program is reached from the Curate Lifestyle page,
- * so the trail runs through it. The Curate Lifestyle page itself takes
- * serviceCrumbs.
+ * THE TWO CURATE LIFESTYLE PAGES CARRY NO TRAIL, BY FRANK'S DECISION ON
+ * 2026-09-19. They moved to /programs on the same day, and both already
+ * show the section navigation under the header, which he reads as the menu
+ * for that page. Nothing here builds a trail for them, and
+ * scripts/audit-breadcrumbs.js lists them as exceptions. Do not add one
+ * back without asking him.
  */
-export function lifestyleProgramCrumbs(title: string): Crumb[] {
-  return trail(
-    { name: "Services", path: "/services" },
-    { name: "Curate Lifestyle", path: "/services/curate-lifestyle" },
-    { name: title, path: "/services/curate-lifestyle-program" }
-  );
-}
 
 /** /products/tens-machines and its four siblings. */
 export function productCrumbs(title: string, slug: string): Crumb[] {

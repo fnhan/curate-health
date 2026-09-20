@@ -106,7 +106,7 @@ async function main() {
   // 2026-09-19: each already shows the section navigation under the header.
   // They keep no BreadcrumbList either, since markup has to describe what the
   // page shows.
-  const NO_TRAIL = ["/programs/curate-lifestyle", "/programs/curate-lifestyle-program"];
+  const NO_TRAIL = ["/our-programs/curate-lifestyle", "/our-programs/curate-lifestyle-program"];
 
   const deep = urls.filter((u) => depth(u) >= 1 && !NO_TRAIL.includes(u));
   const shallow = urls.filter((u) => depth(u) < 1);

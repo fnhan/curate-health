@@ -35,7 +35,7 @@ export default async function ServiceLifestylePage() {
       <JsonLdScript
         data={buildLifestyleJsonLd({
           title: program.title,
-          path: "/programs/curate-lifestyle-program",
+          path: "/our-programs/curate-lifestyle-program",
           description: program.seo?.pageDescription,
           image: heroImage?.asset?.url,
         })}
@@ -71,6 +71,6 @@ export async function generateMetadata() {
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
 
   return buildPageMetadata(seo, {
-    path: "/programs/curate-lifestyle-program",
+    path: "/our-programs/curate-lifestyle-program",
   });
 }

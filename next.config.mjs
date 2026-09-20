@@ -173,27 +173,22 @@ const nextConfig = {
       // ===================================================================
       // CURATE LIFESTYLE MOVED OUT OF /services, 2026-09-19
       //
-      // Frank's call: it is a programme, not a service, so it sits under
-      // /programs with the other three. Both addresses were live and in
-      // Google, so both redirect rather than 404.
+      // Frank's call: it is a programme, not a service, so it sits under the
+      // programmes hub, /our-programs, with the other three. Both old
+      // addresses were live and in Google, so both redirect rather than 404.
       //
-      // /programs itself is not a page. The programmes hub is /our-programs,
-      // which is where the navigation and the breadcrumbs point, so anyone
-      // who trims the URL back lands there rather than on a 404.
+      // Under the hub rather than a new /programs section, corrected
+      // 2026-09-20: the hub page is /our-programs, so these are its children
+      // and trimming the URL lands on the page that lists them.
       // ===================================================================
       {
         source: "/services/curate-lifestyle",
-        destination: "/programs/curate-lifestyle",
+        destination: "/our-programs/curate-lifestyle",
         statusCode: 301,
       },
       {
         source: "/services/curate-lifestyle-program",
-        destination: "/programs/curate-lifestyle-program",
-        statusCode: 301,
-      },
-      {
-        source: "/programs",
-        destination: "/our-programs",
+        destination: "/our-programs/curate-lifestyle-program",
         statusCode: 301,
       },
     ];

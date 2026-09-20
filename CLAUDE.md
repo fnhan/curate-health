@@ -1147,6 +1147,8 @@ that list them, the Curate Lifestyle page, site search, the sitemap and
 llms.txt, which catches up within the hour. Switched back on, all of it
 returns, with nothing else to edit.
 
+**Switching someone back on has a step outside this repository.** Safa Karoumi's page was removed from Google by hand, through Search Console's Removals tool, on 2026-09-19, because a 404 sits in the results until Google recrawls it. That removal lasts about six months and hides the address whatever the site says. **Before flipping her switch back on, cancel the removal request in Search Console, then ask for the page to be indexed again through URL Inspection.** Otherwise her page returns to the site and stays invisible in Google. The same applies to anyone else taken off this way.
+
 The team page and the Curate Lifestyle page read `ourTeam.teamMembers`, not
 the practitioner records, so their queries drop any member whose name matches
 a switched-off practitioner. **The two names must agree.**
@@ -1462,17 +1464,17 @@ Three more things that came out of the same sweep and are waiting on him: the "F
 
 **The banned-word checks miss inflections.** `audit-content-rules.js` and `audit-metadata.js` match "elevate" but not "elevating". Match the stem when this is next touched.
 
-### Curate Lifestyle moved to /programs, 2026-09-19
+### Curate Lifestyle moved under /our-programs, 2026-09-19
 
-**Frank's call: it is a programme, not a service.** `/services/curate-lifestyle` and `/services/curate-lifestyle-program` are now `/programs/curate-lifestyle` and `/programs/curate-lifestyle-program`, with 301s from both old addresses, which were live and indexed. The routes moved with them, `app/programs/*`, and `app/programs/layout.tsx` is the same wrapper the services section uses.
+**Frank's call: it is a programme, not a service.** `/services/curate-lifestyle` and `/services/curate-lifestyle-program` are now `/our-programs/curate-lifestyle` and `/our-programs/curate-lifestyle-program`, with 301s from both old addresses, which were live and indexed. The routes moved with them, into `app/our-programs/`, where the hub's own layout already wraps them.
 
-`/programs` is not a page. The hub is still `/our-programs`, where the navigation points, so `/programs` 301s there rather than 404ing for anyone who trims the URL.
+**Under the hub, not a new /programs section**, corrected by Frank on 2026-09-20 before any of it went live. The first version put them at `/programs/*` with `/programs` redirecting to the hub, which left the children hanging off an address that was not a page. Now the URL says what the structure is: `/our-programs` lists the three programmes and these are two of its children.
 
 Every link was repointed in the same change: the navigation's Programs list, the Curate Lifestyle card on `/our-programs`, the bar at the foot of the timeline, and Dr. Leong's booking CTA. The sitemap, llms.txt and `pathsForDocument` in `lib/indexnow.ts` carry the new addresses. Submit both old and new to IndexNow after the deploy, since the old ones are what Bing holds.
 
 **No breadcrumb trail on either page, by Frank's decision the same day.** He asked for the trail to come off: each page already shows the section navigation under the header, and he reads that as the menu. They carry no `BreadcrumbList` either, because markup is supposed to describe what the page shows. `scripts/audit-breadcrumbs.js` holds both paths in `NO_TRAIL`, so they are checked for the absence rather than failing the rule. Do not add a trail back without asking him. Every other page below a hub still carries one, CH-009.
 
-**The bar under the Program Timeline was invisible, and it is a pattern worth recognising.** `components/shared/hover-link-variation.tsx` put `w-full bg-platinum` on a `next/link`, which renders an inline `<a>`: neither the width nor the background applies to an inline box, so the band painted nothing and the body's own dark green showed through, under dark text. It reads as an empty dark strip on a screenshot and as a working link in the source. The anchor is a block now and carries the Book Now button's colours, `bg-card` with `text-card-foreground`, which is what Frank asked for; hovering still fills it sage and turns the text white. `components/shared/hover-link.tsx` has the same inline anchor but no background of its own, so nothing shows; leave it unless it grows one.
+**The bar under the Program Timeline was invisible, and it is a pattern worth recognising.** `components/shared/hover-link-variation.tsx` put `w-full bg-platinum` on a `next/link`, which renders an inline `<a>`: neither the width nor the background applies to an inline box, so the band painted nothing and the body's own dark green showed through, under dark text. It reads as an empty dark strip on a screenshot and as a working link in the source. The anchor is a block now and carries the colours Frank picked on 2026-09-20: `bg-platinum`, which is #DBDED9, with `text-primary` for the text and for the line above it. Hovering still fills it sage and turns the text white. `components/shared/hover-link.tsx` has the same inline anchor but no background of its own, so nothing shows; leave it unless it grows one.
 
 ### The every-page rule, first run 2026-09-18
 

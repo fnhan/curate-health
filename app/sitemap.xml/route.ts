@@ -175,13 +175,13 @@ export async function GET() {
   // when the document each page renders from exists.
   const lifestyleRoutes: Url[] = [
     lifestyle && {
-      url: `${BASEURL}/programs/curate-lifestyle`,
+      url: `${BASEURL}/our-programs/curate-lifestyle`,
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     lifestyleProgram && {
-      url: `${BASEURL}/programs/curate-lifestyle-program`,
+      url: `${BASEURL}/our-programs/curate-lifestyle-program`,
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly",
       priority: 0.8,

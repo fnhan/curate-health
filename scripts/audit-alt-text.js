@@ -38,7 +38,7 @@ const DECORATIVE = [
   "cta-arrow",
   "thumbnail.webp", // the Mux hero poster
   "CircleText",
-  // The eight group session pictures on /programs/curate-lifestyle-program,
+  // The eight group session pictures on /our-programs/curate-lifestyle-program,
   // looked at 2026-09-18: small stock illustrations, tortilla chips for whole
   // versus processed food, a stack of stones for stress management and so on,
   // each beside a title that already names the session. They reached this
@@ -52,7 +52,7 @@ const DECORATIVE = [
   "1e4488e3493f7b5c34f3d05a7f7b60a243554401",
   "0886d06724359529d8d84270c024f5fd53378397",
   // The line drawing of a figure in a circle behind the pillars quote on
-  // /programs/curate-lifestyle. Its component already sets alt="".
+  // /our-programs/curate-lifestyle. Its component already sets alt="".
   "23be0c5a23210b72fad387c31380527dcf534704",
 ];
 

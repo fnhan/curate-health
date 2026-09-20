@@ -8,11 +8,16 @@
  * guards against is invisible in the components: a trail whose markup says
  * something else, an intermediate item with no URL, a crumb pointing at a 404.
  *
+ * ONLY BLOG POSTS CARRY A TRAIL, SINCE 2026-09-20. Frank took them off every
+ * other page: the service, treatment and product pages show a section menu
+ * under the header instead, and the about, practitioner and legal pages are
+ * reached from a hub that links straight to them. This check enforces that
+ * split, so a trail added back anywhere else shows up here.
+ *
  * Seven rules, and the ones that matter most are the last three.
  *
- *   1 Every page more than one level deep shows a trail.
- *   2 No hub and not the homepage shows one. Home > About on /about is a link
- *     to the page you are already beneath.
+ *   1 Every blog post shows a trail.
+ *   2 No other page shows one, the hubs and the homepage included.
  *   3 The trail starts at Home.
  *   4 The visible names and the BreadcrumbList names match, in order. Google
  *     asks that the markup describe what the page shows.
@@ -30,7 +35,7 @@ const { assertChecked } = require("./lib/assert-checked");
 
 const target = (process.argv[2] || "http://localhost:3000").replace(/\/$/, "");
 
-/** Depth 0 means one segment: /about, /services. These get no trail. */
+/** Depth 0 means one segment: /about, /blog. A post is depth 1. */
 function depth(pathname) {
   return pathname.split("/").filter(Boolean).length - 1;
 }
@@ -102,16 +107,14 @@ async function main() {
     hint: `Fetched ${target}/sitemap.xml and got ${urls.length} entries. Every check below would pass by looking at nothing.`,
   });
 
-  // Frank asked for the trail to come off the two Curate Lifestyle pages on
-  // 2026-09-19: each already shows the section navigation under the header.
-  // They keep no BreadcrumbList either, since markup has to describe what the
-  // page shows.
-  const NO_TRAIL = ["/our-programs/curate-lifestyle", "/our-programs/curate-lifestyle-program"];
+  // A blog post is the one page that keeps its trail, and depth alone no
+  // longer decides: /blog is the hub and carries none, /blog/{post} does.
+  const carriesTrail = (u) => u.startsWith("/blog/") && depth(u) >= 1;
 
-  const deep = urls.filter((u) => depth(u) >= 1 && !NO_TRAIL.includes(u));
-  const shallow = urls.filter((u) => depth(u) < 1);
+  const deep = urls.filter(carriesTrail);
+  const shallow = urls.filter((u) => !carriesTrail(u));
 
-  assertChecked({ label: "pages more than one level deep", count: deep.length, atLeast: 10 });
+  assertChecked({ label: "blog posts", count: deep.length, atLeast: 1 });
 
   const failures = [];
   const seen200 = new Map();
@@ -180,16 +183,16 @@ async function main() {
     }
   }
 
-  for (const path of [...shallow, ...NO_TRAIL.filter((p) => urls.includes(p))]) {
+  for (const path of shallow) {
     const { html } = await get(`${target}${path}`);
     if (visibleTrail(html)) {
-      failures.push(`${path}: hub page shows a trail, it should not`);
+      failures.push(`${path}: shows a trail, and only blog posts should`);
     }
   }
 
   console.log(
-    `${urls.length} sitemap URLs: ${deep.length} more than one level deep, ` +
-      `${shallow.length} hubs.\n`
+    `${urls.length} sitemap URLs: ${deep.length} blog posts with a trail, ` +
+      `${shallow.length} pages without one.\n`
   );
 
   for (const path of deep.slice(0, 8)) {

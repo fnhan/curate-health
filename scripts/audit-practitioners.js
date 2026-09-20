@@ -281,6 +281,15 @@ async function main() {
   console.log("Every practitioner has a page, and every page agrees with its record.");
   if (hidden.length) {
     console.log("Everyone switched off is gone from the team page, their own page, the sitemap and site search.");
+    // The half of this that lives outside the site. A 404 sits in Google's
+    // results until Google revisits, so a switched-off page is usually also
+    // removed by hand in Search Console, and that removal has to be cancelled
+    // before the switch goes back on. The Studio says the same on the field.
+    console.log(
+      `\nBefore switching ${hidden.length === 1 ? `${hidden[0].name} back on` : "any of them back on"}: ` +
+        "cancel the temporary removal in Google Search Console, then ask for the page to be indexed again.\n" +
+        "Otherwise the page is live on the site and hidden in Google for about six months."
+    );
   }
 
   if (soft.length) {

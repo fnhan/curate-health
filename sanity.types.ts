@@ -2331,6 +2331,18 @@ export type ProductsPage = {
   _updatedAt: string;
   _rev: string;
   title?: string;
+  heroImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
   intro?: string;
   seo?: Seo;
 };
@@ -3507,10 +3519,14 @@ export type ABOUT_INDEX_QUERYResult = {
   >;
 };
 // Variable: PRODUCTS_PAGE_QUERY
-// Query: *[_type == "productsPage"][0]{  title,  intro,    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      }    }  }}
+// Query: *[_type == "productsPage"][0]{  title,  intro,  heroImage{    "url": asset->url,    alt  },    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        asset-> {          _id,          url,          alt        }      }    }  }}
 export type PRODUCTS_PAGE_QUERYResult = {
   title: string | null;
   intro: string | null;
+  heroImage: {
+    url: string | null;
+    alt: string | null;
+  } | null;
   seo: {
     pageTitle: string | null;
     pageDescription: string | null;
@@ -3538,6 +3554,12 @@ export type PRODUCTS_PAGE_QUERYResult = {
     } | null;
   } | null;
 } | null;
+// Variable: LEGAL_PAGES_NAV_QUERY
+// Query: *[_type == "legalPage" && defined(slug.current)] | order(title asc){  title,  "slug": slug.current}
+export type LEGAL_PAGES_NAV_QUERYResult = Array<{
+  title: string | null;
+  slug: string | null;
+}>;
 // Variable: PRODUCTS_NAVIGATION_QUERY
 // Query: *[_type == "product" && isActive == true] {  title,  "slug": slug.current,}
 export type PRODUCTS_NAVIGATION_QUERYResult = Array<{
@@ -8555,7 +8577,8 @@ declare module "@sanity/client" {
     '*[_type == "productsSection"][0]{\n  sectionTitle,\n  "products": *[_type == "product" && isActive == true]{\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    "altText": image.alt\n  }\n}': PRODUCTS_SECTION_QUERYResult;
     '*[_type == "product" && isActive == true] {\n  title,\n  indepthblockinfo,\n  description,\n  "slug" : slug.current,\n  "banner": banner.asset->url,\n  "image": image.asset->url,\n  "altText": image.alt,\n  meta {\n    title,\n    description\n  }\n}': PRODUCTS_QUERYResult;
     '{\n  "page": *[_type == "aboutIndexPage"][0]{\n    title,\n    intro,\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n  "children": [\n    *[_type == "ourStory" && pageActive == true][0]{\n      "title": "Our Story",\n      "slug": "our-story",\n      "description": seo.pageDescription\n    },\n    *[_type == "ourTeam" && pageActive == true][0]{\n      "title": "Our Team",\n      "slug": "our-team",\n      "description": seo.pageDescription\n    },\n    *[_type == "missionAndValues" && pageActive == true][0]{\n      "title": "Mission and Values",\n      "slug": "mission-and-values",\n      "description": seo.pageDescription\n    },\n    *[_type == "pillarsOfHealth" && pageActive == true][0]{\n      "title": "Pillars of Health",\n      "slug": "pillars-of-health",\n      "description": seo.pageDescription\n    },\n    *[_type == "sustainability" && pageActive == true][0]{\n      "title": "Sustainability",\n      "slug": "sustainability",\n      "description": seo.pageDescription\n    }\n  ]\n}': ABOUT_INDEX_QUERYResult;
-    '*[_type == "productsPage"][0]{\n  title,\n  intro,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRODUCTS_PAGE_QUERYResult;
+    '*[_type == "productsPage"][0]{\n  title,\n  intro,\n  heroImage{\n    "url": asset->url,\n    alt\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRODUCTS_PAGE_QUERYResult;
+    '*[_type == "legalPage" && defined(slug.current)] | order(title asc){\n  title,\n  "slug": slug.current\n}': LEGAL_PAGES_NAV_QUERYResult;
     '*[_type == "product" && isActive == true] {\n  title,\n  "slug": slug.current,\n}': PRODUCTS_NAVIGATION_QUERYResult;
     '*[_type == "product" && slug.current == $slug && isActive == true][0] {\n  title,\n  slug,\n  description,\n  image {\n    asset->,\n    alt\n  },\n  banner {\n    asset->,\n    alt\n  },\n  accordioninfo[] {\n    title,\n    description\n  },\n  callToAction,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRODUCT_BY_SLUG_QUERYResult;
     '*[_type == "ourStory" && pageActive == true][0]{\n  heroSection{\n    heroImage{\n      "image": image.asset->url,\n      alt\n    },\n    heroTitle,\n    heroSubtitle\n  },\n  quoteSection{\n    quoteImage{\n      "image": image.asset->url,\n      alt\n    },\n    quoteText\n  },\n  additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n  ctaSection{\n    ctaSectionImage{\n      "image": image.asset->url,\n      alt\n    },\n    ctaSectionTitle,\n    ctaSectionParagraph,\n    ctaButton{\n      buttonText,\n      buttonLink\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': OUR_STORY_PAGE_QUERYResult;

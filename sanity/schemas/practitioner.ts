@@ -77,10 +77,29 @@ export default defineType({
       title: "Show on website",
       type: "boolean",
       description:
-        "Switch off to take this person off the website everywhere they appear, including the team page, their own page and service pages. Switch it back on to bring them back. The team page finds them by name, so keep this name the same as their entry under Our Team.",
+        "Switch off to take this person off the website everywhere they appear, including the team page, their own page and service pages. Switch it back on to bring them back. The team page finds them by name, so keep this name the same as their entry under Our Team. Their page keeps showing in Google until Google next visits it, which is why the reminder below appears while this is off.",
       initialValue: true,
-      validation: (Rule) =>
+      /*
+       * The warning is the point, and Frank asked for it on 2026-09-20.
+       *
+       * Switching someone off is only half the job: their page stays in
+       * Google's results until Google recrawls the 404, so Safa's was taken
+       * out by hand through Search Console's Removals tool. That removal
+       * outlives the switch. Flipping this back on without cancelling it puts
+       * the page back on the site and leaves it invisible in Google for about
+       * six months, with nothing anywhere to say why.
+       *
+       * A warning rather than an error: an editor must still be able to
+       * publish the person as switched off.
+       */
+      validation: (Rule) => [
         Rule.required().error("Choose whether this person shows on the website"),
+        Rule.custom((value) =>
+          value === false
+            ? "While this is off: their page returns not found, and it stays in Google until Google revisits. To take it out sooner, request a temporary removal in Google Search Console. Before switching this back on, cancel that removal request and ask for the page to be indexed again, or it will be live on the site and hidden in Google."
+            : true
+        ).warning(),
+      ],
     }),
     // No display order field, deliberately. Order is set by dragging, in the
     // reference list on "About | Our Team Page", exactly as the old embedded

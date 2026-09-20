@@ -4,8 +4,6 @@ import { notFound } from "next/navigation";
 
 import { PortableText } from "next-sanity";
 
-import { Breadcrumbs } from "@/components/shared/breadcrumbs";
-import { practitionerCrumbs } from "@/lib/breadcrumbs";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { treatmentPath } from "@/lib/service-urls";
@@ -111,7 +109,6 @@ export default async function PractitionerPage({
         data={buildPractitionerJsonLd(person)}
         id={`practitioner-${params.practitioner}-json-ld`}
       />
-      <Breadcrumbs crumbs={practitionerCrumbs(name!, params.practitioner)} />
 
       <article className="bg-white pb-16 pt-6 text-primary md:pb-24">
         <div className="container">

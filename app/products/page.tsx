@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ProductsNavigation } from "@/components/layout/products-page/products-navigation";
+import SectionHero from "@/components/shared/section-hero";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { productPath } from "@/lib/service-urls";
 import { JsonLdScript, buildProductsIndexJsonLd } from "@/lib/structured-data";
@@ -60,6 +61,9 @@ export default async function ProductsPage() {
     query: PRODUCTS_PAGE_QUERY,
   });
 
+  const heading = page?.title?.trim() || FALLBACK.title;
+  const intro = page?.intro?.trim() || FALLBACK.intro;
+
   return (
     <>
       <JsonLdScript
@@ -67,16 +71,34 @@ export default async function ProductsPage() {
         id="products-json-ld"
       />
 
-      <section className="bg-white pt-32 md:pt-40">
-        <div className="container flex flex-col gap-6">
-          <h1 className="text-3xl font-light text-primary md:text-5xl">
-            {page?.title?.trim() || FALLBACK.title}
-          </h1>
-          <p className="max-w-[65ch] whitespace-pre-line font-light leading-7 text-primary">
-            {page?.intro?.trim() || FALLBACK.intro}
-          </p>
-        </div>
-      </section>
+      {/*
+        The same shape as /services, at Frank's request on 2026-09-20: a
+        photograph across the top with the heading over it, then the second
+        menu, then the grid. Before that this page opened on a bare white
+        band, which matched nothing else on the site.
+
+        The heading and intro still render without a photograph, above the
+        menu, so the page holds together until one is set in the Studio.
+      */}
+      {page?.heroImage?.url ? (
+        <SectionHero
+          image={page.heroImage.url}
+          alt={page.heroImage.alt ?? ""}
+          title={heading}
+          subtitle={intro}
+        />
+      ) : (
+        <section className="bg-white pt-32 md:pt-40">
+          <div className="container flex flex-col gap-6">
+            <h1 className="text-3xl font-light text-primary md:text-5xl">
+              {heading}
+            </h1>
+            <p className="max-w-[65ch] whitespace-pre-line font-light leading-7 text-primary">
+              {intro}
+            </p>
+          </div>
+        </section>
+      )}
 
       <ProductsNavigation products={productsNav} />
 

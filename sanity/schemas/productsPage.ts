@@ -31,6 +31,23 @@ export default defineType({
       validation: (Rule) => Rule.required().error("Page Heading is required"),
     }),
     defineField({
+      name: "heroImage",
+      title: "Hero Photo",
+      type: "image",
+      options: { hotspot: true },
+      description:
+        "The photograph across the top of /products, behind the heading. It is the first thing on the page, so use a wide, high resolution one: it is shown 550 pixels tall at full page width and dimmed so the heading stays readable. Drag the hotspot to choose what stays in frame when it is cropped.",
+      fields: [
+        defineField({
+          name: "alt",
+          title: "Alt Text",
+          type: "string",
+          description: "What the photograph shows, for screen readers and image search.",
+          validation: (Rule) => Rule.required().error("Alt text is required"),
+        }),
+      ],
+    }),
+    defineField({
       name: "intro",
       title: "Intro Paragraph",
       type: "text",

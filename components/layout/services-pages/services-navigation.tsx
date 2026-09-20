@@ -1,55 +1,29 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
+import { SectionNavigation } from "@/components/shared/section-navigation";
 import { ALL_SERVICES_QUERYResult } from "@/sanity.types";
 
+/**
+ * The services second menu. The look and the behaviour live in
+ * components/shared/section-navigation.tsx, which every section uses.
+ *
+ * Curate Lifestyle is left out on purpose: it is a programme, not a service,
+ * and it moved to /our-programs/curate-lifestyle on 2026-09-19.
+ */
 export function ServicesNavigation({
   services,
 }: {
   services: ALL_SERVICES_QUERYResult;
 }) {
-  const pathname = usePathname();
-
-  const hoverEffect =
-    "after:ease-[cubic-bezier(.86,0,.07,1)] relative inline-block cursor-pointer after:absolute after:left-0 after:top-[110%] after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-500 hover:after:origin-bottom-left hover:after:scale-x-100";
-
   return (
-    <div className="bg-secondary">
-      <nav className="container font-light text-primary">
-        <ul className="scrollbar-thumb-rounded-full flex items-center gap-4 overflow-x-auto whitespace-nowrap py-8 scrollbar-thin scrollbar-track-secondary scrollbar-thumb-primary">
-          <li>
-            <Link
-              className={`${hoverEffect} ${
-                pathname?.endsWith(`/services`) &&
-                "after:origin-bottom-left after:scale-x-100"
-              }`}
-              href="/services"
-            >
-              Our Services
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-primary">
-            |
-          </li>
-          {services
-            .filter((service) => service.slug !== "curate-lifestyle")
-            .map((service) => (
-              <li key={service.slug}>
-                <Link
-                  href={`/services/${service.slug}`}
-                  className={`${hoverEffect} ${
-                    pathname?.endsWith(`/services/${service.slug}`) &&
-                    "after:origin-bottom-left after:scale-x-100"
-                  }`}
-                >
-                  {service.title}
-                </Link>
-              </li>
-            ))}
-        </ul>
-      </nav>
-    </div>
+    <SectionNavigation
+      ariaLabel="Services"
+      label="Our Services"
+      labelHref="/services"
+      items={services
+        .filter((service) => service.slug && service.slug !== "curate-lifestyle")
+        .map((service) => ({
+          title: service.title ?? "",
+          href: `/services/${service.slug}`,
+        }))}
+    />
   );
 }

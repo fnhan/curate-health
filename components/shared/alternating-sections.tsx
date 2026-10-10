@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { PortableText } from "@portabletext/react";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { cn } from "@/lib/utils";
 
 interface Section {
@@ -68,7 +69,10 @@ export const AlternatingSections = ({
                 {section.sectionTitle}
               </h2>
               <div className={cn("prose max-w-[80ch]", proseClassName)}>
-                <PortableText value={section.sectionParagraph!} />
+                <PortableText
+                  value={section.sectionParagraph!}
+                  components={portableTextComponents}
+                />
               </div>
             </div>
           </div>

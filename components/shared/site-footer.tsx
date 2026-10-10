@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,6 +12,19 @@ import { externalLinkProps } from "@/lib/links";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
 import { FooterMobileAccordion } from "./footer-mobile-accordion";
+
+/**
+ * B Lab requires a certified company using the mark to send visitors to
+ * bcorp.com, by hyperlink or by a line of text, and set 31 August 2026 as the
+ * deadline for it. So this is a compliance requirement rather than a choice,
+ * and it is why the link is not pointed at the B Corp directory profile, which
+ * would otherwise be the stronger link because it verifies the claim.
+ *
+ * bcorp.com 301s to bcorporation.net/en-us/. That is B Lab's own redirect on
+ * their own canonical short URL, so it stays as written rather than being
+ * resolved to the destination.
+ */
+const BCORP_URL = "https://bcorp.com";
 
 export default function SiteFooter({
   siteSettings,
@@ -40,41 +54,68 @@ export default function SiteFooter({
       <div className="flex flex-col text-white">
         <div className="container flex flex-col gap-10 py-14 lg:flex-row lg:justify-between lg:py-40">
           {/* Contact Info */}
-          <address className="space-y-2 text-sm not-italic md:text-base">
-            <h2 className="w-fit font-semibold hover:underline">
-              <Link href="/contact">Contact</Link>
-            </h2>
-            <a
-              className="flex items-start gap-2 hover:underline"
-              href={contactInfo?.mapLink!}
-              {...externalLinkProps(contactInfo?.mapLink!)}
-            >
-              <MapPinIcon size={20} className="mt-1" />
-              <div>
-                {addressLines(contactInfo?.address).map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
+          <div className="flex flex-col gap-8">
+            <address className="space-y-2 text-sm not-italic md:text-base">
+              <h2 className="w-fit font-semibold hover:underline">
+                <Link href="/contact">Contact</Link>
+              </h2>
+              <a
+                className="flex items-start gap-2 hover:underline"
+                href={contactInfo?.mapLink!}
+                {...externalLinkProps(contactInfo?.mapLink!)}
+              >
+                <MapPinIcon size={20} className="mt-1" />
+                <div>
+                  {addressLines(contactInfo?.address).map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </div>
+              </a>
+              <div className="space-y-2">
+                <a
+                  className="flex w-fit items-center gap-2 hover:underline"
+                  href={`mailto:${contactInfo?.email}`}
+                >
+                  <MailIcon size={20} />
+                  <span>{contactInfo?.email}</span>
+                </a>
+                <a
+                  className="flex w-fit items-center gap-2 hover:underline"
+                  href={`tel:${contactInfo?.phone}`}
+                >
+                  <PhoneIcon size={20} />
+                  <span>{contactInfo?.phone}</span>
+                </a>
               </div>
+            </address>
+            {/*
+              The mark is black on transparency, so brightness-0 invert paints
+              it white. White and black are the only two colours B Lab permits,
+              and the footer is dark, so white is the compliant one here.
+
+              80px wide, not the 44px of the original draft. The lockup carries
+              the words "Certified" and "Corporation", and at 44px those set at
+              roughly four pixels tall and cannot be read. The height follows
+              the asset's own 960x1403 ratio; the draft's 44x59 did not, and
+              would have squashed it.
+            */}
+            <a
+              href={BCORP_URL}
+              {...externalLinkProps(BCORP_URL)}
+              className="w-fit"
+            >
+              <Image
+                src="/images/B_Corp_Logo.png"
+                alt="Certified B Corporation"
+                width={80}
+                height={117}
+                sizes="80px"
+                className="brightness-0 invert"
+              />
             </a>
-            <div className="space-y-2">
-              <a
-                className="flex w-fit items-center gap-2 hover:underline"
-                href={`mailto:${contactInfo?.email}`}
-              >
-                <MailIcon size={20} />
-                <span>{contactInfo?.email}</span>
-              </a>
-              <a
-                className="flex w-fit items-center gap-2 hover:underline"
-                href={`tel:${contactInfo?.phone}`}
-              >
-                <PhoneIcon size={20} />
-                <span>{contactInfo?.phone}</span>
-              </a>
-            </div>
-          </address>
+          </div>
           <div>
             <FooterMobileAccordion siteSettings={siteSettings} />
             <div className="hidden flex-col gap-2 lg:flex lg:flex-row lg:justify-end lg:gap-10">

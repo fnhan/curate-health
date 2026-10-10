@@ -1457,6 +1457,61 @@ It still fails on four pages whose title and heading differ, `/about/our-story`,
 - Three descriptions too short to be used, which `audit-metadata.js` now warns on below 70 characters: the Curate Lifestyle Program's reads "Curate Lifestyle Program", `/cafe`'s "A space where nourishment meets intention.", and Rooj's page runs on the code fallback until the practitioner descriptions are approved.
 - **The content rules: 88 breaks on 27 of 51 pages.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
 
+### B Corp certification, 2026-10-10
+
+Curate Health is a Certified B Corporation, confirmed by Frank on 2026-10-10.
+
+**The link target is not a choice.** B Lab's brand guidelines require a certified
+company using the mark to send visitors to `bcorp.com`, by hyperlink or by a
+line of text such as "Learn more at bcorp.com", and set 31 August 2026 as the
+deadline for it. So the footer mark links to `https://bcorp.com` even though
+that 301s to `bcorporation.net/en-us/`. It is B Lab's own redirect on their own
+short URL, and the compliance requirement outranks this project's preference for
+linking the resolved address. Do not "fix" it to the destination.
+
+The stronger link would be Curate's own entry in the B Corp directory, since it
+verifies the claim rather than describing the scheme. No entry was findable on
+2026-10-10, which is ordinary lag for a new certification. It stays as it is
+regardless: the guidelines name bcorp.com, not the profile.
+
+**The mark may be white or black, and no other colour.** The asset is black on
+transparency, so the footer paints it white with `brightness-0 invert`, which
+lands on one of the two permitted colours. The lockup has to keep the line above
+the word "Corporation", so it must not be cropped, and the Circle B on its own is
+reserved to B Lab. The name is styled "B Corp", with a space, never "B-Corp" or
+"BCorp".
+
+**Rendered at 80px wide, not 44.** PR #182 drew it at 44x59, which was wrong
+twice over. The asset is 960x1403, so 44 wide is 64 tall and 59 squashed it, and
+at that size the words "Certified" and "Corporation" set about four pixels tall
+and cannot be read. 80x117 holds the ratio and keeps the words legible. It sits
+under the contact block, which also satisfies B Lab's guidance to place the
+lockup in the lower left.
+
+**PR #182 was not merged.** Opened 2026-04-06 against a footer that has since
+been rewritten: `addressLines()`, `externalLinkProps()`, `SocialIcon` and the
+`h2` headings all postdate it, and re-applying its diff would have put the
+address back to `{street}{city}{state}{zip}` with no separators. It also carried
+no hyperlink, which is the one thing B Lab actually requires, and no `sizes`,
+which fails CH-007. Rebuilt on main instead. Close #182 once this lands.
+
+**Still open: the section on the Sustainability page.** Its copy sits in
+`drafts.c0ca5697-0672-4e6b-80c2-8c9c898de6e7` and nowhere else, written
+2026-04-17. **Do not press Publish on that draft.** The published document was
+updated 2026-09-10, five months later, and `audit-drafts.js` reports three
+changed fields: publishing reverts `seo.pageTitle`, `seo.socialMeta.title` and
+`seo.socialMeta.description` to their April wording. Patch
+`additionalSections` onto the published document instead, writing the array
+whole per the CH-028 note, after a fresh export.
+
+The drafted copy needs rewriting first. It carries two rule-of-three lists,
+"proud to be", "highest standards" and "a force for good", which is brand voice
+against the tone rule, and its semicolons read as em dashes somebody swapped out.
+B Lab's own tagline wording has moved from "highest" to "high" since it was
+written. Its alt text is "B Corp Logo", which names the file rather than
+describing the mark, and should read "Certified B Corporation" as the footer's
+does. The replacement copy is with Frank.
+
 ### Dependency security alerts
 
 **Triaged 2026-09-15.** GitHub listed 187 open Dependabot alerts on main: 7 critical, 86 high, 78 medium, 16 low. Only `next` reaches visitors. The rest sit in the Sanity CLI, ESLint, the build, the Studio or the draft preview overlay. That was checked against the build output rather than read off the package list, because GitHub labels every one of them "runtime": `next` is the only flagged package in the server function traces, lodash's `_.template` appears only in the Studio chunk, and the on-demand preview chunk carries nanoid and lodash internals but not the flawed functions. The build does contain three Server Actions, all from `next-sanity` preview tooling, so the Server Action advisories apply.

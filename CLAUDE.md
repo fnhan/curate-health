@@ -1512,6 +1512,31 @@ written. Its alt text is "B Corp Logo", which names the file rather than
 describing the mark, and should read "Certified B Corporation" as the footer's
 does. The replacement copy is with Frank.
 
+### No rich text link has ever rendered, found 2026-10-10
+
+`@portabletext/react` ships default renderers for the decorators, em, strong,
+code, underline and strike-through, and for nothing else. The `link`
+annotation is the only annotation `sanity/schemas/blockContent.ts` defines, and
+it has no default, so it falls through to the library's `unknownMark` and
+renders as `<span class="unknown__pt__mark__link">`. The words appear, the link
+does not. It looks correct in the Studio, in the GROQ result and in the source.
+
+All 25 `<PortableText>` call sites passed no `components` prop, and no file in
+the repository defined a `marks` renderer.
+
+**This is a trap, not a live defect.** Nine production pages covering every rich
+text template were checked on 2026-10-10 and carry zero `unknown__pt__mark__` of
+any kind, so no editor has yet put a link into a rich text field. The first one
+to try would have found it.
+
+`components/shared/portable-text-components.tsx` now holds a shared `link`
+renderer, which reads `externalLinkProps` so a link out of the site opens in a
+new tab. **It is wired into `AlternatingSections` only**, because that is what
+the B Corp section needs. The other 24 call sites still pass nothing and still
+have the trap. Wiring them is a one-line import each and visually a no-op today,
+since nothing currently renders a link, but it is 24 files and it is Frank's
+call whether that rides along with something else.
+
 ### Dependency security alerts
 
 **Triaged 2026-09-15.** GitHub listed 187 open Dependabot alerts on main: 7 critical, 86 high, 78 medium, 16 low. Only `next` reaches visitors. The rest sit in the Sanity CLI, ESLint, the build, the Studio or the draft preview overlay. That was checked against the build output rather than read off the package list, because GitHub labels every one of them "runtime": `next` is the only flagged package in the server function traces, lodash's `_.template` appears only in the Studio chunk, and the on-demand preview chunk carries nanoid and lodash internals but not the flawed functions. The build does contain three Server Actions, all from `next-sanity` preview tooling, so the Server Action advisories apply.

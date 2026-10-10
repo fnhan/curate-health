@@ -1553,6 +1553,36 @@ call whether that rides along with something else.
 
 **About 67 alerts are left after the update**, counted by matching the installed versions against each alert's range; GitHub recounts after merge. 25 are the Next.js ones that need version 16. The rest are inside the Sanity CLI and build tools and need larger Sanity upgrades. `decompress` and `parse-git-config` have no fix published.
 
+### Node 24, forced 2026-10-10
+
+**Every deployment failed for a day and nothing in the repository was wrong.**
+Vercel discontinued Node 20.x, which the project was pinned to, and rejected
+each attempt with "Node.js Version 20.x is discontinued and must be upgraded".
+The signature is worth recognising: status Error after about two seconds, with
+`Builds: . [0ms]` and no logs at all. A real build failure takes minutes and
+prints something. Two seconds and an empty build list means the deployment was
+refused before it started, so look at the account and the project settings
+rather than at the code.
+
+Four deployments failed this way, the previews for #249 and #250 and both
+production merges, while production carried on serving the #244 build from
+2026-09-18. A merged pull request looked shipped and was not. Check
+`npx vercel list curate-health` after a merge rather than assuming.
+
+Fixed in the repository rather than the dashboard. `engines.node` in
+package.json overrides the Node version in Project Settings, which Vercel's own
+documentation spells out for this exact case: Project Settings on 20.x plus
+`"node": "24.x"` in package.json deploys on the latest 24.x. So the dashboard
+setting is now dead weight and the version lives with the code, where a change
+to it is reviewable.
+
+Nothing else had to change. `npm run build` was already passing on Node 24.19.0
+locally before this, the Studio route included, which is why the bump went in on
+its own rather than waiting for CH-118.
+
+**CH-118 below assumes this is still pending. It is not.** The line about Sanity
+Studio v6 needing Node 22.12, and the Vercel project moving off 20.x, is done.
+
 ### CH-118 Upgrade to Next.js 16
 
 **Scheduled after the pressing SEO work, Frank's call on 2026-09-17.** Not 15, which leaves Maintenance LTS on 2026-10-21. Scoped on 2026-09-15:

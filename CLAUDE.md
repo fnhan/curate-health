@@ -1496,12 +1496,21 @@ no hyperlink, which is the one thing B Lab actually requires, and no `sizes`,
 which fails CH-007. Rebuilt on main instead. Close #182 once this lands.
 
 **The footer carries standing text beside the mark, since 2026-10-11.** "We
-are a B Corp." over "Part of a global movement working to better people and the
-planet.", then a Learn More link. Frank's copy, and the idea came off Athleta's
-footer, which runs the same arrangement with B Lab's boxed URL badge and an
-uppercase heading. Ours is deliberately not that: the bare mark rather than the
-boxed badge, white on the dark green rather than black on white, sentence case,
-and sitting inside the contact column rather than in a band of its own.
+are a B Corp." over "The same care we take with patients, applied to our team
+and our footprint.", then a Learn More link.
+
+**The second line was rewritten before it shipped, and the reason matters.**
+The idea for this block came off Athleta's footer, and the first draft read
+"Part of a global movement working to better people and the planet", which is
+Athleta's own sentence with one word changed. Frank stopped it: he did not want
+a line another brand could recognise as theirs. The replacement says something
+only this business can say, which is that the certification applies the care the
+clinic already takes with patients to its team and its footprint. **Do not drift
+back toward the B Lab or Athleta boilerplate when this is next edited.**
+
+The layout is also deliberately not Athleta's, which uses B Lab's boxed URL
+badge with an uppercase heading in a band of its own. Ours is the bare vertical
+lockup, white on the dark green, sentence case, inside the contact column.
 
 **Learn More goes to the directory profile, the mark still goes to bcorp.com.**
 `https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`

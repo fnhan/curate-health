@@ -132,9 +132,9 @@ export default function SiteFooter({
               </a>
               <div className="flex flex-col gap-2 pt-1 text-sm">
                 <p className="font-semibold">We are a B Corp.</p>
-                <p className="max-w-[24ch] font-light">
-                  Part of a global movement working to better people and the
-                  planet.
+                <p className="max-w-[26ch] font-light">
+                  The same care we take with patients, applied to our team and
+                  our footprint.
                 </p>
                 <a
                   href={BCORP_PROFILE_URL}

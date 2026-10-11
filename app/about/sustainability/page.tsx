@@ -43,7 +43,23 @@ export default async function SustainabilityPage() {
           </div>
         </div>
       </div>
-      <AlternatingSections sections={additionalSections!} />
+      {/*
+        The B Corp section's photograph carries the certification mark, and
+        B Lab's brand guidelines require a certified company using the mark to
+        direct visitors to bcorp.com. So the mark is a link here as well as in
+        the footer, and for the same reason it points at bcorp.com rather than
+        at Curate's own directory profile, which the section's body text links
+        to instead.
+
+        Matched on _key, not on the title, so renaming the section in the
+        Studio does not quietly drop the link.
+      */}
+      <AlternatingSections
+        sections={additionalSections!}
+        imageHref={(section) =>
+          section._key === "bcorp-certification" ? "https://bcorp.com" : null
+        }
+      />
       <CtaFooterSection ctaSection={ctaSection!} />
     </>
   );

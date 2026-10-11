@@ -113,11 +113,13 @@ These apply to every word written into the site, schema, meta tags, or alt text.
   the same breath as relaxing the words. They are 47 of the remaining breaks
 - **"journey" is fine, in any form, including "holistic wellness journey". Cleared by Frank on 2026-09-10 and widened to the full phrase on 2026-09-12.** It is not a banned word, it is not a banned phrase, and it should not be reported as one. Older copies of this file banned the bare word, then banned the phrase while allowing the word; both are superseded. Do not reintroduce either restriction, and do not add "journey" back to the banned array in any script
 - "complimentary" is allowed as of 2026-10-11 and the audits no longer flag it.
-  The older guidance here was to use "included" or "bonus" for anything Curate
+  The older guidance was to use "included" or "bonus" for anything Curate
   offers, on the reasoning that calling part of a paid tier free is a claim
-  rather than a word choice. That reasoning was put to Frank and he cleared the
-  word anyway, so it stands cleared. The one live use is "Complimentary
-  Flowpresso Session" on /our-programs
+  rather than a word choice. That was put to Frank and he cleared the word
+  anyway, so it stands cleared. **The word is nonetheless gone from the site**,
+  because he then asked for it out of the Flowpresso lines on /our-programs on
+  the same day, and it was redundant in all three places it appeared. Allowed,
+  and currently unused
 - OHIP framing is exactly: "partially covered by OHIP and most benefit programs"
 - The outdoor space is always "Recovery Sanctuary." Never "outdoor terrace" or any variant
 - Neighbourhood descriptor is "Midtown Toronto"

@@ -1528,6 +1528,15 @@ margin is B Lab's clear space, not padding somebody left in. Verified by
 measurement rather than by eye, the Contact heading, the map pin icon and the
 mark's ink all start at 32px.
 
+**The text beside it is aligned to the mark's ink, not to its frame.** The
+asset is inset vertically as well as horizontally, 139 of 1403 from the top and
+120 from the bottom, which at height 140 is 14px and 12px. The text column
+carries exactly those as padding and spreads itself with `justify-between`, so
+the first line sits on the top of "Certified" and the Learn More link sits on
+the bottom of "Corporation". Measured rather than eyeballed: 0.1px out at the
+top, 0 at the bottom. All four numbers come from the asset, so recompute them
+if the asset or the height changes.
+
 **A lazy image reads as a missing image for a moment.** Both the desktop and
 mobile checks of this block showed empty space where the mark goes, and both
 were a screenshot taken before the lazy-loaded image painted. The DOM said

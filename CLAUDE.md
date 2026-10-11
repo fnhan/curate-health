@@ -79,6 +79,17 @@ Two assumptions in the acceptance scripts below do not hold on this machine:
 - `python3` resolves to the Microsoft Store stub, which prints an install prompt and exits 9009 instead of running. Python 3.12.10 is installed and runs as `py -3` or `python`. Use Node for verification checks anyway, since it removes the interpreter question and the project already depends on it. Counting Format-category characters in Node: `[...s].filter(c => /\p{Cf}/u.test(c)).length`
 - In PowerShell, `curl` is an alias for `Invoke-WebRequest` and rejects curl's flags. Either run verification from Git Bash, where `curl` is the real binary, or use Node's built-in `fetch`.
 
+- **Git Bash rewrites any argument that starts with a slash into a Windows
+  path.** MSYS path conversion turns `/contact` into
+  `C:/Program Files/Git/contact` before node ever sees it. This bites
+  `scripts/indexnow-submit.js`, whose documented usage is
+  `node scripts/indexnow-submit.js --apply /blog /contact`: the paths are
+  mangled, the script's `startsWith("/")` filter matches none of them, and it
+  **silently falls back to submitting the entire sitemap** rather than failing.
+  Found 2026-10-11 while submitting the moved Curate Lifestyle addresses.
+  Prefix the command with `MSYS_NO_PATHCONV=1`, or run it from PowerShell.
+  Any script taking a path as an argument has the same problem.
+
 Default to Node for every verification script in this file. It removes a dependency and behaves identically from either shell. When you rewrite one, show Frank the Node version and what it checks, since he will be running these himself between sessions.
 
 ---

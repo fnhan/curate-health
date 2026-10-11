@@ -92,9 +92,21 @@ These apply to every word written into the site, schema, meta tags, or alt text.
 - No emojis
 - No tricolons or rule-of-three lists
 - No fabricated statistics, study citations, or quotes
-- Banned words: dive in, unlock, elevate, harness the power of, complimentary, transformative, seamless
+- **Banned words: "harness the power of". That is the whole list.** Frank cleared
+  the rest on 2026-10-11 after reading how they were actually used:
+  **transformative, elevate, unlock, seamless, complimentary and "dive in" are
+  fine.** Older copies of this file banned all seven. Do not reintroduce any of
+  them, in this file or in `scripts/lib/content-rules.js`, and do not report
+  their presence in existing copy as a defect
+- **Em and en dashes are the hard ban**, reaffirmed by Frank on 2026-10-11 in
+  the same breath as relaxing the words. They are 47 of the remaining breaks
 - **"journey" is fine, in any form, including "holistic wellness journey". Cleared by Frank on 2026-09-10 and widened to the full phrase on 2026-09-12.** It is not a banned word, it is not a banned phrase, and it should not be reported as one. Older copies of this file banned the bare word, then banned the phrase while allowing the word; both are superseded. Do not reintroduce either restriction, and do not add "journey" back to the banned array in any script
-- Never use "complimentary" for anything Curate offers. Use "included" or "bonus"
+- "complimentary" is allowed as of 2026-10-11 and the audits no longer flag it.
+  The older guidance here was to use "included" or "bonus" for anything Curate
+  offers, on the reasoning that calling part of a paid tier free is a claim
+  rather than a word choice. That reasoning was put to Frank and he cleared the
+  word anyway, so it stands cleared. The one live use is "Complimentary
+  Flowpresso Session" on /our-programs
 - OHIP framing is exactly: "partially covered by OHIP and most benefit programs"
 - The outdoor space is always "Recovery Sanctuary." Never "outdoor terrace" or any variant
 - Neighbourhood descriptor is "Midtown Toronto"

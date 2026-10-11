@@ -26,6 +26,18 @@ import { FooterMobileAccordion } from "./footer-mobile-accordion";
  */
 const BCORP_URL = "https://bcorp.com";
 
+/**
+ * Curate's own entry in the B Corp directory, which is the link that verifies
+ * the claim rather than describing the scheme. It did not exist when the mark
+ * went into the footer on 2026-10-10; B Lab published it since.
+ *
+ * It does not replace BCORP_URL above. The mark itself still has to point at
+ * bcorp.com to satisfy the brand guidelines, so the mark and the Learn More
+ * link deliberately go to different places.
+ */
+const BCORP_PROFILE_URL =
+  "https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/";
+
 export default function SiteFooter({
   siteSettings,
 }: {
@@ -95,26 +107,44 @@ export default function SiteFooter({
               it white. White and black are the only two colours B Lab permits,
               and the footer is dark, so white is the compliant one here.
 
-              80px wide, not the 44px of the original draft. The lockup carries
-              the words "Certified" and "Corporation", and at 44px those set at
-              roughly four pixels tall and cannot be read. The height follows
-              the asset's own 960x1403 ratio; the draft's 44x59 did not, and
-              would have squashed it.
+              The asset carries its own transparent margin, measured at 14.6% of
+              the canvas on the left, so the ink starts well inside the frame and
+              the mark reads as indented against the address above it. The
+              negative margin is that margin at this width, 96 x 0.146, which
+              lines the ink up with the text rather than lining the file up.
+              Recompute it if the width changes, and do not crop the asset: the
+              margin is B Lab's clear space, not padding somebody added.
             */}
-            <a
-              href={BCORP_URL}
-              {...externalLinkProps(BCORP_URL)}
-              className="w-fit"
-            >
-              <Image
-                src="/images/B_Corp_Logo.png"
-                alt="Certified B Corporation"
-                width={80}
-                height={117}
-                sizes="80px"
-                className="brightness-0 invert"
-              />
-            </a>
+            <div className="flex items-start gap-3">
+              <a
+                href={BCORP_URL}
+                {...externalLinkProps(BCORP_URL)}
+                className="-ml-[14px] shrink-0"
+              >
+                <Image
+                  src="/images/B_Corp_Logo.png"
+                  alt="Certified B Corporation"
+                  width={96}
+                  height={140}
+                  sizes="96px"
+                  className="brightness-0 invert"
+                />
+              </a>
+              <div className="flex flex-col gap-2 pt-1 text-sm">
+                <p className="font-semibold">We are a B Corp.</p>
+                <p className="max-w-[26ch] font-light">
+                  The same care we take with patients, applied to our team and
+                  our footprint.
+                </p>
+                <a
+                  href={BCORP_PROFILE_URL}
+                  {...externalLinkProps(BCORP_PROFILE_URL)}
+                  className="w-fit underline underline-offset-4 hover:no-underline"
+                >
+                  Learn More
+                </a>
+              </div>
+            </div>
           </div>
           <div>
             <FooterMobileAccordion siteSettings={siteSettings} />

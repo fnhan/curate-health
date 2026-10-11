@@ -1495,6 +1495,45 @@ address back to `{street}{city}{state}{zip}` with no separators. It also carried
 no hyperlink, which is the one thing B Lab actually requires, and no `sizes`,
 which fails CH-007. Rebuilt on main instead. Close #182 once this lands.
 
+**The footer carries standing text beside the mark, since 2026-10-11.** "We
+are a B Corp." over "The same care we take with patients, applied to our team
+and our footprint.", then a Learn More link.
+
+**The second line was rewritten before it shipped, and the reason matters.**
+The idea for this block came off Athleta's footer, and the first draft read
+"Part of a global movement working to better people and the planet", which is
+Athleta's own sentence with one word changed. Frank stopped it: he did not want
+a line another brand could recognise as theirs. The replacement says something
+only this business can say, which is that the certification applies the care the
+clinic already takes with patients to its team and its footprint. **Do not drift
+back toward the B Lab or Athleta boilerplate when this is next edited.**
+
+The layout is also deliberately not Athleta's, which uses B Lab's boxed URL
+badge with an uppercase heading in a band of its own. Ours is the bare vertical
+lockup, white on the dark green, sentence case, inside the contact column.
+
+**Learn More goes to the directory profile, the mark still goes to bcorp.com.**
+`https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`
+exists now; it did not on 2026-10-10. It is the link that verifies the claim, so
+it is the better destination for a text link, but it cannot replace the mark's
+own link because the brand guidelines name bcorp.com. Two links, two
+destinations, on purpose. Repoint Learn More at CH-119 when that page is built.
+
+**The mark is offset left by 14px and that is not a nudge.** The asset carries
+its own transparent margin, measured at 14.6% of the canvas on the left, so the
+ink starts well inside the frame and the mark reads as indented against the
+address above it. The negative margin is that margin at the rendered width, 96
+times 0.146. Recompute it if the width changes. Do not crop the asset: that
+margin is B Lab's clear space, not padding somebody left in. Verified by
+measurement rather than by eye, the Contact heading, the map pin icon and the
+mark's ink all start at 32px.
+
+**A lazy image reads as a missing image for a moment.** Both the desktop and
+mobile checks of this block showed empty space where the mark goes, and both
+were a screenshot taken before the lazy-loaded image painted. The DOM said
+`complete: true` each time. Take the screenshot, then take it again, before
+concluding a footer image is broken.
+
 **Still open: the section on the Sustainability page.** Its copy sits in
 `drafts.c0ca5697-0672-4e6b-80c2-8c9c898de6e7` and nowhere else, written
 2026-04-17. **Do not press Publish on that draft.** The published document was
@@ -1651,6 +1690,25 @@ its own rather than waiting for CH-118.
 
 **CH-118 below assumes this is still pending. It is not.** The line about Sanity
 Studio v6 needing Node 22.12, and the Vercel project moving off 20.x, is done.
+
+### CH-119 Our B Corp Certification page
+
+Asked for by Frank on 2026-10-11, to be built later. A page under About Us about
+the certification, which the footer's Learn More should point at once it exists.
+
+Until then Learn More points at the directory profile,
+`https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`.
+**Repointing it is part of this ticket, and the mark's own link stays on
+bcorp.com** whatever happens here, because B Lab requires that one.
+
+The copy is Frank's to supply or approve. What the certification covers, what
+B Lab assessed, and the date certified are claims about the business, so they
+are not for drafting from the directory listing.
+
+It is a new route, so the every-page rule applies in full: its own title and
+description in the Studio, a share card, a breadcrumb under /about, a line in
+the sitemap and in llms.txt, a link from the About hub so it is not orphaned,
+and the content rules. `node scripts/audit-seo-complete.js` is the gate.
 
 ### CH-118 Upgrade to Next.js 16
 

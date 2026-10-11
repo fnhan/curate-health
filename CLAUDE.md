@@ -1576,6 +1576,75 @@ have the trap. Wiring them is a one-line import each and visually a no-op today,
 since nothing currently renders a link, but it is 24 files and it is Frank's
 call whether that rides along with something else.
 
+### The siteSettings draft was a loaded gun, cleared 2026-10-11
+
+`audit-drafts.js` had been exiting 1 since 2026-09-12 on a `siteSettings`
+draft carrying seven destructive paths. Anyone who opened site settings in the
+Studio and pressed Publish would have undone two tickets in one click, with no
+warning and nothing in the interface suggesting it.
+
+The draft was saved at 18:18 on 2026-09-12. The published document was written
+at 22:11 the same day, when `add-social-and-hours.js` ran. So the draft was a
+snapshot of the state before that script, and publishing it would have:
+
+- deleted TikTok and Facebook from `socialMedia`, along with every `entity`
+  and `label` field, collapsing `sameAs` from five profiles to two and undoing
+  the clinic and cafe split, CH-008
+- reverted `/products` to `/#products` in both the nav and the footer, which is
+  the anchor to nowhere that orphaned the five product pages, CH-010
+
+It held nothing unpublished. Every field in it was an older copy of something
+already live, which is what made deleting it safe rather than a judgement call.
+
+`scripts/clear-stale-draft.js` does this and refuses to do anything else. It
+deletes a draft only when a published document exists, the draft is older than
+it, and the draft adds no field the published document lacks. A draft that is
+merely different is not stale: the differences are printed for a reader to
+judge, and only those three conditions decide. Exercised against the
+`aboutSection` draft, which is newer, it refuses and says why.
+
+`audit-drafts.js` exits 0 now. The four remaining drafts are two orphans with
+no published counterpart and two with ordinary in-progress edits.
+
+**This is a standing hazard, not a one-off.** Any script that writes to a
+document somebody has open in the Studio creates another one. Run
+`audit-drafts.js` after a migration, which the CH-020 note already says, and
+clear what it finds rather than leaving it to the next person to publish.
+
+### The banned-word checks, shared and matching stems, 2026-10-11
+
+Two problems, both recorded in this file as known and both now fixed.
+
+**The two audits had drifted.** `audit-content-rules.js` and
+`audit-metadata.js` each carried their own copy of the banned list, and the
+first had "dive into" where the second did not. The same phrase therefore failed
+in body copy and passed in a meta description. A rule enforced in one place and
+not the other is worse than no rule, because it reads as checked. Both now read
+`scripts/lib/content-rules.js`.
+
+**They matched a prefix, so they missed any inflection that changes the stem.**
+A bare prefix catches what only adds letters, "unlocking" contains "unlock" and
+"seamlessly" contains "seamless", but "elevating" does not contain "elevate".
+The list is patterns now. The count went from 88 breaks to **90 on 27 of 51
+pages**, both new hits being "elevating", on `/our-programs` and
+`/services/performance-training`.
+
+One of those two reads as a patient testimonial rather than marketing copy,
+"This was all about elevating myself to the best me possible". If it is, it
+belongs with the seventeen unsigned first-person quotes in the copy review and
+is a regulated-advertising question, not a word swap. Confirm before editing it.
+
+**What is deliberately not matched.** Only inflections of a banned word, never
+its relatives: "transformation" is not caught by "transformative". "elevation"
+is left out on purpose because this is a clinic and "elevation of the leg" is
+correct clinical English. "elevated" is still matched, as it always was, because
+the snippet makes the call obvious, but do not widen this further without
+reading the hits. A check that cries wolf gets ignored.
+
+"journey" is not in the list and must not be added back, per the content rules
+above. There is a unit check covering that, and the `elevating` gap, in the
+module's own patterns.
+
 ### Dependency security alerts
 
 **Triaged 2026-09-15.** GitHub listed 187 open Dependabot alerts on main: 7 critical, 86 high, 78 medium, 16 low. Only `next` reaches visitors. The rest sit in the Sanity CLI, ESLint, the build, the Studio or the draft preview overlay. That was checked against the build output rather than read off the package list, because GitHub labels every one of them "runtime": `next` is the only flagged package in the server function traces, lodash's `_.template` appears only in the Studio chunk, and the on-demand preview chunk carries nanoid and lodash internals but not the flawed functions. The build does contain three Server Actions, all from `next-sanity` preview tooling, so the Server Action advisories apply.

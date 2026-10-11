@@ -115,7 +115,7 @@ export default function SiteFooter({
               Recompute it if the width changes, and do not crop the asset: the
               margin is B Lab's clear space, not padding somebody added.
             */}
-            <div className="flex items-start gap-3">
+            <div className="flex items-stretch gap-3">
               <a
                 href={BCORP_URL}
                 {...externalLinkProps(BCORP_URL)}
@@ -130,7 +130,7 @@ export default function SiteFooter({
                   className="brightness-0 invert"
                 />
               </a>
-              <div className="flex flex-col gap-2 pt-1 text-sm">
+              <div className="flex flex-col justify-between pb-[12px] pt-[14px] text-sm">
                 <p className="font-semibold">We are a B Corp.</p>
                 <p className="max-w-[26ch] font-light">
                   The same care we take with patients, applied to our team and

@@ -133,7 +133,7 @@ export default function SiteFooter({
               <div className="flex flex-col justify-between pb-[12px] pt-[14px] text-sm">
                 <p className="font-semibold">We are a B Corp.</p>
                 <p className="max-w-[26ch] font-light">
-                  The same care we take with patients, applied to our team and
+                  The same care we take with patients is applied to our team and
                   our footprint.
                 </p>
                 <a

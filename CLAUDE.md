@@ -1595,6 +1595,33 @@ were a screenshot taken before the lazy-loaded image painted. The DOM said
 `complete: true` each time. Take the screenshot, then take it again, before
 concluding a footer image is broken.
 
+**The section photograph is a custom composite, since 2026-10-11.** The
+original was stock: a tea plantation with the mark burned in, 1920x1280 and
+5.76 MB, and it rendered soft because the slot paints 704x556 and crops.
+
+The replacement is built from `FrontPage_Eighth_Section.jpg`, already in the
+library at 5575x3717 and referenced by nothing, so it is greenery Curate owns
+that had never appeared on the site. The mark is composited over it in white,
+with a soft radial scrim so it holds against the leaves.
+
+Three things about it are deliberate. It is **1600x1267**, a ratio of 1.263
+against the slot's 1.266, so `object-cover` crops essentially nothing and the
+mark is never cut: B Lab does not permit a cropped mark. The mark is sized and
+centred from its **ink** rather than its canvas, since the asset's transparent
+margins would otherwise have made it small and off centre. And it is 213 KB
+rather than 5.76 MB.
+
+**It was composited on a canvas in the browser**, because this project has no
+image library and a native dependency was not worth adding for one picture.
+`scripts/swap-bcorp-section-image.js` uploads the finished file and repoints
+the section; it does not generate it. To redo the composite, draw the photo at
+1600x1267, lay a radial scrim of rgba(20,34,18,0.55) to 0.12 over it, then draw
+the mark with `filter: brightness(0) invert(1)` at 46% of the height measured
+on its ink.
+
+The old tea-plantation asset is still in the library, now unreferenced. It is a
+candidate for CH-117 rather than something to delete on its own.
+
 **Still open: the section on the Sustainability page.** Its copy sits in
 `drafts.c0ca5697-0672-4e6b-80c2-8c9c898de6e7` and nowhere else, written
 2026-04-17. **Do not press Publish on that draft.** The published document was

@@ -1,37 +1,30 @@
 /**
  * The banned words from CLAUDE.md, as one list both audits read.
  *
- * WHY THIS IS SHARED
+ * **There is one.** Frank cleared the rest on 2026-10-11 after reading their
+ * real usage: transformative, elevate, unlock, seamless, complimentary and
+ * "dive in" are all fine to use. Do not reintroduce them, and do not treat
+ * their presence in older copy as a defect.
+ *
+ * "journey" is not here and must not be added either, cleared 2026-09-10 and
+ * widened to "holistic wellness journey" on 2026-09-12.
+ *
+ * WHY THIS IS STILL SHARED
  *
  * audit-content-rules.js and audit-metadata.js each carried their own copy and
- * the two had already drifted: the first had "dive into" and the second did not,
- * so the same phrase failed in body copy and passed in a meta description. A
- * rule enforced in one place and not the other is worse than no rule, because
- * it reads as checked.
+ * the two had already drifted once. A rule enforced in one place and not the
+ * other is worse than no rule, because it reads as checked. One entry today is
+ * still one entry in two places.
  *
- * WHY PATTERNS AND NOT WORDS
+ * WHY A PATTERN AND NOT A WORD
  *
- * Both audits matched a bare prefix at a word boundary, which catches the
- * inflections that only add letters: "unlocking" contains "unlock",
- * "seamlessly" contains "seamless". It misses the ones that change the stem.
- * "elevating" does not contain "elevate", so it passed, and CLAUDE.md has
- * recorded that gap as an undercount since 2026-09-19.
+ * Both audits matched a bare prefix, which catches inflections that only add
+ * letters and misses any that change the stem. The pattern below covers
+ * harness/harnesses/harnessed/harnessing.
  *
- * WHAT IS DELIBERATELY NOT MATCHED
- *
- * Only inflections of the banned word, never its relatives. "transformation"
- * is not matched by "transformative" and "transform" is not either: they are
- * different words, and one of them is ordinary English a clinic may need.
- *
- * "elevation" is left out on purpose, and so is any attempt at "elevated" in
- * isolation, because this is a clinic. "elevated blood pressure" and "elevated
- * liver enzymes" are the correct clinical terms, and a gastroenterologist's
- * pages will use them. "elevated" is still matched, because it is already
- * matched today and the snippet makes the call obvious, but do not widen this
- * further without reading the hits. A check that cries wolf gets ignored.
- *
- * "journey" is not here and must not be added. Frank cleared it on 2026-09-10
- * and widened that to "holistic wellness journey" on 2026-09-12.
+ * The heavy rules now live elsewhere: em and en dashes, which Frank confirmed
+ * on 2026-10-11 are a hard ban, plus exclamation marks, the cafe accent and
+ * "outdoor terrace", are all checked directly in audit-content-rules.js.
  */
 
 /**
@@ -39,16 +32,10 @@
  * Patterns are built without flags; the helpers below add them.
  */
 const BANNED_PATTERNS = [
-  { rule: "dive in", source: String.raw`div(?:e|es|ed|ing)\s+in(?:to)?\b` },
-  { rule: "unlock", source: String.raw`unlock\w*` },
-  { rule: "elevate", source: String.raw`elevat(?:e|es|ed|ing)\b` },
   {
     rule: "harness the power of",
     source: String.raw`harness(?:es|ed|ing)?\s+the\s+power\s+of\b`,
   },
-  { rule: "complimentary", source: String.raw`complimentary\b` },
-  { rule: "transformative", source: String.raw`transformative\b` },
-  { rule: "seamless", source: String.raw`seamless\w*` },
 ];
 
 /**

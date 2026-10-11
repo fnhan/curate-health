@@ -63,15 +63,7 @@ const DESCRIPTION_MAX = 155;
 // 2026-09-18.
 const DESCRIPTION_MIN = 70;
 
-const BANNED = [
-  "dive in",
-  "unlock",
-  "elevate",
-  "harness the power of",
-  "complimentary",
-  "transformative",
-  "seamless",
-];
+const { findBanned } = require("./lib/content-rules");
 
 function decode(value) {
   return (value || "")
@@ -172,7 +164,8 @@ function checkImage(url) {
           const type = response.headers.get("content-type") || "";
           await response.arrayBuffer();
           if (response.status !== 200) return `${response.status} from ${url}`;
-          if (!type.startsWith("image/")) return `${type || "no type"} from ${url}`;
+          if (!type.startsWith("image/"))
+            return `${type || "no type"} from ${url}`;
           return null;
         })
         .catch((error) => `${error.message} from ${url}`)
@@ -324,10 +317,8 @@ async function main() {
       if (value.split(BRAND).length - 1 > 1) {
         add("FAIL", `${label} says "${BRAND}" twice: ${JSON.stringify(value)}`);
       }
-      for (const word of BANNED) {
-        if (new RegExp(`\\b${word}`, "i").test(value)) {
-          add("WARN", `${label} carries the banned word "${word}"`);
-        }
+      for (const { rule } of findBanned(value)) {
+        add("WARN", `${label} carries the banned word "${rule}"`);
       }
     }
 
@@ -351,10 +342,8 @@ async function main() {
     for (const field of ["title", "description"]) {
       const value = page[field];
       if (!value) continue;
-      for (const word of BANNED) {
-        if (new RegExp(`\\b${word}`, "i").test(value)) {
-          add("WARN", `${field} carries the banned word "${word}"`);
-        }
+      for (const { rule } of findBanned(value)) {
+        add("WARN", `${field} carries the banned word "${rule}"`);
       }
     }
   }

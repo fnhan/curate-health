@@ -29,16 +29,7 @@
 
 const DEFAULT_BASE = "https://www.curatehealth.ca";
 
-const BANNED = [
-  "dive in",
-  "dive into",
-  "unlock",
-  "elevate",
-  "harness the power of",
-  "complimentary",
-  "transformative",
-  "seamless",
-];
+const { findBanned } = require("./lib/content-rules");
 
 function visibleText(html) {
   return html
@@ -53,9 +44,7 @@ function visibleText(html) {
 }
 
 function snippet(text, index, length) {
-  return text
-    .slice(Math.max(0, index - 45), index + length + 35)
-    .trim();
+  return text.slice(Math.max(0, index - 45), index + length + 35).trim();
 }
 
 function check(text) {
@@ -65,14 +54,8 @@ function check(text) {
     found.push(["dash", snippet(text, m.index, 1)]);
   }
 
-  const lower = text.toLowerCase();
-  for (const word of BANNED) {
-    let i = lower.indexOf(word);
-    while (i >= 0) {
-      const before = i === 0 ? " " : lower[i - 1];
-      if (!/[a-z]/.test(before)) found.push([word, snippet(text, i, word.length)]);
-      i = lower.indexOf(word, i + 1);
-    }
+  for (const { rule, index, length } of findBanned(text)) {
+    found.push([rule, snippet(text, index, length)]);
   }
 
   for (const m of text.matchAll(/[A-Za-z)]!(?=\s|$)/g)) {
@@ -87,10 +70,11 @@ function check(text) {
     found.push(["outdoor terrace", snippet(text, m.index, 15)]);
   }
 
-  // "dive into" also matches "dive in"; keep one.
+  // One pattern per rule, so a phrase is reported once. Kept as a guard
+  // because two rules can still land on the same snippet.
   const seen = new Set();
   return found.filter(([rule, text]) => {
-    const key = `${rule === "dive into" ? "dive in" : rule}|${text}`;
+    const key = `${rule}|${text}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -106,7 +90,9 @@ async function main() {
   );
 
   if (paths.length < 20) {
-    console.error(`Only ${paths.length} pages in ${base}/sitemap.xml. Not checking a site that did not render.`);
+    console.error(
+      `Only ${paths.length} pages in ${base}/sitemap.xml. Not checking a site that did not render.`
+    );
     process.exit(1);
   }
 
@@ -123,7 +109,8 @@ async function main() {
     if (path === "/" && main) {
       const shell = visibleText(html.replace(main[0], " "));
       const shellFound = check(shell);
-      if (shellFound.length) report.push(["header and footer, every page", shellFound]);
+      if (shellFound.length)
+        report.push(["header and footer, every page", shellFound]);
     }
   }
 

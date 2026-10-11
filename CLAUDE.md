@@ -1587,6 +1587,18 @@ The layout is also deliberately not Athleta's, which uses B Lab's boxed URL
 badge with an uppercase heading in a band of its own. Ours is the bare vertical
 lockup, white on the dark green, sentence case, inside the contact column.
 
+**The mark is a link wherever it appears, including on the Sustainability
+page.** B Lab requires a certified company using the mark to direct visitors to
+bcorp.com, and that applies to the section photograph too, not only the footer,
+because the mark is in the photograph. Frank asked for it on 2026-10-11.
+
+`AlternatingSections` takes an optional `imageHref` resolver for this. The
+sustainability page matches on `_key === "bcorp-certification"`, not on the
+section title, so renaming the section in the Studio cannot quietly drop the
+link. `_key` was added to the GROQ projection for the same reason. Every other
+section photograph on that page and on /cafe stays unlinked, which is why the
+prop returns null by default rather than taking a single href.
+
 **Learn More goes to the directory profile, the mark still goes to bcorp.com.**
 `https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`
 exists now; it did not on 2026-10-10. It is the link that verifies the claim, so

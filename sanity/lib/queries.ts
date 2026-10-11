@@ -484,6 +484,7 @@ export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability" && pageActi
     }
   },
   additionalSections[] {
+    _key,
     sectionTitle,
     sectionParagraph,
     sectionImage {

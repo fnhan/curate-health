@@ -3,9 +3,12 @@ import Image from "next/image";
 import { PortableText } from "@portabletext/react";
 
 import { portableTextComponents } from "@/components/shared/portable-text-components";
+import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
 interface Section {
+  /** Stable across renames, unlike the title. Used to target one section. */
+  _key?: string | null;
   sectionTitle: string | null;
   sectionParagraph: any | null;
   sectionImage: {
@@ -20,12 +23,23 @@ interface AlternatingSectionsProps {
   sectionClassName?: string;
   /** Merged onto the PortableText prose wrapper. */
   proseClassName?: string;
+  /**
+   * Optional destination for a section's photograph. Return null for the
+   * sections that should not be links, which is almost all of them.
+   *
+   * This exists for the B Corp section, whose photograph carries the
+   * certification mark. B Lab's brand guidelines require a certified company
+   * using the mark to direct visitors to bcorp.com, so the mark has to be a
+   * link wherever it appears, not only in the footer.
+   */
+  imageHref?: (section: Section) => string | null | undefined;
 }
 
 export const AlternatingSections = ({
   sections,
   sectionClassName,
   proseClassName,
+  imageHref,
 }: AlternatingSectionsProps) => {
   if (!sections || sections.length === 0) return null;
 
@@ -50,19 +64,34 @@ export const AlternatingSections = ({
                     : "right-0 w-[calc(100%-2rem)] sm:w-[calc(100%-4rem)]"
                 }`}
               />
-              <Image
-                sizes="(min-width: 768px) 45vw, 100vw"
-                loading="lazy"
-                src={section.sectionImage?.image || ""}
-                alt={section.sectionImage?.alt || ""}
-                width={704}
-                height={556}
-                className={`relative z-10 h-[360px] w-full object-cover md:h-[556px] ${
-                  index % 2 === 0
-                    ? "pr-4 sm:pr-8 md:pr-0"
-                    : "pl-4 sm:pl-8 md:pl-0"
-                }`}
-              />
+              {(() => {
+                const photo = (
+                  <Image
+                    sizes="(min-width: 768px) 45vw, 100vw"
+                    loading="lazy"
+                    src={section.sectionImage?.image || ""}
+                    alt={section.sectionImage?.alt || ""}
+                    width={704}
+                    height={556}
+                    className={`relative z-10 h-[360px] w-full object-cover md:h-[556px] ${
+                      index % 2 === 0
+                        ? "pr-4 sm:pr-8 md:pr-0"
+                        : "pl-4 sm:pl-8 md:pl-0"
+                    }`}
+                  />
+                );
+                const href = imageHref?.(section);
+                if (!href) return photo;
+                return (
+                  <a
+                    href={href}
+                    {...externalLinkProps(href)}
+                    className="relative z-10 block"
+                  >
+                    {photo}
+                  </a>
+                );
+              })()}
             </div>
             <div className="container flex flex-col gap-4 md:max-w-none md:px-0">
               <h2 className="text-balance text-2xl font-light">

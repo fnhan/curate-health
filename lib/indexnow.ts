@@ -110,9 +110,9 @@ export function pathsForDocument(doc: DocumentForPaths): string[] {
         ? [treatmentPath(doc.serviceSlug, slug), servicePath(doc.serviceSlug)]
         : [];
     case "serviceLifestyle":
-      return ["/services/curate-lifestyle"];
+      return ["/our-programs/curate-lifestyle"];
     case "serviceLifestyleProgram":
-      return ["/services/curate-lifestyle-program"];
+      return ["/our-programs/curate-lifestyle-program"];
     case "ourPrograms":
       return ["/our-programs"];
     case "productsPage":

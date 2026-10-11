@@ -4,7 +4,6 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 
 import { ProductsNavigation } from "@/components/layout/products-page/products-navigation";
-import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import {
   Accordion,
   AccordionContent,
@@ -12,7 +11,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { productCrumbs } from "@/lib/breadcrumbs";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { productAliasTargets, productPath } from "@/lib/service-urls";
@@ -117,9 +115,6 @@ export default async function ProductPage({
           className="h-[400px] w-full object-cover md:h-[550px]"
         />
       </section>
-      <Breadcrumbs
-        crumbs={productCrumbs(title!, product.slug?.current ?? "")}
-      />
       <ProductsNavigation products={products} />
       <section className="bg-white py-20 text-primary md:py-32">
         <div className="container">

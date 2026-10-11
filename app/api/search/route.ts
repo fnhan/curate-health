@@ -68,7 +68,7 @@ const FEATURED_QUERY = groq`
  * The switch is only trusted for the three types where it genuinely decides
  * whether a page exists: service, treatments and product. It is NOT applied to
  * everything, deliberately. serviceLifestyleProgram is switched off in Sanity
- * and its page at /services/curate-lifestyle-program is live regardless, so a
+ * and its page at /our-programs/curate-lifestyle-program is live regardless, so a
  * blanket isActive filter would have hidden a working page from search. That
  * mismatch is Frank's to resolve; this should not paper over it either way.
  */

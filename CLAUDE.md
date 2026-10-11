@@ -15,7 +15,7 @@ This file briefs Claude Code on the codebase, the constraints, and the work. Rea
 | Booking      | Jane, external at `curatehealth.janeapp.com`            |
 | Serving host | `https://www.curatehealth.ca` (apex 308-redirects here) |
 
-Site is 51 URLs in the sitemap as of 2026-09-18. Health and wellness clinic with an attached cafe at 989 Eglinton Ave W, Suite 2, Toronto.
+Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with an attached cafe at 989 Eglinton Ave W, Suite 2, Toronto.
 
 ---
 
@@ -796,6 +796,10 @@ node scripts/add-social-and-hours.js   # dry run, re-runnable, writes only what 
 
 None anywhere, and no `BreadcrumbList` schema. Add a component on every page more than one level deep, with matching markup.
 
+**Blog posts only, since 2026-09-20. Frank's call, and it is not a bug to fix.** The trail came off all 41 other pages. His reasoning: the service, treatment and product pages already show a second menu under the header and the line repeated it, and the about, practitioner and legal pages are one click from a hub that lists them. A blog post has neither, so it keeps its trail.
+
+What that costs, so nobody rediscovers it: Google draws the breadcrumb line in a result from this markup, so those results show the bare address instead. Nothing else changes. Every page is still linked from its hub, which is what crawling depends on, and `scripts/audit-orphans.js` still proves it. `lib/breadcrumbs.ts` now holds only `postCrumbs`, and `scripts/audit-breadcrumbs.js` fails if a trail appears anywhere but a post.
+
 **Done 2026-09-13.** 35 pages carry a trail, the 8 hubs carry none, and the
 homepage carries none.
 
@@ -1147,6 +1151,10 @@ that list them, the Curate Lifestyle page, site search, the sitemap and
 llms.txt, which catches up within the hour. Switched back on, all of it
 returns, with nothing else to edit.
 
+**The Studio warns about this on the switch itself, since 2026-09-20.** Turning "Show on website" off raises a validation warning on the field, in the editor's own words, saying that the page stays in Google until Google revisits, how to take it out sooner, and to cancel that removal before switching the person back on. A warning rather than an error, so the record can still be published switched off. `scripts/audit-practitioners.js` prints the same reminder whenever anyone is switched off.
+
+**Switching someone back on has a step outside this repository.** Safa Karoumi's page was removed from Google by hand, through Search Console's Removals tool, on 2026-09-19, because a 404 sits in the results until Google recrawls it. That removal lasts about six months and hides the address whatever the site says. **Before flipping her switch back on, cancel the removal request in Search Console, then ask for the page to be indexed again through URL Inspection.** Otherwise her page returns to the site and stays invisible in Google. The same applies to anyone else taken off this way.
+
 The team page and the Curate Lifestyle page read `ourTeam.teamMembers`, not
 the practitioner records, so their queries drop any member whose name matches
 a switched-off practitioner. **The two names must agree.**
@@ -1442,6 +1450,50 @@ The dry run refuses while the key file is not live, so it cannot be sent before 
 `scripts/audit-metadata.js` now fails a page with no `og:image`, one that does not load, or no `og:type`. Run against production before this change, it named all nine pages.
 
 It still fails on four pages whose title and heading differ, `/about/our-story`, `/our-programs`, one blog post and Outdoor Yoga Therapy, and warns on two 158 character descriptions. All of that is content in Sanity, raised with Frank on 2026-09-18.
+
+### Section pages: one hero, one second menu. The rule, set 2026-09-20
+
+**Every section of the site looks the same at the top, and there is one component for each half.** Frank asked for the services pattern to be the template and for it to bind anything built later, after `/products` shipped with a different shape and the second menu had been written twice.
+
+- `components/shared/section-hero.tsx`: a photograph the full width of the page, 400px tall and 550px from the medium breakpoint, dimmed to 60%, with the page's h1 over it at the bottom left inside the container and the standing line under it at 80 characters. Marked `priority`, `sizes="100vw"`.
+- `components/shared/section-navigation.tsx`: the sage band directly under it. The section's own name first, then a divider, then the pages in it. The page's font, light weight, dark green. Container width, 2rem above and below, 1rem between items. On hover a hairline sweeps in under the word from the left over half a second, and stays drawn on the page you are on. One line that scrolls sideways on a phone, never wraps. Give the label an href when the section has a hub page, leave it off when it does not.
+
+`ServicesNavigation` and `ProductsNavigation` are thin wrappers over the shared one, so their call sites did not change. The legal pages took the menu on the same day, with "Legal" as plain text because there is no `/legal` index. **Build the next section from these two, not from a copy.**
+
+**`/products` was rebuilt to match**, which is what started this: it opened on a bare white band while every other section opened on a photograph. It now carries the hero, then the products menu, then the same grid the services page uses. `productsPage.heroImage` holds the photograph, with its own alt text, and the page still renders the old heading block if that field is ever empty.
+
+The photograph is a placeholder chosen from the library on 2026-09-20: a practitioner's hands supporting a patient's knee during an assessment. **Nothing in the library shows a product being fitted**, which is what Frank wanted; the five product banners are the closest and all five are already used on their own pages. Replace it in the Studio when there is a photograph of a real fitting.
+
+### The copy and SEO review with Frank, open since 2026-09-19
+
+**Every rewrite is approved one at a time, on a page built for it:** https://claude.ai/artifact/XSbS6Zx9ibbzNzL3o1rdzR. 102 items, each showing the live text beside the proposal, with approve, edit and keep. Frank's choices are saved in the page's own store, at `decisions/<itemId>`, and read back with the ArtifactData tool. Nothing is written to Sanity until he has decided, and the live text is checked against each item's "before" at write time.
+
+What is in it: the two decisions below, the search and share details still missing (`/about`, `/products`, `/blog`, Safa, the cafe description), photo descriptions, 79 page copy fixes, and five lines written into the code.
+
+**Two decisions are load-bearing:**
+
+- **Seventeen service pages carry an unsigned first-person quote**, such as "With chiropractic care, I discovered the power of alignment". Fitness Training carries the Exercise Rehab one word for word, about rehabilitation. They read as patient testimonials nobody gave: the content rules forbid invented quotes, and the regulatory colleges restrict testimonials in professional advertising. Recommended: remove all seventeen and hide the empty quote box.
+- **The Curate Lifestyle Program page is switched off in the Studio** and has been since January, but its route never checks `isActive`, so the page is live and linked. Either the switch is wrong or the page is. Until Frank says, it stays out of IndexNow submissions.
+
+Three more things that came out of the same sweep and are waiting on him: the "FDA Approved" claim on Flowpresso is still live, CH-023; `/our-programs` offers to "submit claims on your behalf", which is direct billing and out of scope; and the Curate Lifestyle FAQ quotes "Over 80% of participants" with no source, which needs Dr. Leong.
+
+**Practitioner SEO fields are written, five of six.** Titles, descriptions, share titles, share descriptions, and both share images, the person's own photo with the hotspot the code used. Transaction `Mtij2FIbO1I0nUyGx00e79`, after `sanity-backup-2026-09-19-before-practitioner-seo-documents.tar.gz`. Dr. Nhan's is held: the description he wrote is 174 characters and the Studio's own limit is 160.
+
+**IndexNow was seeded on 2026-09-19**, 51 addresses, answered 202. Safa's switched-off page went in deliberately, so Bing learns it is gone; Frank asked for Google's temporary removal in Search Console the same day.
+
+**The banned-word checks miss inflections.** `audit-content-rules.js` and `audit-metadata.js` match "elevate" but not "elevating". Match the stem when this is next touched.
+
+### Curate Lifestyle moved under /our-programs, 2026-09-19
+
+**Frank's call: it is a programme, not a service.** `/services/curate-lifestyle` and `/services/curate-lifestyle-program` are now `/our-programs/curate-lifestyle` and `/our-programs/curate-lifestyle-program`, with 301s from both old addresses, which were live and indexed. The routes moved with them, into `app/our-programs/`, where the hub's own layout already wraps them.
+
+**Under the hub, not a new /programs section**, corrected by Frank on 2026-09-20 before any of it went live. The first version put them at `/programs/*` with `/programs` redirecting to the hub, which left the children hanging off an address that was not a page. Now the URL says what the structure is: `/our-programs` lists the three programmes and these are two of its children.
+
+Every link was repointed in the same change: the navigation's Programs list, the Curate Lifestyle card on `/our-programs`, the bar at the foot of the timeline, and Dr. Leong's booking CTA. The sitemap, llms.txt and `pathsForDocument` in `lib/indexnow.ts` carry the new addresses. Submit both old and new to IndexNow after the deploy, since the old ones are what Bing holds.
+
+**No breadcrumb trail on either page, by Frank's decision the same day.** He asked for the trail to come off: each page already shows the section navigation under the header, and he reads that as the menu. They carry no `BreadcrumbList` either, because markup is supposed to describe what the page shows. `scripts/audit-breadcrumbs.js` holds both paths in `NO_TRAIL`, so they are checked for the absence rather than failing the rule. Do not add a trail back without asking him. Every other page below a hub still carries one, CH-009.
+
+**The bar under the Program Timeline was invisible, and it is a pattern worth recognising.** `components/shared/hover-link-variation.tsx` put `w-full bg-platinum` on a `next/link`, which renders an inline `<a>`: neither the width nor the background applies to an inline box, so the band painted nothing and the body's own dark green showed through, under dark text. It reads as an empty dark strip on a screenshot and as a working link in the source. The anchor is a block now and carries the colours Frank picked on 2026-09-20: `bg-platinum`, which is #DBDED9, with `text-primary` for the text and for the line above it. Hovering still fills it sage and turns the text white. `components/shared/hover-link.tsx` has the same inline anchor but no background of its own, so nothing shows; leave it unless it grows one.
 
 ### The every-page rule, first run 2026-09-18
 

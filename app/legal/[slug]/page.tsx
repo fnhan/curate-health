@@ -2,16 +2,20 @@ import { notFound } from "next/navigation";
 
 import { PortableText } from "next-sanity";
 
-import { Breadcrumbs } from "@/components/shared/breadcrumbs";
 import Layout from "@/components/shared/layout";
-import { legalCrumbs } from "@/lib/breadcrumbs";
+import { SectionNavigation } from "@/components/shared/section-navigation";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   LAYOUT_QUERYResult,
+  LEGAL_PAGES_NAV_QUERYResult,
   LEGAL_PAGE_BY_SLUG_QUERYResult,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
-import { LAYOUT_QUERY, LEGAL_PAGE_BY_SLUG_QUERY } from "@/sanity/lib/queries";
+import {
+  LAYOUT_QUERY,
+  LEGAL_PAGES_NAV_QUERY,
+  LEGAL_PAGE_BY_SLUG_QUERY,
+} from "@/sanity/lib/queries";
 
 export default async function LegalPage({
   params,
@@ -27,6 +31,10 @@ export default async function LegalPage({
     params: { slug: params.slug },
   });
 
+  const legalPages = await sanityFetch<LEGAL_PAGES_NAV_QUERYResult>({
+    query: LEGAL_PAGES_NAV_QUERY,
+  });
+
   if (!legalPage) {
     return notFound();
   }
@@ -36,11 +44,21 @@ export default async function LegalPage({
   return (
     <Layout layout={layout}>
       {/*
-        Home > Terms of Use, with no Legal level. There is no /legal index, so
-        a Legal crumb would be a dangling text node in a trail Google may then
-        refuse to show. See lib/breadcrumbs.ts.
+        The section menu the rest of the site uses, in place of the breadcrumb
+        trail these pages carried until 2026-09-20. The label is plain text
+        rather than a link: there is no /legal index and none is planned, so
+        linking it would point at a 404.
       */}
-      <Breadcrumbs crumbs={legalCrumbs(title!, params.slug)} />
+      <SectionNavigation
+        ariaLabel="Legal"
+        label="Legal"
+        items={legalPages
+          .filter((page) => page.slug)
+          .map((page) => ({
+            title: page.title ?? "",
+            href: `/legal/${page.slug}`,
+          }))}
+      />
       <div className="bg-white">
         <div className="container py-20">
           <div className="container prose">

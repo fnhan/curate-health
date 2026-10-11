@@ -377,7 +377,7 @@ export default function ServiceLifestyleContent({
         </div>
       </section>
       <HoverLinkVariation
-        href="/services/curate-lifestyle-program"
+        href="/our-programs/curate-lifestyle-program"
         text="View Full Program Breakdown"
       />
 

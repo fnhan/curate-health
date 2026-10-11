@@ -285,7 +285,17 @@ export const ABOUT_INDEX_QUERY = groq`{
 export const PRODUCTS_PAGE_QUERY = groq`*[_type == "productsPage"][0]{
   title,
   intro,
+  heroImage{
+    "url": asset->url,
+    alt
+  },
   ${SEO_QUERY}
+}`;
+
+/** The three legal pages, for the second menu they share. */
+export const LEGAL_PAGES_NAV_QUERY = groq`*[_type == "legalPage" && defined(slug.current)] | order(title asc){
+  title,
+  "slug": slug.current
 }`;
 
 export const PRODUCTS_NAVIGATION_QUERY = groq`*[_type == "product" && isActive == true] {

@@ -170,18 +170,18 @@ export async function GET() {
     })
   );
 
-  // Curate Lifestyle has two pages with routes of their own, so the service
-  // slugs above never produced them. Listed when the document each page
-  // renders from exists.
+  // The two Curate Lifestyle pages live under /programs, with routes of
+  // their own rather than a slug, so no list above produces them. Listed
+  // when the document each page renders from exists.
   const lifestyleRoutes: Url[] = [
     lifestyle && {
-      url: `${BASEURL}/services/curate-lifestyle`,
+      url: `${BASEURL}/our-programs/curate-lifestyle`,
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     lifestyleProgram && {
-      url: `${BASEURL}/services/curate-lifestyle-program`,
+      url: `${BASEURL}/our-programs/curate-lifestyle-program`,
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly",
       priority: 0.8,

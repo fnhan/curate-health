@@ -4,8 +4,6 @@ import { notFound } from "next/navigation";
 
 import { PortableText } from "next-sanity";
 
-import { Breadcrumbs } from "@/components/shared/breadcrumbs";
-import { practitionerCrumbs } from "@/lib/breadcrumbs";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { treatmentPath } from "@/lib/service-urls";
@@ -48,8 +46,8 @@ import { PRACTITIONER_BY_SLUG_QUERY } from "@/sanity/lib/queries";
  * with it instead of leaving the button on the old file.
  */
 const CTA_TARGETS: Record<string, string> = {
-  curateLifestyleReferralForm: "/services/curate-lifestyle#referral",
-  curateLifestyleProgram: "/services/curate-lifestyle",
+  curateLifestyleReferralForm: "/our-programs/curate-lifestyle#referral",
+  curateLifestyleProgram: "/our-programs/curate-lifestyle",
 };
 
 /** The first name, for "Book with Ariel" and "Services Ariel offers". */
@@ -111,7 +109,6 @@ export default async function PractitionerPage({
         data={buildPractitionerJsonLd(person)}
         id={`practitioner-${params.practitioner}-json-ld`}
       />
-      <Breadcrumbs crumbs={practitionerCrumbs(name!, params.practitioner)} />
 
       <article className="bg-white pb-16 pt-6 text-primary md:pb-24">
         <div className="container">

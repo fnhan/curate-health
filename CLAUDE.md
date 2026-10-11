@@ -1509,6 +1509,203 @@ Every link was repointed in the same change: the navigation's Programs list, the
 - Three descriptions too short to be used, which `audit-metadata.js` now warns on below 70 characters: the Curate Lifestyle Program's reads "Curate Lifestyle Program", `/cafe`'s "A space where nourishment meets intention.", and Rooj's page runs on the code fallback until the practitioner descriptions are approved.
 - **The content rules: 88 breaks on 27 of 51 pages.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
 
+### B Corp certification, 2026-10-10
+
+Curate Health is a Certified B Corporation, confirmed by Frank on 2026-10-10.
+
+**The link target is not a choice.** B Lab's brand guidelines require a certified
+company using the mark to send visitors to `bcorp.com`, by hyperlink or by a
+line of text such as "Learn more at bcorp.com", and set 31 August 2026 as the
+deadline for it. So the footer mark links to `https://bcorp.com` even though
+that 301s to `bcorporation.net/en-us/`. It is B Lab's own redirect on their own
+short URL, and the compliance requirement outranks this project's preference for
+linking the resolved address. Do not "fix" it to the destination.
+
+The stronger link would be Curate's own entry in the B Corp directory, since it
+verifies the claim rather than describing the scheme. No entry was findable on
+2026-10-10, which is ordinary lag for a new certification. It stays as it is
+regardless: the guidelines name bcorp.com, not the profile.
+
+**The mark may be white or black, and no other colour.** The asset is black on
+transparency, so the footer paints it white with `brightness-0 invert`, which
+lands on one of the two permitted colours. The lockup has to keep the line above
+the word "Corporation", so it must not be cropped, and the Circle B on its own is
+reserved to B Lab. The name is styled "B Corp", with a space, never "B-Corp" or
+"BCorp".
+
+**Rendered at 80px wide, not 44.** PR #182 drew it at 44x59, which was wrong
+twice over. The asset is 960x1403, so 44 wide is 64 tall and 59 squashed it, and
+at that size the words "Certified" and "Corporation" set about four pixels tall
+and cannot be read. 80x117 holds the ratio and keeps the words legible. It sits
+under the contact block, which also satisfies B Lab's guidance to place the
+lockup in the lower left.
+
+**PR #182 was not merged.** Opened 2026-04-06 against a footer that has since
+been rewritten: `addressLines()`, `externalLinkProps()`, `SocialIcon` and the
+`h2` headings all postdate it, and re-applying its diff would have put the
+address back to `{street}{city}{state}{zip}` with no separators. It also carried
+no hyperlink, which is the one thing B Lab actually requires, and no `sizes`,
+which fails CH-007. Rebuilt on main instead. Close #182 once this lands.
+
+**The footer carries standing text beside the mark, since 2026-10-11.** "We
+are a B Corp." over "The same care we take with patients, applied to our team
+and our footprint.", then a Learn More link.
+
+**The second line was rewritten before it shipped, and the reason matters.**
+The idea for this block came off Athleta's footer, and the first draft read
+"Part of a global movement working to better people and the planet", which is
+Athleta's own sentence with one word changed. Frank stopped it: he did not want
+a line another brand could recognise as theirs. The replacement says something
+only this business can say, which is that the certification applies the care the
+clinic already takes with patients to its team and its footprint. **Do not drift
+back toward the B Lab or Athleta boilerplate when this is next edited.**
+
+The layout is also deliberately not Athleta's, which uses B Lab's boxed URL
+badge with an uppercase heading in a band of its own. Ours is the bare vertical
+lockup, white on the dark green, sentence case, inside the contact column.
+
+**Learn More goes to the directory profile, the mark still goes to bcorp.com.**
+`https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`
+exists now; it did not on 2026-10-10. It is the link that verifies the claim, so
+it is the better destination for a text link, but it cannot replace the mark's
+own link because the brand guidelines name bcorp.com. Two links, two
+destinations, on purpose. Repoint Learn More at CH-119 when that page is built.
+
+**The mark is offset left by 14px and that is not a nudge.** The asset carries
+its own transparent margin, measured at 14.6% of the canvas on the left, so the
+ink starts well inside the frame and the mark reads as indented against the
+address above it. The negative margin is that margin at the rendered width, 96
+times 0.146. Recompute it if the width changes. Do not crop the asset: that
+margin is B Lab's clear space, not padding somebody left in. Verified by
+measurement rather than by eye, the Contact heading, the map pin icon and the
+mark's ink all start at 32px.
+
+**The text beside it is aligned to the mark's ink, not to its frame.** The
+asset is inset vertically as well as horizontally, 139 of 1403 from the top and
+120 from the bottom, which at height 140 is 14px and 12px. The text column
+carries exactly those as padding and spreads itself with `justify-between`, so
+the first line sits on the top of "Certified" and the Learn More link sits on
+the bottom of "Corporation". Measured rather than eyeballed: 0.1px out at the
+top, 0 at the bottom. All four numbers come from the asset, so recompute them
+if the asset or the height changes.
+
+**A lazy image reads as a missing image for a moment.** Both the desktop and
+mobile checks of this block showed empty space where the mark goes, and both
+were a screenshot taken before the lazy-loaded image painted. The DOM said
+`complete: true` each time. Take the screenshot, then take it again, before
+concluding a footer image is broken.
+
+**Still open: the section on the Sustainability page.** Its copy sits in
+`drafts.c0ca5697-0672-4e6b-80c2-8c9c898de6e7` and nowhere else, written
+2026-04-17. **Do not press Publish on that draft.** The published document was
+updated 2026-09-10, five months later, and `audit-drafts.js` reports three
+changed fields: publishing reverts `seo.pageTitle`, `seo.socialMeta.title` and
+`seo.socialMeta.description` to their April wording. Patch
+`additionalSections` onto the published document instead, writing the array
+whole per the CH-028 note, after a fresh export.
+
+The drafted copy needs rewriting first. It carries two rule-of-three lists,
+"proud to be", "highest standards" and "a force for good", which is brand voice
+against the tone rule, and its semicolons read as em dashes somebody swapped out.
+B Lab's own tagline wording has moved from "highest" to "high" since it was
+written. Its alt text is "B Corp Logo", which names the file rather than
+describing the mark, and should read "Certified B Corporation" as the footer's
+does. The replacement copy is with Frank.
+
+### No rich text link has ever rendered, found 2026-10-10
+
+`@portabletext/react` ships default renderers for the decorators, em, strong,
+code, underline and strike-through, and for nothing else. The `link`
+annotation is the only annotation `sanity/schemas/blockContent.ts` defines, and
+it has no default, so it falls through to the library's `unknownMark` and
+renders as `<span class="unknown__pt__mark__link">`. The words appear, the link
+does not. It looks correct in the Studio, in the GROQ result and in the source.
+
+All 25 `<PortableText>` call sites passed no `components` prop, and no file in
+the repository defined a `marks` renderer.
+
+**This is a trap, not a live defect.** Nine production pages covering every rich
+text template were checked on 2026-10-10 and carry zero `unknown__pt__mark__` of
+any kind, so no editor has yet put a link into a rich text field. The first one
+to try would have found it.
+
+`components/shared/portable-text-components.tsx` now holds a shared `link`
+renderer, which reads `externalLinkProps` so a link out of the site opens in a
+new tab. **It is wired into `AlternatingSections` only**, because that is what
+the B Corp section needs. The other 24 call sites still pass nothing and still
+have the trap. Wiring them is a one-line import each and visually a no-op today,
+since nothing currently renders a link, but it is 24 files and it is Frank's
+call whether that rides along with something else.
+
+### The siteSettings draft was a loaded gun, cleared 2026-10-11
+
+`audit-drafts.js` had been exiting 1 since 2026-09-12 on a `siteSettings`
+draft carrying seven destructive paths. Anyone who opened site settings in the
+Studio and pressed Publish would have undone two tickets in one click, with no
+warning and nothing in the interface suggesting it.
+
+The draft was saved at 18:18 on 2026-09-12. The published document was written
+at 22:11 the same day, when `add-social-and-hours.js` ran. So the draft was a
+snapshot of the state before that script, and publishing it would have:
+
+- deleted TikTok and Facebook from `socialMedia`, along with every `entity`
+  and `label` field, collapsing `sameAs` from five profiles to two and undoing
+  the clinic and cafe split, CH-008
+- reverted `/products` to `/#products` in both the nav and the footer, which is
+  the anchor to nowhere that orphaned the five product pages, CH-010
+
+It held nothing unpublished. Every field in it was an older copy of something
+already live, which is what made deleting it safe rather than a judgement call.
+
+`scripts/clear-stale-draft.js` does this and refuses to do anything else. It
+deletes a draft only when a published document exists, the draft is older than
+it, and the draft adds no field the published document lacks. A draft that is
+merely different is not stale: the differences are printed for a reader to
+judge, and only those three conditions decide. Exercised against the
+`aboutSection` draft, which is newer, it refuses and says why.
+
+`audit-drafts.js` exits 0 now. The four remaining drafts are two orphans with
+no published counterpart and two with ordinary in-progress edits.
+
+**This is a standing hazard, not a one-off.** Any script that writes to a
+document somebody has open in the Studio creates another one. Run
+`audit-drafts.js` after a migration, which the CH-020 note already says, and
+clear what it finds rather than leaving it to the next person to publish.
+
+### The banned-word checks, shared and matching stems, 2026-10-11
+
+Two problems, both recorded in this file as known and both now fixed.
+
+**The two audits had drifted.** `audit-content-rules.js` and
+`audit-metadata.js` each carried their own copy of the banned list, and the
+first had "dive into" where the second did not. The same phrase therefore failed
+in body copy and passed in a meta description. A rule enforced in one place and
+not the other is worse than no rule, because it reads as checked. Both now read
+`scripts/lib/content-rules.js`.
+
+**They matched a prefix, so they missed any inflection that changes the stem.**
+A bare prefix catches what only adds letters, "unlocking" contains "unlock" and
+"seamlessly" contains "seamless", but "elevating" does not contain "elevate".
+The list is patterns now. The count went from 88 breaks to **90 on 27 of 51
+pages**, both new hits being "elevating", on `/our-programs` and
+`/services/performance-training`.
+
+One of those two reads as a patient testimonial rather than marketing copy,
+"This was all about elevating myself to the best me possible". If it is, it
+belongs with the seventeen unsigned first-person quotes in the copy review and
+is a regulated-advertising question, not a word swap. Confirm before editing it.
+
+**What is deliberately not matched.** Only inflections of a banned word, never
+its relatives: "transformation" is not caught by "transformative". "elevation"
+is left out on purpose because this is a clinic and "elevation of the leg" is
+correct clinical English. "elevated" is still matched, as it always was, because
+the snippet makes the call obvious, but do not widen this further without
+reading the hits. A check that cries wolf gets ignored.
+
+"journey" is not in the list and must not be added back, per the content rules
+above. There is a unit check covering that, and the `elevating` gap, in the
+module's own patterns.
+
 ### Dependency security alerts
 
 **Triaged 2026-09-15.** GitHub listed 187 open Dependabot alerts on main: 7 critical, 86 high, 78 medium, 16 low. Only `next` reaches visitors. The rest sit in the Sanity CLI, ESLint, the build, the Studio or the draft preview overlay. That was checked against the build output rather than read off the package list, because GitHub labels every one of them "runtime": `next` is the only flagged package in the server function traces, lodash's `_.template` appears only in the Studio chunk, and the on-demand preview chunk carries nanoid and lodash internals but not the flawed functions. The build does contain three Server Actions, all from `next-sanity` preview tooling, so the Server Action advisories apply.
@@ -1524,6 +1721,55 @@ Every link was repointed in the same change: the navigation's Programs list, the
 **ESLint is not set up.** `next lint` stops at its first-run configuration prompt, so `eslint-config-next` and everything under it is a tool nothing runs.
 
 **About 67 alerts are left after the update**, counted by matching the installed versions against each alert's range; GitHub recounts after merge. 25 are the Next.js ones that need version 16. The rest are inside the Sanity CLI and build tools and need larger Sanity upgrades. `decompress` and `parse-git-config` have no fix published.
+
+### Node 24, forced 2026-10-10
+
+**Every deployment failed for a day and nothing in the repository was wrong.**
+Vercel discontinued Node 20.x, which the project was pinned to, and rejected
+each attempt with "Node.js Version 20.x is discontinued and must be upgraded".
+The signature is worth recognising: status Error after about two seconds, with
+`Builds: . [0ms]` and no logs at all. A real build failure takes minutes and
+prints something. Two seconds and an empty build list means the deployment was
+refused before it started, so look at the account and the project settings
+rather than at the code.
+
+Four deployments failed this way, the previews for #249 and #250 and both
+production merges, while production carried on serving the #244 build from
+2026-09-18. A merged pull request looked shipped and was not. Check
+`npx vercel list curate-health` after a merge rather than assuming.
+
+Fixed in the repository rather than the dashboard. `engines.node` in
+package.json overrides the Node version in Project Settings, which Vercel's own
+documentation spells out for this exact case: Project Settings on 20.x plus
+`"node": "24.x"` in package.json deploys on the latest 24.x. So the dashboard
+setting is now dead weight and the version lives with the code, where a change
+to it is reviewable.
+
+Nothing else had to change. `npm run build` was already passing on Node 24.19.0
+locally before this, the Studio route included, which is why the bump went in on
+its own rather than waiting for CH-118.
+
+**CH-118 below assumes this is still pending. It is not.** The line about Sanity
+Studio v6 needing Node 22.12, and the Vercel project moving off 20.x, is done.
+
+### CH-119 Our B Corp Certification page
+
+Asked for by Frank on 2026-10-11, to be built later. A page under About Us about
+the certification, which the footer's Learn More should point at once it exists.
+
+Until then Learn More points at the directory profile,
+`https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`.
+**Repointing it is part of this ticket, and the mark's own link stays on
+bcorp.com** whatever happens here, because B Lab requires that one.
+
+The copy is Frank's to supply or approve. What the certification covers, what
+B Lab assessed, and the date certified are claims about the business, so they
+are not for drafting from the directory listing.
+
+It is a new route, so the every-page rule applies in full: its own title and
+description in the Studio, a share card, a breadcrumb under /about, a line in
+the sitemap and in llms.txt, a link from the About hub so it is not orphaned,
+and the content rules. `node scripts/audit-seo-complete.js` is the gate.
 
 ### CH-118 Upgrade to Next.js 16
 

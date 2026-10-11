@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,6 +12,31 @@ import { externalLinkProps } from "@/lib/links";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
 import { FooterMobileAccordion } from "./footer-mobile-accordion";
+
+/**
+ * B Lab requires a certified company using the mark to send visitors to
+ * bcorp.com, by hyperlink or by a line of text, and set 31 August 2026 as the
+ * deadline for it. So this is a compliance requirement rather than a choice,
+ * and it is why the link is not pointed at the B Corp directory profile, which
+ * would otherwise be the stronger link because it verifies the claim.
+ *
+ * bcorp.com 301s to bcorporation.net/en-us/. That is B Lab's own redirect on
+ * their own canonical short URL, so it stays as written rather than being
+ * resolved to the destination.
+ */
+const BCORP_URL = "https://bcorp.com";
+
+/**
+ * Curate's own entry in the B Corp directory, which is the link that verifies
+ * the claim rather than describing the scheme. It did not exist when the mark
+ * went into the footer on 2026-10-10; B Lab published it since.
+ *
+ * It does not replace BCORP_URL above. The mark itself still has to point at
+ * bcorp.com to satisfy the brand guidelines, so the mark and the Learn More
+ * link deliberately go to different places.
+ */
+const BCORP_PROFILE_URL =
+  "https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/";
 
 export default function SiteFooter({
   siteSettings,
@@ -40,41 +66,86 @@ export default function SiteFooter({
       <div className="flex flex-col text-white">
         <div className="container flex flex-col gap-10 py-14 lg:flex-row lg:justify-between lg:py-40">
           {/* Contact Info */}
-          <address className="space-y-2 text-sm not-italic md:text-base">
-            <h2 className="w-fit font-semibold hover:underline">
-              <Link href="/contact">Contact</Link>
-            </h2>
-            <a
-              className="flex items-start gap-2 hover:underline"
-              href={contactInfo?.mapLink!}
-              {...externalLinkProps(contactInfo?.mapLink!)}
-            >
-              <MapPinIcon size={20} className="mt-1" />
-              <div>
-                {addressLines(contactInfo?.address).map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
+          <div className="flex flex-col gap-8">
+            <address className="space-y-2 text-sm not-italic md:text-base">
+              <h2 className="w-fit font-semibold hover:underline">
+                <Link href="/contact">Contact</Link>
+              </h2>
+              <a
+                className="flex items-start gap-2 hover:underline"
+                href={contactInfo?.mapLink!}
+                {...externalLinkProps(contactInfo?.mapLink!)}
+              >
+                <MapPinIcon size={20} className="mt-1" />
+                <div>
+                  {addressLines(contactInfo?.address).map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </div>
+              </a>
+              <div className="space-y-2">
+                <a
+                  className="flex w-fit items-center gap-2 hover:underline"
+                  href={`mailto:${contactInfo?.email}`}
+                >
+                  <MailIcon size={20} />
+                  <span>{contactInfo?.email}</span>
+                </a>
+                <a
+                  className="flex w-fit items-center gap-2 hover:underline"
+                  href={`tel:${contactInfo?.phone}`}
+                >
+                  <PhoneIcon size={20} />
+                  <span>{contactInfo?.phone}</span>
+                </a>
               </div>
-            </a>
-            <div className="space-y-2">
+            </address>
+            {/*
+              The mark is black on transparency, so brightness-0 invert paints
+              it white. White and black are the only two colours B Lab permits,
+              and the footer is dark, so white is the compliant one here.
+
+              The asset carries its own transparent margin, measured at 14.6% of
+              the canvas on the left, so the ink starts well inside the frame and
+              the mark reads as indented against the address above it. The
+              negative margin is that margin at this width, 96 x 0.146, which
+              lines the ink up with the text rather than lining the file up.
+              Recompute it if the width changes, and do not crop the asset: the
+              margin is B Lab's clear space, not padding somebody added.
+            */}
+            <div className="flex items-stretch gap-3">
               <a
-                className="flex w-fit items-center gap-2 hover:underline"
-                href={`mailto:${contactInfo?.email}`}
+                href={BCORP_URL}
+                {...externalLinkProps(BCORP_URL)}
+                className="-ml-[14px] shrink-0"
               >
-                <MailIcon size={20} />
-                <span>{contactInfo?.email}</span>
+                <Image
+                  src="/images/B_Corp_Logo.png"
+                  alt="Certified B Corporation"
+                  width={96}
+                  height={140}
+                  sizes="96px"
+                  className="brightness-0 invert"
+                />
               </a>
-              <a
-                className="flex w-fit items-center gap-2 hover:underline"
-                href={`tel:${contactInfo?.phone}`}
-              >
-                <PhoneIcon size={20} />
-                <span>{contactInfo?.phone}</span>
-              </a>
+              <div className="flex flex-col justify-between pb-[12px] pt-[14px] text-sm">
+                <p className="font-semibold">We are a B Corp.</p>
+                <p className="max-w-[26ch] font-light">
+                  The same care we take with patients, applied to our team and
+                  our footprint.
+                </p>
+                <a
+                  href={BCORP_PROFILE_URL}
+                  {...externalLinkProps(BCORP_PROFILE_URL)}
+                  className="w-fit underline underline-offset-4 hover:no-underline"
+                >
+                  Learn More
+                </a>
+              </div>
             </div>
-          </address>
+          </div>
           <div>
             <FooterMobileAccordion siteSettings={siteSettings} />
             <div className="hidden flex-col gap-2 lg:flex lg:flex-row lg:justify-end lg:gap-10">

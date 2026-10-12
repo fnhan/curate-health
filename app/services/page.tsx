@@ -4,6 +4,7 @@ import Link from "next/link";
 import ServicesHeroSection from "@/components/layout/services-pages/services-hero-section";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import HoverLink from "@/components/shared/hover-link";
+import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   ALL_SERVICES_QUERYResult,
@@ -24,6 +25,18 @@ export default async function ServicesPage() {
     <>
       <ServicesHeroSection servicesHeroSection={servicesHeroSection} />
       <ServicesNavigation services={services} />
+      {/*
+        The prose band, added 2026-10-12. The page was a hero, a menu and a
+        grid of photographs, so the only words a crawler or an answer engine
+        could read off it were the service names in the grid. The copy is
+        Frank's, and it names the practice, the neighbourhood and every
+        modality by name, which is what gets quoted back.
+
+        Same component /about uses, so the two sections read the same.
+      */}
+      <SectionIntro
+        paragraphs={toParagraphs(servicesHeroSection?.intro).slice(1)}
+      />
       <section className="bg-white">
         <div className="grid gap-1 bg-white pb-28 lg:container sm:grid-cols-2 md:pb-36 lg:grid-cols-3 lg:pb-[200px]">
           {services.map((service) => (

@@ -1495,6 +1495,61 @@ It still fails on four pages whose title and heading differ, `/about/our-story`,
 
 `ServicesNavigation` and `ProductsNavigation` are thin wrappers over the shared one, so their call sites did not change. The legal pages took the menu on the same day, with "Legal" as plain text because there is no `/legal` index. **Build the next section from these two, not from a copy.**
 
+
+### Section pages: and a third component, the prose band. 2026-10-12
+
+`components/shared/section-intro.tsx` is the band of prose between the second
+menu and the card grid, plus `toParagraphs`, the blank-line split every intro
+field uses. /about had it first; Frank asked for /services and /products to read
+the same. **Three components now, not two. Build the next section from all
+three.**
+
+**The first paragraph is the hero's standing line, the rest is the band.** One
+field holds a page's whole prose and the page splits it, so there is no second
+field to drift and an editor writes in one place. On /services
+`servicesHeroSection.subtitle` stays as the fallback when `intro` is empty,
+which is what that page showed before.
+
+**Two columns from the large breakpoint, and the reason is the bug it fixed.**
+The band was `container max-w-[70ch]`. `container` is configured `center: true`,
+so the 70ch box was centred in the viewport while the grid below it spanned the
+whole container: the text floated in the middle with the photographs sticking
+out either side. Dropping the cap alone lines the edges up and gives a 165
+character line, so the band fills the container and splits in two. Measured at
+1600px: text 125 to 1461, grid 125 to 1460.
+
+Multi-column rather than a two-column grid, because this is continuous prose and
+should read down one column then down the next. `break-inside-avoid` keeps a
+paragraph whole. A single paragraph stays one column: it cannot be balanced
+across two without being split, and one short paragraph alone in the left half
+would look like the bug above.
+
+**The copy.** /services is Frank's own, corrected for grammar and tone; every
+change is listed in the pull request. /products is a draft he approved the same
+day. `scripts/apply-section-intros.js` writes both and checks them against the
+content rules before it will.
+
+**It applies in two phases, one deploy apart**, and refuses to run them
+together. `--phase=1` writes `servicesHeroSection.intro`, a field the deployed
+code does not read, so the live site is unchanged. `--phase=2` writes
+`productsPage.intro` **after** the merge deploys: that field is already live and
+is read whole as the hero's standing line, so writing 123 words into it under
+the old code would spill three paragraphs over a 400px hero on a public page.
+
+```bash
+node scripts/apply-section-intros.js --apply --phase=1   # before the merge
+#   merge, let it deploy
+node scripts/apply-section-intros.js --apply --phase=2   # after
+```
+
+**The blog byline portrait is grayscale until the row is hovered**, which is
+what every other photograph of a practitioner does, on the team page and in the
+hub grids. The house mark is not: it is painted flat white already, so grayscale
+on it is a no-op and a hover that changes nothing reads as broken. `group` moved
+from the link to the row so an unlinked byline still colours its portrait, and
+the name is underlined on hover only when the row is a link.
+
+
 **`/products` was rebuilt to match**, which is what started this: it opened on a bare white band while every other section opened on a photograph. It now carries the hero, then the products menu, then the same grid the services page uses. `productsPage.heroImage` holds the photograph, with its own alt text, and the page still renders the old heading block if that field is ever empty.
 
 The photograph is a placeholder chosen from the library on 2026-09-20: a practitioner's hands supporting a patient's knee during an assessment. **Nothing in the library shows a product being fitted**, which is what Frank wanted; the five product banners are the closest and all five are already used on their own pages. Replace it in the Studio when there is a photograph of a real fitting.

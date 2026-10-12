@@ -47,7 +47,11 @@ export default function BlogAuthorByline({
    * with the same brightness-0 invert the B Corp mark uses.
    *
    * A real practitioner keeps the ring and the backing: a photograph needs a
-   * frame, and inverting one would be absurd.
+   * frame, and inverting one would be absurd. The portrait is also grayscale
+   * until the row is hovered, which is what every other photograph of a
+   * practitioner on this site does, on the team page and in the hub grids.
+   * The mark is not: it is painted flat white already, so grayscale on it is
+   * a no-op and a hover that changes nothing reads as a broken hover.
    */
   const isHouseByline =
     author.linkedTeamMemberName?.trim() === AUTHOR_TEAM_PROFILE_PAGE_ONLY;
@@ -65,7 +69,11 @@ export default function BlogAuthorByline({
         <AvatarImage
           src={imageUrl}
           alt={displayName ? `${displayName} portrait` : ""}
-          className={isHouseByline ? "brightness-0 invert" : undefined}
+          className={
+            isHouseByline
+              ? "brightness-0 invert"
+              : "grayscale transition-all duration-300 group-hover:grayscale-0 group-focus-visible:grayscale-0"
+          }
         />
         <AvatarFallback
           className={
@@ -76,12 +84,20 @@ export default function BlogAuthorByline({
         </AvatarFallback>
       </Avatar>
       {displayName ? (
-        <span className="text-sm group-hover:underline">{displayName}</span>
+        // underlined only when the row is a link, now that `group` is on
+        // every row rather than only on the linked one
+        <span className={cn("text-sm", teamHref && "group-hover:underline")}>
+          {displayName}
+        </span>
       ) : null}
     </>
   );
 
-  const rowClass = cn("flex items-center gap-4", className);
+  /**
+   * `group` is on the row rather than only on the link, so a byline with no
+   * practitioner page still colours its portrait when the reader hovers it.
+   */
+  const rowClass = cn("group flex items-center gap-4", className);
 
   if (teamHref) {
     return (
@@ -89,7 +105,7 @@ export default function BlogAuthorByline({
         href={teamHref}
         className={cn(
           rowClass,
-          "group rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
+          "rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
         )}
         aria-label={
           displayName ? `${displayName}, view on Our Team` : "View on Our Team"

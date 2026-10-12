@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import SectionHero from "@/components/shared/section-hero";
+import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
 import { SectionNavigation } from "@/components/shared/section-navigation";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { ABOUT_INDEX_QUERYResult } from "@/sanity.types";
@@ -44,10 +45,7 @@ export default async function AboutPage() {
   // hub lists what is live rather than linking somewhere that 404s.
   const children = (data?.children ?? []).filter(Boolean);
 
-  const paragraphs = (page?.intro ?? "")
-    .split(/\n{2,}/)
-    .map((p) => p.trim())
-    .filter(Boolean);
+  const paragraphs = toParagraphs(page?.intro);
 
   return (
     <>
@@ -78,21 +76,13 @@ export default async function AboutPage() {
         The intro is the reason this page exists, so it keeps its own band
         rather than being reduced to the hero's standing line. Google weighs
         who is responsible for a site hardest on health, and a hub carrying
-        only navigation earns none of that. The hero shows the first paragraph;
-        the rest are here.
+        only navigation earns none of that.
+
+        The hero already shows paragraphs[0] as its standing line, so this is
+        the rest. It is the same component /services uses, so the two sections
+        read the same, which is what Frank asked for on 2026-10-12.
       */}
-      {/* The hero already shows paragraphs[0] as its standing line. */}
-      {paragraphs.length > 1 ? (
-        <section className="bg-white py-16 md:py-24">
-          <div className="container flex max-w-[70ch] flex-col gap-4">
-            {paragraphs.slice(1).map((text) => (
-              <p key={text} className="font-light leading-7 text-primary">
-                {text}
-              </p>
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <SectionIntro paragraphs={paragraphs.slice(1)} />
 
       {/*
         The same grid /services uses: a photograph per child, grayscale until

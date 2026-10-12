@@ -35,6 +35,14 @@ export default defineType({
       type: "string",
     }),
     defineField({
+      name: "intro",
+      title: "Intro",
+      type: "text",
+      rows: 12,
+      description:
+        "The prose between the menu and the grid of services. Say what the practice is and what each of the three areas covers, by name, rather than describing the grid underneath. This is the text an AI answer engine reads off this page. Blank lines separate paragraphs.",
+    }),
+    defineField({
       name: "seo",
       title: "SEO",
       type: "seo",

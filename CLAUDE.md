@@ -124,7 +124,17 @@ These apply to every word written into the site, schema, meta tags, or alt text.
 - The outdoor space is always "Recovery Sanctuary." Never "outdoor terrace" or any variant
 - Neighbourhood descriptor is "Midtown Toronto"
 - **The house spelling is "cafe", never "café".** No accent, anywhere: the site, the Studio, marketing, design, anything Curate produces. Frank ruled on 2026-09-12. `node scripts/audit-cafe-accent.js` sweeps the dataset and exits 1 if an accented spelling is live
-- Canadian spelling throughout
+- **Canadian spelling throughout. A hard rule, and Frank asked on 2026-10-11
+  that it hold even against his own later instruction.** If he approves copy
+  carrying an American spelling, as he did for the cafe paragraph that day, fix
+  the spelling and tell him, rather than treating the approval as an override.
+  `scripts/audit-content-rules.js` checks it and `scripts/fix-canadian-spelling.js`
+  sweeps the dataset. 23 spellings across 19 fields were corrected on 2026-10-11
+- **Canadian English is not British English, and the check is deliberately
+  short.** "program", "organize" and "analyze" are all correct here and are not
+  flagged. "practice" and "license" split noun from verb in a way no regex can
+  judge, so neither is flagged either. Widening the list to catch those would
+  produce more wrong answers than it fixes
 
 Tone: scientific and evidence-based, thoughtful, warm, understated. A trusted clinician sharing an observation, not a brand talking. No hype.
 

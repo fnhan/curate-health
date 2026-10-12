@@ -29,7 +29,7 @@
 
 const DEFAULT_BASE = "https://www.curatehealth.ca";
 
-const { findBanned } = require("./lib/content-rules");
+const { findBanned, findAmerican } = require("./lib/content-rules");
 
 function visibleText(html) {
   return html
@@ -55,6 +55,10 @@ function check(text) {
   }
 
   for (const { rule, index, length } of findBanned(text)) {
+    found.push([rule, snippet(text, index, length)]);
+  }
+
+  for (const { rule, index, length } of findAmerican(text)) {
     found.push([rule, snippet(text, index, length)]);
   }
 

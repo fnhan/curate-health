@@ -1507,7 +1507,19 @@ What is in it: the two decisions below, the search and share details still missi
 
 **Two decisions are load-bearing:**
 
-- **Seventeen service pages carry an unsigned first-person quote**, such as "With chiropractic care, I discovered the power of alignment". Fitness Training carries the Exercise Rehab one word for word, about rehabilitation. They read as patient testimonials nobody gave: the content rules forbid invented quotes, and the regulatory colleges restrict testimonials in professional advertising. Recommended: remove all seventeen and hide the empty quote box.
+- **The seventeen unsigned first-person quotes stay. Settled by Frank on
+  2026-10-11, and he asked not to be asked again.** They are on seventeen
+  service pages, such as "With chiropractic care, I discovered the power of
+  alignment". They had been raised here as invented testimonials and as a
+  college advertising risk. Frank's ruling: they are not presented as real
+  testimonials, they set the mood of the service, and no college rule is
+  engaged. **Do not reopen this, and do not report them as a defect.**
+
+  One consequence worth knowing. Because they are mood copy rather than
+  somebody's words, editing them is ordinary copy editing. That is how the
+  last banned phrase was cleared: the breathwork quote read "Harnessing the
+  power of my breath" and now reads "Working with my breath". Had they been
+  real quotes, rewording would have been worse than leaving the break.
 - **The Curate Lifestyle Program page is switched off in the Studio** and has been since January, but its route never checks `isActive`, so the page is live and linked. Either the switch is wrong or the page is. Until Frank says, it stays out of IndexNow submissions.
 
 Three more things that came out of the same sweep and are waiting on him: the "FDA Approved" claim on Flowpresso is still live, CH-023; `/our-programs` offers to "submit claims on your behalf", which is direct billing and out of scope; and the Curate Lifestyle FAQ quotes "Over 80% of participants" with no source, which needs Dr. Leong.
@@ -1846,6 +1858,31 @@ it, and it may be removed anyway.
 The last exclamation marks went with the sweep: "Visit us today." on
 `cafePage.ctaBandSection.closingLine`, and one hardcoded in
 `service-lifestyle.tsx`.
+
+### The content rules pass, 2026-10-11
+
+`audit-content-rules.js` reports **zero breaks on all 51 pages**, from 88 at
+the start of the day. `audit-alt-text.js` passes too. One of nine checks still
+fails, and it is `audit-metadata.js`.
+
+What cleared in the last pass:
+
+- The two Curate Lifestyle photographs have alt text, on
+  `serviceLifestyle.hero_image.alt` and `content_image.alt`. Both were fetched
+  and looked at before being described, per the CH-028 note, and both are
+  styled stock flat-lays rather than Curate's own photography.
+- The last banned phrase went with the breathwork quote reword above.
+- `/products` takes its section hero as its share card. The query selects the
+  url rather than the asset id, and `buildPageMetadata` reads the id back out
+  of the url, so the 1200x630 crop still comes out.
+
+**What is left in `audit-metadata.js`, all of it content:**
+
+- `/about` has no share image and no photograph of its own to fall back on.
+  It is a hub of links, so unlike `/products` there is nothing to default to.
+  Frank is choosing one.
+- Four pages whose title and heading disagree: `/about/our-story`,
+  `/our-programs`, the joints-in-motion blog post, and Outdoor Yoga Therapy.
 
 ### Dependency security alerts
 

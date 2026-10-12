@@ -400,7 +400,7 @@ export default function ServiceLifestyleContent({
               <ul className="ml-4 mt-10 list-disc text-pretty pr-8 font-light leading-7">
                 <li>
                   Overseen by a team of healthcare professionals, including
-                  doctors, therapists, and nutrition experts—so it’s both safe
+                  doctors, therapists, and nutrition experts, so it’s both safe
                   and effective.
                 </li>
                 <li>
@@ -497,7 +497,7 @@ export default function ServiceLifestyleContent({
           <LargeText className="max-w-2xl text-center italic">
             Canada&apos;s only Lifestyle Medicine clinic with a triple-certified
             Gastroenterologist, Internal Medicine and Lifestyle Medicine Doctor
-            — reversing disease from the inside out.
+            , reversing disease from the inside out.
           </LargeText>
         </div>
       </section>
@@ -556,12 +556,12 @@ export default function ServiceLifestyleContent({
                 <p>
                   Once received, our team will review your referral and contact
                   you to ask screening questions and to schedule your initial
-                  consultation if this program is the right fit for you!{" "}
+                  consultation if this program is the right fit for you.{" "}
                 </p>
               </div>
               <div className="flex flex-col gap-y-6">
                 <p>
-                  No referral yet? Let us know—our team can help guide you
+                  No referral yet? Let us know. Our team can help guide you
                   through options on joining the program without a doctor's
                   referral.
                 </p>

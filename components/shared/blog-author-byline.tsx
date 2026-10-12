@@ -1,7 +1,10 @@
 import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getBlogAuthorDisplayName, getBlogAuthorTeamHref } from "@/lib/author-team-link";
+import {
+  getBlogAuthorDisplayName,
+  getBlogAuthorTeamHref,
+} from "@/lib/author-team-link";
 import { cn } from "@/lib/utils";
 
 export type BlogAuthorBylineAuthor = {
@@ -14,7 +17,7 @@ export type BlogAuthorBylineAuthor = {
 };
 
 export function blogAuthorShouldRender(
-  author: BlogAuthorBylineAuthor | null | undefined,
+  author: BlogAuthorBylineAuthor | null | undefined
 ) {
   if (!author) return false;
   const imageUrl = author.image?.asset?.url;
@@ -58,12 +61,10 @@ export default function BlogAuthorByline({
         href={teamHref}
         className={cn(
           rowClass,
-          "group rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring",
+          "group rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
         )}
         aria-label={
-          displayName
-            ? `${displayName} — view on Our Team`
-            : "View on Our Team"
+          displayName ? `${displayName}, view on Our Team` : "View on Our Team"
         }
       >
         {inner}

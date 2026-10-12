@@ -1532,7 +1532,7 @@ Every link was repointed in the same change: the navigation's Programs list, the
 - `/about` and `/products` need a share image chosen.
 - Four titles that differ from their headings, and two 158 character descriptions, listed under Share cards.
 - Three descriptions too short to be used, which `audit-metadata.js` now warns on below 70 characters: the Curate Lifestyle Program's reads "Curate Lifestyle Program", `/cafe`'s "A space where nourishment meets intention.", and Rooj's page runs on the code fallback until the practitioner descriptions are approved.
-- **The content rules: 88 breaks on 27 of 51 pages.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
+- **The content rules: was 88 breaks on 27 of 51 pages, now 1. See the dash sweep below.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
 
 ### B Corp certification, 2026-10-10
 
@@ -1769,6 +1769,73 @@ reading the hits. A check that cries wolf gets ignored.
 "journey" is not in the list and must not be added back, per the content rules
 above. There is a unit check covering that, and the `elevating` gap, in the
 module's own patterns.
+
+### The dash sweep, 2026-10-11. 88 breaks to 1
+
+The content rules now fail on **one** thing across all 51 pages, and it is not
+a word choice. Em and en dashes were 47 of the 50 that remained after Frank
+relaxed the banned words, and they are gone from the dataset and from the
+source.
+
+**75 dashes in Sanity, not the 46 the audit reported.** The audit reads
+rendered pages; the dataset holds more, including fields on documents the
+sitemap never reaches and two on the `serviceLifestyleProgram` draft. Fixing
+the published copy and leaving the draft would have put the dashes back the
+moment somebody pressed Publish, so both were patched.
+
+**A dash is not one mark, so this was not one replacement.** Blanket commas
+would have produced comma splices in roughly a fifth of them, trading the rule
+for a worse error. `scripts/propose-dash-fixes.js` classifies each one and
+proposes accordingly: a numeric range becomes "to", a parenthetical pair
+becomes two commas, a dash introducing a list becomes a colon, two independent
+clauses become a full stop, and an afterthought becomes a comma.
+
+The classifier is a first draft and was wrong eight times on its first run,
+turning `approach-using personalized strategies` into a colon, which does not
+parse before a participle. A participle or preposition after the dash is
+continuation, not a list. **Read the proposals; do not trust them.**
+
+**Frank wrote 19 of them himself** and approved the other 40 as proposed. His
+wording is in `scripts/dash-overrides.json` and several of his edits go beyond
+the dash: "in our space" rather than "in our tranquil clinic", the cafe closing
+restructured, the Outdoor Pilates quote rewritten.
+
+**The overrides are matched on source text, not on item number.** Item numbers
+come from the order Sanity returns documents in, which is not promised to be
+stable, so keying by number would eventually write one paragraph into another
+field. `dash-overrides-expect.json` carries the "before" each override was
+written against and the script refuses the whole run if one no longer matches.
+
+**Apostrophes are reconciled, not normalised.** Copy pasted through a chat
+window comes back with whichever apostrophe the client preferred. Where the
+original used one kind throughout, the replacement is made to match; where the
+original was already mixed, Frank's text stands. Item 41's original was mixed,
+three curly and three straight, so that paragraph is now internally consistent
+for the first time.
+
+**Six dashes were in components, not Sanity**, in `app/contact/page.tsx`,
+`our-programs-page/cta-section.tsx`, `services-pages/service-lifestyle.tsx`
+and `shared/blog-author-byline.tsx`. Two more are deliberately left: a JSX
+comment, which renders nothing, and the character class in
+`lib/page-metadata.ts`, which has to match a dash to strip a trailing brand
+separator. **Do not "fix" that regex.**
+
+**Grep is not reliable for this on Windows.** `grep -rn '[—–]'` in Git Bash
+matches individual UTF-8 bytes, so it reports every ellipsis, curly apostrophe,
+dagger and arrow as a dash. Count them in Node.
+
+**The one remaining break is a testimonial.** `treatments`
+`721e0537-425d-4128-befa-e7642caa5e63` `quoteContent` reads "Harnessing the
+power of my breath brought profound relaxation and emotional balance into my
+daily routine." That is the only banned phrase left on the site, and it sits
+inside one of the seventeen unsigned first-person quotes already flagged as a
+regulated-advertising question. **Resolve it with that decision, not with a
+word swap.** Editing the words of a quote nobody gave is worse than removing
+it, and it may be removed anyway.
+
+The last exclamation marks went with the sweep: "Visit us today." on
+`cafePage.ctaBandSection.closingLine`, and one hardcoded in
+`service-lifestyle.tsx`.
 
 ### Dependency security alerts
 

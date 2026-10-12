@@ -1884,6 +1884,48 @@ What cleared in the last pass:
 - Four pages whose title and heading disagree: `/about/our-story`,
   `/our-programs`, the joints-in-motion blog post, and Outdoor Yoga Therapy.
 
+### Titles aligned to headings, 2026-10-12
+
+`audit-metadata.js` had four pages where the title and the h1 described
+different things. All four are fixed and **the whole gate is now one failure**,
+`/about` having no share image.
+
+**What the check actually demands**, since guessing at it wastes a pass: every
+significant word of the h1 must appear in the title. Extra words in the title
+are fine. `significant()` drops stopwords and anything under three letters.
+Lift `titleMatchesHeading` out of the audit and test a draft against it before
+writing anything.
+
+| page | changed | now |
+| --- | --- | --- |
+| Outdoor Yoga Therapy | `seo.pageTitle` | Outdoor Yoga Therapy & Classes Toronto |
+| /our-programs | `seo.pageTitle` and `title` | Personalized Health Programs Toronto, h1 Personalized Health Programs |
+| joints-in-motion post | `title` | Joints in Motion: Joint Health and Mobility |
+| /about/our-story | `seo.pageTitle` | Our Story: From Heart to Healing and Passion |
+
+`seo.pageTitle` holds the part before the brand; `buildPageMetadata` appends
+"| Curate Health" and counts the whole thing against 60.
+
+**One of these was drafted wrong first and is worth the warning.** The yoga
+title was going to be "Outdoor Yoga Therapy Toronto", which passes the check
+and drops "Class". "Outdoor yoga class Toronto" is the higher-volume query, so
+passing the audit had quietly cost the page its best search term. The audit
+measures consistency, not reach. **Draft for search, then check it passes, not
+the other way round.**
+
+**The search title and the share title are different fields and already allowed
+to differ.** `buildPageMetadata` says so in its own comment: a search result
+answers "is this the thing I typed?", a share card has to make somebody stop
+scrolling. The audit only reads the page title. Evocative copy belongs in
+`og:title`, so do not try to make one string do both jobs.
+
+What was given up, deliberately: "Prioritizing" and "Lifelong" left the blog
+h1, and "for Every Stage of Life" left the /our-programs h1. "Prioritizing" has
+no search value. The other two are low volume and both survive in the body copy
+and meta description, which is where AI answer engines read from anyway. The
+/our-programs paragraph directly under the h1 already says "every individual
+has unique goals, health needs, and levels of commitment".
+
 ### Dependency security alerts
 
 **Triaged 2026-09-15.** GitHub listed 187 open Dependabot alerts on main: 7 critical, 86 high, 78 medium, 16 low. Only `next` reaches visitors. The rest sit in the Sanity CLI, ESLint, the build, the Studio or the draft preview overlay. That was checked against the build output rather than read off the package list, because GitHub labels every one of them "runtime": `next` is the only flagged package in the server function traces, lodash's `_.template` appears only in the Studio chunk, and the on-demand preview chunk carries nanoid and lodash internals but not the flawed functions. The build does contain three Server Actions, all from `next-sanity` preview tooling, so the Server Action advisories apply.

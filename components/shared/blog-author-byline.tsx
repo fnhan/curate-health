@@ -39,12 +39,16 @@ export default function BlogAuthorByline({
 
   /**
    * The house byline is the mark, not a face, and it is treated differently.
+   * The backing and the ring come off, because a logo does not need a frame
+   * and a white rim around it against the dark green read as neither.
    *
-   * The asset in Sanity is `logo-black.png`, pure black on transparency. In a
-   * circular avatar with a white backing it read as a green mark with a white
-   * rim against the dark green footer, which is not the logo. So for this one
-   * author the backing and the ring come off and the mark is painted white
-   * with the same brightness-0 invert the B Corp mark uses.
+   * **The mark is no longer painted white by CSS.** It used to be
+   * `logo-black.png` with `brightness-0 invert` over it, which produced the
+   * right pixels and left the Studio showing a black logo on a record whose
+   * whole job is the white one. `CurateHealth_logo_symbol_white.png` was
+   * already in the library, white on transparency, so the records point at it
+   * and the filter is gone. Do not reintroduce the filter: it would invert a
+   * white mark to black.
    *
    * A real practitioner keeps the ring and the backing: a photograph needs a
    * frame, and inverting one would be absurd. The portrait is also grayscale
@@ -71,7 +75,7 @@ export default function BlogAuthorByline({
           alt={displayName ? `${displayName} portrait` : ""}
           className={
             isHouseByline
-              ? "brightness-0 invert"
+              ? undefined
               : "grayscale transition-all duration-300 group-hover:grayscale-0 group-focus-visible:grayscale-0"
           }
         />

@@ -1698,39 +1698,104 @@ rather than care.
 his. Frank approved it as the owner and a practitioner. If Dr. Leong wants it
 narrower, the field is `serviceLifestyle.faq[3]`.
 
-### Flowpresso is FDA cleared, not FDA approved. Found 2026-10-12
+### Flowpresso is FDA cleared, not FDA approved. Fixed 2026-10-12
 
-The benefit subtitle on `/services/recovery-sanctuary/flowpresso-therapy` reads
+The benefit subtitle on `/services/recovery-sanctuary/flowpresso-therapy` read
 "Flowpresso® Therapy is FDA Approved cutting-edge technology that's been proven
-to deliver effective, non-invasive treatment." **"Approved" is the wrong word
-and it is a specific wrong word, not a style quibble.**
+to deliver effective, non-invasive treatment." **"Approved" was the wrong word,
+and it is a specific wrong word rather than a style quibble.**
 
-The FDA has separate pathways and they are not synonyms. **Approval** means
-premarket approval, PMA, for high risk Class III devices. **Clearance** means a
-510(k), a finding that the device is substantially equivalent to one already on
-the market. The FDA treats "FDA approved" on a cleared device as misbranding,
-and it is the manufacturer's own distinction here too.
+The FDA's pathways are not synonyms. **Approval** means premarket approval, PMA,
+for high risk Class III devices. **Clearance** means a 510(k), a finding of
+substantial equivalence to a device already on the market. The FDA treats "FDA
+approved" on a cleared device as misbranding.
 
 Flowpresso holds **510(k) clearance K223729**, granted to Medella Health
-Limited in December 2023, Class II, product codes IRP and IRT under 21 CFR
-890.5650, substantially equivalent to the Therm-X heat and compression device.
+Limited, Class II, product codes IRP and IRT under 21 CFR 890.5650,
+substantially equivalent to the Therm-X heat and compression device.
 Flowpresso's own site calls it "an FDA-cleared Class II medical device". So the
-line states a regulatory status the device does not hold.
+page claimed a regulatory status the device does not hold. Frank confirmed the
+correction on 2026-10-12.
 
-Two more things in the same sentence. "Proven to deliver effective treatment" is
-an efficacy claim with nothing behind it, and "cutting-edge" is hype against the
-tone rule. The cleared indications are also narrower than the page implies: post
-traumatic and post surgical conditions where localized thermal therapy is
-indicated, on the order of a licensed professional.
-
-Proposed, waiting on Frank:
+Two other things went in the same sentence: "proven to deliver effective
+treatment", an efficacy claim with nothing behind it, and "cutting-edge", which
+is hype against the tone rule. It now reads:
 
 > Flowpresso® Therapy is an FDA cleared Class II medical device, delivering
 > non-invasive compression and heat therapy under a practitioner's supervision.
 
-Field is `treatments` `15127b12-484d-41fb-8491-c6d85b6ad404`
-`benefits.benefitsList[2].subtitle`, and the block's title
-"State-of-the-Art Technology" wants the same look at.
+`scripts/fix-byline-logo-and-fda.js`, transaction `UAIn8zgTVuj4HCTBS47LjJ`. The
+block's heading is still "State-of-the-Art Technology", which wants the same
+look when somebody is next in there.
+
+**The cleared indications are narrower than the page implies**: post traumatic
+and post surgical conditions where localized thermal therapy is indicated, on
+the order of a licensed professional. Worth knowing before anyone widens the
+copy.
+
+
+### The prose band's columns are symmetrical. The rule, set 2026-10-12
+
+Frank's words: "make this a rule to have it symmetrical, no matter how long the
+content is, make best efforts to make it symmetrical." All three section pages
+had shipped lopsided.
+
+**The cause was `break-inside-avoid`.** The first `section-intro.tsx` kept every
+paragraph whole, so whole paragraphs were the only unit the browser could move:
+/services packed three into the left column and two into the right, /about put
+one in each, and /products, down to a single paragraph after the billing line
+came out, filled the left column and left the right one empty. Keeping a
+paragraph whole and keeping the columns even are the same decision made two
+ways, and Frank has chosen even.
+
+So the band leaves it to `column-fill: balance`, the browser's own balancing,
+and **`break-inside-avoid` must not go back in**. `orphans` and `widows` are set
+to 2, as a style because Tailwind has no utility for either, so no single line
+is stranded at the foot or head of a column.
+
+Measured at 1600px, by collecting every line box and splitting on the container's
+midline:
+
+| page | left | right | out by |
+| --- | --- | --- | --- |
+| /services | 1108 | 1080 | 28px, one line |
+| /about | 920 | 972 | 52px, one line plus a paragraph gap |
+| /products | 948 | 972 | 24px |
+
+That is the arithmetic best in each case: /about's band is seven lines, so the
+only splits available are four and three. A single paragraph balances too, split
+down the middle, which is why there is no special case for it any more.
+
+**Measure it the same way if this is touched**, since CSS columns are not
+elements and have no boxes of their own: walk the text nodes, take
+`Range.getClientRects()`, bucket by the container's midline, compare the lowest
+bottom in each bucket.
+
+### The blog byline mark is the white asset, 2026-10-12
+
+Both author records pointed at `logo-black.png` and the byline painted it white
+with `brightness-0 invert`. The rendered pixels were right, which is why every
+check passed, and the record was still the black logo: anyone opening it in the
+Studio saw a black mark on a document whose only job is the white one. Frank
+spotted it.
+
+`CurateHealth_logo_symbol_white.png` was already in the library, 1723x1726,
+80.5% transparent, average opaque luminance 254.9, so genuinely white on
+transparency rather than white on a white box. Both records point at it and the
+filter is gone from `blog-author-byline.tsx`. **The two had to move together:**
+the filter over a white mark renders it black.
+
+**`npm run build` reuses Next's fetch cache, so a Sanity change can fail to
+appear in a build run right after the mutation.** It happened here: the swap was
+applied, the build ran seconds later, and `/blog` still served the old asset.
+`rm -rf .next` before the build when verifying a content change, or the check
+reports the state before the write.
+
+**The byline avatar is client only, and that is Radix.** `Avatar` renders
+`AvatarFallback` on the server and swaps in the image once it loads, so the
+initials "CU" are what a crawler sees. It carries no text a crawler needs, so it
+is not a breach of the every-page rule, but do not read the server HTML and
+conclude the image is broken.
 
 
 ### The billing sweep, 2026-10-12

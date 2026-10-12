@@ -35,6 +35,47 @@ const BCORP_URL = "https://bcorp.com";
  * bcorp.com to satisfy the brand guidelines, so the mark and the Learn More
  * link deliberately go to different places.
  */
+/**
+ * The rendered height of the mark.
+ *
+ * Profiling the PNG’s ink rows gives five bands on its 1403 canvas:
+ * "Certified" 139..267, the circle B 323..1000, the registered mark
+ * 1004..1044, the rule 1071..1116, and "Corporation" 1172..1282. The
+ * alignment below uses the outermost two, so the text spans the mark’s whole
+ * ink height. Re-profile the asset if it is ever replaced.
+ */
+const MARK_H = 140;
+
+/**
+ * Where the three lines sit beside the mark. Offsets from the top of the row.
+ *
+ * **Measure the rendered image, not the source PNG.** Two earlier attempts
+ * aligned against rows in the 960x1403 file and both read wrong to Frank. At
+ * 96x140 the ink actually lands on rows 13..26 for "Certified", 32..104 for
+ * the circle B, 106..111 for the rule and 117..127 for "Corporation", so the
+ * mark's ink spans 13..127 with 13px of clear space above and 12px below.
+ * Downscaling by ten and inverting does not preserve the source proportions
+ * closely enough for this.
+ *
+ * The other trap: row 13 is "Certified"'s **ascender** top, its f and d, not
+ * its cap top. "We are a B Corp." has no ascender above cap height, so
+ * matching cap top to ascender top sits the heading visibly high. That is the
+ * error Frank caught twice, and it is not visible in any measurement that
+ * only compares numbers.
+ *
+ * Final positions, settled by eye on 2026-10-12 after measuring: text ink
+ * spans 18..125 inside the mark's 13..127. Deliberately not symmetric against
+ * the mark, 5px in at the top and 2px at the bottom, because the heading
+ * needed to come down for the two words to read as level. The paragraph is
+ * centred between the heading and the link, 10.1px of air each side.
+ *
+ * **Re-solve by eye if MARK_H, the asset or the type size changes.** These do
+ * not scale arithmetically.
+ */
+const HEADING_TOP = "14px";
+const PARAGRAPH_TOP = "38.13px";
+const LEARN_MORE_TOP = "106px";
+
 const BCORP_PROFILE_URL =
   "https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/";
 
@@ -130,16 +171,39 @@ export default function SiteFooter({
                   className="brightness-0 invert"
                 />
               </a>
-              <div className="flex flex-col justify-between pb-[12px] pt-[14px] text-sm">
-                <p className="font-semibold">We are a B Corp.</p>
-                <p className="max-w-[26ch] font-light">
+              {/*
+                The two anchors are features of the mark, not round numbers.
+                Profiling the asset's ink rows gives five bands: "Certified" at
+                139..267, the circle B at 323..1000, the registered mark at
+                1004..1044, the rule at 1071..1116 and "Corporation" at
+                1172..1282, on a 1403 canvas.
+
+                So "Certified" ends 19.03% down and the rule starts 76.33% down.
+                The heading's baseline sits on the first and the cap height of
+                "Learn More" on the second, which is what Frank asked for.
+                MARK_H carries the rendered height so the two percentages stay
+                tied to the asset rather than to a pixel value somebody has to
+                remember to change.
+              */}
+              <div className="relative min-w-[210px] text-sm">
+                <p
+                  className="absolute left-0 font-semibold leading-none"
+                  style={{ top: HEADING_TOP }}
+                >
+                  We are a B Corp.
+                </p>
+                <p
+                  className="absolute left-0 max-w-[210px] font-light leading-snug"
+                  style={{ top: PARAGRAPH_TOP }}
+                >
                   The same care we take with patients is applied to our team and
                   our footprint.
                 </p>
                 <a
                   href={BCORP_PROFILE_URL}
                   {...externalLinkProps(BCORP_PROFILE_URL)}
-                  className="w-fit underline underline-offset-4 hover:no-underline"
+                  className="absolute left-0 w-fit leading-none underline underline-offset-4 hover:no-underline"
+                  style={{ top: LEARN_MORE_TOP }}
                 >
                   Learn More
                 </a>
@@ -151,7 +215,17 @@ export default function SiteFooter({
             <div className="hidden flex-col gap-2 lg:flex lg:flex-row lg:justify-end lg:gap-10">
               {/* Services Section */}
               <div className="border-b border-white pb-2 lg:border-none">
-                <h2 className="pl-3 font-semibold md:mb-3">Services</h2>
+                {/*
+                  A link, like About below it, because /services is a hub page.
+                  Resources and Connect stay plain text: neither has a single
+                  page behind it, Resources being a mixed list and Connect a
+                  set of outbound profiles. That is the same rule
+                  SectionNavigation follows, an href where the section has a
+                  hub and none where it does not.
+                */}
+                <h2 className="w-fit pl-3 font-semibold hover:underline md:mb-3">
+                  <Link href="/services">Services</Link>
+                </h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {services?.map(
                     (service, index) =>

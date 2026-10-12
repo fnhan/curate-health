@@ -251,33 +251,47 @@ export const ABOUT_INDEX_QUERY = groq`{
   "page": *[_type == "aboutIndexPage"][0]{
     title,
     intro,
+    heroImage{
+      "url": asset->url,
+      alt
+    },
     ${SEO_QUERY}
   },
   "children": [
     *[_type == "ourStory" && pageActive == true][0]{
       "title": "Our Story",
       "slug": "our-story",
-      "description": seo.pageDescription
+      "description": seo.pageDescription,
+      "image": heroSection.heroImage.image.asset->url,
+      "imageAlt": heroSection.heroImage.alt
     },
     *[_type == "ourTeam" && pageActive == true][0]{
       "title": "Our Team",
       "slug": "our-team",
-      "description": seo.pageDescription
+      "description": seo.pageDescription,
+      "image": heroSection.heroImage.image.asset->url,
+      "imageAlt": heroSection.heroImage.alt
     },
     *[_type == "missionAndValues" && pageActive == true][0]{
       "title": "Mission and Values",
       "slug": "mission-and-values",
-      "description": seo.pageDescription
+      "description": seo.pageDescription,
+      "image": heroSection.heroImage.image.asset->url,
+      "imageAlt": heroSection.heroImage.alt
     },
     *[_type == "pillarsOfHealth" && pageActive == true][0]{
       "title": "Pillars of Health",
       "slug": "pillars-of-health",
-      "description": seo.pageDescription
+      "description": seo.pageDescription,
+      "image": heroSection.heroImage.image.asset->url,
+      "imageAlt": heroSection.heroImage.alt
     },
     *[_type == "sustainability" && pageActive == true][0]{
       "title": "Sustainability",
       "slug": "sustainability",
-      "description": seo.pageDescription
+      "description": seo.pageDescription,
+      "image": heroSection.heroImage.image.asset->url,
+      "imageAlt": heroSection.heroImage.alt
     }
   ]
 }`;

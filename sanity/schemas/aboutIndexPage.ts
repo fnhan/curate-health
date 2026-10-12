@@ -44,6 +44,23 @@ export default defineType({
       validation: (Rule) => Rule.required().error("Page Heading is required"),
     }),
     defineField({
+      name: "heroImage",
+      title: "Hero Image",
+      type: "image",
+      options: { hotspot: true },
+      description:
+        "The photograph across the top of /about. Also the share card when no Open Graph Image is set under SEO.",
+      fields: [
+        {
+          name: "alt",
+          title: "Alternative Text",
+          type: "string",
+          description:
+            "Describes the photograph for anyone who cannot see it. Required if an image is set.",
+        },
+      ],
+    }),
+    defineField({
       name: "intro",
       title: "Intro",
       type: "text",

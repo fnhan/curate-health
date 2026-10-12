@@ -44,7 +44,7 @@ const CtaSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
               </LargeText>
               <p className="max-w-[740px] text-pretty pt-4 text-center text-sm font-light md:text-base">
                 {/* {call_to_action} */}
-                Every health journey is unique — that’s why we’ve designed
+                Every health journey is unique. That’s why we’ve designed
                 programs that range from flexible to fully comprehensive.
                 Whether you’re ready for guided habits, steady maintenance, or a
                 concierge-style experience, our team can help you choose the

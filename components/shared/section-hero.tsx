@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { cn } from "@/lib/utils";
+
 /**
  * THE SECTION HERO. THE OTHER HALF OF THE PATTERN IN section-navigation.tsx.
  *
@@ -21,11 +23,18 @@ export default function SectionHero({
   alt,
   title,
   subtitle,
+  imageClassName,
 }: {
   image: string;
   alt: string;
   title: string;
   subtitle?: string | null;
+  /**
+   * Merged onto the photograph. /about passes grayscale, because its hero is a
+   * practitioner's portrait and a full-bleed colour face at the top of a hub
+   * reads as that person's page rather than the practice's.
+   */
+  imageClassName?: string;
 }) {
   return (
     <section className="relative">
@@ -37,7 +46,10 @@ export default function SectionHero({
         quality={100}
         priority
         sizes="100vw"
-        className="h-[400px] w-full object-cover opacity-60 md:h-[550px]"
+        className={cn(
+          "h-[400px] w-full object-cover opacity-60 md:h-[550px]",
+          imageClassName
+        )}
       />
       <div className="absolute inset-0 flex flex-col justify-end pb-16">
         <div className="container">

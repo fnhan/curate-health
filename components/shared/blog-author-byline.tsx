@@ -1,7 +1,11 @@
 import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getBlogAuthorDisplayName, getBlogAuthorTeamHref } from "@/lib/author-team-link";
+import {
+  AUTHOR_TEAM_PROFILE_PAGE_ONLY,
+  getBlogAuthorDisplayName,
+  getBlogAuthorTeamHref,
+} from "@/lib/author-team-link";
 import { cn } from "@/lib/utils";
 
 export type BlogAuthorBylineAuthor = {
@@ -14,7 +18,7 @@ export type BlogAuthorBylineAuthor = {
 };
 
 export function blogAuthorShouldRender(
-  author: BlogAuthorBylineAuthor | null | undefined,
+  author: BlogAuthorBylineAuthor | null | undefined
 ) {
   if (!author) return false;
   const imageUrl = author.image?.asset?.url;
@@ -33,14 +37,41 @@ export default function BlogAuthorByline({
   const displayName = getBlogAuthorDisplayName(author.linkedTeamMemberName);
   const teamHref = getBlogAuthorTeamHref(author.linkedTeamMemberName);
 
+  /**
+   * The house byline is the mark, not a face, and it is treated differently.
+   *
+   * The asset in Sanity is `logo-black.png`, pure black on transparency. In a
+   * circular avatar with a white backing it read as a green mark with a white
+   * rim against the dark green footer, which is not the logo. So for this one
+   * author the backing and the ring come off and the mark is painted white
+   * with the same brightness-0 invert the B Corp mark uses.
+   *
+   * A real practitioner keeps the ring and the backing: a photograph needs a
+   * frame, and inverting one would be absurd.
+   */
+  const isHouseByline =
+    author.linkedTeamMemberName?.trim() === AUTHOR_TEAM_PROFILE_PAGE_ONLY;
+
   const inner = (
     <>
-      <Avatar className="size-12 shrink-0 border border-primary/10 bg-white/80">
+      <Avatar
+        className={cn(
+          "size-12 shrink-0",
+          isHouseByline
+            ? "bg-transparent"
+            : "border border-primary/10 bg-white/80"
+        )}
+      >
         <AvatarImage
           src={imageUrl}
           alt={displayName ? `${displayName} portrait` : ""}
+          className={isHouseByline ? "brightness-0 invert" : undefined}
         />
-        <AvatarFallback className="bg-white text-black">
+        <AvatarFallback
+          className={
+            isHouseByline ? "bg-transparent text-white" : "bg-white text-black"
+          }
+        >
           {displayName ? displayName.slice(0, 2).toUpperCase() : "?"}
         </AvatarFallback>
       </Avatar>
@@ -58,12 +89,10 @@ export default function BlogAuthorByline({
         href={teamHref}
         className={cn(
           rowClass,
-          "group rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring",
+          "group rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
         )}
         aria-label={
-          displayName
-            ? `${displayName} — view on Our Team`
-            : "View on Our Team"
+          displayName ? `${displayName}, view on Our Team` : "View on Our Team"
         }
       >
         {inner}

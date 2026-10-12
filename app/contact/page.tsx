@@ -250,7 +250,7 @@ export default async function ContactPage() {
             </h2>
             <div className="max-w-xl space-y-4 text-pretty font-light">
               If you need help getting started with the Curate Lifestyle
-              Program, our team is here to support you— please contact us or
+              Program, our team is here to support you. Please contact us or
               send us a message for guidance on the referral process and next
               steps.
             </div>

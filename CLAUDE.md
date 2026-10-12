@@ -124,7 +124,17 @@ These apply to every word written into the site, schema, meta tags, or alt text.
 - The outdoor space is always "Recovery Sanctuary." Never "outdoor terrace" or any variant
 - Neighbourhood descriptor is "Midtown Toronto"
 - **The house spelling is "cafe", never "café".** No accent, anywhere: the site, the Studio, marketing, design, anything Curate produces. Frank ruled on 2026-09-12. `node scripts/audit-cafe-accent.js` sweeps the dataset and exits 1 if an accented spelling is live
-- Canadian spelling throughout
+- **Canadian spelling throughout. A hard rule, and Frank asked on 2026-10-11
+  that it hold even against his own later instruction.** If he approves copy
+  carrying an American spelling, as he did for the cafe paragraph that day, fix
+  the spelling and tell him, rather than treating the approval as an override.
+  `scripts/audit-content-rules.js` checks it and `scripts/fix-canadian-spelling.js`
+  sweeps the dataset. 23 spellings across 19 fields were corrected on 2026-10-11
+- **Canadian English is not British English, and the check is deliberately
+  short.** "program", "organize" and "analyze" are all correct here and are not
+  flagged. "practice" and "license" split noun from verb in a way no regex can
+  judge, so neither is flagged either. Widening the list to catch those would
+  produce more wrong answers than it fixes
 
 Tone: scientific and evidence-based, thoughtful, warm, understated. A trusted clinician sharing an observation, not a brand talking. No hype.
 
@@ -1497,7 +1507,19 @@ What is in it: the two decisions below, the search and share details still missi
 
 **Two decisions are load-bearing:**
 
-- **Seventeen service pages carry an unsigned first-person quote**, such as "With chiropractic care, I discovered the power of alignment". Fitness Training carries the Exercise Rehab one word for word, about rehabilitation. They read as patient testimonials nobody gave: the content rules forbid invented quotes, and the regulatory colleges restrict testimonials in professional advertising. Recommended: remove all seventeen and hide the empty quote box.
+- **The seventeen unsigned first-person quotes stay. Settled by Frank on
+  2026-10-11, and he asked not to be asked again.** They are on seventeen
+  service pages, such as "With chiropractic care, I discovered the power of
+  alignment". They had been raised here as invented testimonials and as a
+  college advertising risk. Frank's ruling: they are not presented as real
+  testimonials, they set the mood of the service, and no college rule is
+  engaged. **Do not reopen this, and do not report them as a defect.**
+
+  One consequence worth knowing. Because they are mood copy rather than
+  somebody's words, editing them is ordinary copy editing. That is how the
+  last banned phrase was cleared: the breathwork quote read "Harnessing the
+  power of my breath" and now reads "Working with my breath". Had they been
+  real quotes, rewording would have been worse than leaving the break.
 - **The Curate Lifestyle Program page is switched off in the Studio** and has been since January, but its route never checks `isActive`, so the page is live and linked. Either the switch is wrong or the page is. Until Frank says, it stays out of IndexNow submissions.
 
 Three more things that came out of the same sweep and are waiting on him: the "FDA Approved" claim on Flowpresso is still live, CH-023; `/our-programs` offers to "submit claims on your behalf", which is direct billing and out of scope; and the Curate Lifestyle FAQ quotes "Over 80% of participants" with no source, which needs Dr. Leong.
@@ -1532,7 +1554,7 @@ Every link was repointed in the same change: the navigation's Programs list, the
 - `/about` and `/products` need a share image chosen.
 - Four titles that differ from their headings, and two 158 character descriptions, listed under Share cards.
 - Three descriptions too short to be used, which `audit-metadata.js` now warns on below 70 characters: the Curate Lifestyle Program's reads "Curate Lifestyle Program", `/cafe`'s "A space where nourishment meets intention.", and Rooj's page runs on the code fallback until the practitioner descriptions are approved.
-- **The content rules: 88 breaks on 27 of 51 pages.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
+- **The content rules: was 88 breaks on 27 of 51 pages, now 1. See the dash sweep below.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
 
 ### B Corp certification, 2026-10-10
 
@@ -1769,6 +1791,197 @@ reading the hits. A check that cries wolf gets ignored.
 "journey" is not in the list and must not be added back, per the content rules
 above. There is a unit check covering that, and the `elevating` gap, in the
 module's own patterns.
+
+### The dash sweep, 2026-10-11. 88 breaks to 1
+
+The content rules now fail on **one** thing across all 51 pages, and it is not
+a word choice. Em and en dashes were 47 of the 50 that remained after Frank
+relaxed the banned words, and they are gone from the dataset and from the
+source.
+
+**75 dashes in Sanity, not the 46 the audit reported.** The audit reads
+rendered pages; the dataset holds more, including fields on documents the
+sitemap never reaches and two on the `serviceLifestyleProgram` draft. Fixing
+the published copy and leaving the draft would have put the dashes back the
+moment somebody pressed Publish, so both were patched.
+
+**A dash is not one mark, so this was not one replacement.** Blanket commas
+would have produced comma splices in roughly a fifth of them, trading the rule
+for a worse error. `scripts/propose-dash-fixes.js` classifies each one and
+proposes accordingly: a numeric range becomes "to", a parenthetical pair
+becomes two commas, a dash introducing a list becomes a colon, two independent
+clauses become a full stop, and an afterthought becomes a comma.
+
+The classifier is a first draft and was wrong eight times on its first run,
+turning `approach-using personalized strategies` into a colon, which does not
+parse before a participle. A participle or preposition after the dash is
+continuation, not a list. **Read the proposals; do not trust them.**
+
+**Frank wrote 19 of them himself** and approved the other 40 as proposed. His
+wording is in `scripts/dash-overrides.json` and several of his edits go beyond
+the dash: "in our space" rather than "in our tranquil clinic", the cafe closing
+restructured, the Outdoor Pilates quote rewritten.
+
+**The overrides are matched on source text, not on item number.** Item numbers
+come from the order Sanity returns documents in, which is not promised to be
+stable, so keying by number would eventually write one paragraph into another
+field. `dash-overrides-expect.json` carries the "before" each override was
+written against and the script refuses the whole run if one no longer matches.
+
+**Apostrophes are reconciled, not normalised.** Copy pasted through a chat
+window comes back with whichever apostrophe the client preferred. Where the
+original used one kind throughout, the replacement is made to match; where the
+original was already mixed, Frank's text stands. Item 41's original was mixed,
+three curly and three straight, so that paragraph is now internally consistent
+for the first time.
+
+**Six dashes were in components, not Sanity**, in `app/contact/page.tsx`,
+`our-programs-page/cta-section.tsx`, `services-pages/service-lifestyle.tsx`
+and `shared/blog-author-byline.tsx`. Two more are deliberately left: a JSX
+comment, which renders nothing, and the character class in
+`lib/page-metadata.ts`, which has to match a dash to strip a trailing brand
+separator. **Do not "fix" that regex.**
+
+**Grep is not reliable for this on Windows.** `grep -rn '[—–]'` in Git Bash
+matches individual UTF-8 bytes, so it reports every ellipsis, curly apostrophe,
+dagger and arrow as a dash. Count them in Node.
+
+**The one remaining break is a testimonial.** `treatments`
+`721e0537-425d-4128-befa-e7642caa5e63` `quoteContent` reads "Harnessing the
+power of my breath brought profound relaxation and emotional balance into my
+daily routine." That is the only banned phrase left on the site, and it sits
+inside one of the seventeen unsigned first-person quotes already flagged as a
+regulated-advertising question. **Resolve it with that decision, not with a
+word swap.** Editing the words of a quote nobody gave is worse than removing
+it, and it may be removed anyway.
+
+The last exclamation marks went with the sweep: "Visit us today." on
+`cafePage.ctaBandSection.closingLine`, and one hardcoded in
+`service-lifestyle.tsx`.
+
+### The content rules pass, 2026-10-11
+
+`audit-content-rules.js` reports **zero breaks on all 51 pages**, from 88 at
+the start of the day. `audit-alt-text.js` passes too. One of nine checks still
+fails, and it is `audit-metadata.js`.
+
+What cleared in the last pass:
+
+- The two Curate Lifestyle photographs have alt text, on
+  `serviceLifestyle.hero_image.alt` and `content_image.alt`. Both were fetched
+  and looked at before being described, per the CH-028 note, and both are
+  styled stock flat-lays rather than Curate's own photography.
+- The last banned phrase went with the breathwork quote reword above.
+- `/products` takes its section hero as its share card. The query selects the
+  url rather than the asset id, and `buildPageMetadata` reads the id back out
+  of the url, so the 1200x630 crop still comes out.
+
+**What is left in `audit-metadata.js`, all of it content:**
+
+- `/about` has no share image and no photograph of its own to fall back on.
+  It is a hub of links, so unlike `/products` there is nothing to default to.
+  Frank is choosing one.
+- Four pages whose title and heading disagree: `/about/our-story`,
+  `/our-programs`, the joints-in-motion blog post, and Outdoor Yoga Therapy.
+
+### Titles aligned to headings, 2026-10-12
+
+`audit-metadata.js` had four pages where the title and the h1 described
+different things. All four are fixed and **the whole gate is now one failure**,
+`/about` having no share image.
+
+**What the check actually demands**, since guessing at it wastes a pass: every
+significant word of the h1 must appear in the title. Extra words in the title
+are fine. `significant()` drops stopwords and anything under three letters.
+Lift `titleMatchesHeading` out of the audit and test a draft against it before
+writing anything.
+
+| page | changed | now |
+| --- | --- | --- |
+| Outdoor Yoga Therapy | `seo.pageTitle` | Outdoor Yoga Therapy & Classes Toronto |
+| /our-programs | `seo.pageTitle` and `title` | Personalized Health Programs Toronto, h1 Personalized Health Programs |
+| joints-in-motion post | `title` | Joints in Motion: Joint Health and Mobility |
+| /about/our-story | `seo.pageTitle` | Our Story: From Heart to Healing and Passion |
+
+`seo.pageTitle` holds the part before the brand; `buildPageMetadata` appends
+"| Curate Health" and counts the whole thing against 60.
+
+**One of these was drafted wrong first and is worth the warning.** The yoga
+title was going to be "Outdoor Yoga Therapy Toronto", which passes the check
+and drops "Class". "Outdoor yoga class Toronto" is the higher-volume query, so
+passing the audit had quietly cost the page its best search term. The audit
+measures consistency, not reach. **Draft for search, then check it passes, not
+the other way round.**
+
+**The search title and the share title are different fields and already allowed
+to differ.** `buildPageMetadata` says so in its own comment: a search result
+answers "is this the thing I typed?", a share card has to make somebody stop
+scrolling. The audit only reads the page title. Evocative copy belongs in
+`og:title`, so do not try to make one string do both jobs.
+
+What was given up, deliberately: "Prioritizing" and "Lifelong" left the blog
+h1, and "for Every Stage of Life" left the /our-programs h1. "Prioritizing" has
+no search value. The other two are low volume and both survive in the body copy
+and meta description, which is where AI answer engines read from anyway. The
+/our-programs paragraph directly under the h1 already says "every individual
+has unique goals, health needs, and levels of commitment".
+
+### The about hub, the footer and the blog, 2026-10-12
+
+**/about is built from the two shared section components now**, per the rule
+set on 2026-09-20. It was the last section opening on a bare white band while
+every other one opened on a photograph. Hero, then the About menu, then the
+intro, then a card grid of the five children in the same shape /services uses.
+
+`aboutIndexPage` gained a `heroImage` field, which it did not have: it held
+only title, intro and seo. `ABOUT_INDEX_QUERY` also projects each child's own
+hero as its card image, and a child with none falls back to the hub's image
+rather than leaving a hole. Our Team is that case today, so it shows Frank's
+portrait until a full team photograph exists.
+
+**The hero takes an optional `imageClassName`.** /about passes `grayscale`.
+The section's other five heroes are high-contrast natural imagery, two of them
+monochrome, so a colour hero sat outside the register.
+
+The hero photograph is `about-hero-curate-logo-cork.jpg`, 2400x1000, cropped
+from the Drive file `P1016112.JPG` at the point where the mark and most of the
+wordmark are in frame. Its subject is the logo embossed into **cork yoga mats**,
+which is Frank's correction: the first alt text said only "cork", which is the
+kind of detail that cannot be read off the photograph.
+
+**"Unknown field found" in the Studio is expected here, and Remove field is
+the wrong button.** Adding a schema field and writing its data before the code
+ships always produces it: Sanity holds the value, the deployed Studio has no
+definition to render it with. The ordering is unavoidable, since the page
+cannot render without data and the data cannot display without the schema. It
+clears on the next deploy. **Pressing Remove field deletes the content.**
+
+**The footer heading links follow the SectionNavigation rule.** Services now
+links to /services, as About already linked to /about. Resources and Connect
+stay plain text, because neither has a single page behind it: Resources is a
+mixed list and Connect is a set of outbound profiles. The mobile accordion puts
+each hub in its list instead, because the trigger has to stay a button that
+opens the accordion.
+
+**The house blog byline is white on transparent.** The asset in Sanity,
+`logo-black.png`, is pure black on transparency, and the avatar's white
+backing and ring made it read as a green mark with a white rim against the
+dark green footer. For that one author the backing and ring come off and the
+mark is painted white with `brightness-0 invert`. A practitioner's photograph
+keeps its frame; inverting one would be absurd.
+
+**A blog card's photograph and excerpt both open the post. Hard rule from
+2026-10-12, for every post.** Both carry `tabIndex={-1}` so they add no
+keyboard stops, since the title and "Read more" already reach the same place,
+and the image link is `aria-hidden` because the title already names the post.
+Four tab stops per card to one destination is worse than two.
+
+**Regenerating sanity.types.ts churns about 10,000 lines and that is not the
+CH-025 trap.** Plain `sanity schema extract` was used. Only ten lines are
+genuinely new and four removed; the rest is the generated union types
+reordering. Check the optional-marker count before assuming otherwise: it went
+3090 to 3097 here, where the `--enforce-required-fields` failure flips roughly
+five thousand.
 
 ### Dependency security alerts
 

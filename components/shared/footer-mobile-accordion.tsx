@@ -30,6 +30,15 @@ export function FooterMobileAccordion({
           </AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-1 text-base">
+              {/*
+                Same reason as the About hub below: the trigger has to stay a
+                button that opens the accordion, so the hub goes in the list.
+                Without it /services is reachable on desktop and not on a
+                phone.
+              */}
+              <Link className="hover:underline" href="/services">
+                All Services
+              </Link>
               {services.map(
                 (service, index) =>
                   service.isActive && (

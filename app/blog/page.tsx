@@ -44,16 +44,42 @@ export default async function BlogPage() {
                   {post.title}
                 </Link>
               </CardTitle>
-              <Image
-                sizes="(min-width: 1536px) 30vw, (min-width: 768px) 45vw, 90vw"
-                src={post.mainImage?.asset?.url || ""}
-                alt={post.mainImage?.alt ?? ""}
-                width={300}
-                height={300}
-                className="mx-auto h-56 w-full object-cover"
-              />
+              {/*
+                The photograph and the excerpt both open the post, so the whole
+                card behaves the way people already expect a card to behave.
+                A hard rule for every post from 2026-10-12, see CLAUDE.md.
+
+                Both carry tabIndex={-1} so they add no keyboard stops: the
+                title above and "Read more" below already reach the same post,
+                and four tab stops per card to one destination is a worse
+                experience than two. The image link is also aria-hidden,
+                because the title link already names the post and a screen
+                reader gains nothing from hearing it a third time. The excerpt
+                is not hidden, since it is the only place that text appears.
+              */}
+              <Link
+                href={`/blog/${post.slug}`}
+                tabIndex={-1}
+                aria-hidden="true"
+                className="block"
+              >
+                <Image
+                  sizes="(min-width: 1536px) 30vw, (min-width: 768px) 45vw, 90vw"
+                  src={post.mainImage?.asset?.url || ""}
+                  alt={post.mainImage?.alt ?? ""}
+                  width={300}
+                  height={300}
+                  className="mx-auto h-56 w-full object-cover transition-opacity hover:opacity-90"
+                />
+              </Link>
               <CardDescription className="py-7 text-white">
-                {post.excerpt}
+                <Link
+                  href={`/blog/${post.slug}`}
+                  tabIndex={-1}
+                  className="hover:underline"
+                >
+                  {post.excerpt}
+                </Link>
               </CardDescription>
             </CardHeader>
             <CardFooter className="flex w-full flex-col items-start gap-6 pb-0 text-secondary">

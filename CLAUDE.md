@@ -1926,6 +1926,63 @@ and meta description, which is where AI answer engines read from anyway. The
 /our-programs paragraph directly under the h1 already says "every individual
 has unique goals, health needs, and levels of commitment".
 
+### The about hub, the footer and the blog, 2026-10-12
+
+**/about is built from the two shared section components now**, per the rule
+set on 2026-09-20. It was the last section opening on a bare white band while
+every other one opened on a photograph. Hero, then the About menu, then the
+intro, then a card grid of the five children in the same shape /services uses.
+
+`aboutIndexPage` gained a `heroImage` field, which it did not have: it held
+only title, intro and seo. `ABOUT_INDEX_QUERY` also projects each child's own
+hero as its card image, and a child with none falls back to the hub's image
+rather than leaving a hole. Our Team is that case today, so it shows Frank's
+portrait until a full team photograph exists.
+
+**The hero takes an optional `imageClassName`.** /about passes `grayscale`.
+The section's other five heroes are high-contrast natural imagery, two of them
+monochrome, so a colour hero sat outside the register.
+
+The hero photograph is `about-hero-curate-logo-cork.jpg`, 2400x1000, cropped
+from the Drive file `P1016112.JPG` at the point where the mark and most of the
+wordmark are in frame. Its subject is the logo embossed into **cork yoga mats**,
+which is Frank's correction: the first alt text said only "cork", which is the
+kind of detail that cannot be read off the photograph.
+
+**"Unknown field found" in the Studio is expected here, and Remove field is
+the wrong button.** Adding a schema field and writing its data before the code
+ships always produces it: Sanity holds the value, the deployed Studio has no
+definition to render it with. The ordering is unavoidable, since the page
+cannot render without data and the data cannot display without the schema. It
+clears on the next deploy. **Pressing Remove field deletes the content.**
+
+**The footer heading links follow the SectionNavigation rule.** Services now
+links to /services, as About already linked to /about. Resources and Connect
+stay plain text, because neither has a single page behind it: Resources is a
+mixed list and Connect is a set of outbound profiles. The mobile accordion puts
+each hub in its list instead, because the trigger has to stay a button that
+opens the accordion.
+
+**The house blog byline is white on transparent.** The asset in Sanity,
+`logo-black.png`, is pure black on transparency, and the avatar's white
+backing and ring made it read as a green mark with a white rim against the
+dark green footer. For that one author the backing and ring come off and the
+mark is painted white with `brightness-0 invert`. A practitioner's photograph
+keeps its frame; inverting one would be absurd.
+
+**A blog card's photograph and excerpt both open the post. Hard rule from
+2026-10-12, for every post.** Both carry `tabIndex={-1}` so they add no
+keyboard stops, since the title and "Read more" already reach the same place,
+and the image link is `aria-hidden` because the title already names the post.
+Four tab stops per card to one destination is worse than two.
+
+**Regenerating sanity.types.ts churns about 10,000 lines and that is not the
+CH-025 trap.** Plain `sanity schema extract` was used. Only ten lines are
+genuinely new and four removed; the rest is the generated union types
+reordering. Check the optional-marker count before assuming otherwise: it went
+3090 to 3097 here, where the `--enforce-required-fields` failure flips roughly
+five thousand.
+
 ### Dependency security alerts
 
 **Triaged 2026-09-15.** GitHub listed 187 open Dependabot alerts on main: 7 critical, 86 high, 78 medium, 16 low. Only `next` reaches visitors. The rest sit in the Sanity CLI, ESLint, the build, the Studio or the draft preview overlay. That was checked against the build output rather than read off the package list, because GitHub labels every one of them "runtime": `next` is the only flagged package in the server function traces, lodash's `_.template` appears only in the Studio chunk, and the on-demand preview chunk carries nanoid and lodash internals but not the flawed functions. The build does contain three Server Actions, all from `next-sanity` preview tooling, so the Server Action advisories apply.

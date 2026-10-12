@@ -1,5 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 
+import SectionHero from "@/components/shared/section-hero";
+import { SectionNavigation } from "@/components/shared/section-navigation";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { ABOUT_INDEX_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -48,44 +51,82 @@ export default async function AboutPage() {
 
   return (
     <>
-      <section className="bg-white pt-32 md:pt-40">
-        <div className="container flex flex-col gap-6">
-          <h1 className="text-3xl font-light text-primary md:text-5xl">
-            {page?.title?.trim() || FALLBACK.title}
-          </h1>
-          {paragraphs.length ? (
-            <div className="flex max-w-[65ch] flex-col gap-4">
-              {paragraphs.map((text) => (
-                <p key={text} className="font-light leading-7 text-primary">
-                  {text}
-                </p>
-              ))}
-            </div>
-          ) : null}
-        </div>
-      </section>
+      {/*
+        Built from the two shared section components rather than from a copy,
+        per the section rule set on 2026-09-20. /about was the last section
+        opening on a bare white band while every other one opened on a
+        photograph.
+      */}
+      <SectionHero
+        image={page?.heroImage?.url ?? ""}
+        alt={page?.heroImage?.alt ?? ""}
+        title={page?.title?.trim() || FALLBACK.title}
+        subtitle={paragraphs[0] ?? null}
+        imageClassName="grayscale"
+      />
+      <SectionNavigation
+        label="About"
+        labelHref="/about"
+        ariaLabel="About"
+        items={children.map((child) => ({
+          title: child!.title,
+          href: `/about/${child!.slug}`,
+        }))}
+      />
 
-      <section className="bg-white py-16 md:py-24">
-        <div className="container">
-          <ul className="grid gap-px border border-secondary bg-secondary sm:grid-cols-2 lg:grid-cols-3">
-            {children.map((child) => (
-              <li key={child!.slug} className="bg-white">
-                <Link
-                  href={`/about/${child!.slug}`}
-                  className="group flex h-full flex-col gap-3 p-8 transition-colors duration-300 hover:bg-platinum focus-visible:bg-platinum"
-                >
-                  <h2 className="text-xl font-medium text-primary group-hover:underline">
-                    {child!.title}
-                  </h2>
-                  {child!.description ? (
-                    <p className="text-pretty text-sm font-light leading-6 text-primary">
-                      {child!.description}
-                    </p>
-                  ) : null}
-                </Link>
-              </li>
+      {/*
+        The intro is the reason this page exists, so it keeps its own band
+        rather than being reduced to the hero's standing line. Google weighs
+        who is responsible for a site hardest on health, and a hub carrying
+        only navigation earns none of that. The hero shows the first paragraph;
+        the rest are here.
+      */}
+      {/* The hero already shows paragraphs[0] as its standing line. */}
+      {paragraphs.length > 1 ? (
+        <section className="bg-white py-16 md:py-24">
+          <div className="container flex max-w-[70ch] flex-col gap-4">
+            {paragraphs.slice(1).map((text) => (
+              <p key={text} className="font-light leading-7 text-primary">
+                {text}
+              </p>
             ))}
-          </ul>
+          </div>
+        </section>
+      ) : null}
+
+      {/*
+        The same grid /services uses: a photograph per child, grayscale until
+        hovered. A child with no hero falls back to the hub's own image rather
+        than leaving a hole in the grid.
+      */}
+      <section className="bg-white">
+        <div className="grid gap-1 bg-white pb-28 lg:container sm:grid-cols-2 md:pb-36 lg:grid-cols-3 lg:pb-[200px]">
+          {children.map((child) => (
+            <Link
+              key={child!.slug}
+              href={`/about/${child!.slug}`}
+              className="group relative grayscale transition-all duration-300 hover:grayscale-0 focus:grayscale-0"
+            >
+              <Image
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="h-72 w-full object-cover md:h-96 lg:h-[512px]"
+                src={child!.image ?? page?.heroImage?.url ?? ""}
+                alt={child!.imageAlt ?? ""}
+                width={380}
+                height={512}
+              />
+              <div className="absolute inset-0 flex flex-col justify-end gap-2 bg-gradient-to-t from-primary/80 to-transparent p-8">
+                <h2 className="text-xl font-light text-white group-hover:underline">
+                  {child!.title}
+                </h2>
+                {child!.description ? (
+                  <p className="max-w-[40ch] text-pretty text-sm font-light leading-6 text-white/90">
+                    {child!.description}
+                  </p>
+                ) : null}
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
     </>

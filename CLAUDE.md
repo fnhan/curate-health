@@ -1668,6 +1668,71 @@ hands supporting a patient's knee during an assessment".
 2026-09-18.
 
 
+### The medication FAQ, softened 2026-10-12
+
+"Can this help me reduce medications?" on /our-programs/curate-lifestyle used to
+answer "Absolutely. Over 80% of participants see improvements in blood pressure,
+glucose levels, cholesterol, or fatty liver biomarkers, often allowing them to
+reduce or eliminate medications under medical supervision."
+
+Two rule breaks in one sentence: a statistic with no source, which the content
+rules forbid outright, and a guarantee about a clinical outcome on the page that
+sells the programme.
+
+Frank wrote the replacement. It keeps the four biomarkers and the "under medical
+supervision" qualifier, drops the number, and turns the guarantee into a
+possibility:
+
+> Many participants see improvements in blood pressure, glucose levels,
+> cholesterol, or fatty liver biomarkers, which may allow them to reduce or
+> eliminate medications under medical supervision.
+
+**One word was taken out of his wording.** He wrote "Many participants often
+see". "Many" and "often" are the same hedge twice, which reads as nervousness
+rather than care.
+
+`scripts/soften-outcome-claim.js`, transaction `PGYRglssrB1zyRdETTevCV`, after
+`sanity-backup-2026-10-12-before-outcome-claim-documents.tar.gz`.
+
+**It is still a clinical claim and it is Dr. Leong's**, since the programme is
+his. Frank approved it as the owner and a practitioner. If Dr. Leong wants it
+narrower, the field is `serviceLifestyle.faq[3]`.
+
+### Flowpresso is FDA cleared, not FDA approved. Found 2026-10-12
+
+The benefit subtitle on `/services/recovery-sanctuary/flowpresso-therapy` reads
+"Flowpresso® Therapy is FDA Approved cutting-edge technology that's been proven
+to deliver effective, non-invasive treatment." **"Approved" is the wrong word
+and it is a specific wrong word, not a style quibble.**
+
+The FDA has separate pathways and they are not synonyms. **Approval** means
+premarket approval, PMA, for high risk Class III devices. **Clearance** means a
+510(k), a finding that the device is substantially equivalent to one already on
+the market. The FDA treats "FDA approved" on a cleared device as misbranding,
+and it is the manufacturer's own distinction here too.
+
+Flowpresso holds **510(k) clearance K223729**, granted to Medella Health
+Limited in December 2023, Class II, product codes IRP and IRT under 21 CFR
+890.5650, substantially equivalent to the Therm-X heat and compression device.
+Flowpresso's own site calls it "an FDA-cleared Class II medical device". So the
+line states a regulatory status the device does not hold.
+
+Two more things in the same sentence. "Proven to deliver effective treatment" is
+an efficacy claim with nothing behind it, and "cutting-edge" is hype against the
+tone rule. The cleared indications are also narrower than the page implies: post
+traumatic and post surgical conditions where localized thermal therapy is
+indicated, on the order of a licensed professional.
+
+Proposed, waiting on Frank:
+
+> Flowpresso® Therapy is an FDA cleared Class II medical device, delivering
+> non-invasive compression and heat therapy under a practitioner's supervision.
+
+Field is `treatments` `15127b12-484d-41fb-8491-c6d85b6ad404`
+`benefits.benefitsList[2].subtitle`, and the block's title
+"State-of-the-Art Technology" wants the same look at.
+
+
 ### The billing sweep, 2026-10-12
 
 **Curate does no insurance submissions and no direct billing.** Frank confirmed

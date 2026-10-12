@@ -132,5 +132,23 @@ export async function generateMetadata() {
     path: "/about",
     title: FALLBACK.title,
     description: FALLBACK.description,
+    /*
+     * The section hero doubles as the share card, the same way /products does
+     * it. /about was the last page on the site with no og:image, because it is
+     * a hub of links and had no photograph to fall back to. It has one since
+     * the cork yoga mats hero landed, and Frank chose that same photograph for
+     * the card on 2026-10-12, so this needs nobody to pick one in the Studio.
+     *
+     * The query selects the url and not the asset id. buildPageMetadata reads
+     * the id back out of the url, so a 1200x630 crop still comes out.
+     */
+    image: data?.page?.heroImage?.url
+      ? {
+          asset: {
+            url: data.page.heroImage.url,
+            alt: data.page.heroImage.alt ?? undefined,
+          },
+        }
+      : undefined,
   });
 }

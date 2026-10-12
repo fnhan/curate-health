@@ -47,9 +47,9 @@ const SERVICES_INTRO = [
 
   "Clinical Care is where assessment and hands-on treatment happen, and where most people start. It covers chiropractic care, physiotherapy, massage therapy, acupuncture, naturopathy, psychotherapy and nutritional counselling.",
 
-  "Movement and Training is where treatment turns into capacity. We meet you where you are, and take you through the spectrum, from exercise rehab to fitness training and performance training.",
+  "Movement and Training is where treatment turns into capacity. We meet you where you are, and take you through the spectrum, from exercise rehab to fitness training and even performance specific training.",
 
-  "The Recovery Sanctuary is our outdoor space, offering a sauna and cold plunge experience along with outdoor yoga therapy, outdoor Pilates, breathwork and meditation. We are also one of the few spaces in Toronto offering Flowpresso therapy.",
+  "The Recovery Sanctuary is our outdoor space, offering a sauna and cold plunge experience along with our outdoor yoga therapy and Pilates, breathwork and meditation programs. We are also one of the few spaces in Toronto offering Flowpresso therapy.",
 
   "What makes this interdisciplinary rather than simply co-located: your practitioners discuss your case with each other. A chiropractor and a physiotherapist working on the same back agree on an approach between them rather than each running a separate plan.",
 
@@ -60,8 +60,6 @@ const PRODUCTS_INTRO = [
   "Curate Health fits and supplies a small range of items that support treatment rather than replace it. Each one is fitted or selected in the clinic at 989 Eglinton Ave W in Midtown Toronto.",
 
   "Custom foot orthotics and custom knee braces are made to a cast or measurement taken here. Compression stockings are sized in person. TENS machines are demonstrated before you take one home, so you know where the pads go and what settings to start on. Professional grade supplements are stocked in the clinic rather than sold online, so your practitioner knows what you are taking alongside your treatment.",
-
-  "Whether an item is claimable depends on your own plan. Ask your practitioner what you need before you check with your provider.",
 ].join("\n\n");
 
 const TARGETS = [

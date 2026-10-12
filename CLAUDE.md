@@ -185,7 +185,10 @@ sentence shape.**
 ### Out of scope, do not build
 
 - A pricing page. Pricing lives in Jane behind the Book Now button
-- Direct billing content. Curate does not offer it
+- Direct billing content. **Curate does no insurance submissions and no
+  direct billing, confirmed by Frank on 2026-10-12.** Not a scope
+  preference, a fact about the business, so copy saying otherwise is wrong
+  rather than merely off topic. See the sweep below
 - Standalone condition pages. Conditions will be covered in blog posts instead
 - Practitioner bio copy. It already exists in Sanity, see CH-104
 
@@ -1596,6 +1599,14 @@ Three more things that came out of the same sweep and are waiting on him: the "F
 
 **Practitioner SEO fields are written, five of six.** Titles, descriptions, share titles, share descriptions, and both share images, the person's own photo with the hotspot the code used. Transaction `Mtij2FIbO1I0nUyGx00e79`, after `sanity-backup-2026-09-19-before-practitioner-seo-documents.tar.gz`. Dr. Nhan's is held: the description he wrote is 174 characters and the Studio's own limit is 160.
 
+**Corrected 2026-10-12. His `seo` fields are empty, all of them**, and the
+174 character draft is not recorded anywhere, so it cannot be trimmed, only
+rewritten. His page runs on the code fallback, "Dr. Frank Nhan, Doctor of
+Chiropractic at Curate Health in Midtown Toronto.", 75 characters. That
+passes the audit and is thin. Safa Karoumi's `pageDescription` is empty too.
+The other five follow one shape: *{Name} is a {role} at Curate Health in
+Midtown Toronto. Book a {service} appointment with {first name} online.*
+
 **IndexNow was seeded on 2026-09-19**, 51 addresses, answered 202. Safa's switched-off page went in deliberately, so Bing learns it is gone; Frank asked for Google's temporary removal in Search Console the same day.
 
 **The banned-word checks miss inflections.** `audit-content-rules.js` and `audit-metadata.js` match "elevate" but not "elevating". Match the stem when this is next touched.
@@ -1625,6 +1636,85 @@ Every link was repointed in the same change: the navigation's Programs list, the
 - Four titles that differ from their headings, and two 158 character descriptions, listed under Share cards.
 - Three descriptions too short to be used, which `audit-metadata.js` now warns on below 70 characters: the Curate Lifestyle Program's reads "Curate Lifestyle Program", `/cafe`'s "A space where nourishment meets intention.", and Rooj's page runs on the code fallback until the practitioner descriptions are approved.
 - **The content rules: was 88 breaks on 27 of 51 pages, now 1. See the dash sweep below.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
+
+### /about's share card is its own hero, 2026-10-12
+
+The last page on the site with no `og:image` has one, and it is the cork yoga
+mats photograph the hero already shows. Frank asked for the two to match.
+
+**It was done by clearing a field, not setting one.** `seo.socialMeta.ogImage`
+held a different picture, the logo in cork lettering on the wall above the
+waiting area, with its own crop and hotspot, and `twitterImage` held the same.
+Emptying both makes the page fall through to `buildPageMetadata`'s `image`
+option, which `app/about/page.tsx` now passes the hero, so the two cannot
+disagree again. Pointing the field at the hero asset instead would have worked
+today and drifted the moment somebody changed the hero without remembering this
+field. That is the every-page rule: default the share image to a photo the page
+already shows.
+
+`scripts/align-about-share-image.js` prints the old asset, alt, crop and hotspot
+before it unsets them, so they can be put back by hand. Transaction
+`UAIn8zgTVuj4HCTBS3hHfB`, after
+`sanity-backup-2026-10-12-before-about-share-image-documents.tar.gz`. The share
+title and description are Frank's and were left alone.
+
+**The hero's alt now reaches the card.** Both /about and /products passed only
+`{asset: {url}}`, so `imageEntry` fell back to the page title for
+`og:image:alt`. They pass the alt too, and the cards read "The Curate Health
+logo embossed into cork yoga mats, lit from the side." and "A practitioner's
+hands supporting a patient's knee during an assessment".
+
+**`audit-seo-complete.js` passes 9 of 9 for the first time**, from 3 failures on
+2026-09-18.
+
+
+### The billing sweep, 2026-10-12
+
+**Curate does no insurance submissions and no direct billing.** Frank confirmed
+it on 2026-10-12 and asked for a sweep, so this records what was found and what
+the line is, since the two are easy to confuse.
+
+**Removed.** `/our-programs` FAQ "Is insurance available?" ended "Our team is
+happy to assist in determining your eligibility and, when possible, can submit
+claims on your behalf, so you can stay focused on your health, not the
+paperwork." That sentence was untrue. `scripts/remove-direct-billing.js` took
+it and nothing else, in transaction `UAIn8zgTVuj4HCTBS3h53F`, after
+`sanity-backup-2026-10-12-before-billing-removal-documents.tar.gz`. Nothing was
+drafted to replace it: a line about issuing receipts would be an operational
+claim nobody has confirmed.
+
+**The distinction that decides the rest.** Saying what a visitor's own plan
+might cover is a statement about their coverage. Saying Curate will deal with
+their insurer is a service Curate does not provide. Only the second is banned.
+The OHIP framing in the content rules is the first kind, which is why it stands.
+
+**Left alone, all of the first kind**, listed so the next sweep does not
+re-litigate them:
+
+| Where | Text |
+| --- | --- |
+| `/our-programs` FAQ, what remains | may be eligible under your extended health benefits, confirm with your insurer |
+| `/our-programs/curate-lifestyle` FAQ 3 and 6 | extended health plans reimburse portions, "Let us help you check your benefits" |
+| three `our-programs-page` components | "May also be partially covered by extended healthcare insurance" footnotes |
+| `legal/privacy` | holding insurance details, receipts for submission to insurers, disclosure to insurers where authorized |
+
+**"Let us help you check your benefits" is the closest call** and it is still
+on two Curate Lifestyle FAQs. Helping somebody read their own policy is not
+submitting a claim, so it was not removed, but it is the line to ask Frank about
+if this comes up again.
+
+**The privacy policy is deliberately untouched.** It describes what Curate
+would do with the information if it held it, which is what a privacy policy is
+for, and narrowing it to current practice would be a legal edit rather than a
+copy one.
+
+**The sweep is a script, not a grep.** Run it again after any copy change that
+touches money:
+
+```bash
+node scripts/remove-direct-billing.js   # dry run, names what it would change
+```
+
 
 ### B Corp certification, 2026-10-10
 

@@ -165,14 +165,19 @@ export async function generateMetadata() {
     /*
      * The section hero doubles as the share card, so /products stops showing a
      * bare card when its link is shared. It was one of the two pages still
-     * without an og:image, and unlike /about it already has a photograph of
-     * its own, so this needs nobody to choose one.
+     * without an og:image on 2026-09-18, so this needs nobody to choose one.
+     * /about does the same now that it has a hero of its own.
      *
      * The query selects the url and not the asset id. buildPageMetadata reads
      * the id back out of the url, so a 1200x630 crop still comes out.
      */
     image: page?.heroImage?.url
-      ? { asset: { url: page.heroImage.url } }
+      ? {
+          asset: {
+            url: page.heroImage.url,
+            alt: page.heroImage.alt ?? undefined,
+          },
+        }
       : undefined,
   });
 }

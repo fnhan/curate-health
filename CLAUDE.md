@@ -149,6 +149,21 @@ The `claude-seo` plugin is installed at user scope, so its 25 skills and 18 suba
 - `aggregateRating` stays out per CH-008, whatever the local SEO skill recommends
 - Practitioner credentials and the OHIP framing come from the tables above, never from what a plugin infers off the rendered page
 
+**Curate Health is not a clinic. Hard rule, restated by Frank on 2026-10-12.**
+It is a health and wellness space, and the clinic is one of the things inside
+it, alongside the cafe, the Recovery Sanctuary and the programs. So it is
+"Curate Health is home to an interdisciplinary clinic", never "Curate Health is
+an interdisciplinary clinic", and never "we are one of the few clinics in
+Toronto" where "spaces" or "places" is what is meant.
+
+This is easy to get wrong in the name of concision. The /services lead Frank
+wrote read "Curate Health is home to an interdisciplinary clinic in Midtown
+Toronto", and it was edited to "Curate Health is an interdisciplinary clinic"
+as a fix for circular phrasing. It was not circular, it was accurate, and the
+edit collapsed the whole business into one of its parts. **Do not tighten this
+sentence shape.**
+
+
 ### Canonical strings, use verbatim
 
 - Brand descriptor: "A curated health and wellness destination."

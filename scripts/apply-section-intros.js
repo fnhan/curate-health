@@ -43,13 +43,13 @@ const { query, mutate } = require("./lib/sanity-cli");
 const { findBanned, findAmerican } = require("./lib/content-rules");
 
 const SERVICES_INTRO = [
-  "Curate Health is an interdisciplinary clinic in Midtown Toronto. Care is organized into three areas, and most people use more than one.",
+  "Curate Health is home to an interdisciplinary clinic in Midtown Toronto. Care is organized into three areas, and most people use more than one.",
 
   "Clinical Care is where assessment and hands-on treatment happen, and where most people start. It covers chiropractic care, physiotherapy, massage therapy, acupuncture, naturopathy, psychotherapy and nutritional counselling.",
 
   "Movement and Training is where treatment turns into capacity. We meet you where you are, and take you through the spectrum, from exercise rehab to fitness training and performance training.",
 
-  "The Recovery Sanctuary is our outdoor space, offering a sauna and cold plunge experience along with outdoor yoga therapy, outdoor Pilates, breathwork and meditation. We are also one of the few clinics in Toronto to offer Flowpresso therapy.",
+  "The Recovery Sanctuary is our outdoor space, offering a sauna and cold plunge experience along with outdoor yoga therapy, outdoor Pilates, breathwork and meditation. We are also one of the few spaces in Toronto offering Flowpresso therapy.",
 
   "What makes this interdisciplinary rather than simply co-located: your practitioners discuss your case with each other. A chiropractor and a physiotherapist working on the same back agree on an approach between them rather than each running a separate plan.",
 

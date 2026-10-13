@@ -149,6 +149,21 @@ The `claude-seo` plugin is installed at user scope, so its 25 skills and 18 suba
 - `aggregateRating` stays out per CH-008, whatever the local SEO skill recommends
 - Practitioner credentials and the OHIP framing come from the tables above, never from what a plugin infers off the rendered page
 
+**Curate Health is not a clinic. Hard rule, restated by Frank on 2026-10-12.**
+It is a health and wellness space, and the clinic is one of the things inside
+it, alongside the cafe, the Recovery Sanctuary and the programs. So it is
+"Curate Health is home to an interdisciplinary clinic", never "Curate Health is
+an interdisciplinary clinic", and never "we are one of the few clinics in
+Toronto" where "spaces" or "places" is what is meant.
+
+This is easy to get wrong in the name of concision. The /services lead Frank
+wrote read "Curate Health is home to an interdisciplinary clinic in Midtown
+Toronto", and it was edited to "Curate Health is an interdisciplinary clinic"
+as a fix for circular phrasing. It was not circular, it was accurate, and the
+edit collapsed the whole business into one of its parts. **Do not tighten this
+sentence shape.**
+
+
 ### Canonical strings, use verbatim
 
 - Brand descriptor: "A curated health and wellness destination."
@@ -170,7 +185,10 @@ The `claude-seo` plugin is installed at user scope, so its 25 skills and 18 suba
 ### Out of scope, do not build
 
 - A pricing page. Pricing lives in Jane behind the Book Now button
-- Direct billing content. Curate does not offer it
+- Direct billing content. **Curate does no insurance submissions and no
+  direct billing, confirmed by Frank on 2026-10-12.** Not a scope
+  preference, a fact about the business, so copy saying otherwise is wrong
+  rather than merely off topic. See the sweep below
 - Standalone condition pages. Conditions will be covered in blog posts instead
 - Practitioner bio copy. It already exists in Sanity, see CH-104
 
@@ -1495,6 +1513,61 @@ It still fails on four pages whose title and heading differ, `/about/our-story`,
 
 `ServicesNavigation` and `ProductsNavigation` are thin wrappers over the shared one, so their call sites did not change. The legal pages took the menu on the same day, with "Legal" as plain text because there is no `/legal` index. **Build the next section from these two, not from a copy.**
 
+
+### Section pages: and a third component, the prose band. 2026-10-12
+
+`components/shared/section-intro.tsx` is the band of prose between the second
+menu and the card grid, plus `toParagraphs`, the blank-line split every intro
+field uses. /about had it first; Frank asked for /services and /products to read
+the same. **Three components now, not two. Build the next section from all
+three.**
+
+**The first paragraph is the hero's standing line, the rest is the band.** One
+field holds a page's whole prose and the page splits it, so there is no second
+field to drift and an editor writes in one place. On /services
+`servicesHeroSection.subtitle` stays as the fallback when `intro` is empty,
+which is what that page showed before.
+
+**Two columns from the large breakpoint, and the reason is the bug it fixed.**
+The band was `container max-w-[70ch]`. `container` is configured `center: true`,
+so the 70ch box was centred in the viewport while the grid below it spanned the
+whole container: the text floated in the middle with the photographs sticking
+out either side. Dropping the cap alone lines the edges up and gives a 165
+character line, so the band fills the container and splits in two. Measured at
+1600px: text 125 to 1461, grid 125 to 1460.
+
+Multi-column rather than a two-column grid, because this is continuous prose and
+should read down one column then down the next. `break-inside-avoid` keeps a
+paragraph whole. A single paragraph stays one column: it cannot be balanced
+across two without being split, and one short paragraph alone in the left half
+would look like the bug above.
+
+**The copy.** /services is Frank's own, corrected for grammar and tone; every
+change is listed in the pull request. /products is a draft he approved the same
+day. `scripts/apply-section-intros.js` writes both and checks them against the
+content rules before it will.
+
+**It applies in two phases, one deploy apart**, and refuses to run them
+together. `--phase=1` writes `servicesHeroSection.intro`, a field the deployed
+code does not read, so the live site is unchanged. `--phase=2` writes
+`productsPage.intro` **after** the merge deploys: that field is already live and
+is read whole as the hero's standing line, so writing 123 words into it under
+the old code would spill three paragraphs over a 400px hero on a public page.
+
+```bash
+node scripts/apply-section-intros.js --apply --phase=1   # before the merge
+#   merge, let it deploy
+node scripts/apply-section-intros.js --apply --phase=2   # after
+```
+
+**The blog byline portrait is grayscale until the row is hovered**, which is
+what every other photograph of a practitioner does, on the team page and in the
+hub grids. The house mark is not: it is painted flat white already, so grayscale
+on it is a no-op and a hover that changes nothing reads as broken. `group` moved
+from the link to the row so an unlinked byline still colours its portrait, and
+the name is underlined on hover only when the row is a link.
+
+
 **`/products` was rebuilt to match**, which is what started this: it opened on a bare white band while every other section opened on a photograph. It now carries the hero, then the products menu, then the same grid the services page uses. `productsPage.heroImage` holds the photograph, with its own alt text, and the page still renders the old heading block if that field is ever empty.
 
 The photograph is a placeholder chosen from the library on 2026-09-20: a practitioner's hands supporting a patient's knee during an assessment. **Nothing in the library shows a product being fitted**, which is what Frank wanted; the five product banners are the closest and all five are already used on their own pages. Replace it in the Studio when there is a photograph of a real fitting.
@@ -1526,6 +1599,14 @@ Three more things that came out of the same sweep and are waiting on him: the "F
 
 **Practitioner SEO fields are written, five of six.** Titles, descriptions, share titles, share descriptions, and both share images, the person's own photo with the hotspot the code used. Transaction `Mtij2FIbO1I0nUyGx00e79`, after `sanity-backup-2026-09-19-before-practitioner-seo-documents.tar.gz`. Dr. Nhan's is held: the description he wrote is 174 characters and the Studio's own limit is 160.
 
+**Corrected 2026-10-12. His `seo` fields are empty, all of them**, and the
+174 character draft is not recorded anywhere, so it cannot be trimmed, only
+rewritten. His page runs on the code fallback, "Dr. Frank Nhan, Doctor of
+Chiropractic at Curate Health in Midtown Toronto.", 75 characters. That
+passes the audit and is thin. Safa Karoumi's `pageDescription` is empty too.
+The other five follow one shape: *{Name} is a {role} at Curate Health in
+Midtown Toronto. Book a {service} appointment with {first name} online.*
+
 **IndexNow was seeded on 2026-09-19**, 51 addresses, answered 202. Safa's switched-off page went in deliberately, so Bing learns it is gone; Frank asked for Google's temporary removal in Search Console the same day.
 
 **The banned-word checks miss inflections.** `audit-content-rules.js` and `audit-metadata.js` match "elevate" but not "elevating". Match the stem when this is next touched.
@@ -1555,6 +1636,215 @@ Every link was repointed in the same change: the navigation's Programs list, the
 - Four titles that differ from their headings, and two 158 character descriptions, listed under Share cards.
 - Three descriptions too short to be used, which `audit-metadata.js` now warns on below 70 characters: the Curate Lifestyle Program's reads "Curate Lifestyle Program", `/cafe`'s "A space where nourishment meets intention.", and Rooj's page runs on the code fallback until the practitioner descriptions are approved.
 - **The content rules: was 88 breaks on 27 of 51 pages, now 1. See the dash sweep below.** Dashes, banned words such as "unlock", "elevate" and "transformative", "complimentary" for a Flowpresso session on `/our-programs`, and two exclamation marks. Nearly all of it is body copy from 2024, written before the rules. Every fix is a copy change for Frank to approve, and a practitioner's where it touches a health claim, so it wants its own pass, page by page.
+
+### /about's share card is its own hero, 2026-10-12
+
+The last page on the site with no `og:image` has one, and it is the cork yoga
+mats photograph the hero already shows. Frank asked for the two to match.
+
+**It was done by clearing a field, not setting one.** `seo.socialMeta.ogImage`
+held a different picture, the logo in cork lettering on the wall above the
+waiting area, with its own crop and hotspot, and `twitterImage` held the same.
+Emptying both makes the page fall through to `buildPageMetadata`'s `image`
+option, which `app/about/page.tsx` now passes the hero, so the two cannot
+disagree again. Pointing the field at the hero asset instead would have worked
+today and drifted the moment somebody changed the hero without remembering this
+field. That is the every-page rule: default the share image to a photo the page
+already shows.
+
+`scripts/align-about-share-image.js` prints the old asset, alt, crop and hotspot
+before it unsets them, so they can be put back by hand. Transaction
+`UAIn8zgTVuj4HCTBS3hHfB`, after
+`sanity-backup-2026-10-12-before-about-share-image-documents.tar.gz`. The share
+title and description are Frank's and were left alone.
+
+**The hero's alt now reaches the card.** Both /about and /products passed only
+`{asset: {url}}`, so `imageEntry` fell back to the page title for
+`og:image:alt`. They pass the alt too, and the cards read "The Curate Health
+logo embossed into cork yoga mats, lit from the side." and "A practitioner's
+hands supporting a patient's knee during an assessment".
+
+**`audit-seo-complete.js` passes 9 of 9 for the first time**, from 3 failures on
+2026-09-18.
+
+
+### The medication FAQ, softened 2026-10-12
+
+"Can this help me reduce medications?" on /our-programs/curate-lifestyle used to
+answer "Absolutely. Over 80% of participants see improvements in blood pressure,
+glucose levels, cholesterol, or fatty liver biomarkers, often allowing them to
+reduce or eliminate medications under medical supervision."
+
+Two rule breaks in one sentence: a statistic with no source, which the content
+rules forbid outright, and a guarantee about a clinical outcome on the page that
+sells the programme.
+
+Frank wrote the replacement. It keeps the four biomarkers and the "under medical
+supervision" qualifier, drops the number, and turns the guarantee into a
+possibility:
+
+> Many participants see improvements in blood pressure, glucose levels,
+> cholesterol, or fatty liver biomarkers, which may allow them to reduce or
+> eliminate medications under medical supervision.
+
+**One word was taken out of his wording.** He wrote "Many participants often
+see". "Many" and "often" are the same hedge twice, which reads as nervousness
+rather than care.
+
+`scripts/soften-outcome-claim.js`, transaction `PGYRglssrB1zyRdETTevCV`, after
+`sanity-backup-2026-10-12-before-outcome-claim-documents.tar.gz`.
+
+**It is still a clinical claim and it is Dr. Leong's**, since the programme is
+his. Frank approved it as the owner and a practitioner. If Dr. Leong wants it
+narrower, the field is `serviceLifestyle.faq[3]`.
+
+### Flowpresso is FDA cleared, not FDA approved. Fixed 2026-10-12
+
+The benefit subtitle on `/services/recovery-sanctuary/flowpresso-therapy` read
+"Flowpresso® Therapy is FDA Approved cutting-edge technology that's been proven
+to deliver effective, non-invasive treatment." **"Approved" was the wrong word,
+and it is a specific wrong word rather than a style quibble.**
+
+The FDA's pathways are not synonyms. **Approval** means premarket approval, PMA,
+for high risk Class III devices. **Clearance** means a 510(k), a finding of
+substantial equivalence to a device already on the market. The FDA treats "FDA
+approved" on a cleared device as misbranding.
+
+Flowpresso holds **510(k) clearance K223729**, granted to Medella Health
+Limited, Class II, product codes IRP and IRT under 21 CFR 890.5650,
+substantially equivalent to the Therm-X heat and compression device.
+Flowpresso's own site calls it "an FDA-cleared Class II medical device". So the
+page claimed a regulatory status the device does not hold. Frank confirmed the
+correction on 2026-10-12.
+
+Two other things went in the same sentence: "proven to deliver effective
+treatment", an efficacy claim with nothing behind it, and "cutting-edge", which
+is hype against the tone rule. It now reads:
+
+> Flowpresso® Therapy is an FDA cleared Class II medical device, delivering
+> non-invasive compression and heat therapy under a practitioner's supervision.
+
+`scripts/fix-byline-logo-and-fda.js`, transaction `UAIn8zgTVuj4HCTBS47LjJ`. The
+block's heading is still "State-of-the-Art Technology", which wants the same
+look when somebody is next in there.
+
+**The cleared indications are narrower than the page implies**: post traumatic
+and post surgical conditions where localized thermal therapy is indicated, on
+the order of a licensed professional. Worth knowing before anyone widens the
+copy.
+
+
+### The prose band's columns are symmetrical. The rule, set 2026-10-12
+
+Frank's words: "make this a rule to have it symmetrical, no matter how long the
+content is, make best efforts to make it symmetrical." All three section pages
+had shipped lopsided.
+
+**The cause was `break-inside-avoid`.** The first `section-intro.tsx` kept every
+paragraph whole, so whole paragraphs were the only unit the browser could move:
+/services packed three into the left column and two into the right, /about put
+one in each, and /products, down to a single paragraph after the billing line
+came out, filled the left column and left the right one empty. Keeping a
+paragraph whole and keeping the columns even are the same decision made two
+ways, and Frank has chosen even.
+
+So the band leaves it to `column-fill: balance`, the browser's own balancing,
+and **`break-inside-avoid` must not go back in**. `orphans` and `widows` are set
+to 2, as a style because Tailwind has no utility for either, so no single line
+is stranded at the foot or head of a column.
+
+Measured at 1600px, by collecting every line box and splitting on the container's
+midline:
+
+| page | left | right | out by |
+| --- | --- | --- | --- |
+| /services | 1108 | 1080 | 28px, one line |
+| /about | 920 | 972 | 52px, one line plus a paragraph gap |
+| /products | 948 | 972 | 24px |
+
+That is the arithmetic best in each case: /about's band is seven lines, so the
+only splits available are four and three. A single paragraph balances too, split
+down the middle, which is why there is no special case for it any more.
+
+**Measure it the same way if this is touched**, since CSS columns are not
+elements and have no boxes of their own: walk the text nodes, take
+`Range.getClientRects()`, bucket by the container's midline, compare the lowest
+bottom in each bucket.
+
+### The blog byline mark is the white asset, 2026-10-12
+
+Both author records pointed at `logo-black.png` and the byline painted it white
+with `brightness-0 invert`. The rendered pixels were right, which is why every
+check passed, and the record was still the black logo: anyone opening it in the
+Studio saw a black mark on a document whose only job is the white one. Frank
+spotted it.
+
+`CurateHealth_logo_symbol_white.png` was already in the library, 1723x1726,
+80.5% transparent, average opaque luminance 254.9, so genuinely white on
+transparency rather than white on a white box. Both records point at it and the
+filter is gone from `blog-author-byline.tsx`. **The two had to move together:**
+the filter over a white mark renders it black.
+
+**`npm run build` reuses Next's fetch cache, so a Sanity change can fail to
+appear in a build run right after the mutation.** It happened here: the swap was
+applied, the build ran seconds later, and `/blog` still served the old asset.
+`rm -rf .next` before the build when verifying a content change, or the check
+reports the state before the write.
+
+**The byline avatar is client only, and that is Radix.** `Avatar` renders
+`AvatarFallback` on the server and swaps in the image once it loads, so the
+initials "CU" are what a crawler sees. It carries no text a crawler needs, so it
+is not a breach of the every-page rule, but do not read the server HTML and
+conclude the image is broken.
+
+
+### The billing sweep, 2026-10-12
+
+**Curate does no insurance submissions and no direct billing.** Frank confirmed
+it on 2026-10-12 and asked for a sweep, so this records what was found and what
+the line is, since the two are easy to confuse.
+
+**Removed.** `/our-programs` FAQ "Is insurance available?" ended "Our team is
+happy to assist in determining your eligibility and, when possible, can submit
+claims on your behalf, so you can stay focused on your health, not the
+paperwork." That sentence was untrue. `scripts/remove-direct-billing.js` took
+it and nothing else, in transaction `UAIn8zgTVuj4HCTBS3h53F`, after
+`sanity-backup-2026-10-12-before-billing-removal-documents.tar.gz`. Nothing was
+drafted to replace it: a line about issuing receipts would be an operational
+claim nobody has confirmed.
+
+**The distinction that decides the rest.** Saying what a visitor's own plan
+might cover is a statement about their coverage. Saying Curate will deal with
+their insurer is a service Curate does not provide. Only the second is banned.
+The OHIP framing in the content rules is the first kind, which is why it stands.
+
+**Left alone, all of the first kind**, listed so the next sweep does not
+re-litigate them:
+
+| Where | Text |
+| --- | --- |
+| `/our-programs` FAQ, what remains | may be eligible under your extended health benefits, confirm with your insurer |
+| `/our-programs/curate-lifestyle` FAQ 3 and 6 | extended health plans reimburse portions, "Let us help you check your benefits" |
+| three `our-programs-page` components | "May also be partially covered by extended healthcare insurance" footnotes |
+| `legal/privacy` | holding insurance details, receipts for submission to insurers, disclosure to insurers where authorized |
+
+**"Let us help you check your benefits" is the closest call** and it is still
+on two Curate Lifestyle FAQs. Helping somebody read their own policy is not
+submitting a claim, so it was not removed, but it is the line to ask Frank about
+if this comes up again.
+
+**The privacy policy is deliberately untouched.** It describes what Curate
+would do with the information if it held it, which is what a privacy policy is
+for, and narrowing it to current practice would be a legal edit rather than a
+copy one.
+
+**The sweep is a script, not a grep.** Run it again after any copy change that
+touches money:
+
+```bash
+node scripts/remove-direct-billing.js   # dry run, names what it would change
+```
+
 
 ### B Corp certification, 2026-10-10
 

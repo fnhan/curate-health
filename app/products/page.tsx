@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { ProductsNavigation } from "@/components/layout/products-page/products-navigation";
 import SectionHero from "@/components/shared/section-hero";
+import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { productPath } from "@/lib/service-urls";
 import { JsonLdScript, buildProductsIndexJsonLd } from "@/lib/structured-data";
@@ -62,7 +63,15 @@ export default async function ProductsPage() {
   });
 
   const heading = page?.title?.trim() || FALLBACK.title;
-  const intro = page?.intro?.trim() || FALLBACK.intro;
+
+  /**
+   * The first paragraph is the hero's standing line and the rest is the band
+   * below the menu, the same split /services and /about use. The intro was a
+   * single sentence sitting in the hero until 2026-10-12, which left this page
+   * with almost no readable text of its own.
+   */
+  const paragraphs = toParagraphs(page?.intro?.trim() || FALLBACK.intro);
+  const lead = paragraphs[0] ?? "";
 
   return (
     <>
@@ -85,7 +94,7 @@ export default async function ProductsPage() {
           image={page.heroImage.url}
           alt={page.heroImage.alt ?? ""}
           title={heading}
-          subtitle={intro}
+          subtitle={lead}
         />
       ) : (
         <section className="bg-white pt-32 md:pt-40">
@@ -94,13 +103,15 @@ export default async function ProductsPage() {
               {heading}
             </h1>
             <p className="max-w-[65ch] whitespace-pre-line font-light leading-7 text-primary">
-              {intro}
+              {lead}
             </p>
           </div>
         </section>
       )}
 
       <ProductsNavigation products={productsNav} />
+
+      <SectionIntro paragraphs={paragraphs.slice(1)} />
 
       <section className="bg-white">
         <div className="grid gap-1 bg-white pb-28 lg:container sm:grid-cols-2 md:pb-36 lg:grid-cols-3 lg:pb-[200px]">
@@ -154,14 +165,19 @@ export async function generateMetadata() {
     /*
      * The section hero doubles as the share card, so /products stops showing a
      * bare card when its link is shared. It was one of the two pages still
-     * without an og:image, and unlike /about it already has a photograph of
-     * its own, so this needs nobody to choose one.
+     * without an og:image on 2026-09-18, so this needs nobody to choose one.
+     * /about does the same now that it has a hero of its own.
      *
      * The query selects the url and not the asset id. buildPageMetadata reads
      * the id back out of the url, so a 1200x630 crop still comes out.
      */
     image: page?.heroImage?.url
-      ? { asset: { url: page.heroImage.url } }
+      ? {
+          asset: {
+            url: page.heroImage.url,
+            alt: page.heroImage.alt ?? undefined,
+          },
+        }
       : undefined,
   });
 }

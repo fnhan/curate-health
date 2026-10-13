@@ -39,15 +39,23 @@ export default function BlogAuthorByline({
 
   /**
    * The house byline is the mark, not a face, and it is treated differently.
+   * The backing and the ring come off, because a logo does not need a frame
+   * and a white rim around it against the dark green read as neither.
    *
-   * The asset in Sanity is `logo-black.png`, pure black on transparency. In a
-   * circular avatar with a white backing it read as a green mark with a white
-   * rim against the dark green footer, which is not the logo. So for this one
-   * author the backing and the ring come off and the mark is painted white
-   * with the same brightness-0 invert the B Corp mark uses.
+   * **The mark is no longer painted white by CSS.** It used to be
+   * `logo-black.png` with `brightness-0 invert` over it, which produced the
+   * right pixels and left the Studio showing a black logo on a record whose
+   * whole job is the white one. `CurateHealth_logo_symbol_white.png` was
+   * already in the library, white on transparency, so the records point at it
+   * and the filter is gone. Do not reintroduce the filter: it would invert a
+   * white mark to black.
    *
    * A real practitioner keeps the ring and the backing: a photograph needs a
-   * frame, and inverting one would be absurd.
+   * frame, and inverting one would be absurd. The portrait is also grayscale
+   * until the row is hovered, which is what every other photograph of a
+   * practitioner on this site does, on the team page and in the hub grids.
+   * The mark is not: it is painted flat white already, so grayscale on it is
+   * a no-op and a hover that changes nothing reads as a broken hover.
    */
   const isHouseByline =
     author.linkedTeamMemberName?.trim() === AUTHOR_TEAM_PROFILE_PAGE_ONLY;
@@ -65,7 +73,11 @@ export default function BlogAuthorByline({
         <AvatarImage
           src={imageUrl}
           alt={displayName ? `${displayName} portrait` : ""}
-          className={isHouseByline ? "brightness-0 invert" : undefined}
+          className={
+            isHouseByline
+              ? undefined
+              : "grayscale transition-all duration-300 group-hover:grayscale-0 group-focus-visible:grayscale-0"
+          }
         />
         <AvatarFallback
           className={
@@ -76,12 +88,20 @@ export default function BlogAuthorByline({
         </AvatarFallback>
       </Avatar>
       {displayName ? (
-        <span className="text-sm group-hover:underline">{displayName}</span>
+        // underlined only when the row is a link, now that `group` is on
+        // every row rather than only on the linked one
+        <span className={cn("text-sm", teamHref && "group-hover:underline")}>
+          {displayName}
+        </span>
       ) : null}
     </>
   );
 
-  const rowClass = cn("flex items-center gap-4", className);
+  /**
+   * `group` is on the row rather than only on the link, so a byline with no
+   * practitioner page still colours its portrait when the reader hovers it.
+   */
+  const rowClass = cn("group flex items-center gap-4", className);
 
   if (teamHref) {
     return (
@@ -89,7 +109,7 @@ export default function BlogAuthorByline({
         href={teamHref}
         className={cn(
           rowClass,
-          "group rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
+          "rounded-md outline-offset-4 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
         )}
         aria-label={
           displayName ? `${displayName}, view on Our Team` : "View on Our Team"

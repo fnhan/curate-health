@@ -105,6 +105,7 @@ export const SERVICES_PAGE_QUERY = groq`*[_type == "servicesHeroSection"][0]{
     "alt": image.alt,
     subtitle
   },
+  intro,
   "seo": ${SEO_QUERY},
   "services": ${ALL_SERVICES_QUERY},
   }`;

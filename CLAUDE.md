@@ -1788,7 +1788,23 @@ so it could not be trimmed, only rewritten. Frank chose from three options:
 
 It departs from the house pattern on purpose: he holds four credentials and the
 pattern has room for one, so his names all four and gives up the call to action.
-**His share title, share description and share image are still empty.**
+
+**His share fields were filled on 2026-10-13**, transaction
+`PGYRglssrB1zyRdETWBABF`, which closes the last empty SEO field on any
+practitioner: all eight now carry a page title, a description, a share title, a
+share description and both share images.
+
+**It changed nothing a visitor sees, and that was the point.** His page already
+showed the right things because the code fills in for an empty record: the title
+fell back to his name plus his first credential, and the share card to his
+photograph cropped at y 0.3. The rendered crop is byte for byte what the stored
+hotspot produces, `rect=0,80,3640,1911` before and after. What changed is that
+the values are in the Studio, where an editor can see and change them.
+
+`seo.pageTitle` went in alongside the share fields although only the share ones
+were asked for. Storing a share title while leaving the page title computed
+would let the two drift the moment anybody edited his credentials, and the house
+shape is that `socialMeta.title` repeats `pageTitle`.
 
 **Safa's is the complete set**, written at Frank's request while she is switched
 off, "so when we turn it on, it's already there". Page title, description,
@@ -1830,6 +1846,30 @@ since a 510(k) is a finding of substantial equivalence to a device already on
 the market. Frank chose **"Medical-Grade Technology"**, hyphenated because it is
 a compound modifier before a noun.
 
+
+### og:image:alt never reads the alt anybody wrote. Found 2026-10-13
+
+Every `og:image:alt` on the site is the page's share title rather than a
+description of the picture. Checked across the practitioner pages: all of them.
+
+**The alt is written in one place and read from another.** `SEO_QUERY` projects
+`ogImage{ crop, hotspot, asset->{_id, url, alt} }`, so the `alt` it selects is
+the one on the **asset document** in the media library. Every alt written for a
+share card, by the September pass and since, is on the **image object**,
+`ogImage.alt`, which the query never selects. `imageEntry` in
+`lib/page-metadata.ts` then falls back to the title it was handed, which is why
+the output always looks plausible and is never the sentence somebody wrote.
+
+**This is a trap of the same shape as the blog alt in CH-028**, where
+`GET_POST_BY_SLUG_QUERY` selected `image.alt` while the schema stored
+`sectionImage.alt`. Check the path end to end before writing copy into a field.
+
+Not yet fixed, and it is small: a share title is a reasonable thing for
+`og:image:alt` to say, so this is a missed improvement rather than a defect. The
+fix is two edits and a typegen. Add `alt` at the image-object level in both
+`ogImage` and `twitterImage` in `SEO_QUERY`, then prefer it in `imageEntry`:
+`image?.alt?.trim() || image?.asset?.alt?.trim() || alt`. `SeoImage` needs the
+field too. It touches metadata on every page, so it is tier 2.
 
 ### The blog byline mark is the white asset, 2026-10-12
 

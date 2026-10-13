@@ -1897,11 +1897,29 @@ particular areas follow, in the copy and in a practitioner's focus list.
 `UAIn8zgTVuj4HCTBS54Bin`, after
 `sanity-backup-2026-10-13-before-claire-and-outdoor-pilates-documents.tar.gz`.
 
-**She has a photograph, since 2026-10-13**, a studio portrait Frank sent as a
-placeholder "until I get a better one". It is on her record and on both share
-fields, so **the only thing left before she can be switched on is the Our Team
-entry**, which is CH-030. The hub reads `ourTeam.teamMembers` and matches on
-name, so the entry has to say "Claire Kim" exactly.
+**She is live, since 2026-10-13.** CH-030 is done: the `ourTeam.teamMembers`
+entry is written and `isActive` is on, so her card, her page, her listing on
+Outdoor Pilates, the sitemap, llms.txt and site search all carry her.
+`scripts/switch-claire-on.js` does both halves in one transaction,
+`UAIn8zgTVuj4HCTBS5RKw1`, **because they have to move together**: the hub reads
+`ourTeam.teamMembers` and matches on name, so an entry without a matching
+practitioner record, or a name that differs by a character, drops her from the
+page and fails `audit-practitioners.js`.
+
+She is eighth and last, beside Rooj, since the array runs the regulated
+clinicians first and then the two teachers. Masonry lays the cards out column
+first, so check the order by position on the page rather than by reading the
+HTML.
+
+**No Search Console step for her.** The warning on the "Show on website" switch
+is about somebody taken off the site and removed from Google by hand, which is
+Safa. Claire's page has never been live, so there was no removal to cancel.
+
+Her photograph is a studio portrait Frank sent as a placeholder "until I get a
+better one". The hub's query selects the asset URL only, no hotspot, so the card
+crops centrally with `object-cover`; at 427x300 from her 1331x2000 that lands on
+her face and the pose, checked by eye. Her own page and her share card use the
+hotspot on the practitioner record.
 
 **Her share hotspot is y 0.52, not the house 0.3.** The other six are standing
 portraits with the face about a third down, which is what 0.3 is for. Hers is a

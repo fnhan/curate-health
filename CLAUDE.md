@@ -1950,7 +1950,16 @@ paints 704x556 landscape, so both had to be cropped whatever else happened, to
 with a gamma curve that fades out towards the highlights, so the sky and the lit
 paving hold.
 
-The class shot is cropped from y=330, which keeps the loose shoes out of frame.
+**The class shot is a third photograph, since 2026-10-13.** Frank sent a better
+one after the first two: the whole group seated, mid side-reach with cork blocks,
+the pergola overhead and the sauna cabin behind, and a mixed group rather than
+the all-female bridge shot. Cropped from y=620 of 1125x2000. y=820 was the
+alternative and loses the pergola entirely, which is the thing the copy on this
+very page talks about, so the higher crop won. No retouching: his note was "no
+cropping of shoes needed here since you can barely see any".
+
+The two earlier class crops, the plain y=330 and the retouched y=700, are both
+in the library referenced by nothing, so both are CH-117 candidates.
 
 **A retouched version was built and thrown away, and the lesson is worth the
 paragraph.** Frank asked for the framing to drop so more of the class shows, and

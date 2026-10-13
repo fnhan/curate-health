@@ -1934,15 +1934,35 @@ has its own section. The component staggers off the array index, so nothing had
 to be written for that: measured at 1600px, the first photograph sits at 125 and
 the second at 825.
 
-**Both photographs were edited, and only in ways a crop or a curve can do.**
-They are 1125x2000 portrait and the slot paints 704x556 landscape, so both had
-to be cropped whatever else happened, to 1125x889. The warmup shot is backlit
-with the whole row in shadow and was lifted with a gamma curve that fades out
-towards the highlights, so the sky and the lit paving hold. The class shot was
-cropped from y=330 to drop the loose shoes along the bottom, which is what Frank
-asked for. **One pair of trainers remains**, beside the instructor: a crop
-cannot reach it without losing her, and painting it out is retouching the
-contents of a real photograph rather than framing it, which is Frank's call.
+**Both photographs were edited.** They are 1125x2000 portrait and the slot
+paints 704x556 landscape, so both had to be cropped whatever else happened, to
+1125x889. The warmup shot is backlit with the whole row in shadow and was lifted
+with a gamma curve that fades out towards the highlights, so the sky and the lit
+paving hold.
+
+The class shot was first cropped from y=330 to keep the loose shoes out of
+frame. Frank then asked for the framing to drop so more of the class shows, and
+for the shoes to be painted out rather than cropped around. It starts at y=700
+now, nine participants in shot, with **five patches** over the shoes that
+revealed: beside Claire, the white trainers mid-frame, the sandals by the
+planter, the pair by the pink mat and the bottom-right corner.
+
+**Each patch copies clean paving from elsewhere in the same photograph**, through
+a feathered mask. The paving is a regular grid of pale slabs, so a donor taken a
+slab or two away lands on matching texture and matching light. **Take donors
+straight down from the target, not sideways.** Three of the first five were
+sideways and all three were wrong: one sampled the blue mat and came back as a
+dark block, one caught the planter edge, one a shadow. It took three passes, and
+each was checked by opening the saved file rather than by screenshotting the
+pane, which kept scrolling between calls.
+
+**Nothing in either photograph changes a person.** Frank also asked for Claire to
+be made "a bit slimmer", reading the wide angle as having warped her. That was
+declined: it alters how a real, identifiable person's body looks, on a clinic
+site, and it is her likeness rather than the clinic's to reshape. Reframing so
+she is not near the frame edge, where a wide lens stretches hardest, is the
+honest version of the same fix, and asking her is the other. **Keep that line
+where it is**: framing, exposure and the ground are fair game, a person is not.
 
 Done on a canvas in the browser, as the B Corp composite was, because this
 project has no image library. **The base64 never came back through the

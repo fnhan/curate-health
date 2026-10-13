@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
-import { LastUpdated } from "@/components/shared/last-updated";
 import { PractitionerGrid } from "@/components/shared/practitioner-card";
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
@@ -60,7 +59,6 @@ export default function TreatmentContent({
               {intro?.subtitle}
             </h2>
             <p className="font-light">{intro?.introParagraph}</p>
-            <LastUpdated date={treatment._updatedAt} className="pt-2" />
           </div>
         </div>
       </section>

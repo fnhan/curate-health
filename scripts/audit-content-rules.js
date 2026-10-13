@@ -22,6 +22,7 @@
  *   Exclamation marks
  *   "cafe" with an accent
  *   "outdoor terrace"     The space is the Recovery Sanctuary.
+ *   "Last reviewed"       No update stamp appears anywhere, ever.
  *
  * It reports; it cannot fix. The copy lives in Sanity, and every change to it
  * is Frank's to approve, and a practitioner's where it makes a health claim.
@@ -72,6 +73,19 @@ function check(text) {
 
   for (const m of text.matchAll(/outdoor terrace/gi)) {
     found.push(["outdoor terrace", snippet(text, m.index, 15)]);
+  }
+
+  /*
+   * No update stamp on any page. Frank's rule, 2026-10-13: "make a rule that
+   * this update stamp should never appear."
+   *
+   * The component that drew it is deleted, so this is here to catch it being
+   * reintroduced, by a component or by somebody typing it into a Sanity field.
+   * "Last modified" and "Last updated" are caught too, since the rule is about
+   * the stamp rather than one wording of it.
+   */
+  for (const m of text.matchAll(/last (?:reviewed|updated|modified)/gi)) {
+    found.push(["update stamp", snippet(text, m.index, 30)]);
   }
 
   // One pattern per rule, so a phrase is reported once. Kept as a guard

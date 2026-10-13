@@ -564,12 +564,16 @@ export function buildCafeJsonLd(
 /**
  * BlogPosting for a post page. CH-105.
  *
- * The two dates are the two the page shows. datePublished is the "Published"
- * line, and dateModified is the "Last reviewed" line, which is Sanity's
- * _updatedAt. Markup that disagrees with the dates a reader can see is worse
- * than none, so both come from the same fields as the page. The caveat in
- * components/shared/last-updated.tsx carries over: any save moves _updatedAt,
- * a typo fix included.
+ * datePublished is the "Published" line the page shows. dateModified is
+ * Sanity's _updatedAt and is **deliberately not shown anywhere**, since Frank
+ * had the visible "Last reviewed" line removed from the whole site on
+ * 2026-10-13.
+ *
+ * It stays in the markup because Google reads dateModified on Article and
+ * BlogPosting without expecting it rendered, unlike BreadcrumbList, which is
+ * checked against the trail a reader can see. Caveat: any save moves
+ * _updatedAt, a typo fix included, so it says when the document changed rather
+ * than when anybody reviewed it.
  *
  * The author is whoever the byline shows. "Curate Health Team" is a byline for
  * the clinic that links to the team page, so it is described as exactly that.

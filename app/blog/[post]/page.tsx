@@ -6,7 +6,6 @@ import BlogAuthorByline, {
   blogAuthorShouldRender,
 } from "@/components/shared/blog-author-byline";
 import { Breadcrumbs } from "@/components/shared/breadcrumbs";
-import { LastUpdated } from "@/components/shared/last-updated";
 import { withBlogFeed } from "@/lib/blog-feed";
 import { postCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -63,7 +62,6 @@ export default async function BlogPostPage({
             <div className="text-balance text-sm">
               Published: {formatDate(publishedAt!)}
             </div>
-            <LastUpdated date={post._updatedAt} className="text-balance" />
           </div>
         </div>
       </div>

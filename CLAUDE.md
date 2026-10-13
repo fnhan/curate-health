@@ -122,6 +122,14 @@ These apply to every word written into the site, schema, meta tags, or alt text.
   and currently unused
 - OHIP framing is exactly: "partially covered by OHIP and most benefit programs"
 - The outdoor space is always "Recovery Sanctuary." Never "outdoor terrace" or any variant
+- **No update stamp on any page, ever. Frank's rule, 2026-10-13.** No "Last
+  reviewed", "Last updated" or "Last modified" line, anywhere, whatever the
+  date comes from. `audit-content-rules.js` fails on all three wordings, and
+  `audit-blog.js` fails a post that renders one. The component that drew it is
+  deleted, so putting it back means writing a new one. **`dateModified` stays in
+  the `BlogPosting` markup**, which is not a contradiction: Google reads it on
+  Article and BlogPosting without expecting it rendered, unlike
+  `BreadcrumbList`, which it checks against the trail a reader can see
 - Neighbourhood descriptor is "Midtown Toronto"
 - **The house spelling is "cafe", never "café".** No accent, anywhere: the site, the Studio, marketing, design, anything Curate produces. Frank ruled on 2026-09-12. `node scripts/audit-cafe-accent.js` sweeps the dataset and exits 1 if an accented spelling is live
 - **Canadian spelling throughout. A hard rule, and Frank asked on 2026-10-11
@@ -1328,7 +1336,7 @@ Folded into the contact page instead. `contactPage.howToGetHere` was rewritten i
 | ID     | Task                                                                                                                                                               |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | CH-110 | **Done 2026-09-13.** `lang="en-CA"` in `app/layout.tsx` |
-| CH-111 | **Done 2026-09-17.** A visible "Last reviewed" line is on treatment and blog pages, from Sanity's `_updatedAt`, since 2026-09-13. Blog posts carry the same date as `dateModified` in their `BlogPosting` markup, CH-105. Treatment pages carry no `dateModified`, because putting it on a `Service` node would be markup nothing consumes |
+| CH-111 | **Reversed 2026-10-13, and it is not coming back.** The visible "Last reviewed" line ran on treatment and blog pages from 2026-09-13; Frank had it off every page: "make a rule that this update stamp should never appear." `components/shared/last-updated.tsx` is deleted, both call sites with it. The case for it was that a reader judging health content wants to know how old it is; against it, `_updatedAt` moves on a typo fix, so the line dated the document rather than any review, and on a page nobody had touched in months it advertised that. `dateModified` stays in the `BlogPosting` markup, see the content rule above |
 | CH-112 | **Done 2026-09-13.** Search form, six hub links, `noindex`, still a real 404. Deliberately not a redirect home: a soft 404 teaches a crawler a dead URL is a live page |
 | CH-113 | **Done 2026-09-13.** `book_now`, `call_click`, `email_click`, `directions_click` and `file_download`, from one delegated listener in `components/shared/analytics-events.tsx`. See below |
 | CH-114 | **Built 2026-09-18.** IndexNow submission on publish. Bing's index is what ChatGPT search runs on. See below                                                        |
@@ -1734,42 +1742,94 @@ the order of a licensed professional. Worth knowing before anyone widens the
 copy.
 
 
-### The prose band's columns are symmetrical. The rule, set 2026-10-12
+### The prose band is one column. Settled 2026-10-12, after two wrong answers
 
-Frank's words: "make this a rule to have it symmetrical, no matter how long the
-content is, make best efforts to make it symmetrical." All three section pages
-had shipped lopsided.
+**Do not put `columns-2` back on `section-intro.tsx`**, balanced or otherwise.
+The band went through both column layouts in one afternoon and Frank rejected
+each, and the second rejection is the one that explains it.
 
-**The cause was `break-inside-avoid`.** The first `section-intro.tsx` kept every
-paragraph whole, so whole paragraphs were the only unit the browser could move:
-/services packed three into the left column and two into the right, /about put
-one in each, and /products, down to a single paragraph after the billing line
-came out, filled the left column and left the right one empty. Keeping a
-paragraph whole and keeping the columns even are the same decision made two
-ways, and Frank has chosen even.
+_First_, two columns with `break-inside-avoid`, which keeps every paragraph
+whole. Whole paragraphs are then the only unit the browser can move, so the
+columns ended hundreds of pixels apart: /services packed three paragraphs left
+and two right, /about one each, and /products, down to a single paragraph,
+filled the left column and left the right one empty.
 
-So the band leaves it to `column-fill: balance`, the browser's own balancing,
-and **`break-inside-avoid` must not go back in**. `orphans` and `widows` are set
-to 2, as a style because Tailwind has no utility for either, so no single line
-is stranded at the foot or head of a column.
+_Then_, `column-fill: balance`, which balanced to within one line on all three.
+It did it by cutting a sentence across the gutter. /about ended its left column
+on "rather than treating" and opened its right one on "it separately." Frank:
+"this prose looks stupid, lets just get rid of the columns and keep it to a
+single column so there's no breaks."
 
-Measured at 1600px, by collecting every line box and splitting on the container's
-midline:
+**Balanced columns and unbroken sentences are mutually exclusive**, and these
+bands are five to eight lines, so every break lands mid-thought. Newspaper
+columns work because they are tall. A measurement showing the columns even is
+not evidence the layout reads well, which is what the second attempt got wrong:
+the numbers were good and the page was worse.
 
-| page | left | right | out by |
-| --- | --- | --- | --- |
-| /services | 1108 | 1080 | 28px, one line |
-| /about | 920 | 972 | 52px, one line plus a paragraph gap |
-| /products | 948 | 972 | 24px |
+The block is `mr-auto max-w-[70ch]` inside `container`. **The measure was never
+the problem; the centring was.** `container` is configured `center: true`, so
+its `mx-auto` floated a 70ch box in the middle of the viewport while the card
+grid below spanned the full width. `mr-auto` pins it to the container's left
+edge, which is where the first photograph in the grid starts: measured at
+1600px, text left 125, grid left 125.
 
-That is the arithmetic best in each case: /about's band is seven lines, so the
-only splits available are four and three. A single paragraph balances too, split
-down the middle, which is why there is no special case for it any more.
+### The last two practitioner SEO sets, 2026-10-12
 
-**Measure it the same way if this is touched**, since CSS columns are not
-elements and have no boxes of their own: walk the text nodes, take
-`Range.getClientRects()`, bucket by the container's midline, compare the lowest
-bottom in each bucket.
+Dr. Nhan and Safa Karoumi were the two of seven with nothing filled in, both
+running on the code fallback, "Dr. Frank Nhan, Doctor of Chiropractic at Curate
+Health in Midtown Toronto.", 75 characters.
+
+Dr. Nhan's was held in September because the description he wrote was 174
+characters against the Studio's 160 limit. **That draft is recorded nowhere**,
+so it could not be trimmed, only rewritten. Frank chose from three options:
+
+> Dr. Frank Nhan is a chiropractor and acupuncture provider at Curate Health in
+> Midtown Toronto, also a strength and conditioning specialist and yoga teacher.
+
+It departs from the house pattern on purpose: he holds four credentials and the
+pattern has room for one, so his names all four and gives up the call to action.
+**His share title, share description and share image are still empty.**
+
+**Safa's is the complete set**, written at Frank's request while she is switched
+off, "so when we turn it on, it's already there". Page title, description,
+share title, share description and both share images. It changes nothing a
+visitor sees, since her page is a 404 until the switch flips, and the Search
+Console steps above still apply then.
+
+The house shape, now confirmed across all six that have one: `socialMeta.title`
+repeats `pageTitle`, `socialMeta.description` repeats `pageDescription`, and both
+share images are the person's own photo with no crop and the hotspot
+`{x: 0.5, y: 0.3, width: 1, height: 0.6}`. **The y of 0.3 is the load-bearing
+part**: centred, a 1200x630 band through a portrait cuts the face in half.
+
+**Her title and description say "Registered Psychotherapist", without
+"(Qualifying)", by Frank's decision on 2026-10-12**: "we aren't pushing it yet
+anyway, and by the time we do, she will be qualified." That also dissolves a
+character problem, since CRPO's full "Registered Psychotherapist (Qualifying)"
+is 53 against a 45 budget, "| Curate Health" costing 15 of the 60 Google shows.
+Transaction `t0eFzHW6gbFrsnx0qyFban`.
+
+**`credentials` on the record still reads "Registered Psychotherapist
+(Qualifying)", deliberately.** That is the line the page itself prints and it is
+accurate today. The two disagree, which is fine only while the page is a 404.
+**Change the credential at the same moment the switch goes back on**, or the
+page will show one designation and the search snippet another.
+
+`scripts/apply-remaining-practitioner-seo.js` wrote the two descriptions,
+transaction `UAIn8zgTVuj4HCTBS4qjIb`.
+`scripts/finish-safa-seo-and-flowpresso-heading.js` wrote the rest,
+`UAIn8zgTVuj4HCTBS4vNa9`, after
+`sanity-backup-2026-10-12-before-safa-share-and-heading-documents.tar.gz`.
+
+**The Flowpresso benefit heading went in the same transaction.**
+"State-of-the-Art Technology" sat over the sentence corrected earlier that day
+to "an FDA cleared Class II medical device", and it was wrong twice: hype
+against the tone rule, the same category as the "cutting-edge" removed from the
+sentence below it, and a claim of novelty over a body conceding equivalence,
+since a 510(k) is a finding of substantial equivalence to a device already on
+the market. Frank chose **"Medical-Grade Technology"**, hyphenated because it is
+a compound modifier before a noun.
+
 
 ### The blog byline mark is the white asset, 2026-10-12
 
@@ -1797,6 +1857,156 @@ initials "CU" are what a crawler sees. It carries no text a crawler needs, so it
 is not a breach of the every-page rule, but do not read the server HTML and
 conclude the image is broken.
 
+
+### Conditions go on the treatment page, not a page each. 2026-10-13
+
+Frank, weighing whether to list what Pilates helps with: "I just don't want a
+ton of pages for each condition. that same logic can apply to all conditions
+for all professionals at the clinic, and we'll have hundreds of pages."
+
+**He is right, and this is already the project's position**, so treat it as
+settled rather than reopening it. "Standalone condition pages. Conditions will
+be covered in blog posts instead" has been in the out-of-scope list from the
+start. Four reasons it holds:
+
+- A page that exists to catch one phrase and says little else is a doorway
+  page by Google's own definition, which is the reasoning that closed CH-109.
+- It is worse for AI answers, not better. Per the CH-101 evidence these systems
+  read visible body text, so one substantial page that answers "who is this
+  for" is extractable where twenty thin ones split the same text twenty ways.
+- CH-010 got every page within three clicks of the homepage and
+  `audit-orphans.js` proves it. Going from 51 URLs to several hundred breaks
+  that, and the fix is more navigation nobody wants.
+- Every one is a health claim needing practitioner sign-off, times hundreds.
+
+**The exception**: a condition earns a page when there is a page's worth to say
+and somebody qualified to say it. That is the blog, which is where CH-105 puts
+it.
+
+**And do not lead with the conditions either.** Frank's second note the same
+day, on a draft meta description naming prenatal, postnatal and bone health:
+"it's also not to say that she only specializes in these three things. Let's
+not try to pigeonhole what the class is good for, as some people who don't have
+these conditions may not want to come." So the general offer leads and the
+particular areas follow, in the copy and in a practitioner's focus list.
+
+### Claire Kim, and the Outdoor Pilates page. 2026-10-13
+
+**Claire's record exists and is switched off**, so turning her on is one click.
+`scripts/add-claire-and-revamp-outdoor-pilates.js`, transaction
+`UAIn8zgTVuj4HCTBS54Bin`, after
+`sanity-backup-2026-10-13-before-claire-and-outdoor-pilates-documents.tar.gz`.
+
+**She has a photograph, since 2026-10-13**, a studio portrait Frank sent as a
+placeholder "until I get a better one". It is on her record and on both share
+fields, so **the only thing left before she can be switched on is the Our Team
+entry**, which is CH-030. The hub reads `ourTeam.teamMembers` and matches on
+name, so the entry has to say "Claire Kim" exactly.
+
+**Her share hotspot is y 0.52, not the house 0.3.** The other six are standing
+portraits with the face about a third down, which is what 0.3 is for. Hers is a
+seated side stretch with her face at about 0.54, so 0.3 would band her shoulder.
+The rule was always "put the band on the face"; 0.3 is what that meant for the
+other six rather than a number to copy. Her source is 1331x2000, narrower than
+both the 4:5 page crop and the 1200x630 share, so every crop takes the full
+width and the horizontal hotspot does nothing.
+
+**"Pilates Instructor", not "STOTT PILATES Instructor Trainer"**, by Frank's
+decision: "some may not know what that is or may not look for that
+specifically". The STOTT training stays in the bio, where it reads as
+provenance rather than jargon.
+
+`commonlyTreatsLabel` is "Class focus", as Rooj's is, because she is not a
+regulated health professional. The list leads with what every class covers,
+posture, core and mobility, and puts prenatal, postnatal, active aging and
+osteoporosis after, per the pigeonholing note above.
+
+**Her bio is verbatim as Frank sent it, including two rule-of-three lists**,
+"precision, curiosity, and a deep respect" and "joyful, empowering, and
+uniquely their own". A bio is a personal statement in that person's voice, so
+it was flagged rather than silently edited. Edit it only if Claire wants it.
+
+_The page._ It was entirely benefit language: nothing said how long a class
+runs, how many people are in it, what happens when it rains, what to bring, or
+who teaches it, which are the questions a search actually asks and the flat
+facts an answer engine quotes. All of it is on the page now, Frank's facts
+throughout: 50 minutes, up to 12, the pergola that closes, the move indoors to
+the gym, workout clothes and layers, mats provided and your own welcome, and
+the one-on-one sessions.
+
+**Two sections with a photograph each, since 2026-10-13.** The practical copy
+was crowded into the one existing section for a day, because
+`AlternatingSections` renders `src={sectionImage?.image || ""}` and a section
+with no photograph publishes a bare `<img>` with an empty source, the CH-028
+defect, and the library had nothing usable: a watermarked stock beach and a
+screenshot of a sauna. Frank then sent two photographs of a real class, so it
+has its own section. The component staggers off the array index, so nothing had
+to be written for that: measured at 1600px, the first photograph sits at 125 and
+the second at 825.
+
+**Both photographs were edited.** They are 1125x2000 portrait and the slot
+paints 704x556 landscape, so both had to be cropped whatever else happened, to
+1125x889. The warmup shot is backlit with the whole row in shadow and was lifted
+with a gamma curve that fades out towards the highlights, so the sky and the lit
+paving hold.
+
+The class shot is cropped from y=330, which keeps the loose shoes out of frame.
+
+**A retouched version was built and thrown away, and the lesson is worth the
+paragraph.** Frank asked for the framing to drop so more of the class shows, and
+for the shoes to be painted out rather than cropped around. That was done: y=700,
+nine participants, five patches of clean paving copied from elsewhere in the same
+photograph through feathered masks. His verdict: "the photoshop class photo is
+terrible without the shoes. revert back to what you had before."
+
+He is right, and it is not obvious while you are doing it. Patching five holes in
+a paving grid leaves five patches of repeated texture, and a slab pattern makes
+the repetition visible even when every seam is feathered. **A crop that excludes
+clutter beats a retouch that covers it.** Reach for the crop first.
+
+Two things from the attempt that are still worth knowing, if a patch is ever the
+only option. Take donors **straight down** from the target, not sideways: three
+of the first five were sideways and all three were wrong, one sampling the blue
+mat and coming back as a dark block. And check each pass by opening the saved
+file rather than screenshotting the pane, which kept scrolling between calls.
+
+The retouched asset is still in the library, referenced by nothing, so it is a
+CH-117 candidate.
+
+**Nothing in either photograph changes a person.** Frank also asked for Claire to
+be made "a bit slimmer", reading the wide angle as having warped her. That was
+declined: it alters how a real, identifiable person's body looks, on a clinic
+site, and it is her likeness rather than the clinic's to reshape. Reframing so
+she is not near the frame edge, where a wide lens stretches hardest, is the
+honest version of the same fix, and asking her is the other. **Keep that line
+where it is**: framing, exposure and the ground are fair game, a person is not.
+
+Done on a canvas in the browser, as the B Corp composite was, because this
+project has no image library. **The base64 never came back through the
+conversation**: a page that POSTs its canvases to a throwaway local Node server
+writes the bytes to disk, which is worth remembering, since reading two data
+URLs out through the browser tool would have moved about 650,000 characters.
+`scripts/add-outdoor-pilates-photos.js` uploads the finished files and writes
+the sections; it does not generate them.
+
+The two benefit rewrites are Claire's own, trimmed. **Her copy came from a
+stale version of the page**: the em dash she flagged in "philosophy-supporting"
+went in the dash sweep on 2026-10-11, so her other notes may be against old
+text too.
+
+Title and description were rewritten for search: "Outdoor Pilates Practice &
+Services" to "Outdoor Pilates Classes Toronto", and a description that named
+neither Toronto nor what the class is to one that names both. Housekeeping in
+the same pass cleared the trailing space in `title` that CH-009 records, two
+more in a benefit title, three leading ones in subtitles, and an empty block.
+
+**No photograph of a practitioner is ever composited.** Frank asked on
+2026-10-13 whether Claire could be edited into the Recovery Sanctuary. A
+fabricated photograph of a real practitioner in a place she was not, on a
+clinic site selling those sessions, is the same class of thing as the invented
+statistics the content rules ban. Shoot her in the space, or use a real
+portrait until there is one. Cropping and colour-matching a real photograph is
+fine.
 
 ### The billing sweep, 2026-10-12
 

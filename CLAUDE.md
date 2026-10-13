@@ -1734,42 +1734,67 @@ the order of a licensed professional. Worth knowing before anyone widens the
 copy.
 
 
-### The prose band's columns are symmetrical. The rule, set 2026-10-12
+### The prose band is one column. Settled 2026-10-12, after two wrong answers
 
-Frank's words: "make this a rule to have it symmetrical, no matter how long the
-content is, make best efforts to make it symmetrical." All three section pages
-had shipped lopsided.
+**Do not put `columns-2` back on `section-intro.tsx`**, balanced or otherwise.
+The band went through both column layouts in one afternoon and Frank rejected
+each, and the second rejection is the one that explains it.
 
-**The cause was `break-inside-avoid`.** The first `section-intro.tsx` kept every
-paragraph whole, so whole paragraphs were the only unit the browser could move:
-/services packed three into the left column and two into the right, /about put
-one in each, and /products, down to a single paragraph after the billing line
-came out, filled the left column and left the right one empty. Keeping a
-paragraph whole and keeping the columns even are the same decision made two
-ways, and Frank has chosen even.
+_First_, two columns with `break-inside-avoid`, which keeps every paragraph
+whole. Whole paragraphs are then the only unit the browser can move, so the
+columns ended hundreds of pixels apart: /services packed three paragraphs left
+and two right, /about one each, and /products, down to a single paragraph,
+filled the left column and left the right one empty.
 
-So the band leaves it to `column-fill: balance`, the browser's own balancing,
-and **`break-inside-avoid` must not go back in**. `orphans` and `widows` are set
-to 2, as a style because Tailwind has no utility for either, so no single line
-is stranded at the foot or head of a column.
+_Then_, `column-fill: balance`, which balanced to within one line on all three.
+It did it by cutting a sentence across the gutter. /about ended its left column
+on "rather than treating" and opened its right one on "it separately." Frank:
+"this prose looks stupid, lets just get rid of the columns and keep it to a
+single column so there's no breaks."
 
-Measured at 1600px, by collecting every line box and splitting on the container's
-midline:
+**Balanced columns and unbroken sentences are mutually exclusive**, and these
+bands are five to eight lines, so every break lands mid-thought. Newspaper
+columns work because they are tall. A measurement showing the columns even is
+not evidence the layout reads well, which is what the second attempt got wrong:
+the numbers were good and the page was worse.
 
-| page | left | right | out by |
-| --- | --- | --- | --- |
-| /services | 1108 | 1080 | 28px, one line |
-| /about | 920 | 972 | 52px, one line plus a paragraph gap |
-| /products | 948 | 972 | 24px |
+The block is `mr-auto max-w-[70ch]` inside `container`. **The measure was never
+the problem; the centring was.** `container` is configured `center: true`, so
+its `mx-auto` floated a 70ch box in the middle of the viewport while the card
+grid below spanned the full width. `mr-auto` pins it to the container's left
+edge, which is where the first photograph in the grid starts: measured at
+1600px, text left 125, grid left 125.
 
-That is the arithmetic best in each case: /about's band is seven lines, so the
-only splits available are four and three. A single paragraph balances too, split
-down the middle, which is why there is no special case for it any more.
+### The last two practitioner descriptions, 2026-10-12
 
-**Measure it the same way if this is touched**, since CSS columns are not
-elements and have no boxes of their own: walk the text nodes, take
-`Range.getClientRects()`, bucket by the container's midline, compare the lowest
-bottom in each bucket.
+Dr. Nhan and Safa Karoumi were the two of seven with no `seo.pageDescription`,
+both running on the code fallback, "Dr. Frank Nhan, Doctor of Chiropractic at
+Curate Health in Midtown Toronto.", 75 characters.
+
+Dr. Nhan's was held in September because the description he wrote was 174
+characters against the Studio's 160 limit. **That draft is recorded nowhere**,
+so it could not be trimmed, only rewritten. Frank chose from three options on
+2026-10-12:
+
+> Dr. Frank Nhan is a chiropractor and acupuncture provider at Curate Health in
+> Midtown Toronto, also a strength and conditioning specialist and yoga teacher.
+
+It departs from the house pattern on purpose: he holds four credentials and the
+pattern has room for one, so his names all four and gives up the call to action.
+Safa's follows the pattern the other five use.
+
+`scripts/apply-remaining-practitioner-seo.js`, transaction
+`UAIn8zgTVuj4HCTBS4qjIb`, after
+`sanity-backup-2026-10-12-before-nhan-safa-seo-documents.tar.gz`.
+
+**Safa's page is switched off and this was still worth writing.** It changes
+nothing a visitor sees and means there is nothing to remember when she returns.
+The Search Console steps above still apply then.
+
+**Still empty on both records:** the share title, the share description and the
+share image, and the page title falls back to the name and credential. A
+separate decision.
+
 
 ### The blog byline mark is the white asset, 2026-10-12
 

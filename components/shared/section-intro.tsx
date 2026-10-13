@@ -8,42 +8,35 @@ import { cn } from "@/lib/utils";
  * first; Frank asked on 2026-10-12 for /services and /products to carry the
  * same thing, so it is one component rather than three that drift.
  *
- * THE COLUMNS ARE SYMMETRICAL. THAT IS THE RULE, NOT A PREFERENCE.
+ * ONE COLUMN. NO COLUMNS AT ALL.
  *
- * Frank set it on 2026-10-12, after all three pages shipped lopsided: "make
- * this a rule to have it symmetrical, no matter how long the content is, make
- * best efforts to make it symmetrical."
+ * This band was two balanced columns for about an hour on 2026-10-12 and Frank
+ * killed it: "this prose looks stupid, lets just get rid of the columns and
+ * keep it to a single column so there's no breaks."
  *
- * So the band leaves the balancing to the browser. `columns-2` with
- * `column-fill: balance`, which is the default, makes both columns the same
- * height to within one line, whatever the paragraphs happen to weigh.
+ * He is right, and the reason is worth keeping so nobody tries again. Balanced
+ * columns and whole paragraphs are mutually exclusive. The first version kept
+ * paragraphs whole with `break-inside-avoid` and the columns ended hundreds of
+ * pixels apart. The second let the browser balance, and it balanced by cutting
+ * a sentence across the gutter: /about ended its left column on "rather than
+ * treating" and opened its right one on "it separately." Two words alone at the
+ * top of a column is worse than either problem it was solving.
  *
- * **Do not add `break-inside-avoid` back.** The first version had it, to stop a
- * paragraph splitting across the gutter, and that is exactly what broke the
- * symmetry: with whole paragraphs as the only unit, five paragraphs of
- * different lengths pack three into the left column and two into the right,
- * and the two columns end hundreds of pixels apart. Keeping a paragraph whole
- * and keeping the columns even are the same decision made two ways, and Frank
- * has chosen even. A paragraph continuing across the gutter is how a column of
- * text has always read.
- *
- * `orphans` and `widows` are the part that keeps that readable: no single line
- * is left behind at the foot of one column or stranded at the head of the next.
- * They are set as a style rather than a class because Tailwind has no utility
- * for either.
- *
- * One paragraph balances too, split down the middle, which is why there is no
- * special case for it any more. The old one rendered a lone paragraph at full
- * container width, and that was the worst asymmetry of the three.
+ * Newspaper columns work because they are tall. These bands are five to eight
+ * lines, so every break lands in the middle of a thought. **Do not reintroduce
+ * `columns-2` here**, balanced or otherwise.
  *
  * THE WIDTH
  *
- * The band used to be `container max-w-[70ch]`. `container` is configured
- * `center: true`, so the 70ch box was centred in the viewport while the card
- * grid below it spanned the whole container: the text floated in the middle of
- * the page with the photographs sticking out either side. It fills the
- * container now, so both edges line up with the photographs, and the split in
- * two keeps the line near 80 characters rather than 165.
+ * The original was `container max-w-[70ch]` and it floated in the middle of the
+ * page with the photographs sticking out either side. That was not the measure,
+ * it was `container`, which is configured `center: true`, so its `mx-auto`
+ * centred the narrow box in the viewport.
+ *
+ * So the measure stays and the centring goes: `mr-auto` pins the block to the
+ * container's left edge, which is where the first photograph in the grid below
+ * starts. One column the full width of the container would be a 165 character
+ * line, about twice what anybody reads comfortably.
  */
 export default function SectionIntro({
   paragraphs,
@@ -56,18 +49,14 @@ export default function SectionIntro({
 
   return (
     <section className={cn("bg-white py-16 md:py-24", className)}>
-      <div
-        className="container lg:columns-2 lg:gap-12"
-        style={{ columnFill: "balance", orphans: 2, widows: 2 }}
-      >
-        {paragraphs.map((text) => (
-          <p
-            key={text}
-            className="mb-6 font-light leading-7 text-primary last:mb-0"
-          >
-            {text}
-          </p>
-        ))}
+      <div className="container">
+        <div className="mr-auto flex max-w-[70ch] flex-col gap-6">
+          {paragraphs.map((text) => (
+            <p key={text} className="font-light leading-7 text-primary">
+              {text}
+            </p>
+          ))}
+        </div>
       </div>
     </section>
   );

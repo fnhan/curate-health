@@ -1850,6 +1850,97 @@ is not a breach of the every-page rule, but do not read the server HTML and
 conclude the image is broken.
 
 
+### Conditions go on the treatment page, not a page each. 2026-10-13
+
+Frank, weighing whether to list what Pilates helps with: "I just don't want a
+ton of pages for each condition. that same logic can apply to all conditions
+for all professionals at the clinic, and we'll have hundreds of pages."
+
+**He is right, and this is already the project's position**, so treat it as
+settled rather than reopening it. "Standalone condition pages. Conditions will
+be covered in blog posts instead" has been in the out-of-scope list from the
+start. Four reasons it holds:
+
+- A page that exists to catch one phrase and says little else is a doorway
+  page by Google's own definition, which is the reasoning that closed CH-109.
+- It is worse for AI answers, not better. Per the CH-101 evidence these systems
+  read visible body text, so one substantial page that answers "who is this
+  for" is extractable where twenty thin ones split the same text twenty ways.
+- CH-010 got every page within three clicks of the homepage and
+  `audit-orphans.js` proves it. Going from 51 URLs to several hundred breaks
+  that, and the fix is more navigation nobody wants.
+- Every one is a health claim needing practitioner sign-off, times hundreds.
+
+**The exception**: a condition earns a page when there is a page's worth to say
+and somebody qualified to say it. That is the blog, which is where CH-105 puts
+it.
+
+**And do not lead with the conditions either.** Frank's second note the same
+day, on a draft meta description naming prenatal, postnatal and bone health:
+"it's also not to say that she only specializes in these three things. Let's
+not try to pigeonhole what the class is good for, as some people who don't have
+these conditions may not want to come." So the general offer leads and the
+particular areas follow, in the copy and in a practitioner's focus list.
+
+### Claire Kim, and the Outdoor Pilates page. 2026-10-13
+
+**Claire's record exists and is switched off**, so turning her on is one click.
+`scripts/add-claire-and-revamp-outdoor-pilates.js`, transaction
+`UAIn8zgTVuj4HCTBS54Bin`, after
+`sanity-backup-2026-10-13-before-claire-and-outdoor-pilates-documents.tar.gz`.
+
+**She is not on the team page and cannot be until there is a photograph.** The
+hub renders a fixed 300px frame per card and an empty one is a hole in the
+grid. That is the rest of CH-030, along with her share image.
+
+**"Pilates Instructor", not "STOTT PILATES Instructor Trainer"**, by Frank's
+decision: "some may not know what that is or may not look for that
+specifically". The STOTT training stays in the bio, where it reads as
+provenance rather than jargon.
+
+`commonlyTreatsLabel` is "Class focus", as Rooj's is, because she is not a
+regulated health professional. The list leads with what every class covers,
+posture, core and mobility, and puts prenatal, postnatal, active aging and
+osteoporosis after, per the pigeonholing note above.
+
+**Her bio is verbatim as Frank sent it, including two rule-of-three lists**,
+"precision, curiosity, and a deep respect" and "joyful, empowering, and
+uniquely their own". A bio is a personal statement in that person's voice, so
+it was flagged rather than silently edited. Edit it only if Claire wants it.
+
+_The page._ It was entirely benefit language: nothing said how many people are
+in a class, what happens when it rains, what to bring, or who teaches it, which
+are the questions a search actually asks and the flat facts an answer engine
+quotes. Group size, the closing pergola, the move indoors, what to wear and the
+one-on-one sessions are all on it now. **Class length is still missing**, and
+was left out rather than guessed.
+
+**The practical copy went into the existing section rather than a new one.**
+`AlternatingSections` renders `src={sectionImage?.image || ""}`, so a section
+with no photograph publishes a bare `<img>` with an empty source, the CH-028
+defect. The library holds no usable second photograph for this page: the only
+two candidates are a watermarked stock beach and a screenshot of a sauna. Add a
+real second photograph and the practical copy can become its own section.
+
+The two benefit rewrites are Claire's own, trimmed. **Her copy came from a
+stale version of the page**: the em dash she flagged in "philosophy-supporting"
+went in the dash sweep on 2026-10-11, so her other notes may be against old
+text too.
+
+Title and description were rewritten for search: "Outdoor Pilates Practice &
+Services" to "Outdoor Pilates Classes Toronto", and a description that named
+neither Toronto nor what the class is to one that names both. Housekeeping in
+the same pass cleared the trailing space in `title` that CH-009 records, two
+more in a benefit title, three leading ones in subtitles, and an empty block.
+
+**No photograph of a practitioner is ever composited.** Frank asked on
+2026-10-13 whether Claire could be edited into the Recovery Sanctuary. A
+fabricated photograph of a real practitioner in a place she was not, on a
+clinic site selling those sessions, is the same class of thing as the invented
+statistics the content rules ban. Shoot her in the space, or use a real
+portrait until there is one. Cropping and colour-matching a real photograph is
+fine.
+
 ### The billing sweep, 2026-10-12
 
 **Curate does no insurance submissions and no direct billing.** Frank confirmed

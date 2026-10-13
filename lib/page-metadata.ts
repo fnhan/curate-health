@@ -51,6 +51,12 @@ export function stripBrand(title: string | null | undefined): string {
 }
 
 type SeoImage = {
+  /**
+   * The alt typed against this picture in the Studio, on the image object.
+   * Distinct from `asset.alt`, which is the one on the asset document in the
+   * media library and is shared by every use of that file.
+   */
+  alt?: string | null;
   asset?: {
     _id?: string | null;
     url?: string | null;
@@ -197,7 +203,17 @@ function imageEntry(image: SeoImage | undefined, alt: string) {
   return [
     {
       url: shareUrl,
-      alt: image?.asset?.alt?.trim() || alt,
+      /*
+       * The image object's own alt first, then the asset document's, then the
+       * title handed in.
+       *
+       * Only the last two were read until 2026-10-13, and every alt written for
+       * a share card is on the image object, so **every og:image:alt on the
+       * site was the page's share title**. It looked plausible, which is why it
+       * went unnoticed, and it was never the sentence anybody wrote. Same shape
+       * as the CH-028 blog alt bug.
+       */
+      alt: image?.alt?.trim() || image?.asset?.alt?.trim() || alt,
       width: SHARE_IMAGE_WIDTH,
       height: SHARE_IMAGE_HEIGHT,
     },

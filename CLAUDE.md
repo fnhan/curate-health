@@ -204,6 +204,25 @@ sentence shape.**
 
 ## Phase 1: P0
 
+**Every ticket in this phase is done, verified against production on
+2026-10-13**, and several had no Done marker for weeks, which made the backlog
+look larger than it was. Check before working one of these.
+
+| Ticket | Checked |
+| --- | --- |
+| CH-020 unicode | `audit-unicode.js`, 0 Cf characters in the dataset |
+| CH-021 address | `addressLocality: Toronto`, no "York" |
+| CH-001 500s | unknown service slugs return 404 |
+| CH-002 redirects | all four legacy URLs 301 |
+| CH-022 acupuncture | `/services/rehab/acupuncture` 200 |
+| CH-023 Flowpresso | title is `Flowpresso® Therapy Toronto`, and the last three claim lines went 2026-10-13, below |
+| CH-032 llms.txt | clean on all six original defects |
+| CH-033 psychotherapy | its own description, not performance training's |
+
+CH-013, in phase 2, is done too: both `/services/exercise-therapy` and
+`/services/lifestyle-medicine/exercise-therapy` redirect to
+`/services/movement-and-training`.
+
 ### CH-020 Strip zero-width Unicode from Sanity
 
 Roughly 9,550 invisible characters render on every page. The contact page carries 17,190. Source is the address field in Sanity, contaminated by a paste from a rich-text source.
@@ -314,7 +333,18 @@ New title: `Flowpresso® Therapy Toronto | Curate Health`
 
 `scripts/fix-flowpresso-capitalisation.js` fixes the ten occurrences in Sanity. The registered symbol goes everywhere, titles included. It was first left out of `seo.pageTitle` on the reasoning that a title is the string Google truncates hardest; Frank confirmed on 2026-09-10 that he wants it there, and the title has room.
 
-That script also reports four things on the same page that need a decision rather than a replace, and leaves them alone: a grammatical slip in `benefits.title`, "transformative" in `cta.ctaText`, "clinics" in a benefit subtitle, and an "FDA Approved" claim. The last is a compliance question, not a copy one. Flowpresso is a New Zealand device and FDA clearance is a specific regulatory status rather than a synonym for approved, so confirm it before it stays.
+That script also reported four things on the same page that needed a decision rather than a replace. **All four are closed as of 2026-10-13.**
+
+- The **"FDA Approved" claim** was the one that mattered. Flowpresso holds 510(k) clearance, not premarket approval, and the page now says so. See the FDA section below.
+- The **grammatical slip in `benefits.title`**, "Why Choose Curate Health's for Flowpresso® Therapy?", now reads "Why Choose Curate Health for".
+- **"clinics" in a benefit subtitle** went with the same pass. "One of the few clinics to provide Flowpresso® Therapy in Toronto" breaks the rule that Curate Health is a space, and the same claim on /services already read "one of the few spaces in Toronto", so the two now agree. "ensuring you receive the highest quality care" went at the same time, a superlative against the tone rule.
+- **"transformative" in `cta.ctaText` stays.** Frank cleared the word on 2026-10-11.
+
+One more went with them, not on the original list: `intro.subtitle` read "Enhance Your Recovery with Advanced Compression Therapy - Overcoming Recovery Challenges", two headings joined by a hyphen standing in for a dash, the second repeating the first. It is the first half alone now.
+
+`scripts/fix-flowpresso-capitalisation.js` is unchanged and still only does the spelling. These three were applied directly, transaction `UAIn8zgTVuj4HCTBS5YhXh`, after `sanity-backup-2026-10-13-before-flowpresso-claims-documents.tar.gz`.
+
+**The quote on that page stays**, one of the seventeen unsigned first-person lines Frank settled on 2026-10-11.
 
 ### CH-032 Regenerate llms.txt
 
@@ -1864,12 +1894,19 @@ the output always looks plausible and is never the sentence somebody wrote.
 `GET_POST_BY_SLUG_QUERY` selected `image.alt` while the schema stored
 `sectionImage.alt`. Check the path end to end before writing copy into a field.
 
-Not yet fixed, and it is small: a share title is a reasonable thing for
-`og:image:alt` to say, so this is a missed improvement rather than a defect. The
-fix is two edits and a typegen. Add `alt` at the image-object level in both
-`ogImage` and `twitterImage` in `SEO_QUERY`, then prefer it in `imageEntry`:
-`image?.alt?.trim() || image?.asset?.alt?.trim() || alt`. `SeoImage` needs the
-field too. It touches metadata on every page, so it is tier 2.
+**Fixed 2026-10-13.** `SEO_QUERY` selects `alt` at the image-object level on
+both `ogImage` and `twitterImage`, `SeoImage` carries the field, and
+`imageEntry` prefers it: `image?.alt?.trim() || image?.asset?.alt?.trim() ||
+alt`. The asset-level alt is still read second, so a picture with its alt in the
+media library rather than on the field keeps working.
+
+Every share card now carries the sentence somebody wrote for it. Checked across
+the practitioner pages, /about, /products and /blog: all of them were the page
+title before, and none is now.
+
+Regenerating the types added 38 lines, one `alt` per share image across the 19
+queries that embed `SEO_QUERY`, and nothing else. `schema.json` did not change,
+since the schema already had the field; only the projection was missing it.
 
 ### The blog byline mark is the white asset, 2026-10-12
 

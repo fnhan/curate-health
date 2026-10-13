@@ -10,6 +10,7 @@ export const SEO_QUERY = groq`
       ogImage{
         crop,
         hotspot,
+        alt,
         asset-> {
           _id,
           url,
@@ -19,6 +20,7 @@ export const SEO_QUERY = groq`
       twitterImage{
         crop,
         hotspot,
+        alt,
         asset-> {
           _id,
           url,

@@ -1476,10 +1476,27 @@ fail. `--expect=<n>` was added for this: `--apply` now also requires the count
 the dry run printed, which cannot be written before the dry run is read.
 **Do not chain anything destructive after anything else.**
 
-### CH-117 Retire the orphaned image assets
+### CH-117 Retire the orphaned image assets. Closed 2026-10-13, not deferred
 
-**Deferred 2026-09-13, at Frank's direction. Raise it again rather than
-letting it lapse.**
+**Frank's decision: the unreferenced images stay, as a library to draw on.**
+"I'm okay with leaving all the unreferenced photos as the library for if we need
+it later." **Do not raise this again**, and do not treat an unreferenced asset
+as a defect: the B Corp section photograph was built from one.
+
+**His question was whether this was about space, and it was not.** The note
+below already said so and it is worth stating plainly: the 807 MB is not a
+constraint anybody has hit, and nothing about it reaches a visitor. The only
+real cost was the Studio's media library, where dead images sit between the live
+ones, and he has judged that cheaper than losing the archive. The three
+verification gaps below are moot.
+
+**CH-029 is a separate thing and still stands.** Downsampling oversized assets
+is about what gets served, not what is stored. It is low value since CH-007
+added `sizes`, so Next serves resized variants and the source dimensions mostly
+do not reach anybody, but it is not the same decision.
+
+The record of what was found, kept because it is the only survey of this
+library:
 
 367 of the 560 image assets are referenced by nothing, 807 MB. None appears
 in production HTML. That is two methods, and CH-116 held documents to three,

@@ -1897,9 +1897,19 @@ particular areas follow, in the copy and in a practitioner's focus list.
 `UAIn8zgTVuj4HCTBS54Bin`, after
 `sanity-backup-2026-10-13-before-claire-and-outdoor-pilates-documents.tar.gz`.
 
-**She is not on the team page and cannot be until there is a photograph.** The
-hub renders a fixed 300px frame per card and an empty one is a hole in the
-grid. That is the rest of CH-030, along with her share image.
+**She has a photograph, since 2026-10-13**, a studio portrait Frank sent as a
+placeholder "until I get a better one". It is on her record and on both share
+fields, so **the only thing left before she can be switched on is the Our Team
+entry**, which is CH-030. The hub reads `ourTeam.teamMembers` and matches on
+name, so the entry has to say "Claire Kim" exactly.
+
+**Her share hotspot is y 0.52, not the house 0.3.** The other six are standing
+portraits with the face about a third down, which is what 0.3 is for. Hers is a
+seated side stretch with her face at about 0.54, so 0.3 would band her shoulder.
+The rule was always "put the band on the face"; 0.3 is what that meant for the
+other six rather than a number to copy. Her source is 1331x2000, narrower than
+both the 4:5 page crop and the 1200x630 share, so every crop takes the full
+width and the horizontal hotspot does nothing.
 
 **"Pilates Instructor", not "STOTT PILATES Instructor Trainer"**, by Frank's
 decision: "some may not know what that is or may not look for that
@@ -1940,21 +1950,28 @@ paints 704x556 landscape, so both had to be cropped whatever else happened, to
 with a gamma curve that fades out towards the highlights, so the sky and the lit
 paving hold.
 
-The class shot was first cropped from y=330 to keep the loose shoes out of
-frame. Frank then asked for the framing to drop so more of the class shows, and
-for the shoes to be painted out rather than cropped around. It starts at y=700
-now, nine participants in shot, with **five patches** over the shoes that
-revealed: beside Claire, the white trainers mid-frame, the sandals by the
-planter, the pair by the pink mat and the bottom-right corner.
+The class shot is cropped from y=330, which keeps the loose shoes out of frame.
 
-**Each patch copies clean paving from elsewhere in the same photograph**, through
-a feathered mask. The paving is a regular grid of pale slabs, so a donor taken a
-slab or two away lands on matching texture and matching light. **Take donors
-straight down from the target, not sideways.** Three of the first five were
-sideways and all three were wrong: one sampled the blue mat and came back as a
-dark block, one caught the planter edge, one a shadow. It took three passes, and
-each was checked by opening the saved file rather than by screenshotting the
-pane, which kept scrolling between calls.
+**A retouched version was built and thrown away, and the lesson is worth the
+paragraph.** Frank asked for the framing to drop so more of the class shows, and
+for the shoes to be painted out rather than cropped around. That was done: y=700,
+nine participants, five patches of clean paving copied from elsewhere in the same
+photograph through feathered masks. His verdict: "the photoshop class photo is
+terrible without the shoes. revert back to what you had before."
+
+He is right, and it is not obvious while you are doing it. Patching five holes in
+a paving grid leaves five patches of repeated texture, and a slab pattern makes
+the repetition visible even when every seam is feathered. **A crop that excludes
+clutter beats a retouch that covers it.** Reach for the crop first.
+
+Two things from the attempt that are still worth knowing, if a patch is ever the
+only option. Take donors **straight down** from the target, not sideways: three
+of the first five were sideways and all three were wrong, one sampling the blue
+mat and coming back as a dark block. And check each pass by opening the saved
+file rather than screenshotting the pane, which kept scrolling between calls.
+
+The retouched asset is still in the library, referenced by nothing, so it is a
+CH-117 candidate.
 
 **Nothing in either photograph changes a person.** Frank also asked for Claire to
 be made "a bit slimmer", reading the wide angle as having warped her. That was

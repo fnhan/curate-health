@@ -122,6 +122,14 @@ These apply to every word written into the site, schema, meta tags, or alt text.
   and currently unused
 - OHIP framing is exactly: "partially covered by OHIP and most benefit programs"
 - The outdoor space is always "Recovery Sanctuary." Never "outdoor terrace" or any variant
+- **No update stamp on any page, ever. Frank's rule, 2026-10-13.** No "Last
+  reviewed", "Last updated" or "Last modified" line, anywhere, whatever the
+  date comes from. `audit-content-rules.js` fails on all three wordings, and
+  `audit-blog.js` fails a post that renders one. The component that drew it is
+  deleted, so putting it back means writing a new one. **`dateModified` stays in
+  the `BlogPosting` markup**, which is not a contradiction: Google reads it on
+  Article and BlogPosting without expecting it rendered, unlike
+  `BreadcrumbList`, which it checks against the trail a reader can see
 - Neighbourhood descriptor is "Midtown Toronto"
 - **The house spelling is "cafe", never "café".** No accent, anywhere: the site, the Studio, marketing, design, anything Curate produces. Frank ruled on 2026-09-12. `node scripts/audit-cafe-accent.js` sweeps the dataset and exits 1 if an accented spelling is live
 - **Canadian spelling throughout. A hard rule, and Frank asked on 2026-10-11
@@ -1328,7 +1336,7 @@ Folded into the contact page instead. `contactPage.howToGetHere` was rewritten i
 | ID     | Task                                                                                                                                                               |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | CH-110 | **Done 2026-09-13.** `lang="en-CA"` in `app/layout.tsx` |
-| CH-111 | **Done 2026-09-17.** A visible "Last reviewed" line is on treatment and blog pages, from Sanity's `_updatedAt`, since 2026-09-13. Blog posts carry the same date as `dateModified` in their `BlogPosting` markup, CH-105. Treatment pages carry no `dateModified`, because putting it on a `Service` node would be markup nothing consumes |
+| CH-111 | **Reversed 2026-10-13, and it is not coming back.** The visible "Last reviewed" line ran on treatment and blog pages from 2026-09-13; Frank had it off every page: "make a rule that this update stamp should never appear." `components/shared/last-updated.tsx` is deleted, both call sites with it. The case for it was that a reader judging health content wants to know how old it is; against it, `_updatedAt` moves on a typo fix, so the line dated the document rather than any review, and on a page nobody had touched in months it advertised that. `dateModified` stays in the `BlogPosting` markup, see the content rule above |
 | CH-112 | **Done 2026-09-13.** Search form, six hub links, `noindex`, still a real 404. Deliberately not a redirect home: a soft 404 teaches a crawler a dead URL is a live page |
 | CH-113 | **Done 2026-09-13.** `book_now`, `call_click`, `email_click`, `directions_click` and `file_download`, from one delegated listener in `components/shared/analytics-events.tsx`. See below |
 | CH-114 | **Built 2026-09-18.** IndexNow submission on publish. Bing's index is what ChatGPT search runs on. See below                                                        |
@@ -1908,19 +1916,41 @@ osteoporosis after, per the pigeonholing note above.
 uniquely their own". A bio is a personal statement in that person's voice, so
 it was flagged rather than silently edited. Edit it only if Claire wants it.
 
-_The page._ It was entirely benefit language: nothing said how many people are
-in a class, what happens when it rains, what to bring, or who teaches it, which
-are the questions a search actually asks and the flat facts an answer engine
-quotes. Group size, the closing pergola, the move indoors, what to wear and the
-one-on-one sessions are all on it now. **Class length is still missing**, and
-was left out rather than guessed.
+_The page._ It was entirely benefit language: nothing said how long a class
+runs, how many people are in it, what happens when it rains, what to bring, or
+who teaches it, which are the questions a search actually asks and the flat
+facts an answer engine quotes. All of it is on the page now, Frank's facts
+throughout: 50 minutes, up to 12, the pergola that closes, the move indoors to
+the gym, workout clothes and layers, mats provided and your own welcome, and
+the one-on-one sessions.
 
-**The practical copy went into the existing section rather than a new one.**
-`AlternatingSections` renders `src={sectionImage?.image || ""}`, so a section
+**Two sections with a photograph each, since 2026-10-13.** The practical copy
+was crowded into the one existing section for a day, because
+`AlternatingSections` renders `src={sectionImage?.image || ""}` and a section
 with no photograph publishes a bare `<img>` with an empty source, the CH-028
-defect. The library holds no usable second photograph for this page: the only
-two candidates are a watermarked stock beach and a screenshot of a sauna. Add a
-real second photograph and the practical copy can become its own section.
+defect, and the library had nothing usable: a watermarked stock beach and a
+screenshot of a sauna. Frank then sent two photographs of a real class, so it
+has its own section. The component staggers off the array index, so nothing had
+to be written for that: measured at 1600px, the first photograph sits at 125 and
+the second at 825.
+
+**Both photographs were edited, and only in ways a crop or a curve can do.**
+They are 1125x2000 portrait and the slot paints 704x556 landscape, so both had
+to be cropped whatever else happened, to 1125x889. The warmup shot is backlit
+with the whole row in shadow and was lifted with a gamma curve that fades out
+towards the highlights, so the sky and the lit paving hold. The class shot was
+cropped from y=330 to drop the loose shoes along the bottom, which is what Frank
+asked for. **One pair of trainers remains**, beside the instructor: a crop
+cannot reach it without losing her, and painting it out is retouching the
+contents of a real photograph rather than framing it, which is Frank's call.
+
+Done on a canvas in the browser, as the B Corp composite was, because this
+project has no image library. **The base64 never came back through the
+conversation**: a page that POSTs its canvases to a throwaway local Node server
+writes the bytes to disk, which is worth remembering, since reading two data
+URLs out through the browser tool would have moved about 650,000 characters.
+`scripts/add-outdoor-pilates-photos.js` uploads the finished files and writes
+the sections; it does not generate them.
 
 The two benefit rewrites are Claire's own, trimmed. **Her copy came from a
 stale version of the page**: the em dash she flagged in "philosophy-supporting"

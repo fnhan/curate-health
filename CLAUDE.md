@@ -1765,35 +1765,58 @@ grid below spanned the full width. `mr-auto` pins it to the container's left
 edge, which is where the first photograph in the grid starts: measured at
 1600px, text left 125, grid left 125.
 
-### The last two practitioner descriptions, 2026-10-12
+### The last two practitioner SEO sets, 2026-10-12
 
-Dr. Nhan and Safa Karoumi were the two of seven with no `seo.pageDescription`,
-both running on the code fallback, "Dr. Frank Nhan, Doctor of Chiropractic at
-Curate Health in Midtown Toronto.", 75 characters.
+Dr. Nhan and Safa Karoumi were the two of seven with nothing filled in, both
+running on the code fallback, "Dr. Frank Nhan, Doctor of Chiropractic at Curate
+Health in Midtown Toronto.", 75 characters.
 
 Dr. Nhan's was held in September because the description he wrote was 174
 characters against the Studio's 160 limit. **That draft is recorded nowhere**,
-so it could not be trimmed, only rewritten. Frank chose from three options on
-2026-10-12:
+so it could not be trimmed, only rewritten. Frank chose from three options:
 
 > Dr. Frank Nhan is a chiropractor and acupuncture provider at Curate Health in
 > Midtown Toronto, also a strength and conditioning specialist and yoga teacher.
 
 It departs from the house pattern on purpose: he holds four credentials and the
 pattern has room for one, so his names all four and gives up the call to action.
-Safa's follows the pattern the other five use.
+**His share title, share description and share image are still empty.**
 
-`scripts/apply-remaining-practitioner-seo.js`, transaction
-`UAIn8zgTVuj4HCTBS4qjIb`, after
-`sanity-backup-2026-10-12-before-nhan-safa-seo-documents.tar.gz`.
+**Safa's is the complete set**, written at Frank's request while she is switched
+off, "so when we turn it on, it's already there". Page title, description,
+share title, share description and both share images. It changes nothing a
+visitor sees, since her page is a 404 until the switch flips, and the Search
+Console steps above still apply then.
 
-**Safa's page is switched off and this was still worth writing.** It changes
-nothing a visitor sees and means there is nothing to remember when she returns.
-The Search Console steps above still apply then.
+The house shape, now confirmed across all six that have one: `socialMeta.title`
+repeats `pageTitle`, `socialMeta.description` repeats `pageDescription`, and both
+share images are the person's own photo with no crop and the hotspot
+`{x: 0.5, y: 0.3, width: 1, height: 0.6}`. **The y of 0.3 is the load-bearing
+part**: centred, a 1200x630 band through a portrait cuts the face in half.
 
-**Still empty on both records:** the share title, the share description and the
-share image, and the page title falls back to the name and credential. A
-separate decision.
+**One regulatory point on Safa's title, for her to confirm.** CRPO authorises
+"Registered Psychotherapist (Qualifying)" and the abbreviation "RP
+(Qualifying)". The full form is 53 characters and a page title has 45, since
+"| Curate Health" costs 15 of the 60 Google shows. The title reads
+"Psychotherapist (Qualifying)", which keeps the qualifying class visible and
+claims no full registration but drops "Registered". The description carries the
+designation in full, so the snippet is complete. If she wants the exact title,
+"Safa Karoumi, RP (Qualifying)" fits at 44.
+
+`scripts/apply-remaining-practitioner-seo.js` wrote the two descriptions,
+transaction `UAIn8zgTVuj4HCTBS4qjIb`.
+`scripts/finish-safa-seo-and-flowpresso-heading.js` wrote the rest,
+`UAIn8zgTVuj4HCTBS4vNa9`, after
+`sanity-backup-2026-10-12-before-safa-share-and-heading-documents.tar.gz`.
+
+**The Flowpresso benefit heading went in the same transaction.**
+"State-of-the-Art Technology" sat over the sentence corrected earlier that day
+to "an FDA cleared Class II medical device", and it was wrong twice: hype
+against the tone rule, the same category as the "cutting-edge" removed from the
+sentence below it, and a claim of novelty over a body conceding equivalence,
+since a 510(k) is a finding of substantial equivalence to a device already on
+the market. Frank chose **"Medical-Grade Technology"**, hyphenated because it is
+a compound modifier before a noun.
 
 
 ### The blog byline mark is the white asset, 2026-10-12

@@ -1794,14 +1794,18 @@ share images are the person's own photo with no crop and the hotspot
 `{x: 0.5, y: 0.3, width: 1, height: 0.6}`. **The y of 0.3 is the load-bearing
 part**: centred, a 1200x630 band through a portrait cuts the face in half.
 
-**One regulatory point on Safa's title, for her to confirm.** CRPO authorises
-"Registered Psychotherapist (Qualifying)" and the abbreviation "RP
-(Qualifying)". The full form is 53 characters and a page title has 45, since
-"| Curate Health" costs 15 of the 60 Google shows. The title reads
-"Psychotherapist (Qualifying)", which keeps the qualifying class visible and
-claims no full registration but drops "Registered". The description carries the
-designation in full, so the snippet is complete. If she wants the exact title,
-"Safa Karoumi, RP (Qualifying)" fits at 44.
+**Her title and description say "Registered Psychotherapist", without
+"(Qualifying)", by Frank's decision on 2026-10-12**: "we aren't pushing it yet
+anyway, and by the time we do, she will be qualified." That also dissolves a
+character problem, since CRPO's full "Registered Psychotherapist (Qualifying)"
+is 53 against a 45 budget, "| Curate Health" costing 15 of the 60 Google shows.
+Transaction `t0eFzHW6gbFrsnx0qyFban`.
+
+**`credentials` on the record still reads "Registered Psychotherapist
+(Qualifying)", deliberately.** That is the line the page itself prints and it is
+accurate today. The two disagree, which is fine only while the page is a 404.
+**Change the credential at the same moment the switch goes back on**, or the
+page will show one designation and the search snippet another.
 
 `scripts/apply-remaining-practitioner-seo.js` wrote the two descriptions,
 transaction `UAIn8zgTVuj4HCTBS4qjIb`.

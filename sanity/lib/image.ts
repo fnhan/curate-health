@@ -80,3 +80,35 @@ export const urlForPractitionerPhoto = (source: Image) => {
     .auto("format")
     .url();
 };
+
+/**
+ * The photograph slot in AlternatingSections, which paints 704x556.
+ *
+ * ADDED SO A CROP SET IN THE STUDIO ACTUALLY DOES SOMETHING
+ *
+ * That component took a bare url out of the query, so the crop and hotspot an
+ * editor dragged in the Studio were never read: the browser centre-cropped
+ * whatever was uploaded. Frank asked on 2026-10-18 for the cafe photographs to
+ * be left whole so he could crop them himself, which would have been a silent
+ * no-op without this.
+ *
+ * Twice the slot, so it stays sharp on a 2x screen. A portrait source is
+ * cropped to the frame by Sanity rather than by the browser, which is the whole
+ * point: the Studio's crop decides which part.
+ */
+export const SECTION_IMAGE_WIDTH = 1408;
+export const SECTION_IMAGE_HEIGHT = 1112;
+
+export const urlForSectionImage = (source: Image) => {
+  // The builder throws rather than returning null on an object with no asset,
+  // so this guards before calling it. Same trap as the practitioner photos.
+  if (!source || !(source as { asset?: unknown }).asset) return undefined;
+
+  return imageBuilder
+    ?.image(source)
+    .width(SECTION_IMAGE_WIDTH)
+    .height(SECTION_IMAGE_HEIGHT)
+    .fit("crop")
+    .auto("format")
+    .url();
+};

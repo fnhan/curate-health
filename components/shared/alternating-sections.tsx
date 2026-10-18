@@ -5,6 +5,7 @@ import { PortableText } from "@portabletext/react";
 import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
+import { urlForSectionImage } from "@/sanity/lib/image";
 
 interface Section {
   /** Stable across renames, unlike the title. Used to target one section. */
@@ -14,6 +15,20 @@ interface Section {
   sectionImage: {
     image: string | null;
     alt: string | null;
+    /**
+     * The image object, with whatever crop and hotspot the Studio holds.
+     *
+     * Optional, because only CAFE_PAGE_QUERY projects it so far. Where it is
+     * present the photograph is cropped by Sanity, which is what makes a crop
+     * dragged in the Studio do anything; where it is absent the bare `image`
+     * url is used and the browser centre-crops, as it always did.
+     *
+     * Added 2026-10-18, when Frank asked for the cafe photographs to be left
+     * whole so he could crop them himself. Without this that is a silent
+     * no-op, which is the same class of trap as the blog alt in CH-028: the
+     * field is written and nothing reads it.
+     */
+    source?: unknown;
   } | null;
 }
 
@@ -69,7 +84,13 @@ export const AlternatingSections = ({
                   <Image
                     sizes="(min-width: 768px) 45vw, 100vw"
                     loading="lazy"
-                    src={section.sectionImage?.image || ""}
+                    src={
+                      urlForSectionImage(
+                        section.sectionImage?.source as never
+                      ) ||
+                      section.sectionImage?.image ||
+                      ""
+                    }
                     alt={section.sectionImage?.alt || ""}
                     width={704}
                     height={556}

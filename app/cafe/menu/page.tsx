@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import SectionHero from "@/components/shared/section-hero";
-import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
+import { toParagraphs } from "@/components/shared/section-intro";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   CAFE_MENU_PATH,
@@ -161,29 +161,51 @@ export default async function CafeMenuPage() {
     <div className="font-poppins">
       <JsonLdScript data={buildCafeMenuJsonLd(menu)} id="cafe-menu-json-ld" />
 
-      {hero?.url ? (
-        <SectionHero
-          image={hero.url}
-          alt={hero.alt ?? ""}
-          title={heading}
-          subtitle={paragraphs[0]}
-        />
-      ) : (
-        <section className="bg-white pt-32 md:pt-40">
-          <div className="container flex flex-col gap-6">
-            <h1 className="text-3xl font-light text-primary md:text-5xl">
-              {heading}
-            </h1>
-            {paragraphs[0] ? (
-              <p className="max-w-[70ch] font-light leading-7 text-primary">
-                {paragraphs[0]}
-              </p>
-            ) : null}
-          </div>
-        </section>
-      )}
+      {/*
+        THE PHOTOGRAPH CARRIES NO TEXT, AND THE TITLE SITS UNDER IT.
 
-      <SectionIntro className="font-poppins" paragraphs={paragraphs.slice(1)} />
+        Frank, 2026-10-18: bring the title "below the hero image for more
+        visibility and to make it congruent with all the other sibling pages".
+        This page's sibling is /cafe, which does exactly this: a full bleed
+        photograph and then the heading on white underneath.
+
+        It used SectionHero before, which lays the h1 over the picture. That is
+        the right pattern for /services, /products and /about, where the second
+        menu sits directly under the band. The cafe does not use that pattern
+        and this page belongs to the cafe.
+      */}
+      {hero?.url ? (
+        <Image
+          src={hero.url}
+          alt={hero.alt ?? ""}
+          width={1920}
+          height={1080}
+          priority
+          quality={100}
+          sizes="100vw"
+          className="h-[400px] w-full object-cover md:h-[550px]"
+        />
+      ) : null}
+
+      {/*
+        The heading and the opening prose, across the full container rather
+        than capped at the left column. Frank again: "have it extend all the
+        way across in width and not just align to the left column." So no
+        measure cap here, unlike the item lists below, which need one to keep
+        the price column readable.
+      */}
+      <section className="bg-white pt-14 text-primary md:pt-20">
+        <div className="container flex flex-col gap-6">
+          <h1 className="text-3xl font-light tracking-tight md:text-5xl">
+            {heading}
+          </h1>
+          {paragraphs.map((text) => (
+            <p key={text} className="font-light leading-7">
+              {text}
+            </p>
+          ))}
+        </div>
+      </section>
 
       <section className="bg-white pb-28 text-primary md:pb-36">
         <div className="container">

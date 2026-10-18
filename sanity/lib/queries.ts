@@ -361,6 +361,9 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
     sectionParagraph,
     sectionImage{
       "image": image.asset->url,
+      // The image object itself, so AlternatingSections can apply the crop
+      // and hotspot the Studio holds. The url above stays as the fallback.
+      "source": image{asset, crop, hotspot},
       alt
     }
   },

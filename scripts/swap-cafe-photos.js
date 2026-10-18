@@ -8,20 +8,22 @@
  * latte, the energy bars in place of a bowl of energy balls, and a better chia
  * pudding.
  *
- * WHY THEY ARE CROPPED BEFORE UPLOAD
+ * THEY GO UP WHOLE, UNCROPPED
  *
- * All three arrived 1506x2000 portrait and the slot in AlternatingSections
- * paints 704x556, a ratio of 1.266. `object-cover` would centre-crop them,
- * which is fine for the two that are centred and ruins the matcha, whose glass
- * sits in the bottom half of the frame: a centre crop cuts it off.
+ * A first run uploaded them cropped to the slot, 1506x2000 down to 1506x1189,
+ * because AlternatingSections paints 704x556 and `object-cover` would
+ * centre-crop them. Frank asked on 2026-10-18 for the originals instead: "leave
+ * them whole on Sanity and I will go in and crop it myself."
  *
- * A crop set in Sanity would not help, because the query behind that component
- * selects the raw asset url and no crop, so the Studio's crop is ignored there.
- * So the crop is baked, each with its own vertical offset chosen from the
- * subject, by photo/crop.html on a canvas. Same approach as the Outdoor Pilates
- * photographs, and the reason is the same: this project has no image library.
+ * **That needed a code change to mean anything.** The query behind that
+ * component selected a bare url, so the crop and hotspot an editor drags in the
+ * Studio were never read. CAFE_PAGE_QUERY now projects the image object and the
+ * component runs it through `urlForSectionImage`, so his crop decides the frame.
+ * Without that, cropping in the Studio would have been a silent no-op, the same
+ * class of trap as the blog alt in CH-028.
  *
- * THE ARRAY IS WRITTEN WHOLE
+ * Until he crops one, Sanity centres it, which is what the browser did before.
+ * * THE ARRAY IS WRITTEN WHOLE
  *
  * Per the CH-028 note: an indexed patch into an array that is also being
  * rewritten in the same transaction is silently lost. This reads
@@ -42,7 +44,7 @@ const PHOTOS = path.join(
   "claude",
   "C--Users-Chiro1-projects-curatehealth",
   "32965cdf-5391-4e2a-98af-6a36417013eb",
-  "photo"
+  "images"
 );
 
 /**
@@ -53,19 +55,22 @@ const PHOTOS = path.join(
 const SWAPS = [
   {
     section: "We Invite You To Slow Down And Savour",
-    file: "cafe-matcha-latte.jpg",
+    file: "8.jpg",
+    upload: "cafe-matcha-latte.jpg",
     alt: "A hand holding a glass of iced matcha latte, the matcha settling in green ribbons through the milk, in front of the cafe's frosted glass door.",
     replaces: "a 384x512 photograph, by far the smallest asset on the page",
   },
   {
     section: "Food Is Medicine",
-    file: "cafe-energy-bars.jpg",
+    file: "10.jpg",
+    upload: "cafe-energy-bars.jpg",
     alt: "Two chocolate hazelnut bars cut to show the filling, on a white plate with hazelnut crumble and whole hazelnuts.",
     replaces: "three energy balls in a black bowl, which are not on the menu",
   },
   {
     section: "Where Every Bite Matters",
-    file: "cafe-chia-pudding.jpg",
+    file: "9.jpg",
+    upload: "cafe-chia-pudding.jpg",
     alt: "A glass of chia pudding layered with dark berry compote and topped with hojicha nut granola.",
     replaces: "an older chia pudding photograph on a wooden board",
   },
@@ -97,7 +102,9 @@ async function main() {
   console.log(`cafePage ${page._id}, rev ${page._rev}\n`);
 
   for (const swap of SWAPS) {
-    const found = page.sections.find((s) => s.sectionTitle?.trim() === swap.section);
+    const found = page.sections.find(
+      (s) => s.sectionTitle?.trim() === swap.section
+    );
     if (!found) {
       throw new Error(`no section titled "${swap.section}"`);
     }
@@ -105,7 +112,9 @@ async function main() {
     console.log(swap.section);
     console.log(`  was:  ${found.file}`);
     console.log(`        ${found.alt}`);
-    console.log(`  now:  ${swap.file}  ${(swap.bytes.length / 1024).toFixed(0)} KB`);
+    console.log(
+      `  now:  ${swap.upload}  ${(swap.bytes.length / 1024).toFixed(0)} KB, whole`
+    );
     console.log(`        ${swap.alt}`);
     console.log(`  why:  replaces ${swap.replaces}\n`);
   }
@@ -116,16 +125,15 @@ async function main() {
   }
 
   for (const swap of SWAPS) {
-    const asset = await uploadImage(swap.bytes, swap.file, "image/jpeg");
+    const asset = await uploadImage(swap.bytes, swap.upload, "image/jpeg");
     swap.assetId = asset._id;
-    console.log(`uploaded ${swap.file} -> ${asset._id}`);
+    console.log(`uploaded ${swap.upload} -> ${asset._id}`);
   }
 
   // Read the array whole, swap in place, write it back whole.
-  const [full] = await query(
-    `*[_id == $id][0...1]{_rev, additionalSections}`,
-    { id: page._id }
-  );
+  const [full] = await query(`*[_id == $id][0...1]{_rev, additionalSections}`, {
+    id: page._id,
+  });
 
   const sections = (full.additionalSections || []).map((section) => {
     const swap = SWAPS.find((s) => s._key === section._key);

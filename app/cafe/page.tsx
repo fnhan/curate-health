@@ -87,14 +87,20 @@ export default async function CafePage() {
         sectionClassName="font-poppins"
         proseClassName="font-poppins prose-headings:font-poppins prose-p:font-poppins"
       />
-      <CafeHours siteSettings={siteSettings} />
       {/*
-        The menu band, directly above the Visit the cafe band, at Frank's
-        request on 2026-10-18. It replaces the What we're serving today card
-        and the PDF download that sat in it, so there is one way into the
-        menu rather than three. It takes that card's own Studio copy.
+        The menu band, directly under the last alternating section and above
+        "Visit the cafe", which is the hours block. Frank, 2026-10-18: "above
+        \"Visit the Cafe\" and just below the chia pudding photo".
+
+        It was below the hours before this, because the first reading of
+        "before the Visit the cafe section" took that for the CTA band at the
+        foot of the page. It is not: CafeHours carries that heading.
+
+        It replaces the What we're serving today card and the PDF download
+        that sat in it, so there is one way into the menu rather than three.
       */}
       <CafeMenuBand menuPath={hasMenuPage ? CAFE_MENU_PATH : null} />
+      <CafeHours siteSettings={siteSettings} />
       <CafeCtaBandSection data={ctaBandSection} />
     </div>
   );

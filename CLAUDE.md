@@ -1446,12 +1446,18 @@ adaptive settings need to split it to 2 for any reason". Measured at 1680,
 1280 and 375, every heading is one line today, the widest being "Kombucha on
 Tap" at 211px in a 311px phone container.
 
-**/cafe has one way into the menu, a band above the Visit the cafe band.**
+**/cafe has one way into the menu, a band under the last alternating section and above "Visit the cafe".**
 `components/layout/cafe-page/cafe-menu-band.tsx`, chosen by Frank on
 2026-10-18 from three drafts: dark green filling sage on hover, the whole
 section a single link because he asked for "the entire section being a
 clickable button". White on sage is the house hover, the same as the bar under
 the Program Timeline, and the resting state is the high contrast one.
+
+**"Visit the cafe" is the hours block, not the band at the foot of the page.**
+The band sat below the hours for a round because the first reading of "before
+the Visit the cafe section" took that heading for the CTA band. `CafeHours`
+carries it. Measured after the fix: the chia pudding section at y 4887, the
+band at 5555, Visit the cafe at 5903, the CTA band at 6631.
 
 **It says "Cafe menu" and then "Read the full menu" with an arrow, and that
 is the whole of it.** His words: "I like the simplicity ... keeps it simple
@@ -1786,6 +1792,23 @@ of a rich text source into a field. `audit-unicode.js` runs after the write;
 this runs before it. Everything he sent was retyped by hand, and the audit
 reports 0 Cf in the dataset.
 
+#### The menu page follows /cafe, not /services. 2026-10-18
+
+**The photograph carries no text and the title sits under it.** Frank asked
+for the title "below the hero image for more visibility and to make it
+congruent with all the other sibling pages". This page's sibling is /cafe,
+which does exactly that: a full bleed photograph, then the heading on white.
+
+It used `SectionHero` before, which lays the h1 over the picture. That is
+right for /services, /products and /about, where the second menu sits directly
+under the band, and the cafe does not use that pattern.
+
+**The heading and the opening prose run the full container width**, not capped
+at the left column: "have it extend all the way across in width and not just
+align to the left column." The item lists below keep their measure, because
+the price column needs an edge to sit against. Measured at 1440: the heading
+spans 45 to 1381, which is the container.
+
 #### Three new photographs on /cafe, 2026-10-18
 
 Frank sent them to replace three section images: the matcha latte, the energy
@@ -1794,14 +1817,22 @@ chia pudding. `scripts/swap-cafe-photos.js`, transaction
 `b293KmNbo0z5K9RnfhO8Th`, after
 `sanity-backup-2026-10-18-before-cafe-photos-documents.tar.gz`.
 
-**All three were cropped before upload**, 1506x2000 portrait down to 1506x1189
-for a slot that paints 704x556. `object-cover` centre-crops, which is fine for
-the two that are centred and ruins the matcha, whose glass sits in the bottom
-half: the centre crop cuts it off. **A crop set in Sanity would not have
-helped**, because the query behind `AlternatingSections` selects the raw asset
-url and no crop, so the Studio's crop is ignored there. Baked on a canvas by
-`photo/crop.html`, as the Outdoor Pilates photographs were.
+**They are whole, and a crop in the Studio now does something.** A first run
+uploaded them cropped to the slot, 1506x2000 down to 1506x1189, because
+`object-cover` centre-crops and that cuts the matcha glass off. Frank asked
+for the originals instead: "leave them whole on Sanity and I will go in and
+crop it myself."
 
+**That needed a code change to mean anything.** `AlternatingSections` took a
+bare url out of the query, so the crop and hotspot an editor drags in the
+Studio were never read. `CAFE_PAGE_QUERY` now projects the image object as
+`source`, and the component runs it through `urlForSectionImage`, so the
+Studio's crop decides the frame. Without it, cropping there would have been a
+silent no-op, the same class of trap as the blog alt in CH-028.
+
+`source` is optional on the component's type and only the cafe query provides
+it, so the other six callers are untouched and still centre-crop as before.
+Until a crop is set, Sanity centres it, which is what the browser did.
 **The Drive link he first sent could not be used**, and the reason is worth
 knowing before anyone tries again: it was the top-level Curate Drive folder,
 hundreds of files with phone-camera names, and the cafe shoot in it is **HEIF**,

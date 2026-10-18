@@ -1,9 +1,9 @@
-import Image from "next/image";
 import { notFound, permanentRedirect } from "next/navigation";
 
 import { PortableText } from "@portabletext/react";
 
 import { ProductsNavigation } from "@/components/layout/products-page/products-navigation";
+import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Accordion,
   AccordionContent,
@@ -104,12 +104,13 @@ export default async function ProductPage({
         id={`product-${product.slug?.current}-json-ld`}
       />
       <section>
-        <Image
+        <SanityImage
           width={1920}
           height={1080}
           priority
           quality={100}
           sizes="100vw"
+          source={banner}
           src={banner?.asset?.url || ""}
           alt={banner?.alt || ""}
           className="h-[400px] w-full object-cover md:h-[550px]"
@@ -143,10 +144,11 @@ export default async function ProductPage({
                 ))}
               </div>
             </div>
-            <Image
+            <SanityImage
               sizes="(min-width: 768px) 384px, 320px"
               width={1080}
               height={1440}
+              source={image}
               src={image?.asset?.url || ""}
               alt={image?.alt || ""}
               className="size-80 object-contain md:size-96 md:place-self-center md:justify-self-end"

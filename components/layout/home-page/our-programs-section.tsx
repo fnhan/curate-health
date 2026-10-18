@@ -1,8 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import HoverLink from "components/shared/hover-link";
 import { MoveRightIcon } from "lucide-react";
+
+import { SanityImage } from "@/components/shared/sanity-image";
 
 /**
  * Every field here is nullable, because every field in Sanity is optional and
@@ -52,8 +53,9 @@ export default function OurProgramsSection({
       {/* Background Image */}
       <div className="relative aspect-[16/12] min-h-[500px] w-full sm:aspect-[16/10] md:aspect-[16/8]">
         {bgImage?.asset?.url && (
-          <Image
+          <SanityImage
             fill
+            source={bgImage}
             src={bgImage.asset.url}
             alt={bgImage.alt ?? "Our Programs background"}
             className="object-cover object-[center_75%]"

@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-
+import { SanityImage } from "@/components/shared/sanity-image";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 
 const scrollToSection = (id) => {
@@ -53,8 +52,9 @@ const IntroSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
                 }
               >
                 <div className="relative flex-1">
-                  <Image
+                  <SanityImage
                     sizes="(min-width: 1280px) 350px, (min-width: 768px) 45vw, 90vw"
+                    source={image}
                     src={image?.asset?.url!}
                     alt={image?.alt ?? ""}
                     fill

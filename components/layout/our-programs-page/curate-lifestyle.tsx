@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 
+import { SanityImage } from "@/components/shared/sanity-image";
 import { getAssetDownloadUrl } from "@/lib/asset-download";
 import { externalLinkProps } from "@/lib/links";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
@@ -27,8 +27,9 @@ const CurateLifestyle = ({
         <div className="flex flex-col justify-end gap-8 pb-5 lg:items-center xl:flex-row 2xl:justify-start 2xl:pl-[488px]">
           <div className="relative shrink-0 md:left-0 2xl:absolute 2xl:-left-[210px]">
             <div className="absolute -top-14 left-0 h-14 w-5/6 bg-our-programs-border-2"></div>
-            <Image
+            <SanityImage
               sizes="(min-width: 768px) 700px, 100vw"
+              source={curateLifestyle?.image}
               src={curateLifestyle?.image?.asset?.url!}
               alt={curateLifestyle?.image?.alt ?? ""}
               height={550}

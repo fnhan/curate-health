@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Accordion,
   AccordionContent,
@@ -73,12 +73,13 @@ export default async function MissionAndValuesPage() {
 
   return (
     <>
-      <Image
+      <SanityImage
         width={1920}
         height={1080}
         priority
         quality={100}
         sizes="100vw"
+        source={heroSection?.heroImage?.image}
         src={heroSection?.heroImage?.image?.asset?.url || ""}
         alt={heroSection?.heroImage?.alt || ""}
         className="h-[400px] w-full object-cover md:h-[550px]"

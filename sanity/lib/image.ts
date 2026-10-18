@@ -127,3 +127,23 @@ export function framedImageUrl(source: unknown, width: number, height: number) {
       .url() || undefined
   );
 }
+
+/**
+ * The Studio's crop rectangle, with no box to fit it to.
+ *
+ * For a `fill` image, whose size comes from its container rather than from
+ * props. Sanity applies the stored crop as a `rect`, so the editor's framing is
+ * honoured and `object-cover` fits the result to the box, which is what it did
+ * before. Returns undefined when nothing is stored, so the plain url is served
+ * and nothing changes.
+ */
+export const croppedImageUrl = (source: unknown) => {
+  if (!hasFraming(source)) return undefined;
+
+  return (
+    imageBuilder
+      ?.image(source as Image)
+      .auto("format")
+      .url() || undefined
+  );
+};

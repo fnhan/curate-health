@@ -7,6 +7,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import highlightCircleText from "public/images/CircleText.png";
 import { ABOUT_SECTION_QUERYResult } from "sanity.types";
 
+import { SanityImage } from "@/components/shared/sanity-image";
+
 export default function AboutSection({
   aboutSection,
 }: {
@@ -30,11 +32,12 @@ export default function AboutSection({
         </div>
         <div className="flex justify-center">
           <div className="relative inline-block">
-            <Image
+            <SanityImage
               sizes="(min-width: 1536px) 536px, (min-width: 768px) 375px, 250px"
               width={536}
               height={536}
               alt={aboutImage?.alt || ""}
+              source={aboutImage}
               src={aboutImage?.asset?.url!}
               className="w-[250px] md:w-[375px] 2xl:w-[536px]"
             />

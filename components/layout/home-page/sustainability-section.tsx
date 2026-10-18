@@ -1,7 +1,6 @@
-import Image from "next/image";
-
 import { PortableText } from "@portabletext/react";
 
+import { SanityImage } from "@/components/shared/sanity-image";
 import { SUSTAINABILITY_SECTION_QUERYResult } from "@/sanity.types";
 
 export default function SustainabilitySection({
@@ -19,8 +18,9 @@ export default function SustainabilitySection({
     <section>
       <div className="relative">
         <div className="aspect-[16/12] min-h-[500px] w-full sm:aspect-[16/10] md:aspect-[16/8]">
-          <Image
+          <SanityImage
             fill
+            source={bgImage}
             src={bgImage?.asset?.url!}
             alt={bgImage?.alt ?? ""}
             className="object-cover"

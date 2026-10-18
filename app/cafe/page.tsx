@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { CafeCtaBandSection } from "@/components/layout/cafe-page/cafe-cta-band";
@@ -9,6 +8,7 @@ import {
 } from "@/components/layout/cafe-page/cafe-intro-and-quote";
 import { CafeMenuBand } from "@/components/layout/cafe-page/cafe-menu-band";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { SanityImage } from "@/components/shared/sanity-image";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   CAFE_MENU_PATH,
@@ -70,12 +70,13 @@ export default async function CafePage() {
         data={buildCafeJsonLd(cafePage, siteSettings, hasMenuPage)}
         id="cafe-json-ld"
       />
-      <Image
+      <SanityImage
         width={1920}
         height={1080}
         priority
         quality={100}
         sizes="100vw"
+        source={heroSection?.heroImage?.image}
         src={heroSection?.heroImage?.image?.asset?.url || ""}
         alt={heroSection?.heroImage?.alt || ""}
         className="h-[400px] w-full object-cover md:h-[550px]"

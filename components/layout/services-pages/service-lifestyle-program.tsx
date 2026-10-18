@@ -1,8 +1,7 @@
-import Image from "next/image";
-
 import { PortableText } from "@portabletext/react";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { SanityImage } from "@/components/shared/sanity-image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getAssetDownloadUrl } from "@/lib/asset-download";
@@ -103,7 +102,7 @@ export default function ServiceLifestyleProgramContent({
                   <PortableText value={section.description!} />
                 </div>
                 <div className="size-24 shrink-0 rounded-full bg-primary">
-                  <Image
+                  <SanityImage
                     sizes="96px"
                     src={section.image!}
                     // Decorative unless an editor writes one: the session's
@@ -122,8 +121,9 @@ export default function ServiceLifestyleProgramContent({
 
       <section className="relative bg-[#EBEBEB] py-14">
         {/* Background Image, flipped horizontally */}
-        <Image
+        <SanityImage
           sizes="100vw"
+          source={assistanceSectionImage}
           src={assistanceSectionImage?.asset?.url!}
           alt="Assistance Section Image"
           fill
@@ -203,8 +203,9 @@ export default function ServiceLifestyleProgramContent({
       </section>
 
       <section className={`relative h-[calc(100vh-100px)]`}>
-        <Image
+        <SanityImage
           sizes="100vw"
+          source={ctaBg}
           src={ctaBg?.asset?.url!}
           alt={ctaBgAlt!}
           width={1440}

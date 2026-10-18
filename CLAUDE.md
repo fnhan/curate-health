@@ -2072,6 +2072,58 @@ node scripts/indexnow-submit.js --apply   # sends every sitemap page
 
 The dry run refuses while the key file is not live, so it cannot be sent before the deploy lands. 200 and 202 are both success; 202 means the key is still being checked, normal at first.
 
+### The Studio's crop tool, made to work on the site. 2026-10-18
+
+Frank asked to be able to crop any photograph himself, "without changing how
+any of the current photos are cropped".
+
+**Almost every photograph here was a bare asset url in a box with**
+**`object-cover`**, so the browser centre-cropped it and the crop and hotspot
+an editor dragged in the Studio were thrown away. 308 image objects in the
+dataset, 28 carrying a crop and 29 a hotspot, nearly all of them ignored.
+
+**The promise is kept by doing nothing when there is nothing to do.**
+`framedImageUrl` in `sanity/lib/image.ts` returns undefined unless a crop or a
+hotspot is stored, and `components/shared/sanity-image.tsx` then serves the
+same bare url as before, byte for byte. The feature is dormant until somebody
+drags a frame, and live the moment they do. That is what lets it go on every
+photograph at once.
+
+**Wired so far**: `AlternatingSections`, which covers the section photographs
+on /cafe, /about/our-story, /about/mission-and-values, /about/sustainability,
+the blog posts, the treatment pages and the lifestyle program; `SectionHero`,
+which covers /services, /products and /about; and the /cafe/menu hero. The
+GROQ plumbing is on 43 projections, so the remaining call sites are a
+`<SanityImage>` swap each, not a query change.
+
+**`scripts/audit-image-framing.js` is the proof.** It records every image url
+on every page in the sitemap, and compares. Take the baseline before the
+change, with `--save`, from a build that does not have it.
+
+```bash
+node scripts/audit-image-framing.js http://localhost:3000 --save
+node scripts/audit-image-framing.js http://localhost:3000
+```
+
+**Its first version passed blind and that is the trap to know.** Every image
+here is served as `/_next/image?url=<the real one>`, and it compared the outer
+path, so all 387 images normalised to the string `/_next/image` and the check
+reported no change while a photograph had in fact moved. It unwraps the
+optimiser now.
+
+**Ten urls changed on two pages, and both are understood.**
+
+- **/about's hero genuinely reframes, by 1.5%.** Somebody had already set a
+  hotspot on it in the Studio and the site was ignoring it. Turning the tool
+  on makes their choice count: the crop starts at y 761 of 3073 rather than
+  the 715 a plain centre crop gives, 46px down. It is the one photograph on
+  the site where the promise could not be kept, and the reason is that the
+  promise and the feature disagree there.
+- **/about/our-story's four section photographs lost a `rect` and look
+  identical.** They were being cropped by Sanity to 1408x1112, a ratio of
+  1.266, and are now the plain url in a 704x556 box, a ratio of 1.266. Same
+  framing, different delivery, and the same path every other page takes.
+
 ### Share cards
 
 **Every page carries a share image, since 2026-09-18**, apart from `/about` and `/products`, which need a picture chosen in the Studio. Nine pages had none, all built this year: the six practitioner pages, `/blog`, `/about` and `/products`. A shared link to any of them showed a bare card.

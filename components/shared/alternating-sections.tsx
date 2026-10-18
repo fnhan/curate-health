@@ -1,11 +1,9 @@
-import Image from "next/image";
-
 import { PortableText } from "@portabletext/react";
 
 import { portableTextComponents } from "@/components/shared/portable-text-components";
+import { SanityImage } from "@/components/shared/sanity-image";
 import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
-import { urlForSectionImage } from "@/sanity/lib/image";
 
 interface Section {
   /** Stable across renames, unlike the title. Used to target one section. */
@@ -28,7 +26,7 @@ interface Section {
      * no-op, which is the same class of trap as the blog alt in CH-028: the
      * field is written and nothing reads it.
      */
-    source?: unknown;
+    imageSource?: unknown;
   } | null;
 }
 
@@ -81,16 +79,11 @@ export const AlternatingSections = ({
               />
               {(() => {
                 const photo = (
-                  <Image
+                  <SanityImage
                     sizes="(min-width: 768px) 45vw, 100vw"
                     loading="lazy"
-                    src={
-                      urlForSectionImage(
-                        section.sectionImage?.source as never
-                      ) ||
-                      section.sectionImage?.image ||
-                      ""
-                    }
+                    source={section.sectionImage?.imageSource}
+                    src={section.sectionImage?.image || ""}
                     alt={section.sectionImage?.alt || ""}
                     width={704}
                     height={556}

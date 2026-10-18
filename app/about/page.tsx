@@ -57,6 +57,7 @@ export default async function AboutPage() {
       */}
       <SectionHero
         image={page?.heroImage?.url ?? ""}
+        imageSource={page?.heroImage?.source}
         alt={page?.heroImage?.alt ?? ""}
         title={page?.title?.trim() || FALLBACK.title}
         subtitle={paragraphs[0] ?? null}

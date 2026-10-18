@@ -82,33 +82,48 @@ export const urlForPractitionerPhoto = (source: Image) => {
 };
 
 /**
- * The photograph slot in AlternatingSections, which paints 704x556.
+ * THE STUDIO'S CROP TOOL, MADE TO WORK EVERYWHERE, WITHOUT MOVING A PIXEL
+ * TODAY.
  *
- * ADDED SO A CROP SET IN THE STUDIO ACTUALLY DOES SOMETHING
+ * Frank asked on 2026-10-18 to be able to crop any photograph on the site
+ * himself, "without changing how any of the current photos are cropped".
  *
- * That component took a bare url out of the query, so the crop and hotspot an
- * editor dragged in the Studio were never read: the browser centre-cropped
- * whatever was uploaded. Frank asked on 2026-10-18 for the cafe photographs to
- * be left whole so he could crop them himself, which would have been a silent
- * no-op without this.
+ * Almost every photograph on this site is a bare asset url dropped into a box
+ * with `object-cover`, so the browser centre-crops it and the crop and hotspot
+ * an editor drags in the Studio are thrown away. Making the Studio's choice
+ * count everywhere means building the url through Sanity instead.
  *
- * Twice the slot, so it stays sharp on a 2x screen. A portrait source is
- * cropped to the frame by Sanity rather than by the browser, which is the whole
- * point: the Studio's crop decides which part.
+ * **The promise is kept by doing nothing when there is nothing to do.** With no
+ * crop and no hotspot stored, this returns undefined and the call site serves
+ * the same bare url it served before, byte for byte. Sanity's own centre crop
+ * and the browser's `object-cover` agree anyway, but "agree" is not "identical"
+ * and the baseline check in scripts/audit-image-framing.js compares urls.
+ *
+ * So the feature is dormant until somebody opens a photograph in the Studio and
+ * drags the frame, and live the moment they do.
+ *
+ * Takes the box it is being painted into, at twice the size so it stays sharp
+ * on a 2x screen.
  */
-export const SECTION_IMAGE_WIDTH = 1408;
-export const SECTION_IMAGE_HEIGHT = 1112;
+export function hasFraming(source: unknown) {
+  const image = source as
+    | { asset?: unknown; crop?: unknown; hotspot?: unknown }
+    | null
+    | undefined;
 
-export const urlForSectionImage = (source: Image) => {
-  // The builder throws rather than returning null on an object with no asset,
-  // so this guards before calling it. Same trap as the practitioner photos.
-  if (!source || !(source as { asset?: unknown }).asset) return undefined;
+  return Boolean(image?.asset && (image.crop || image.hotspot));
+}
 
-  return imageBuilder
-    ?.image(source)
-    .width(SECTION_IMAGE_WIDTH)
-    .height(SECTION_IMAGE_HEIGHT)
-    .fit("crop")
-    .auto("format")
-    .url();
-};
+export function framedImageUrl(source: unknown, width: number, height: number) {
+  if (!hasFraming(source)) return undefined;
+
+  return (
+    imageBuilder
+      ?.image(source as Image)
+      .width(Math.round(width * 2))
+      .height(Math.round(height * 2))
+      .fit("crop")
+      .auto("format")
+      .url() || undefined
+  );
+}

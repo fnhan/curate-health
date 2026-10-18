@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { SanityImage } from "@/components/shared/sanity-image";
 import { toParagraphs } from "@/components/shared/section-intro";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
@@ -187,7 +187,8 @@ export default async function CafeMenuPage() {
         and this page belongs to the cafe.
       */}
       {hero?.url ? (
-        <Image
+        <SanityImage
+          source={hero.source}
           src={hero.url}
           alt={hero.alt ?? ""}
           width={1920}

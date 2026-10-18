@@ -2234,6 +2234,36 @@ costs more than six fetches of a six item list on statically rendered pages.
 On Our Team the band sits above the heading rather than under a photograph,
 because that page has no hero image.
 
+### Our Services and Our Programs are one row design. 2026-10-18
+
+Frank: the two home page sections "serve the same purpose" and should look
+alike. They did not: Programs had a coloured bar, roomier rows and more air
+before the arrow, and Services had the hover sweep.
+
+Both rows are now a bar, the name, and the arrow, with `gap-4 md:gap-6`
+between rows and inside each one. Measured on the rendered page: both
+sections have a 15px bar, 24px from the name to the arrow and 24px between
+rows.
+
+**The sweep is on the name, not on the row.** On the row the line would run
+under the bar and the arrow too. That is what let Programs take it without
+looking wrong, and Services moved to match.
+
+**A service carries its own `barColor`, the same field a programme has.** The
+three were seeded with the programmes' own palette, `#888D76`, `#AFBD8C` and
+`#DBDDD8` dark to light, by `scripts/apply-service-bar-colours.js`,
+transaction `b293KmNbo0z5K9Rnfkl4Sp`, after
+`sanity-backup-2026-10-18-before-service-bar-colours-documents.tar.gz`. It is
+editable, so those are a starting point. **A service with the field empty
+draws no bar**, which is the right failure: a bar of no colour is worse than
+no bar.
+
+There are three active services and three programmes, so the two lists
+already matched in length; nothing was added or hidden to make them.
+
+**A programme that is not a link gets no sweep**, because the `group` lives on
+the link. That is correct rather than a gap: there is nothing to click.
+
 ### Share cards
 
 **Every page carries a share image, since 2026-09-18**, apart from `/about` and `/products`, which need a picture chosen in the Studio. Nine pages had none, all built this year: the six practitioner pages, `/blog`, `/about` and `/products`. A shared link to any of them showed a bare card.

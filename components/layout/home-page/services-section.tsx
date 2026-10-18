@@ -9,8 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MoveRightIcon } from "lucide-react";
 import { SERVICES_SECTION_QUERYResult } from "sanity.types";
 
-import { HOVER_UNDERLINE } from "@/lib/hover-underline";
-import { cn } from "@/lib/utils";
+import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
 
 export default function ServicesSection({
   servicesSection,
@@ -33,18 +32,32 @@ export default function ServicesSection({
             <h2 className="mb-14 text-2xl md:mb-28 md:text-3xl xl:mb-40 xl:text-6xl">
               {sectionTitle}
             </h2>
-            <div className="flex flex-col gap-2 md:gap-4">
+            {/*
+              The same row as Our Programs, at Frank's request on 2026-10-18:
+              the two sections do the same job and should read as a pair. So
+              the coloured bar, the gap between rows and the distance from the
+              name to the arrow all match that component.
+
+              The sweep is on the name rather than on the link, so the line
+              runs under the words and not under the bar and the arrow as
+              well. Programs does the same, which is how both can carry it.
+            */}
+            <div className="flex flex-col gap-4 md:gap-6">
               {services?.map((service) => (
                 <Link
                   key={service.title}
                   href={`/services/${service.slug}`}
-                  className={cn(
-                    "flex w-fit items-center gap-2 font-light md:text-xl xl:text-3xl",
-                    HOVER_UNDERLINE
-                  )}
+                  className="group flex w-fit items-center gap-4 font-light transition-opacity hover:opacity-70 md:gap-6 md:text-xl xl:text-3xl"
                   onMouseEnter={() => setHoveredService(service as any)}
                 >
-                  <span>{service.title}</span>
+                  {service.barColor ? (
+                    <span
+                      className="h-14 w-[15px] shrink-0 rounded-sm"
+                      style={{ backgroundColor: service.barColor }}
+                      aria-hidden
+                    />
+                  ) : null}
+                  <span className={GROUP_HOVER_UNDERLINE}>{service.title}</span>
                   <MoveRightIcon strokeWidth={1.5} size={24} />
                 </Link>
               ))}

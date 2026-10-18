@@ -583,6 +583,22 @@ export function buildCafeJsonLd(
   }) as JsonLdObject;
 }
 
+/**
+ * A menu price as it is written, CH-108.
+ *
+ * Whole numbers lose the decimals, by Frank on 2026-10-18: nearly every
+ * price on this menu is a round dollar "as everything is whole numbers for
+ * that reason". Only the $4.50 energy bars show cents.
+ *
+ * Exported because the page and the Offer in the markup both need it, and a
+ * second copy of the rule in the builder would eventually disagree with the
+ * page it is supposed to describe. scripts/apply-cafe-menu.js prints the same
+ * way; that one is a dry run rather than output, so it carries its own.
+ */
+export function menuPrice(price: number) {
+  return Number.isInteger(price) ? String(price) : price.toFixed(2);
+}
+
 /** /cafe/menu. One place, so the page and the markup cannot disagree. */
 export const CAFE_MENU_PATH = "/cafe/menu";
 
@@ -639,7 +655,7 @@ export function buildCafeMenuJsonLd(menu: CAFE_MENU_QUERYResult) {
           typeof item.price === "number"
             ? {
                 "@type": "Offer",
-                price: item.price.toFixed(2),
+                price: menuPrice(item.price),
                 priceCurrency: "CAD",
               }
             : undefined,

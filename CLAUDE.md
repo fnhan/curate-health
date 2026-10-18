@@ -1389,9 +1389,12 @@ the ingredient field says it is allergen information.** The bar was sold as
 syrup, cinnamon, cacao powder, vanilla extract, salt". That omits **walnut**, a
 tree nut named in the item's own title, omits the goji berries and lemon zest,
 and lists cacao powder, which belongs to the Chocolate Hazelnut bar. The recipe
-doc has the real list and that is what went in, walnut brittle included. Frank
+doc has the real list and that is what went in, the walnut included. Frank
 renamed it **Maple Almond** on 2026-10-16 and confirmed **no honey** in it,
-which the recipe agrees with. Honey stays in the drinks that have it.
+which the recipe agrees with. Honey stays in the drinks that have it. The
+recipe calls the topping a brittle; he corrected that on 2026-10-18, "it is
+not a brittle, it is just a maple walnut topping", so the line ends "with a
+maple walnut topping".
 
 The PDF sets items out in four columns with the ingredient lists in a separate
 text layer, so pairing a list to its drink is a reading of the layout rather
@@ -1422,6 +1425,50 @@ before the mutation rather than after the build. Applied in transaction
 `sanity-backup-2026-10-18-before-cafe-menu-documents.tar.gz`.
 
 **`audit-seo-complete.js` passes 9 of 9 with the page in.**
+
+#### Frank's pass, 2026-10-18
+
+**The first two paragraphs of the intro are his**, and they are one paragraph
+of his split at his own sentence break: the first becomes the hero's standing
+line, the second the band. At 250 characters the whole thing ran to four lines
+over the photograph. Not a word is altered. The third paragraph is the
+allergen line and is mine.
+
+**The draft his replaced opened on "cooked without industrial seed oils and
+sweetened with maple syrup, honey or dates rather than refined sugar".** That
+claim is off the page because he took it out, not by oversight. Do not put it
+back without asking him.
+
+The standing note is his too: "vessel" rather than "mug", and food as well as
+beverages.
+
+**Prices print whole numbers without decimals**, "as everything is whole
+numbers for that reason". Only the $4.50 bars show cents. `menuPrice` in
+`lib/structured-data.tsx` is exported for this, because the page and the
+`Offer` in the markup both need it and two copies of the rule would eventually
+disagree with each other.
+
+**Ingredient lines stop at three quarters of the measure**, from the `sm`
+breakpoint up. At full width a long one ran under the price column and the two
+read as one paragraph. Not on a phone: there is no price column to clear at
+375px, and three quarters of 311px took the immunity latte to five lines.
+
+**Two columns from `xl`, which he asked for so a wide window scrolls less.**
+This is not the layout he rejected twice on the prose band, and the difference
+is `break-inside-avoid`. There, balancing the columns meant cutting a sentence
+across the gutter. A menu section is a discrete block, so it moves whole or
+not at all. Multi-column rather than a grid, because a grid makes every row as
+tall as its tallest section and ten sections of different lengths leave holes.
+
+Measured at 1680: five sections each side, the left column ending 512px above
+the right. That is the browser's best with these sections, since moving
+Smoothies across overshoots, and it is the price of never splitting one.
+
+**`apply-cafe-menu.js` refuses text carrying Cf characters.** His menu copy
+arrived with them, which is the CH-020 contamination route exactly: a paste out
+of a rich text source into a field. `audit-unicode.js` runs after the write;
+this runs before it. Everything he sent was retyped by hand, and the audit
+reports 0 Cf in the dataset.
 
 #### The outline button variant is dark on dark
 

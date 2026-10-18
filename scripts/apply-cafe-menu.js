@@ -46,20 +46,31 @@ const TITLE = "Cafe Menu";
  * The hero's standing line is the first paragraph and the band below the menu
  * is the rest, the same split /services, /about and /products use.
  *
- * Every claim here is read off the ingredient lists below rather than asserted:
- * no industrial seed oil appears in any item, the only sweeteners are maple
- * syrup, honey and dates, and the Seasonal Salad is built on a named Ontario
- * farm's mix. The allergen paragraph leads on tree nuts because the almond milk
- * is in most of the drinks.
+ * THE FIRST TWO PARAGRAPHS ARE FRANK'S, 2026-10-18, AND ARE ONE PARAGRAPH OF HIS
+ *
+ * He sent them as a single paragraph. They are split at his own sentence break
+ * so the first becomes the hero's standing line and the second the band, which
+ * is the only change: at 250 characters the whole thing ran to four lines over
+ * the photograph. Not a word is altered.
+ *
+ * The third is mine and is the allergen line. It was trimmed when his went in,
+ * because his second sentence already says the almond milk is in most of the
+ * drinks and saying it twice in three paragraphs reads as padding.
+ *
+ * The draft his replaced opened on "cooked without industrial seed oils and
+ * sweetened with maple syrup, honey or dates rather than refined sugar". That
+ * claim is gone because he took it out, not by oversight. Do not put it back
+ * without asking him.
  */
 const INTRO = [
-  "A short menu made in the cafe, cooked without industrial seed oils and sweetened with maple syrup, honey or dates rather than refined sugar.",
-  "The salads are built on Ontario produce and change with the season, so the Seasonal Salad in February is not the one you get in August. The energy bars and the chia pudding are made here, as is the almond milk that goes into most of the drinks.",
-  "Every item below lists what is in it. Several contain tree nuts, and the almond milk is in most of the drinks, so ask at the counter if you need to check something.",
+  "Everything here begins with sourcing organic, local, farm to table, and seasonal ingredients whenever possible.",
+  "We make as much as we can in-house, from our ferments to our energy bars, and even our almond milk that goes into most of the drinks.",
+  "Every item below lists what is in it. Several contain tree nuts, so ask at the counter if you need to check something.",
 ].join("\n\n");
 
+/** Frank's wording, 2026-10-18. "Vessel", not "mug", and food as well as drink. */
 const NOTE =
-  "Bring your own mug for $1.00 off all beverages. House-made almond milk, 1oz, can be added to any drink.";
+  "Bring your own vessel for $1.00 off all food and beverages. House-made almond milk, 1oz, can be added to any drink.";
 
 const SEO = {
   pageTitle: "Cafe Menu: Matcha, Smoothies and Salads",
@@ -202,9 +213,16 @@ const SECTIONS = [
         name: "Maple Almond",
         size: "35g",
         price: 4.5,
-        // From the recipe doc, not the PDF. See the header.
+        /*
+         * From the recipe doc, not the PDF. See the header.
+         *
+         * The recipe calls the topping a brittle and Frank corrected that on
+         * 2026-10-18: "it's not a brittle, it's just a maple walnut topping".
+         * Worth keeping either way, since walnut is the tree nut the printed
+         * line left out.
+         */
         ingredients:
-          "almond pulp, almond butter, dates, maple syrup, goji berries, lemon zest, cinnamon, vanilla extract, coconut oil, sea salt, topped with maple walnut brittle",
+          "almond pulp, almond butter, dates, maple syrup, goji berries, lemon zest, cinnamon, vanilla extract, coconut oil, sea salt, with a maple walnut topping",
       },
       {
         name: "Chocolate Hazelnut",
@@ -268,9 +286,26 @@ const SECTIONS = [
  */
 const DASHES = /[–—]/;
 
+/**
+ * Zero-width and bidi characters, CH-020.
+ *
+ * Checked here and not only by `audit-unicode.js` because the audit runs after
+ * the write, and this is the exact path the original contamination took: copy
+ * pasted out of a rich text source into a field. Frank's menu copy on
+ * 2026-10-18 arrived carrying them, so this is not hypothetical.
+ *
+ * Cf only, the Format category, so it does not catch U+0000 and the other C0
+ * controls, which are Cc. Same limit the audit has.
+ */
+const CF = /\p{Cf}/u;
+
 function ruleBreaks(label, text) {
   const out = [];
   if (!text) return out;
+  if (CF.test(text)) {
+    const n = [...text].filter((c) => CF.test(c)).length;
+    out.push(`${label}: ${n} zero-width or bidi characters, retype it`);
+  }
   if (DASHES.test(text)) out.push(`${label}: em or en dash`);
   if (text.includes("!")) out.push(`${label}: exclamation mark`);
   if (/café/i.test(text)) out.push(`${label}: accented cafe`);
@@ -286,8 +321,15 @@ function ruleBreaks(label, text) {
   return out;
 }
 
+/**
+ * Whole numbers print without decimals, by Frank on 2026-10-18: almost
+ * everything is a round dollar "and that is why". Only the $4.50 bars show
+ * cents. Mirrors menuPrice in lib/structured-data.tsx, which is what the
+ * page and the markup use.
+ */
 function money(price) {
-  return typeof price === "number" ? `$${price.toFixed(2)}` : "";
+  if (typeof price !== "number") return "";
+  return Number.isInteger(price) ? `$${price}` : `$${price.toFixed(2)}`;
 }
 
 /* ------------------------------------------------------------------- shape */

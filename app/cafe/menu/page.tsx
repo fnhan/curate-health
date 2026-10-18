@@ -8,6 +8,7 @@ import {
   CAFE_MENU_PATH,
   JsonLdScript,
   buildCafeMenuJsonLd,
+  menuPrice,
 } from "@/lib/structured-data";
 import { CAFE_MENU_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -107,15 +108,36 @@ export default async function CafeMenuPage() {
           section-intro.tsx.
         */}
         <div className="container">
-          <div className="mr-auto flex max-w-[70ch] flex-col gap-16 md:gap-20">
-            {menu.note?.trim() ? (
-              <p className="font-light italic text-muted-foreground">
-                {menu.note.trim()}
-              </p>
-            ) : null}
+          {menu.note?.trim() ? (
+            <p className="mb-16 mr-auto max-w-[70ch] font-light italic text-muted-foreground md:mb-20">
+              {menu.note.trim()}
+            </p>
+          ) : null}
 
+          {/*
+            TWO COLUMNS FROM THE EXTRA LARGE BREAKPOINT, AT FRANK'S REQUEST
+            2026-10-18, SO A WIDE WINDOW SCROLLS LESS.
+
+            Multi-column rather than a grid, because a grid lays sections out
+            in rows and every row is as tall as its tallest section, which on
+            ten sections of wildly different lengths leaves holes. Columns flow
+            down the first and then the second, which is how a menu is read.
+
+            `break-inside-avoid` on each section is what makes this safe here
+            and is the whole difference from the prose band, which Frank
+            rejected twice. There, balancing the columns meant cutting a
+            sentence across the gutter. A menu section is a discrete block, so
+            it moves whole or not at all and nothing is ever split mid-thought.
+            Ten of them also balance far better than three paragraphs did.
+
+            Below xl it is one column at 70ch, as before.
+          */}
+          <div className="mr-auto max-w-[70ch] xl:max-w-none xl:columns-2 xl:gap-20">
             {sections.map((section) => (
-              <section key={section._key} className="flex flex-col gap-8">
+              <section
+                key={section._key}
+                className="mb-16 flex break-inside-avoid flex-col gap-8 md:mb-20"
+              >
                 <div className="flex flex-col gap-2 border-b border-primary/15 pb-4">
                   <h2 className="text-2xl font-light tracking-tight md:text-3xl">
                     {section.title}
@@ -142,17 +164,29 @@ export default async function CafeMenuPage() {
                         {typeof item.price === "number" ? (
                           /*
                            * The price is text in the HTML, not an image or a
-                           * background, so it is readable and quotable. Two
-                           * decimals throughout: 4.5 in the Studio renders as
-                           * $4.50, which is how a price is written.
+                           * background, so it is readable and quotable.
+                           * menuPrice is shared with the Offer in the markup,
+                           * so the two cannot print the number differently.
                            */
                           <p className="shrink-0 font-light tabular-nums">
-                            ${item.price.toFixed(2)}
+                            ${menuPrice(item.price)}
                           </p>
                         ) : null}
                       </div>
                       {item.ingredients?.trim() ? (
-                        <p className="text-sm font-light leading-6 text-muted-foreground">
+                        /*
+                         * Three quarters of the measure, at Frank's request on
+                         * 2026-10-18. At full width a long ingredient line ran
+                         * under the price column and the two read as one
+                         * paragraph. Stopping short leaves the prices with a
+                         * clear edge to sit against.
+                         *
+                         * From sm up only. A phone is 375px wide and the price
+                         * is a short string at the end of the line above, so
+                         * there is no column to clear, and three quarters of
+                         * 311px took the immunity latte to five lines.
+                         */
+                        <p className="text-sm font-light leading-6 text-muted-foreground sm:max-w-[75%]">
                           {item.ingredients.trim()}
                         </p>
                       ) : null}
@@ -161,16 +195,17 @@ export default async function CafeMenuPage() {
                 </ul>
               </section>
             ))}
-
-            <p className="font-light">
-              <Link
-                className="underline decoration-primary/30 underline-offset-4 transition-colors hover:decoration-primary"
-                href="/cafe"
-              >
-                Back to Curate Cafe
-              </Link>
-            </p>
           </div>
+
+          {/* Outside the columns, so it stays one line under both of them. */}
+          <p className="font-light">
+            <Link
+              className="underline decoration-primary/30 underline-offset-4 transition-colors hover:decoration-primary"
+              href="/cafe"
+            >
+              Back to Curate Cafe
+            </Link>
+          </p>
         </div>
       </section>
     </div>

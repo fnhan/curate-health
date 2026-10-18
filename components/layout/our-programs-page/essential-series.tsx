@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { SanityImage } from "@/components/shared/sanity-image";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 
 import darkGreenCheckmark from "../../../public/images/dark-green-checkmark.svg";
@@ -34,8 +33,9 @@ const EssentialSeries = ({
             <div className="flex-1">
               <div className="relative flex justify-end">
                 <div className="absolute -top-14 right-0 h-14 w-3/4 bg-our-programs-border"></div>
-                <Image
+                <SanityImage
                   sizes="(min-width: 768px) 700px, 100vw"
+                  source={essentialSeries?.image}
                   src={essentialSeries?.image?.asset?.url!}
                   alt={essentialSeries?.image?.alt ?? ""}
                   height={550}

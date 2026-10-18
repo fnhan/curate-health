@@ -1,6 +1,6 @@
 import Image, { type ImageProps } from "next/image";
 
-import { framedImageUrl } from "@/sanity/lib/image";
+import { croppedImageUrl, framedImageUrl } from "@/sanity/lib/image";
 
 /**
  * A photograph from Sanity that obeys the crop and hotspot set in the Studio.
@@ -51,15 +51,17 @@ export function SanityImage({
   source?: unknown;
   /** The plain asset url, used whenever there is no crop or hotspot. */
   src: string;
-  width: number;
-  height: number;
 }) {
-  return (
-    <Image
-      {...rest}
-      src={framedImageUrl(source, width, height) || src}
-      width={width}
-      height={height}
-    />
-  );
+  /*
+   * A `fill` image has no width or height: it takes the size of whatever
+   * box it is in, which the component cannot know. It still gets the
+   * Studio's crop rectangle, which is the part an editor actually drew;
+   * `object-cover` then fits that to the box as it always did.
+   */
+  const framed =
+    typeof width === "number" && typeof height === "number"
+      ? framedImageUrl(source, width, height)
+      : croppedImageUrl(source);
+
+  return <Image {...rest} src={framed || src} width={width} height={height} />;
 }

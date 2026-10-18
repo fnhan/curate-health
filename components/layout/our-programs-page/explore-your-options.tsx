@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { SanityImage } from "@/components/shared/sanity-image";
 import { Input } from "@/components/ui/input";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 
@@ -18,8 +17,9 @@ const ExploreYourOptions = ({
     <section className="bg-white py-14">
       <div className="container flex justify-center py-24 lg:justify-between">
         <div className="relative hidden flex-1 overflow-hidden lg:block xl:left-52">
-          <Image
+          <SanityImage
             sizes="50vw"
+            source={exploreYourOptions?.image}
             src={exploreYourOptions?.image?.asset?.url!}
             alt={exploreYourOptions?.image?.alt ?? ""}
             fill

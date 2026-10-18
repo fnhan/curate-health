@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "components/ui/sheet";
 import { Menu, Search as SearchIcon } from "lucide-react";
 
+import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Accordion,
   AccordionContent,
@@ -319,8 +319,9 @@ export default function SiteNav({
         <div className="flex flex-1 justify-center">
           <div className="flex items-center gap-4">
             <Link href={"/"} onClick={() => setOpen(false)}>
-              <Image
+              <SanityImage
                 sizes="(min-width: 640px) 48px, 30px"
+                source={siteLogo}
                 src={siteLogo?.asset?.url!}
                 width={48}
                 height={48}

@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { SanityImage } from "@/components/shared/sanity-image";
 import { cn } from "@/lib/utils";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 
@@ -92,8 +91,9 @@ const ThreePaths = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
                     <div
                       className={`relative h-[275px] w-[325px] overflow-hidden border-b-[12px] ${borderColor[i]}`}
                     >
-                      <Image
+                      <SanityImage
                         sizes="325px"
+                        source={image}
                         src={image?.asset?.url!}
                         alt={image?.alt ?? ""}
                         height={0}

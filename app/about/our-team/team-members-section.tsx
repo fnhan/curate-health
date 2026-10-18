@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef } from "react";
@@ -9,6 +8,7 @@ import { ChevronRight } from "lucide-react";
 import { PortableText } from "next-sanity";
 import Masonry from "react-masonry-css";
 
+import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Card,
   CardContent,
@@ -163,9 +163,10 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
                 href={practitionerHref(teamMember.name)}
                 className="block h-[300px]"
               >
-                <Image
+                <SanityImage
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 90vw"
                   className={teamPhotoClassName}
+                  source={teamMember.image}
                   src={teamMember.image?.asset?.url ?? ""}
                   alt={teamMember.name ?? ""}
                   width={400}
@@ -218,9 +219,10 @@ export default function TeamMembersSection({
                   href={practitionerHref(teamMember.name)}
                   className="block h-[300px]"
                 >
-                  <Image
+                  <SanityImage
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 90vw"
                     className={teamPhotoClassName}
+                    source={teamMember.image}
                     src={teamMember.image?.asset?.url ?? ""}
                     alt={teamMember.name ?? ""}
                     width={400}

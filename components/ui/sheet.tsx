@@ -74,27 +74,27 @@ const SheetContent = React.forwardRef<
     },
     ref
   ) => (
-  <SheetPortal>
-    <SheetOverlay className={overlayClassName} />
-    <SheetPrimitive.Content
-      ref={ref}
-      className={cn(sheetVariants({ side }), className)}
-      {...props}
-    >
-      {children}
-      {showCloseButton ? (
-        <SheetPrimitive.Close
-          className={cn(
-            "absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary",
-            closeButtonClassName
-          )}
-        >
-          <X className="h-5 w-5" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
-      ) : null}
-    </SheetPrimitive.Content>
-  </SheetPortal>
+    <SheetPortal>
+      <SheetOverlay className={overlayClassName} />
+      <SheetPrimitive.Content
+        ref={ref}
+        className={cn(sheetVariants({ side }), className)}
+        {...props}
+      >
+        {children}
+        {showCloseButton ? (
+          <SheetPrimitive.Close
+            className={cn(
+              "absolute left-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none",
+              closeButtonClassName
+            )}
+          >
+            <X className="h-5 w-5" />
+            <span className="sr-only">Close</span>
+          </SheetPrimitive.Close>
+        ) : null}
+      </SheetPrimitive.Content>
+    </SheetPortal>
   )
 );
 SheetContent.displayName = SheetPrimitive.Content.displayName;

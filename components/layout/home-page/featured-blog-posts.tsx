@@ -6,6 +6,7 @@ import cn from "classnames";
 import { format, parseISO } from "date-fns";
 import { getMostRecentPosts } from "lib/utils";
 
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { POSTS_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
@@ -73,7 +74,10 @@ function Post({ post }: { post: FeaturedPost }) {
         <div className="flex justify-between text-xs md:text-sm">
           <Date dateString={publishedAt!} />
           <Link
-            className="italic text-secondary transition-all duration-300 hover:text-white hover:underline"
+            className={cn(
+              "w-fit italic text-secondary transition-all duration-300 hover:text-white",
+              HOVER_UNDERLINE
+            )}
             href={`/blog/${slug?.current}`}
           >
             Read more about {title}

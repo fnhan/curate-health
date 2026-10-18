@@ -16,6 +16,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
+import { cn } from "@/lib/utils";
 import { getPractitionerSlugFromName, getTeamMemberUrlId } from "@/lib/utils";
 
 /**
@@ -157,7 +159,10 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
                 teamMemberRefs.current[memberId] = el;
               }}
             >
-              <Link href={practitionerHref(teamMember.name)} className="block h-[300px]">
+              <Link
+                href={practitionerHref(teamMember.name)}
+                className="block h-[300px]"
+              >
                 <Image
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 90vw"
                   className={teamPhotoClassName}
@@ -180,7 +185,10 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
               <CardContent>
                 <Link
                   href={practitionerHref(teamMember.name)}
-                  className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
+                  className={cn(
+                    "flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all",
+                    HOVER_UNDERLINE
+                  )}
                 >
                   Learn More
                   <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />
@@ -207,7 +215,10 @@ export default function TeamMembersSection({
                 key={teamMember.name}
                 className="flex h-full flex-col rounded-none"
               >
-                <Link href={practitionerHref(teamMember.name)} className="block h-[300px]">
+                <Link
+                  href={practitionerHref(teamMember.name)}
+                  className="block h-[300px]"
+                >
                   <Image
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 90vw"
                     className={teamPhotoClassName}
@@ -230,7 +241,10 @@ export default function TeamMembersSection({
                 <CardContent className="relative">
                   <Link
                     href={practitionerHref(teamMember.name)}
-                    className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
+                    className={cn(
+                      "flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all",
+                      HOVER_UNDERLINE
+                    )}
                   >
                     Learn More
                     <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />

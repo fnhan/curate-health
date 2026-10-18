@@ -19,7 +19,9 @@ export function ServicesNavigation({
       label="Our Services"
       labelHref="/services"
       items={services
-        .filter((service) => service.slug && service.slug !== "curate-lifestyle")
+        .filter(
+          (service) => service.slug && service.slug !== "curate-lifestyle"
+        )
         .map((service) => ({
           title: service.title ?? "",
           href: `/services/${service.slug}`,

@@ -15,7 +15,10 @@ function ensureMuxDialogsHaveNames(player: any) {
   if (!dialog) return false;
 
   // If Mux/Media Chrome ever adds proper names internally, do not override them.
-  if (dialog.getAttribute("aria-label") || dialog.getAttribute("aria-labelledby")) {
+  if (
+    dialog.getAttribute("aria-label") ||
+    dialog.getAttribute("aria-labelledby")
+  ) {
     return true;
   }
 

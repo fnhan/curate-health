@@ -30,7 +30,9 @@ export default function HoverLinkVariation({
     <Link className="block w-full bg-platinum" href={href}>
       <span className="group block border-t border-primary py-5 text-right italic transition-all duration-300 hover:bg-secondary">
         <span className="container flex items-center justify-end gap-2 transition-all duration-300 hover:gap-20">
-          <span className={`${textColor} text-lg group-hover:text-white`}>{text}</span>
+          <span className={`${textColor} text-lg group-hover:text-white`}>
+            {text}
+          </span>
           <ChevronRight className={`w-5 ${textColor} group-hover:text-white`} />
         </span>
       </span>

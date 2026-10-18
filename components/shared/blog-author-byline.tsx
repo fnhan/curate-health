@@ -90,9 +90,7 @@ export default function BlogAuthorByline({
       {displayName ? (
         // underlined only when the row is a link, now that `group` is on
         // every row rather than only on the linked one
-        <span className={cn("text-sm", teamHref && "group-hover:underline")}>
-          {displayName}
-        </span>
+        <span className={cn("text-sm", teamHref && "")}>{displayName}</span>
       ) : null}
     </>
   );

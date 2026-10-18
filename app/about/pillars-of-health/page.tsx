@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import Pillars from "@/components/layout/about-pages/pillars";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { PILLARS_OF_HEALTH_QUERYResult } from "@/sanity.types";
@@ -29,6 +30,7 @@ export default async function PillarsofHealth() {
         alt={heroSection?.heroImage?.alt || ""}
         className="h-[400px] w-full object-cover md:h-[550px]"
       />
+      <AboutNavigation />
       <section className="container flex flex-col gap-8 py-14 md:gap-20 md:py-20">
         <div className="space-y-4 font-light md:text-center">
           <h1 className="text-2xl md:text-4xl">{heroSection?.heroTitle}</h1>

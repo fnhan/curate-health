@@ -4,6 +4,12 @@ module.exports = {
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
+    // lib too, since shared class strings live there now. Without it
+    // Tailwind never sees them and emits nothing: moving the hover sweep
+    // into lib/hover-underline.ts silently killed it on every page,
+    // including the services menu it came from. The class was on the
+    // element and the rule did not exist.
+    "./lib/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],

@@ -4,10 +4,12 @@ import { notFound } from "next/navigation";
 
 import { PortableText } from "next-sanity";
 
+import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { treatmentPath } from "@/lib/service-urls";
 import { JsonLdScript, buildPractitionerJsonLd } from "@/lib/structured-data";
+import { cn } from "@/lib/utils";
 import { PRACTITIONER_BY_SLUG_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
@@ -231,7 +233,12 @@ export default async function PractitionerPage({
                       className="group flex h-full items-center justify-between gap-4 border border-border bg-white p-6 transition-colors hover:bg-platinum/40"
                     >
                       <span className="space-y-1">
-                        <span className="block text-lg font-light group-hover:underline">
+                        <span
+                          className={cn(
+                            GROUP_HOVER_UNDERLINE,
+                            "block w-fit text-lg font-light"
+                          )}
+                        >
                           {service.title}
                         </span>
                         {service.serviceName ? (

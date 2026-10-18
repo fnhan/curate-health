@@ -311,11 +311,12 @@ const SECTIONS = [
      * a sweets heading: the word tells a reader what meal the food is for,
      * and these are not an after-dinner course.
      *
-     * "Jars" is what they literally are, both built and served in a glass. It
-     * carries no mealtime and no indulgence with it. The cost is search: a
-     * reader looking for chia pudding finds the item, not the heading.
+     * "Jars" was the second try and he turned that down too. **"Fuel Foods"**
+     * is his, and it is the better answer than either: it says what the food
+     * is for rather than what it is served in, which is the whole point he was
+     * making, and it is a phrase somebody might actually search.
      */
-    title: "Jars",
+    title: "Fuel Foods",
     items: [
       {
         // No weight, by Frank on 2026-10-18, so it reads as one line. The

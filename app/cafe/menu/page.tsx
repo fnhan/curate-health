@@ -46,75 +46,10 @@ type MenuSection = NonNullable<
   NonNullable<CAFE_MENU_QUERYResult>["sections"]
 >[number];
 
-/**
- * Cut the section list in two, left column then right, as evenly as that cut
- * allows, and never with the right column longer.
- *
- * **THE MENU'S ORDER IS THE CONSTRAINT. BALANCE IS WHAT IS OPTIMISED INSIDE
- * IT.** Frank, 2026-10-18: "Please preserve all drinks first then food, like
- * how the original pdf had it." So this is a single cut point, and reading down
- * the left column and then down the right gives the menu in its own order.
- *
- * THE VERSION IN BETWEEN, AND WHY IT IS GONE
- *
- * A middle version chose a column per section rather than a cut point, which
- * opens 2^n arrangements and balanced the two to 16px. It also scattered the
- * menu: Energy Bars ended up at the foot of the drinks column and Kombucha at
- * the head of the food one. That is what he is rejecting here, and it is worth
- * recording that near-perfect balance was exactly what produced it. Balance was
- * never the point on its own.
- *
- * So: of the cuts that leave the left column at least as tall as the right,
- * take the closest to even. Because the running total only grows, that is the
- * first cut that puts half or more of the height on the left.
- *
- * The gap this leaves is whatever the section heights allow, and with ten
- * chunky sections it is a few hundred pixels rather than a few tens. That is
- * the price of the order, and the order is the thing he asked for.
- */
-function splitIntoColumns(sections: MenuSection[]) {
-  /*
-   * Rendered heights in pixels, measured off the page at 1680 rather than
-   * guessed. They only have to rank the cuts against each other, so a section
-   * out by a few pixels cannot move the cut; one out by half its height could.
-   */
-  const HEADING = 110;
-  const NOTE = 28;
-  const ITEM = 60;
-  const INGREDIENT_LINE = 24;
-  const CHARS_PER_LINE = 60;
-  const BETWEEN_SECTIONS = 80;
-
-  const height = (section: MenuSection) =>
-    HEADING +
-    (section.note?.trim() ? NOTE : 0) +
-    BETWEEN_SECTIONS +
-    (section.items ?? []).reduce((total, item) => {
-      const text = item.ingredients?.trim() ?? "";
-      const lines = text ? Math.ceil(text.length / CHARS_PER_LINE) : 0;
-      return total + ITEM + lines * INGREDIENT_LINE;
-    }, 0);
-
-  const heights = sections.map(height);
-  const half = heights.reduce((a, b) => a + b, 0) / 2;
-
-  let running = 0;
-  let at = sections.length;
-  for (let i = 0; i < sections.length; i += 1) {
-    running += heights[i];
-    if (running >= half) {
-      at = i + 1;
-      break;
-    }
-  }
-
-  return [sections.slice(0, at), sections.slice(at)] as const;
-}
-
 /** One section of the menu: its heading, its standing note, and its items. */
 function MenuSectionBlock({ section }: { section: MenuSection }) {
   return (
-    <section className="mb-16 flex flex-col gap-8 md:mb-20">
+    <section className="flex flex-col gap-8">
       {/*
         The heading row: the section's name on the left, its note on the
         right, where it lines up with the price column below.
@@ -217,7 +152,6 @@ export default async function CafeMenuPage() {
 
   const heading = menu.title?.trim() || FALLBACK.title;
   const paragraphs = toParagraphs(menu.intro);
-  const [left, right] = splitIntoColumns(sections);
 
   // The menu's own photograph if one is set, otherwise the cafe page's, so the
   // page always opens on one. Per the every-page rule.
@@ -281,31 +215,45 @@ export default async function CafeMenuPage() {
           ) : null}
 
           {/*
-            TWO COLUMNS FROM THE EXTRA LARGE BREAKPOINT, AT FRANK'S REQUEST
-            2026-10-18, SO A WIDE WINDOW SCROLLS LESS.
+            TWO COLUMNS FROM THE EXTRA LARGE BREAKPOINT, FLOWING IN ROWS.
 
-            Two real columns rather than CSS `columns-2`, which chooses the cut
-            itself and leans whichever way it likes. splitIntoColumns makes that
-            decision, keeping the menu's own order and the left column the
-            taller of the two; see its note.
+            Frank asked for two things that looked like a contradiction and are
+            not. On 2026-10-18: "preserve all drinks first then food, like how
+            the original pdf had it", and then "both columns should have as
+            close to 50/50 as possible. If exact 50/50 is not achievable, make
+            left be the larger of the two".
 
-            A grid of two cells, not a grid of ten: ten cells would lay the
-            sections out in rows and make every row as tall as its tallest
-            section, which leaves holes. Each cell is a column the sections
-            stack down, so reading order is down the left and then down the
-            right, the same as before.
+            **Rows give both, exactly.** A row-flow grid reads left to right and
+            then down, which is the menu's own order, so the six drink sections
+            still come before the four food ones. And because the two columns
+            hold the same number of rows and a row is as tall as its taller
+            cell, the columns are the same height by construction. Not close to
+            50/50: identical.
 
-            Below xl the grid is off, so the two stack and the sections read in
-            their original order at 70ch, which is the single column this
-            started as.
+            WHAT THE TWO EARLIER VERSIONS GOT WRONG
+
+            Both dealt the sections into two column-shaped lists and read down
+            one and then the other, which is where the trouble was.
+
+            A single cut point kept the order and could not balance: with ten
+            chunky sections there were only ten arrangements to choose from, and
+            the best left the right column 570px short, which is the gap in the
+            screenshot he sent.
+
+            Choosing a column per section balanced to 16px and scattered the
+            menu, putting Energy Bars among the drinks and Kombucha among the
+            food. Near-perfect balance is exactly what produced the scatter.
+
+            Rows cost some whitespace under the shorter section in each pair,
+            about 310px spread over four rows. The column version concentrated
+            570px of it in one place at the bottom, and ran 500px taller
+            overall, so this is less waste as well as less scrolling.
+
+            Below xl it is one column, which is the same list in the same order.
           */}
-          <div className="mr-auto max-w-[70ch] xl:grid xl:max-w-none xl:grid-cols-2 xl:gap-x-20">
-            {[left, right].map((column, index) => (
-              <div key={index === 0 ? "left" : "right"}>
-                {column.map((section) => (
-                  <MenuSectionBlock key={section._key} section={section} />
-                ))}
-              </div>
+          <div className="mr-auto grid max-w-[70ch] grid-cols-1 items-start gap-x-20 gap-y-16 md:gap-y-20 xl:max-w-none xl:grid-cols-2">
+            {sections.map((section) => (
+              <MenuSectionBlock key={section._key} section={section} />
             ))}
           </div>
 

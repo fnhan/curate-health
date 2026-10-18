@@ -61,7 +61,6 @@ export default async function CafePage() {
     introSection,
     quoteSection,
     additionalSections,
-    menuDownloadSection,
     ctaBandSection,
   } = cafePage;
 
@@ -95,10 +94,7 @@ export default async function CafePage() {
         and the PDF download that sat in it, so there is one way into the
         menu rather than three. It takes that card's own Studio copy.
       */}
-      <CafeMenuBand
-        data={menuDownloadSection}
-        menuPath={hasMenuPage ? CAFE_MENU_PATH : null}
-      />
+      <CafeMenuBand menuPath={hasMenuPage ? CAFE_MENU_PATH : null} />
       <CafeCtaBandSection data={ctaBandSection} />
     </div>
   );

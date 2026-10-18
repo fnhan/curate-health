@@ -1411,8 +1411,8 @@ the answers are in the data now rather than in a note:
 
 Three structural changes came with them.
 
-**Protein is its own section**, holding the two protein drinks. It replaces
-the PDF's Specialty Protein, and its Protein Shakes heading is gone.
+**Specialty Protein holds both protein drinks**, under the PDF's own name for
+that section. Its Protein Shakes heading is gone.
 
 **Two items came off the menu**, on his instruction rather than by accident:
 "Organic All-In-One Plant-based Protein Shake" and "Signature Protein
@@ -1420,20 +1420,33 @@ Milkshake with House-made Almond Milk", both 20oz at $12 and both printed on
 the PDF. He cut Protein Shakes to the Banana Booster alone. Put them back if
 that was not what he meant.
 
-**"Matchacano" is gone as a name**, which was a suggestion he asked for rather
-than an instruction. He said the matchacano and the ceremonial matcha "are the
-same, we should just pick one". Ceremonial Matcha is the one kept: it is the
-term people search, and it is already the first thing in that item's own
-ingredient line, while "matchacano" is a coined word with no search behind it
-that reads as a typo of americano. **Renamed, not deleted**, so neither
-preparation left the menu: the plain 6oz is still under Hot and the 16oz with
-protein is under Protein. He used the old name again afterwards, so confirm
-before treating this as settled.
+**"Matchacano" is gone as a name, and is not coming back.** He said the
+matchacano and the ceremonial matcha "are the same, we should just pick one",
+asked which, and confirmed the answer: "let's keep ceremonial matcha
+consistent, no matchacano". The reasoning, so it is not reopened: Ceremonial
+Matcha is the term people search and is already the first thing in that item's
+own ingredient line, while "matchacano" is a coined word with no search behind
+it that reads as a typo of americano. **Renamed, not deleted**, so neither
+preparation left the menu: the plain 6oz is under Hot and the 16oz with
+protein is under Specialty Protein.
 
-**A section note renders italic**, so an add-on or a bundle price does not
-read as an item you order on its own: "add on should be in italics and not
-look like an actual item". It becomes that MenuSection's `description` in the
-markup.
+**A section note sits on the heading row, right aligned and italic.** Italic
+so an add-on does not read as an item you order on its own, "add on should be
+in italics and not look like an actual item", and right aligned because "$13
+for 3" belongs in the price column: it "should be on the right (right
+aligned), where all the prices are lined up already". Measured, the note and
+the prices below it both end at 1501px. It wraps below the heading and returns
+to the left on a phone, where a right-aligned sentence on its own line reads
+as a mistake. The note is that MenuSection's `description` in the markup.
+
+**Three more changes the same day.** Cranberry kombucha came off and **Violet
+Lemongrass** replaced it. Two muffins and a no-bake cheesecake went on, from
+the recipe doc rather than the PDF, which carries none of the three: **Banana
+Zucchini Protein Muffin** and **Double Dark Chocolate Protein Muffin** at 69g
+and $6, and **No-Bake Cheesecake** in a 69g jar at $15. The prices are Frank's,
+since neither source has one. Their ingredient lines are the recipes reduced to
+a menu line with every allergen kept: walnut, egg, hemp and oats in the
+muffins, cashew in the cheesecake.
 ```bash
 node scripts/apply-cafe-menu.js           # dry run, prints the whole menu
 node scripts/apply-cafe-menu.js --apply

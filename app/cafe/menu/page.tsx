@@ -106,18 +106,26 @@ function splitIntoColumns(sections: MenuSection[]) {
 function MenuSectionBlock({ section }: { section: MenuSection }) {
   return (
     <section className="mb-16 flex flex-col gap-8 md:mb-20">
-      <div className="flex flex-col gap-2 border-b border-primary/15 pb-4">
+      {/*
+        The heading row: the section's name on the left, its note on the
+        right, where it lines up with the price column below.
+
+        Frank, 2026-10-18, on "$13 for 3": it "should be on the right (right
+        aligned), where all the prices are lined up already". Italic as well,
+        so an add-on or a bundle price does not read as something you order on
+        its own: "add on should be in italics and not look like an actual
+        item".
+
+        It wraps below the heading on a phone and goes back to the left there,
+        because at 375px a right-aligned sentence on its own line reads as a
+        mistake rather than as a price.
+      */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-primary/15 pb-4">
         <h2 className="text-2xl font-light tracking-tight md:text-3xl">
           {section.title}
         </h2>
         {section.note?.trim() ? (
-          /*
-           * Italic, like the standing note at the top of the page, so an
-           * add-on or a bundle price does not read as something you order on
-           * its own. Frank, 2026-10-18: "add on should be in italics and not
-           * look like an actual item".
-           */
-          <p className="font-light italic text-muted-foreground">
+          <p className="font-light italic text-muted-foreground sm:text-right">
             {section.note.trim()}
           </p>
         ) : null}

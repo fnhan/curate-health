@@ -137,12 +137,11 @@ const SECTIONS = [
   },
   {
     /*
-     * Its own section, by Frank on 2026-10-18: the two protein drinks sit
-     * together rather than one under Specialty Protein and one among the
-     * smoothies. That also retires the PDF's Protein Shakes heading, which
-     * he had already cut to a single item.
+     * Both protein drinks together, by Frank on 2026-10-18, under the
+     * PDF's own name for this section. That retires its Protein Shakes
+     * heading, which he had already cut to a single item.
      */
-    title: "Protein",
+    title: "Specialty Protein",
     items: [
       {
         /*
@@ -194,7 +193,8 @@ const SECTIONS = [
     items: [
       { name: "Blue Pomegranate", size: "16oz", price: 9 },
       { name: "Sour Apple", size: "16oz", price: 9 },
-      { name: "Cranberry", size: "16oz", price: 9 },
+      // Replaced Cranberry on 2026-10-18, Frank.
+      { name: "Violet Lemongrass", size: "16oz", price: 9 },
     ],
   },
   {
@@ -235,7 +235,7 @@ const SECTIONS = [
   {
     title: "Energy Bars",
     // Frank, 2026-10-18.
-    note: "Bars are $13 for 3.",
+    note: "$13 for 3",
     items: [
       {
         name: "Maple Almond",
@@ -269,6 +269,36 @@ const SECTIONS = [
     ],
   },
   {
+    /*
+     * Added 2026-10-18 at Frank's request, from the recipe doc rather than the
+     * PDF: neither muffin nor the cheesecake is on the printed menu.
+     *
+     * Prices are Frank's, 2026-10-18: $6 a muffin and $15 for the
+     * cheesecake. Neither the recipe doc nor the PDF carries a price for
+     * these, so they could not be read off anything.
+     *
+     * Ingredients are the recipe reduced to a menu line, with every allergen
+     * kept: walnut, egg, hemp and oats here, cashew in the cheesecake.
+     */
+    title: "Muffins",
+    items: [
+      {
+        name: "Banana Zucchini Protein Muffin",
+        size: "69g",
+        price: 6,
+        ingredients:
+          "sprouted oat flour, banana, zucchini, silken tofu, egg, walnuts, hemp hearts, coconut oil, maple syrup, cinnamon, nutmeg, with an oat and walnut crumble",
+      },
+      {
+        name: "Double Dark Chocolate Protein Muffin",
+        size: "69g",
+        price: 6,
+        ingredients:
+          "sprouted oat flour, cacao powder, cacao paste, banana, zucchini, silken tofu, egg, hemp hearts, coconut oil, maple syrup, vanilla extract",
+      },
+    ],
+  },
+  {
     title: "Chia Pudding",
     items: [
       {
@@ -278,6 +308,18 @@ const SECTIONS = [
         size: "350g",
         price: 10,
         ingredients: "topped with hojicha granola and probiotic berry compote",
+      },
+    ],
+  },
+  {
+    title: "No-Bake Cheesecake",
+    items: [
+      {
+        name: "No-Bake Cheesecake",
+        size: "69g jar",
+        price: 15,
+        ingredients:
+          "a hojicha nut granola and Medjool date crust, with silken tofu, cashew, coconut cream, coconut oil, lemon juice and zest, maple syrup, vanilla extract",
       },
     ],
   },

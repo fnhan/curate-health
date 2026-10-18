@@ -10,13 +10,22 @@ import {
 import { CafeMenuDownloadSection } from "@/components/layout/cafe-page/cafe-menu-download";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { buildPageMetadata } from "@/lib/page-metadata";
-import { JsonLdScript, buildCafeJsonLd } from "@/lib/structured-data";
 import {
+  CAFE_MENU_PATH,
+  JsonLdScript,
+  buildCafeJsonLd,
+} from "@/lib/structured-data";
+import {
+  CAFE_MENU_QUERYResult,
   CAFE_PAGE_QUERYResult,
   SITE_SETTINGS_QUERYResult,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
-import { CAFE_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import {
+  CAFE_MENU_QUERY,
+  CAFE_PAGE_QUERY,
+  SITE_SETTINGS_QUERY,
+} from "@/sanity/lib/queries";
 
 export default async function CafePage() {
   const cafePage = await sanityFetch<CAFE_PAGE_QUERYResult>({
@@ -28,6 +37,20 @@ export default async function CafePage() {
   const siteSettings = await sanityFetch<SITE_SETTINGS_QUERYResult>({
     query: SITE_SETTINGS_QUERY,
   });
+
+  /*
+   * The menu page, CH-108. Only its presence matters here: whether to link to
+   * it, and whether the cafe's hasMenu markup should point at the Menu entity
+   * there rather than at the PDF. One gate, the same one the route 404s on and
+   * the sitemap lists on, so /cafe can never link to a page that is not there.
+   */
+  const menu = await sanityFetch<CAFE_MENU_QUERYResult>({
+    query: CAFE_MENU_QUERY,
+  });
+
+  const hasMenuPage = (menu?.sections ?? []).some(
+    (section) => (section.items ?? []).length > 0
+  );
 
   if (!cafePage) {
     return notFound();
@@ -45,7 +68,7 @@ export default async function CafePage() {
   return (
     <div className="font-poppins">
       <JsonLdScript
-        data={buildCafeJsonLd(cafePage, siteSettings)}
+        data={buildCafeJsonLd(cafePage, siteSettings, hasMenuPage)}
         id="cafe-json-ld"
       />
       <Image
@@ -66,7 +89,10 @@ export default async function CafePage() {
         proseClassName="font-poppins prose-headings:font-poppins prose-p:font-poppins"
       />
       <CafeHours siteSettings={siteSettings} />
-      <CafeMenuDownloadSection data={menuDownloadSection} />
+      <CafeMenuDownloadSection
+        data={menuDownloadSection}
+        menuPath={hasMenuPage ? CAFE_MENU_PATH : null}
+      />
       <CafeCtaBandSection data={ctaBandSection} />
     </div>
   );

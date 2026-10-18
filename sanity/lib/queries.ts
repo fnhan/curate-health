@@ -965,6 +965,41 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
   ${SEO_QUERY}
 }`;
 
+/**
+ * The cafe menu as text, CH-108.
+ *
+ * The hero falls back to the cafe page's own photograph, so the page always
+ * opens on one and nobody has to remember to choose it, per the every-page
+ * rule. Both shapes are projected the same way so the page can treat them
+ * alike.
+ */
+export const CAFE_MENU_QUERY = groq`*[_type == "cafeMenu"][0]{
+  title,
+  intro,
+  note,
+  heroImage{
+    "url": asset->url,
+    alt
+  },
+  sections[]{
+    _key,
+    title,
+    note,
+    items[]{
+      _key,
+      name,
+      size,
+      price,
+      ingredients
+    }
+  },
+  "cafeHeroImage": *[_type == "cafePage" && pageActive == true][0].heroSection.heroImage{
+    "url": image.asset->url,
+    alt
+  },
+  ${SEO_QUERY}
+}`;
+
 export const SITEMAP_QUERY = groq`{
   "services": *[_type == "service" && isActive == true].slug.current,
   // A treatment is only a live page if its category is live too. Exercise
@@ -987,6 +1022,10 @@ export const SITEMAP_QUERY = groq`{
   "sustainability": *[_type == "sustainability" && pageActive == true]{_id},
   "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},
   "cafe": *[_type == "cafePage" && pageActive == true]{_id},
+  // /cafe/menu, CH-108. Gated on the document having items, so an empty
+  // menu is never listed: the route 404s in that state and a sitemap
+  // entry would point at it.
+  "cafeMenu": count(*[_type == "cafeMenu" && count(sections[defined(items) && count(items) > 0]) > 0]) > 0,
   // The two Curate Lifestyle pages have routes of their own rather than a
   // slug under /services, so the services list above never included them.
   // Both were live and missing from the sitemap until 2026-09-18.

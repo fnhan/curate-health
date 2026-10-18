@@ -121,6 +121,10 @@ export function pathsForDocument(doc: DocumentForPaths): string[] {
       return slug ? [`/products/${slug}`, "/products"] : ["/products"];
     case "cafePage":
       return ["/cafe"];
+    // The menu page, CH-108. /cafe goes with it because its hasMenu markup
+    // and its link into the menu both change when the menu does.
+    case "cafeMenu":
+      return ["/cafe/menu", "/cafe"];
     case "contactPage":
       return ["/contact"];
     case "legalPage":

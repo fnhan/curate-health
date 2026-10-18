@@ -1341,13 +1341,103 @@ Tai Chi with Dr. Gabriele on Sunday mornings, yoga with Rooj, mat Pilates with C
 
 Build a class schedule page with per-class URLs, `Event` markup, and direct booking links. This gives the Recovery Sanctuary a discovery surface it currently lacks entirely.
 
-### CH-108 Cafe menu as HTML
+### CH-108 Cafe menu as HTML. Built 2026-10-18
 
-The menu is a PDF. PDFs index badly and can't be excerpted cleanly by AI systems.
+`/cafe/menu`, 10 sections and 27 items, every name, size, price and ingredient
+line as text in the HTML. The PDF is still on `/cafe` for printing, as the
+second button rather than the only one.
 
-Build it as an indexable page with item names, descriptions and ingredients as real text. The functional nutrition positioning, no industrial seed oils, maple and honey only, Ontario-local and seasonal sourcing, is genuinely differentiated and completely invisible to search right now.
+The menu lives in a `cafeMenu` document, one document rather than one per item:
+thirty documents would be thirty things to open to change a price, and thirty
+slugs for pages nobody wants.
 
-Add `hasMenu` and `servesCuisine` to the cafe entity.
+**The markup is a `Menu` entity, not a link to a file.** `hasMenu` on the cafe
+entity points at `#menu` on the new page, and that node points back with
+`provider`, so the two are one business. Sections become `MenuSection` and items
+`MenuItem`, which is what lets an answer engine quote one drink rather than the
+whole list. `hasMenu` rather than `menu`, which schema.org marks superseded by
+it; the PDF url is still what it carries while the page has no items on it.
+
+**Prices are in the markup here, unlike the product pages.** Those carry
+`Product` with no `Offer` on purpose, because pricing for them lives in Jane and
+the site cannot show it. The menu is the opposite: the prices are printed on the
+page, so leaving them out would describe the page less accurately than putting
+them in. Markup describes what the page shows.
+
+**One gate in four places.** The route 404s, the sitemap omits the URL, llms.txt
+omits the line and `/cafe` hides the link, all on the same condition: the
+document has at least one section with items. So the four cannot disagree, and
+`/cafe` can never link to a page that is not there.
+
+`cafeMenu` is in `pathsForDocument` and in both `INDEX_DOCS_QUERY` copies, so
+publishing it tells Bing and site search finds it. Checked: "Zawadi", "hojicha"
+and "Maple Almond" each return `/cafe/menu`.
+
+**The hero defaults to the cafe page's own photograph**, and so does the share
+card, so neither needed choosing. No breadcrumb trail, per the blog-posts-only
+rule from 2026-09-20.
+
+#### Where the content came from, and the four readings in it
+
+Two sources, both Frank's: the menu PDF `/cafe` was linking to, and the "New
+recipes" Google Doc, which is **newer** and is the master for what the kitchen
+makes.
+
+**The Maple Almond bar does not use its printed line, and this is the reason
+the ingredient field says it is allergen information.** The bar was sold as
+"Almond & Walnut" and the PDF's ingredients for it read "almonds, dates, maple
+syrup, cinnamon, cacao powder, vanilla extract, salt". That omits **walnut**, a
+tree nut named in the item's own title, omits the goji berries and lemon zest,
+and lists cacao powder, which belongs to the Chocolate Hazelnut bar. The recipe
+doc has the real list and that is what went in, walnut brittle included. Frank
+renamed it **Maple Almond** on 2026-10-16 and confirmed **no honey** in it,
+which the recipe agrees with. Honey stays in the drinks that have it.
+
+The PDF sets items out in four columns with the ingredient lists in a separate
+text layer, so pairing a list to its drink is a reading of the layout rather
+than something the file states. Four readings are **waiting on Frank**, each
+printed by the script's dry run:
+
+- **Hot against Iced.** Split on size, everything 12oz or under hot and
+  everything 16oz iced. Matcha Latte at 16oz is the one that could go the other
+  way.
+- **"Matchacano with Protein" and "Cold Foam (16oz)"** are two runs in the same
+  column, read here as one item at $14.
+- **"vanilla", "chocolate", "chocolate peanut butter"** sit beside "Plant
+  protein + Superfoods Powder" and near "Smoothie add-ons 3", read here as the
+  add-on and its three flavours. They may belong to the Signature Protein
+  Milkshake instead.
+- **Chia Pudding prints 35g**, the same as an energy bar, for a $10 item. Left
+  as printed in case it is the dry weight.
+
+```bash
+node scripts/apply-cafe-menu.js           # dry run, prints the whole menu
+node scripts/apply-cafe-menu.js --apply
+```
+
+The script checks the copy against the content rules before it will write, and
+against the audits' own title and description limits, so a failure shows up
+before the mutation rather than after the build. Applied in transaction
+`b293KmNbo0z5K9Rnfg9Yi3`, after
+`sanity-backup-2026-10-18-before-cafe-menu-documents.tar.gz`.
+
+**`audit-seo-complete.js` passes 9 of 9 with the page in.**
+
+#### The outline button variant is dark on dark
+
+Found here, worth knowing anywhere a second button is wanted. `components/ui/button.tsx`
+gives `outline` `bg-background` and **no text colour**, and `--background` in
+this theme is the dark green, so it paints a dark green box and lets the label
+inherit the dark green around it. Measured: both `rgb(39, 52, 24)`. It renders
+as a filled rectangle with nothing in it, and it looks correct in the source.
+
+The PDF button spells its colours out rather than relying on the variant. Fixed
+at the call site on purpose: the variant is shared, and repainting it would
+change buttons on pages this ticket has not looked at.
+
+**Still Frank's.** The block's description on `/cafe` reads "Save or share the
+menu in one tap", written when the PDF was the only thing there. It is Studio
+copy on `cafePage.menuDownloadSection.description`.
 
 ### CH-109 Eglinton Crosstown landing page
 

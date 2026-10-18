@@ -1154,6 +1154,44 @@ export type Author = {
   };
 };
 
+export type CafeMenu = {
+  _id: string;
+  _type: "cafeMenu";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  heroImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  intro?: string;
+  note?: string;
+  sections?: Array<{
+    title?: string;
+    note?: string;
+    items?: Array<{
+      name?: string;
+      size?: string;
+      price?: number;
+      ingredients?: string;
+      _type: "menuItem";
+      _key: string;
+    }>;
+    _type: "menuSection";
+    _key: string;
+  }>;
+  seo?: Seo;
+};
+
 export type CafePage = {
   _id: string;
   _type: "cafePage";
@@ -2885,6 +2923,7 @@ export type AllSanitySchemaTypes =
   | Practitioner
   | Post
   | Author
+  | CafeMenu
   | CafePage
   | Treatments
   | Service
@@ -7798,8 +7837,63 @@ export type CAFE_PAGE_QUERYResult = {
     } | null;
   } | null;
 } | null;
+// Variable: CAFE_MENU_QUERY
+// Query: *[_type == "cafeMenu"][0]{  title,  intro,  note,  heroImage{    "url": asset->url,    alt  },  sections[]{    _key,    title,    note,    items[]{      _key,      name,      size,      price,      ingredients    }  },  "cafeHeroImage": *[_type == "cafePage" && pageActive == true][0].heroSection.heroImage{    "url": image.asset->url,    alt  },    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      }    }  }}
+export type CAFE_MENU_QUERYResult = {
+  title: string | null;
+  intro: string | null;
+  note: string | null;
+  heroImage: {
+    url: string | null;
+    alt: string | null;
+  } | null;
+  sections: Array<{
+    _key: string;
+    title: string | null;
+    note: string | null;
+    items: Array<{
+      _key: string;
+      name: string | null;
+      size: string | null;
+      price: number | null;
+      ingredients: string | null;
+    }> | null;
+  }> | null;
+  cafeHeroImage: {
+    url: string | null;
+    alt: string | null;
+  } | null;
+  seo: {
+    pageTitle: string | null;
+    pageDescription: string | null;
+    socialMeta: {
+      title: string | null;
+      description: string | null;
+      ogImage: {
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        alt: string | null;
+        asset: {
+          _id: string;
+          url: string | null;
+          alt: null;
+        } | null;
+      } | null;
+      twitterImage: {
+        crop: SanityImageCrop | null;
+        hotspot: SanityImageHotspot | null;
+        alt: string | null;
+        asset: {
+          _id: string;
+          url: string | null;
+          alt: null;
+        } | null;
+      } | null;
+    } | null;
+  } | null;
+} | null;
 // Variable: SITEMAP_QUERY
-// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  // A treatment is only a live page if its category is live too. Exercise  // Therapy was switched on under the switched-off Lifestyle Medicine  // category, so the sitemap kept listing an address that forwards  // elsewhere. Caught by audit-metadata.js on 2026-09-11.  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  // One entry per practitioner page, CH-104. Gated on isActive, so  // switching someone off in the Studio takes their URL out of the sitemap  // rather than leaving it listed and 404ing.  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},  "cafe": *[_type == "cafePage" && pageActive == true]{_id},  // The two Curate Lifestyle pages have routes of their own rather than a  // slug under /services, so the services list above never included them.  // Both were live and missing from the sitemap until 2026-09-18.  "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0}
+// Query: {  "services": *[_type == "service" && isActive == true].slug.current,  // A treatment is only a live page if its category is live too. Exercise  // Therapy was switched on under the switched-off Lifestyle Medicine  // category, so the sitemap kept listing an address that forwards  // elsewhere. Caught by audit-metadata.js on 2026-09-11.  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{    "serviceSlug": service->slug.current,    "treatmentSlug": treatmentSlug.current  },  "products": *[_type == "product" && isActive == true].slug.current,  "posts": *[_type == "post" && defined(slug)].slug.current,  "team": *[_type == "ourTeam" && pageActive == true]{_id},  // One entry per practitioner page, CH-104. Gated on isActive, so  // switching someone off in the Studio takes their URL out of the sitemap  // rather than leaving it listed and 404ing.  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,  "story": *[_type == "ourStory" && pageActive == true]{_id},  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},  "cafe": *[_type == "cafePage" && pageActive == true]{_id},  // /cafe/menu, CH-108. Gated on the document having items, so an empty  // menu is never listed: the route 404s in that state and a sitemap  // entry would point at it.  "cafeMenu": count(*[_type == "cafeMenu" && count(sections[defined(items) && count(items) > 0]) > 0]) > 0,  // The two Curate Lifestyle pages have routes of their own rather than a  // slug under /services, so the services list above never included them.  // Both were live and missing from the sitemap until 2026-09-18.  "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0}
 export type SITEMAP_QUERYResult = {
   services: Array<string | null>;
   treatments: Array<{
@@ -7827,6 +7921,7 @@ export type SITEMAP_QUERYResult = {
   cafe: Array<{
     _id: string;
   }>;
+  cafeMenu: boolean;
   lifestyle: boolean;
   lifestyleProgram: boolean;
 };
@@ -8675,7 +8770,8 @@ declare module "@sanity/client" {
     '{\n  "page": *[_type == "blogSection"][0]{\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n  "latestImage": *[_type == "post" && published == true && defined(mainImage.asset)]\n    | order(publishedAt desc, _createdAt desc)[0].mainImage{\n      crop,\n      hotspot,\n      alt,\n      asset->{\n        _id,\n        url\n      }\n    }\n}': BLOG_PAGE_QUERYResult;
     '*[_type == "post" && published == true && slug.current == $slug][0] {\n  _updatedAt,\n  title,\n  publishedAt,\n  excerpt,\n  slug,\n  "author": author->{\n    linkedTeamMemberName,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  "mainImage": {\n    "image": mainImage.asset->url,\n    "alt": mainImage.alt\n  },\n  sections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      // alt sits on sectionImage, beside image, not inside it. This read\n      // image.alt, a field the post schema does not define, so every blog\n      // section rendered alt="" and typing alt text into the Studio would\n      // have changed nothing. The same projection in CAFE_PAGE_QUERY has\n      // always read it correctly. CH-028.\n      //\n      // Line comments only in here. A /* */ block inside the template\n      // literal parses as GROQ rather than as JavaScript and takes the whole\n      // query out, which shows up as a missing generated type.\n      alt\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': GET_POST_BY_SLUG_QUERYResult;
     '*[_type == "cafePage" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->\n     },\n     alt\n   }\n },\n introSection{\n   title,\n   subheading,\n   description\n },\n quoteSection{\n   quoteImage{\n     "image": image.asset->url,\n     alt\n   },\n   quoteText\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      alt\n    }\n  },\n menuDownloadSection{\n    eyebrow,\n    headline,\n    description,\n    buttonLabel,\n    "menuFile": menuPdf.asset->{\n      url,\n      originalFilename,\n      mimeType\n    }\n },\n ctaBandSection{\n    backgroundImage{\n      "url": image.asset->url,\n      alt\n    },\n    headline,\n    body,\n    closingLine\n },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': CAFE_PAGE_QUERYResult;
-    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  // A treatment is only a live page if its category is live too. Exercise\n  // Therapy was switched on under the switched-off Lifestyle Medicine\n  // category, so the sitemap kept listing an address that forwards\n  // elsewhere. Caught by audit-metadata.js on 2026-09-11.\n  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  // One entry per practitioner page, CH-104. Gated on isActive, so\n  // switching someone off in the Studio takes their URL out of the sitemap\n  // rather than leaving it listed and 404ing.\n  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id},\n  // The two Curate Lifestyle pages have routes of their own rather than a\n  // slug under /services, so the services list above never included them.\n  // Both were live and missing from the sitemap until 2026-09-18.\n  "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,\n  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0\n}': SITEMAP_QUERYResult;
+    '{\n  "services": *[_type == "service" && isActive == true].slug.current,\n  // A treatment is only a live page if its category is live too. Exercise\n  // Therapy was switched on under the switched-off Lifestyle Medicine\n  // category, so the sitemap kept listing an address that forwards\n  // elsewhere. Caught by audit-metadata.js on 2026-09-11.\n  "treatments": *[_type == "treatments" && isActive == true && service->isActive == true]{\n    "serviceSlug": service->slug.current,\n    "treatmentSlug": treatmentSlug.current\n  },\n  "products": *[_type == "product" && isActive == true].slug.current,\n  "posts": *[_type == "post" && defined(slug)].slug.current,\n  "team": *[_type == "ourTeam" && pageActive == true]{_id},\n  // One entry per practitioner page, CH-104. Gated on isActive, so\n  // switching someone off in the Studio takes their URL out of the sitemap\n  // rather than leaving it listed and 404ing.\n  "practitioners": *[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current,\n  "story": *[_type == "ourStory" && pageActive == true]{_id},\n  "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},\n  "sustainability": *[_type == "sustainability" && pageActive == true]{_id},\n  "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},\n  "cafe": *[_type == "cafePage" && pageActive == true]{_id},\n  // /cafe/menu, CH-108. Gated on the document having items, so an empty\n  // menu is never listed: the route 404s in that state and a sitemap\n  // entry would point at it.\n  "cafeMenu": count(*[_type == "cafeMenu" && count(sections[defined(items) && count(items) > 0]) > 0]) > 0,\n  // The two Curate Lifestyle pages have routes of their own rather than a\n  // slug under /services, so the services list above never included them.\n  // Both were live and missing from the sitemap until 2026-09-18.\n  "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,\n  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0\n}': SITEMAP_QUERYResult;
+    '*[_type == "cafeMenu"][0]{\n  title,\n  intro,\n  note,\n  heroImage{\n    "url": asset->url,\n    alt\n  },\n  sections[]{\n    _key,\n    title,\n    note,\n    items[]{\n      _key,\n      name,\n      size,\n      price,\n      ingredients\n    }\n  },\n  "cafeHeroImage": *[_type == "cafePage" && pageActive == true][0].heroSection.heroImage{\n    "url": image.asset->url,\n    alt\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': CAFE_MENU_QUERYResult;
     '*[_type == "legalPage" && slug.current == $slug][0]{\n  title,\n  body,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': LEGAL_PAGE_BY_SLUG_QUERYResult;
     '\n  *[_type == "serviceLifestyle" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    hero_secondary_title,\n    hero_large_text,\n    referral_form_pdf {\n      asset-> {\n        url,\n        originalFilename,\n      }\n    },\n    block_2_title,\n    block_2_content,\n    block_2_image {\n      asset-> {\n        url,\n      }\n    },\n    block_3_title,\n    block_3_content,\n    "block_4_image": block_4_image.asset->url,\n    "block_5_image": block_5_image.asset->url,\n    benefits[] {\n      title,\n      description,\n      "image": image.asset->url,\n      tint_percentage,\n      tint_percentage_hover\n    },\n    "block_7_image": block_7_image.asset->url,\n    "block_9_image": block_9_image.asset->url,\n    timeline[] {\n      title,\n      description\n    },\n    "block_11_image": block_11_image.asset->url,\n    faq[] {\n      title,\n      description\n    },\n    call_to_action,\n    pillars[] {\n      title,\n      description\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n    "ourTeam": *[_type == "ourTeam" && pageActive == true][0]{\n      teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)] {\n        name,\n        role,\n        bio,\n        image {\n          asset-> {\n            url\n          }\n        }\n      }\n    },\n    testimonials[] {\n      name,\n      description,\n      image {\n        asset-> {\n          url\n        }\n      }\n    }\n  }\n': SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
     '\n  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{\n title,\n  "slug": slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      alt\n    }\n  },\n  additionalCheckinTitle,\n  additionalCheckin[] {\n    checkinDescription,\n    checkinCount\n  },\n  groupSectionTitle,\n  groupSectionDescription,\n  groupSections[] {\n    description,\n    "image": image.asset->url,\n    "alt": image.alt\n  },\n  assistanceSectionTitle,\n  assistanceSectionDescription,\n  assistanceSectionImage {\n    asset-> {\n      url,\n    }\n  },\n  referral_form_pdf {\n    asset-> {\n      url,\n        originalFilename,\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;

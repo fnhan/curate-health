@@ -7,6 +7,7 @@ import type { Crumb } from "@/lib/breadcrumbs";
 import { treatmentPath } from "@/lib/service-urls";
 import { getPractitionerSlugFromName } from "@/lib/utils";
 import {
+  CAFE_MENU_QUERYResult,
   CAFE_PAGE_QUERYResult,
   GET_POST_BY_SLUG_QUERYResult,
   PRACTITIONER_BY_SLUG_QUERYResult,
@@ -475,7 +476,19 @@ export function buildTreatmentJsonLd(treatment: TREATMENT_BY_SLUG_QUERYResult) {
 
 export function buildCafeJsonLd(
   cafePage: CAFE_PAGE_QUERYResult,
-  siteSettings?: SITE_SETTINGS_QUERYResult
+  siteSettings?: SITE_SETTINGS_QUERYResult,
+  /**
+   * True when /cafe/menu has items on it, CH-108.
+   *
+   * The menu was a PDF, and `menu` pointed at the file. A PDF is a poor
+   * answer to "what does this cafe serve": it indexes badly and nothing can
+   * excerpt an item out of it cleanly. With the page built, hasMenu points at
+   * the Menu entity there instead, which names every section and item.
+   *
+   * It falls back to the PDF when the page has nothing on it, so the markup
+   * never claims a menu that is not there.
+   */
+  hasMenuPage?: boolean
 ) {
   if (!cafePage) {
     return null;
@@ -506,7 +519,16 @@ export function buildCafeJsonLd(
       cafe.ctaBandSection?.backgroundImage?.url,
     url: `${BASEURL}/cafe`,
     parentOrganization: { "@id": `${BASEURL}/#organization` },
-    menu: cafe.menuDownloadSection?.menuFile?.url,
+    /**
+     * `hasMenu` rather than `menu`: schema.org marks `menu` superseded by it,
+     * and the value is the Menu entity on /cafe/menu rather than a URL, so a
+     * crawler that follows it gets the sections and items rather than a page
+     * to parse. The PDF is still on the page for anybody who wants to print
+     * it, and is still what this points at while the page is empty.
+     */
+    hasMenu: hasMenuPage
+      ? { "@id": `${BASEURL}${CAFE_MENU_PATH}#menu` }
+      : cafe.menuDownloadSection?.menuFile?.url,
     // The cafe shares the clinic's address, so it gets the same one rather
     // than a second copy of it. Without an address a LocalBusiness cannot be
     // placed, which is most of what the type is for.
@@ -559,6 +581,80 @@ export function buildCafeJsonLd(
       name: "Toronto",
     },
   }) as JsonLdObject;
+}
+
+/** /cafe/menu. One place, so the page and the markup cannot disagree. */
+export const CAFE_MENU_PATH = "/cafe/menu";
+
+/**
+ * The cafe menu as a Menu graph. CH-108.
+ *
+ * Sections become MenuSection and items become MenuItem, which is what lets
+ * an answer engine quote one drink rather than the whole list. The cafe entity
+ * on /cafe points here with hasMenu, and this points back with `provider`, so
+ * the two are one business rather than two.
+ *
+ * PRICES ARE IN THE MARKUP HERE, UNLIKE THE PRODUCT PAGES
+ *
+ * The five product pages carry Product with no Offer on purpose: pricing for
+ * those lives in Jane and a price in markup would be a number the site itself
+ * cannot show. The menu is the opposite case. The prices are printed on the
+ * page, so leaving them out of the markup would describe the page less
+ * accurately than including them. Markup describes what the page shows.
+ *
+ * The ingredient line becomes the item's description, because that is what it
+ * is: the one thing somebody with an allergy is looking for.
+ */
+export function buildCafeMenuJsonLd(menu: CAFE_MENU_QUERYResult) {
+  const sections = (menu?.sections ?? []).filter(
+    (section) => (section.items ?? []).length > 0
+  );
+
+  if (!menu || sections.length === 0) {
+    return null;
+  }
+
+  const url = absoluteUrl(CAFE_MENU_PATH);
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@type": "Menu",
+    "@id": `${url}#menu`,
+    name: menu.title || "Curate Cafe Menu",
+    url,
+    inLanguage: "en-CA",
+    description: menu.seo?.pageDescription || firstParagraph(menu.intro),
+    // The cafe entity, not the clinic. The menu belongs to one of the
+    // businesses in the building rather than to all of them.
+    provider: { "@id": `${BASEURL}/cafe#cafe` },
+    hasMenuSection: sections.map((section) => ({
+      "@type": "MenuSection",
+      name: section.title,
+      description: section.note,
+      hasMenuItem: (section.items ?? []).map((item) => ({
+        "@type": "MenuItem",
+        name: item.name,
+        description: item.ingredients,
+        offers:
+          typeof item.price === "number"
+            ? {
+                "@type": "Offer",
+                price: item.price.toFixed(2),
+                priceCurrency: "CAD",
+              }
+            : undefined,
+        // The size as printed, 16oz or 35g. suggestedServingSize is the
+        // property schema.org has for it; it takes text, so "16oz" is
+        // fine as written rather than needing a unit code.
+        suggestedServingSize: item.size,
+      })),
+    })),
+  }) as JsonLdObject;
+}
+
+/** The lead paragraph of an intro field, for a description with none written. */
+function firstParagraph(intro: string | null | undefined) {
+  return (intro ?? "").split(/\n{2,}/)[0]?.trim() || undefined;
 }
 
 /**

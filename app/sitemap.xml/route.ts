@@ -49,6 +49,7 @@ export async function GET() {
     pillarsHealth,
     lifestyle,
     lifestyleProgram,
+    cafeMenu,
   } = sitemap!;
 
   const staticRoutes: Url[] = [
@@ -88,6 +89,19 @@ export async function GET() {
       changeFrequency: "monthly",
       priority: 0.5,
     },
+    // The cafe menu as a page rather than a PDF, CH-108. Conditional on the
+    // document having items, the same gate the route 404s on, so this never
+    // lists a page that is not there.
+    ...(cafeMenu
+      ? [
+          {
+            url: `${BASEURL}/cafe/menu`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: "monthly" as const,
+            priority: 0.6,
+          },
+        ]
+      : []),
     {
       // The products hub, CH-010. Ranked with the other section indexes rather
       // than with the product pages below it, since it is the page the

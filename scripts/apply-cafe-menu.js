@@ -284,14 +284,14 @@ const SECTIONS = [
     items: [
       {
         name: "Banana Zucchini Protein Muffin",
-        size: "69g",
+        size: "65g",
         price: 6,
         ingredients:
           "sprouted oat flour, banana, zucchini, silken tofu, egg, walnuts, hemp hearts, coconut oil, maple syrup, cinnamon, nutmeg, with an oat and walnut crumble",
       },
       {
         name: "Double Dark Chocolate Protein Muffin",
-        size: "69g",
+        size: "65g",
         price: 6,
         ingredients:
           "sprouted oat flour, cacao powder, cacao paste, banana, zucchini, silken tofu, egg, hemp hearts, coconut oil, maple syrup, vanilla extract",
@@ -299,24 +299,29 @@ const SECTIONS = [
     ],
   },
   {
-    title: "Chia Pudding",
+    /*
+     * Chia Pudding and the cheesecake share a section, by Frank on 2026-10-18,
+     * "to reduce sections". Both are chilled, spooned out of a glass and
+     * sweetened with maple, so they belong together.
+     *
+     * "Desserts" rather than "Jars" or "Chilled Desserts", which were the two
+     * alternatives. It is the word somebody searching asks with, and this page
+     * exists to be found and quoted. The other two describe the serving rather
+     * than the thing.
+     */
+    title: "Desserts",
     items: [
       {
+        // No weight, by Frank on 2026-10-18, so it reads as one line. The
+        // ingredient line stays: the granola carries cashew, walnut, pumpkin
+        // seed and sesame, and that is allergen information.
         name: "Chia Pudding",
-        // 350g, confirmed by Frank 2026-10-18. The PDF prints 35g, which is
-        // an energy bar's weight for a $10 item, so the file is wrong here.
-        size: "350g",
         price: 10,
         ingredients: "topped with hojicha granola and probiotic berry compote",
       },
-    ],
-  },
-  {
-    title: "No-Bake Cheesecake",
-    items: [
       {
         name: "No-Bake Cheesecake",
-        size: "69g jar",
+        size: "65g",
         price: 15,
         ingredients:
           "a hojicha nut granola and Medjool date crust, with silken tofu, cashew, coconut cream, coconut oil, lemon juice and zest, maple syrup, vanilla extract",

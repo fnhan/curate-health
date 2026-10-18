@@ -1439,6 +1439,121 @@ the prices below it both end at 1501px. It wraps below the heading and returns
 to the left on a phone, where a right-aligned sentence on its own line reads
 as a mistake. The note is that MenuSection's `description` in the markup.
 
+**Section headings hold one line.** The heading is `shrink-0` so the note on
+the right gives way first. Not `whitespace-nowrap`, which overflows the column
+rather than wrapping, and wrapping is the behaviour Frank allowed for: "unless
+adaptive settings need to split it to 2 for any reason". Measured at 1680,
+1280 and 375, every heading is one line today, the widest being "Kombucha on
+Tap" at 211px in a 311px phone container.
+
+**The PDF download button is gone from /cafe**, by Frank on 2026-10-18 now
+that the page exists. It is the **fallback** rather than a second button: it
+appears only when there is no menu page to link to, because that block with no
+action at all is worse than a download. The file is untouched in Sanity, so
+switching the menu document off puts the download straight back.
+
+**Three more changes the same day.** Cranberry kombucha came off and **Violet
+Lemongrass** replaced it. Two muffins and a no-bake cheesecake went on, from
+the recipe doc rather than the PDF, which carries none of the three: **Banana
+Zucchini Protein Muffin** and **Double Dark Chocolate Protein Muffin** at 69g
+and $6, and **No-Bake Cheesecake** in a 69g jar at $15. The prices are Frank's,
+since neither source has one. Their ingredient lines are the recipes reduced to
+a menu line with every allergen kept: walnut, egg, hemp and oats in the
+muffins, cashew in the cheesecake.
+```bash
+node scripts/apply-cafe-menu.js           # dry run, prints the whole menu
+node scripts/apply-cafe-menu.js --apply
+```
+
+The script checks the copy against the content rules before it will write, and
+against the audits' own title and description limits, so a failure shows up
+before the mutation rather than after the build. Applied in transaction
+`b293KmNbo0z5K9Rnfg9Yi3`, after
+`sanity-backup-2026-10-18-before-cafe-menu-documents.tar.gz`.
+
+**`audit-seo-complete.js` passes 9 of 9 with the page in.**
+
+#### Frank's pass, 2026-10-18
+
+**The first two paragraphs of the intro are his**, and they are one paragraph
+of his split at his own sentence break: the first becomes the hero's standing
+line, the second the band. At 250 characters the whole thing ran to four lines
+over the photograph. Not a word is altered. The third paragraph is the
+allergen line and is mine.
+
+**The draft his replaced opened on "cooked without industrial seed oils and
+sweetened with maple syrup, honey or dates rather than refined sugar".** That
+claim is off the page because he took it out, not by oversight. Do not put it
+back without asking him.
+
+The standing note is his too: "vessel" rather than "mug", and food as well as
+beverages. It is **two lines**, as he wrote them, because they are two
+separate offers rather than one sentence, and it is pulled up against the
+intro band with a negative margin. SectionIntro ends on `py-24`, so the note
+sat 96px clear of the paragraph it belongs with and read as a section of its
+own.
+
+**"Bars are $13 for 3"** is a section note on Energy Bars, which also becomes
+that MenuSection's `description` in the markup.
+
+**The /cafe block no longer says "Save or share the menu in one tap"**, which
+was written when downloading the file was all that block did. The script
+matches that sentence rather than replacing the paragraph, so an editor
+rewording the rest in the Studio is not silently reverted by the next run.
+
+**Prices print whole numbers without decimals**, "as everything is whole
+numbers for that reason". Only the $4.50 bars show cents. `menuPrice` in
+`lib/structured-data.tsx` is exported for this, because the page and the
+`Offer` in the markup both need it and two copies of the rule would eventually
+disagree with each other.
+
+**Ingredient lines stop at three quarters of the measure**, from the `sm`
+breakpoint up. At full width a long one ran under the price column and the two
+read as one paragraph. Not on a phone: there is no price column to clear at
+375px, and three quarters of 311px took the immunity latte to five lines.
+
+**Two columns from `xl`, which he asked for so a wide window scrolls less.**
+This is not the layout he rejected twice on the prose band. There, balancing
+the columns meant cutting a sentence across the gutter; a menu section is a
+discrete block that moves whole or not at all.
+
+**The longer column is always the left one, and the two are as even as they
+go.** His rule, 2026-10-18: "balanced as best as possible, but if one needs a
+bit more, make it the left". CSS `columns-2` decides the split itself and
+leans whichever way it likes, so `splitIntoColumns` in the page makes the
+decision and the columns are real elements in a two cell grid.
+
+**It is not a single split point, and that was the first version's mistake.**
+Cutting the list in two at one index is the obvious reading of "two columns"
+and it is also why it was 437px out: with one cut there are only ten
+arrangements and none of them was even. The cut before Smoothies left the
+right column 512px ahead, the cut after it left the left 437px ahead, and
+there was nothing in between to choose. Choosing a column per section opens
+2^n arrangements instead, which is 1024 to try and free on a static page.
+
+**Two things rein the arithmetic in.** The most even arrangement is often a
+scatter: left to itself it balanced to 32px by putting Kombucha alone at the
+top of the left column with Hot and Iced over on the right, so the page opened
+on the wrong thing. So **the menu's first section always leads the left
+column**, as a constraint rather than a preference, and an arrangement within
+60px of the evenest wins if it holds the sections in fewer contiguous runs.
+Measured after: left 1813px, right 1797px, 16px apart, opening on Hot.
+
+**A grid of two cells, not of ten.** Ten cells lays the sections out in rows
+and makes every row as tall as its tallest section, which leaves holes.
+
+The heights it estimates were read off the rendered page rather than guessed.
+They only have to rank sections against each other, so one out by a few pixels
+cannot change the answer; one out by half its height could.
+**A section note sits on the heading row, right aligned and italic.** Italic
+so an add-on does not read as an item you order on its own, "add on should be
+in italics and not look like an actual item", and right aligned because "$13
+for 3" belongs in the price column: it "should be on the right (right
+aligned), where all the prices are lined up already". Measured, the note and
+the prices below it both end at 1501px. It wraps below the heading and returns
+to the left on a phone, where a right-aligned sentence on its own line reads
+as a mistake. The note is that MenuSection's `description` in the markup.
+
 **Three more changes the same day.** Cranberry kombucha came off and **Violet
 Lemongrass** replaced it. Two muffins and a no-bake cheesecake went on, from
 the recipe doc rather than the PDF, which carries none of the three: **Banana

@@ -47,27 +47,50 @@ type MenuSection = NonNullable<
 >[number];
 
 /**
- * Deal the sections into two columns, with the longer one on the left.
+ * Deal the sections into two columns: as even as they go, and when they cannot
+ * be even, the left one longer.
  *
- * Frank asked on 2026-10-18 for the left column to be the longer one whenever
- * the two cannot be even. CSS `columns-2` decides that for itself and had put
- * Smoothies, the tallest section, on the right, so the right ran 512px past
- * the left. There is no CSS property that says "lean left", so the split is
- * made here and the columns are real elements.
+ * Frank's rule, 2026-10-18: "make sure it's balanced as best as possible, but
+ * if one needs a bit more, make it the left". CSS `columns-2` decides the split
+ * itself and leans whichever way it likes, so the decision is made here and the
+ * columns are real elements.
  *
- * The rule: walk the sections in order, filling the left until it holds at
- * least half the total height, then everything after goes right. Because the
- * running total only grows, the first split that passes half is both the one
- * that leans left and the closest to even of the splits that do.
+ * WHY THIS IS NOT A SINGLE SPLIT POINT
  *
- * Reading order is unchanged, down the left and then down the right.
+ * The first version cut the list in two at one index, which is the obvious
+ * reading of "two columns" and is also the reason it was 437px out. With one
+ * cut there are only ten arrangements to choose from and none of them was even:
+ * the cut before Smoothies left the right column 512px ahead, and the cut after
+ * it left the left column 437px ahead. There was nothing in between to pick.
+ *
+ * Choosing which column each section goes in opens 2^n arrangements instead, so
+ * a near-even one almost always exists. Ten sections is 1024 to try, which is
+ * nothing, and the page is static.
+ *
+ * WHY IT IS NOT PURELY THE MOST EVEN ONE
+ *
+ * The most even arrangement is often a scatter. Left to itself this one put
+ * Kombucha alone at the top of the left column with Hot and Iced over on the
+ * right, balanced to 32px and opening on the wrong thing. So two things rein
+ * it in.
+ *
+ * **The menu's first section always leads the left column.** A reader starting
+ * at the top left has to meet the top of the menu, whatever the arithmetic
+ * prefers. This is a constraint rather than a preference.
+ *
+ * **Near-even beats dead even when it groups better.** It takes the most even
+ * arrangement, then accepts any within TOLERANCE of it that holds the sections
+ * in fewer contiguous runs, and prefers the evenest of those. One run each side
+ * is a single clean cut.
+ *
+ * Order within each column is the menu's own, always.
  */
 function splitIntoColumns(sections: MenuSection[]) {
   /*
-   * Rough rendered heights in pixels, read off the page at 1680 rather than
+   * Rendered heights in pixels, measured off the page at 1680 rather than
    * guessed. They only have to rank the sections against each other, so a
-   * section being out by a few pixels cannot move the split; a section being
-   * out by half its height could.
+   * section out by a few pixels cannot change the answer; one out by half its
+   * height could.
    */
   const HEADING = 110;
   const NOTE = 28;
@@ -75,6 +98,12 @@ function splitIntoColumns(sections: MenuSection[]) {
   const INGREDIENT_LINE = 24;
   const CHARS_PER_LINE = 60;
   const BETWEEN_SECTIONS = 80;
+
+  /** How much unevenness is worth trading for a tidier arrangement. */
+  const TOLERANCE = 60;
+
+  /** Above this, 2^n stops being free and it falls back to one split point. */
+  const BRUTE_FORCE_LIMIT = 18;
 
   const height = (section: MenuSection) =>
     HEADING +
@@ -87,19 +116,60 @@ function splitIntoColumns(sections: MenuSection[]) {
     }, 0);
 
   const heights = sections.map(height);
-  const half = heights.reduce((a, b) => a + b, 0) / 2;
+  const total = heights.reduce((a, b) => a + b, 0);
+  const n = sections.length;
 
-  let running = 0;
-  let split = sections.length;
-  for (let i = 0; i < sections.length; i += 1) {
-    running += heights[i];
-    if (running >= half) {
-      split = i + 1;
-      break;
+  const take = (mask: number, right: boolean) =>
+    sections.filter((_, i) => Boolean(mask & (1 << i)) === right);
+
+  if (n > BRUTE_FORCE_LIMIT) {
+    // One split point, the first that puts half or more in the left column.
+    let running = 0;
+    let at = n;
+    for (let i = 0; i < n; i += 1) {
+      running += heights[i];
+      if (running >= total / 2) {
+        at = i + 1;
+        break;
+      }
     }
+    return [sections.slice(0, at), sections.slice(at)] as const;
   }
 
-  return [sections.slice(0, split), sections.slice(split)] as const;
+  /** Contiguous blocks in the arrangement. One means a single clean cut. */
+  const runs = (mask: number) => {
+    let count = 0;
+    for (let i = 0; i < n; i += 1) {
+      const side = mask & (1 << i);
+      const previous = i > 0 ? mask & (1 << (i - 1)) : -1;
+      if (i === 0 || Boolean(side) !== Boolean(previous)) count += 1;
+    }
+    return count;
+  };
+
+  type Option = { mask: number; gap: number; runs: number };
+  const options: Option[] = [];
+
+  for (let mask = 0; mask < 1 << n; mask += 1) {
+    // The menu's first section leads the left column, always.
+    if (mask & 1) continue;
+
+    let right = 0;
+    for (let i = 0; i < n; i += 1) {
+      if (mask & (1 << i)) right += heights[i];
+    }
+    const gap = total - right - right;
+    // The left column must never be the shorter one.
+    if (gap < 0) continue;
+    options.push({ mask, gap, runs: runs(mask) });
+  }
+
+  const evenest = Math.min(...options.map((option) => option.gap));
+  const best = options
+    .filter((option) => option.gap <= evenest + TOLERANCE)
+    .sort((a, b) => a.runs - b.runs || a.gap - b.gap)[0];
+
+  return [take(best.mask, false), take(best.mask, true)] as const;
 }
 
 /** One section of the menu: its heading, its standing note, and its items. */
@@ -121,7 +191,17 @@ function MenuSectionBlock({ section }: { section: MenuSection }) {
         mistake rather than as a price.
       */}
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-primary/15 pb-4">
-        <h2 className="text-2xl font-light tracking-tight md:text-3xl">
+        {/*
+          shrink-0 so the note on the right gives way first and a section name
+          keeps its own line. Frank, 2026-10-18: "make all section headers one
+          line, unless adaptive settings need to split it to 2 for any
+          reason". Not whitespace-nowrap, which would overflow the column
+          rather than wrap, and the wrap is the behaviour he is allowing for.
+
+          Measured at 1680, 1280 and 375: every heading is one line today, the
+          widest being "Kombucha on Tap" at 211px in a 311px phone container.
+        */}
+        <h2 className="shrink-0 text-2xl font-light tracking-tight md:text-3xl">
           {section.title}
         </h2>
         {section.note?.trim() ? (

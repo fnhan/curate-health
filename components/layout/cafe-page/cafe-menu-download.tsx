@@ -4,7 +4,6 @@ import { ArrowRight, FileDown, UtensilsCrossed } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
-import { cn } from "@/lib/utils";
 
 type MenuSection = {
   eyebrow?: string | null;
@@ -21,12 +20,18 @@ type MenuSection = {
 /**
  * The menu block on /cafe.
  *
- * It was a download button and nothing else, which made a PDF the only way to
- * read the menu. CH-108 built the menu as a page, so reading it is the primary
- * action here and the PDF is the secondary one, for printing.
+ * It was a PDF download button and nothing else, which made a file the only
+ * way to read the menu. CH-108 built the menu as a page, and Frank had the
+ * download button off on 2026-10-18 once that page existed.
  *
- * `menuPath` is passed only when that page has items on it, the same gate the
- * route and the sitemap use, so this never links to a 404.
+ * **The PDF button is the fallback now, not the second button.** It appears
+ * only when there is no menu page to link to, because this block with no
+ * action in it is worse than a download. `menuPath` is passed only when that
+ * page has items on it, the same gate the route and the sitemap use, so this
+ * never links to a 404.
+ *
+ * The file itself is untouched in Sanity, so switching the menu document off
+ * puts the download straight back.
  */
 export function CafeMenuDownloadSection({
   data,
@@ -80,7 +85,7 @@ export function CafeMenuDownloadSection({
           {description}
         </p>
       ) : null}
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+      <div className="mt-8 flex justify-center">
         {menuPath ? (
           <Button
             asChild
@@ -92,34 +97,11 @@ export function CafeMenuDownloadSection({
               <ArrowRight className="size-5 shrink-0" aria-hidden />
             </Link>
           </Button>
-        ) : null}
-        {/*
-          The PDF steps back to a secondary button once the page is here, and
-          stays the filled one when it is the only thing in this block.
-
-          THE COLOURS ARE SPELLED OUT BECAUSE `outline` IS DARK ON DARK HERE.
-
-          The shared outline variant is `bg-background` with no text colour,
-          and `--background` in this theme is the dark green, so it paints a
-          dark green box and lets the text inherit the dark green around it:
-          a filled rectangle with an invisible label. It looks correct in the
-          source and reads as a blank box on the page. Measured rather than
-          eyeballed, both were rgb(39, 52, 24).
-
-          Fixed here rather than in components/ui/button.tsx, because that
-          variant is shared and changing it would repaint buttons on pages
-          this ticket has not looked at.
-        */}
-        {url && buttonLabel ? (
+        ) : url && buttonLabel ? (
           <Button
             asChild
             size="lg"
-            variant={menuPath ? "outline" : "default"}
-            className={cn(
-              "h-12 gap-2 rounded-none px-8 text-base font-normal transition-opacity hover:opacity-90",
-              menuPath &&
-                "border-primary/30 bg-white text-primary hover:bg-primary/5 hover:text-primary"
-            )}
+            className="h-12 gap-2 rounded-none px-8 text-base font-normal transition-opacity hover:opacity-90"
           >
             <a href={url} {...externalLinkProps(url)} download={filename}>
               <FileDown className="size-5 shrink-0" aria-hidden />

@@ -32,6 +32,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getAssetDownloadUrl } from "@/lib/asset-download";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { treatmentPath } from "@/lib/service-urls";
 import { cleanSlug, cn, getPractitionerSlugFromName } from "@/lib/utils";
@@ -217,7 +218,10 @@ export default function ServiceLifestyleContent({
               {treatments.map((treatment) => {
                 return (
                   <Link
-                    className="flex w-fit items-center gap-2 italic hover:underline"
+                    className={cn(
+                      "flex w-fit items-center gap-2 italic",
+                      HOVER_UNDERLINE
+                    )}
                     key={treatment._id}
                     // * Clean slug is used when sanity preview mode is enabled
                     href={treatmentPath(
@@ -615,7 +619,10 @@ export default function ServiceLifestyleContent({
                 <CardContent className="relative">
                   <Link
                     href={`/about/our-team/${getPractitionerSlugFromName(mainMember[0]?.name || "")}`}
-                    className="mt-8 flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
+                    className={cn(
+                      "mt-8 flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all",
+                      HOVER_UNDERLINE
+                    )}
                   >
                     Learn More
                     <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />
@@ -661,7 +668,10 @@ export default function ServiceLifestyleContent({
                 <CardContent className="relative">
                   <Link
                     href={`/about/our-team/${getPractitionerSlugFromName(teamMember.name || "")}`}
-                    className="flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all hover:underline"
+                    className={cn(
+                      "flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all",
+                      HOVER_UNDERLINE
+                    )}
                   >
                     Learn More
                     <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />

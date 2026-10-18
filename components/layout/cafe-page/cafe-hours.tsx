@@ -1,6 +1,7 @@
 import { MapPinIcon, PhoneIcon } from "lucide-react";
 
 import { addressOneLine } from "@/lib/address";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
@@ -97,7 +98,7 @@ export function CafeHours({
           </p>
           <address className="space-y-3 text-sm not-italic md:text-base">
             <a
-              className="flex w-fit items-start gap-2 hover:underline"
+              className={cn("flex w-fit items-start gap-2", HOVER_UNDERLINE)}
               href={contact?.mapLink ?? ""}
               {...externalLinkProps(contact?.mapLink ?? "")}
             >
@@ -106,7 +107,7 @@ export function CafeHours({
             </a>
             {contact?.phone ? (
               <a
-                className="flex w-fit items-center gap-2 hover:underline"
+                className={cn("flex w-fit items-center gap-2", HOVER_UNDERLINE)}
                 href={`tel:${contact.phone}`}
               >
                 <PhoneIcon size={18} className="shrink-0" />

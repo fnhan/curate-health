@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BLOG_DESCRIPTION, withBlogFeed } from "@/lib/blog-feed";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/utils";
@@ -40,7 +41,7 @@ export default async function BlogPage() {
               <CardTitle className="text-pretty pb-10 text-2xl not-italic text-white">
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="w-fit font-normal hover:underline"
+                  className={cn("w-fit font-normal", HOVER_UNDERLINE)}
                 >
                   {post.title}
                 </Link>
@@ -77,7 +78,7 @@ export default async function BlogPage() {
                 <Link
                   href={`/blog/${post.slug}`}
                   tabIndex={-1}
-                  className="w-fit hover:underline"
+                  className={cn("w-fit", HOVER_UNDERLINE)}
                 >
                   {post.excerpt}
                 </Link>
@@ -96,7 +97,7 @@ export default async function BlogPage() {
                 </span>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="w-fit italic text-white hover:underline"
+                  className={cn("w-fit italic text-white", HOVER_UNDERLINE)}
                 >
                   Read more about {post.title}
                 </Link>

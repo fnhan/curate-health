@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ChevronRightIcon } from "lucide-react";
 
 import type { Crumb } from "@/lib/breadcrumbs";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { JsonLdScript, buildBreadcrumbJsonLd } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
 
@@ -52,7 +53,10 @@ export function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
                     />
                   ) : null}
                   {crumb.path && !isLast ? (
-                    <Link href={crumb.path} className="w-fit hover:underline">
+                    <Link
+                      href={crumb.path}
+                      className={cn("w-fit", HOVER_UNDERLINE)}
+                    >
                       {crumb.name}
                     </Link>
                   ) : (

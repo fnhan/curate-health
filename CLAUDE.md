@@ -2163,17 +2163,23 @@ Services and About and the Learn More on Our Team.
 `lib/hover-underline.ts` holds the one copy. It was already duplicated between
 `section-navigation.tsx` and `our-programs-navigation.tsx`.
 
-**It is six files, and that is the whole list.** The first pass put it on all
-49 plain `hover:underline` links across 18 files and Frank pulled it back:
-"you overdid it ... It only needs to be on text buttons that already had an
-underline or underlining hover feature." A contact detail, a breadcrumb, an
-inline link, a byline and an error page are clickable text, not buttons, and
-they keep `hover:underline`.
+**THE RULE, in his words on 2026-10-18: "all animations that already had an
+underlining animation, but just appeared versus a sweep. I want all of them
+that do have an appearing underline to convert to a sweep underline."**
 
-What has the sweep: the two section menus, the footer and its mobile
-accordion, the Our Team cards and the practitioner card. **Ask before widening
-it again.**
+So: an element whose underline merely appeared on hover gets the sweep. An
+element with no underline at all is left alone. That is the whole test, and
+it is worth applying rather than judging what looks like a button, which is
+the mistake that took two rounds to settle.
 
+**The footer is the one exception and it is his.** The address, the email, the
+number and the child lists under Services and About keep a plain underline:
+he named them. Only the three headings there sweep, and the mobile accordion
+matches, being the same footer on a phone.
+
+**Accordion triggers sweep too**, which is what the sidebar's Services,
+Programs and About are. That reaches every accordion on the site, all of
+which had an appearing underline, so the rule holds.
 **`after:bg-current`, not a colour.** The line takes the text colour, which is
 what lets the footer use it: those links are white on the dark green, where
 the old `after:bg-primary` would have drawn dark green on dark green.

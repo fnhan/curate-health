@@ -39,6 +39,9 @@ const { findBanned } = require("./lib/content-rules");
 
 const DOC_ID = "cafeMenu";
 
+/** A single newline, which the intro and note fields use to separate lines. */
+const LINE_BREAK = String.fromCharCode(10);
+
 /** The page's one h1. */
 const TITLE = "Cafe Menu";
 
@@ -68,9 +71,16 @@ const INTRO = [
   "Every item below lists what is in it. Several contain tree nuts, so ask at the counter if you need to check something.",
 ].join("\n\n");
 
-/** Frank's wording, 2026-10-18. "Vessel", not "mug", and food as well as drink. */
-const NOTE =
-  "Bring your own vessel for $1.00 off all food and beverages. House-made almond milk, 1oz, can be added to any drink.";
+/**
+ * Frank's wording, 2026-10-18. "Vessel", not "mug", and food as well as drink.
+ *
+ * Two lines, as he wrote them, because they are two separate offers rather
+ * than one sentence. The page renders each on its own line.
+ */
+const NOTE = [
+  "Bring your own vessel for $1.00 off all food and beverages.",
+  "House-made almond milk, 1oz, can be added to any drink.",
+].join(LINE_BREAK);
 
 const SEO = {
   pageTitle: "Cafe Menu: Matcha, Smoothies and Salads",
@@ -208,6 +218,8 @@ const SECTIONS = [
   },
   {
     title: "Energy Bars",
+    // Frank, 2026-10-18.
+    note: "Bars are $13 for 3.",
     items: [
       {
         name: "Maple Almond",
@@ -372,6 +384,7 @@ function buildDocument() {
       _key: key(section.title),
       _type: "menuSection",
       title: section.title,
+      ...(section.note ? { note: section.note } : {}),
       items: section.items.map((item) => ({
         _key: key(item.name),
         _type: "menuItem",
@@ -405,6 +418,7 @@ async function main() {
 
   for (const section of SECTIONS) {
     console.log(section.title);
+    if (section.note) console.log(`  ${section.note}`);
     for (const item of section.items) {
       const size = item.size ? ` (${item.size})` : "";
       console.log(`  ${item.name}${size}  ${money(item.price)}`);
@@ -436,6 +450,7 @@ async function main() {
   ];
   for (const section of SECTIONS) {
     breaks.push(...ruleBreaks(`section "${section.title}"`, section.title));
+    breaks.push(...ruleBreaks(`note "${section.title}"`, section.note));
     for (const item of section.items) {
       breaks.push(...ruleBreaks(`item "${item.name}"`, item.name));
       breaks.push(
@@ -493,6 +508,40 @@ async function main() {
     console.log(`${DOC_ID} does not exist yet, it will be created.`);
   }
 
+  /*
+   * The block on /cafe, which still sells the PDF.
+   *
+   * Its description ended "Save or share the menu in one tap", written when
+   * downloading the file was the only thing that block did. Frank asked for
+   * that sentence out on 2026-10-18 now that the page is the primary action.
+   *
+   * Matched on the sentence rather than replaced wholesale, so an editor
+   * rewording the rest of the paragraph in the Studio does not have their
+   * work silently reverted by the next run of this script. Already gone, it
+   * does nothing.
+   */
+  const [cafePage] = await query(
+    `*[_type == "cafePage" && pageActive == true][0...1]{
+      _id, _rev, "description": menuDownloadSection.description
+    }`
+  );
+
+  const STALE_SENTENCE = "Save or share the menu in one tap.";
+  const cafeDescription = (cafePage?.description || "").trim();
+  const trimmedDescription = cafeDescription.includes(STALE_SENTENCE)
+    ? cafeDescription.replace(STALE_SENTENCE, "").replace(/\s+$/, "")
+    : null;
+
+  if (trimmedDescription !== null) {
+    console.log("\n/cafe menu block description");
+    console.log(`  before: ${cafeDescription}`);
+    console.log(`  after:  ${trimmedDescription}`);
+  } else if (cafePage) {
+    console.log(
+      `\n/cafe menu block description: already clear of "${STALE_SENTENCE}"`
+    );
+  }
+
   if (!apply) {
     console.log("\nDry run. Nothing written.");
     return;
@@ -518,6 +567,16 @@ async function main() {
         { createOrReplace: doc },
       ]
     : [{ createOrReplace: doc }];
+
+  if (trimmedDescription !== null) {
+    mutations.push({
+      patch: {
+        id: cafePage._id,
+        ifRevisionID: cafePage._rev,
+        set: { "menuDownloadSection.description": trimmedDescription },
+      },
+    });
+  }
 
   const result = await mutate(mutations);
   console.log(`\nApplied. Transaction ${result.transactionId || "(none)"}`);

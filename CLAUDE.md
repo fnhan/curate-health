@@ -1440,7 +1440,19 @@ claim is off the page because he took it out, not by oversight. Do not put it
 back without asking him.
 
 The standing note is his too: "vessel" rather than "mug", and food as well as
-beverages.
+beverages. It is **two lines**, as he wrote them, because they are two
+separate offers rather than one sentence, and it is pulled up against the
+intro band with a negative margin. SectionIntro ends on `py-24`, so the note
+sat 96px clear of the paragraph it belongs with and read as a section of its
+own.
+
+**"Bars are $13 for 3"** is a section note on Energy Bars, which also becomes
+that MenuSection's `description` in the markup.
+
+**The /cafe block no longer says "Save or share the menu in one tap"**, which
+was written when downloading the file was all that block did. The script
+matches that sentence rather than replacing the paragraph, so an editor
+rewording the rest in the Studio is not silently reverted by the next run.
 
 **Prices print whole numbers without decimals**, "as everything is whole
 numbers for that reason". Only the $4.50 bars show cents. `menuPrice` in
@@ -1454,15 +1466,29 @@ read as one paragraph. Not on a phone: there is no price column to clear at
 375px, and three quarters of 311px took the immunity latte to five lines.
 
 **Two columns from `xl`, which he asked for so a wide window scrolls less.**
-This is not the layout he rejected twice on the prose band, and the difference
-is `break-inside-avoid`. There, balancing the columns meant cutting a sentence
-across the gutter. A menu section is a discrete block, so it moves whole or
-not at all. Multi-column rather than a grid, because a grid makes every row as
-tall as its tallest section and ten sections of different lengths leave holes.
+This is not the layout he rejected twice on the prose band. There, balancing
+the columns meant cutting a sentence across the gutter; a menu section is a
+discrete block that moves whole or not at all.
 
-Measured at 1680: five sections each side, the left column ending 512px above
-the right. That is the browser's best with these sections, since moving
-Smoothies across overshoots, and it is the price of never splitting one.
+**The longer column is always the left one, by his rule on 2026-10-18.** CSS
+`columns-2` decides that for itself and had put Smoothies, the tallest
+section, on the right, leaving the right 512px longer. No CSS property says
+"lean left", so `splitIntoColumns` in the page makes the decision and the
+columns are real elements in a two cell grid.
+
+The rule it uses: walk the sections in order, fill the left until it holds at
+least half the total height, everything after goes right. The running total
+only grows, so the first split past half is both the one that leans left and
+the closest to even of the splits that do. Measured at 1680 after: six
+sections left at 2066px against four right at 1480px.
+
+**A grid of two cells, not of ten.** Ten cells lays the sections out in rows
+and makes every row as tall as its tallest section, which leaves holes.
+
+The heights `splitIntoColumns` estimates were read off the rendered page
+rather than guessed. They only have to rank sections against each other, so a
+section out by a few pixels cannot move the split; one out by half its height
+could.
 
 **`apply-cafe-menu.js` refuses text carrying Cf characters.** His menu copy
 arrived with them, which is the CH-020 contamination route exactly: a paste out

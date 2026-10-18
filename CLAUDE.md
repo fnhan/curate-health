@@ -2113,16 +2113,30 @@ optimiser now.
 
 **Ten urls changed on two pages, and both are understood.**
 
-- **/about's hero genuinely reframes, by 1.5%.** Somebody had already set a
-  hotspot on it in the Studio and the site was ignoring it. Turning the tool
-  on makes their choice count: the crop starts at y 761 of 3073 rather than
-  the 715 a plain centre crop gives, 46px down. It is the one photograph on
-  the site where the promise could not be kept, and the reason is that the
-  promise and the feature disagree there.
+- **/about's hero reframes by 1.5%, and Frank kept it.** Somebody had already
+  set a hotspot on it in the Studio and the site was ignoring it. Turning the
+  tool on makes their choice count: the crop starts at y 761 of 3073 rather
+  than the 715 a plain centre crop gives, 46px down. He said "use the hotspot"
+  on 2026-10-18, so this stands.
 - **/about/our-story's four section photographs lost a `rect` and look
   identical.** They were being cropped by Sanity to 1408x1112, a ratio of
   1.266, and are now the plain url in a 704x556 box, a ratio of 1.266. Same
   framing, different delivery, and the same path every other page takes.
+
+**The band is olive green filling platinum**, Frank's colours on 2026-10-18,
+replacing the sage hover it shipped with. Platinum is #DBDED9, pale enough
+that the white text would vanish on it, so the heading and the line under it
+turn dark green on hover: the same pair as the resting state, the other way
+round.
+
+**The cafe's hours block reads as two headings.** "Hours" was `text-lg
+font-medium` beside a `text-3xl font-light` "Visit the cafe", so it read as a
+label rather than its pair. Same size and weight now, and the days of the week
+are no longer bold.
+
+**The three cafe photographs are stored whole**, 1506x2000 with no crop and no
+hotspot, so Frank can frame them in the Studio himself. Until he does, the
+browser centre-crops as it always has.
 
 ### Share cards
 

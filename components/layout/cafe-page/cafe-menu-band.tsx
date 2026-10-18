@@ -20,12 +20,16 @@ import { ArrowRight } from "lucide-react";
  * rather than a heading, a line of copy and a button that all go to the same
  * place.
  *
- * WHITE ON SAGE IS THE HOUSE HOVER
+ * OLIVE GREEN FILLING PLATINUM, AND THE TEXT HAS TO TURN OVER WITH IT
  *
- * The bar under the Program Timeline already does this, platinum filling sage
- * with the text going white, and Frank chose those colours. The resting state
- * here is white on dark green, which is the high contrast one; the sage only
- * appears under the cursor.
+ * Frank's colours, 2026-10-18. Platinum is #DBDED9, a pale grey green, so
+ * the white text that reads on the olive would vanish on it. Every line and
+ * the arrow flip to the dark green on hover, which is the same pair the
+ * resting state uses, the other way round.
+ *
+ * The bar under the Program Timeline runs platinum to sage with the text
+ * going white. This is that idea reversed, and it is deliberate: this band
+ * is dark at rest so it carries weight on a white page.
  *
  * THE TWO STRINGS ARE IN THE CODE, NOT THE STUDIO
  *
@@ -42,13 +46,13 @@ export function CafeMenuBand({ menuPath }: { menuPath?: string | null }) {
     <section className="bg-white font-poppins">
       <Link
         href={menuPath}
-        className="group block bg-primary transition-colors duration-500 hover:bg-secondary focus-visible:bg-secondary focus-visible:outline-none"
+        className="group block bg-primary transition-colors duration-500 hover:bg-platinum focus-visible:bg-platinum focus-visible:outline-none"
       >
         <div className="container py-14 md:py-20">
-          <p className="text-3xl font-light leading-tight text-white md:text-4xl lg:text-5xl">
+          <p className="text-3xl font-light leading-tight text-white transition-colors duration-500 group-hover:text-primary md:text-4xl lg:text-5xl">
             Cafe menu
           </p>
-          <p className="mt-4 flex items-center gap-3 text-base font-light text-white/80 transition-colors duration-500 group-hover:text-white md:text-lg">
+          <p className="mt-4 flex items-center gap-3 text-base font-light text-white/80 transition-colors duration-500 group-hover:text-primary md:text-lg">
             Read the full menu
             <ArrowRight
               className="size-5 shrink-0 transition-transform duration-500 group-hover:translate-x-1"

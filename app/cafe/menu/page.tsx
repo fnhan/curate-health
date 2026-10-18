@@ -249,7 +249,12 @@ export default async function CafeMenuPage() {
         </div>
       </section>
 
-      <section className="bg-white pb-28 text-primary md:pb-36">
+      {/*
+        The list needs its own top padding. The heading section above has
+        none at the foot, so the standing note sat almost against the first
+        section heading, about 30px apart in Frank's screenshot.
+      */}
+      <section className="bg-white pb-28 pt-14 text-primary md:pb-36 md:pt-20">
         <div className="container">
           {/*
             TWO COLUMNS FROM THE EXTRA LARGE BREAKPOINT, FLOWING IN ROWS.

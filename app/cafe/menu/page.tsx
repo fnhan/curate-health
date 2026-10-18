@@ -111,7 +111,13 @@ function MenuSectionBlock({ section }: { section: MenuSection }) {
           {section.title}
         </h2>
         {section.note?.trim() ? (
-          <p className="font-light text-muted-foreground">
+          /*
+           * Italic, like the standing note at the top of the page, so an
+           * add-on or a bundle price does not read as something you order on
+           * its own. Frank, 2026-10-18: "add on should be in italics and not
+           * look like an actual item".
+           */
+          <p className="font-light italic text-muted-foreground">
             {section.note.trim()}
           </p>
         ) : null}

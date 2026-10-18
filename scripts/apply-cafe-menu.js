@@ -98,8 +98,9 @@ const SEO = {
 const SECTIONS = [
   {
     title: "Hot",
-    check:
-      "The PDF prints Hot and Iced as two columns and the split below is read off the sizes: everything 12oz or under is here, everything 16oz is iced. Matcha Latte at 16oz is the one that could go either way.",
+    // Hot and Iced are two columns on the PDF and the split is by size,
+    // everything 12oz and under here. Frank settled the one ambiguous case on
+    // 2026-10-18: Matcha Latte at 16oz is iced.
     items: [
       { name: "Genuine Tea", size: "12oz", price: 8 },
       { name: "Mushroom Tea", size: "12oz", price: 7 },
@@ -135,16 +136,56 @@ const SECTIONS = [
     ],
   },
   {
-    title: "Specialty Protein",
+    /*
+     * Its own section, by Frank on 2026-10-18: the two protein drinks sit
+     * together rather than one under Specialty Protein and one among the
+     * smoothies. That also retires the PDF's Protein Shakes heading, which
+     * he had already cut to a single item.
+     */
+    title: "Protein",
     items: [
       {
-        name: "Matchacano with Protein Cold Foam",
+        /*
+         * One item, confirmed by Frank 2026-10-18. The PDF has "Matchacano
+         * with Protein" and "Cold Foam (16oz)" as two runs in one column.
+         *
+         * RENAMED OFF "MATCHACANO"
+         *
+         * He said the matchacano and the ceremonial matcha "are the same, we
+         * should just pick one". Ceremonial Matcha is the name kept, because
+         * it is the term people search and it is already the first thing in
+         * this item's own ingredient line, while "matchacano" is a coined
+         * word with no search behind it that reads as a typo of americano.
+         *
+         * Renamed rather than deleted, so neither preparation came off the
+         * menu: the plain 6oz is still under Hot and this is the 16oz with
+         * protein. If he wants only one of the two, drop the other then.
+         */
+        name: "Ceremonial Matcha with Protein Cold Foam",
         size: "16oz",
         price: 14,
         ingredients:
           "ceremonial grade matcha, house-made almond milk, protein and superfood powder",
-        check:
-          'The PDF has "Matchacano with Protein" and "Cold Foam (16oz)" as two runs in the same column, so this reads them as one item. If they are two, it needs splitting.',
+      },
+      {
+        /*
+         * Moved here from Protein Shakes, which Frank cut to this one item on
+         * 2026-10-18 and then folded into Smoothies, so that section is gone.
+         *
+         * WHAT CAME OFF THE MENU WITH IT
+         *
+         * "Organic All-In-One Plant-based Protein Shake" (20oz, $12) and
+         * "Signature Protein Milkshake with House-made Almond Milk" (20oz,
+         * $12), both printed on the PDF. Removed on his instruction, not by
+         * accident. Put them back if that was not what he meant.
+         *
+         * The three flavours are his, moved off the add-on.
+         */
+        name: "Banana Booster Protein Smoothie",
+        size: "20oz",
+        price: 13,
+        ingredients:
+          "organic sprouted plant-based protein and superfood powder, banana, house-made almond milk, in vanilla, chocolate or chocolate peanut butter",
       },
     ],
   },
@@ -158,6 +199,15 @@ const SECTIONS = [
   },
   {
     title: "Smoothies",
+    /*
+     * The add-on is a section note rather than an item, so it stops reading
+     * like something you order on its own. Frank, 2026-10-18: "add on should
+     * be in italics and not look like an actual item", and limited to vanilla.
+     *
+     * The other two flavours were never the add-on's. They belong to the
+     * Banana Booster below, which is where he put them.
+     */
+    note: "Add plant protein and superfoods powder, vanilla, for $3.",
     items: [
       {
         name: "Gut Health Smoothie",
@@ -179,40 +229,6 @@ const SECTIONS = [
         price: 15,
         ingredients:
           "strawberry, beet, banana, arugula, apple, ginger, dates, lemon juice, pumpkin seeds, cacao, house-made almond milk",
-      },
-      {
-        name: "Smoothie add-ons",
-        price: 3,
-        ingredients:
-          "plant protein and superfoods powder, in vanilla, chocolate or chocolate peanut butter",
-        check:
-          'The PDF lists "vanilla", "chocolate", "chocolate peanut butter" and "Plant protein + Superfoods Powder" as one column beside the smoothies, with "Smoothie add-ons 3" nearby. This reads them as the add-on and its three flavours. If the flavours belong to the Signature Protein Milkshake instead, they move there.',
-      },
-    ],
-  },
-  {
-    title: "Protein Shakes",
-    items: [
-      {
-        name: "Organic All-In-One Plant-based Protein Shake",
-        size: "20oz",
-        price: 12,
-        ingredients:
-          "organic sprouted plant-based protein and superfood powder, alkaline water",
-      },
-      {
-        name: "Signature Protein Milkshake with House-made Almond Milk",
-        size: "20oz",
-        price: 12,
-        ingredients:
-          "organic sprouted plant-based protein and superfood powder, house-made almond milk",
-      },
-      {
-        name: "Banana Booster Protein Smoothie",
-        size: "20oz",
-        price: 13,
-        ingredients:
-          "organic sprouted plant-based protein and superfood powder, banana, house-made almond milk",
       },
     ],
   },
@@ -257,11 +273,11 @@ const SECTIONS = [
     items: [
       {
         name: "Chia Pudding",
-        size: "35g",
+        // 350g, confirmed by Frank 2026-10-18. The PDF prints 35g, which is
+        // an energy bar's weight for a $10 item, so the file is wrong here.
+        size: "350g",
         price: 10,
         ingredients: "topped with hojicha granola and probiotic berry compote",
-        check:
-          "The PDF prints 35g, the same as an energy bar, for a $10 item. Read off the file rather than corrected, in case it is the dry weight, but it is worth a look.",
       },
     ],
   },

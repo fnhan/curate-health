@@ -1397,22 +1397,43 @@ not a brittle, it is just a maple walnut topping", so the line ends "with a
 maple walnut topping".
 
 The PDF sets items out in four columns with the ingredient lists in a separate
-text layer, so pairing a list to its drink is a reading of the layout rather
-than something the file states. Four readings are **waiting on Frank**, each
-printed by the script's dry run:
+text layer, so pairing a list to its drink was a reading of the layout rather
+than something the file states. **Frank settled all four on 2026-10-18**, and
+the answers are in the data now rather than in a note:
 
-- **Hot against Iced.** Split on size, everything 12oz or under hot and
-  everything 16oz iced. Matcha Latte at 16oz is the one that could go the other
-  way.
-- **"Matchacano with Protein" and "Cold Foam (16oz)"** are two runs in the same
-  column, read here as one item at $14.
-- **"vanilla", "chocolate", "chocolate peanut butter"** sit beside "Plant
-  protein + Superfoods Powder" and near "Smoothie add-ons 3", read here as the
-  add-on and its three flavours. They may belong to the Signature Protein
-  Milkshake instead.
-- **Chia Pudding prints 35g**, the same as an energy bar, for a $10 item. Left
-  as printed in case it is the dry weight.
+- **Matcha Latte at 16oz is iced.** Everything else split on size, 12oz and
+  under hot.
+- **"Matchacano with Protein" and "Cold Foam (16oz)" are one item**, $14.
+- **The $3 add-on is vanilla only**, and the other two flavours belong to the
+  Banana Booster, which is where they went.
+- **Chia Pudding is 350g.** The PDF prints 35g, an energy bar's weight for a
+  $10 item, so the file is wrong there.
 
+Three structural changes came with them.
+
+**Protein is its own section**, holding the two protein drinks. It replaces
+the PDF's Specialty Protein, and its Protein Shakes heading is gone.
+
+**Two items came off the menu**, on his instruction rather than by accident:
+"Organic All-In-One Plant-based Protein Shake" and "Signature Protein
+Milkshake with House-made Almond Milk", both 20oz at $12 and both printed on
+the PDF. He cut Protein Shakes to the Banana Booster alone. Put them back if
+that was not what he meant.
+
+**"Matchacano" is gone as a name**, which was a suggestion he asked for rather
+than an instruction. He said the matchacano and the ceremonial matcha "are the
+same, we should just pick one". Ceremonial Matcha is the one kept: it is the
+term people search, and it is already the first thing in that item's own
+ingredient line, while "matchacano" is a coined word with no search behind it
+that reads as a typo of americano. **Renamed, not deleted**, so neither
+preparation left the menu: the plain 6oz is still under Hot and the 16oz with
+protein is under Protein. He used the old name again afterwards, so confirm
+before treating this as settled.
+
+**A section note renders italic**, so an add-on or a bundle price does not
+read as an item you order on its own: "add on should be in italics and not
+look like an actual item". It becomes that MenuSection's `description` in the
+markup.
 ```bash
 node scripts/apply-cafe-menu.js           # dry run, prints the whole menu
 node scripts/apply-cafe-menu.js --apply

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
+import { cn } from "@/lib/utils";
 
 /**
  * The practitioner card for the "Practitioners offering this service" block on
@@ -79,7 +81,12 @@ export function PractitionerCard({
           ) : null}
         </CardHeader>
         <CardContent>
-          <span className="flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline">
+          <span
+            className={cn(
+              "flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all",
+              HOVER_UNDERLINE
+            )}
+          >
             {label}
             <ChevronRight className="h-4 w-4 shrink-0" aria-hidden="true" />
           </span>

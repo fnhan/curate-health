@@ -4,7 +4,9 @@ import Link from "next/link";
 import { PortableText } from "@portabletext/react";
 import { ArrowRightIcon } from "lucide-react";
 
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
+import { cn } from "@/lib/utils";
 import { cleanSlug } from "@/lib/utils";
 import { SERVICE_BY_SLUG_QUERYResult } from "@/sanity.types";
 
@@ -40,7 +42,10 @@ export default function ServiceContent({
             {treatments.map((treatment) => {
               return (
                 <Link
-                  className="flex w-fit items-center gap-2 italic hover:underline"
+                  className={cn(
+                    "flex w-fit items-center gap-2 italic",
+                    HOVER_UNDERLINE
+                  )}
                   key={treatment._id}
                   // * Clean slug is used when sanity preview mode is enabled
                   href={treatmentPath(

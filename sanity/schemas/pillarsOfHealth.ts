@@ -1,9 +1,6 @@
 import { defineField, defineType } from "sanity";
 
-
-
 import { fieldDescriptions } from "../schema-helpers";
-
 
 export default defineType({
   name: "pillarsOfHealth",
@@ -40,6 +37,7 @@ export default defineType({
               name: "image",
               title: "Image",
               type: "image",
+              options: { hotspot: true },
               validation: (Rule) =>
                 Rule.required().error("An image is required"),
             },

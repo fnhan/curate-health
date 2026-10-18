@@ -2096,6 +2096,20 @@ which covers /services, /products and /about; and the /cafe/menu hero. The
 GROQ plumbing is on 43 projections, so the remaining call sites are a
 `<SanityImage>` swap each, not a query change.
 
+**Half the image fields had no crop tool in the Studio at all**, which is the
+other half of this and was found when Frank went looking for it: "I don't see
+the option to go in and crop images". Sanity only draws the crop and hotspot
+editor when the field says `options: { hotspot: true }`, and 35 image fields
+across 12 schemas never had it, `cafePage` among them. So there was no way to
+crop those photographs whatever the front end did with the result. Added
+everywhere.
+
+**It does not touch `schema.json` or the generated types.** `hotspot` is a
+Studio option rather than part of the content shape, so `sanity schema
+extract` records nothing and regenerating only churns the type unions. The
+run after this one moved 5,537 lines with a net change of zero; both generated
+files were restored from HEAD.
+
 **`scripts/audit-image-framing.js` is the proof.** It records every image url
 on every page in the sitemap, and compares. Take the baseline before the
 change, with `--save`, from a build that does not have it.
@@ -2137,6 +2151,57 @@ are no longer bold.
 **The three cafe photographs are stored whole**, 1506x2000 with no crop and no
 hotspot, so Frank can frame them in the Studio himself. Until he does, the
 browser centre-crops as it always has.
+
+### One hover on every link, and the About menu on its children. 2026-10-18
+
+**The sweep from the /services menu is now every underlined link on the
+site.** The hairline is drawn at full width, scaled to nothing from the right,
+and on hover the origin flips so it grows in from the left over half a
+second. Frank asked for it everywhere "to stay consistent", naming the footer
+Services and About and the Learn More on Our Team.
+
+`lib/hover-underline.ts` holds the one copy. It was already duplicated between
+`section-navigation.tsx` and `our-programs-navigation.tsx`. 49 plain
+`hover:underline` links across 18 files were converted.
+
+**`after:bg-current`, not a colour.** The line takes the text colour, which is
+what lets the footer use it: those links are white on the dark green, where
+the old `after:bg-primary` would have drawn dark green on dark green.
+
+**`GROUP_HOVER_UNDERLINE` is the card variant**, for a title that reacts to
+its whole card rather than to itself. Those call sites used
+`group-hover:underline` before.
+
+**`components/ui/*` is left alone.** Those are shadcn primitives behind
+buttons and accordions all over the site; the ask was about links.
+
+#### Moving a class string into lib silently deletes it
+
+**Tailwind only scanned `pages`, `components`, `app` and `src`.** Putting the
+sweep in `lib/hover-underline.ts` meant Tailwind never saw those class names
+and emitted no rules for them, so the class sat on every element and did
+nothing. It killed the hover on the services menu it came from, not only on
+the new ones.
+
+`./lib/**/*.{ts,tsx}` is in the content globs now. **The symptom to recognise
+is `content: none` on the `::after`**, with the class present in the markup:
+that is a rule Tailwind never generated, not a rule that lost. Check it the
+same way, by reading the computed `::after` rather than by eye, because a
+hover that does nothing looks like a hover you have not triggered.
+
+#### The About children carry the section menu
+
+/about had the band and its five children did not, while every page under
+/services carries the services one. `components/layout/about-pages/about-navigation.tsx`
+is on all six now.
+
+**It fetches its own list**, unlike `ServicesNavigation`, which takes one as a
+prop. Every services page already had the list to hand; a child About page's
+query knows nothing about its siblings, and threading one through five routes
+costs more than six fetches of a six item list on statically rendered pages.
+
+On Our Team the band sits above the heading rather than under a photograph,
+because that page has no hero image.
 
 ### Share cards
 

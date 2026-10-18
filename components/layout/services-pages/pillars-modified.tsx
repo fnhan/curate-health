@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { memo, useEffect, useState } from "react";
 
 import { PortableText } from "@portabletext/react";
@@ -11,11 +12,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import Image from "next/image";
 
 // Memoized component for the pillar title
 const PillarTitle = memo(({ title }: { title: string }) => (
-  <h2 className="text-2xl font-medium mb-6">{title}</h2>
+  <h2 className="mb-6 text-2xl font-medium">{title}</h2>
 ));
 
 PillarTitle.displayName = "PillarTitle";
@@ -40,9 +40,7 @@ export default function PillarsModified({
     return null;
   }
 
-  const [textContent, setTextContent] = useState(
-    pillars?.[0]?.description
-  );
+  const [textContent, setTextContent] = useState(pillars?.[0]?.description);
   const [activePillar, setActivePillar] = useState(pillars?.[0]?.title);
   const [circleSize, setCircleSize] = useState(500);
   const isMobile = useMediaQuery("(max-width: 640px)");
@@ -78,7 +76,7 @@ export default function PillarsModified({
     const clockPosition = clockPositions[index % clockPositions.length];
 
     // Convert clock position to angle (12 o'clock = 0°, 3 o'clock = 90°, etc.)
-    const angle = (clockPosition * 30) - 90; // 30° per hour, -90° to start from 12 o'clock
+    const angle = clockPosition * 30 - 90; // 30° per hour, -90° to start from 12 o'clock
     const radius = circleSize / 2;
     const radian = (angle * Math.PI) / 180;
 
@@ -106,7 +104,7 @@ export default function PillarsModified({
       </div>
       {/* Tablet */}
       <div className="hidden sm:block">
-        <div className="flex sm:flex-col lg:flex-row gap-2 items-center">
+        <div className="flex items-center gap-2 sm:flex-col lg:flex-row">
           <div className="flex-1">
             <div
               className="relative mx-auto rounded-full"
@@ -116,14 +114,14 @@ export default function PillarsModified({
               }}
             >
               {/* Static background image - doesn't re-render */}
-              <div className="p-20 absolute inset-0 mx-auto flex items-center justify-center text-balance text-center text-sm italic md:text-base 2xl:text-lg">
+              <div className="absolute inset-0 mx-auto flex items-center justify-center text-balance p-20 text-center text-sm italic md:text-base 2xl:text-lg">
                 <Image
                   src={block_4_image!}
                   alt=""
                   width={0}
                   height={0}
                   sizes="100vw"
-                  className="object-cover w-full h-full"
+                  className="h-full w-full object-cover"
                 />
               </div>
               {pillars?.map((pillar: any, index: number) => (
@@ -131,13 +129,12 @@ export default function PillarsModified({
                   onMouseEnter={() =>
                     displayText(pillar.description, pillar.title)
                   }
-                  onClick={() =>
-                    displayText(pillar.description, pillar.title)
-                  }
-                  className={`absolute size-32 rounded-full border border-2 px-2 border-primary transition-all duration-300 lg:text-lg lg:size-40 ${activePillar === pillar.title
-                    ? "bg-[#C2C6BA]"
-                    : "text-primary bg-platinum"
-                    }`}
+                  onClick={() => displayText(pillar.description, pillar.title)}
+                  className={`absolute size-32 rounded-full border border-2 border-primary px-2 transition-all duration-300 lg:size-40 lg:text-lg ${
+                    activePillar === pillar.title
+                      ? "bg-[#C2C6BA]"
+                      : "bg-platinum text-primary"
+                  }`}
                   key={pillar.title}
                   style={calculatePosition(index, pillars.length)}
                 >
@@ -146,7 +143,7 @@ export default function PillarsModified({
               ))}
             </div>
           </div>
-          <div className="flex-1 max-w-lg mt-22 lg:pl-8 lg:pr-4">
+          <div className="mt-22 max-w-lg flex-1 lg:pl-8 lg:pr-4">
             <PillarTitle title={activePillar} />
             <PillarContent content={textContent} />
           </div>

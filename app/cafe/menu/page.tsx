@@ -209,7 +209,13 @@ export default async function CafeMenuPage() {
       */}
       <section className="bg-white pt-14 text-primary md:pt-20">
         <div className="container flex flex-col gap-6">
-          <h1 className="text-3xl font-light tracking-tight md:text-5xl">
+          {/*
+            The space under the title matches the space over it, at Frank's
+            request on 2026-10-18. The section's own padding is 56px, 80px
+            from the medium breakpoint, and the container's gap-6 already
+            contributes 24, so the margin here is the remainder: 32 and 56.
+          */}
+          <h1 className="mb-8 text-3xl font-light tracking-tight md:mb-14 md:text-5xl">
             {heading}
           </h1>
           {paragraphs.map((text) => (

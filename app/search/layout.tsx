@@ -15,4 +15,3 @@ export default async function SearchLayout({
   });
   return <Layout layout={layout}>{children}</Layout>;
 }
-

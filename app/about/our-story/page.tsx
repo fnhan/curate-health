@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
@@ -32,7 +33,8 @@ export default async function OurStoryPage() {
           height={344}
           className="h-[344px] w-full object-cover md:h-[336px] lg:h-[344px]"
         />
-          <div className="bg-secondary">
+        <AboutNavigation />
+        <div className="bg-secondary">
           <div className="container">
             <div className="max-w-[80ch] space-y-2 text-pretty py-14 font-light md:space-y-5 md:py-20 2xl:space-y-12">
               <h1 className="text-2xl md:text-4xl 2xl:text-6xl">

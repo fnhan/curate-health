@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import SectionHero from "@/components/shared/section-hero";
 import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
-import { SectionNavigation } from "@/components/shared/section-navigation";
+import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { buildPageMetadata } from "@/lib/page-metadata";
+import { cn } from "@/lib/utils";
 import { ABOUT_INDEX_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { ABOUT_INDEX_QUERY } from "@/sanity/lib/queries";
@@ -63,15 +65,7 @@ export default async function AboutPage() {
         subtitle={paragraphs[0] ?? null}
         imageClassName="grayscale"
       />
-      <SectionNavigation
-        label="About"
-        labelHref="/about"
-        ariaLabel="About"
-        items={children.map((child) => ({
-          title: child!.title,
-          href: `/about/${child!.slug}`,
-        }))}
-      />
+      <AboutNavigation />
 
       {/*
         The intro is the reason this page exists, so it keeps its own band
@@ -107,7 +101,12 @@ export default async function AboutPage() {
                 height={512}
               />
               <div className="absolute inset-0 flex flex-col justify-end gap-2 bg-gradient-to-t from-primary/80 to-transparent p-8">
-                <h2 className="text-xl font-light text-white group-hover:underline">
+                <h2
+                  className={cn(
+                    GROUP_HOVER_UNDERLINE,
+                    "w-fit text-xl font-light text-white"
+                  )}
+                >
                   {child!.title}
                 </h2>
                 {child!.description ? (

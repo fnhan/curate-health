@@ -88,6 +88,7 @@ export default defineType({
             {
               name: "image",
               type: "image",
+              options: { hotspot: true },
               title: "Image",
               validation: (Rule) => Rule.required().error("Image is required"),
               fields: [
@@ -122,6 +123,7 @@ export default defineType({
         {
           name: "image",
           type: "image",
+          options: { hotspot: true },
           title: "Image",
           validation: (Rule) => Rule.required().error("Image is required"),
           fields: [
@@ -212,6 +214,7 @@ export default defineType({
         {
           name: "image",
           type: "image",
+          options: { hotspot: true },
           title: "Image",
           validation: (Rule) => Rule.required().error("Image is required"),
           fields: [
@@ -309,6 +312,7 @@ export default defineType({
         {
           name: "image",
           type: "image",
+          options: { hotspot: true },
           title: "Image",
           validation: (Rule) => Rule.required().error("Image is required"),
           fields: [
@@ -390,6 +394,7 @@ export default defineType({
         {
           name: "image",
           type: "image",
+          options: { hotspot: true },
           title: "Background Image",
           /*
            * The other four blocks on this page each carry an alt field and
@@ -608,6 +613,7 @@ export default defineType({
         {
           name: "image",
           type: "image",
+          options: { hotspot: true },
           title: "Background Image",
         },
         {

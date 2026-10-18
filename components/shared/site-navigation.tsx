@@ -16,7 +16,9 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
+import { cn } from "@/lib/utils";
 import {
   PRIMARY_CTA_BUTTON_QUERYResult,
   SITE_SETTINGS_QUERYResult,
@@ -92,7 +94,7 @@ export default function SiteNav({
                     aria-labelledby="nav-items nav-menu"
                   >
                     <Link
-                      className="text-2xl hover:underline"
+                      className={cn("w-fit text-2xl", HOVER_UNDERLINE)}
                       href={"/"}
                       onClick={() => setOpen(false)}
                     >
@@ -129,7 +131,10 @@ export default function SiteNav({
                                         (treatment, treatmentIndex) => (
                                           <Link
                                             key={treatmentIndex}
-                                            className="text-sm hover:underline"
+                                            className={cn(
+                                              "w-fit text-sm",
+                                              HOVER_UNDERLINE
+                                            )}
                                             href={treatmentPath(
                                               service.slug,
                                               treatment.slug
@@ -183,7 +188,7 @@ export default function SiteNav({
                           ].map((program, index) => (
                             <Link
                               key={index}
-                              className="text-base hover:underline"
+                              className={cn("w-fit text-base", HOVER_UNDERLINE)}
                               href={program.href}
                               onClick={() => setOpen(false)}
                             >
@@ -213,7 +218,10 @@ export default function SiteNav({
                             .map((page, index) => (
                               <Link
                                 key={index}
-                                className="text-base hover:underline"
+                                className={cn(
+                                  "w-fit text-base",
+                                  HOVER_UNDERLINE
+                                )}
                                 href={`/about/${page?.slug}`}
                                 onClick={() => setOpen(false)}
                               >
@@ -227,7 +235,7 @@ export default function SiteNav({
                     {navLinks?.map((link, index) => (
                       <div key={index} className="flex flex-col gap-2">
                         <Link
-                          className="text-2xl hover:underline"
+                          className={cn("w-fit text-2xl", HOVER_UNDERLINE)}
                           href={link.href!}
                           onClick={() => setOpen(false)}
                         >

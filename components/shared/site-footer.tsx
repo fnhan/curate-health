@@ -8,7 +8,9 @@ import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
 
 import { SocialIcon } from "@/components/shared/social-icon";
 import { addressLines } from "@/lib/address";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
+import { cn } from "@/lib/utils";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
 import { FooterMobileAccordion } from "./footer-mobile-accordion";
@@ -109,11 +111,11 @@ export default function SiteFooter({
           {/* Contact Info */}
           <div className="flex flex-col gap-8">
             <address className="space-y-2 text-sm not-italic md:text-base">
-              <h2 className="w-fit font-semibold hover:underline">
+              <h2 className={cn("w-fit font-semibold", HOVER_UNDERLINE)}>
                 <Link href="/contact">Contact</Link>
               </h2>
               <a
-                className="flex items-start gap-2 hover:underline"
+                className={cn("flex w-fit items-start gap-2", HOVER_UNDERLINE)}
                 href={contactInfo?.mapLink!}
                 {...externalLinkProps(contactInfo?.mapLink!)}
               >
@@ -128,14 +130,20 @@ export default function SiteFooter({
               </a>
               <div className="space-y-2">
                 <a
-                  className="flex w-fit items-center gap-2 hover:underline"
+                  className={cn(
+                    "flex w-fit items-center gap-2",
+                    HOVER_UNDERLINE
+                  )}
                   href={`mailto:${contactInfo?.email}`}
                 >
                   <MailIcon size={20} />
                   <span>{contactInfo?.email}</span>
                 </a>
                 <a
-                  className="flex w-fit items-center gap-2 hover:underline"
+                  className={cn(
+                    "flex w-fit items-center gap-2",
+                    HOVER_UNDERLINE
+                  )}
                   href={`tel:${contactInfo?.phone}`}
                 >
                   <PhoneIcon size={20} />
@@ -202,7 +210,13 @@ export default function SiteFooter({
                 <a
                   href={BCORP_PROFILE_URL}
                   {...externalLinkProps(BCORP_PROFILE_URL)}
-                  className="absolute left-0 w-fit leading-none underline underline-offset-4 hover:no-underline"
+                  // The one footer link that was underlined at rest and lost
+                  // it on hover, the inverse of everything else. It sweeps in
+                  // like the rest now.
+                  className={cn(
+                    "absolute left-0 w-fit leading-none",
+                    HOVER_UNDERLINE
+                  )}
                   style={{ top: LEARN_MORE_TOP }}
                 >
                   Learn More
@@ -223,7 +237,12 @@ export default function SiteFooter({
                   SectionNavigation follows, an href where the section has a
                   hub and none where it does not.
                 */}
-                <h2 className="w-fit pl-3 font-semibold hover:underline md:mb-3">
+                <h2
+                  className={cn(
+                    "w-fit pl-3 font-semibold md:mb-3",
+                    HOVER_UNDERLINE
+                  )}
+                >
                   <Link href="/services">Services</Link>
                 </h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
@@ -232,7 +251,7 @@ export default function SiteFooter({
                       service.isActive && (
                         <Link
                           key={index}
-                          className="hover:underline"
+                          className={cn("w-fit", HOVER_UNDERLINE)}
                           href={`/services/${service.slug}`}
                         >
                           {service.title}
@@ -250,7 +269,12 @@ export default function SiteFooter({
                   the page that exists to be those pages' parent was itself
                   unreachable. Caught by scripts/audit-orphans.js.
                 */}
-                <h2 className="w-fit pl-3 font-semibold hover:underline md:mb-3">
+                <h2
+                  className={cn(
+                    "w-fit pl-3 font-semibold md:mb-3",
+                    HOVER_UNDERLINE
+                  )}
+                >
                   <Link href="/about">About</Link>
                 </h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
@@ -259,7 +283,7 @@ export default function SiteFooter({
                     .map((page, index) => (
                       <Link
                         key={index}
-                        className="hover:underline"
+                        className={cn("w-fit", HOVER_UNDERLINE)}
                         href={`/about/${page?.slug}`}
                       >
                         {page?.title}
@@ -280,7 +304,7 @@ export default function SiteFooter({
                     {group.links?.map((link, linkIndex) => (
                       <Link
                         key={linkIndex}
-                        className="hover:underline"
+                        className={cn("w-fit", HOVER_UNDERLINE)}
                         href={link.slug?.current!}
                       >
                         {link.title}
@@ -298,7 +322,10 @@ export default function SiteFooter({
                     .map((link, linkIndex) => (
                       <a
                         key={linkIndex}
-                        className="flex items-center gap-2 hover:underline"
+                        className={cn(
+                          "flex w-fit items-center gap-2",
+                          HOVER_UNDERLINE
+                        )}
                         href={link.url!}
                         {...externalLinkProps(link.url!)}
                       >
@@ -326,7 +353,7 @@ export default function SiteFooter({
             {legalLinks?.map((link, index) => (
               <Link
                 key={index}
-                className="hover:underline"
+                className={cn("w-fit", HOVER_UNDERLINE)}
                 href={`/legal/${link.slug}`}
               >
                 {link.title}

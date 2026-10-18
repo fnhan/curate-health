@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { PortableText } from "@portabletext/react";
 
+import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import CtaFooterSection from "@/components/shared/cta-footer-section";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -33,6 +34,7 @@ export default async function SustainabilityPage() {
         alt={heroSection?.heroImage?.alt || ""}
         className="h-[400px] w-full object-cover md:h-[550px]"
       />
+      <AboutNavigation />
       <div className="bg-white py-14 md:py-32">
         <div className="container space-y-4 font-light text-primary md:space-y-6">
           <h1 className="text-2xl md:text-4xl 2xl:text-6xl">

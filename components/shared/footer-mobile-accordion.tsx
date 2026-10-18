@@ -8,7 +8,9 @@ import {
 } from "components/ui/accordion";
 
 import { SocialIcon } from "@/components/shared/social-icon";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
+import { cn } from "@/lib/utils";
 import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
 
 export function FooterMobileAccordion({
@@ -36,7 +38,7 @@ export function FooterMobileAccordion({
                 Without it /services is reachable on desktop and not on a
                 phone.
               */}
-              <Link className="hover:underline" href="/services">
+              <Link className={cn("w-fit", HOVER_UNDERLINE)} href="/services">
                 All Services
               </Link>
               {services.map(
@@ -44,7 +46,7 @@ export function FooterMobileAccordion({
                   service.isActive && (
                     <Link
                       key={index}
-                      className="hover:underline"
+                      className={cn("w-fit", HOVER_UNDERLINE)}
                       href={`/services/${service.slug}`}
                     >
                       {service.title}
@@ -67,7 +69,7 @@ export function FooterMobileAccordion({
                 it, /about is reachable on desktop and not on a phone, which is
                 where most visitors are.
               */}
-              <Link className="hover:underline" href="/about">
+              <Link className={cn("w-fit", HOVER_UNDERLINE)} href="/about">
                 About Curate Health
               </Link>
               {aboutPages
@@ -75,7 +77,7 @@ export function FooterMobileAccordion({
                 .map((page, index) => (
                   <Link
                     key={index}
-                    className="hover:underline"
+                    className={cn("w-fit", HOVER_UNDERLINE)}
                     href={`/about/${page?.slug}`}
                   >
                     {page?.title}
@@ -97,7 +99,7 @@ export function FooterMobileAccordion({
               {section.links?.map((link, linkIndex) => (
                 <Link
                   key={linkIndex}
-                  className="hover:underline"
+                  className={cn("w-fit", HOVER_UNDERLINE)}
                   href={link.slug?.current!}
                 >
                   {link.title}
@@ -125,7 +127,10 @@ export function FooterMobileAccordion({
                 .map((link, index) => (
                   <a
                     key={index}
-                    className="flex items-center gap-2 hover:underline"
+                    className={cn(
+                      "flex w-fit items-center gap-2",
+                      HOVER_UNDERLINE
+                    )}
                     href={link.url!}
                     {...externalLinkProps(link.url!)}
                   >

@@ -27,6 +27,7 @@ export default defineType({
               name: "image",
               title: "Image",
               type: "image",
+              options: { hotspot: true },
               validation: (Rule) =>
                 Rule.required().error("An image is required"),
             },
@@ -73,6 +74,7 @@ export default defineType({
                   name: "image",
                   title: "Image",
                   type: "image",
+                  options: { hotspot: true },
                 },
                 {
                   name: "alt",
@@ -133,7 +135,8 @@ export default defineType({
                   title: "Report file (PDF)",
                   type: "file",
                   options: { accept: "application/pdf" },
-                  validation: (Rule) => Rule.required().error("A PDF file is required"),
+                  validation: (Rule) =>
+                    Rule.required().error("A PDF file is required"),
                 }),
               ],
               preview: {
@@ -173,7 +176,8 @@ export default defineType({
           title: "Button text",
           type: "string",
           initialValue: "Share feedback",
-          validation: (Rule) => Rule.required().error("Button text is required"),
+          validation: (Rule) =>
+            Rule.required().error("Button text is required"),
         }),
         defineField({
           name: "url",

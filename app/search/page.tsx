@@ -2,7 +2,9 @@ import Link from "next/link";
 
 import { groq } from "next-sanity";
 
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
+import { cn } from "@/lib/utils";
 import { SEARCH_REVALIDATE_SECONDS, sanityFetch } from "@/sanity/lib/client";
 
 type IndexDoc = Record<string, unknown> & {
@@ -317,7 +319,10 @@ export default async function SearchPage({
                       key={hit.href}
                       className="border-b border-black/10 pb-6"
                     >
-                      <Link href={hit.href} className="text-xl hover:underline">
+                      <Link
+                        href={hit.href}
+                        className={cn("w-fit text-xl", HOVER_UNDERLINE)}
+                      >
                         {highlightExact(hit.title, needle)}
                       </Link>
                       <div className="mt-2 text-sm text-black/60">

@@ -6,8 +6,10 @@ import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { addressLines, addressOneLine } from "@/lib/address";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
+import { cn } from "@/lib/utils";
 import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -92,7 +94,10 @@ export default async function ContactPage() {
                   <a
                     href={contactInfo?.mapLink ?? ""}
                     {...externalLinkProps(contactInfo?.mapLink ?? "")}
-                    className="not-italic hover:underline md:text-3xl"
+                    className={cn(
+                      "w-fit not-italic md:text-3xl",
+                      HOVER_UNDERLINE
+                    )}
                   >
                     {addressOneLine(contactInfo?.address)}
                   </a>
@@ -107,7 +112,10 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     href={`mailto:${contactInfo?.email}`}
-                    className="not-italic hover:underline md:text-3xl"
+                    className={cn(
+                      "w-fit not-italic md:text-3xl",
+                      HOVER_UNDERLINE
+                    )}
                   >
                     {contactInfo?.email}
                   </a>
@@ -122,7 +130,10 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     href={`tel:${contactInfo?.phone}`}
-                    className="not-italic hover:underline md:text-3xl"
+                    className={cn(
+                      "w-fit not-italic md:text-3xl",
+                      HOVER_UNDERLINE
+                    )}
                   >
                     {contactInfo?.phone}
                   </a>
@@ -137,7 +148,10 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     href={`tel:${contactInfo?.phone}`}
-                    className="not-italic hover:underline md:text-3xl"
+                    className={cn(
+                      "w-fit not-italic md:text-3xl",
+                      HOVER_UNDERLINE
+                    )}
                   >
                     {contactInfo?.phone}
                   </a>

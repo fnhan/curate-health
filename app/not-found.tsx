@@ -2,7 +2,9 @@ import Link from "next/link";
 
 import { ArrowRightIcon, SearchIcon } from "lucide-react";
 
+import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { buildPageMetadata } from "@/lib/page-metadata";
+import { cn } from "@/lib/utils";
 
 /**
  * The 404 page. CH-112.
@@ -112,7 +114,12 @@ export default function NotFound() {
                 href={hub.href}
                 className="group flex h-full flex-col gap-2 p-6 transition-colors duration-300 hover:bg-platinum focus-visible:bg-platinum"
               >
-                <span className="flex items-center gap-2 text-lg font-medium group-hover:underline">
+                <span
+                  className={cn(
+                    GROUP_HOVER_UNDERLINE,
+                    "flex w-fit items-center gap-2 text-lg font-medium"
+                  )}
+                >
                   {hub.name}
                   <ArrowRightIcon
                     size={16}

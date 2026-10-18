@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { HOVER_UNDERLINE_INLINE, UNDERLINE_DRAWN } from "@/lib/hover-underline";
+
 /**
  * THE SECOND MENU. THE ONE PATTERN, FOR EVERY SECTION OF THE SITE.
  *
@@ -32,11 +34,7 @@ export type SectionNavItem = {
   href: string;
 };
 
-const HOVER_UNDERLINE =
-  "after:ease-[cubic-bezier(.86,0,.07,1)] relative inline-block cursor-pointer after:absolute after:left-0 after:top-[110%] after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-500 hover:after:origin-bottom-left hover:after:scale-x-100";
-
 /** Drawn already, for the page being viewed. */
-const UNDERLINED = "after:origin-bottom-left after:scale-x-100";
 
 export function SectionNavigation({
   label,
@@ -62,7 +60,7 @@ export function SectionNavigation({
               <Link
                 href={labelHref}
                 aria-current={isCurrent(labelHref) ? "page" : undefined}
-                className={`${HOVER_UNDERLINE} ${isCurrent(labelHref) ? UNDERLINED : ""}`}
+                className={`${HOVER_UNDERLINE_INLINE} ${isCurrent(labelHref) ? UNDERLINE_DRAWN : ""}`}
               >
                 {label}
               </Link>
@@ -78,7 +76,7 @@ export function SectionNavigation({
               <Link
                 href={item.href}
                 aria-current={isCurrent(item.href) ? "page" : undefined}
-                className={`${HOVER_UNDERLINE} ${isCurrent(item.href) ? UNDERLINED : ""}`}
+                className={`${HOVER_UNDERLINE_INLINE} ${isCurrent(item.href) ? UNDERLINE_DRAWN : ""}`}
               >
                 {item.title}
               </Link>

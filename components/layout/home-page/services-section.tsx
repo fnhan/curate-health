@@ -27,9 +27,14 @@ export default function ServicesSection({
     <section className="relative">
       <div className="container py-14 md:py-24">
         <div className="grid gap-12 md:grid-cols-2">
-          {/* List of Services */}
-          <div className="flex flex-col">
-            <h2 className="mb-14 text-2xl md:mb-28 md:text-3xl xl:mb-40 xl:text-6xl">
+          {/* List of Services.
+            Centred in the row and mb-10 under the heading, both taken from
+            Our Programs. Frank, 2026-10-18: the heading sat high against a
+            photograph taller than the list, and mb-28 at md and mb-40 at xl
+            left a gap the eye read as a break rather than a cushion.
+          */}
+          <div className="flex flex-col justify-center">
+            <h2 className="mb-10 text-2xl md:text-3xl xl:text-6xl">
               {sectionTitle}
             </h2>
             {/*

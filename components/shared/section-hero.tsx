@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { SanityImage } from "@/components/shared/sanity-image";
 import { cn } from "@/lib/utils";
 
 /**
@@ -20,12 +19,15 @@ import { cn } from "@/lib/utils";
  */
 export default function SectionHero({
   image,
+  imageSource,
   alt,
   title,
   subtitle,
   imageClassName,
 }: {
   image: string;
+  /** The image object, so a crop set in the Studio frames the hero. */
+  imageSource?: unknown;
   alt: string;
   title: string;
   subtitle?: string | null;
@@ -38,9 +40,10 @@ export default function SectionHero({
 }) {
   return (
     <section className="relative">
-      <Image
+      <SanityImage
         width={1920}
         height={1080}
+        source={imageSource}
         src={image}
         alt={alt}
         quality={100}

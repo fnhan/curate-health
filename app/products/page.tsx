@@ -92,6 +92,7 @@ export default async function ProductsPage() {
       {page?.heroImage?.url ? (
         <SectionHero
           image={page.heroImage.url}
+          imageSource={page.heroImage.source}
           alt={page.heroImage.alt ?? ""}
           title={heading}
           subtitle={lead}

@@ -116,11 +116,18 @@ export function CafeHours({
         </div>
 
         <div>
-          <h3 className="mb-4 text-lg font-medium">Hours</h3>
+          {/*
+            The same size and weight as "Visit the cafe" beside it, at Frank's
+            request on 2026-10-18, so the two read as a pair of headings
+            rather than a heading and a label. mb-4 becomes the same 1rem
+            rhythm the other column gets from space-y-4.
+          */}
+          <h3 className="mb-4 text-2xl font-light md:text-3xl">Hours</h3>
           <dl className="space-y-2 text-sm md:text-base">
             {rows.map((row) => (
               <div key={row.day} className="grid grid-cols-2 gap-4">
-                <dt className="font-medium">{row.day}</dt>
+                {/* Not bold: the day and its hours carry equal weight. */}
+                <dt>{row.day}</dt>
                 <dd className="text-right tabular-nums">{row.hours}</dd>
               </div>
             ))}

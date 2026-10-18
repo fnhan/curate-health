@@ -7,16 +7,25 @@ import {
   CafeIntroSection,
   CafeQuoteSection,
 } from "@/components/layout/cafe-page/cafe-intro-and-quote";
-import { CafeMenuDownloadSection } from "@/components/layout/cafe-page/cafe-menu-download";
+import { CafeMenuBand } from "@/components/layout/cafe-page/cafe-menu-band";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { buildPageMetadata } from "@/lib/page-metadata";
-import { JsonLdScript, buildCafeJsonLd } from "@/lib/structured-data";
 import {
+  CAFE_MENU_PATH,
+  JsonLdScript,
+  buildCafeJsonLd,
+} from "@/lib/structured-data";
+import {
+  CAFE_MENU_QUERYResult,
   CAFE_PAGE_QUERYResult,
   SITE_SETTINGS_QUERYResult,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
-import { CAFE_PAGE_QUERY, SITE_SETTINGS_QUERY } from "@/sanity/lib/queries";
+import {
+  CAFE_MENU_QUERY,
+  CAFE_PAGE_QUERY,
+  SITE_SETTINGS_QUERY,
+} from "@/sanity/lib/queries";
 
 export default async function CafePage() {
   const cafePage = await sanityFetch<CAFE_PAGE_QUERYResult>({
@@ -29,6 +38,20 @@ export default async function CafePage() {
     query: SITE_SETTINGS_QUERY,
   });
 
+  /*
+   * The menu page, CH-108. Only its presence matters here: whether to link to
+   * it, and whether the cafe's hasMenu markup should point at the Menu entity
+   * there rather than at the PDF. One gate, the same one the route 404s on and
+   * the sitemap lists on, so /cafe can never link to a page that is not there.
+   */
+  const menu = await sanityFetch<CAFE_MENU_QUERYResult>({
+    query: CAFE_MENU_QUERY,
+  });
+
+  const hasMenuPage = (menu?.sections ?? []).some(
+    (section) => (section.items ?? []).length > 0
+  );
+
   if (!cafePage) {
     return notFound();
   }
@@ -38,14 +61,13 @@ export default async function CafePage() {
     introSection,
     quoteSection,
     additionalSections,
-    menuDownloadSection,
     ctaBandSection,
   } = cafePage;
 
   return (
     <div className="font-poppins">
       <JsonLdScript
-        data={buildCafeJsonLd(cafePage, siteSettings)}
+        data={buildCafeJsonLd(cafePage, siteSettings, hasMenuPage)}
         id="cafe-json-ld"
       />
       <Image
@@ -65,8 +87,20 @@ export default async function CafePage() {
         sectionClassName="font-poppins"
         proseClassName="font-poppins prose-headings:font-poppins prose-p:font-poppins"
       />
+      {/*
+        The menu band, directly under the last alternating section and above
+        "Visit the cafe", which is the hours block. Frank, 2026-10-18: "above
+        \"Visit the Cafe\" and just below the chia pudding photo".
+
+        It was below the hours before this, because the first reading of
+        "before the Visit the cafe section" took that for the CTA band at the
+        foot of the page. It is not: CafeHours carries that heading.
+
+        It replaces the What we're serving today card and the PDF download
+        that sat in it, so there is one way into the menu rather than three.
+      */}
+      <CafeMenuBand menuPath={hasMenuPage ? CAFE_MENU_PATH : null} />
       <CafeHours siteSettings={siteSettings} />
-      <CafeMenuDownloadSection data={menuDownloadSection} />
       <CafeCtaBandSection data={ctaBandSection} />
     </div>
   );

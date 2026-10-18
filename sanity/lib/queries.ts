@@ -97,6 +97,9 @@ export const ALL_SERVICES_QUERY = groq`*[_type == "service" && isActive == true]
     title,
     "slug": slug.current,
     "hero_image": hero_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "hero_imageSource": hero_image{asset, crop, hotspot},
     "hero_alt": hero_image.alt,
     }`;
 
@@ -104,6 +107,9 @@ export const SERVICES_PAGE_QUERY = groq`*[_type == "servicesHeroSection"][0]{
   "heroSection": {
     title,
     "image": image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "imageSource": image{asset, crop, hotspot},
     "alt": image.alt,
     subtitle
   },
@@ -120,6 +126,9 @@ export const SERVICES_SECTION_QUERY = groq`*[_type == "servicesSection"][0]{
     title,
     "slug": slug.current,
     "hero_image": hero_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "hero_imageSource": hero_image{asset, crop, hotspot},
     "hero_alt": hero_image.alt
   }
 }`;
@@ -129,8 +138,14 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     title,
     "slug": slug.current,
     "hero_image": hero_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "hero_imageSource": hero_image{asset, crop, hotspot},
     "hero_alt": hero_image.alt,
     "content_image": content_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "content_imageSource": content_image{asset, crop, hotspot},
     "content_alt": content_image.alt,
     content,
     "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){
@@ -183,6 +198,9 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
     sectionParagraph,
     sectionImage {
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     }
   },  
@@ -217,6 +235,9 @@ export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
     description,
     "slug": slug.current,
     "image": image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "imageSource": image{asset, crop, hotspot},
     "altText": image.alt
   }
 }`;
@@ -227,7 +248,13 @@ export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
   description,
   "slug" : slug.current,
   "banner": banner.asset->url,
+  // The image object beside its url, so the crop and hotspot set in
+  // the Studio reach SanityImage. Dormant until one is set.
+  "bannerSource": banner{asset, crop, hotspot},
   "image": image.asset->url,
+  // The image object beside its url, so the crop and hotspot set in
+  // the Studio reach SanityImage. Dormant until one is set.
+  "imageSource": image{asset, crop, hotspot},
   "altText": image.alt,
   meta {
     title,
@@ -256,6 +283,8 @@ export const ABOUT_INDEX_QUERY = groq`{
     intro,
     heroImage{
       "url": asset->url,
+      // The image object itself, so a crop set in the Studio frames it.
+      "source": @{asset, crop, hotspot},
       alt
     },
     ${SEO_QUERY}
@@ -266,6 +295,9 @@ export const ABOUT_INDEX_QUERY = groq`{
       "slug": "our-story",
       "description": seo.pageDescription,
       "image": heroSection.heroImage.image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},
       "imageAlt": heroSection.heroImage.alt
     },
     *[_type == "ourTeam" && pageActive == true][0]{
@@ -273,6 +305,9 @@ export const ABOUT_INDEX_QUERY = groq`{
       "slug": "our-team",
       "description": seo.pageDescription,
       "image": heroSection.heroImage.image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},
       "imageAlt": heroSection.heroImage.alt
     },
     *[_type == "missionAndValues" && pageActive == true][0]{
@@ -280,6 +315,9 @@ export const ABOUT_INDEX_QUERY = groq`{
       "slug": "mission-and-values",
       "description": seo.pageDescription,
       "image": heroSection.heroImage.image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},
       "imageAlt": heroSection.heroImage.alt
     },
     *[_type == "pillarsOfHealth" && pageActive == true][0]{
@@ -287,6 +325,9 @@ export const ABOUT_INDEX_QUERY = groq`{
       "slug": "pillars-of-health",
       "description": seo.pageDescription,
       "image": heroSection.heroImage.image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},
       "imageAlt": heroSection.heroImage.alt
     },
     *[_type == "sustainability" && pageActive == true][0]{
@@ -294,6 +335,9 @@ export const ABOUT_INDEX_QUERY = groq`{
       "slug": "sustainability",
       "description": seo.pageDescription,
       "image": heroSection.heroImage.image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},
       "imageAlt": heroSection.heroImage.alt
     }
   ]
@@ -304,6 +348,8 @@ export const PRODUCTS_PAGE_QUERY = groq`*[_type == "productsPage"][0]{
   intro,
   heroImage{
     "url": asset->url,
+    // The image object itself, so a crop set in the Studio frames it.
+    "source": @{asset, crop, hotspot},
     alt
   },
   ${SEO_QUERY}
@@ -344,6 +390,9 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
   heroSection{
     heroImage{
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     },
     heroTitle,
@@ -352,6 +401,9 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
   quoteSection{
     quoteImage{
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     },
     quoteText
@@ -361,12 +413,18 @@ export const OUR_STORY_PAGE_QUERY = groq`*[_type == "ourStory" && pageActive == 
     sectionParagraph,
     sectionImage{
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     }
   },
   ctaSection{
     ctaSectionImage{
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     },
     ctaSectionTitle,
@@ -466,6 +524,9 @@ export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pa
     sectionParagraph,
     sectionImage{
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     }
   },
@@ -497,6 +558,9 @@ export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability" && pageActi
     heroParagraph,
     heroImage {
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     }
   },
@@ -506,12 +570,18 @@ export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability" && pageActi
     sectionParagraph,
     sectionImage {
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     }
   },
   ctaSection {
     ctaSectionImage {
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     },
     ctaSectionTitle,
@@ -530,6 +600,9 @@ export const PILLARS_OF_HEALTH_QUERY = groq`*[_type == "pillarsOfHealth" && page
     heroParagraph,
     heroImage {
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     }
   },
@@ -806,6 +879,9 @@ export const CONTACT_PAGE_QUERY = groq`{
       title,
       heroImage {
         "image": image.asset->url,
+        // The image object beside its url, so the crop and hotspot set in
+        // the Studio reach SanityImage. Dormant until one is set.
+        "imageSource": image{asset, crop, hotspot},
         alt
       }
     },
@@ -825,6 +901,9 @@ export const CONTACT_PAGE_QUERY = groq`{
     },
     contactForm{
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     },
     ${SEO_QUERY}
@@ -891,6 +970,9 @@ export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == tru
   },
   "mainImage": {
     "image": mainImage.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "imageSource": mainImage{asset, crop, hotspot},
     "alt": mainImage.alt
   },
   sections[] {
@@ -898,6 +980,9 @@ export const GET_POST_BY_SLUG_QUERY = groq`*[_type == "post" && published == tru
     sectionParagraph,
     sectionImage {
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       // alt sits on sectionImage, beside image, not inside it. This read
       // image.alt, a field the post schema does not define, so every blog
       // section rendered alt="" and typing alt text into the Studio would
@@ -930,6 +1015,9 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
  quoteSection{
    quoteImage{
      "image": image.asset->url,
+     // The image object beside its url, so the crop and hotspot set in
+     // the Studio reach SanityImage. Dormant until one is set.
+     "imageSource": image{asset, crop, hotspot},
      alt
    },
    quoteText
@@ -939,6 +1027,9 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
     sectionParagraph,
     sectionImage{
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     }
   },
@@ -965,6 +1056,45 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
   ${SEO_QUERY}
 }`;
 
+/**
+ * The cafe menu as text, CH-108.
+ *
+ * The hero falls back to the cafe page's own photograph, so the page always
+ * opens on one and nobody has to remember to choose it, per the every-page
+ * rule. Both shapes are projected the same way so the page can treat them
+ * alike.
+ */
+export const CAFE_MENU_QUERY = groq`*[_type == "cafeMenu"][0]{
+  title,
+  intro,
+  note,
+  heroImage{
+    "url": asset->url,
+    // The image object itself, so a crop set in the Studio frames it.
+    "source": @{asset, crop, hotspot},
+    alt
+  },
+  sections[]{
+    _key,
+    title,
+    note,
+    footnote,
+    items[]{
+      _key,
+      name,
+      size,
+      price,
+      ingredients
+    }
+  },
+  "cafeHeroImage": *[_type == "cafePage" && pageActive == true][0].heroSection.heroImage{
+    "url": image.asset->url,
+    "source": image{asset, crop, hotspot},
+    alt
+  },
+  ${SEO_QUERY}
+}`;
+
 export const SITEMAP_QUERY = groq`{
   "services": *[_type == "service" && isActive == true].slug.current,
   // A treatment is only a live page if its category is live too. Exercise
@@ -987,6 +1117,10 @@ export const SITEMAP_QUERY = groq`{
   "sustainability": *[_type == "sustainability" && pageActive == true]{_id},
   "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},
   "cafe": *[_type == "cafePage" && pageActive == true]{_id},
+  // /cafe/menu, CH-108. Gated on the document having items, so an empty
+  // menu is never listed: the route 404s in that state and a sitemap
+  // entry would point at it.
+  "cafeMenu": count(*[_type == "cafeMenu" && count(sections[defined(items) && count(items) > 0]) > 0]) > 0,
   // The two Curate Lifestyle pages have routes of their own rather than a
   // slug under /services, so the services list above never included them.
   // Both were live and missing from the sitemap until 2026-09-18.
@@ -1005,8 +1139,14 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
     title,
     "slug": slug.current,
     "hero_image": hero_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "hero_imageSource": hero_image{asset, crop, hotspot},
     "hero_alt": hero_image.alt,
     "content_image": content_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "content_imageSource": content_image{asset, crop, hotspot},
     "content_alt": content_image.alt,
     content,
     "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){
@@ -1033,21 +1173,39 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
     block_3_title,
     block_3_content,
     "block_4_image": block_4_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "block_4_imageSource": block_4_image{asset, crop, hotspot},
     "block_5_image": block_5_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "block_5_imageSource": block_5_image{asset, crop, hotspot},
     benefits[] {
       title,
       description,
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       tint_percentage,
       tint_percentage_hover
     },
     "block_7_image": block_7_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "block_7_imageSource": block_7_image{asset, crop, hotspot},
     "block_9_image": block_9_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "block_9_imageSource": block_9_image{asset, crop, hotspot},
     timeline[] {
       title,
       description
     },
     "block_11_image": block_11_image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "block_11_imageSource": block_11_image{asset, crop, hotspot},
     faq[] {
       title,
       description
@@ -1101,6 +1259,9 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
     sectionParagraph,
     sectionImage {
       "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
       alt
     }
   },
@@ -1114,6 +1275,9 @@ export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
   groupSections[] {
     description,
     "image": image.asset->url,
+    // The image object beside its url, so the crop and hotspot set in
+    // the Studio reach SanityImage. Dormant until one is set.
+    "imageSource": image{asset, crop, hotspot},
     "alt": image.alt
   },
   assistanceSectionTitle,

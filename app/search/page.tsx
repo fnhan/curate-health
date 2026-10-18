@@ -40,6 +40,7 @@ const INDEX_DOCS_QUERY = groq`
     "sustainability",
     "pillarsOfHealth",
     "cafePage",
+    "cafeMenu",
     "contactPage",
     "ourPrograms",
     "servicesHeroSection",
@@ -117,6 +118,8 @@ function buildHrefForDoc(doc: IndexDoc): string | null {
       return "/about/pillars-of-health";
     case "cafePage":
       return "/cafe";
+    case "cafeMenu":
+      return "/cafe/menu";
     case "contactPage":
       return "/contact";
     case "ourPrograms":

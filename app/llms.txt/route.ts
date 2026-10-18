@@ -52,6 +52,11 @@ type LlmsData = {
     menuUrl: string | null;
     seoDescription: string | null;
   } | null;
+  cafeMenu: {
+    title: string | null;
+    description: string | null;
+    items: number | null;
+  } | null;
   team: Array<{
     name: string | null;
     role: string | null;
@@ -133,6 +138,14 @@ const LLMS_TXT_QUERY = groq`{
     "description": introSection.description,
     "menuUrl": menuDownloadSection.menuPdf.asset->url,
     "seoDescription": seo.pageDescription
+  },
+  // The menu as a page, CH-108. Counted rather than listed: the file names
+  // the page and says what is on it, and an answer engine that wants the
+  // items follows the link to read them.
+  "cafeMenu": *[_type == "cafeMenu"][0]{
+    title,
+    "description": coalesce(seo.pageDescription, intro),
+    "items": count(sections[].items[])
   },
   // Role is rich text in the Studio, one line per role. Read as plain text
   // here, it printed as "[object Object]" for every member until 2026-09-18.
@@ -356,7 +369,18 @@ function buildLlmsTxt(data: LlmsData) {
     data.cafe
       ? [
           `- [Curate Cafe](${BASEURL}/cafe): ${compact(data.cafe.seoDescription || data.cafe.description)}`,
-          data.cafe.menuUrl ? `- Menu: ${data.cafe.menuUrl}` : "",
+          // The menu page, when it has items on it. Same gate as the
+          // sitemap and the route, so the three cannot disagree.
+          data.cafeMenu && (data.cafeMenu.items ?? 0) > 0
+            ? link(
+                data.cafeMenu.title || "Cafe Menu",
+                "/cafe/menu",
+                data.cafeMenu.description
+              )
+            : "",
+          // The PDF, for printing. Not a page, so it is named rather than
+          // linked as one.
+          data.cafe.menuUrl ? `- Menu as a PDF: ${data.cafe.menuUrl}` : "",
         ]
           .filter(Boolean)
           .join("\n")
@@ -379,7 +403,9 @@ function buildLlmsTxt(data: LlmsData) {
       `- Feed: ${BASEURL}${BLOG_FEED_PATH}`,
       ...posts
         .filter((post) => post.title && post.slug)
-        .map((post) => link(post.title!, `/blog/${post.slug}`, post.description)),
+        .map((post) =>
+          link(post.title!, `/blog/${post.slug}`, post.description)
+        ),
     ].join("\n"),
     "## Best-Use Guidance For AI Assistants",
     "Use the canonical URLs above when citing Curate Health. Treat this file as a concise navigation and entity summary; verify appointment availability, pricing, practitioner schedules, and clinical details on the linked pages.",

@@ -1341,13 +1341,540 @@ Tai Chi with Dr. Gabriele on Sunday mornings, yoga with Rooj, mat Pilates with C
 
 Build a class schedule page with per-class URLs, `Event` markup, and direct booking links. This gives the Recovery Sanctuary a discovery surface it currently lacks entirely.
 
-### CH-108 Cafe menu as HTML
+### CH-108 Cafe menu as HTML. Built 2026-10-18
 
-The menu is a PDF. PDFs index badly and can't be excerpted cleanly by AI systems.
+`/cafe/menu`, 10 sections and 27 items, every name, size, price and ingredient
+line as text in the HTML. The PDF is still on `/cafe` for printing, as the
+second button rather than the only one.
 
-Build it as an indexable page with item names, descriptions and ingredients as real text. The functional nutrition positioning, no industrial seed oils, maple and honey only, Ontario-local and seasonal sourcing, is genuinely differentiated and completely invisible to search right now.
+The menu lives in a `cafeMenu` document, one document rather than one per item:
+thirty documents would be thirty things to open to change a price, and thirty
+slugs for pages nobody wants.
 
-Add `hasMenu` and `servesCuisine` to the cafe entity.
+**The markup is a `Menu` entity, not a link to a file.** `hasMenu` on the cafe
+entity points at `#menu` on the new page, and that node points back with
+`provider`, so the two are one business. Sections become `MenuSection` and items
+`MenuItem`, which is what lets an answer engine quote one drink rather than the
+whole list. `hasMenu` rather than `menu`, which schema.org marks superseded by
+it; the PDF url is still what it carries while the page has no items on it.
+
+**Prices are in the markup here, unlike the product pages.** Those carry
+`Product` with no `Offer` on purpose, because pricing for them lives in Jane and
+the site cannot show it. The menu is the opposite: the prices are printed on the
+page, so leaving them out would describe the page less accurately than putting
+them in. Markup describes what the page shows.
+
+**One gate in four places.** The route 404s, the sitemap omits the URL, llms.txt
+omits the line and `/cafe` hides the link, all on the same condition: the
+document has at least one section with items. So the four cannot disagree, and
+`/cafe` can never link to a page that is not there.
+
+`cafeMenu` is in `pathsForDocument` and in both `INDEX_DOCS_QUERY` copies, so
+publishing it tells Bing and site search finds it. Checked: "Zawadi", "hojicha"
+and "Maple Almond" each return `/cafe/menu`.
+
+**The hero defaults to the cafe page's own photograph**, and so does the share
+card, so neither needed choosing. No breadcrumb trail, per the blog-posts-only
+rule from 2026-09-20.
+
+#### Where the content came from, and the four readings in it
+
+Two sources, both Frank's: the menu PDF `/cafe` was linking to, and the "New
+recipes" Google Doc, which is **newer** and is the master for what the kitchen
+makes.
+
+**The Maple Almond bar does not use its printed line, and this is the reason
+the ingredient field says it is allergen information.** The bar was sold as
+"Almond & Walnut" and the PDF's ingredients for it read "almonds, dates, maple
+syrup, cinnamon, cacao powder, vanilla extract, salt". That omits **walnut**, a
+tree nut named in the item's own title, omits the goji berries and lemon zest,
+and lists cacao powder, which belongs to the Chocolate Hazelnut bar. The recipe
+doc has the real list and that is what went in, the walnut included. Frank
+renamed it **Maple Almond** on 2026-10-16 and confirmed **no honey** in it,
+which the recipe agrees with. Honey stays in the drinks that have it. The
+recipe calls the topping a brittle; he corrected that on 2026-10-18, "it is
+not a brittle, it is just a maple walnut topping", so the line ends "with a
+maple walnut topping".
+
+The PDF sets items out in four columns with the ingredient lists in a separate
+text layer, so pairing a list to its drink was a reading of the layout rather
+than something the file states. **Frank settled all four on 2026-10-18**, and
+the answers are in the data now rather than in a note:
+
+- **Matcha Latte at 16oz is iced.** Everything else split on size, 12oz and
+  under hot.
+- **"Matchacano with Protein" and "Cold Foam (16oz)" are one item**, $14.
+- **The $3 add-on is vanilla only**, and the other two flavours belong to the
+  Banana Booster, which is where they went.
+- **Chia Pudding is 350g.** The PDF prints 35g, an energy bar's weight for a
+  $10 item, so the file is wrong there.
+
+Three structural changes came with them.
+
+**Specialty Protein holds both protein drinks**, under the PDF's own name for
+that section. Its Protein Shakes heading is gone.
+
+**Two items came off the menu**, on his instruction rather than by accident:
+"Organic All-In-One Plant-based Protein Shake" and "Signature Protein
+Milkshake with House-made Almond Milk", both 20oz at $12 and both printed on
+the PDF. He cut Protein Shakes to the Banana Booster alone. Put them back if
+that was not what he meant.
+
+**"Matchacano" is gone as a name, and is not coming back.** He said the
+matchacano and the ceremonial matcha "are the same, we should just pick one",
+asked which, and confirmed the answer: "let's keep ceremonial matcha
+consistent, no matchacano". The reasoning, so it is not reopened: Ceremonial
+Matcha is the term people search and is already the first thing in that item's
+own ingredient line, while "matchacano" is a coined word with no search behind
+it that reads as a typo of americano. **Renamed, not deleted**, so neither
+preparation left the menu: the plain 6oz is under Hot and the 16oz with
+protein is under Specialty Protein.
+
+**A section has two optional lines and they sit in different places.** `note`
+goes on the heading row, right aligned, where it lands in the price column:
+that is "$13 for 3" on Energy Bars. `footnote` goes under the items, which is
+where the smoothie add-on belongs. Frank, 2026-10-18: it "should be at the
+bottom of smoothie section". Both are italic, and the markup joins whichever
+are set into that MenuSection's `description`.
+
+**The standing note lost a negative margin that was dragging it over the
+prose.** It carried `-mt-10` from when it sat in its own section below the
+intro band and had to be pulled up against it. Once the intro moved into the
+heading section the margin had nothing to pull against and overlapped the
+paragraph above, which is what his screenshot showed. Delete a block's
+positioning when you move the block.
+
+**The back link needs its own top padding now.** The sections lost their
+bottom margin when the grid took over the spacing, so the link sat tight
+against the last one. It is `pt-16 md:pt-20`, matching the grid's row gap.
+
+**A section note sits on the heading row, right aligned and italic.** Italic
+so an add-on does not read as an item you order on its own, "add on should be
+in italics and not look like an actual item", and right aligned because "$13
+for 3" belongs in the price column: it "should be on the right (right
+aligned), where all the prices are lined up already". Measured, the note and
+the prices below it both end at 1501px. It wraps below the heading and returns
+to the left on a phone, where a right-aligned sentence on its own line reads
+as a mistake. The note is that MenuSection's `description` in the markup.
+
+**Section headings hold one line.** The heading is `shrink-0` so the note on
+the right gives way first. Not `whitespace-nowrap`, which overflows the column
+rather than wrapping, and wrapping is the behaviour Frank allowed for: "unless
+adaptive settings need to split it to 2 for any reason". Measured at 1680,
+1280 and 375, every heading is one line today, the widest being "Kombucha on
+Tap" at 211px in a 311px phone container.
+
+**/cafe has one way into the menu, a band under the last alternating section and above "Visit the cafe".**
+`components/layout/cafe-page/cafe-menu-band.tsx`, chosen by Frank on
+2026-10-18 from three drafts: dark green filling sage on hover, the whole
+section a single link because he asked for "the entire section being a
+clickable button". White on sage is the house hover, the same as the bar under
+the Program Timeline, and the resting state is the high contrast one.
+
+**"Visit the cafe" is the hours block, not the band at the foot of the page.**
+The band sat below the hours for a round because the first reading of "before
+the Visit the cafe section" took that heading for the CTA band. `CafeHours`
+carries it. Measured after the fix: the chia pudding section at y 4887, the
+band at 5555, Visit the cafe at 5903, the CTA band at 6631.
+
+**It says "Cafe menu" and then "Read the full menu" with an arrow, and that
+is the whole of it.** His words: "I like the simplicity ... keeps it simple
+for the eye to find." **Those two strings are in the code, not the Studio.**
+They are a link label rather than editorial copy, like every other navigation
+label on the site. A first version read the deleted card's Studio fields and
+so published its old paragraph here, which is the opposite of what he asked
+for.
+
+**It replaced both of the other menu calls to action.** The "What we're
+serving today" card is deleted, and the PDF download button with it. The band
+reads that card's own Studio fields, `cafePage.menuDownloadSection.headline`
+and `.description`, so the copy stayed editable and no new field was needed.
+The PDF itself is untouched in Sanity and is now linked from nowhere.
+
+**The section with the chia pudding and the cheesecake went through three
+names.** "Desserts" he rejected, "this gives the impression unhealthy. These
+are protein packed, so should be able to eat for breakfast, lunch or dinner".
+"Jars" he rejected too. **"Fuel Foods" is his and is the better answer than
+either of mine**: it says what the food is for rather than what it is served
+in, which is the point he was making, and somebody might actually search it.
+
+**Three more changes the same day.** Cranberry kombucha came off and **Violet
+Lemongrass** replaced it. Two muffins and a no-bake cheesecake went on, from
+the recipe doc rather than the PDF, which carries none of the three: **Banana
+Zucchini Protein Muffin** and **Double Dark Chocolate Protein Muffin** at 69g
+and $6, and **No-Bake Cheesecake** in a 69g jar at $15. The prices are Frank's,
+since neither source has one. Their ingredient lines are the recipes reduced to
+a menu line with every allergen kept: walnut, egg, hemp and oats in the
+muffins, cashew in the cheesecake.
+```bash
+node scripts/apply-cafe-menu.js           # dry run, prints the whole menu
+node scripts/apply-cafe-menu.js --apply
+```
+
+The script checks the copy against the content rules before it will write, and
+against the audits' own title and description limits, so a failure shows up
+before the mutation rather than after the build. Applied in transaction
+`b293KmNbo0z5K9Rnfg9Yi3`, after
+`sanity-backup-2026-10-18-before-cafe-menu-documents.tar.gz`.
+
+**`audit-seo-complete.js` passes 9 of 9 with the page in.**
+
+#### Frank's pass, 2026-10-18
+
+**The first two paragraphs of the intro are his**, and they are one paragraph
+of his split at his own sentence break: the first becomes the hero's standing
+line, the second the band. At 250 characters the whole thing ran to four lines
+over the photograph. Not a word is altered. The third paragraph is the
+allergen line and is mine.
+
+**The draft his replaced opened on "cooked without industrial seed oils and
+sweetened with maple syrup, honey or dates rather than refined sugar".** That
+claim is off the page because he took it out, not by oversight. Do not put it
+back without asking him.
+
+The standing note is his too: "vessel" rather than "mug", and food as well as
+beverages. It is **two lines**, as he wrote them, because they are two
+separate offers rather than one sentence, and it is pulled up against the
+intro band with a negative margin. SectionIntro ends on `py-24`, so the note
+sat 96px clear of the paragraph it belongs with and read as a section of its
+own.
+
+**"Bars are $13 for 3"** is a section note on Energy Bars, which also becomes
+that MenuSection's `description` in the markup.
+
+**The /cafe block no longer says "Save or share the menu in one tap"**, which
+was written when downloading the file was all that block did. The script
+matches that sentence rather than replacing the paragraph, so an editor
+rewording the rest in the Studio is not silently reverted by the next run.
+
+**Prices print whole numbers without decimals**, "as everything is whole
+numbers for that reason". Only the $4.50 bars show cents. `menuPrice` in
+`lib/structured-data.tsx` is exported for this, because the page and the
+`Offer` in the markup both need it and two copies of the rule would eventually
+disagree with each other.
+
+**Ingredient lines stop at three quarters of the measure**, from the `sm`
+breakpoint up. At full width a long one ran under the price column and the two
+read as one paragraph. Not on a phone: there is no price column to clear at
+375px, and three quarters of 311px took the immunity latte to five lines.
+
+**Two columns from `xl`, which he asked for so a wide window scrolls less.**
+This is not the layout he rejected twice on the prose band. There, balancing
+the columns meant cutting a sentence across the gutter; a menu section is a
+discrete block that moves whole or not at all.
+
+**Two columns flowing in ROWS, not two column-shaped lists.** This is the
+third attempt and the only one that satisfies both things Frank asked for,
+which looked like a contradiction and were not: "preserve all drinks first
+then food, like how the original pdf had it", and "both columns should have
+as close to 50/50 as possible. If exact 50/50 is not achievable, make left be
+the larger of the two".
+
+A row-flow grid reads left to right and then down, which is the menu's own
+order, so the six drink sections still come before the four food ones. And
+because both columns hold the same number of rows and a row is as tall as its
+taller cell, the columns are the same height by construction. Measured at
+1390: 1969px and 1993px.
+
+**The 24px is the last row, and it is the wrong way round.** Fuel Foods sits
+left of Salads and Salads is the taller of the two, so the right column's last
+section ends 24px lower. The rows are equal; only the final cells' content
+differs. Not worth special-casing an order rule for 24px on a 2000px column.
+
+**What the two earlier versions got wrong**, recorded so neither comes back.
+Both dealt the sections into two lists and read down one and then the other.
+A single cut point kept the order and could not balance: ten chunky sections
+give ten arrangements, and the best left the right column 570px short.
+Choosing a column per section balanced to 16px and scattered the menu, putting
+Energy Bars among the drinks and Kombucha among the food. **Near-perfect
+balance is exactly what produced the scatter.**
+
+Rows cost some whitespace under the shorter section in each pair, about 310px
+over four rows. The column version concentrated 570px of it at one column's
+foot and ran 500px taller overall, so rows are less waste and less scrolling.
+**Section headings hold one line.** The heading is `shrink-0` so the note on
+the right gives way first. Not `whitespace-nowrap`, which overflows the column
+rather than wrapping, and wrapping is the behaviour Frank allowed for: "unless
+adaptive settings need to split it to 2 for any reason". Measured at 1680,
+1280 and 375, every heading is one line today, the widest being "Kombucha on
+Tap" at 211px in a 311px phone container.
+
+**/cafe has one way into the menu, a band above the Visit the cafe band.**
+`components/layout/cafe-page/cafe-menu-band.tsx`, chosen by Frank on
+2026-10-18 from three drafts: dark green filling sage on hover, the whole
+section a single link because he asked for "the entire section being a
+clickable button". White on sage is the house hover, the same as the bar under
+the Program Timeline, and the resting state is the high contrast one.
+
+**It replaced both of the other menu calls to action.** The "What we're
+serving today" card is deleted, and the PDF download button with it. The band
+reads that card's own Studio fields, `cafePage.menuDownloadSection.headline`
+and `.description`, so the copy stayed editable and no new field was needed.
+The PDF itself is untouched in Sanity and is now linked from nowhere.
+
+**The jars section is not called Desserts.** That was the first name and he
+rejected it: "this gives the impression unhealthy. These are protein packed, so
+should be able to eat for breakfast, lunch or dinner". The heading tells a
+reader what meal the food is for, and these are not an after-dinner course. It
+is **"Jars"**, which is what they literally are and carries no mealtime with
+it. The cost is search: somebody looking for chia pudding finds the item, not
+the heading.
+
+**Three more changes the same day.** Cranberry kombucha came off and **Violet
+Lemongrass** replaced it. Two muffins and a no-bake cheesecake went on, from
+the recipe doc rather than the PDF, which carries none of the three: **Banana
+Zucchini Protein Muffin** and **Double Dark Chocolate Protein Muffin** at 69g
+and $6, and **No-Bake Cheesecake** in a 69g jar at $15. The prices are Frank's,
+since neither source has one. Their ingredient lines are the recipes reduced to
+a menu line with every allergen kept: walnut, egg, hemp and oats in the
+muffins, cashew in the cheesecake.
+```bash
+node scripts/apply-cafe-menu.js           # dry run, prints the whole menu
+node scripts/apply-cafe-menu.js --apply
+```
+
+The script checks the copy against the content rules before it will write, and
+against the audits' own title and description limits, so a failure shows up
+before the mutation rather than after the build. Applied in transaction
+`b293KmNbo0z5K9Rnfg9Yi3`, after
+`sanity-backup-2026-10-18-before-cafe-menu-documents.tar.gz`.
+
+**`audit-seo-complete.js` passes 9 of 9 with the page in.**
+
+#### Frank's pass, 2026-10-18
+
+**The first two paragraphs of the intro are his**, and they are one paragraph
+of his split at his own sentence break: the first becomes the hero's standing
+line, the second the band. At 250 characters the whole thing ran to four lines
+over the photograph. Not a word is altered. The third paragraph is the
+allergen line and is mine.
+
+**The draft his replaced opened on "cooked without industrial seed oils and
+sweetened with maple syrup, honey or dates rather than refined sugar".** That
+claim is off the page because he took it out, not by oversight. Do not put it
+back without asking him.
+
+The standing note is his too: "vessel" rather than "mug", and food as well as
+beverages. It is **two lines**, as he wrote them, because they are two
+separate offers rather than one sentence, and it is pulled up against the
+intro band with a negative margin. SectionIntro ends on `py-24`, so the note
+sat 96px clear of the paragraph it belongs with and read as a section of its
+own.
+
+**"Bars are $13 for 3"** is a section note on Energy Bars, which also becomes
+that MenuSection's `description` in the markup.
+
+**The /cafe block no longer says "Save or share the menu in one tap"**, which
+was written when downloading the file was all that block did. The script
+matches that sentence rather than replacing the paragraph, so an editor
+rewording the rest in the Studio is not silently reverted by the next run.
+
+**Prices print whole numbers without decimals**, "as everything is whole
+numbers for that reason". Only the $4.50 bars show cents. `menuPrice` in
+`lib/structured-data.tsx` is exported for this, because the page and the
+`Offer` in the markup both need it and two copies of the rule would eventually
+disagree with each other.
+
+**Ingredient lines stop at three quarters of the measure**, from the `sm`
+breakpoint up. At full width a long one ran under the price column and the two
+read as one paragraph. Not on a phone: there is no price column to clear at
+375px, and three quarters of 311px took the immunity latte to five lines.
+
+**Two columns from `xl`, which he asked for so a wide window scrolls less.**
+This is not the layout he rejected twice on the prose band. There, balancing
+the columns meant cutting a sentence across the gutter; a menu section is a
+discrete block that moves whole or not at all.
+
+**The menu's own order is the constraint, and balance is optimised inside
+it.** Frank, 2026-10-18: "Please preserve all drinks first then food, like
+how the original pdf had it." So the list is cut once, and reading down the
+left column and then down the right gives the menu in its own order. Of the
+cuts that leave the left column at least as tall as the right, it takes the
+closest to even, which is the first cut putting half or more of the height on
+the left.
+
+**That cut lands exactly on the drinks and food line**, six drink sections
+left at 2090px and four food sections right at 1520px. 570px apart, which is
+what the section heights allow: cutting one earlier gets within 344px and puts
+the right column ahead, which breaks the other rule.
+
+**A version in between chose a column per section rather than a cut point.**
+That opens 2^n arrangements and balanced the two to 16px. It also scattered
+the menu, putting Energy Bars at the foot of the drinks column and Kombucha at
+the head of the food one, and that is what he rejected. Worth recording that
+**near-perfect balance is what produced the scatter**: balance was never the
+point on its own. Do not reintroduce it.
+**A grid of two cells, not of ten.** Ten cells lays the sections out in rows
+and makes every row as tall as its tallest section, which leaves holes.
+
+The heights it estimates were read off the rendered page rather than guessed.
+They only have to rank sections against each other, so one out by a few pixels
+cannot change the answer; one out by half its height could.
+**A section note sits on the heading row, right aligned and italic.** Italic
+so an add-on does not read as an item you order on its own, "add on should be
+in italics and not look like an actual item", and right aligned because "$13
+for 3" belongs in the price column: it "should be on the right (right
+aligned), where all the prices are lined up already". Measured, the note and
+the prices below it both end at 1501px. It wraps below the heading and returns
+to the left on a phone, where a right-aligned sentence on its own line reads
+as a mistake. The note is that MenuSection's `description` in the markup.
+
+**Three more changes the same day.** Cranberry kombucha came off and **Violet
+Lemongrass** replaced it. Two muffins and a no-bake cheesecake went on, from
+the recipe doc rather than the PDF, which carries none of the three: **Banana
+Zucchini Protein Muffin** and **Double Dark Chocolate Protein Muffin** at 69g
+and $6, and **No-Bake Cheesecake** in a 69g jar at $15. The prices are Frank's,
+since neither source has one. Their ingredient lines are the recipes reduced to
+a menu line with every allergen kept: walnut, egg, hemp and oats in the
+muffins, cashew in the cheesecake.
+```bash
+node scripts/apply-cafe-menu.js           # dry run, prints the whole menu
+node scripts/apply-cafe-menu.js --apply
+```
+
+The script checks the copy against the content rules before it will write, and
+against the audits' own title and description limits, so a failure shows up
+before the mutation rather than after the build. Applied in transaction
+`b293KmNbo0z5K9Rnfg9Yi3`, after
+`sanity-backup-2026-10-18-before-cafe-menu-documents.tar.gz`.
+
+**`audit-seo-complete.js` passes 9 of 9 with the page in.**
+
+#### Frank's pass, 2026-10-18
+
+**The first two paragraphs of the intro are his**, and they are one paragraph
+of his split at his own sentence break: the first becomes the hero's standing
+line, the second the band. At 250 characters the whole thing ran to four lines
+over the photograph. Not a word is altered. The third paragraph is the
+allergen line and is mine.
+
+**The draft his replaced opened on "cooked without industrial seed oils and
+sweetened with maple syrup, honey or dates rather than refined sugar".** That
+claim is off the page because he took it out, not by oversight. Do not put it
+back without asking him.
+
+The standing note is his too: "vessel" rather than "mug", and food as well as
+beverages. It is **two lines**, as he wrote them, because they are two
+separate offers rather than one sentence, and it is pulled up against the
+intro band with a negative margin. SectionIntro ends on `py-24`, so the note
+sat 96px clear of the paragraph it belongs with and read as a section of its
+own.
+
+**"Bars are $13 for 3"** is a section note on Energy Bars, which also becomes
+that MenuSection's `description` in the markup.
+
+**The /cafe block no longer says "Save or share the menu in one tap"**, which
+was written when downloading the file was all that block did. The script
+matches that sentence rather than replacing the paragraph, so an editor
+rewording the rest in the Studio is not silently reverted by the next run.
+
+**Prices print whole numbers without decimals**, "as everything is whole
+numbers for that reason". Only the $4.50 bars show cents. `menuPrice` in
+`lib/structured-data.tsx` is exported for this, because the page and the
+`Offer` in the markup both need it and two copies of the rule would eventually
+disagree with each other.
+
+**Ingredient lines stop at three quarters of the measure**, from the `sm`
+breakpoint up. At full width a long one ran under the price column and the two
+read as one paragraph. Not on a phone: there is no price column to clear at
+375px, and three quarters of 311px took the immunity latte to five lines.
+
+**Two columns from `xl`, which he asked for so a wide window scrolls less.**
+This is not the layout he rejected twice on the prose band. There, balancing
+the columns meant cutting a sentence across the gutter; a menu section is a
+discrete block that moves whole or not at all.
+
+**The longer column is always the left one, by his rule on 2026-10-18.** CSS
+`columns-2` decides that for itself and had put Smoothies, the tallest
+section, on the right, leaving the right 512px longer. No CSS property says
+"lean left", so `splitIntoColumns` in the page makes the decision and the
+columns are real elements in a two cell grid.
+
+The rule it uses: walk the sections in order, fill the left until it holds at
+least half the total height, everything after goes right. The running total
+only grows, so the first split past half is both the one that leans left and
+the closest to even of the splits that do. Measured at 1680 after: six
+sections left at 2066px against four right at 1480px.
+
+**A grid of two cells, not of ten.** Ten cells lays the sections out in rows
+and makes every row as tall as its tallest section, which leaves holes.
+
+The heights `splitIntoColumns` estimates were read off the rendered page
+rather than guessed. They only have to rank sections against each other, so a
+section out by a few pixels cannot move the split; one out by half its height
+could.
+
+**`apply-cafe-menu.js` refuses text carrying Cf characters.** His menu copy
+arrived with them, which is the CH-020 contamination route exactly: a paste out
+of a rich text source into a field. `audit-unicode.js` runs after the write;
+this runs before it. Everything he sent was retyped by hand, and the audit
+reports 0 Cf in the dataset.
+
+#### The menu page follows /cafe, not /services. 2026-10-18
+
+**The photograph carries no text and the title sits under it.** Frank asked
+for the title "below the hero image for more visibility and to make it
+congruent with all the other sibling pages". This page's sibling is /cafe,
+which does exactly that: a full bleed photograph, then the heading on white.
+
+It used `SectionHero` before, which lays the h1 over the picture. That is
+right for /services, /products and /about, where the second menu sits directly
+under the band, and the cafe does not use that pattern.
+
+**The heading and the opening prose run the full container width**, not capped
+at the left column: "have it extend all the way across in width and not just
+align to the left column." The item lists below keep their measure, because
+the price column needs an edge to sit against. Measured at 1440: the heading
+spans 45 to 1381, which is the container.
+
+#### Three new photographs on /cafe, 2026-10-18
+
+Frank sent them to replace three section images: the matcha latte, the energy
+bars in place of a bowl of energy balls that are not on the menu, and a better
+chia pudding. `scripts/swap-cafe-photos.js`, transaction
+`b293KmNbo0z5K9RnfhO8Th`, after
+`sanity-backup-2026-10-18-before-cafe-photos-documents.tar.gz`.
+
+**They are whole, and a crop in the Studio now does something.** A first run
+uploaded them cropped to the slot, 1506x2000 down to 1506x1189, because
+`object-cover` centre-crops and that cuts the matcha glass off. Frank asked
+for the originals instead: "leave them whole on Sanity and I will go in and
+crop it myself."
+
+**That needed a code change to mean anything.** `AlternatingSections` took a
+bare url out of the query, so the crop and hotspot an editor drags in the
+Studio were never read. `CAFE_PAGE_QUERY` now projects the image object as
+`source`, and the component runs it through `urlForSectionImage`, so the
+Studio's crop decides the frame. Without it, cropping there would have been a
+silent no-op, the same class of trap as the blog alt in CH-028.
+
+`source` is optional on the component's type and only the cafe query provides
+it, so the other six callers are untouched and still centre-crop as before.
+Until a crop is set, Sanity centres it, which is what the browser did.
+**The Drive link he first sent could not be used**, and the reason is worth
+knowing before anyone tries again: it was the top-level Curate Drive folder,
+hundreds of files with phone-camera names, and the cafe shoot in it is **HEIF**,
+which the Drive connector cannot open. It reads JPEG, PNG and PDF. Ask for the
+images in chat.
+
+**A fourth photograph came with them**, two tall textured glasses of iced
+drinks under a pothos leaf, and it has no slot. Still his to place.
+
+#### The outline button variant is dark on dark
+
+Found here, worth knowing anywhere a second button is wanted. `components/ui/button.tsx`
+gives `outline` `bg-background` and **no text colour**, and `--background` in
+this theme is the dark green, so it paints a dark green box and lets the label
+inherit the dark green around it. Measured: both `rgb(39, 52, 24)`. It renders
+as a filled rectangle with nothing in it, and it looks correct in the source.
+
+The PDF button spells its colours out rather than relying on the variant. Fixed
+at the call site on purpose: the variant is shared, and repainting it would
+change buttons on pages this ticket has not looked at.
+
+**Still Frank's.** The block's description on `/cafe` reads "Save or share the
+menu in one tap", written when the PDF was the only thing there. It is Studio
+copy on `cafePage.menuDownloadSection.description`.
 
 ### CH-109 Eglinton Crosstown landing page
 
@@ -1544,6 +2071,72 @@ node scripts/indexnow-submit.js --apply   # sends every sitemap page
 ```
 
 The dry run refuses while the key file is not live, so it cannot be sent before the deploy lands. 200 and 202 are both success; 202 means the key is still being checked, normal at first.
+
+### The Studio's crop tool, made to work on the site. 2026-10-18
+
+Frank asked to be able to crop any photograph himself, "without changing how
+any of the current photos are cropped".
+
+**Almost every photograph here was a bare asset url in a box with**
+**`object-cover`**, so the browser centre-cropped it and the crop and hotspot
+an editor dragged in the Studio were thrown away. 308 image objects in the
+dataset, 28 carrying a crop and 29 a hotspot, nearly all of them ignored.
+
+**The promise is kept by doing nothing when there is nothing to do.**
+`framedImageUrl` in `sanity/lib/image.ts` returns undefined unless a crop or a
+hotspot is stored, and `components/shared/sanity-image.tsx` then serves the
+same bare url as before, byte for byte. The feature is dormant until somebody
+drags a frame, and live the moment they do. That is what lets it go on every
+photograph at once.
+
+**Wired so far**: `AlternatingSections`, which covers the section photographs
+on /cafe, /about/our-story, /about/mission-and-values, /about/sustainability,
+the blog posts, the treatment pages and the lifestyle program; `SectionHero`,
+which covers /services, /products and /about; and the /cafe/menu hero. The
+GROQ plumbing is on 43 projections, so the remaining call sites are a
+`<SanityImage>` swap each, not a query change.
+
+**`scripts/audit-image-framing.js` is the proof.** It records every image url
+on every page in the sitemap, and compares. Take the baseline before the
+change, with `--save`, from a build that does not have it.
+
+```bash
+node scripts/audit-image-framing.js http://localhost:3000 --save
+node scripts/audit-image-framing.js http://localhost:3000
+```
+
+**Its first version passed blind and that is the trap to know.** Every image
+here is served as `/_next/image?url=<the real one>`, and it compared the outer
+path, so all 387 images normalised to the string `/_next/image` and the check
+reported no change while a photograph had in fact moved. It unwraps the
+optimiser now.
+
+**Ten urls changed on two pages, and both are understood.**
+
+- **/about's hero reframes by 1.5%, and Frank kept it.** Somebody had already
+  set a hotspot on it in the Studio and the site was ignoring it. Turning the
+  tool on makes their choice count: the crop starts at y 761 of 3073 rather
+  than the 715 a plain centre crop gives, 46px down. He said "use the hotspot"
+  on 2026-10-18, so this stands.
+- **/about/our-story's four section photographs lost a `rect` and look
+  identical.** They were being cropped by Sanity to 1408x1112, a ratio of
+  1.266, and are now the plain url in a 704x556 box, a ratio of 1.266. Same
+  framing, different delivery, and the same path every other page takes.
+
+**The band is olive green filling platinum**, Frank's colours on 2026-10-18,
+replacing the sage hover it shipped with. Platinum is #DBDED9, pale enough
+that the white text would vanish on it, so the heading and the line under it
+turn dark green on hover: the same pair as the resting state, the other way
+round.
+
+**The cafe's hours block reads as two headings.** "Hours" was `text-lg
+font-medium` beside a `text-3xl font-light` "Visit the cafe", so it read as a
+label rather than its pair. Same size and weight now, and the days of the week
+are no longer bold.
+
+**The three cafe photographs are stored whole**, 1506x2000 with no crop and no
+hotspot, so Frank can frame them in the Studio himself. Until he does, the
+browser centre-crops as it always has.
 
 ### Share cards
 

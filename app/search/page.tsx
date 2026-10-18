@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { groq } from "next-sanity";
 
-import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
 import { cn } from "@/lib/utils";
 import { SEARCH_REVALIDATE_SECONDS, sanityFetch } from "@/sanity/lib/client";
@@ -321,7 +320,7 @@ export default async function SearchPage({
                     >
                       <Link
                         href={hit.href}
-                        className={cn("w-fit text-xl", HOVER_UNDERLINE)}
+                        className="w-fit text-xl hover:underline"
                       >
                         {highlightExact(hit.title, needle)}
                       </Link>

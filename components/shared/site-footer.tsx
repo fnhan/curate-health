@@ -237,13 +237,17 @@ export default function SiteFooter({
                   SectionNavigation follows, an href where the section has a
                   hub and none where it does not.
                 */}
-                <h2
-                  className={cn(
-                    "w-fit pl-3 font-semibold md:mb-3",
-                    HOVER_UNDERLINE
-                  )}
-                >
-                  <Link href="/services">Services</Link>
+                {/*
+                  The sweep is on the link, not on the h2. The h2 carries pl-3 and
+                  the line is positioned against the padded box, so on the heading
+                  it started 12px to the left of the word. after:left-3 cannot fix
+                  that: it and the shared after:left-0 have the same specificity,
+                  so Tailwind's own order decides and left-0 wins.
+                */}
+                <h2 className="w-fit pl-3 font-semibold md:mb-3">
+                  <Link className={HOVER_UNDERLINE} href="/services">
+                    Services
+                  </Link>
                 </h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {services?.map(
@@ -269,13 +273,17 @@ export default function SiteFooter({
                   the page that exists to be those pages' parent was itself
                   unreachable. Caught by scripts/audit-orphans.js.
                 */}
-                <h2
-                  className={cn(
-                    "w-fit pl-3 font-semibold md:mb-3",
-                    HOVER_UNDERLINE
-                  )}
-                >
-                  <Link href="/about">About</Link>
+                {/*
+                  The sweep is on the link, not on the h2. The h2 carries pl-3 and
+                  the line is positioned against the padded box, so on the heading
+                  it started 12px to the left of the word. after:left-3 cannot fix
+                  that: it and the shared after:left-0 have the same specificity,
+                  so Tailwind's own order decides and left-0 wins.
+                */}
+                <h2 className="w-fit pl-3 font-semibold md:mb-3">
+                  <Link className={HOVER_UNDERLINE} href="/about">
+                    About
+                  </Link>
                 </h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {aboutPages

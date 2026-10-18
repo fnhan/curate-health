@@ -5,7 +5,6 @@ import Link from "next/link";
 import { HomeIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { cn } from "@/lib/utils";
 
 export default function GlobalError({
@@ -30,10 +29,7 @@ export default function GlobalError({
         </Button>
         <Button
           asChild
-          className={cn(
-            "flex w-fit items-center gap-2 rounded-none",
-            HOVER_UNDERLINE
-          )}
+          className="flex w-fit items-center gap-2 rounded-none hover:underline"
         >
           <Link href="/">
             <HomeIcon size={16} />

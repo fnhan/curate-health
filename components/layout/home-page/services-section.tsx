@@ -9,7 +9,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MoveRightIcon } from "lucide-react";
 import { SERVICES_SECTION_QUERYResult } from "sanity.types";
 
-import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { cn } from "@/lib/utils";
 
 export default function ServicesSection({
@@ -38,10 +37,7 @@ export default function ServicesSection({
                 <Link
                   key={service.title}
                   href={`/services/${service.slug}`}
-                  className={cn(
-                    "flex w-fit items-center gap-2 font-light md:text-xl xl:text-3xl",
-                    HOVER_UNDERLINE
-                  )}
+                  className="flex w-fit items-center gap-2 font-light hover:underline md:text-xl xl:text-3xl"
                   onMouseEnter={() => setHoveredService(service as any)}
                 >
                   <span>{service.title}</span>

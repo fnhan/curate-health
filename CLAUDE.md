@@ -2161,8 +2161,18 @@ second. Frank asked for it everywhere "to stay consistent", naming the footer
 Services and About and the Learn More on Our Team.
 
 `lib/hover-underline.ts` holds the one copy. It was already duplicated between
-`section-navigation.tsx` and `our-programs-navigation.tsx`. 49 plain
-`hover:underline` links across 18 files were converted.
+`section-navigation.tsx` and `our-programs-navigation.tsx`.
+
+**It is six files, and that is the whole list.** The first pass put it on all
+49 plain `hover:underline` links across 18 files and Frank pulled it back:
+"you overdid it ... It only needs to be on text buttons that already had an
+underline or underlining hover feature." A contact detail, a breadcrumb, an
+inline link, a byline and an error page are clickable text, not buttons, and
+they keep `hover:underline`.
+
+What has the sweep: the two section menus, the footer and its mobile
+accordion, the Our Team cards and the practitioner card. **Ask before widening
+it again.**
 
 **`after:bg-current`, not a colour.** The line takes the text colour, which is
 what lets the footer use it: those links are white on the dark green, where
@@ -2174,6 +2184,21 @@ its whole card rather than to itself. Those call sites used
 
 **`components/ui/*` is left alone.** Those are shadcn primitives behind
 buttons and accordions all over the site; the ask was about links.
+
+#### Two ways the line lands in the wrong place
+
+**It is positioned against the padded box, not the text.** The footer's
+Services and About headings carry `pl-3`, so the line began 12px to the left
+of the word. `after:left-3` does not fix it: it and the shared `after:left-0`
+have the same specificity, so Tailwind's own ordering decides and `left-0`
+wins. **Put the sweep on the unpadded element instead**, which here meant the
+`<Link>` inside the `<h2>` rather than the heading.
+
+**`top-[110%]` is 110% of the element, so a tall element throws the line
+down.** Our Team's "Learn More" is a flex row with `py-4`, a 56px box, so the
+line sat well under the words: "way too far from the words". The sweep moved
+onto a `<span>` around the text, driven by a `group/learn` on the link.
+Measured after: 2px below the text, the same as the section menu's.
 
 #### Moving a class string into lib silently deletes it
 

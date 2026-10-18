@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 
 import { PortableText } from "next-sanity";
 
-import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { treatmentPath } from "@/lib/service-urls";
@@ -233,12 +232,7 @@ export default async function PractitionerPage({
                       className="group flex h-full items-center justify-between gap-4 border border-border bg-white p-6 transition-colors hover:bg-platinum/40"
                     >
                       <span className="space-y-1">
-                        <span
-                          className={cn(
-                            GROUP_HOVER_UNDERLINE,
-                            "block w-fit text-lg font-light"
-                          )}
-                        >
+                        <span className="block w-fit text-lg font-light hover:underline">
                           {service.title}
                         </span>
                         {service.serviceName ? (

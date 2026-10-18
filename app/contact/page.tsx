@@ -6,7 +6,6 @@ import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { addressLines, addressOneLine } from "@/lib/address";
-import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { cn } from "@/lib/utils";
@@ -94,10 +93,7 @@ export default async function ContactPage() {
                   <a
                     href={contactInfo?.mapLink ?? ""}
                     {...externalLinkProps(contactInfo?.mapLink ?? "")}
-                    className={cn(
-                      "w-fit not-italic md:text-3xl",
-                      HOVER_UNDERLINE
-                    )}
+                    className="w-fit not-italic hover:underline md:text-3xl"
                   >
                     {addressOneLine(contactInfo?.address)}
                   </a>
@@ -112,10 +108,7 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     href={`mailto:${contactInfo?.email}`}
-                    className={cn(
-                      "w-fit not-italic md:text-3xl",
-                      HOVER_UNDERLINE
-                    )}
+                    className="w-fit not-italic hover:underline md:text-3xl"
                   >
                     {contactInfo?.email}
                   </a>
@@ -130,10 +123,7 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     href={`tel:${contactInfo?.phone}`}
-                    className={cn(
-                      "w-fit not-italic md:text-3xl",
-                      HOVER_UNDERLINE
-                    )}
+                    className="w-fit not-italic hover:underline md:text-3xl"
                   >
                     {contactInfo?.phone}
                   </a>
@@ -148,10 +138,7 @@ export default async function ContactPage() {
                 <div className="pl-8">
                   <a
                     href={`tel:${contactInfo?.phone}`}
-                    className={cn(
-                      "w-fit not-italic md:text-3xl",
-                      HOVER_UNDERLINE
-                    )}
+                    className="w-fit not-italic hover:underline md:text-3xl"
                   >
                     {contactInfo?.phone}
                   </a>

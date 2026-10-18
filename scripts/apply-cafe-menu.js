@@ -200,14 +200,18 @@ const SECTIONS = [
   {
     title: "Smoothies",
     /*
-     * The add-on is a section note rather than an item, so it stops reading
-     * like something you order on its own. Frank, 2026-10-18: "add on should
-     * be in italics and not look like an actual item", and limited to vanilla.
+     * The add-on is a footnote rather than an item, so it stops reading like
+     * something you order on its own. Frank, 2026-10-18: "add on should be in
+     * italics and not look like an actual item", limited to vanilla, and then
+     * "should be at the bottom of smoothie section".
+     *
+     * A `note` sits above the items beside the prices, which is right for the
+     * bars' bundle price and wrong for this. `footnote` sits below them.
      *
      * The other two flavours were never the add-on's. They belong to the
-     * Banana Booster below, which is where he put them.
+     * Banana Booster, which is where he put them.
      */
-    note: "Add plant protein and superfoods powder, vanilla, for $3.",
+    footnote: "Add plant protein and superfoods powder, vanilla, for $3.",
     items: [
       {
         name: "Gut Health Smoothie",
@@ -455,6 +459,7 @@ function buildDocument() {
       _type: "menuSection",
       title: section.title,
       ...(section.note ? { note: section.note } : {}),
+      ...(section.footnote ? { footnote: section.footnote } : {}),
       items: section.items.map((item) => ({
         _key: key(item.name),
         _type: "menuItem",
@@ -489,6 +494,7 @@ async function main() {
   for (const section of SECTIONS) {
     console.log(section.title);
     if (section.note) console.log(`  ${section.note}`);
+    if (section.footnote) console.log(`  (footnote) ${section.footnote}`);
     for (const item of section.items) {
       const size = item.size ? ` (${item.size})` : "";
       console.log(`  ${item.name}${size}  ${money(item.price)}`);
@@ -521,6 +527,7 @@ async function main() {
   for (const section of SECTIONS) {
     breaks.push(...ruleBreaks(`section "${section.title}"`, section.title));
     breaks.push(...ruleBreaks(`note "${section.title}"`, section.note));
+    breaks.push(...ruleBreaks(`footnote "${section.title}"`, section.footnote));
     for (const item of section.items) {
       breaks.push(...ruleBreaks(`item "${item.name}"`, item.name));
       breaks.push(

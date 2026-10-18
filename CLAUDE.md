@@ -1430,6 +1430,24 @@ it that reads as a typo of americano. **Renamed, not deleted**, so neither
 preparation left the menu: the plain 6oz is under Hot and the 16oz with
 protein is under Specialty Protein.
 
+**A section has two optional lines and they sit in different places.** `note`
+goes on the heading row, right aligned, where it lands in the price column:
+that is "$13 for 3" on Energy Bars. `footnote` goes under the items, which is
+where the smoothie add-on belongs. Frank, 2026-10-18: it "should be at the
+bottom of smoothie section". Both are italic, and the markup joins whichever
+are set into that MenuSection's `description`.
+
+**The standing note lost a negative margin that was dragging it over the
+prose.** It carried `-mt-10` from when it sat in its own section below the
+intro band and had to be pulled up against it. Once the intro moved into the
+heading section the margin had nothing to pull against and overlapped the
+paragraph above, which is what his screenshot showed. Delete a block's
+positioning when you move the block.
+
+**The back link needs its own top padding now.** The sections lost their
+bottom margin when the grid took over the spacing, so the link sat tight
+against the last one. It is `pt-16 md:pt-20`, matching the grid's row gap.
+
 **A section note sits on the heading row, right aligned and italic.** Italic
 so an add-on does not read as an item you order on its own, "add on should be
 in italics and not look like an actual item", and right aligned because "$13

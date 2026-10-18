@@ -646,7 +646,13 @@ export function buildCafeMenuJsonLd(menu: CAFE_MENU_QUERYResult) {
     hasMenuSection: sections.map((section) => ({
       "@type": "MenuSection",
       name: section.title,
-      description: section.note,
+      // The heading note and the footnote both describe the section, so the
+      // markup carries whichever are set rather than only the first.
+      description:
+        [section.note, section.footnote]
+          .map((line) => line?.trim())
+          .filter(Boolean)
+          .join(" ") || undefined,
       hasMenuItem: (section.items ?? []).map((item) => ({
         "@type": "MenuItem",
         name: item.name,

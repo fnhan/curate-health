@@ -988,6 +988,7 @@ export const CAFE_MENU_QUERY = groq`*[_type == "cafeMenu"][0]{
     _key,
     title,
     note,
+    footnote,
     items[]{
       _key,
       name,

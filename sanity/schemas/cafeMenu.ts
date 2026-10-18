@@ -92,6 +92,13 @@ export default defineType({
                 "Optional line under the section title, for something that applies to every item in it.",
             }),
             defineField({
+              name: "footnote",
+              title: "Section footnote",
+              type: "string",
+              description:
+                "Optional line AFTER the items, for an add-on or an option that is not something you order on its own. The section note sits above them, beside the prices, and suits a bundle price; this sits below, where a footnote belongs.",
+            }),
+            defineField({
               name: "items",
               title: "Items",
               type: "array",

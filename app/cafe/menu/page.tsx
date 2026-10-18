@@ -128,6 +128,18 @@ function MenuSectionBlock({ section }: { section: MenuSection }) {
           </li>
         ))}
       </ul>
+
+      {section.footnote?.trim() ? (
+        /*
+         * Under the items, not over them. A note sits in the heading row
+         * beside the prices, which suits the bars' bundle price; an add-on is
+         * a footnote and belongs at the foot. Frank, 2026-10-18: it "should
+         * be at the bottom of smoothie section".
+         */
+        <p className="font-light italic text-muted-foreground">
+          {section.footnote.trim()}
+        </p>
+      ) : null}
     </section>
   );
 }
@@ -204,22 +216,20 @@ export default async function CafeMenuPage() {
               {text}
             </p>
           ))}
-        </div>
-      </section>
-
-      <section className="bg-white pb-28 text-primary md:pb-36">
-        <div className="container">
           {menu.note?.trim() ? (
             /*
-              Pulled up against the intro band above it, at Frank's request on
-              2026-10-18. SectionIntro ends on py-24, so the note sat 96px
-              clear of the paragraph it belongs with and read as its own
-              section. The negative margin takes that to about 40px.
+            The two standing offers, under the prose rather than over it.
 
-              Each line is its own paragraph, as he wrote them: they are two
-              separate offers rather than one sentence.
-            */
-            <div className="-mt-10 mb-16 mr-auto flex max-w-[70ch] flex-col gap-1 md:-mt-14 md:mb-20">
+            This block carried a negative margin for a round, from when it
+            sat in its own section below the intro band and had to be pulled
+            up against it. Once the intro moved into this section the margin
+            had nothing to pull against and dragged the italic lines on top
+            of the paragraph above, which is what Frank's screenshot shows.
+
+            Each line is its own paragraph, as he wrote them: they are two
+            separate offers rather than one sentence.
+          */
+            <div className="flex flex-col gap-1 pt-2">
               {menu.note
                 .trim()
                 .split("\n")
@@ -235,7 +245,11 @@ export default async function CafeMenuPage() {
                 ))}
             </div>
           ) : null}
+        </div>
+      </section>
 
+      <section className="bg-white pb-28 text-primary md:pb-36">
+        <div className="container">
           {/*
             TWO COLUMNS FROM THE EXTRA LARGE BREAKPOINT, FLOWING IN ROWS.
 
@@ -279,8 +293,13 @@ export default async function CafeMenuPage() {
             ))}
           </div>
 
-          {/* Outside the columns, so it stays one line under both of them. */}
-          <p className="font-light">
+          {/*
+            Outside the columns, so it stays one line under both of them, with
+            the same air above it that the sections have between them. It sat
+            tight against the last section for a round, because the sections
+            lost their own bottom margin when the grid took over the spacing.
+          */}
+          <p className="pt-16 font-light md:pt-20">
             <Link
               className="underline decoration-primary/30 underline-offset-4 transition-colors hover:decoration-primary"
               href="/cafe"

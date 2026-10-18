@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import SectionHero from "@/components/shared/section-hero";
 import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
-import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { cn } from "@/lib/utils";
 import { ABOUT_INDEX_QUERYResult } from "@/sanity.types";
@@ -103,8 +103,8 @@ export default async function AboutPage() {
               <div className="absolute inset-0 flex flex-col justify-end gap-2 bg-gradient-to-t from-primary/80 to-transparent p-8">
                 <h2
                   className={cn(
-                    GROUP_HOVER_UNDERLINE,
-                    "w-fit text-xl font-light text-white"
+                    "w-fit text-xl font-light text-white",
+                    HOVER_UNDERLINE
                   )}
                 >
                   {child!.title}

@@ -46,7 +46,7 @@ export function FooterMobileAccordion({
                   service.isActive && (
                     <Link
                       key={index}
-                      className={cn("w-fit", HOVER_UNDERLINE)}
+                      className="w-fit hover:underline"
                       href={`/services/${service.slug}`}
                     >
                       {service.title}
@@ -77,7 +77,7 @@ export function FooterMobileAccordion({
                 .map((page, index) => (
                   <Link
                     key={index}
-                    className={cn("w-fit", HOVER_UNDERLINE)}
+                    className="w-fit hover:underline"
                     href={`/about/${page?.slug}`}
                   >
                     {page?.title}
@@ -99,7 +99,7 @@ export function FooterMobileAccordion({
               {section.links?.map((link, linkIndex) => (
                 <Link
                   key={linkIndex}
-                  className={cn("w-fit", HOVER_UNDERLINE)}
+                  className="w-fit hover:underline"
                   href={link.slug?.current!}
                 >
                   {link.title}
@@ -127,10 +127,7 @@ export function FooterMobileAccordion({
                 .map((link, index) => (
                   <a
                     key={index}
-                    className={cn(
-                      "flex w-fit items-center gap-2",
-                      HOVER_UNDERLINE
-                    )}
+                    className="flex w-fit items-center gap-2 hover:underline"
                     href={link.url!}
                     {...externalLinkProps(link.url!)}
                   >

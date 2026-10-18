@@ -115,7 +115,7 @@ export default function SiteFooter({
                 <Link href="/contact">Contact</Link>
               </h2>
               <a
-                className={cn("flex w-fit items-start gap-2", HOVER_UNDERLINE)}
+                className="flex w-fit items-start gap-2 hover:underline"
                 href={contactInfo?.mapLink!}
                 {...externalLinkProps(contactInfo?.mapLink!)}
               >
@@ -130,20 +130,14 @@ export default function SiteFooter({
               </a>
               <div className="space-y-2">
                 <a
-                  className={cn(
-                    "flex w-fit items-center gap-2",
-                    HOVER_UNDERLINE
-                  )}
+                  className="flex w-fit items-center gap-2 hover:underline"
                   href={`mailto:${contactInfo?.email}`}
                 >
                   <MailIcon size={20} />
                   <span>{contactInfo?.email}</span>
                 </a>
                 <a
-                  className={cn(
-                    "flex w-fit items-center gap-2",
-                    HOVER_UNDERLINE
-                  )}
+                  className="flex w-fit items-center gap-2 hover:underline"
                   href={`tel:${contactInfo?.phone}`}
                 >
                   <PhoneIcon size={20} />
@@ -210,13 +204,7 @@ export default function SiteFooter({
                 <a
                   href={BCORP_PROFILE_URL}
                   {...externalLinkProps(BCORP_PROFILE_URL)}
-                  // The one footer link that was underlined at rest and lost
-                  // it on hover, the inverse of everything else. It sweeps in
-                  // like the rest now.
-                  className={cn(
-                    "absolute left-0 w-fit leading-none",
-                    HOVER_UNDERLINE
-                  )}
+                  className="absolute left-0 w-fit leading-none underline underline-offset-4 hover:no-underline"
                   style={{ top: LEARN_MORE_TOP }}
                 >
                   Learn More
@@ -237,13 +225,17 @@ export default function SiteFooter({
                   SectionNavigation follows, an href where the section has a
                   hub and none where it does not.
                 */}
-                <h2
-                  className={cn(
-                    "w-fit pl-3 font-semibold md:mb-3",
-                    HOVER_UNDERLINE
-                  )}
-                >
-                  <Link href="/services">Services</Link>
+                {/*
+                  The sweep is on the link, not on the h2. The h2 carries pl-3 and
+                  the line is positioned against the padded box, so on the heading
+                  it started 12px to the left of the word. after:left-3 cannot fix
+                  that: it and the shared after:left-0 have the same specificity,
+                  so Tailwind's own order decides and left-0 wins.
+                */}
+                <h2 className="w-fit pl-3 font-semibold md:mb-3">
+                  <Link className={HOVER_UNDERLINE} href="/services">
+                    Services
+                  </Link>
                 </h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {services?.map(
@@ -251,7 +243,7 @@ export default function SiteFooter({
                       service.isActive && (
                         <Link
                           key={index}
-                          className={cn("w-fit", HOVER_UNDERLINE)}
+                          className="w-fit hover:underline"
                           href={`/services/${service.slug}`}
                         >
                           {service.title}
@@ -269,13 +261,17 @@ export default function SiteFooter({
                   the page that exists to be those pages' parent was itself
                   unreachable. Caught by scripts/audit-orphans.js.
                 */}
-                <h2
-                  className={cn(
-                    "w-fit pl-3 font-semibold md:mb-3",
-                    HOVER_UNDERLINE
-                  )}
-                >
-                  <Link href="/about">About</Link>
+                {/*
+                  The sweep is on the link, not on the h2. The h2 carries pl-3 and
+                  the line is positioned against the padded box, so on the heading
+                  it started 12px to the left of the word. after:left-3 cannot fix
+                  that: it and the shared after:left-0 have the same specificity,
+                  so Tailwind's own order decides and left-0 wins.
+                */}
+                <h2 className="w-fit pl-3 font-semibold md:mb-3">
+                  <Link className={HOVER_UNDERLINE} href="/about">
+                    About
+                  </Link>
                 </h2>
                 <div className="hidden flex-col gap-1 pl-3 md:flex">
                   {aboutPages
@@ -283,7 +279,7 @@ export default function SiteFooter({
                     .map((page, index) => (
                       <Link
                         key={index}
-                        className={cn("w-fit", HOVER_UNDERLINE)}
+                        className="w-fit hover:underline"
                         href={`/about/${page?.slug}`}
                       >
                         {page?.title}
@@ -304,7 +300,7 @@ export default function SiteFooter({
                     {group.links?.map((link, linkIndex) => (
                       <Link
                         key={linkIndex}
-                        className={cn("w-fit", HOVER_UNDERLINE)}
+                        className="w-fit hover:underline"
                         href={link.slug?.current!}
                       >
                         {link.title}
@@ -322,10 +318,7 @@ export default function SiteFooter({
                     .map((link, linkIndex) => (
                       <a
                         key={linkIndex}
-                        className={cn(
-                          "flex w-fit items-center gap-2",
-                          HOVER_UNDERLINE
-                        )}
+                        className="flex w-fit items-center gap-2 hover:underline"
                         href={link.url!}
                         {...externalLinkProps(link.url!)}
                       >
@@ -353,7 +346,7 @@ export default function SiteFooter({
             {legalLinks?.map((link, index) => (
               <Link
                 key={index}
-                className={cn("w-fit", HOVER_UNDERLINE)}
+                className="w-fit hover:underline"
                 href={`/legal/${link.slug}`}
               >
                 {link.title}

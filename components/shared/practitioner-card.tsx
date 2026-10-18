@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { HOVER_UNDERLINE } from "@/lib/hover-underline";
+import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { cn } from "@/lib/utils";
 
 /**
@@ -51,7 +51,7 @@ export function PractitionerCard({
       : undefined;
 
   return (
-    <Link href={`/about/our-team/${person.slug}`} className="block">
+    <Link href={`/about/our-team/${person.slug}`} className="group block">
       <Card className="flex min-h-[580px] w-full flex-col rounded-none">
         <div className="h-[300px]">
           {person.photo?.url ? (
@@ -81,13 +81,13 @@ export function PractitionerCard({
           ) : null}
         </CardHeader>
         <CardContent>
-          <span
-            className={cn(
-              "flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all",
-              HOVER_UNDERLINE
-            )}
-          >
-            {label}
+          {/*
+            The line goes on the words, not on the row. This span is py-4,
+            so after:top-[110%] measured off the padded box and dropped the
+            line well below the text, the same bug as Our Team's Learn More.
+          */}
+          <span className="flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all">
+            <span className={GROUP_HOVER_UNDERLINE}>{label}</span>
             <ChevronRight className="h-4 w-4 shrink-0" aria-hidden="true" />
           </span>
         </CardContent>

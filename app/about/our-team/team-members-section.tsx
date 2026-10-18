@@ -185,12 +185,11 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
               <CardContent>
                 <Link
                   href={practitionerHref(teamMember.name)}
-                  className={cn(
-                    "flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all",
-                    HOVER_UNDERLINE
-                  )}
+                  className="group/learn flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all"
                 >
-                  Learn More
+                  <span className="after:ease-[cubic-bezier(.86,0,.07,1)] relative after:absolute after:left-0 after:top-[110%] after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-current after:transition-transform after:duration-500 group-hover/learn:after:origin-bottom-left group-hover/learn:after:scale-x-100">
+                    Learn More
+                  </span>
                   <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />
                 </Link>
               </CardContent>
@@ -241,12 +240,11 @@ export default function TeamMembersSection({
                 <CardContent className="relative">
                   <Link
                     href={practitionerHref(teamMember.name)}
-                    className={cn(
-                      "flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all",
-                      HOVER_UNDERLINE
-                    )}
+                    className="group/learn flex w-fit flex-1 items-center justify-between py-4 font-medium transition-all"
                   >
-                    Learn More
+                    <span className="after:ease-[cubic-bezier(.86,0,.07,1)] relative after:absolute after:left-0 after:top-[110%] after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-current after:transition-transform after:duration-500 group-hover/learn:after:origin-bottom-left group-hover/learn:after:scale-x-100">
+                      Learn More
+                    </span>
                     <ChevronRight className="h-4 w-4 shrink-0 transition-transform duration-200" />
                   </Link>
                 </CardContent>

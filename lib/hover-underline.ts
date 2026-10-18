@@ -41,3 +41,14 @@ export const HOVER_UNDERLINE_INLINE = `inline-block ${HOVER_UNDERLINE}`;
  */
 export const GROUP_HOVER_UNDERLINE =
   "relative after:absolute after:left-0 after:top-[110%] after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-[cubic-bezier(.86,0,.07,1)] group-hover:after:origin-bottom-left group-hover:after:scale-x-100";
+
+/**
+ * The accordion trigger's variant, keyed to `group/accordion`.
+ *
+ * A trigger is a tall padded row, so the line has to sit on a span around the
+ * label rather than on the trigger itself, and the span has to watch the
+ * trigger rather than itself. The named group keeps it from reacting to some
+ * other `group` further up the tree, which a card or a row often is.
+ */
+export const GROUP_ACCORDION_UNDERLINE =
+  "relative after:absolute after:left-0 after:top-[110%] after:h-px after:w-full after:origin-bottom-right after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:ease-[cubic-bezier(.86,0,.07,1)] group-hover/accordion:after:origin-bottom-left group-hover/accordion:after:scale-x-100";

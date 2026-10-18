@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ArrowRightIcon, SearchIcon } from "lucide-react";
 
-import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
+import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { cn } from "@/lib/utils";
 
@@ -116,8 +116,8 @@ export default function NotFound() {
               >
                 <span
                   className={cn(
-                    GROUP_HOVER_UNDERLINE,
-                    "flex w-fit items-center gap-2 text-lg font-medium"
+                    "flex w-fit items-center gap-2 text-lg font-medium",
+                    HOVER_UNDERLINE
                   )}
                 >
                   {hub.name}

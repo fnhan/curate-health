@@ -7,7 +7,7 @@ import {
   CafeIntroSection,
   CafeQuoteSection,
 } from "@/components/layout/cafe-page/cafe-intro-and-quote";
-import { CafeMenuDownloadSection } from "@/components/layout/cafe-page/cafe-menu-download";
+import { CafeMenuBand } from "@/components/layout/cafe-page/cafe-menu-band";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
@@ -89,7 +89,13 @@ export default async function CafePage() {
         proseClassName="font-poppins prose-headings:font-poppins prose-p:font-poppins"
       />
       <CafeHours siteSettings={siteSettings} />
-      <CafeMenuDownloadSection
+      {/*
+        The menu band, directly above the Visit the cafe band, at Frank's
+        request on 2026-10-18. It replaces the What we're serving today card
+        and the PDF download that sat in it, so there is one way into the
+        menu rather than three. It takes that card's own Studio copy.
+      */}
+      <CafeMenuBand
         data={menuDownloadSection}
         menuPath={hasMenuPage ? CAFE_MENU_PATH : null}
       />

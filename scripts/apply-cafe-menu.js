@@ -304,12 +304,18 @@ const SECTIONS = [
      * "to reduce sections". Both are chilled, spooned out of a glass and
      * sweetened with maple, so they belong together.
      *
-     * "Desserts" rather than "Jars" or "Chilled Desserts", which were the two
-     * alternatives. It is the word somebody searching asks with, and this page
-     * exists to be found and quoted. The other two describe the serving rather
-     * than the thing.
+     * **Not "Desserts".** That was the first name and Frank rejected it on
+     * 2026-10-18: "this gives the impression unhealthy. These are protein
+     * packed, so should be able to eat for breakfast, lunch or dinner". He is
+     * right, and it is the same mistake as putting the protein muffins under
+     * a sweets heading: the word tells a reader what meal the food is for,
+     * and these are not an after-dinner course.
+     *
+     * "Jars" is what they literally are, both built and served in a glass. It
+     * carries no mealtime and no indulgence with it. The cost is search: a
+     * reader looking for chia pudding finds the item, not the heading.
      */
-    title: "Desserts",
+    title: "Jars",
     items: [
       {
         // No weight, by Frank on 2026-10-18, so it reads as one line. The

@@ -47,50 +47,36 @@ type MenuSection = NonNullable<
 >[number];
 
 /**
- * Deal the sections into two columns: as even as they go, and when they cannot
- * be even, the left one longer.
+ * Cut the section list in two, left column then right, as evenly as that cut
+ * allows, and never with the right column longer.
  *
- * Frank's rule, 2026-10-18: "make sure it's balanced as best as possible, but
- * if one needs a bit more, make it the left". CSS `columns-2` decides the split
- * itself and leans whichever way it likes, so the decision is made here and the
- * columns are real elements.
+ * **THE MENU'S ORDER IS THE CONSTRAINT. BALANCE IS WHAT IS OPTIMISED INSIDE
+ * IT.** Frank, 2026-10-18: "Please preserve all drinks first then food, like
+ * how the original pdf had it." So this is a single cut point, and reading down
+ * the left column and then down the right gives the menu in its own order.
  *
- * WHY THIS IS NOT A SINGLE SPLIT POINT
+ * THE VERSION IN BETWEEN, AND WHY IT IS GONE
  *
- * The first version cut the list in two at one index, which is the obvious
- * reading of "two columns" and is also the reason it was 437px out. With one
- * cut there are only ten arrangements to choose from and none of them was even:
- * the cut before Smoothies left the right column 512px ahead, and the cut after
- * it left the left column 437px ahead. There was nothing in between to pick.
+ * A middle version chose a column per section rather than a cut point, which
+ * opens 2^n arrangements and balanced the two to 16px. It also scattered the
+ * menu: Energy Bars ended up at the foot of the drinks column and Kombucha at
+ * the head of the food one. That is what he is rejecting here, and it is worth
+ * recording that near-perfect balance was exactly what produced it. Balance was
+ * never the point on its own.
  *
- * Choosing which column each section goes in opens 2^n arrangements instead, so
- * a near-even one almost always exists. Ten sections is 1024 to try, which is
- * nothing, and the page is static.
+ * So: of the cuts that leave the left column at least as tall as the right,
+ * take the closest to even. Because the running total only grows, that is the
+ * first cut that puts half or more of the height on the left.
  *
- * WHY IT IS NOT PURELY THE MOST EVEN ONE
- *
- * The most even arrangement is often a scatter. Left to itself this one put
- * Kombucha alone at the top of the left column with Hot and Iced over on the
- * right, balanced to 32px and opening on the wrong thing. So two things rein
- * it in.
- *
- * **The menu's first section always leads the left column.** A reader starting
- * at the top left has to meet the top of the menu, whatever the arithmetic
- * prefers. This is a constraint rather than a preference.
- *
- * **Near-even beats dead even when it groups better.** It takes the most even
- * arrangement, then accepts any within TOLERANCE of it that holds the sections
- * in fewer contiguous runs, and prefers the evenest of those. One run each side
- * is a single clean cut.
- *
- * Order within each column is the menu's own, always.
+ * The gap this leaves is whatever the section heights allow, and with ten
+ * chunky sections it is a few hundred pixels rather than a few tens. That is
+ * the price of the order, and the order is the thing he asked for.
  */
 function splitIntoColumns(sections: MenuSection[]) {
   /*
    * Rendered heights in pixels, measured off the page at 1680 rather than
-   * guessed. They only have to rank the sections against each other, so a
-   * section out by a few pixels cannot change the answer; one out by half its
-   * height could.
+   * guessed. They only have to rank the cuts against each other, so a section
+   * out by a few pixels cannot move the cut; one out by half its height could.
    */
   const HEADING = 110;
   const NOTE = 28;
@@ -98,12 +84,6 @@ function splitIntoColumns(sections: MenuSection[]) {
   const INGREDIENT_LINE = 24;
   const CHARS_PER_LINE = 60;
   const BETWEEN_SECTIONS = 80;
-
-  /** How much unevenness is worth trading for a tidier arrangement. */
-  const TOLERANCE = 60;
-
-  /** Above this, 2^n stops being free and it falls back to one split point. */
-  const BRUTE_FORCE_LIMIT = 18;
 
   const height = (section: MenuSection) =>
     HEADING +
@@ -116,60 +96,19 @@ function splitIntoColumns(sections: MenuSection[]) {
     }, 0);
 
   const heights = sections.map(height);
-  const total = heights.reduce((a, b) => a + b, 0);
-  const n = sections.length;
+  const half = heights.reduce((a, b) => a + b, 0) / 2;
 
-  const take = (mask: number, right: boolean) =>
-    sections.filter((_, i) => Boolean(mask & (1 << i)) === right);
-
-  if (n > BRUTE_FORCE_LIMIT) {
-    // One split point, the first that puts half or more in the left column.
-    let running = 0;
-    let at = n;
-    for (let i = 0; i < n; i += 1) {
-      running += heights[i];
-      if (running >= total / 2) {
-        at = i + 1;
-        break;
-      }
+  let running = 0;
+  let at = sections.length;
+  for (let i = 0; i < sections.length; i += 1) {
+    running += heights[i];
+    if (running >= half) {
+      at = i + 1;
+      break;
     }
-    return [sections.slice(0, at), sections.slice(at)] as const;
   }
 
-  /** Contiguous blocks in the arrangement. One means a single clean cut. */
-  const runs = (mask: number) => {
-    let count = 0;
-    for (let i = 0; i < n; i += 1) {
-      const side = mask & (1 << i);
-      const previous = i > 0 ? mask & (1 << (i - 1)) : -1;
-      if (i === 0 || Boolean(side) !== Boolean(previous)) count += 1;
-    }
-    return count;
-  };
-
-  type Option = { mask: number; gap: number; runs: number };
-  const options: Option[] = [];
-
-  for (let mask = 0; mask < 1 << n; mask += 1) {
-    // The menu's first section leads the left column, always.
-    if (mask & 1) continue;
-
-    let right = 0;
-    for (let i = 0; i < n; i += 1) {
-      if (mask & (1 << i)) right += heights[i];
-    }
-    const gap = total - right - right;
-    // The left column must never be the shorter one.
-    if (gap < 0) continue;
-    options.push({ mask, gap, runs: runs(mask) });
-  }
-
-  const evenest = Math.min(...options.map((option) => option.gap));
-  const best = options
-    .filter((option) => option.gap <= evenest + TOLERANCE)
-    .sort((a, b) => a.runs - b.runs || a.gap - b.gap)[0];
-
-  return [take(best.mask, false), take(best.mask, true)] as const;
+  return [sections.slice(0, at), sections.slice(at)] as const;
 }
 
 /** One section of the menu: its heading, its standing note, and its items. */
@@ -345,11 +284,10 @@ export default async function CafeMenuPage() {
             TWO COLUMNS FROM THE EXTRA LARGE BREAKPOINT, AT FRANK'S REQUEST
             2026-10-18, SO A WIDE WINDOW SCROLLS LESS.
 
-            Two real columns rather than CSS `columns-2`, because he also asked
-            for the longer column to be the left one and CSS decides that for
-            itself. It had put Smoothies, the tallest section, on the right,
-            which left the right running 512px past the left. splitIntoColumns
-            makes that decision instead; see its note.
+            Two real columns rather than CSS `columns-2`, which chooses the cut
+            itself and leans whichever way it likes. splitIntoColumns makes that
+            decision, keeping the menu's own order and the left column the
+            taller of the two; see its note.
 
             A grid of two cells, not a grid of ten: ten cells would lay the
             sections out in rows and make every row as tall as its tallest

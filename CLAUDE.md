@@ -1446,11 +1446,26 @@ adaptive settings need to split it to 2 for any reason". Measured at 1680,
 1280 and 375, every heading is one line today, the widest being "Kombucha on
 Tap" at 211px in a 311px phone container.
 
-**The PDF download button is gone from /cafe**, by Frank on 2026-10-18 now
-that the page exists. It is the **fallback** rather than a second button: it
-appears only when there is no menu page to link to, because that block with no
-action at all is worse than a download. The file is untouched in Sanity, so
-switching the menu document off puts the download straight back.
+**/cafe has one way into the menu, a band above the Visit the cafe band.**
+`components/layout/cafe-page/cafe-menu-band.tsx`, chosen by Frank on
+2026-10-18 from three drafts: dark green filling sage on hover, the whole
+section a single link because he asked for "the entire section being a
+clickable button". White on sage is the house hover, the same as the bar under
+the Program Timeline, and the resting state is the high contrast one.
+
+**It replaced both of the other menu calls to action.** The "What we're
+serving today" card is deleted, and the PDF download button with it. The band
+reads that card's own Studio fields, `cafePage.menuDownloadSection.headline`
+and `.description`, so the copy stayed editable and no new field was needed.
+The PDF itself is untouched in Sanity and is now linked from nowhere.
+
+**The jars section is not called Desserts.** That was the first name and he
+rejected it: "this gives the impression unhealthy. These are protein packed, so
+should be able to eat for breakfast, lunch or dinner". The heading tells a
+reader what meal the food is for, and these are not an after-dinner course. It
+is **"Jars"**, which is what they literally are and carries no mealtime with
+it. The cost is search: somebody looking for chia pudding finds the item, not
+the heading.
 
 **Three more changes the same day.** Cranberry kombucha came off and **Violet
 Lemongrass** replaced it. Two muffins and a no-bake cheesecake went on, from
@@ -1517,28 +1532,25 @@ This is not the layout he rejected twice on the prose band. There, balancing
 the columns meant cutting a sentence across the gutter; a menu section is a
 discrete block that moves whole or not at all.
 
-**The longer column is always the left one, and the two are as even as they
-go.** His rule, 2026-10-18: "balanced as best as possible, but if one needs a
-bit more, make it the left". CSS `columns-2` decides the split itself and
-leans whichever way it likes, so `splitIntoColumns` in the page makes the
-decision and the columns are real elements in a two cell grid.
+**The menu's own order is the constraint, and balance is optimised inside
+it.** Frank, 2026-10-18: "Please preserve all drinks first then food, like
+how the original pdf had it." So the list is cut once, and reading down the
+left column and then down the right gives the menu in its own order. Of the
+cuts that leave the left column at least as tall as the right, it takes the
+closest to even, which is the first cut putting half or more of the height on
+the left.
 
-**It is not a single split point, and that was the first version's mistake.**
-Cutting the list in two at one index is the obvious reading of "two columns"
-and it is also why it was 437px out: with one cut there are only ten
-arrangements and none of them was even. The cut before Smoothies left the
-right column 512px ahead, the cut after it left the left 437px ahead, and
-there was nothing in between to choose. Choosing a column per section opens
-2^n arrangements instead, which is 1024 to try and free on a static page.
+**That cut lands exactly on the drinks and food line**, six drink sections
+left at 2090px and four food sections right at 1520px. 570px apart, which is
+what the section heights allow: cutting one earlier gets within 344px and puts
+the right column ahead, which breaks the other rule.
 
-**Two things rein the arithmetic in.** The most even arrangement is often a
-scatter: left to itself it balanced to 32px by putting Kombucha alone at the
-top of the left column with Hot and Iced over on the right, so the page opened
-on the wrong thing. So **the menu's first section always leads the left
-column**, as a constraint rather than a preference, and an arrangement within
-60px of the evenest wins if it holds the sections in fewer contiguous runs.
-Measured after: left 1813px, right 1797px, 16px apart, opening on Hot.
-
+**A version in between chose a column per section rather than a cut point.**
+That opens 2^n arrangements and balanced the two to 16px. It also scattered
+the menu, putting Energy Bars at the foot of the drinks column and Kombucha at
+the head of the food one, and that is what he rejected. Worth recording that
+**near-perfect balance is what produced the scatter**: balance was never the
+point on its own. Do not reintroduce it.
 **A grid of two cells, not of ten.** Ten cells lays the sections out in rows
 and makes every row as tall as its tallest section, which leaves holes.
 

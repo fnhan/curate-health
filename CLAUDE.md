@@ -2089,27 +2089,21 @@ same bare url as before, byte for byte. The feature is dormant until somebody
 drags a frame, and live the moment they do. That is what lets it go on every
 photograph at once.
 
-**Wired so far**: `AlternatingSections`, which covers the section photographs
-on /cafe, /about/our-story, /about/mission-and-values, /about/sustainability,
-the blog posts, the treatment pages and the lifestyle program; `SectionHero`,
-which covers /services, /products and /about; and the /cafe/menu hero. The
-GROQ plumbing is on 43 projections, so the remaining call sites are a
-`<SanityImage>` swap each, not a query change.
+**Every Sanity photograph on the site now honours it**, which is the standing
+rule Frank set on 2026-10-18: "whenever we crop or hotspot any photo
+whatsoever in Sanity, it doesn't get ignored on page". 24 more call sites
+across 20 files moved onto `SanityImage`, and the `{asset->}` projections
+gained `crop` and `hotspot`, which they had been dropping.
 
-**Half the image fields had no crop tool in the Studio at all**, which is the
-other half of this and was found when Frank went looking for it: "I don't see
-the option to go in and crop images". Sanity only draws the crop and hotspot
-editor when the field says `options: { hotspot: true }`, and 35 image fields
-across 12 schemas never had it, `cafePage` among them. So there was no way to
-crop those photographs whatever the front end did with the result. Added
-everywhere.
+**`fill` images get the crop rectangle and no box.** A `fill` image takes its
+size from its container, which the component cannot know, so
+`croppedImageUrl` applies the Studio's rectangle and leaves `object-cover` to
+fit the result, exactly as before.
 
-**It does not touch `schema.json` or the generated types.** `hotspot` is a
-Studio option rather than part of the content shape, so `sanity schema
-extract` records nothing and regenerating only churns the type unions. The
-run after this one moved 5,537 lines with a net change of zero; both generated
-files were restored from HEAD.
-
+**Not every `<Image>` is a Sanity photograph.** The circle text on the home
+page is a local import and stays on `next/image`; there is nothing in the
+Studio to crop. A sweep over `<Image>` tags will catch it, and TypeScript is
+what says so, since a static import is not a url.
 **`scripts/audit-image-framing.js` is the proof.** It records every image url
 on every page in the sitemap, and compares. Take the baseline before the
 change, with `--save`, from a build that does not have it.

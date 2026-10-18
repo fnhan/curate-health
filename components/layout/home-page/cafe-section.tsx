@@ -1,8 +1,8 @@
-import Image from "next/image";
-
 import { PortableText } from "@portabletext/react";
 import HoverLink from "components/shared/hover-link";
 import { CAFE_QUERYResult } from "sanity.types";
+
+import { SanityImage } from "@/components/shared/sanity-image";
 
 export default function CafeSection({
   cafeSection,
@@ -18,8 +18,9 @@ export default function CafeSection({
     <section>
       <div className="relative">
         <div className="aspect-[16/12] min-h-[500px] w-full sm:aspect-[16/10] md:aspect-[16/8]">
-          <Image
+          <SanityImage
             fill
+            source={cafeImage}
             src={cafeImage?.asset?.url!}
             alt={cafeImage?.alt ?? ""}
             className="object-cover object-top"

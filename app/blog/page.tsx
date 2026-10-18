@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import BlogAuthorByline, {
   blogAuthorShouldRender,
 } from "@/components/shared/blog-author-byline";
+import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Card,
   CardDescription,
@@ -65,8 +65,9 @@ export default async function BlogPage() {
                 aria-hidden="true"
                 className="block"
               >
-                <Image
+                <SanityImage
                   sizes="(min-width: 1536px) 30vw, (min-width: 768px) 45vw, 90vw"
+                  source={post.mainImage}
                   src={post.mainImage?.asset?.url || ""}
                   alt={post.mainImage?.alt ?? ""}
                   width={300}

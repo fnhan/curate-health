@@ -373,10 +373,14 @@ export const PRODUCT_BY_SLUG_QUERY = groq`*[_type == "product" && slug.current =
   description,
   image {
     asset->,
+    crop,
+    hotspot,
     alt
   },
   banner {
     asset->,
+    crop,
+    hotspot,
     alt
   },
   accordioninfo[] {
@@ -515,7 +519,9 @@ export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pa
  heroSection{
    heroImage{
      image{
-       asset->
+       asset->,
+       crop,
+       hotspot,
      },
      alt
    }
@@ -927,6 +933,8 @@ export const GET_ALL_POSTS_QUERY = groq`*[_type == "post" && published == true] 
   },
   mainImage {
     asset->,
+    crop,
+    hotspot,
     alt
   },
 } | order(publishedAt desc)`;
@@ -1003,7 +1011,9 @@ export const CAFE_PAGE_QUERY = groq`*[_type == "cafePage" && pageActive == true]
  heroSection{
    heroImage{
      image{
-       asset->
+       asset->,
+       crop,
+       hotspot,
      },
      alt
    }

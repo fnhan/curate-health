@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 
 import HoverLinkVariation from "@/components/shared/hover-link-variation";
+import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Accordion,
   AccordionContent,
@@ -237,7 +237,7 @@ export default function ServiceLifestyleContent({
             </div>
           </div>
           <div className="flex justify-center md:justify-end">
-            <Image
+            <SanityImage
               sizes="(min-width: 1536px) 545px, (min-width: 768px) 320px, 256px"
               className="size-[256px] rounded-full object-cover md:size-[320px] 2xl:size-[545px]"
               width={545}
@@ -489,7 +489,7 @@ export default function ServiceLifestyleContent({
       <section className="bg-platinum py-16 text-primary md:py-24">
         <div className="container flex flex-col items-center gap-4 md:gap-8 md:py-8">
           <div className="size-20 md:size-32">
-            <Image
+            <SanityImage
               src={block_7_image!}
               alt={"Curate Lifestyle Quote"}
               width={0}
@@ -509,7 +509,7 @@ export default function ServiceLifestyleContent({
       <section className="bg-white text-primary">
         <div className="container flex flex-col items-end gap-x-12 md:flex-row">
           <div className="hidden flex-1 md:block">
-            <Image
+            <SanityImage
               src={block_9_image!}
               alt={"How to Join"}
               width={0}
@@ -596,8 +596,9 @@ export default function ServiceLifestyleContent({
           {mainMember && mainMember.length > 0 && (
             <Card className="flex h-full w-full flex-col rounded-none md:max-w-screen-md md:flex-row xl:max-w-screen-lg">
               <div className="h-[500px]">
-                <Image
+                <SanityImage
                   className="h-full w-full object-cover"
+                  source={mainMember[0]?.image}
                   src={mainMember[0]?.image?.asset?.url ?? ""}
                   alt={mainMember[0]?.name ?? ""}
                   width={0}
@@ -646,8 +647,9 @@ export default function ServiceLifestyleContent({
                 className="flex h-full flex-col rounded-none"
               >
                 <div className="h-[300px]">
-                  <Image
+                  <SanityImage
                     className="h-full w-full object-cover"
+                    source={teamMember.image}
                     src={teamMember.image?.asset?.url ?? ""}
                     alt={teamMember.name ?? ""}
                     width={0}

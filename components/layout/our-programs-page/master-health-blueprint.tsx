@@ -1,5 +1,4 @@
-import Image from "next/image";
-
+import { SanityImage } from "@/components/shared/sanity-image";
 import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
 
 const MasterHealthBlueprint = ({
@@ -31,8 +30,9 @@ const MasterHealthBlueprint = ({
           </div>
           <div className="relative">
             <div className="absolute -top-14 right-0 h-14 w-3/4 bg-our-programs-border-3"></div>
-            <Image
+            <SanityImage
               sizes="(min-width: 768px) 700px, 100vw"
+              source={masterHealthBlueprint?.image}
               src={masterHealthBlueprint?.image?.asset?.url!}
               alt={masterHealthBlueprint?.image?.alt ?? ""}
               height={550}

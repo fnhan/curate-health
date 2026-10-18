@@ -1,7 +1,6 @@
-import Image from "next/image";
-
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { PractitionerGrid } from "@/components/shared/practitioner-card";
+import { SanityImage } from "@/components/shared/sanity-image";
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
 import {
@@ -124,8 +123,9 @@ export default function TreatmentContent({
       ) : null}
 
       <section className={`relative h-[calc(100vh-100px)]`}>
-        <Image
+        <SanityImage
           sizes="100vw"
+          source={ctaBg}
           src={ctaBg?.asset?.url!}
           alt={ctaBgAlt!}
           width={1440}

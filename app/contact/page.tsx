@@ -145,11 +145,18 @@ export default async function ContactPage() {
                   <PrinterIcon className="h-4 w-4" />
                   <p className="text-sm text-white/80 md:text-base">Fax</p>
                 </div>
-                <div className="pl-8">
+                {/*
+                  gap-2 and an inline-block anchor, so the sweep clears the
+                  line below it. The hairline sits at 110% of the link, and
+                  "(Same as Phone)" began immediately under it, so the two
+                  overlapped. The anchor also needs a display for w-fit to
+                  mean anything.
+                */}
+                <div className="flex flex-col gap-2 pl-8">
                   <a
                     href={`tel:${contactInfo?.phone}`}
                     className={cn(
-                      "w-fit not-italic md:text-3xl",
+                      "inline-block w-fit not-italic md:text-3xl",
                       HOVER_UNDERLINE
                     )}
                   >

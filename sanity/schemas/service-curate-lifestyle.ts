@@ -110,6 +110,7 @@ export default defineType({
       name: "block_2_image",
       title: "Block 2 Image",
       type: "image",
+      options: { hotspot: true },
       validation: (Rule) => Rule.required().error("An image is required"),
     }),
 
@@ -152,6 +153,7 @@ export default defineType({
       name: "block_4_image",
       title: "Block 4 Image",
       type: "image",
+      options: { hotspot: true },
     }),
 
     defineField({
@@ -187,6 +189,7 @@ export default defineType({
       name: "block_5_image",
       title: "Block 5 Image",
       type: "image",
+      options: { hotspot: true },
     }),
 
     defineField({
@@ -217,6 +220,7 @@ export default defineType({
               name: "image",
               title: "Image",
               type: "image",
+              options: { hotspot: true },
               validation: (Rule) =>
                 Rule.required().error("An image is required"),
             },
@@ -243,12 +247,14 @@ export default defineType({
       name: "block_7_image",
       title: "Block 7 Image",
       type: "image",
+      options: { hotspot: true },
     }),
 
     defineField({
       name: "block_9_image",
       title: "Block 9 Image",
       type: "image",
+      options: { hotspot: true },
     }),
 
     defineField({
@@ -284,6 +290,7 @@ export default defineType({
       name: "block_11_image",
       title: "Block 11 Image",
       type: "image",
+      options: { hotspot: true },
     }),
 
     defineField({
@@ -343,6 +350,7 @@ export default defineType({
               name: "image",
               title: "Image",
               type: "image",
+              options: { hotspot: true },
             },
             {
               name: "description",

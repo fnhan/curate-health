@@ -2096,6 +2096,20 @@ which covers /services, /products and /about; and the /cafe/menu hero. The
 GROQ plumbing is on 43 projections, so the remaining call sites are a
 `<SanityImage>` swap each, not a query change.
 
+**Half the image fields had no crop tool in the Studio at all**, which is the
+other half of this and was found when Frank went looking for it: "I don't see
+the option to go in and crop images". Sanity only draws the crop and hotspot
+editor when the field says `options: { hotspot: true }`, and 35 image fields
+across 12 schemas never had it, `cafePage` among them. So there was no way to
+crop those photographs whatever the front end did with the result. Added
+everywhere.
+
+**It does not touch `schema.json` or the generated types.** `hotspot` is a
+Studio option rather than part of the content shape, so `sanity schema
+extract` records nothing and regenerating only churns the type unions. The
+run after this one moved 5,537 lines with a net change of zero; both generated
+files were restored from HEAD.
+
 **`scripts/audit-image-framing.js` is the proof.** It records every image url
 on every page in the sitemap, and compares. Take the baseline before the
 change, with `--save`, from a build that does not have it.

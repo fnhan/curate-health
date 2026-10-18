@@ -101,6 +101,7 @@ export default defineType({
                   name: "image",
                   title: "Image",
                   type: "image",
+                  options: { hotspot: true },
                 },
                 {
                   name: "alt",

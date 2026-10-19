@@ -2258,6 +2258,98 @@ already matched in length; nothing was added or hidden to make them.
 **A programme that is not a link gets no sweep**, because the `group` lives on
 the link. That is correct rather than a gap: there is nothing to click.
 
+### The products carousel, and the TENS photograph. 2026-10-18
+
+**The product titles were sitting under the photographs**, on the home page
+carousel, at every width from 1400 up. Frank asked for it fixed and for it not
+to come back "on any aspect ratio, whether it's desktop, mobile, or tablet".
+
+**`object-contain` was doing nothing to stop it, and that is the thing to
+know.** The box was `2xl:h-64`, 256px, and the image was an ordinary
+`<Image width={350} height={350}>`. `object-contain` governs how the file sits
+inside the element; it says nothing about the element's own size, so the
+`<img>` kept its natural height and simply ran past the box. Measured before
+the fix at 1700: image heights 272 to 378 in a 256 box, four of the five cards
+overlapping the heading by 23 to 45px.
+
+It is a `fill` image in a box with a definite height now, `h-56 md:h-64
+2xl:h-72`. `fill` is absolutely positioned to the box, so the picture is
+scaled to fit inside it whatever the source ratio and the row below cannot
+move. The height is set at every breakpoint rather than only at `2xl`, which
+also lines the five images up with each other.
+
+Measured after, on a local build, image against box and the gap to the title:
+
+| viewport | box | overflowing | gap |
+| --- | --- | --- | --- |
+| 375 | 224 | 0 of 5 | 16 |
+| 768 | 256 | 0 of 5 | 16 |
+| 1024 | 256 | 0 of 5 | 16 |
+| 1440 | 288 | 0 of 5 | 16 |
+| 1700 | 288 | 0 of 5 | 16 |
+
+The gap is the `mb-4` and nothing else, which is the point: with `fill` there
+is no arithmetic left that can go wrong.
+
+**`2xl` is 1400 on this project, not 1536.** The old `sizes` named 1536px, a
+breakpoint `tailwind.config.js` does not have, so that branch never matched
+where it was meant to. The new values were read off the rendered box at each
+width, 287 at 375, 552 at 640, 325 at 768, 422 at 1400 and 427 beyond, and
+each one sits just above its widest measurement, per the CH-007 note that a
+hint which is too small is worse than none.
+
+**Measure a carousel after it settles.** Embla recomputes on resize, and a
+reading taken 400ms after a viewport change gave box widths of 85px at 375 and
+781px at 1024, both nonsense. At 1400ms they were stable. A related trap: at
+`innerWidth` 1024 the media queries see 1009, because the scrollbar is outside
+the layout viewport, so the `lg` rules do not apply at the width you think you
+are testing.
+
+**The carousel honours a Studio crop now**, which it did not: the query has
+carried `imageSource` since the crop work, and this call site was still
+reading the flattened url. It is `SanityImage` like the rest.
+
+#### The HiDow XPD12, cut out
+
+The photograph on the page was a stock stimulator. Frank sent a photograph of
+the unit Curate actually sells and asked for the background out and the
+shadows gone, to match the other product images. (He said PDF; the house
+format is a transparent PNG, which is what the other five are and what this
+is.)
+
+`scripts/swap-tens-photo.js` uploads the finished file and repoints the
+product. It does not make it. The cutout was done on a canvas in the browser,
+as the B Corp composite and the Outdoor Pilates crops were, because this
+project has no image library.
+
+Three things about the method, in case it is needed again:
+
+- **Flood fill from the frame edges, never a global threshold.** The grey
+  print on the electrode pads and the lit screen are as bright as parts of the
+  shadow, so a threshold would have punched holes through the product. Nothing
+  interior is reachable from the edge, so the fill cannot.
+- **The backdrop the product encloses needs its own seed.** The loop of cable
+  at the bottom right wraps a patch of the sheet, and the first pass left it
+  as a white blob. It is found by labelling what the fill missed, kept only
+  where it is as bright as the sheet, then flooded by the same rule as the
+  edges so the shadow running off it goes too.
+- **Unmix the white out of the partly transparent rim.** Otherwise every edge
+  keeps the white it was photographed against: invisible on this white card,
+  and a pale fringe the first time somebody puts it on a dark background.
+  Measured after, the rim's mean luminance is 35.8, so there is none.
+
+The cutout is 1000x648 RGBA, trimmed to the content. The shadows are gone
+rather than faded: the sheet reads 243 to 253 and the shadow bottoms out near
+231, well above the cutoff, so the whole of it clears.
+
+**The alt text was written from the photograph**, per CH-028. The old one
+described a generic stimulator with "multiple electrode pads". Transaction on
+the product document after
+`sanity-backup-2026-10-18-before-tens-photo-documents.tar.gz`.
+
+The superseded `Tens MachineTransparent.png` stays in the library,
+unreferenced, per CH-117.
+
 ### Share cards
 
 **Every page carries a share image, since 2026-09-18**, apart from `/about` and `/products`, which need a picture chosen in the Studio. Nine pages had none, all built this year: the six practitioner pages, `/blog`, `/about` and `/products`. A shared link to any of them showed a bare card.

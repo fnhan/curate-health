@@ -2506,6 +2506,28 @@ accepted, 200 and "Check your inbox".
 Formspree form for this and set `NEWSLETTER_FALLBACK_ENDPOINT` in the Vercel
 project. Until then a refused address only reaches the Vercel log.
 
+**The confirmation notice is over the whole page, for ten seconds.** Frank,
+2026-10-18: people were missing it in the bottom right corner.
+`components/shared/confirmation-overlay.tsx`, used by the newsletter success
+only; the failure notice stays an ordinary toast.
+
+**It can always be closed, and that is not a detail to trim.** A panel over
+the whole page that cannot be dismissed for ten seconds traps anyone who has
+already read it, and traps a keyboard or screen reader user worst of all. So
+ten seconds is a maximum rather than a minimum: Escape, the close button and
+the backdrop each end it at once. Focus moves to the close button when it
+opens and returns where it was on close, and the page behind cannot scroll
+while it is up.
+
+Measured on a local build: visible for 10,048ms, scrolling restored after,
+all three ways of closing it work, and the panel is 343x292 inside a 375px
+phone with room on every side.
+
+**A ten second window outlasts a tool round trip**, so a screenshot taken
+after the call that opens it catches an empty page and reads as a broken
+overlay. Hold the timer open to photograph it, as with the lazy footer image
+in the B Corp note.
+
 **What happens to somebody who never confirms.** Systeme.io keeps them as a
 pending contact, and per their own glossary a pending contact is excluded
 from broadcasts and sequences and may be auto-purged after 14 or 30 days. So

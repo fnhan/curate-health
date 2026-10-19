@@ -80,7 +80,22 @@ const ThreePaths = ({ program }: { program: OUR_PROGRAMS_QUERY_RESULT }) => {
           </p>
         </div>
       </div>
-      <div className="container flex overflow-auto text-primary md:overflow-hidden lg:justify-center">
+      {/*
+        overflow-x-auto at EVERY width, where this used to turn into
+        overflow-hidden from md up.
+
+        The table is three 325px columns plus a label column, about 1,075px,
+        so it does not fit until roughly xl. From md to xl the old rule
+        clipped it with no way to scroll, which took the third programme off
+        the page entirely: Frank reported exactly that on 2026-10-19. Below md
+        it scrolled, so the bug was invisible on a phone and only showed on a
+        tablet or a small window.
+
+        A table is one of the three things CLAUDE.md allows to be wider than
+        the screen, each inside its own overflow-x-auto container, so scrolling
+        it is the house answer rather than shrinking the columns.
+      */}
+      <div className="container flex overflow-x-auto text-primary lg:justify-center">
         <table className="border-collapse border-spacing-0">
           <thead>
             <tr>

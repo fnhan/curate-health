@@ -190,8 +190,24 @@ function capture(html, status) {
       const widths = [...ss.matchAll(/\s(\d+)w(?:,|$)/g)]
         .map((x) => x[1])
         .join("/");
+      /*
+       * The class and the inline style, because where a photograph is framed
+       * lives there and nowhere else. object-position decides which part of
+       * an `object-cover` image survives the crop, and it is set either by a
+       * Tailwind class or, for a Studio hotspot, by an inline style.
+       *
+       * Without these the check reported "nothing changed" across a change
+       * that reframed the homepage band at three breakpoints. The seventh
+       * gap found in this tool, and the same shape as the others: it was
+       * recording the file and not how the file is shown.
+       *
+       * Next sets its own inline style on a fill image (position, inset,
+       * color), which is the same on both sides and so harmless to include.
+       */
+      const cls = strip(attr(m[0], "class") || "");
+      const style = strip(attr(m[0], "style") || "");
       return src
-        ? `${src}  |alt=${alt === null ? "(MISSING)" : strip(alt)}${widths ? "  |srcset=" + widths : ""}`
+        ? `${src}  |alt=${alt === null ? "(MISSING)" : strip(alt)}${widths ? "  |srcset=" + widths : ""}${cls ? "  |class=" + cls : ""}${style ? "  |style=" + style : ""}`
         : null;
     })
     .filter(Boolean)

@@ -226,6 +226,26 @@ const nextConfig = {
         pathname: "/images/rwc5kyvy/**",
       },
     ],
+    /*
+     * These three are pinned to the values Next 14 used, because Next 16
+     * changes all three defaults and every one of them would alter images
+     * that are live today. CH-118's brief was to disturb nothing, so the
+     * upgrade keeps the old behaviour and changing it is a separate decision.
+     *
+     *   qualities       was: any quality allowed.  16's default: [75] only.
+     *                   Thirteen components ask for 90 or 100 and would all
+     *                   have been silently coerced down to 75.
+     *   imageSizes      16 was dropped from the default array in Next 16,
+     *                   which rewrites the srcset of every image on the site.
+     *   minimumCacheTTL was 60 seconds; Next 16 makes it 4 hours.
+     *
+     * Taking Next 16's defaults is worth doing on purpose later: the smaller
+     * srcset and the longer cache are both improvements. Not in the same
+     * change as the framework, where a difference has two possible causes.
+     */
+    qualities: [75, 90, 100],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
   },
   // Stops every response announcing the framework and its presence. Costs
   // nothing and removes one line from an attacker's fingerprint.

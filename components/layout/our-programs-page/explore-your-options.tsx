@@ -14,15 +14,25 @@ const ExploreYourOptions = ({
   const { exploreYourOptions } = program;
 
   return (
-    <section className="bg-white py-14">
+    // `relative`, so the photograph below can be pinned to the window's own
+    // left edge rather than to the container's.
+    <section className="relative overflow-hidden bg-white py-14">
       <div className="container flex justify-center py-24 lg:justify-between">
         {/*
-          xl:left-44, not left-52. Together with the framing below, this is
-          PR #166 from 2025-10-23, which was never merged and which the page
-          still needs: from xl up the photograph was pushed far enough right
-          that it sat under the contact form.
+          Pinned to the window's left edge, not laid out inside the container.
+
+          It used to be a flex child offset right by `xl:left-44`, which put
+          its left edge at x=221 on a 1440 window: the photograph's own white
+          ground then met the page's white at a visible seam, and Frank read
+          that on 2026-10-19 as the picture being cropped. Absolute to the
+          section, which spans the window, so left-0 is the window's edge at
+          every width and there is no seam to see.
+
+          Half the window wide, which is what `flex-1` gave it before, so the
+          framing is unchanged apart from where it starts. The form keeps its
+          own half through `lg:w-1/2` below, since this is now out of flow.
         */}
-        <div className="relative hidden flex-1 overflow-hidden lg:block xl:left-44">
+        <div className="absolute inset-y-0 left-0 hidden w-1/2 overflow-hidden lg:block">
           <SanityImage
             sizes="50vw"
             source={exploreYourOptions?.image}
@@ -36,7 +46,11 @@ const ExploreYourOptions = ({
             className="object-cover"
           />
         </div>
-        <div className="z-10 flex flex-col gap-6 text-primary">
+        {/*
+          `lg:ml-auto lg:w-1/2`, because the photograph above is absolute now
+          and no longer holds the left half open in the flex row.
+        */}
+        <div className="z-10 flex flex-col gap-6 text-primary lg:ml-auto lg:w-1/2">
           <h2 className="text-balance text-4xl font-light text-background">
             Explore Your Options
           </h2>

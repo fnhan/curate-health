@@ -2350,6 +2350,62 @@ the product document after
 The superseded `Tens MachineTransparent.png` stays in the library,
 unreferenced, per CH-117.
 
+### The consult buttons went to Embodia. Repointed 2026-10-18
+
+**Curate does not use Embodia any more, and five buttons still sent people
+there.** Every product page's consultation button pointed at
+`https://curatehealth.embodiaapp.com/patient_portal`. Frank found it on the
+TENS page and asked for a sweep.
+
+They go to Dr. Frank Nhan's complimentary 15 minute consultation now,
+`https://curatehealth.janeapp.com/#/discipline/1/treatment/50`, which is the
+address he gave.
+
+| page | button |
+| --- | --- |
+| /products/tens-machines | Schedule Your TENS Therapy Consultation |
+| /products/compression-stockings | Schedule Your Compression Stockings Consultation |
+| /products/custom-foot-orthotics | Schedule Your Custom Orthotics Consultation |
+| /products/professional-grade-supplements | Schedule Your Supplement Consultation |
+| /products/custom-knee-braces | Schedule Your Custom Knee Brace Consultation |
+
+All five were `product.callToAction.ctaLink`, rendered at
+`app/products/[slug]/page.tsx:170`. **Nothing in the source held an Embodia
+address**, so a grep of the repository finds none of this: it was entirely
+data.
+
+**The treatment id was checked on the live booking site, not trusted.**
+`#/discipline/1/treatment/50` is "Complimentary 15-Minute Chiropractic
+Consultation", offered by Dr. Frank Nhan, 15 minutes, $0.00. This is the
+CH-104 lesson: the one time a pasted Jane id went in unchecked it turned out
+to be Cold Plunge & Sauna.
+
+**A side effect worth knowing: these five buttons are now counted.** CH-113's
+`book_now` fires on any link whose href contains `janeapp.com`, so the product
+consult buttons were firing nothing at all while they pointed at Embodia.
+Every product consultation started from these pages has been invisible in GA4.
+
+`scripts/audit-booking-links.js` is the sweep, and it is what to run after any
+change that touches a booking URL. **It walks every string in every document
+rather than reading a list of field names**, because these links sit in
+treatment CTAs, product CTAs, portable text and site settings, and a field
+list written from memory is how one gets missed. It prints every URL in the
+dataset grouped by host, which is the useful part: it is also how
+`systeme.io` surfaced, on `newsletterSection.endpointUrl`, the newsletter
+form's endpoint. That one is in use and was left alone.
+
+Hosts after the change: 27 janeapp.com, 0 embodiaapp.com.
+
+`scripts/repoint-embodia-to-jane.js`, transaction `EKyEZOyq4DKl6IWNZjRNQU`,
+after `sanity-backup-2026-10-18-before-embodia-to-jane-documents.tar.gz`. It
+patches drafts as well as published documents, since a draft holding the old
+link would put it back on the next Publish; there were none.
+
+**The button wording was left alone and may want a look.** "Schedule Your
+Compression Stockings Consultation" now opens a chiropractic consult with Dr.
+Nhan, which is what Frank asked for, but the five labels name five different
+things and the destination is one appointment type.
+
 ### Share cards
 
 **Every page carries a share image, since 2026-09-18**, apart from `/about` and `/products`, which need a picture chosen in the Studio. Nine pages had none, all built this year: the six practitioner pages, `/blog`, `/about` and `/products`. A shared link to any of them showed a bare card.

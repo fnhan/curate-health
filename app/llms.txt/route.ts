@@ -178,7 +178,7 @@ const LLMS_TXT_QUERY = groq`{
     "lifestyle": *[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"][0]{
       "description": seo.pageDescription
     },
-    "lifestyleProgram": *[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"][0]{
+    "lifestyleProgram": *[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program" && isActive == true][0]{
       "description": seo.pageDescription
     },
     "about": *[_type == "aboutIndexPage"][0].seo.pageDescription,

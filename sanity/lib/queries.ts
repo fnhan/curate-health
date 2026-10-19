@@ -1136,7 +1136,7 @@ export const SITEMAP_QUERY = groq`{
   // slug under /services, so the services list above never included them.
   // Both were live and missing from the sitemap until 2026-09-18.
   "lifestyle": count(*[_type == "serviceLifestyle" && slug.current == "curate-lifestyle"]) > 0,
-  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program"]) > 0
+  "lifestyleProgram": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program" && isActive == true]) > 0
 }`;
 
 export const LEGAL_PAGE_BY_SLUG_QUERY = groq`*[_type == "legalPage" && slug.current == $slug][0]{
@@ -1147,6 +1147,9 @@ export const LEGAL_PAGE_BY_SLUG_QUERY = groq`*[_type == "legalPage" && slug.curr
 
 export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
   *[_type == "serviceLifestyle" && slug.current == $slug][0]{
+  // Whether the programme page is switched on, so the button to it is not
+  // rendered pointing at a 404. This page is the only thing that links there.
+  "programActive": count(*[_type == "serviceLifestyleProgram" && slug.current == "curate-lifestyle-program" && isActive == true]) > 0,
     title,
     "slug": slug.current,
     "hero_image": hero_image.asset->url,
@@ -1252,7 +1255,11 @@ export const SERVICE_LIFESTYLE_BY_SLUG_QUERY = groq`
 `;
 
 export const SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY = groq`
-  *[_type == "serviceLifestyleProgram" && slug.current == $slug][0]{
+  // isActive, so the Show on website switch decides whether this page exists,
+  // as it does for a service, a treatment, a product and a practitioner. It
+  // was switched off in January and the page stayed live because nothing read
+  // the switch; Frank settled it on 2026-10-19 by asking for the page off.
+  *[_type == "serviceLifestyleProgram" && slug.current == $slug && isActive == true][0]{
  title,
   "slug": slug.current,
   heroImage {

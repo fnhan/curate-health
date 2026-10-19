@@ -49,3 +49,4 @@ dist
 .dead-content-verified.json
 dash-review.md
 .image-framing-baseline.json
+scripts/.render-baseline.json

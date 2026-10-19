@@ -35,7 +35,22 @@ async function getComingSoonStatus() {
   }
 }
 
-export async function middleware(request: NextRequest) {
+/*
+ * `proxy`, not `middleware`. Next 16 deprecated the middleware convention in
+ * favour of this one, and the rename is not only a name: **proxy runs on the
+ * nodejs runtime and that is not configurable**, where middleware ran on the
+ * edge.
+ *
+ * What that costs here: a cold start is slower than an edge isolate, on the
+ * one thing every request passes through. What it buys: ordinary Node, so the
+ * Sanity client and the cache below behave the way they read, and the module
+ * scope persists across requests on a warm instance rather than being thrown
+ * away per isolate, which means fewer fetches for the same 60 second window.
+ *
+ * Done on its own, after the framework upgrade rather than inside it, because
+ * this gates every request on the site: if it is wrong, nothing is reachable.
+ */
+export async function proxy(request: NextRequest) {
   const userAgent = request.headers.get("user-agent") || "";
   const isCrawler =
     userAgent.toLowerCase().includes("bot") ||
@@ -52,7 +67,21 @@ export async function middleware(request: NextRequest) {
     "/api/revalidate",
     "/studio",
     "/coming-soon",
-    "sitemap.xml",
+    /*
+     * With the leading slash. It was "sitemap.xml" for as long as this file
+     * has existed, and `"/sitemap.xml".startsWith("sitemap.xml")` is false, so
+     * the entry never matched and the sitemap was never actually allowlisted.
+     * Invisible until somebody turns coming soon mode on, at which point a
+     * crawler asking for the sitemap is sent to /coming-soon instead.
+     *
+     * Fixed here because these are the lines being rewritten anyway. It
+     * changes nothing while coming soon mode is off, which it is.
+     *
+     * Note robots.txt, llms.txt and rss.xml are still not on this list. That
+     * looks like the same oversight and is not: what a hidden site should
+     * still serve is Frank's call, not a typo.
+     */
+    "/sitemap.xml",
   ];
 
   if (publicPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {

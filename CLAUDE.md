@@ -3856,16 +3856,49 @@ unchanged, and the Next docs name it for exactly this case: a webhook calling
 a Route Handler, where `updateTag` is not available because it is Server
 Actions only. `scripts/test-revalidate-endpoint.js` passes all 7 checks.
 
-#### middleware.ts stays, deliberately
+#### middleware.ts became proxy.ts, 2026-10-19
 
-`middleware` is deprecated in favour of `proxy`, and **`proxy` cannot use the
-edge runtime**: it is nodejs and not configurable. This middleware gates every
-request on the site, reading the coming-soon flag and the admin cookie, so
-moving its runtime is a change worth making on its own with its own
-verification, rather than riding along with a framework upgrade. Next 16 runs
-it unchanged and labels it `Proxy (Middleware)` in the build output. The
-codemod offers to rename it; decline until somebody has tested the runtime
-change.
+Deferred out of the upgrade and done straight after, on its own, because it
+gates every request on the site: if it is wrong, nothing is reachable.
+
+**The rename is not only a name. `proxy` runs on the nodejs runtime and that
+is not configurable**, where middleware ran on the edge. What it costs is a
+slower cold start on the one thing every request passes through. What it buys
+is ordinary Node, so the Sanity client and the module-scope cache behave the
+way they read, and that cache now survives across requests on a warm instance
+rather than being discarded per isolate, which means fewer fetches inside the
+same 60 second window.
+
+**Coming soon mode is where this code actually runs, and it was off**, so the
+useful test was to force `isComingSoon` true in a local build, exercise every
+branch, then revert. All of it behaves as before on nodejs:
+
+| | |
+| --- | --- |
+| ordinary visitor | 307 to /coming-soon |
+| crawler | 503 with `Retry-After: 86400`, not a redirect |
+| admin cookie | 200, gate bypassed |
+| /login, /coming-soon, /studio, /api/revalidate | reachable |
+
+**One real bug went with it.** The allowlist carried `"sitemap.xml"` with no
+leading slash, and `"/sitemap.xml".startsWith("sitemap.xml")` is false, so the
+entry never matched and **the sitemap was never actually allowlisted**. Dead
+for as long as the file has existed, and invisible until somebody turns coming
+soon mode on, at which point a crawler asking for the sitemap is sent to
+/coming-soon. It is `"/sitemap.xml"` now.
+
+**robots.txt, llms.txt and rss.xml are still not on that list**, and that is
+left alone on purpose. It looks like the same oversight and is not the same
+question: what a hidden site should still serve is Frank's call rather than a
+typo to fix.
+
+**The allowlist still matches by prefix**, so `/studio-anything` would be
+allowlisted by the `/studio` entry. No such path exists. Worth knowing because
+it is the same shape as the CSP lookahead bug under CH-012, where a prefix
+test let `/studios-that-do-not-exist` through with no headers at all.
+
+Verified with `audit-render-baseline.js`: 56 addresses, nothing changed. All
+9 checks and the security headers pass.
 
 #### What actually broke, and none of it was in page code
 

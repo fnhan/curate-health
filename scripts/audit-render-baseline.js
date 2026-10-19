@@ -46,6 +46,14 @@ const strip = (s) =>
 function visibleText(html) {
   return strip(
     html
+      /*
+       * Drop <title> before flattening. It is captured as its own field, and
+       * where it lands in the document differs between a response served by
+       * Vercel and one from a local `next start`. That shifted the head and
+       * tail windows on six practitioner pages and reported a change that was
+       * not one: same characters, same total length, different position.
+       */
+      .replace(/<title\b[\s\S]*?<\/title>/gi, " ")
       .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
       .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
       .replace(/<noscript\b[\s\S]*?<\/noscript>/gi, " ")
@@ -67,15 +75,31 @@ function visibleText(html) {
  */
 function normaliseImage(url) {
   if (!url) return null;
-  let u = String(url).trim();
+  /*
+   * Decode the HTML entities FIRST. An attribute in the served HTML reads
+   * `...?url=...&amp;w=3840&amp;q=100`, so parsing it raw gives the keys
+   * `url`, `amp;w` and `amp;q`, and asking for `w` or `q` returns null.
+   *
+   * The first version of this file did exactly that, so it recorded the image
+   * but never its width or its quality, and reported "nothing changed" across
+   * a change that altered the quality of every image on the site. It was
+   * caught by checking a page by hand rather than by the tool. **A check that
+   * silently covers less than it claims is worse than no check**, which is
+   * the same lesson as the optimiser-unwrapping note above.
+   */
+  let u = String(url).trim().replace(/&amp;/g, "&");
   const m = u.match(/\/_next\/image\?([^"'\s]+)/);
   if (m) {
     const q = new URLSearchParams(m[1]);
     const inner = q.get("url");
     if (inner) {
-      // keep the quality, which Next 16 changes the default of
+      // width and quality both, which Next 16 changes the defaults of
+      const w = q.get("w") || "";
       const quality = q.get("q") || "";
-      u = decodeURIComponent(inner) + (quality ? `  q=${quality}` : "");
+      u =
+        decodeURIComponent(inner) +
+        (w ? `  w=${w}` : "") +
+        (quality ? `  q=${quality}` : "");
     }
   }
   /*
@@ -140,7 +164,23 @@ function capture(html, status) {
     .map((m) => {
       const src = normaliseImage(attr(m[0], "src"));
       const alt = attr(m[0], "alt");
-      return src ? `${src}  |alt=${alt === null ? "(MISSING)" : strip(alt)}` : null;
+      /*
+       * srcset as well as src. `imageSizes` and `deviceSizes` change which
+       * candidates Next offers without touching the src at all, so a check
+       * that reads src alone misses a change to what most visitors actually
+       * download. Only the widths are kept: the urls repeat the src and
+       * would make the record enormous for nothing.
+       */
+      const ss = (attr(m[0], "srcset") || attr(m[0], "srcSet") || "").replace(
+        /&amp;/g,
+        "&"
+      );
+      const widths = [...ss.matchAll(/\s(\d+)w(?:,|$)/g)]
+        .map((x) => x[1])
+        .join("/");
+      return src
+        ? `${src}  |alt=${alt === null ? "(MISSING)" : strip(alt)}${widths ? "  |srcset=" + widths : ""}`
+        : null;
     })
     .filter(Boolean)
     .sort();

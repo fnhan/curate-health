@@ -46,7 +46,6 @@ export default function SectionHero({
         source={imageSource}
         src={image}
         alt={alt}
-        quality={100}
         priority
         sizes="100vw"
         className={cn(

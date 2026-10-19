@@ -28,7 +28,6 @@ export default async function SustainabilityPage() {
         width={1920}
         height={1080}
         priority
-        quality={100}
         sizes="100vw"
         src={heroSection?.heroImage?.image || ""}
         alt={heroSection?.heroImage?.alt || ""}

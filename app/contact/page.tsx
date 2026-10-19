@@ -64,7 +64,6 @@ export default async function ContactPage() {
             width={1920}
             height={1080}
             priority
-            quality={100}
             sizes="100vw"
             className="absolute h-full w-full object-cover"
           />

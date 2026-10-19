@@ -21,7 +21,6 @@ export default function TreatmentHeroSection({
       src={asset.url}
       alt={alt}
       priority
-      quality={100}
       sizes="100vw"
       className="h-[254px] w-full object-cover md:h-[364px] lg:h-[608px]"
     />

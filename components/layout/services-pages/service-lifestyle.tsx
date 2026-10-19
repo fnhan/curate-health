@@ -380,10 +380,17 @@ export default function ServiceLifestyleContent({
           </div>
         </div>
       </section>
-      <HoverLinkVariation
-        href="/our-programs/curate-lifestyle-program"
-        text="View Full Program Breakdown"
-      />
+      {/*
+        This page is the only thing that links to the programme page, so the
+        button goes when the programme's Show on website switch is off. Left
+        in, it would be the single route to a 404.
+      */}
+      {service?.programActive ? (
+        <HoverLinkVariation
+          href="/our-programs/curate-lifestyle-program"
+          text="View Full Program Breakdown"
+        />
+      ) : null}
 
       <section className="relative flex items-center justify-center overflow-hidden bg-white bg-cover bg-center bg-no-repeat py-24 text-primary md:py-40">
         <div

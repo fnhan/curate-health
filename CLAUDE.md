@@ -2552,6 +2552,67 @@ is not the same as being signed up. That is why the message says "Check your
 inbox" rather than "You are now signed up": somebody told they are already
 subscribed has no reason to go and click the link.
 
+### The Recovery Sanctuary has one name, and the programme page is off. 2026-10-19
+
+**Two treatment pages had invented their own names for the one outdoor
+space**, "Outdoor Yoga Sanctuary" in five fields and "Outdoor Pilates
+Sanctuary" in two. That breaks the naming rule above, and reads as three
+different places when there is one. They say Recovery Sanctuary now.
+
+**The physiotherapy call to action was the naturopathy one, pasted whole.** It
+named "Naturopathic Care services" and talked about the healing potential of
+nature and about natural therapies, on a page about physiotherapy. Swapping
+only the service name would have left the rest, so it is rewritten around
+assessment, hands-on treatment and targeted exercise. **The naturopathy page's
+own copy is identical and correct, and was left alone**; a sweep for that
+phrase finds two pages and only one is wrong.
+
+`scripts/fix-sanctuary-naming.js`, transaction `7WrwYzu9WnIQ7m3iWg7VLu`, after
+`sanity-backup-2026-10-19-before-sanctuary-renames-documents.tar.gz`. Every
+change states the text it expects and the script refuses the whole run if one
+no longer matches, per the dash sweep note.
+
+#### The Curate Lifestyle Program page honours its switch
+
+`isActive` has been false since January and **five separate things ignored
+it**, so the page was live, linked, listed and searchable. Frank settled it on
+2026-10-19: the page is off.
+
+Each of the five asks the dataset rather than being told, so they cannot
+disagree with the switch or with each other:
+
+| Where | How |
+| --- | --- |
+| the page | `SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY` filters `isActive`, and the route calls `notFound()` |
+| the sitemap | `SITEMAP_QUERY` counts only active ones |
+| llms.txt | its own projection filters `isActive` |
+| the link on /our-programs/curate-lifestyle | `SERVICE_LIFESTYLE_BY_SLUG_QUERY` reports `programActive`, and the button is not rendered when it is off |
+| site search | `INDEX_DOCS_QUERY` filters it, in both copies |
+
+**`notFound()`, not `return null`.** Returning null renders the layout around
+an empty page, which tells a crawler the address is alive. Both the component
+and `generateMetadata` are gated, per CH-001: fixing only the body leaves
+`generateMetadata` throwing on what the query did not return.
+
+**The comment in `app/api/search/route.ts` said this mismatch was Frank's to
+resolve and that search should not paper over it either way.** He has resolved
+it, so the filter is in and the comment records why it changed.
+
+Verified on a local dev server: the page 404s, the sitemap and llms.txt have
+no mention of it, the Curate Lifestyle page no longer links to it and still
+answers 200, and site search returns nothing for it. `audit-content-rules.js`
+passes on 52 pages, `audit-llms.js` and `audit-orphans.js` pass.
+
+**Switching it back on needs the Search Console step**, the same as a
+practitioner: the address stays in Google until Google recrawls, so ask for
+indexing again through URL Inspection rather than waiting.
+
+**The machine could not complete a production build**, so this was verified on
+`next dev` rather than `npm run build`. The Next build worker died three times
+with 1.8 GB of free RAM and 5 GB of free disk. Everything this change touches
+is routing and data, which dev exercises identically; a build is still worth
+running before the next merge that touches rendering.
+
 ### Share cards
 
 **Every page carries a share image, since 2026-09-18**, apart from `/about` and `/products`, which need a picture chosen in the Studio. Nine pages had none, all built this year: the six practitioner pages, `/blog`, `/about` and `/products`. A shared link to any of them showed a bare card.

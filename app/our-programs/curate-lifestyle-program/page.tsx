@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import ServiceLifestyleProgramContent from "@/components/layout/services-pages/service-lifestyle-program";
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
@@ -24,8 +26,14 @@ export default async function ServiceLifestylePage() {
       params: { slug: "curate-lifestyle-program" },
     });
 
+  /*
+   * The query asks for isActive, so a switched-off program returns nothing and
+   * this page is a real 404 rather than a blank frame. notFound() rather than
+   * null, per CH-001: returning null renders the layout around an empty page,
+   * which tells a crawler the address is alive.
+   */
   if (!program) {
-    return null;
+    notFound();
   }
 
   const { heroImage } = program;
@@ -60,8 +68,10 @@ export async function generateMetadata() {
       params: { slug: "curate-lifestyle-program" },
     });
 
+  // Same gate as the component. CH-001: fixing only the body leaves this
+  // throwing, because it destructures what the query did not return.
   if (!servicePage) {
-    return null;
+    notFound();
   }
 
   const { seo } = servicePage!;

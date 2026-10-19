@@ -109,8 +109,20 @@ function normaliseImage(url) {
    * while the image is byte for byte the same. Drop it, for the same reason
    * script and stylesheet urls are left out of this check entirely.
    */
+  /*
+   * Vercel serves these under /_next/static/immutable/media/ and a local
+   * `next start` under /_next/static/media/, for the same file. Fold that out
+   * FIRST: the hash strip below matches the shorter path, so with these the
+   * other way round it never fires and every such asset reads as changed.
+   */
+  u = u.replace("/_next/static/immutable/media/", "/_next/static/media/");
+  /*
+   * Not anchored with $. The optimiser branch above appends "  w=…  q=…"
+   * after the url, so an end-anchored pattern never fires on exactly the
+   * images that go through it, which is most of them.
+   */
   u = u.replace(
-    /(\/_next\/static\/media\/[^/?"']+?)\.[A-Za-z0-9_-]{6,}(\.[a-z0-9]+)$/,
+    /(\/_next\/static\/media\/[^/?"'\s]+?)\.[A-Za-z0-9_-]{6,}(\.[a-z0-9]+)(?=\s|$)/,
     "$1$2"
   );
   // Sanity urls carry the transform in the query, which is the part that matters

@@ -1932,6 +1932,19 @@ changing.
 `book_now` as a key event in the GA4 property, at Admin, Events. Claude Code
 cannot do this from the repository.
 
+**Done 2026-10-19: `book_now` and `call_click` are marked as key events** in
+the GA4 property, so conversions are finally being counted. They are found
+under Admin, Data display, Events, on the **Recent events** tab rather than
+Key events, which only lists what is already starred.
+
+**Neither is marked NPA, and that is Frank's decision, not an oversight.**
+Marking an event NPA excludes it from ads personalisation while leaving
+reporting untouched. It was put to him on 2026-10-19 with the argument for it,
+that `book_now` fires on every Jane link including from the psychotherapy and
+acupuncture pages, so an audience built on it is a health-adjacent signal, and
+he chose not to. **Do not raise it again unless he asks**, and do not describe
+the events as misconfigured because of it.
+
 ```bash
 node scripts/audit-conversion-events.js https://www.curatehealth.ca
 ```
@@ -2639,6 +2652,26 @@ The photograph is a placeholder chosen from the library on 2026-09-20: a practit
 **Every rewrite is approved one at a time, on a page built for it:** https://claude.ai/artifact/XSbS6Zx9ibbzNzL3o1rdzR. 102 items, each showing the live text beside the proposal, with approve, edit and keep. Frank's choices are saved in the page's own store, at `decisions/<itemId>`, and read back with the ArtifactData tool. Nothing is written to Sanity until he has decided, and the live text is checked against each item's "before" at write time.
 
 What is in it: the two decisions below, the search and share details still missing (`/about`, `/products`, `/blog`, Safa, the cafe description), photo descriptions, 79 page copy fixes, and five lines written into the code.
+
+**The review page stays, and so does the breakdown page. Frank, 2026-10-19.**
+He will go through the outstanding items himself, one at a time, choosing
+between his earlier approval and what is live now, and he asked for that to
+wait until the pages are revamped. **Do not propose retiring either page.**
+
+**Of his 48 decisions, only 6 are live word for word**, checked against the
+dataset on 2026-10-19: c11, c12, c17, c47, c53 and c54. Fifteen more were
+handled by other work in different words, and **27 were never applied at all**.
+
+The reason is worth knowing, because it was nearly missed. **The dash sweep on
+2026-10-11 rewrote the same fields with its own wording rather than his.** It
+cleared the punctuation, so the content rules pass and the fields look
+attended to, while the edits he approved in September are not there: the
+Curate Lifestyle opening still carries "elevated by intention", which he cut.
+A page passing the audits is not evidence that his decisions were applied.
+
+The side-by-side of all 42 that are not live as approved, with the live text,
+his text and a word-level diff:
+https://claude.ai/artifact/L1bAhURkmArngbpyfmeLJ9
 
 **Two decisions are load-bearing:**
 

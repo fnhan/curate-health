@@ -47,24 +47,31 @@ export default function NewsletterSection({
       });
 
       if (response.ok) {
+        /*
+          Systeme.io is double opt-in, so at this point the confirmation
+          email has been sent and the person is not subscribed yet. Saying
+          "you are now signed up" and leaving it there is how somebody never
+          clicks the link and quietly never hears from us. The exclamation
+          marks went at the same time, per the content rules.
+        */
         toast({
-          title: "You are now signed up!",
-          description: "Thank you for subscribing to our newsletter.",
+          title: "Check your inbox",
+          description:
+            "We have sent you an email with a link to confirm your subscription.",
         });
         setEmail("");
       } else {
         toast({
           variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description:
-            "There was a problem with your request. Please try again.",
+          title: "That did not go through",
+          description: "Please check the address and try again.",
         });
       }
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request. Please try again.",
+        title: "That did not go through",
+        description: "Please check the address and try again.",
       });
     } finally {
       setIsLoading(false);

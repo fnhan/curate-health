@@ -2406,6 +2406,62 @@ Compression Stockings Consultation" now opens a chiropractic consult with Dr.
 Nhan, which is what Frank asked for, but the five labels name five different
 things and the destination is one appointment type.
 
+### The newsletter signup reached nobody. Fixed 2026-10-18
+
+**Every newsletter signup on the site was being thrown away, and the site
+thanked the person anyway.** The form sits in
+`components/shared/layout.tsx`, so it is on every page. Frank added an
+address through the live site and no contact appeared in Systeme.io.
+
+Two faults, and the second is what hid the first for however long this has
+been running. The setting in Sanity was created 2024-02-13 and never touched.
+
+- **The wrong shape.** `newsletterSection.endpointUrl` is
+  `https://systeme.io/embedded/14262515/subscription`, which is an ordinary
+  HTML page with a subscribe form on it. That form posts `email=...` as
+  form-encoded data. The route was posting JSON, which Systeme.io does not
+  read, so every submission was rejected.
+- **The status code proves nothing.** Systeme.io answers 200 to anything
+  posted at that address, including a body with no email in it at all,
+  checked. The route took the 200 as success, so it reported "Form submitted
+  successfully" every time.
+
+**The signal is whether the subscribe form comes back.** A rejected
+submission hands the form back, which is the ordinary web pattern, and the
+reply is about 3 KB with the address echoed into the field. An accepted one
+returns the thank-you page, about 18 KB, with no form on it. Confirmed
+against both outcomes on the live endpoint. `REJECTED_MARKER` matches
+`name="email"` rather than any thank-you wording, because the page can be
+re-themed in Systeme.io and the field name cannot.
+
+**Systeme.io is double opt-in**, which changes what a success means and what
+the visitor should be told. A 200 means the confirmation email has gone out,
+not that the contact is confirmed, and a new contact sits unconfirmed until
+the person clicks the link. The message said "You are now signed up"; it says
+"Check your inbox" now, with the reason. Somebody told they are subscribed
+has no reason to go and click anything.
+
+Two exclamation marks went with it, "You are now signed up!" and "Uh oh!
+Something went wrong.", both against the content rules. **Neither audit could
+have caught them**: `audit-content-rules.js` reads rendered pages and a toast
+only exists after somebody submits the form. Worth remembering that the
+content rules reach strings in components that no page ever prints until it
+is interacted with.
+
+```bash
+# No email, and a malformed address, both 400. A real address, 200.
+curl -s -X POST -H "Content-Type: application/json" -d '{"email":"you@example.com"}'   http://localhost:3000/api/newsletter-signup
+```
+
+Log lines carry a `[newsletter]` prefix so they can be grepped in the Vercel
+stream, as `[revalidate]` and `[indexnow]` do.
+
+**The sturdier version is Systeme.io's own API** at `api.systeme.io`, which
+answers in JSON and states plainly whether it worked, rather than being read
+off a web page. It needs an API key from the Systeme.io account. Worth doing
+if this breaks again, and the thing to reach for rather than tightening the
+HTML matching further.
+
 ### Share cards
 
 **Every page carries a share image, since 2026-09-18**, apart from `/about` and `/products`, which need a picture chosen in the Studio. Nine pages had none, all built this year: the six practitioner pages, `/blog`, `/about` and `/products`. A shared link to any of them showed a bare card.

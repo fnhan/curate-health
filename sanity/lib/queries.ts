@@ -124,6 +124,7 @@ export const SERVICES_SECTION_QUERY = groq`*[_type == "servicesSection"][0]{
   hoverLinkHref,
   "services": *[_type == "service" && isActive == true]{
     title,
+    barColor,
     "slug": slug.current,
     "hero_image": hero_image.asset->url,
     // The image object beside its url, so the crop and hotspot set in

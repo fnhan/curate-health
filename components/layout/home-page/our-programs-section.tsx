@@ -4,6 +4,8 @@ import HoverLink from "components/shared/hover-link";
 import { MoveRightIcon } from "lucide-react";
 
 import { SanityImage } from "@/components/shared/sanity-image";
+import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
+import { cn } from "@/lib/utils";
 
 /**
  * Every field here is nullable, because every field in Sanity is optional and
@@ -84,8 +86,22 @@ export default function OurProgramsSection({
                           backgroundColor: program.barColor ?? undefined,
                         }}
                       />
-                      {/* Program name */}
-                      <span className="text-xl font-light text-[#283619] md:text-3xl xl:text-[40px] xl:leading-[52px]">
+                      {/*
+                        Program name. The sweep is on the words, not on the
+                        row, so the line does not run under the bar and the
+                        arrow. Frank asked for it here on 2026-10-18, to
+                        match Our Services.
+
+                        A program that is not a link has no group above it,
+                        so nothing sweeps, which is right: there is nothing
+                        to click.
+                      */}
+                      <span
+                        className={cn(
+                          "text-xl font-light text-[#283619] md:text-3xl xl:text-[40px] xl:leading-[52px]",
+                          GROUP_HOVER_UNDERLINE
+                        )}
+                      >
                         {program.name}
                       </span>
                       <MoveRightIcon

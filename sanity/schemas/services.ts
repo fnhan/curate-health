@@ -25,6 +25,13 @@ export default defineType({
       validation: (Rule) => Rule.required().error("A title is required"),
     }),
     defineField({
+      name: "barColor",
+      title: "Bar Colour",
+      type: "string",
+      description:
+        "Hex colour for the small bar beside this service on the home page, for example #888D76. The same field a programme has, so the two sections read as a pair. Left empty, no bar is drawn.",
+    }),
+    defineField({
       name: "slug",
       title: "Slug",
       type: "slug",

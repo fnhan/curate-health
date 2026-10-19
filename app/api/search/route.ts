@@ -65,12 +65,15 @@ const FEATURED_QUERY = groq`
  * A treatment needs two checks: Exercise Therapy was itself switched on, but
  * it hangs off the switched-off Lifestyle Medicine category.
  *
- * The switch is only trusted for the three types where it genuinely decides
- * whether a page exists: service, treatments and product. It is NOT applied to
- * everything, deliberately. serviceLifestyleProgram is switched off in Sanity
- * and its page at /our-programs/curate-lifestyle-program is live regardless, so a
- * blanket isActive filter would have hidden a working page from search. That
- * mismatch is Frank's to resolve; this should not paper over it either way.
+ * The switch is trusted for the four types where it genuinely decides whether
+ * a page exists: service, treatments, product and serviceLifestyleProgram. It
+ * is NOT applied to everything, deliberately.
+ *
+ * serviceLifestyleProgram used to be the exception, because it was switched
+ * off in Sanity while its page stayed live, and filtering here would have
+ * hidden a working page from search. Frank resolved that on 2026-10-19 by
+ * asking for the page off, so the switch now decides the page and this filter
+ * agrees with it.
  */
 const INDEX_DOCS_QUERY = groq`
 *[
@@ -243,6 +246,7 @@ const SEARCH_QUERY = groq`
 
   "lifestylePrograms": *[
     _type == "serviceLifestyleProgram" &&
+    isActive == true &&
     defined(slug.current) &&
     (
       title match $q ||

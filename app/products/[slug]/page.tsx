@@ -58,11 +58,12 @@ async function resolve(slug: string) {
   return { kind: "none" as const };
 }
 
-export default async function ProductPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function ProductPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const products = await sanityFetch<PRODUCTS_NAVIGATION_QUERYResult>({
     query: PRODUCTS_NAVIGATION_QUERY,
   });
@@ -178,11 +179,12 @@ export default async function ProductPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   // Same resolution as the component, deliberately. This runs first, so any
   // logic it does not share is logic the component never gets to apply.
   //

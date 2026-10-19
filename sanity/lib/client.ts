@@ -44,7 +44,7 @@ export async function sanityFetch<QueryResponse>({
   revalidate?: number | false;
   tags?: string[];
 }) {
-  const isDraftMode = draftMode().isEnabled;
+  const isDraftMode = (await draftMode()).isEnabled;
   if (isDraftMode && !token) {
     throw new Error("Missing environment variable SANITY_API_READ_TOKEN");
   }

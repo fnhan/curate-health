@@ -78,6 +78,17 @@ function normaliseImage(url) {
       u = decodeURIComponent(inner) + (quality ? `  q=${quality}` : "");
     }
   }
+  /*
+   * A locally imported asset is served as /_next/static/media/NAME.HASH.ext,
+   * and the hash is the bundler's, not the file's: Turbopack and Webpack
+   * compute it differently, so every one of them changes on a bundler change
+   * while the image is byte for byte the same. Drop it, for the same reason
+   * script and stylesheet urls are left out of this check entirely.
+   */
+  u = u.replace(
+    /(\/_next\/static\/media\/[^/?"']+?)\.[A-Za-z0-9_-]{6,}(\.[a-z0-9]+)$/,
+    "$1$2"
+  );
   // Sanity urls carry the transform in the query, which is the part that matters
   return u.replace(/^https?:\/\//, "");
 }
@@ -196,7 +207,12 @@ async function fetchPage(url) {
   for (const p of extra) {
     const res = await fetch(`${base}${p}`).catch(() => null);
     const body = res ? await res.text() : "";
-    now[p] = { status: res ? res.status : 0, textLength: strip(body).length, body: strip(body) };
+    /*
+     * lastmod is new Date() at request time, so it differs between any two
+     * requests and says nothing about a change to the site.
+     */
+    const stable = strip(body).replace(/<lastmod>[^<]*<\/lastmod>/gi, "<lastmod/>");
+    now[p] = { status: res ? res.status : 0, textLength: stable.length, body: stable };
   }
 
   if (save) {

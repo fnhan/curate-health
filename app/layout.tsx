@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { draftMode } from "next/headers";
 
-import { VisualEditing } from "next-sanity";
+// next-sanity 13 moved VisualEditing out of the root export into its own
+// subpath. Same component, same behaviour.
+import { VisualEditing } from "next-sanity/visual-editing";
 import {
   SITE_METADATA_QUERYResult,
   SITE_SETTINGS_PHONE_QUERYResult,
@@ -119,7 +121,7 @@ export default async function RootLayout({
         <body className="flex min-h-screen flex-col overflow-x-hidden bg-background antialiased">
           {children}
           {callPhone ? <FloatingCallButton phone={callPhone} /> : null}
-          {draftMode().isEnabled && (
+          {(await draftMode()).isEnabled && (
             <>
               <SanityDisablePreviewButton />
               <VisualEditing />

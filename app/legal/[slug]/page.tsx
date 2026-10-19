@@ -17,11 +17,12 @@ import {
   LEGAL_PAGE_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
 
-export default async function LegalPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function LegalPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const layout = await sanityFetch<LAYOUT_QUERYResult>({
     query: LAYOUT_QUERY,
   });
@@ -70,11 +71,12 @@ export default async function LegalPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const legalPage = await sanityFetch<LEGAL_PAGE_BY_SLUG_QUERYResult>({
     query: LEGAL_PAGE_BY_SLUG_QUERY,
     params: { slug: params.slug },

@@ -74,11 +74,12 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default async function PractitionerPage({
-  params,
-}: {
-  params: { practitioner: string };
-}) {
+export default async function PractitionerPage(
+  props: {
+    params: Promise<{ practitioner: string }>;
+  }
+) {
+  const params = await props.params;
   const person = await fetchPractitioner(params.practitioner);
 
   // An unknown or switched-off practitioner is a 404, not an empty 200. The
@@ -262,11 +263,12 @@ export default async function PractitionerPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { practitioner: string };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ practitioner: string }>;
+  }
+) {
+  const params = await props.params;
   const person = await fetchPractitioner(params.practitioner);
 
   // generateMetadata runs before the component, so an unguarded read here

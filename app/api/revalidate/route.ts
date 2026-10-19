@@ -100,8 +100,24 @@ export async function POST(request: Request) {
     // a reason to skip the purge.
   }
 
+  /*
+   * `{ expire: 0 }`, not the "max" the Next 16 guide recommends.
+   *
+   * Next 16 made the second argument required. "max" means
+   * stale-while-revalidate: the next request after a publish is served the
+   * OLD data while the new data loads behind it. That is the right default
+   * for a blog, and it is wrong here. CH-026 exists so the search index is
+   * correct within seconds of a publish, and the one-hour window below it is
+   * only a backstop for this webhook failing silently. Serving a stale index
+   * right after a publish is the fault that ticket was written to remove.
+   *
+   * `{ expire: 0 }` is what the single-argument call did in Next 14, so this
+   * keeps the behaviour the site has today. The Next docs name it for exactly
+   * this case: a webhook calling a Route Handler, where `updateTag`, which is
+   * Server Actions only, cannot be used.
+   */
   for (const tag of TAGS) {
-    revalidateTag(tag);
+    revalidateTag(tag, { expire: 0 });
   }
 
   console.log(

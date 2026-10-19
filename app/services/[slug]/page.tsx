@@ -99,11 +99,12 @@ async function resolve(slug: string) {
   return { kind: "none" as const };
 }
 
-export default async function ServiceOrTreatmentPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function ServiceOrTreatmentPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const services = await sanityFetch<ALL_SERVICES_QUERYResult>({
     query: ALL_SERVICES_QUERY,
   });
@@ -161,11 +162,12 @@ export default async function ServiceOrTreatmentPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const resolved = await resolve(params.slug);
 
   if (resolved.kind === "renamed") {

@@ -16,15 +16,24 @@ const ExploreYourOptions = ({
   return (
     <section className="bg-white py-14">
       <div className="container flex justify-center py-24 lg:justify-between">
-        <div className="relative hidden flex-1 overflow-hidden lg:block xl:left-52">
+        {/*
+          xl:left-44, not left-52. Together with the framing below, this is
+          PR #166 from 2025-10-23, which was never merged and which the page
+          still needs: from xl up the photograph was pushed far enough right
+          that it sat under the contact form.
+        */}
+        <div className="relative hidden flex-1 overflow-hidden lg:block xl:left-44">
           <SanityImage
             sizes="50vw"
             source={exploreYourOptions?.image}
             src={exploreYourOptions?.image?.asset?.url!}
             alt={exploreYourOptions?.image?.alt ?? ""}
             fill
-            objectPosition="100% 18%"
-            className="scale-110 object-cover"
+            // Centred vertically and unscaled. At 18% with a 1.1 scale the
+            // plant was cropped to its leaf tips and the vase was gone
+            // entirely, at every width from xl up.
+            objectPosition="100% 50%"
+            className="object-cover"
           />
         </div>
         <div className="z-10 flex flex-col gap-6 text-primary">

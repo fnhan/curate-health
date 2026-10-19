@@ -2462,6 +2462,58 @@ off a web page. It needs an API key from the Systeme.io account. Worth doing
 if this breaks again, and the thing to reach for rather than tightening the
 HTML matching further.
 
+### A refused newsletter signup is no longer lost. 2026-10-18
+
+Frank asked for a safety net after the fault above, which ran from
+2024-01-29 and threw away every address with nobody able to say how many.
+
+**The Sanity dataset is public, so the addresses cannot go there.** Checked
+2026-10-18: `rwc5kyvy.api.sanity.io/.../data/query/production` answers a
+query with no token at all. A document holding somebody's email address
+would be readable by anyone who asked. **Worth knowing well beyond this
+ticket: nothing private goes in Sanity.**
+
+So a refused signup is forwarded to Formspree, which the contact and programs
+forms already post to. It is private, already in the stack, and it emails
+Frank the moment it happens. **That last part is the half that matters.** The
+original fault lasted two years and nine months precisely because nothing
+ever said a word; storage alone would have been a pile nobody opened.
+
+`NEWSLETTER_FALLBACK_ENDPOINT` holds the Formspree form id. **With it unset
+the address is written to the log instead of dropped**, which is weaker,
+since Vercel keeps those briefly, but is never nothing. If the forward itself
+fails the address is logged too, so a wrong endpoint cannot turn this back
+into a silent loss.
+
+```bash
+# Start the target pointed at the catcher the script runs, then:
+NEWSLETTER_FALLBACK_ENDPOINT=http://localhost:8892/catch npm start
+node scripts/test-newsletter-safety-net.js
+```
+
+**It tests against the real Systeme.io, not a stand-in.** `a@b` has an @ so
+it passes the route's own check and no usable domain so Systeme.io refuses
+it, which exercises the genuine refusal path end to end. Nothing it sends can
+ever be added to the list, since every address it uses is one Systeme.io
+refuses.
+
+All three paths were exercised on a local build against the live endpoint:
+refused with the forward working, the address arrives and the visitor gets a
+502; refused with the forward deliberately broken, the address is in the log;
+accepted, 200 and "Check your inbox".
+
+**Still to do by hand, and the net is weaker until it happens:** create a
+Formspree form for this and set `NEWSLETTER_FALLBACK_ENDPOINT` in the Vercel
+project. Until then a refused address only reaches the Vercel log.
+
+**What happens to somebody who never confirms.** Systeme.io keeps them as a
+pending contact, and per their own glossary a pending contact is excluded
+from broadcasts and sequences and may be auto-purged after 14 or 30 days. So
+an unconfirmed address is visible in the account and cannot be mailed, which
+is not the same as being signed up. That is why the message says "Check your
+inbox" rather than "You are now signed up": somebody told they are already
+subscribed has no reason to go and click the link.
+
 ### Share cards
 
 **Every page carries a share image, since 2026-09-18**, apart from `/about` and `/products`, which need a picture chosen in the Studio. Nine pages had none, all built this year: the six practitioner pages, `/blog`, `/about` and `/products`. A shared link to any of them showed a bare card.

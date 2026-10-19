@@ -47,6 +47,65 @@ import { client } from "@/sanity/lib/client";
  */
 const REJECTED_MARKER = 'name="email"';
 
+/**
+ * Where a refused signup goes so it is not lost.
+ *
+ * NOT SANITY, AND THAT IS THE POINT. The production dataset answers queries
+ * with no token at all, checked 2026-10-18, so a document holding somebody's
+ * email address would be readable by anyone who asked for it. A newsletter
+ * address is ordinary personal information and it does not belong on a public
+ * API.
+ *
+ * Formspree instead, which the contact and programs forms already post to, so
+ * it is private, already in the stack, and it emails Frank the moment it
+ * happens. That last part is the half that matters: the fault this guards
+ * against ran for two years and nine months precisely because nothing ever
+ * said a word.
+ *
+ * With no endpoint configured it writes the address to the log rather than
+ * dropping it, which is weaker (Vercel keeps those briefly) but is never
+ * nothing. Set NEWSLETTER_FALLBACK_ENDPOINT to a Formspree form id to turn
+ * the email on.
+ */
+async function keepRefusedSignup(email: string, why: string) {
+  const endpoint = process.env.NEWSLETTER_FALLBACK_ENDPOINT;
+
+  if (!endpoint) {
+    console.error(
+      `[newsletter] NOT DELIVERED, address kept here only: ${email} (${why}). ` +
+        `Set NEWSLETTER_FALLBACK_ENDPOINT so these are emailed instead.`
+    );
+    return;
+  }
+
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        _subject: "Newsletter signup was refused by Systeme.io",
+        email,
+        reason: why,
+        submittedAt: new Date().toISOString(),
+        message:
+          `${email} tried to join the newsletter and Systeme.io refused it (${why}). ` +
+          `Add them by hand, and check the signup form is still working.`,
+      }),
+    });
+    if (!res.ok) throw new Error(`status ${res.status}`);
+    console.error(`[newsletter] refused, address forwarded for recovery (${why})`);
+  } catch (err) {
+    /*
+     * Log the address if the forward itself fails, so a bad endpoint cannot
+     * turn this back into a silent loss.
+     */
+    console.error(
+      `[newsletter] NOT DELIVERED and could not forward, address kept here only: ${email} (${why})`,
+      err
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const { email } = await request.json();
@@ -80,9 +139,8 @@ export async function POST(request: Request) {
     const rejected = html.includes(REJECTED_MARKER);
 
     if (!response.ok || rejected) {
-      console.error(
-        `[newsletter] rejected, status=${response.status} formReturned=${rejected}`
-      );
+      const why = rejected ? "form returned" : `status ${response.status}`;
+      await keepRefusedSignup(email, why);
       return NextResponse.json(
         { error: "The newsletter service did not accept that address" },
         { status: 502 }

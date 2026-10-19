@@ -1,11 +1,11 @@
-import { PRODUCTS_SECTION_QUERYResult } from "sanity.types";
+import { PRODUCTS_SECTION_QUERY_RESULT } from "sanity.types";
 
 import { ProductCarousel } from "./product-carousel";
 
 export default function ProductsSection({
   productsSection,
 }: {
-  productsSection: PRODUCTS_SECTION_QUERYResult;
+  productsSection: PRODUCTS_SECTION_QUERY_RESULT;
 }) {
   if (!productsSection) {
     return null;

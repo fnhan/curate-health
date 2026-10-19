@@ -108,7 +108,7 @@ export default function TeamMemberNameSelect(props: StringInputProps) {
   }
 
   return (
-    <Stack space={3}>
+    <Stack gap={3}>
       {error ? (
         <Text size={1} style={{ color: "#e03e2d" }}>
           {error}

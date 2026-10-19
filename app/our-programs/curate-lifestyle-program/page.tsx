@@ -6,8 +6,8 @@ import { ServicesNavigation } from "@/components/layout/services-pages/services-
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { JsonLdScript, buildLifestyleJsonLd } from "@/lib/structured-data";
 import {
-  ALL_SERVICES_QUERYResult,
-  SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult,
+  ALL_SERVICES_QUERY_RESULT,
+  SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
@@ -16,12 +16,12 @@ import {
 } from "@/sanity/lib/queries";
 
 export default async function ServiceLifestylePage() {
-  const services = await sanityFetch<ALL_SERVICES_QUERYResult>({
+  const services = await sanityFetch<ALL_SERVICES_QUERY_RESULT>({
     query: ALL_SERVICES_QUERY,
   });
 
   const program =
-    await sanityFetch<SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult>({
+    await sanityFetch<SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY_RESULT>({
       query: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY,
       params: { slug: "curate-lifestyle-program" },
     });
@@ -63,7 +63,7 @@ export default async function ServiceLifestylePage() {
 
 export async function generateMetadata() {
   const servicePage =
-    await sanityFetch<SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult>({
+    await sanityFetch<SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY_RESULT>({
       query: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY,
       params: { slug: "curate-lifestyle-program" },
     });

@@ -206,11 +206,12 @@ function highlightExact(text: string, needle: string) {
   );
 }
 
-export default async function SearchPage({
-  searchParams,
-}: {
-  searchParams: { q?: string };
-}) {
+export default async function SearchPage(
+  props: {
+    searchParams: Promise<{ q?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const q = collapseWhitespace(searchParams.q ?? "");
   const needle = q;
 

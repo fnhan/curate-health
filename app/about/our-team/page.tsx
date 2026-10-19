@@ -3,12 +3,12 @@ import { notFound } from "next/navigation";
 import TeamMembersSection from "@/app/about/our-team/team-members-section";
 import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import { buildPageMetadata } from "@/lib/page-metadata";
-import { OUR_TEAM_PAGE_QUERYResult } from "@/sanity.types";
+import { OUR_TEAM_PAGE_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_TEAM_PAGE_QUERY } from "@/sanity/lib/queries";
 
 export default async function OurTeamPage() {
-  const ourTeam = await sanityFetch<OUR_TEAM_PAGE_QUERYResult>({
+  const ourTeam = await sanityFetch<OUR_TEAM_PAGE_QUERY_RESULT>({
     query: OUR_TEAM_PAGE_QUERY,
   });
 
@@ -37,7 +37,7 @@ export default async function OurTeamPage() {
 }
 
 export async function generateMetadata() {
-  const ourStory = await sanityFetch<OUR_TEAM_PAGE_QUERYResult>({
+  const ourStory = await sanityFetch<OUR_TEAM_PAGE_QUERY_RESULT>({
     query: OUR_TEAM_PAGE_QUERY,
   });
 

@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { draftMode } from "next/headers";
 
-import { VisualEditing } from "next-sanity";
+// next-sanity 13 moved VisualEditing out of the root export into its own
+// subpath. Same component, same behaviour.
+import { VisualEditing } from "next-sanity/visual-editing";
 import {
-  SITE_METADATA_QUERYResult,
-  SITE_SETTINGS_PHONE_QUERYResult,
+  SITE_METADATA_QUERY_RESULT,
+  SITE_SETTINGS_PHONE_QUERY_RESULT,
 } from "sanity.types";
 
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
@@ -31,7 +33,7 @@ const poppins = Poppins({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteMetadata = await sanityFetch<SITE_METADATA_QUERYResult>({
+  const siteMetadata = await sanityFetch<SITE_METADATA_QUERY_RESULT>({
     query: SITE_METADATA_QUERY,
   });
 
@@ -100,7 +102,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const phoneSettings = await sanityFetch<SITE_SETTINGS_PHONE_QUERYResult>({
+  const phoneSettings = await sanityFetch<SITE_SETTINGS_PHONE_QUERY_RESULT>({
     query: SITE_SETTINGS_PHONE_QUERY,
   });
   const callPhone = phoneSettings?.phone?.trim() ?? "";
@@ -119,7 +121,7 @@ export default async function RootLayout({
         <body className="flex min-h-screen flex-col overflow-x-hidden bg-background antialiased">
           {children}
           {callPhone ? <FloatingCallButton phone={callPhone} /> : null}
-          {draftMode().isEnabled && (
+          {(await draftMode()).isEnabled && (
             <>
               <SanityDisablePreviewButton />
               <VisualEditing />

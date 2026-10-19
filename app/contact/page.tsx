@@ -10,12 +10,12 @@ import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { cn } from "@/lib/utils";
-import { CONTACT_PAGE_QUERYResult } from "@/sanity.types";
+import { CONTACT_PAGE_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { CONTACT_PAGE_QUERY } from "@/sanity/lib/queries";
 
 export default async function ContactPage() {
-  const contactPage = await sanityFetch<CONTACT_PAGE_QUERYResult>({
+  const contactPage = await sanityFetch<CONTACT_PAGE_QUERY_RESULT>({
     query: CONTACT_PAGE_QUERY,
   });
 
@@ -357,7 +357,7 @@ export default async function ContactPage() {
 }
 
 export async function generateMetadata() {
-  const contactPage = await sanityFetch<CONTACT_PAGE_QUERYResult>({
+  const contactPage = await sanityFetch<CONTACT_PAGE_QUERY_RESULT>({
     query: CONTACT_PAGE_QUERY,
   });
 

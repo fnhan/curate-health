@@ -1,12 +1,12 @@
 import { PortableText } from "@portabletext/react";
-import { CLINIC_SECTION_QUERYResult } from "sanity.types";
+import { CLINIC_SECTION_QUERY_RESULT } from "sanity.types";
 
 import { SanityImage } from "@/components/shared/sanity-image";
 
 export default function ClinicSection({
   clinicSection,
 }: {
-  clinicSection: CLINIC_SECTION_QUERYResult;
+  clinicSection: CLINIC_SECTION_QUERY_RESULT;
 }) {
   if (!clinicSection) return null;
 

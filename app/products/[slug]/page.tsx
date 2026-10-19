@@ -16,8 +16,8 @@ import { buildPageMetadata } from "@/lib/page-metadata";
 import { productAliasTargets, productPath } from "@/lib/service-urls";
 import { JsonLdScript, buildProductJsonLd } from "@/lib/structured-data";
 import {
-  PRODUCTS_NAVIGATION_QUERYResult,
-  PRODUCT_BY_SLUG_QUERYResult,
+  PRODUCTS_NAVIGATION_QUERY_RESULT,
+  PRODUCT_BY_SLUG_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
@@ -35,7 +35,7 @@ import {
  * down during the treatment slug rename, and the fix was this same shape.
  */
 function fetchProduct(slug: string) {
-  return sanityFetch<PRODUCT_BY_SLUG_QUERYResult>({
+  return sanityFetch<PRODUCT_BY_SLUG_QUERY_RESULT>({
     query: PRODUCT_BY_SLUG_QUERY,
     params: { slug },
   });
@@ -58,12 +58,13 @@ async function resolve(slug: string) {
   return { kind: "none" as const };
 }
 
-export default async function ProductPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const products = await sanityFetch<PRODUCTS_NAVIGATION_QUERYResult>({
+export default async function ProductPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
+  const products = await sanityFetch<PRODUCTS_NAVIGATION_QUERY_RESULT>({
     query: PRODUCTS_NAVIGATION_QUERY,
   });
 
@@ -178,11 +179,12 @@ export default async function ProductPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   // Same resolution as the component, deliberately. This runs first, so any
   // logic it does not share is logic the component never gets to apply.
   //

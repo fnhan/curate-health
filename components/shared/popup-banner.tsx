@@ -14,12 +14,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { POPUP_BANNER_QUERYResult } from "@/sanity.types";
+import { POPUP_BANNER_QUERY_RESULT } from "@/sanity.types";
 
 export default function PopupBanner({
   popupBanner,
 }: {
-  popupBanner: POPUP_BANNER_QUERYResult;
+  popupBanner: POPUP_BANNER_QUERY_RESULT;
 }) {
   const [open, setOpen] = useState(() => {
     if (typeof window !== "undefined") {

@@ -5,14 +5,14 @@ import Image from "next/image";
 import HoverLink from "components/shared/hover-link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import highlightCircleText from "public/images/CircleText.png";
-import { ABOUT_SECTION_QUERYResult } from "sanity.types";
+import { ABOUT_SECTION_QUERY_RESULT } from "sanity.types";
 
 import { SanityImage } from "@/components/shared/sanity-image";
 
 export default function AboutSection({
   aboutSection,
 }: {
-  aboutSection: ABOUT_SECTION_QUERYResult;
+  aboutSection: ABOUT_SECTION_QUERY_RESULT;
 }) {
   if (!aboutSection) return null;
 

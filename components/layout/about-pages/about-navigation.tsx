@@ -1,5 +1,5 @@
 import { SectionNavigation } from "@/components/shared/section-navigation";
-import { ABOUT_INDEX_QUERYResult } from "@/sanity.types";
+import { ABOUT_INDEX_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { ABOUT_INDEX_QUERY } from "@/sanity/lib/queries";
 
@@ -20,7 +20,7 @@ import { ABOUT_INDEX_QUERY } from "@/sanity/lib/queries";
  * section uses.
  */
 export async function AboutNavigation() {
-  const about = await sanityFetch<ABOUT_INDEX_QUERYResult>({
+  const about = await sanityFetch<ABOUT_INDEX_QUERY_RESULT>({
     query: ABOUT_INDEX_QUERY,
   });
 

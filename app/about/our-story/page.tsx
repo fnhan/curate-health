@@ -6,12 +6,12 @@ import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
-import { OUR_STORY_PAGE_QUERYResult } from "@/sanity.types";
+import { OUR_STORY_PAGE_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_STORY_PAGE_QUERY } from "@/sanity/lib/queries";
 
 export default async function OurStoryPage() {
-  const ourStory = await sanityFetch<OUR_STORY_PAGE_QUERYResult>({
+  const ourStory = await sanityFetch<OUR_STORY_PAGE_QUERY_RESULT>({
     query: OUR_STORY_PAGE_QUERY,
   });
 
@@ -100,7 +100,7 @@ export default async function OurStoryPage() {
 }
 
 export async function generateMetadata() {
-  const ourStory = await sanityFetch<OUR_STORY_PAGE_QUERYResult>({
+  const ourStory = await sanityFetch<OUR_STORY_PAGE_QUERY_RESULT>({
     query: OUR_STORY_PAGE_QUERY,
   });
 

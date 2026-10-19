@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getAssetDownloadUrl } from "@/lib/asset-download";
 import { externalLinkProps } from "@/lib/links";
-import { SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult } from "@/sanity.types";
+import { SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 
 export default function ServiceLifestyleProgramContent({
   program,
 }: {
-  program: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERYResult;
+  program: SERVICE_LIFESTYLE_PROGRAM_BY_SLUG_QUERY_RESULT;
 }) {
   if (!program) {
     return null;

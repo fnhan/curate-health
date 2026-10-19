@@ -6,9 +6,9 @@ import Layout from "@/components/shared/layout";
 import { SectionNavigation } from "@/components/shared/section-navigation";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
-  LAYOUT_QUERYResult,
-  LEGAL_PAGES_NAV_QUERYResult,
-  LEGAL_PAGE_BY_SLUG_QUERYResult,
+  LAYOUT_QUERY_RESULT,
+  LEGAL_PAGES_NAV_QUERY_RESULT,
+  LEGAL_PAGE_BY_SLUG_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
@@ -17,21 +17,22 @@ import {
   LEGAL_PAGE_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
 
-export default async function LegalPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const layout = await sanityFetch<LAYOUT_QUERYResult>({
+export default async function LegalPage(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
+  const layout = await sanityFetch<LAYOUT_QUERY_RESULT>({
     query: LAYOUT_QUERY,
   });
 
-  const legalPage = await sanityFetch<LEGAL_PAGE_BY_SLUG_QUERYResult>({
+  const legalPage = await sanityFetch<LEGAL_PAGE_BY_SLUG_QUERY_RESULT>({
     query: LEGAL_PAGE_BY_SLUG_QUERY,
     params: { slug: params.slug },
   });
 
-  const legalPages = await sanityFetch<LEGAL_PAGES_NAV_QUERYResult>({
+  const legalPages = await sanityFetch<LEGAL_PAGES_NAV_QUERY_RESULT>({
     query: LEGAL_PAGES_NAV_QUERY,
   });
 
@@ -70,12 +71,13 @@ export default async function LegalPage({
   );
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const legalPage = await sanityFetch<LEGAL_PAGE_BY_SLUG_QUERYResult>({
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
+  const legalPage = await sanityFetch<LEGAL_PAGE_BY_SLUG_QUERY_RESULT>({
     query: LEGAL_PAGE_BY_SLUG_QUERY,
     params: { slug: params.slug },
   });

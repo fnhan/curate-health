@@ -11,12 +11,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { PILLARS_OF_HEALTH_QUERYResult } from "@/sanity.types";
+import { PILLARS_OF_HEALTH_QUERY_RESULT } from "@/sanity.types";
 
 export default function Pillars({
   pillarsOfHealth,
 }: {
-  pillarsOfHealth: PILLARS_OF_HEALTH_QUERYResult;
+  pillarsOfHealth: PILLARS_OF_HEALTH_QUERY_RESULT;
 }) {
   if (!pillarsOfHealth) {
     return null;

@@ -8,7 +8,12 @@ export const locate: DocumentLocationResolver = (params, context) => {
     // Subscribe to the latest slug and title
     const doc$ = context.documentStore.listenQuery(
       `*[_id == $id][0]{slug,title}`,
-      params,
+      /*
+       * Only the id, not the whole `params`. Sanity 6 added an optional
+       * `version` to what the resolver is handed, and an undefined value is
+       * not a legal GROQ parameter. The query has only ever read $id.
+       */
+      { id: params.id },
       { perspective: "previewDrafts" } // returns a draft article if it exists
     );
     // Return a streaming list of locations

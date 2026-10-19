@@ -1,11 +1,11 @@
 import { SanityImage } from "@/components/shared/sanity-image";
 import { Input } from "@/components/ui/input";
-import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
+import { OUR_PROGRAMS_QUERY_RESULT } from "@/sanity.types";
 
 const ExploreYourOptions = ({
   program,
 }: {
-  program: OUR_PROGRAMS_QUERYResult;
+  program: OUR_PROGRAMS_QUERY_RESULT;
 }) => {
   if (!program) {
     return null;

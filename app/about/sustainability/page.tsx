@@ -7,12 +7,12 @@ import { AboutNavigation } from "@/components/layout/about-pages/about-navigatio
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import CtaFooterSection from "@/components/shared/cta-footer-section";
 import { buildPageMetadata } from "@/lib/page-metadata";
-import { SUSTAINABILITY_QUERYResult } from "@/sanity.types";
+import { SUSTAINABILITY_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { SUSTAINABILITY_QUERY } from "@/sanity/lib/queries";
 
 export default async function SustainabilityPage() {
-  const sustainability = await sanityFetch<SUSTAINABILITY_QUERYResult>({
+  const sustainability = await sanityFetch<SUSTAINABILITY_QUERY_RESULT>({
     query: SUSTAINABILITY_QUERY,
   });
 
@@ -68,7 +68,7 @@ export default async function SustainabilityPage() {
 }
 
 export async function generateMetadata() {
-  const sustainability = await sanityFetch<SUSTAINABILITY_QUERYResult>({
+  const sustainability = await sanityFetch<SUSTAINABILITY_QUERY_RESULT>({
     query: SUSTAINABILITY_QUERY,
   });
 

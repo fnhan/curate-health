@@ -2,7 +2,7 @@ import React from "react";
 
 import { JsonLdScript, buildSiteJsonLd } from "@/lib/structured-data";
 
-import { LAYOUT_QUERYResult } from "../../sanity.types";
+import { LAYOUT_QUERY_RESULT } from "../../sanity.types";
 import NewsletterSection from "./newsletter-section";
 import PopupBanner from "./popup-banner";
 import SiteFooter from "./site-footer";
@@ -14,7 +14,7 @@ export default function Layout({
   layout,
 }: {
   children: React.ReactNode;
-  layout: LAYOUT_QUERYResult;
+  layout: LAYOUT_QUERY_RESULT;
 }) {
   const { surveySection, siteSettings, primaryCTAButton, popupBanner } = layout;
 

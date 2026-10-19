@@ -3,12 +3,12 @@ import Image from "next/image";
 import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import Pillars from "@/components/layout/about-pages/pillars";
 import { buildPageMetadata } from "@/lib/page-metadata";
-import { PILLARS_OF_HEALTH_QUERYResult } from "@/sanity.types";
+import { PILLARS_OF_HEALTH_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { PILLARS_OF_HEALTH_QUERY } from "@/sanity/lib/queries";
 
 export default async function PillarsofHealth() {
-  const pillarsOfHealth = await sanityFetch<PILLARS_OF_HEALTH_QUERYResult>({
+  const pillarsOfHealth = await sanityFetch<PILLARS_OF_HEALTH_QUERY_RESULT>({
     query: PILLARS_OF_HEALTH_QUERY,
   });
 
@@ -45,7 +45,7 @@ export default async function PillarsofHealth() {
 }
 
 export async function generateMetadata() {
-  const pillarsOfHealth = await sanityFetch<PILLARS_OF_HEALTH_QUERYResult>({
+  const pillarsOfHealth = await sanityFetch<PILLARS_OF_HEALTH_QUERY_RESULT>({
     query: PILLARS_OF_HEALTH_QUERY,
   });
 

@@ -1,5 +1,5 @@
 import { SectionNavigation } from "@/components/shared/section-navigation";
-import { ALL_SERVICES_QUERYResult } from "@/sanity.types";
+import { ALL_SERVICES_QUERY_RESULT } from "@/sanity.types";
 
 /**
  * The services second menu. The look and the behaviour live in
@@ -11,7 +11,7 @@ import { ALL_SERVICES_QUERYResult } from "@/sanity.types";
 export function ServicesNavigation({
   services,
 }: {
-  services: ALL_SERVICES_QUERYResult;
+  services: ALL_SERVICES_QUERY_RESULT;
 }) {
   return (
     <SectionNavigation

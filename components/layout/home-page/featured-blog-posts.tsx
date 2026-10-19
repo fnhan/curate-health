@@ -7,7 +7,7 @@ import { format, parseISO } from "date-fns";
 import { getMostRecentPosts } from "lib/utils";
 
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
-import { POSTS_QUERYResult } from "@/sanity.types";
+import { POSTS_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
 
@@ -16,7 +16,7 @@ import { dataset, projectId } from "../../../sanity/env";
 const builder = imageUrlBuilder({ projectId, dataset });
 
 export default async function FeaturedBlogPosts() {
-  const posts = await sanityFetch<POSTS_QUERYResult>({
+  const posts = await sanityFetch<POSTS_QUERY_RESULT>({
     query: POSTS_QUERY,
   });
 
@@ -34,12 +34,12 @@ export default async function FeaturedBlogPosts() {
 /**
  * The element type of the list this actually renders.
  *
- * It was typed as POST_QUERYResult, the result of a query fetching one post by
+ * It was typed as POST_QUERY_RESULT, the result of a query fetching one post by
  * slug, which this component never ran. The posts come from POSTS_QUERY, so a
  * change to that projection could not reach this prop and the mismatch would
  * have gone unreported.
  */
-type FeaturedPost = POSTS_QUERYResult[number];
+type FeaturedPost = POSTS_QUERY_RESULT[number];
 
 function Post({ post }: { post: FeaturedPost }) {
   if (!post) {

@@ -7,13 +7,13 @@ import type { Crumb } from "@/lib/breadcrumbs";
 import { treatmentPath } from "@/lib/service-urls";
 import { getPractitionerSlugFromName } from "@/lib/utils";
 import {
-  CAFE_MENU_QUERYResult,
-  CAFE_PAGE_QUERYResult,
-  GET_POST_BY_SLUG_QUERYResult,
-  PRACTITIONER_BY_SLUG_QUERYResult,
-  SERVICE_BY_SLUG_QUERYResult,
-  SITE_SETTINGS_QUERYResult,
-  TREATMENT_BY_SLUG_QUERYResult,
+  CAFE_MENU_QUERY_RESULT,
+  CAFE_PAGE_QUERY_RESULT,
+  GET_POST_BY_SLUG_QUERY_RESULT,
+  PRACTITIONER_BY_SLUG_QUERY_RESULT,
+  SERVICE_BY_SLUG_QUERY_RESULT,
+  SITE_SETTINGS_QUERY_RESULT,
+  TREATMENT_BY_SLUG_QUERY_RESULT,
 } from "@/sanity.types";
 
 type JsonLdValue =
@@ -55,7 +55,7 @@ function absoluteUrl(path: string) {
   return `${BASEURL}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
-function buildPostalAddress(siteSettings: SITE_SETTINGS_QUERYResult) {
+function buildPostalAddress(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
   const address = siteSettings?.contactInfo?.address;
 
   return stripEmpty({
@@ -79,7 +79,7 @@ function buildPostalAddress(siteSettings: SITE_SETTINGS_QUERYResult) {
  * stored before this field existed is.
  */
 function getActiveSocialUrls(
-  siteSettings: SITE_SETTINGS_QUERYResult,
+  siteSettings: SITE_SETTINGS_QUERY_RESULT,
   entity: "clinic" | "cafe" = "clinic"
 ) {
   return (
@@ -186,7 +186,7 @@ function parseHourRange(range: string | null | undefined) {
  * page, so this changes little there. It matters to everything that reads the
  * page directly, which is the surface CH-032 cares about.
  */
-function buildOpeningHours(siteSettings: SITE_SETTINGS_QUERYResult) {
+function buildOpeningHours(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
   const hours = siteSettings?.businessHours;
   if (!hours) return undefined;
 
@@ -245,7 +245,7 @@ function buildOpeningHours(siteSettings: SITE_SETTINGS_QUERYResult) {
   return specs.length ? (specs as JsonLdObject[]) : undefined;
 }
 
-function getActiveServiceNodes(siteSettings: SITE_SETTINGS_QUERYResult) {
+function getActiveServiceNodes(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
   return (
     siteSettings?.services
       ?.filter((service) => service.isActive && service.title && service.slug)
@@ -283,7 +283,7 @@ function getActiveServiceNodes(siteSettings: SITE_SETTINGS_QUERYResult) {
   );
 }
 
-export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERYResult) {
+export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
   const brandName = siteSettings?.brandName || BRAND_NAME;
   const contact = siteSettings?.contactInfo;
   const services = getActiveServiceNodes(siteSettings);
@@ -373,7 +373,7 @@ export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERYResult) {
   }) as JsonLdObject;
 }
 
-export function buildServiceJsonLd(service: SERVICE_BY_SLUG_QUERYResult) {
+export function buildServiceJsonLd(service: SERVICE_BY_SLUG_QUERY_RESULT) {
   if (!service?.title || !service.slug) {
     return null;
   }
@@ -445,7 +445,7 @@ export function buildLifestyleJsonLd(page: {
  * knows the category: treatments are served from /services/{treatment} and
  * only Recovery Sanctuary children stay nested.
  */
-export function buildTreatmentJsonLd(treatment: TREATMENT_BY_SLUG_QUERYResult) {
+export function buildTreatmentJsonLd(treatment: TREATMENT_BY_SLUG_QUERY_RESULT) {
   const treatmentSlug = treatment?.treatmentSlug?.current;
 
   if (!treatment?.title || !treatmentSlug) {
@@ -475,8 +475,8 @@ export function buildTreatmentJsonLd(treatment: TREATMENT_BY_SLUG_QUERYResult) {
 }
 
 export function buildCafeJsonLd(
-  cafePage: CAFE_PAGE_QUERYResult,
-  siteSettings?: SITE_SETTINGS_QUERYResult,
+  cafePage: CAFE_PAGE_QUERY_RESULT,
+  siteSettings?: SITE_SETTINGS_QUERY_RESULT,
   /**
    * True when /cafe/menu has items on it, CH-108.
    *
@@ -621,7 +621,7 @@ export const CAFE_MENU_PATH = "/cafe/menu";
  * The ingredient line becomes the item's description, because that is what it
  * is: the one thing somebody with an allergy is looking for.
  */
-export function buildCafeMenuJsonLd(menu: CAFE_MENU_QUERYResult) {
+export function buildCafeMenuJsonLd(menu: CAFE_MENU_QUERY_RESULT) {
   const sections = (menu?.sections ?? []).filter(
     (section) => (section.items ?? []).length > 0
   );
@@ -701,7 +701,7 @@ function firstParagraph(intro: string | null | undefined) {
  *
  * No reviewedBy. Frank declined the reviewed-by line on 2026-09-15.
  */
-export function buildBlogPostingJsonLd(post: GET_POST_BY_SLUG_QUERYResult) {
+export function buildBlogPostingJsonLd(post: GET_POST_BY_SLUG_QUERY_RESULT) {
   if (!post?.title || !post.slug?.current) return null;
 
   const url = absoluteUrl(`/blog/${post.slug.current}`);
@@ -916,7 +916,7 @@ export function buildBreadcrumbJsonLd(crumbs: Crumb[] | null | undefined) {
  * is what ties the person to the business rather than leaving them floating.
  */
 export function buildPractitionerJsonLd(
-  person: PRACTITIONER_BY_SLUG_QUERYResult
+  person: PRACTITIONER_BY_SLUG_QUERY_RESULT
 ) {
   if (!person?.name || !person.slug) return null;
 

@@ -16,9 +16,9 @@ import {
   buildCafeJsonLd,
 } from "@/lib/structured-data";
 import {
-  CAFE_MENU_QUERYResult,
-  CAFE_PAGE_QUERYResult,
-  SITE_SETTINGS_QUERYResult,
+  CAFE_MENU_QUERY_RESULT,
+  CAFE_PAGE_QUERY_RESULT,
+  SITE_SETTINGS_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
@@ -28,13 +28,13 @@ import {
 } from "@/sanity/lib/queries";
 
 export default async function CafePage() {
-  const cafePage = await sanityFetch<CAFE_PAGE_QUERYResult>({
+  const cafePage = await sanityFetch<CAFE_PAGE_QUERY_RESULT>({
     query: CAFE_PAGE_QUERY,
   });
 
   // For the cafe's structured data only: its address, hours and its own
   // Instagram all live on siteSettings. CH-008.
-  const siteSettings = await sanityFetch<SITE_SETTINGS_QUERYResult>({
+  const siteSettings = await sanityFetch<SITE_SETTINGS_QUERY_RESULT>({
     query: SITE_SETTINGS_QUERY,
   });
 
@@ -44,7 +44,7 @@ export default async function CafePage() {
    * there rather than at the PDF. One gate, the same one the route 404s on and
    * the sitemap lists on, so /cafe can never link to a page that is not there.
    */
-  const menu = await sanityFetch<CAFE_MENU_QUERYResult>({
+  const menu = await sanityFetch<CAFE_MENU_QUERY_RESULT>({
     query: CAFE_MENU_QUERY,
   });
 
@@ -108,7 +108,7 @@ export default async function CafePage() {
 }
 
 export async function generateMetadata() {
-  const cafePage = await sanityFetch<CAFE_PAGE_QUERYResult>({
+  const cafePage = await sanityFetch<CAFE_PAGE_QUERY_RESULT>({
     query: CAFE_PAGE_QUERY,
   });
 

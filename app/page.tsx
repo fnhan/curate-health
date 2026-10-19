@@ -10,7 +10,7 @@ import ProductsSection from "@/components/layout/home-page/products-section";
 import ServicesSection from "@/components/layout/home-page/services-section";
 import SustainabilitySection from "@/components/layout/home-page/sustainability-section";
 import Layout from "@/components/shared/layout";
-import { HOME_PAGE_QUERYResult, LAYOUT_QUERYResult } from "@/sanity.types";
+import { HOME_PAGE_QUERY_RESULT, LAYOUT_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { HOME_PAGE_QUERY, LAYOUT_QUERY } from "@/sanity/lib/queries";
 
@@ -28,10 +28,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const homePage = await sanityFetch<HOME_PAGE_QUERYResult>({
+  const homePage = await sanityFetch<HOME_PAGE_QUERY_RESULT>({
     query: HOME_PAGE_QUERY,
   });
-  const layout = await sanityFetch<LAYOUT_QUERYResult>({
+  const layout = await sanityFetch<LAYOUT_QUERY_RESULT>({
     query: LAYOUT_QUERY,
   });
 

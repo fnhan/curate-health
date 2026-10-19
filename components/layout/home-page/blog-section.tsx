@@ -1,12 +1,12 @@
 import HoverLink from "@/components/shared/hover-link";
-import { BLOG_SECTION_QUERYResult } from "@/sanity.types";
+import { BLOG_SECTION_QUERY_RESULT } from "@/sanity.types";
 
 import FeaturedBlogPosts from "./featured-blog-posts";
 
 export default function BlogSection({
   blogSection,
 }: {
-  blogSection: BLOG_SECTION_QUERYResult;
+  blogSection: BLOG_SECTION_QUERY_RESULT;
 }) {
   if (!blogSection) return null;
 

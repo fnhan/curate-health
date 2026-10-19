@@ -3782,19 +3782,66 @@ differently, so `CircleText.b545a5bb.png` became `CircleText.0vv3bxse3i-us.png`
 for a byte-identical file. The sitemap's `lastmod` is `new Date()` at request
 time and is normalised out too. A check that cries wolf gets ignored.
 
-#### Three image defaults are pinned, because Next 16 changed all three
+#### Next 16's image defaults, pinned through the upgrade then taken. 2026-10-19
 
-In `next.config.mjs`, and every one of them would have altered live images:
+All three defaults changed, and each would have altered live images, so they
+were pinned to the Next 14 values first and taken in a change of their own,
+where a difference could only have one cause.
 
-| Setting | Was | Next 16 default | Why it is pinned |
+| Setting | Was | Now | |
 | --- | --- | --- | --- |
-| `qualities` | any | `[75]` | **13 components ask for 90 or 100** and would all have been silently coerced down to 75 |
-| `imageSizes` | included 16 | 16 removed | rewrites the srcset of every image on the site |
-| `minimumCacheTTL` | 60s | 4 hours | changes revalidation for every image |
+| `qualities` | any | `[75]` | 12 components asked for 100 and one for 90 |
+| `imageSizes` | included 16 | 16 removed | shortens every srcset |
+| `minimumCacheTTL` | 60s | 4 hours | fewer revalidations |
 
-Taking Next 16's defaults is worth doing deliberately later: a smaller srcset
-and a longer cache are both improvements. Not in the same change as the
-framework, where a difference would have two possible causes.
+**Quality 100 was costing a great deal and buying nothing.** Measured across
+the 42 Sanity photographs served at 90 or 100, at 1920px: **89.7 MB down to
+68.5 MB, a quarter saved**, and the heroes individually drop 71% to 88%, one
+of them from 2.7 MB to 430 KB. Compared side by side and again zoomed four
+times, 100 and 75 are indistinguishable on these photographs. Do not put the
+quality props back without measuring again.
+
+**The `quality={100}` props went with it**, from 13 files. Left in, they would
+have read as a request for something the config no longer allows and silently
+produced 75 instead, and a prop that lies is worse than no prop.
+
+**`minimumCacheTTL` at 4 hours is safe here specifically because of how Sanity
+addresses assets.** The URL carries the content hash, and a crop carries its
+rect, so replacing a photograph or recropping it in the Studio produces a
+different URL rather than a stale one. A four hour cache on an address that
+changes whenever its content does cannot serve the wrong picture.
+
+Verified with `audit-render-baseline.js` against production: of 56 addresses,
+only `images` changed, on 52 pages, and nothing else moved. All 9 checks pass,
+and `audit-image-sizes.js` reports 98 of 98 tags still carrying both `sizes`
+and a srcset.
+
+#### The baseline tool covered less than it claimed, fixed 2026-10-19
+
+Three gaps, all found by checking a page by hand after the tool said nothing
+had changed. Worth knowing because the tool was written to be the proof that
+a framework change was safe, and **a check that silently covers less than it
+claims is worse than no check.**
+
+- **HTML entities were never decoded.** A served attribute reads
+  `?url=...&amp;w=3840&amp;q=100`, so parsing it raw yields the keys `url`,
+  `amp;w` and `amp;q`, and asking for `w` or `q` returns null. The tool
+  therefore recorded every image's address and **neither its width nor its
+  quality**, and reported "nothing changed" across a change that altered the
+  quality of every image on the site.
+- **srcset was not read at all**, though `imageSizes` changes exactly that and
+  nothing else. It records the candidate widths now.
+- **`<title>` was being counted twice**, as its own field and again inside the
+  flattened body text. Where it lands in the document differs between a
+  response served by Vercel and one from a local `next start`, which shifted
+  the head and tail windows on six practitioner pages and reported a change
+  that was not one. It is stripped from the body text now.
+
+**What this means for CH-118's "nothing changed" claim.** It stands for
+titles, descriptions, canonicals, share cards, headings, structured data, alt
+text, links and the words on every page, which is what the tool really
+compared. It did **not** independently confirm image widths and qualities:
+what protected those was pinning the three settings above, not the audit.
 
 #### revalidateTag takes `{ expire: 0 }`, not the recommended "max"
 

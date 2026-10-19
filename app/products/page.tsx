@@ -133,7 +133,6 @@ export default async function ProductsPage() {
                 alt={product.altText || product.title || ""}
                 width={380}
                 height={500}
-                quality={100}
               />
               <div className="absolute inset-0 flex h-full w-full items-end">
                 <div className="relative w-full">

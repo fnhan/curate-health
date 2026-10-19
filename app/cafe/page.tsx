@@ -74,7 +74,6 @@ export default async function CafePage() {
         width={1920}
         height={1080}
         priority
-        quality={100}
         sizes="100vw"
         source={heroSection?.heroImage?.image}
         src={heroSection?.heroImage?.image?.asset?.url || ""}

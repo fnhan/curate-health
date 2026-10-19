@@ -30,7 +30,6 @@ export function CafeCtaBandSection({ data }: { data: CtaBand }) {
           fill
           className="object-cover"
           sizes="100vw"
-          quality={90}
         />
       ) : (
         <div className="absolute inset-0 bg-platinum" aria-hidden />

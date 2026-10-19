@@ -194,7 +194,6 @@ export default async function CafeMenuPage() {
           width={1920}
           height={1080}
           priority
-          quality={100}
           sizes="100vw"
           className="h-[400px] w-full object-cover md:h-[550px]"
         />

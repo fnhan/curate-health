@@ -69,14 +69,26 @@ export default function OurProgramsSection({
             src={bgImage.asset.url}
             alt={bgImage.alt ?? "Our Programs background"}
             /*
-             * `object-[center_75%]` is the fallback, not the setting. With no
-             * hotspot stored this is exactly what it has always been; set one
-             * in the Studio and SanityImage emits an inline object-position,
-             * which beats this class. That is how Frank moves the photograph
-             * so the text sits over the wall rather than the plant on a
-             * narrow screen.
+             * The framing is decided in two places on purpose, because one
+             * photograph has to do two different jobs here.
+             *
+             * From `md` up the box is wide and short, the plant sits clear of
+             * the words, and Frank asked on 2026-10-19 to keep it: so desktop
+             * is pinned to `center 75%`, the framing this section has always
+             * had. The `!` is doing real work. SanityImage emits the hotspot
+             * as an inline style, and only an important class beats an inline
+             * style, so without it the hotspot would win at every width and
+             * the plant would leave the frame.
+             *
+             * Below `md` the box is much taller for its width, `object-cover`
+             * crops the sides, and the plant swells into the text. There the
+             * hotspot rules, so Frank tunes the phone framing by dragging the
+             * marker in the Studio and desktop does not move.
+             *
+             * With no hotspot stored, SanityImage emits nothing and both
+             * widths fall back to `center 75%`, exactly as before.
              */
-            className="object-cover object-[center_75%]"
+            className="object-cover object-[center_75%] md:!object-[center_75%]"
             sizes="100vw"
           />
         )}

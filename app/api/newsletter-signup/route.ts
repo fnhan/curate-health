@@ -82,9 +82,23 @@ async function keepRefusedSignup(email: string, why: string) {
     const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
+      /*
+       * NOT A FIELD CALLED `email`, and this is the whole trap.
+       *
+       * Formspree treats a field of that name as the reply-to address and
+       * validates it, so it answered 422 "should be an email" and sent
+       * nothing. Found 2026-10-19 when the first real refusal produced no
+       * message.
+       *
+       * The addresses most likely to be refused by Systeme.io are malformed
+       * ones, which are exactly the ones Formspree also refuses, so the
+       * safety net was failing for precisely the class of address it was
+       * built to catch. Under any other name the value is passed through
+       * untouched.
+       */
       body: JSON.stringify({
         _subject: "Newsletter signup was refused by Systeme.io",
-        email,
+        refusedAddress: email,
         reason: why,
         submittedAt: new Date().toISOString(),
         message:

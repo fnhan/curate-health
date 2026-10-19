@@ -2506,6 +2506,22 @@ accepted, 200 and "Check your inbox".
 Formspree form for this and set `NEWSLETTER_FALLBACK_ENDPOINT` in the Vercel
 project. Until then a refused address only reaches the Vercel log.
 
+**The address must not go to Formspree in a field called `email`.** It did,
+and the first real refusal on the live site sent nothing: Formspree reads a
+field of that name as the reply-to address and validates it, answering 422
+"should be an email". Fixed 2026-10-19; it is `refusedAddress` now, and under
+any other name the value is passed through untouched.
+
+**This failed for exactly the addresses it was built to catch.** The ones
+Systeme.io refuses are mostly malformed, and a malformed address is precisely
+what Formspree will not accept in that field. A valid address would have gone
+through, so the fault was invisible to every test that used one.
+
+**The local catcher could not see it**, because it accepts anything, which is
+why the test now asserts the payload has no field named `email` rather than
+only that the address arrived. A stand-in that is more permissive than the
+real service will pass things the real service refuses.
+
 **The confirmation notice is over the whole page, for ten seconds.** Frank,
 2026-10-18: people were missing it in the bottom right corner.
 `components/shared/confirmation-overlay.tsx`, used by the newsletter success

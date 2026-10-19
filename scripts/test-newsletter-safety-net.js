@@ -54,7 +54,21 @@ const REFUSED_BY_SYSTEME = "a@b";
   await new Promise((r) => setTimeout(r, 500));
   check("the visitor is told it failed", bad.status, 502);
   check("the address was caught", caught.length, 1);
-  check("and it is the right one", caught[0] && caught[0].email, REFUSED_BY_SYSTEME);
+  check("and it is the right one", caught[0] && caught[0].refusedAddress, REFUSED_BY_SYSTEME);
+
+  /*
+   * The catcher accepts anything, so it cannot notice what Formspree would
+   * refuse. Formspree reads a field named `email` as the reply-to and
+   * validates it, and the addresses Systeme.io refuses are mostly malformed
+   * ones, so a payload carrying that field would be rejected exactly when
+   * this is needed. That is what happened on 2026-10-19. This asserts the
+   * shape so it cannot come back.
+   */
+  check(
+    "no field named email, which Formspree would validate",
+    caught[0] && "email" in caught[0],
+    false
+  );
 
   console.log("\nA malformed address never reaches Systeme.io:");
   const malformed = await fetch(`${TARGET}/api/newsletter-signup`, {

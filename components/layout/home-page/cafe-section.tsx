@@ -1,13 +1,13 @@
 import { PortableText } from "@portabletext/react";
 import HoverLink from "components/shared/hover-link";
-import { CAFE_QUERYResult } from "sanity.types";
+import { CAFE_QUERY_RESULT } from "sanity.types";
 
 import { SanityImage } from "@/components/shared/sanity-image";
 
 export default function CafeSection({
   cafeSection,
 }: {
-  cafeSection: CAFE_QUERYResult;
+  cafeSection: CAFE_QUERY_RESULT;
 }) {
   if (!cafeSection) return null;
 

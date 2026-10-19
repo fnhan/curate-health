@@ -7,17 +7,17 @@ import HoverLink from "@/components/shared/hover-link";
 import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
-  ALL_SERVICES_QUERYResult,
-  SERVICES_PAGE_QUERYResult,
+  ALL_SERVICES_QUERY_RESULT,
+  SERVICES_PAGE_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { ALL_SERVICES_QUERY, SERVICES_PAGE_QUERY } from "@/sanity/lib/queries";
 
 export default async function ServicesPage() {
-  const services = await sanityFetch<ALL_SERVICES_QUERYResult>({
+  const services = await sanityFetch<ALL_SERVICES_QUERY_RESULT>({
     query: ALL_SERVICES_QUERY,
   });
-  const servicesHeroSection = await sanityFetch<SERVICES_PAGE_QUERYResult>({
+  const servicesHeroSection = await sanityFetch<SERVICES_PAGE_QUERY_RESULT>({
     query: SERVICES_PAGE_QUERY,
   });
 
@@ -85,7 +85,7 @@ export default async function ServicesPage() {
 }
 
 export async function generateMetadata() {
-  const servicesPage = await sanityFetch<SERVICES_PAGE_QUERYResult>({
+  const servicesPage = await sanityFetch<SERVICES_PAGE_QUERY_RESULT>({
     query: SERVICES_PAGE_QUERY,
   });
 

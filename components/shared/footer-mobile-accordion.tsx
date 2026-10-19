@@ -11,12 +11,12 @@ import { SocialIcon } from "@/components/shared/social-icon";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
-import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
+import { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 
 export function FooterMobileAccordion({
   siteSettings,
 }: {
-  siteSettings: SITE_SETTINGS_QUERYResult;
+  siteSettings: SITE_SETTINGS_QUERY_RESULT;
 }) {
   if (!siteSettings) return null;
 

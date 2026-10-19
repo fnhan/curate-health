@@ -4,16 +4,16 @@ import { SanityImage } from "@/components/shared/sanity-image";
 import { Button } from "@/components/ui/button";
 import { externalLinkProps } from "@/lib/links";
 import {
-  PRIMARY_CTA_BUTTON_QUERYResult,
-  TREATMENT_BY_SLUG_QUERYResult,
+  PRIMARY_CTA_BUTTON_QUERY_RESULT,
+  TREATMENT_BY_SLUG_QUERY_RESULT,
 } from "@/sanity.types";
 
 export default function TreatmentContent({
   treatment,
   primaryCTA,
 }: {
-  treatment: TREATMENT_BY_SLUG_QUERYResult;
-  primaryCTA: PRIMARY_CTA_BUTTON_QUERYResult;
+  treatment: TREATMENT_BY_SLUG_QUERY_RESULT;
+  primaryCTA: PRIMARY_CTA_BUTTON_QUERY_RESULT;
 }) {
   if (!treatment) {
     return null;

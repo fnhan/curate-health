@@ -20,8 +20,8 @@ import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
 import { cn } from "@/lib/utils";
 import {
-  PRIMARY_CTA_BUTTON_QUERYResult,
-  SITE_SETTINGS_QUERYResult,
+  PRIMARY_CTA_BUTTON_QUERY_RESULT,
+  SITE_SETTINGS_QUERY_RESULT,
 } from "@/sanity.types";
 
 import PrimaryCTAButton from "./primary-cta-button";
@@ -30,8 +30,8 @@ export default function SiteNav({
   siteSettings,
   primaryCTAButton,
 }: {
-  siteSettings: SITE_SETTINGS_QUERYResult;
-  primaryCTAButton: PRIMARY_CTA_BUTTON_QUERYResult;
+  siteSettings: SITE_SETTINGS_QUERY_RESULT;
+  primaryCTAButton: PRIMARY_CTA_BUTTON_QUERY_RESULT;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);

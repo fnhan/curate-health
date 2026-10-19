@@ -7,7 +7,7 @@ import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { cn } from "@/lib/utils";
-import { ABOUT_INDEX_QUERYResult } from "@/sanity.types";
+import { ABOUT_INDEX_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { ABOUT_INDEX_QUERY } from "@/sanity/lib/queries";
 
@@ -37,7 +37,7 @@ const FALLBACK = {
 };
 
 export default async function AboutPage() {
-  const data = await sanityFetch<ABOUT_INDEX_QUERYResult>({
+  const data = await sanityFetch<ABOUT_INDEX_QUERY_RESULT>({
     query: ABOUT_INDEX_QUERY,
   });
 
@@ -124,7 +124,7 @@ export default async function AboutPage() {
 }
 
 export async function generateMetadata() {
-  const data = await sanityFetch<ABOUT_INDEX_QUERYResult>({
+  const data = await sanityFetch<ABOUT_INDEX_QUERY_RESULT>({
     query: ABOUT_INDEX_QUERY,
   });
 

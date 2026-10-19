@@ -8,7 +8,7 @@ import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
 import { cn } from "@/lib/utils";
 import { cleanSlug } from "@/lib/utils";
-import { SERVICE_BY_SLUG_QUERYResult } from "@/sanity.types";
+import { SERVICE_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 
 interface Treatment {
   _id: string;
@@ -19,7 +19,7 @@ interface Treatment {
 export default function ServiceContent({
   service,
 }: {
-  service: SERVICE_BY_SLUG_QUERYResult;
+  service: SERVICE_BY_SLUG_QUERY_RESULT;
 }) {
   if (!service) {
     return null;

@@ -22,9 +22,9 @@ import { buildPageMetadata } from "@/lib/page-metadata";
 import { renamedTreatmentSlug, treatmentPath } from "@/lib/service-urls";
 import { JsonLdScript, buildTreatmentJsonLd } from "@/lib/structured-data";
 import {
-  ALL_SERVICES_QUERYResult,
-  PRIMARY_CTA_BUTTON_QUERYResult,
-  TREATMENT_BY_SLUG_QUERYResult,
+  ALL_SERVICES_QUERY_RESULT,
+  PRIMARY_CTA_BUTTON_QUERY_RESULT,
+  TREATMENT_BY_SLUG_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
@@ -43,7 +43,7 @@ import {
  * component, which is the same ordering trap as CH-001.
  */
 async function resolve(slug: string, treatmentSlug: string) {
-  const treatment = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
+  const treatment = await sanityFetch<TREATMENT_BY_SLUG_QUERY_RESULT>({
     query: TREATMENT_BY_SLUG_QUERY,
     params: { slug: treatmentSlug },
   });
@@ -68,7 +68,7 @@ async function resolve(slug: string, treatmentSlug: string) {
   const newSlug = renamedTreatmentSlug(treatmentSlug);
 
   if (newSlug) {
-    const renamed = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
+    const renamed = await sanityFetch<TREATMENT_BY_SLUG_QUERY_RESULT>({
       query: TREATMENT_BY_SLUG_QUERY,
       params: { slug: newSlug },
     });
@@ -90,7 +90,7 @@ export default async function TreatmentPage(
   }
 ) {
   const params = await props.params;
-  const services = await sanityFetch<ALL_SERVICES_QUERYResult>({
+  const services = await sanityFetch<ALL_SERVICES_QUERY_RESULT>({
     query: ALL_SERVICES_QUERY,
   });
 
@@ -106,7 +106,7 @@ export default async function TreatmentPage(
 
   const { treatment } = resolved;
 
-  const primaryCTA = await sanityFetch<PRIMARY_CTA_BUTTON_QUERYResult>({
+  const primaryCTA = await sanityFetch<PRIMARY_CTA_BUTTON_QUERY_RESULT>({
     query: PRIMARY_CTA_BUTTON_QUERY,
   });
 

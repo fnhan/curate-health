@@ -10,7 +10,7 @@ import {
   buildCafeMenuJsonLd,
   menuPrice,
 } from "@/lib/structured-data";
-import { CAFE_MENU_QUERYResult } from "@/sanity.types";
+import { CAFE_MENU_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { CAFE_MENU_QUERY } from "@/sanity/lib/queries";
 
@@ -43,7 +43,7 @@ const FALLBACK = {
 };
 
 type MenuSection = NonNullable<
-  NonNullable<CAFE_MENU_QUERYResult>["sections"]
+  NonNullable<CAFE_MENU_QUERY_RESULT>["sections"]
 >[number];
 
 /** One section of the menu: its heading, its standing note, and its items. */
@@ -145,7 +145,7 @@ function MenuSectionBlock({ section }: { section: MenuSection }) {
 }
 
 export default async function CafeMenuPage() {
-  const menu = await sanityFetch<CAFE_MENU_QUERYResult>({
+  const menu = await sanityFetch<CAFE_MENU_QUERY_RESULT>({
     query: CAFE_MENU_QUERY,
   });
 
@@ -326,7 +326,7 @@ export default async function CafeMenuPage() {
 }
 
 export async function generateMetadata() {
-  const menu = await sanityFetch<CAFE_MENU_QUERYResult>({
+  const menu = await sanityFetch<CAFE_MENU_QUERY_RESULT>({
     query: CAFE_MENU_QUERY,
   });
 

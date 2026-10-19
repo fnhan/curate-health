@@ -1,4 +1,4 @@
-import { FAVICON_QUERYResult } from "../sanity.types";
+import { FAVICON_QUERY_RESULT } from "../sanity.types";
 import { sanityFetch } from "../sanity/lib/client";
 import { FAVICON_QUERY } from "../sanity/lib/queries";
 
@@ -14,7 +14,7 @@ export const contentType = "image/png";
 
 // Image generation
 export default async function Icon() {
-  const result = await sanityFetch<FAVICON_QUERYResult>({
+  const result = await sanityFetch<FAVICON_QUERY_RESULT>({
     query: FAVICON_QUERY,
   });
 

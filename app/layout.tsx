@@ -6,8 +6,8 @@ import { draftMode } from "next/headers";
 // subpath. Same component, same behaviour.
 import { VisualEditing } from "next-sanity/visual-editing";
 import {
-  SITE_METADATA_QUERYResult,
-  SITE_SETTINGS_PHONE_QUERYResult,
+  SITE_METADATA_QUERY_RESULT,
+  SITE_SETTINGS_PHONE_QUERY_RESULT,
 } from "sanity.types";
 
 import { CSPostHogProvider } from "@/components/providers/posthog-provider";
@@ -33,7 +33,7 @@ const poppins = Poppins({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const siteMetadata = await sanityFetch<SITE_METADATA_QUERYResult>({
+  const siteMetadata = await sanityFetch<SITE_METADATA_QUERY_RESULT>({
     query: SITE_METADATA_QUERY,
   });
 
@@ -102,7 +102,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const phoneSettings = await sanityFetch<SITE_SETTINGS_PHONE_QUERYResult>({
+  const phoneSettings = await sanityFetch<SITE_SETTINGS_PHONE_QUERY_RESULT>({
     query: SITE_SETTINGS_PHONE_QUERY,
   });
   const callPhone = phoneSettings?.phone?.trim() ?? "";

@@ -8,9 +8,9 @@ import { buildPageMetadata } from "@/lib/page-metadata";
 import { productPath } from "@/lib/service-urls";
 import { JsonLdScript, buildProductsIndexJsonLd } from "@/lib/structured-data";
 import {
-  PRODUCTS_NAVIGATION_QUERYResult,
-  PRODUCTS_PAGE_QUERYResult,
-  PRODUCTS_QUERYResult,
+  PRODUCTS_NAVIGATION_QUERY_RESULT,
+  PRODUCTS_PAGE_QUERY_RESULT,
+  PRODUCTS_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
@@ -48,17 +48,17 @@ const FALLBACK = {
 };
 
 export default async function ProductsPage() {
-  const products = await sanityFetch<PRODUCTS_QUERYResult>({
+  const products = await sanityFetch<PRODUCTS_QUERY_RESULT>({
     query: PRODUCTS_QUERY,
   });
 
   // The sibling nav takes its own narrower projection, the same one the product
   // pages use, so the two render an identical list.
-  const productsNav = await sanityFetch<PRODUCTS_NAVIGATION_QUERYResult>({
+  const productsNav = await sanityFetch<PRODUCTS_NAVIGATION_QUERY_RESULT>({
     query: PRODUCTS_NAVIGATION_QUERY,
   });
 
-  const page = await sanityFetch<PRODUCTS_PAGE_QUERYResult>({
+  const page = await sanityFetch<PRODUCTS_PAGE_QUERY_RESULT>({
     query: PRODUCTS_PAGE_QUERY,
   });
 
@@ -153,7 +153,7 @@ export default async function ProductsPage() {
 }
 
 export async function generateMetadata() {
-  const page = await sanityFetch<PRODUCTS_PAGE_QUERYResult>({
+  const page = await sanityFetch<PRODUCTS_PAGE_QUERY_RESULT>({
     query: PRODUCTS_PAGE_QUERY,
   });
 

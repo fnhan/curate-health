@@ -11,7 +11,7 @@ import { addressLines } from "@/lib/address";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
-import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
+import { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 
 import { FooterMobileAccordion } from "./footer-mobile-accordion";
 
@@ -84,7 +84,7 @@ const BCORP_PROFILE_URL =
 export default function SiteFooter({
   siteSettings,
 }: {
-  siteSettings: SITE_SETTINGS_QUERYResult;
+  siteSettings: SITE_SETTINGS_QUERY_RESULT;
 }) {
   const pathname = usePathname();
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { treatmentPath } from "@/lib/service-urls";
-import { SITEMAP_QUERYResult } from "@/sanity.types";
+import { SITEMAP_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { SITEMAP_QUERY } from "@/sanity/lib/queries";
 
@@ -32,7 +32,7 @@ function generateSitemap(urls: Url[]) {
 }
 
 export async function GET() {
-  const sitemap = await sanityFetch<SITEMAP_QUERYResult>({
+  const sitemap = await sanityFetch<SITEMAP_QUERY_RESULT>({
     query: SITEMAP_QUERY,
   });
 

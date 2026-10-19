@@ -11,7 +11,7 @@ import { postCrumbs } from "@/lib/breadcrumbs";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { JsonLdScript, buildBlogPostingJsonLd } from "@/lib/structured-data";
 import { formatDate } from "@/lib/utils";
-import { GET_POST_BY_SLUG_QUERYResult } from "@/sanity.types";
+import { GET_POST_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { GET_POST_BY_SLUG_QUERY } from "@/sanity/lib/queries";
 
@@ -21,7 +21,7 @@ export default async function BlogPostPage(
   }
 ) {
   const params = await props.params;
-  const post = await sanityFetch<GET_POST_BY_SLUG_QUERYResult>({
+  const post = await sanityFetch<GET_POST_BY_SLUG_QUERY_RESULT>({
     query: GET_POST_BY_SLUG_QUERY,
     params: { slug: params.post },
   });
@@ -77,7 +77,7 @@ export async function generateMetadata(
   }
 ) {
   const params = await props.params;
-  const post = await sanityFetch<GET_POST_BY_SLUG_QUERYResult>({
+  const post = await sanityFetch<GET_POST_BY_SLUG_QUERY_RESULT>({
     query: GET_POST_BY_SLUG_QUERY,
     params: { slug: params.post },
   });

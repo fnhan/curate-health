@@ -18,10 +18,10 @@ import {
   buildTreatmentJsonLd,
 } from "@/lib/structured-data";
 import {
-  ALL_SERVICES_QUERYResult,
-  PRIMARY_CTA_BUTTON_QUERYResult,
-  SERVICE_BY_SLUG_QUERYResult,
-  TREATMENT_BY_SLUG_QUERYResult,
+  ALL_SERVICES_QUERY_RESULT,
+  PRIMARY_CTA_BUTTON_QUERY_RESULT,
+  SERVICE_BY_SLUG_QUERY_RESULT,
+  TREATMENT_BY_SLUG_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
@@ -49,7 +49,7 @@ import {
  * are served by [slug]/[treatment]. See lib/service-urls.ts.
  */
 async function resolve(slug: string) {
-  const service = await sanityFetch<SERVICE_BY_SLUG_QUERYResult>({
+  const service = await sanityFetch<SERVICE_BY_SLUG_QUERY_RESULT>({
     query: SERVICE_BY_SLUG_QUERY,
     params: { slug },
   });
@@ -61,7 +61,7 @@ async function resolve(slug: string) {
   const renamed = renamedServicePath(slug);
   if (renamed) return { kind: "renamed" as const, to: renamed };
 
-  const treatment = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
+  const treatment = await sanityFetch<TREATMENT_BY_SLUG_QUERY_RESULT>({
     query: TREATMENT_BY_SLUG_QUERY,
     params: { slug },
   });
@@ -83,7 +83,7 @@ async function resolve(slug: string) {
   // been renamed, in which case send the visitor to wherever it lives now.
   const newSlug = renamedTreatmentSlug(slug);
   if (newSlug) {
-    const renamedTreatment = await sanityFetch<TREATMENT_BY_SLUG_QUERYResult>({
+    const renamedTreatment = await sanityFetch<TREATMENT_BY_SLUG_QUERY_RESULT>({
       query: TREATMENT_BY_SLUG_QUERY,
       params: { slug: newSlug },
     });
@@ -105,7 +105,7 @@ export default async function ServiceOrTreatmentPage(
   }
 ) {
   const params = await props.params;
-  const services = await sanityFetch<ALL_SERVICES_QUERYResult>({
+  const services = await sanityFetch<ALL_SERVICES_QUERY_RESULT>({
     query: ALL_SERVICES_QUERY,
   });
 
@@ -122,7 +122,7 @@ export default async function ServiceOrTreatmentPage(
 
   if (resolved.kind === "treatment") {
     const { treatment } = resolved;
-    const primaryCTA = await sanityFetch<PRIMARY_CTA_BUTTON_QUERYResult>({
+    const primaryCTA = await sanityFetch<PRIMARY_CTA_BUTTON_QUERY_RESULT>({
       query: PRIMARY_CTA_BUTTON_QUERY,
     });
 

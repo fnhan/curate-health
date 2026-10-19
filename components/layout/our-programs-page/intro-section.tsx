@@ -1,7 +1,7 @@
 "use client";
 
 import { SanityImage } from "@/components/shared/sanity-image";
-import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
+import { OUR_PROGRAMS_QUERY_RESULT } from "@/sanity.types";
 
 const scrollToSection = (id) => {
   const element = document.getElementById(id);
@@ -10,7 +10,7 @@ const scrollToSection = (id) => {
   }
 };
 
-const IntroSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
+const IntroSection = ({ program }: { program: OUR_PROGRAMS_QUERY_RESULT }) => {
   if (!program) {
     return null;
   }

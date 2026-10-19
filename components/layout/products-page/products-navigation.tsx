@@ -1,5 +1,5 @@
 import { SectionNavigation } from "@/components/shared/section-navigation";
-import { PRODUCTS_NAVIGATION_QUERYResult } from "@/sanity.types";
+import { PRODUCTS_NAVIGATION_QUERY_RESULT } from "@/sanity.types";
 
 /**
  * The products second menu, the same component the services pages use. See
@@ -8,7 +8,7 @@ import { PRODUCTS_NAVIGATION_QUERYResult } from "@/sanity.types";
 export function ProductsNavigation({
   products,
 }: {
-  products: PRODUCTS_NAVIGATION_QUERYResult;
+  products: PRODUCTS_NAVIGATION_QUERY_RESULT;
 }) {
   return (
     <SectionNavigation

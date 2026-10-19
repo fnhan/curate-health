@@ -2,14 +2,14 @@ import { Button } from "components/ui/button";
 
 import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
-import { PRIMARY_CTA_BUTTON_QUERYResult } from "@/sanity.types";
+import { PRIMARY_CTA_BUTTON_QUERY_RESULT } from "@/sanity.types";
 
 export default function PrimaryCTAButton({
   primaryCTAButton,
   size = "default",
   variant = "default",
 }: {
-  primaryCTAButton: PRIMARY_CTA_BUTTON_QUERYResult;
+  primaryCTAButton: PRIMARY_CTA_BUTTON_QUERY_RESULT;
   size?: "xl" | "lg" | "default" | "sm";
   variant?: "default" | "secondary" | "ghost" | "link";
 }) {

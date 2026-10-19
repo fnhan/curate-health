@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
+import { OUR_PROGRAMS_QUERY_RESULT } from "@/sanity.types";
 
 const LargeText = ({
   children,
@@ -21,7 +21,7 @@ const LargeText = ({
   );
 };
 
-const CtaSection = ({ program }: { program: OUR_PROGRAMS_QUERYResult }) => {
+const CtaSection = ({ program }: { program: OUR_PROGRAMS_QUERY_RESULT }) => {
   if (!program) {
     return null;
   }

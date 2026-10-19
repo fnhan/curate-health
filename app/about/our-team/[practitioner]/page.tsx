@@ -10,7 +10,7 @@ import { buildPageMetadata } from "@/lib/page-metadata";
 import { treatmentPath } from "@/lib/service-urls";
 import { JsonLdScript, buildPractitionerJsonLd } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
-import { PRACTITIONER_BY_SLUG_QUERYResult } from "@/sanity.types";
+import { PRACTITIONER_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import {
   PRACTITIONER_PHOTO_HEIGHT,
@@ -59,7 +59,7 @@ function firstName(name: string) {
 }
 
 function fetchPractitioner(slug: string) {
-  return sanityFetch<PRACTITIONER_BY_SLUG_QUERYResult>({
+  return sanityFetch<PRACTITIONER_BY_SLUG_QUERY_RESULT>({
     query: PRACTITIONER_BY_SLUG_QUERY,
     params: { slug },
   });
@@ -328,7 +328,7 @@ const PORTRAIT_FOCUS = {
  * later, gets a card with their face on it without anyone remembering to.
  */
 function shareImageFromPhoto(
-  photo: NonNullable<PRACTITIONER_BY_SLUG_QUERYResult>["photo"]
+  photo: NonNullable<PRACTITIONER_BY_SLUG_QUERY_RESULT>["photo"]
 ) {
   const assetId = photo?.asset?._ref;
   if (!assetId || !photo?.url) return undefined;

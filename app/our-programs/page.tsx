@@ -10,12 +10,12 @@ import ThreePaths from "@/components/layout/our-programs-page/three-paths";
 import ServiceHeroSection from "@/components/layout/services-pages/service-hero-section";
 import HoverLink from "@/components/shared/hover-link";
 import { buildPageMetadata } from "@/lib/page-metadata";
-import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
+import { OUR_PROGRAMS_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_PROGRAMS_QUERY } from "@/sanity/lib/queries";
 
 export default async function OurProgramsPage() {
-  const program = await sanityFetch<OUR_PROGRAMS_QUERYResult>({
+  const program = await sanityFetch<OUR_PROGRAMS_QUERY_RESULT>({
     query: OUR_PROGRAMS_QUERY,
   });
 
@@ -68,7 +68,7 @@ export default async function OurProgramsPage() {
  * in the Studio still produces a sensible title rather than the site default.
  */
 export async function generateMetadata() {
-  const program = await sanityFetch<OUR_PROGRAMS_QUERYResult>({
+  const program = await sanityFetch<OUR_PROGRAMS_QUERY_RESULT>({
     query: OUR_PROGRAMS_QUERY,
   });
 

@@ -1,6 +1,6 @@
 import SectionHero from "@/components/shared/section-hero";
 import { toParagraphs } from "@/components/shared/section-intro";
-import { SERVICES_PAGE_QUERYResult } from "@/sanity.types";
+import { SERVICES_PAGE_QUERY_RESULT } from "@/sanity.types";
 
 /**
  * The /services hero. The layout lives in components/shared/section-hero.tsx,
@@ -9,7 +9,7 @@ import { SERVICES_PAGE_QUERYResult } from "@/sanity.types";
 export default function ServicesHeroSection({
   servicesHeroSection,
 }: {
-  servicesHeroSection: SERVICES_PAGE_QUERYResult;
+  servicesHeroSection: SERVICES_PAGE_QUERY_RESULT;
 }) {
   if (!servicesHeroSection?.heroSection?.image) {
     return null;

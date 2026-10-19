@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import { PortableText } from "@portabletext/react";
 import PrimaryCTAButton from "components/shared/primary-cta-button";
 import {
-  HERO_SECTION_QUERYResult,
-  PRIMARY_CTA_BUTTON_QUERYResult,
+  HERO_SECTION_QUERY_RESULT,
+  PRIMARY_CTA_BUTTON_QUERY_RESULT,
 } from "sanity.types";
 
 import HeroBgVideo from "./hero-bg-video";
@@ -13,8 +13,8 @@ export default function HeroSection({
   heroSection,
   primaryCTAButton,
 }: {
-  heroSection: HERO_SECTION_QUERYResult;
-  primaryCTAButton: PRIMARY_CTA_BUTTON_QUERYResult;
+  heroSection: HERO_SECTION_QUERY_RESULT;
+  primaryCTAButton: PRIMARY_CTA_BUTTON_QUERY_RESULT;
 }) {
   if (!heroSection) return null;
 

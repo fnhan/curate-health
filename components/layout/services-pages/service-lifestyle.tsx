@@ -36,7 +36,7 @@ import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { treatmentPath } from "@/lib/service-urls";
 import { cleanSlug, cn, getPractitionerSlugFromName } from "@/lib/utils";
-import { SERVICE_LIFESTYLE_BY_SLUG_QUERYResult } from "@/sanity.types";
+import { SERVICE_LIFESTYLE_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 
 import PillarsModified from "./pillars-modified";
 
@@ -126,7 +126,7 @@ interface Condition {
 export default function ServiceLifestyleContent({
   service,
 }: {
-  service: SERVICE_LIFESTYLE_BY_SLUG_QUERYResult;
+  service: SERVICE_LIFESTYLE_BY_SLUG_QUERY_RESULT;
 }) {
   if (!service) {
     return null;

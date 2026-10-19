@@ -3855,6 +3855,32 @@ to a 6.0.3 that something else pulled in, while the build uses the hoisted
 seven real errors. Typecheck with
 `node ./node_modules/typescript/lib/tsc.js --noEmit`.
 
+#### Sanity 6 renamed every generated query type
+
+`sanity typegen generate` emits `FOO_QUERY_RESULT` where Sanity 3 emitted
+`FOO_QUERYResult`, and there is no option to keep the old shape. So the first
+regeneration after this upgrade renames 50 types and breaks every import at
+once, which looks alarming and is mechanical:
+
+```bash
+git ls-files '*.ts' '*.tsx' | grep -v '^sanity.types.ts$' | while IFS= read -r f; do
+  perl -pi -e 's/([A-Z][A-Za-z0-9_]*)QUERYResult/$1QUERY_RESULT/g' "$f"
+done
+```
+
+That was done here, across 67 files. **Type imports are erased at compile
+time, so this cannot change runtime behaviour**, and the render comparison
+confirms it did not.
+
+**Do not pipe that loop into `head`.** The first run did, and SIGPIPE killed
+the loop part way, leaving five files renamed and the rest not. The typecheck
+caught it, but a partial sweep that happens to compile would not be caught.
+
+**A scratch file in `.tmp/` made this look worse than it was.** A survey of
+which names map cleanly reported 17 with no counterpart, all of them from
+`.tmp/types-before.ts`, an untracked leftover rather than live code. The real
+count is 50, all mapping by the one rule. Scope a survey to `git ls-files`.
+
 #### Verified
 
 All 9 checks in `audit-seo-complete.js`, `audit-security-headers.js` on 8

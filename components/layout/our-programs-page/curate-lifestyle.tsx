@@ -3,14 +3,14 @@ import Link from "next/link";
 import { SanityImage } from "@/components/shared/sanity-image";
 import { getAssetDownloadUrl } from "@/lib/asset-download";
 import { externalLinkProps } from "@/lib/links";
-import { OUR_PROGRAMS_QUERYResult } from "@/sanity.types";
+import { OUR_PROGRAMS_QUERY_RESULT } from "@/sanity.types";
 
 import arrow from "../../../public/images/cta-arrow.svg";
 
 const CurateLifestyle = ({
   program,
 }: {
-  program: OUR_PROGRAMS_QUERYResult;
+  program: OUR_PROGRAMS_QUERY_RESULT;
 }) => {
   if (!program) {
     return null;

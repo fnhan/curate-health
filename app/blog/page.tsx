@@ -17,14 +17,14 @@ import { buildPageMetadata } from "@/lib/page-metadata";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/utils";
 import {
-  BLOG_PAGE_QUERYResult,
-  GET_ALL_POSTS_QUERYResult,
+  BLOG_PAGE_QUERY_RESULT,
+  GET_ALL_POSTS_QUERY_RESULT,
 } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { BLOG_PAGE_QUERY, GET_ALL_POSTS_QUERY } from "@/sanity/lib/queries";
 
 export default async function BlogPage() {
-  const posts = await sanityFetch<GET_ALL_POSTS_QUERYResult>({
+  const posts = await sanityFetch<GET_ALL_POSTS_QUERY_RESULT>({
     query: GET_ALL_POSTS_QUERY,
   });
 
@@ -123,7 +123,7 @@ export default async function BlogPage() {
  * post's photo. The feed link tag is CH-105.
  */
 export async function generateMetadata() {
-  const data = await sanityFetch<BLOG_PAGE_QUERYResult>({
+  const data = await sanityFetch<BLOG_PAGE_QUERY_RESULT>({
     query: BLOG_PAGE_QUERY,
   });
 

@@ -4,7 +4,7 @@ import { addressOneLine } from "@/lib/address";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
-import { SITE_SETTINGS_QUERYResult } from "@/sanity.types";
+import { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 
 /**
  * Where the cafe is, when it is open, and how to reach it.
@@ -53,7 +53,7 @@ const TITLE_CASE: Record<string, string> = {
 export function CafeHours({
   siteSettings,
 }: {
-  siteSettings: SITE_SETTINGS_QUERYResult;
+  siteSettings: SITE_SETTINGS_QUERY_RESULT;
 }) {
   const hours = siteSettings?.businessHours;
   const contact = siteSettings?.contactInfo;

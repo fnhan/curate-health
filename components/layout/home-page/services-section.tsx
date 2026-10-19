@@ -7,14 +7,14 @@ import { useState } from "react";
 import HoverLink from "components/shared/hover-link";
 import { AnimatePresence, motion } from "framer-motion";
 import { MoveRightIcon } from "lucide-react";
-import { SERVICES_SECTION_QUERYResult } from "sanity.types";
+import { SERVICES_SECTION_QUERY_RESULT } from "sanity.types";
 
 import { GROUP_HOVER_UNDERLINE } from "@/lib/hover-underline";
 
 export default function ServicesSection({
   servicesSection,
 }: {
-  servicesSection: SERVICES_SECTION_QUERYResult;
+  servicesSection: SERVICES_SECTION_QUERY_RESULT;
 }) {
   if (!servicesSection) return null;
 

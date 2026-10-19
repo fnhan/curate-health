@@ -1,12 +1,12 @@
 import { PortableText } from "@portabletext/react";
 
 import { SanityImage } from "@/components/shared/sanity-image";
-import { SUSTAINABILITY_SECTION_QUERYResult } from "@/sanity.types";
+import { SUSTAINABILITY_SECTION_QUERY_RESULT } from "@/sanity.types";
 
 export default function SustainabilitySection({
   sustainabilitySection,
 }: {
-  sustainabilitySection: SUSTAINABILITY_SECTION_QUERYResult;
+  sustainabilitySection: SUSTAINABILITY_SECTION_QUERY_RESULT;
 }) {
   if (!sustainabilitySection) {
     return null;

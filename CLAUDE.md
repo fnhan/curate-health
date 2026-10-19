@@ -3657,6 +3657,133 @@ its own rather than waiting for CH-118.
 **CH-118 below assumes this is still pending. It is not.** The line about Sanity
 Studio v6 needing Node 22.12, and the Vercel project moving off 20.x, is done.
 
+### CH-118 Next.js 16. Done 2026-10-19
+
+Next 14.2.35 to **16.4.2**, React 18 to **19.3.1**, Sanity Studio 3 to
+**6.19.0**, next-sanity 9 to 13, @sanity/vision 3 to 6, sanity-plugin-mux-input
+2 to 5, framer-motion 10 to 14. Frank gave the go-ahead asking that nothing
+currently on the site be disturbed.
+
+**Every page serves exactly what it served before, and that is measured rather
+than asserted.** `scripts/audit-render-baseline.js` records status, title,
+description, canonical, robots, the whole share card, every h1, every JSON-LD
+block with its keys sorted, every image with its alt, every internal link and
+the visible text of all 53 pages, plus llms.txt, robots.txt, rss.xml and the
+sitemap. Both builds were captured on the same day, warmed first, with the
+identical script: **57 addresses, nothing changed.**
+
+```bash
+node scripts/audit-render-baseline.js http://localhost:3000 --save   # before
+node scripts/audit-render-baseline.js http://localhost:3000          # after
+```
+
+**Capture a warmed server.** The first comparison reported 37 pages changed and
+every one was a page caught mid-generation, with the title not yet in place.
+Request every sitemap page once before `--save` and again before comparing.
+
+**It deliberately ignores two things that change for reasons that are not
+ours**: script and stylesheet URLs, which carry a build hash, and a locally
+imported asset's content hash, which Turbopack and Webpack compute
+differently, so `CircleText.b545a5bb.png` became `CircleText.0vv3bxse3i-us.png`
+for a byte-identical file. The sitemap's `lastmod` is `new Date()` at request
+time and is normalised out too. A check that cries wolf gets ignored.
+
+#### Three image defaults are pinned, because Next 16 changed all three
+
+In `next.config.mjs`, and every one of them would have altered live images:
+
+| Setting | Was | Next 16 default | Why it is pinned |
+| --- | --- | --- | --- |
+| `qualities` | any | `[75]` | **13 components ask for 90 or 100** and would all have been silently coerced down to 75 |
+| `imageSizes` | included 16 | 16 removed | rewrites the srcset of every image on the site |
+| `minimumCacheTTL` | 60s | 4 hours | changes revalidation for every image |
+
+Taking Next 16's defaults is worth doing deliberately later: a smaller srcset
+and a longer cache are both improvements. Not in the same change as the
+framework, where a difference would have two possible causes.
+
+#### revalidateTag takes `{ expire: 0 }`, not the recommended "max"
+
+Next 16 made the second argument required. **"max" is stale-while-revalidate:
+the first request after a publish is served the old data.** That is right for
+a blog and wrong here, because CH-026 exists so the search index is correct
+within seconds of a publish, and the hour-long window beside it is only a
+backstop for this webhook failing silently.
+
+`{ expire: 0 }` is what the one-argument call did in Next 14, so behaviour is
+unchanged, and the Next docs name it for exactly this case: a webhook calling
+a Route Handler, where `updateTag` is not available because it is Server
+Actions only. `scripts/test-revalidate-endpoint.js` passes all 7 checks.
+
+#### middleware.ts stays, deliberately
+
+`middleware` is deprecated in favour of `proxy`, and **`proxy` cannot use the
+edge runtime**: it is nodejs and not configurable. This middleware gates every
+request on the site, reading the coming-soon flag and the admin cookie, so
+moving its runtime is a change worth making on its own with its own
+verification, rather than riding along with a framework upgrade. Next 16 runs
+it unchanged and labels it `Proxy (Middleware)` in the build output. The
+codemod offers to rename it; decline until somebody has tested the runtime
+change.
+
+#### What actually broke, and none of it was in page code
+
+- **The Studio CSP.** Sanity 6 loads `core.sanity-cdn.com/bridge.js` and its
+  fonts from `design-system-static.sanity.io`. Neither is under `*.sanity.io`,
+  so neither was allowed, and **the Studio still booted and looked almost
+  right** with its bridge blocked and a fallback font.
+  `audit-security-headers.js` passed throughout, because it reads headers and
+  cannot see a directive blocking something the page needs. This is the CH-012
+  lesson again: **load the Studio in a browser and read the console.** Both
+  origins are named constants in `lib/security-headers.mjs`, on the Studio
+  policy only.
+- **`moduleResolution` had to move from `node` to `bundler`.** Sanity 6 and
+  next-sanity 13 declare their subpaths through `exports`, which node10
+  resolution cannot read, so every `sanity/structure` and `next-sanity/studio`
+  import failed to typecheck. Compiler setting only; Turbopack does its own
+  resolution and the output is unchanged.
+- **`VisualEditing` moved** to `next-sanity/visual-editing`.
+- **`@sanity/ui` 4 renamed `Stack`'s `space` to `gap`**, typing the old name
+  as `never`.
+- **The presentation resolver** is handed an optional `version` now, which is
+  not a legal GROQ parameter. `sanity/presentation/locate.ts` passes the id
+  alone, which is all that query ever read.
+- **`/api/login` declared a `params` argument** for a route with no dynamic
+  segment and never read it. Next 14 did not check handler signatures; 16
+  generates a validator that does.
+- **`next lint` is removed and the `lint` script went with it.** It never ran:
+  ESLint was never configured here, so the command stopped at its first-run
+  prompt, and nothing in CI invoked it.
+
+**`npx tsc` is not this project's compiler.** `node_modules/.bin/tsc` resolves
+to a 6.0.3 that something else pulled in, while the build uses the hoisted
+5.7.2, and the two disagree: 6.0.3 reported two tsconfig deprecations and hid
+seven real errors. Typecheck with
+`node ./node_modules/typescript/lib/tsc.js --noEmit`.
+
+#### Verified
+
+All 9 checks in `audit-seo-complete.js`, `audit-security-headers.js` on 8
+paths, `audit-conversion-events.js` (53 of 53 pages, all 5 events),
+`test-revalidate-endpoint.js` (7 of 7), `audit-unicode.js`,
+`audit-address-duplication.js`, `audit-cafe-accent.js`, `audit-drafts.js` and
+`audit-booking-links.js` (27 Jane, 0 Embodia).
+
+In a browser, with the console read: the Studio boots with no CSP violation
+and its own font, the homepage has gtag defined and the Mux hero with no error
+and no broken images, `/contact` renders the map iframe with the Formspree
+action and the daddr link intact, and `/cafe/menu` renders. The only console
+error anywhere is the PostHog "initialized without a token" warning, which
+predates this and comes from `NEXT_PUBLIC_POSTHOG_KEY` being absent locally.
+
+**A fresh export was taken first**,
+`sanity-backup-2026-10-19-before-nextjs-16-upgrade.tar.gz`, although nothing
+in this ticket writes to Sanity.
+
+**Still open after this**: the 25 Dependabot alerts that needed version 16
+should now clear, so recount after merge; `middleware` to `proxy` is deferred
+above; and the three pinned image defaults are worth revisiting deliberately.
+
 ### CH-119 Our B Corp Certification page
 
 Asked for by Frank on 2026-10-11, to be built later. A page under About Us about

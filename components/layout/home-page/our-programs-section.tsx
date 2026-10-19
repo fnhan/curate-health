@@ -27,6 +27,14 @@ type OurProgramsSectionData = {
   bgImage: {
     asset: { _id: string; url: string | null } | null;
     alt: string | null;
+    /*
+     * The Studio's framing. `options: { hotspot: true }` has always been set
+     * on this field, so the marker was draggable and simply had no effect:
+     * the query selected neither of these and the component pinned the
+     * position in CSS. Both are read now.
+     */
+    crop?: unknown;
+    hotspot?: { x?: number; y?: number } | null;
   } | null;
   programs:
     | {
@@ -60,7 +68,27 @@ export default function OurProgramsSection({
             source={bgImage}
             src={bgImage.asset.url}
             alt={bgImage.alt ?? "Our Programs background"}
-            className="object-cover object-[center_75%]"
+            /*
+             * The framing is decided in two places on purpose, because one
+             * photograph has to do two different jobs here.
+             *
+             * From `md` up the box is wide and short, the plant sits clear of
+             * the words, and Frank asked on 2026-10-19 to keep it: so desktop
+             * is pinned to `center 75%`, the framing this section has always
+             * had. The `!` is doing real work. SanityImage emits the hotspot
+             * as an inline style, and only an important class beats an inline
+             * style, so without it the hotspot would win at every width and
+             * the plant would leave the frame.
+             *
+             * Below `md` the box is much taller for its width, `object-cover`
+             * crops the sides, and the plant swells into the text. There the
+             * hotspot rules, so Frank tunes the phone framing by dragging the
+             * marker in the Studio and desktop does not move.
+             *
+             * With no hotspot stored, SanityImage emits nothing and both
+             * widths fall back to `center 75%`, exactly as before.
+             */
+            className="object-cover object-[center_75%] md:!object-[center_75%]"
             sizes="100vw"
           />
         )}

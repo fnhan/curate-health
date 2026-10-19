@@ -18,6 +18,15 @@ export default defineType({
       initialValue: true,
     }),
     defineField({
+      name: "displayOrder",
+      title: "Display Order",
+      type: "number",
+      description:
+        "Lowest first, wherever the products are listed: the homepage carousel, the Products page and the Products menu. Leave empty and it sorts to the end alphabetically, so a new product appears last rather than jumping into the middle of a deliberate order.",
+      validation: (Rule) =>
+        Rule.integer().min(1).error("A whole number of 1 or more, or empty"),
+    }),
+    defineField({
       name: "title",
       title: "Product Name",
       type: "string",

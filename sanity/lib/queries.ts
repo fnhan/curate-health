@@ -231,7 +231,10 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
 
 export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
   sectionTitle,
-  "products": *[_type == "product" && isActive == true]{
+  // Ordered by Display Order, which Frank set on 2026-10-19. Anything left
+  // unset falls to the end alphabetically, so a new product appears last
+  // rather than in the middle of a deliberate order.
+  "products": *[_type == "product" && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){
     title,
     description,
     "slug": slug.current,
@@ -243,7 +246,7 @@ export const PRODUCTS_SECTION_QUERY = groq`*[_type == "productsSection"][0]{
   }
 }`;
 
-export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] {
+export const PRODUCTS_QUERY = groq`*[_type == "product" && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc) {
   title,
   indepthblockinfo,
   description,
@@ -362,7 +365,7 @@ export const LEGAL_PAGES_NAV_QUERY = groq`*[_type == "legalPage" && defined(slug
   "slug": slug.current
 }`;
 
-export const PRODUCTS_NAVIGATION_QUERY = groq`*[_type == "product" && isActive == true] {
+export const PRODUCTS_NAVIGATION_QUERY = groq`*[_type == "product" && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc) {
   title,
   "slug": slug.current,
 }`;
@@ -798,7 +801,20 @@ const OUR_PROGRAMS_SECTION_QUERY = groq`*[_type == "ourProgramsSection"][0]{
       _id,
       url
     },
-    "alt": bgImage.alt
+    "alt": bgImage.alt,
+    // The crop and the hotspot. This projection built its own bgImage object
+    // and selected neither, so the Studio's framing never reached the page and
+    // dragging the marker did nothing. Frank asked on 2026-10-19 to move this
+    // photograph so the text sits over the wall rather than the plant on a
+    // narrow screen.
+    //
+    // GROQ takes line comments and not block ones, and this whole query is a
+    // backtick template, so a backtick in a comment ends the string early.
+    // Both mistakes were made here and both break HOME_PAGE_QUERY rather than
+    // only this one, which would have taken the homepage down.
+    // sanity typegen generate is what catches them.
+    "crop": bgImage.crop,
+    "hotspot": bgImage.hotspot
   },
   programs[]{
     name,

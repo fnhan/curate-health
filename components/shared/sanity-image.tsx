@@ -1,6 +1,10 @@
 import Image, { type ImageProps } from "next/image";
 
-import { croppedImageUrl, framedImageUrl } from "@/sanity/lib/image";
+import {
+  croppedImageUrl,
+  framedImageUrl,
+  hotspotObjectPosition,
+} from "@/sanity/lib/image";
 
 /**
  * A photograph from Sanity that obeys the crop and hotspot set in the Studio.
@@ -58,10 +62,30 @@ export function SanityImage({
    * Studio's crop rectangle, which is the part an editor actually drew;
    * `object-cover` then fits that to the box as it always did.
    */
-  const framed =
-    typeof width === "number" && typeof height === "number"
-      ? framedImageUrl(source, width, height)
-      : croppedImageUrl(source);
+  const isFill = !(typeof width === "number" && typeof height === "number");
 
-  return <Image {...rest} src={framed || src} width={width} height={height} />;
+  const framed = isFill
+    ? croppedImageUrl(source)
+    : framedImageUrl(source, width as number, height as number);
+
+  /*
+   * For a `fill` image the crop decides what is in the file and CSS decides
+   * which part of it survives `object-cover`, so the hotspot has to be
+   * expressed as `object-position` or it does nothing at all. Undefined when
+   * no hotspot is stored, which leaves whatever the call site already set.
+   *
+   * An inline style beats a Tailwind `object-[...]` class, which is the point:
+   * a hardcoded position is the fallback, and the editor's marker overrides it.
+   */
+  const objectPosition = isFill ? hotspotObjectPosition(source) : undefined;
+
+  return (
+    <Image
+      {...rest}
+      src={framed || src}
+      width={width}
+      height={height}
+      style={objectPosition ? { ...rest.style, objectPosition } : rest.style}
+    />
+  );
 }

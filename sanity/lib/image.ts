@@ -147,3 +147,39 @@ export const croppedImageUrl = (source: unknown) => {
       .url() || undefined
   );
 };
+
+/**
+ * The hotspot as a CSS `object-position`, for a `fill` image.
+ *
+ * A `fill` image is the one case where the Studio's hotspot was doing nothing.
+ * `croppedImageUrl` above hands Sanity the crop rectangle, which is the part
+ * of the photograph that ends up in the file, but which part of THAT stays
+ * visible when `object-cover` overflows the box is decided by CSS, and nothing
+ * was reading the hotspot to decide it. So an editor could drag the marker and
+ * watch the page ignore it.
+ *
+ * That is what this fixes, and it is the remaining half of the standing rule
+ * from 2026-10-18: a crop or a hotspot set in the Studio is never ignored on
+ * the page.
+ *
+ * Returns undefined when no hotspot is stored, so the call site keeps whatever
+ * object-position it already had and nothing moves until somebody drags the
+ * marker.
+ */
+export function hotspotObjectPosition(source: unknown) {
+  const hotspot = (source as { hotspot?: { x?: number; y?: number } } | null)
+    ?.hotspot;
+
+  if (
+    !hotspot ||
+    typeof hotspot.x !== "number" ||
+    typeof hotspot.y !== "number"
+  ) {
+    return undefined;
+  }
+
+  // Sanity stores the hotspot as a fraction of the image; CSS wants a percentage.
+  const pct = (n: number) => `${Math.round(Math.min(Math.max(n, 0), 1) * 1000) / 10}%`;
+
+  return `${pct(hotspot.x)} ${pct(hotspot.y)}`;
+}

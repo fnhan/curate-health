@@ -27,6 +27,14 @@ type OurProgramsSectionData = {
   bgImage: {
     asset: { _id: string; url: string | null } | null;
     alt: string | null;
+    /*
+     * The Studio's framing. `options: { hotspot: true }` has always been set
+     * on this field, so the marker was draggable and simply had no effect:
+     * the query selected neither of these and the component pinned the
+     * position in CSS. Both are read now.
+     */
+    crop?: unknown;
+    hotspot?: { x?: number; y?: number } | null;
   } | null;
   programs:
     | {
@@ -60,6 +68,14 @@ export default function OurProgramsSection({
             source={bgImage}
             src={bgImage.asset.url}
             alt={bgImage.alt ?? "Our Programs background"}
+            /*
+             * `object-[center_75%]` is the fallback, not the setting. With no
+             * hotspot stored this is exactly what it has always been; set one
+             * in the Studio and SanityImage emits an inline object-position,
+             * which beats this class. That is how Frank moves the photograph
+             * so the text sits over the wall rather than the plant on a
+             * narrow screen.
+             */
             className="object-cover object-[center_75%]"
             sizes="100vw"
           />

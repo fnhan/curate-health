@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import HoverLinkVariation from "@/components/shared/hover-link-variation";
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Accordion,
@@ -211,7 +212,10 @@ export default function ServiceLifestyleContent({
             <div className="space-y-4 md:space-y-6 2xl:space-y-8">
               <PageTitle>{title}</PageTitle>
               <div className="max-w-[80ch] text-pretty font-light">
-                <PortableText value={content!} />
+                <PortableText
+                  value={content!}
+                  components={portableTextComponents}
+                />
               </div>
             </div>
             <div className="flex flex-col gap-4">
@@ -266,7 +270,10 @@ export default function ServiceLifestyleContent({
           <div className="relative z-10 flex max-w-xl flex-col gap-y-10">
             <SubHeading>{block_2_title}</SubHeading>
             <div className="max-w-xl text-pretty font-light">
-              <PortableText value={block_2_content!} />
+              <PortableText
+                value={block_2_content!}
+                components={portableTextComponents}
+              />
             </div>
           </div>
         </div>
@@ -339,7 +346,10 @@ export default function ServiceLifestyleContent({
                             className={`w-full transition-all duration-300 ${isOpen ? "mt-2 h-fit opacity-100" : "h-0 overflow-hidden opacity-0"}`}
                           >
                             <div className="prose w-full text-pretty px-2 font-light">
-                              <PortableText value={condition.description!} />
+                              <PortableText
+                                value={condition.description!}
+                                components={portableTextComponents}
+                              />
                             </div>
                           </div>
                         </button>
@@ -372,7 +382,10 @@ export default function ServiceLifestyleContent({
                     {timeline_item.title}
                   </h3>
                   <div className="text-pretty text-base font-light">
-                    <PortableText value={timeline_item.description!} />
+                    <PortableText
+                      value={timeline_item.description!}
+                      components={portableTextComponents}
+                    />
                   </div>
                 </div>
               );
@@ -484,7 +497,10 @@ export default function ServiceLifestyleContent({
                     {benefit.title}
                   </h3>
                   <div className="max-h-0 overflow-hidden text-pretty font-light text-white transition-all duration-300 group-hover:max-h-96">
-                    <PortableText value={benefit.description!} />
+                    <PortableText
+                      value={benefit.description!}
+                      components={portableTextComponents}
+                    />
                   </div>
                 </div>
               </div>
@@ -620,7 +636,10 @@ export default function ServiceLifestyleContent({
                   </CardTitle>
                   <CardDescription>
                     <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
-                      <PortableText value={mainMember[0]?.role!} />
+                      <PortableText
+                        value={mainMember[0]?.role!}
+                        components={portableTextComponents}
+                      />
                     </div>
                   </CardDescription>
                 </CardHeader>
@@ -670,7 +689,10 @@ export default function ServiceLifestyleContent({
                   </CardTitle>
                   <CardDescription>
                     <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
-                      <PortableText value={teamMember.role!} />
+                      <PortableText
+                        value={teamMember.role!}
+                        components={portableTextComponents}
+                      />
                     </div>
                   </CardDescription>
                 </CardHeader>
@@ -730,7 +752,10 @@ export default function ServiceLifestyleContent({
                     </h4>
                   </AccordionTrigger>
                   <AccordionContent className="prose max-w-none pr-10">
-                    <PortableText value={faq.description!} />
+                    <PortableText
+                      value={faq.description!}
+                      components={portableTextComponents}
+                    />
                   </AccordionContent>
                 </AccordionItem>
               );

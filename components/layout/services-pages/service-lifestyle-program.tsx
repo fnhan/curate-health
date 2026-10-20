@@ -1,6 +1,7 @@
 import { PortableText } from "@portabletext/react";
 
 import { AlternatingSections } from "@/components/shared/alternating-sections";
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -99,7 +100,10 @@ export default function ServiceLifestyleProgramContent({
                 className="group flex flex-row items-center justify-between gap-4 py-4"
               >
                 <div>
-                  <PortableText value={section.description!} />
+                  <PortableText
+                    value={section.description!}
+                    components={portableTextComponents}
+                  />
                 </div>
                 <div className="size-24 shrink-0 rounded-full bg-primary">
                   <SanityImage

@@ -1,5 +1,6 @@
 import { PortableText } from "@portabletext/react";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import {
   Accordion,
   AccordionContent,
@@ -53,7 +54,10 @@ const FaqSection = ({ program }: { program: OUR_PROGRAMS_QUERY_RESULT }) => {
                   </h4>
                 </AccordionTrigger>
                 <AccordionContent className="leading-7hh prose max-w-none pb-12 pr-10 font-light">
-                  <PortableText value={faqItem.description!} />
+                  <PortableText
+                    value={faqItem.description!}
+                    components={portableTextComponents}
+                  />
                 </AccordionContent>
               </AccordionItem>
             );

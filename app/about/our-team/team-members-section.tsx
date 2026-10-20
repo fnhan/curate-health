@@ -8,6 +8,7 @@ import { ChevronRight } from "lucide-react";
 import { PortableText } from "next-sanity";
 import Masonry from "react-masonry-css";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Card,
@@ -179,7 +180,10 @@ function TeamMembersContent({ teamMembers }: TeamMembersSectionProps) {
                 </CardTitle>
                 <CardDescription>
                   <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
-                    <PortableText value={teamMember.role!} />
+                    <PortableText
+                      value={teamMember.role!}
+                      components={portableTextComponents}
+                    />
                   </div>
                 </CardDescription>
               </CardHeader>
@@ -235,7 +239,10 @@ export default function TeamMembersSection({
                   </CardTitle>
                   <CardDescription>
                     <div className="prose text-sm [&_li]:my-0 [&_li]:p-0 [&_ul]:m-0 [&_ul]:list-none [&_ul]:p-0">
-                      <PortableText value={teamMember.role!} />
+                      <PortableText
+                        value={teamMember.role!}
+                        components={portableTextComponents}
+                      />
                     </div>
                   </CardDescription>
                 </CardHeader>

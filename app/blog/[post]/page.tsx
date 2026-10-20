@@ -15,11 +15,9 @@ import { GET_POST_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { GET_POST_BY_SLUG_QUERY } from "@/sanity/lib/queries";
 
-export default async function BlogPostPage(
-  props: {
-    params: Promise<{ post: string }>;
-  }
-) {
+export default async function BlogPostPage(props: {
+  params: Promise<{ post: string }>;
+}) {
   const params = await props.params;
   const post = await sanityFetch<GET_POST_BY_SLUG_QUERY_RESULT>({
     query: GET_POST_BY_SLUG_QUERY,
@@ -70,11 +68,9 @@ export default async function BlogPostPage(
   );
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ post: string }>;
-  }
-) {
+export async function generateMetadata(props: {
+  params: Promise<{ post: string }>;
+}) {
   const params = await props.params;
   const post = await sanityFetch<GET_POST_BY_SLUG_QUERY_RESULT>({
     query: GET_POST_BY_SLUG_QUERY,

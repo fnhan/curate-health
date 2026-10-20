@@ -5,6 +5,7 @@ import ServiceHeroSection from "@/components/layout/services-pages/service-hero-
 import { ServicesNavigation } from "@/components/layout/services-pages/services-navigation";
 import TreatmentContent from "@/components/layout/services-pages/treatment-content";
 import TreatmentHeroSection from "@/components/layout/services-pages/treatment-hero-section";
+import { LinkBand } from "@/components/shared/link-band";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
   renamedServicePath,
@@ -13,6 +14,7 @@ import {
   treatmentPath,
 } from "@/lib/service-urls";
 import {
+  CLASS_SCHEDULE_PATH,
   JsonLdScript,
   buildServiceJsonLd,
   buildTreatmentJsonLd,
@@ -156,6 +158,24 @@ export default async function ServiceOrTreatmentPage(props: {
       />
       <ServicesNavigation services={services} />
       <ServiceContent service={service} />
+      {/*
+        The way into the class schedule, CH-107. Only on the Recovery
+        Sanctuary, because that is where every class runs, and only when the
+        schedule document has classes on it, which is the same gate /classes
+        itself 404s on. So this can never link at a page that is not there.
+
+        This is also what keeps /classes off audit-orphans.js: the schedule is
+        three clicks from the homepage through /services and this page. A main
+        navigation entry would make it one, and that is Frank's call rather
+        than something to add to the nav unasked.
+      */}
+      {params.slug === "recovery-sanctuary" && service.classScheduleActive ? (
+        <LinkBand
+          href={CLASS_SCHEDULE_PATH}
+          heading="Class schedule"
+          action="See when every class runs"
+        />
+      ) : null}
     </>
   );
 }

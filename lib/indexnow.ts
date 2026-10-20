@@ -125,6 +125,10 @@ export function pathsForDocument(doc: DocumentForPaths): string[] {
     // and its link into the menu both change when the menu does.
     case "cafeMenu":
       return ["/cafe/menu", "/cafe"];
+    // The class schedule, CH-107. The Recovery Sanctuary goes with it,
+    // because that page links the schedule and both change when a class does.
+    case "classSchedule":
+      return ["/classes", "/services/recovery-sanctuary"];
     case "contactPage":
       return ["/contact"];
     case "legalPage":

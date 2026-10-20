@@ -6,6 +6,7 @@ import author from "./schemas/author";
 import blockContent from "./schemas/blockContent";
 import blogSection from "./schemas/blogSection";
 import cafeMenu from "./schemas/cafeMenu";
+import classSchedule from "./schemas/classSchedule";
 import cafePage from "./schemas/cafePage";
 import cafeSection from "./schemas/cafeSection";
 import clinicSection from "./schemas/clinicSection";
@@ -74,6 +75,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     treatment /* Uses SEO Type */,
     cafePage /* Uses SEO Type */,
     cafeMenu /* Uses SEO Type */,
+    classSchedule /* Uses SEO Type, references treatments and practitioner */,
     post /* Uses SEO Type */,
     author,
     practitioner,

@@ -57,6 +57,11 @@ type LlmsData = {
     description: string | null;
     items: number | null;
   } | null;
+  classSchedule: {
+    title: string | null;
+    description: string | null;
+    classes: number | null;
+  } | null;
   team: Array<{
     name: string | null;
     role: string | null;
@@ -146,6 +151,13 @@ const LLMS_TXT_QUERY = groq`{
     title,
     "description": coalesce(seo.pageDescription, intro),
     "items": count(sections[].items[])
+  },
+  // The class schedule, CH-107. Counted the same way: the file names the page
+  // and an answer engine that wants the day and time follows the link.
+  "classSchedule": *[_type == "classSchedule"][0]{
+    title,
+    "description": coalesce(seo.pageDescription, intro),
+    "classes": count(classes)
   },
   // Role is rich text in the Studio, one line per role. Read as plain text
   // here, it printed as "[object Object]" for every member until 2026-09-18.
@@ -376,6 +388,16 @@ function buildLlmsTxt(data: LlmsData) {
                 data.cafeMenu.title || "Cafe Menu",
                 "/cafe/menu",
                 data.cafeMenu.description
+              )
+            : "",
+          // The class schedule, CH-107. It sits under this heading because
+          // every class runs in the Recovery Sanctuary, which is the other
+          // half of it. Same gate as the sitemap and the route.
+          data.classSchedule && (data.classSchedule.classes ?? 0) > 0
+            ? link(
+                data.classSchedule.title || "Class Schedule",
+                "/classes",
+                data.classSchedule.description
               )
             : "",
           // The PDF, for printing. Not a page, so it is named rather than

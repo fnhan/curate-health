@@ -1,5 +1,6 @@
 import { PortableText } from "@portabletext/react";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 import { SUSTAINABILITY_SECTION_QUERY_RESULT } from "@/sanity.types";
 
@@ -31,7 +32,10 @@ export default function SustainabilitySection({
         <div className="absolute bottom-0 left-0 right-0">
           <div className="container">
             <div className="relative float-left max-w-xs bg-white p-8 text-xs text-black md:max-w-md md:p-20 md:text-base lg:max-w-lg">
-              <PortableText value={sustainText!} />
+              <PortableText
+                value={sustainText!}
+                components={portableTextComponents}
+              />
             </div>
           </div>
         </div>

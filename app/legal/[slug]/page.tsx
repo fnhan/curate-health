@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PortableText } from "next-sanity";
 
 import Layout from "@/components/shared/layout";
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SectionNavigation } from "@/components/shared/section-navigation";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import {
@@ -17,11 +18,9 @@ import {
   LEGAL_PAGE_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
 
-export default async function LegalPage(
-  props: {
-    params: Promise<{ slug: string }>;
-  }
-) {
+export default async function LegalPage(props: {
+  params: Promise<{ slug: string }>;
+}) {
   const params = await props.params;
   const layout = await sanityFetch<LAYOUT_QUERY_RESULT>({
     query: LAYOUT_QUERY,
@@ -63,7 +62,7 @@ export default async function LegalPage(
       <div className="bg-white">
         <div className="container py-20">
           <div className="container prose">
-            <PortableText value={body!} />
+            <PortableText value={body!} components={portableTextComponents} />
           </div>
         </div>
       </div>
@@ -71,11 +70,9 @@ export default async function LegalPage(
   );
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ slug: string }>;
-  }
-) {
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}) {
   const params = await props.params;
   const legalPage = await sanityFetch<LEGAL_PAGE_BY_SLUG_QUERY_RESULT>({
     query: LEGAL_PAGE_BY_SLUG_QUERY,

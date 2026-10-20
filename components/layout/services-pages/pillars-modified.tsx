@@ -5,6 +5,7 @@ import { memo, useEffect, useState } from "react";
 
 import { PortableText } from "@portabletext/react";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import {
   Accordion,
   AccordionContent,
@@ -23,7 +24,7 @@ PillarTitle.displayName = "PillarTitle";
 // Memoized component for the pillar content
 const PillarContent = memo(({ content }: { content: any }) => (
   <div className="prose">
-    <PortableText value={content!} />
+    <PortableText value={content!} components={portableTextComponents} />
   </div>
 ));
 
@@ -96,7 +97,10 @@ export default function PillarsModified({
             <AccordionItem key={pillar.title} value={pillar.title}>
               <AccordionTrigger>{pillar.title}</AccordionTrigger>
               <AccordionContent>
-                <PortableText value={pillar.description!} />
+                <PortableText
+                  value={pillar.description!}
+                  components={portableTextComponents}
+                />
               </AccordionContent>
             </AccordionItem>
           ))}

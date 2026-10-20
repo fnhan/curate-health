@@ -3,6 +3,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { PortableText } from "@portabletext/react";
 
 import { ProductsNavigation } from "@/components/layout/products-page/products-navigation";
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 import {
   Accordion,
@@ -58,11 +59,9 @@ async function resolve(slug: string) {
   return { kind: "none" as const };
 }
 
-export default async function ProductPage(
-  props: {
-    params: Promise<{ slug: string }>;
-  }
-) {
+export default async function ProductPage(props: {
+  params: Promise<{ slug: string }>;
+}) {
   const params = await props.params;
   const products = await sanityFetch<PRODUCTS_NAVIGATION_QUERY_RESULT>({
     query: PRODUCTS_NAVIGATION_QUERY,
@@ -137,7 +136,10 @@ export default async function ProductPage(
                         {item.title}
                       </AccordionTrigger>
                       <AccordionContent className="prose w-full font-light">
-                        <PortableText value={item.description!} />
+                        <PortableText
+                          value={item.description!}
+                          components={portableTextComponents}
+                        />
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
@@ -178,11 +180,9 @@ export default async function ProductPage(
   );
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ slug: string }>;
-  }
-) {
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}) {
   const params = await props.params;
   // Same resolution as the component, deliberately. This runs first, so any
   // logic it does not share is logic the component never gets to apply.

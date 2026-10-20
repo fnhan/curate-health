@@ -7,6 +7,8 @@ import {
   PRIMARY_CTA_BUTTON_QUERY_RESULT,
 } from "sanity.types";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
+
 import HeroBgVideo from "./hero-bg-video";
 
 export default function HeroSection({
@@ -39,7 +41,7 @@ export default function HeroSection({
       </div>
       <div className="container z-20 py-20 text-center">
         <h1 className="mb-6 text-pretty text-[32px] md:text-[42px] 2xl:text-[72px]">
-          <PortableText value={heroText!} />
+          <PortableText value={heroText!} components={portableTextComponents} />
         </h1>
         <div className="flex h-[250px] justify-center text-[150px] font-thin text-secondary text-white">
           |

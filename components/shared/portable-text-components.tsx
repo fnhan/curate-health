@@ -22,8 +22,13 @@ import { externalLinkProps } from "@/lib/links";
  * `externalLinkProps` decides target and rel per href, so a link that leaves
  * the site opens in a new tab and one that stays does not.
  *
- * ONLY WIRED INTO AlternatingSections SO FAR. The other call sites still pass
- * no components and still have the trap. See the B Corp note in CLAUDE.md.
+ * WIRED INTO EVERY CALL SITE since 2026-10-20. It was AlternatingSections
+ * alone for ten days, which left the trap live everywhere else; the other
+ * fifteen files now pass this too, so a link typed into any rich text field
+ * renders as a link wherever that field is shown.
+ *
+ * Check with: every file matching `<PortableText` should also match
+ * `portableTextComponents`.
  */
 export const portableTextComponents: PortableTextComponents = {
   marks: {

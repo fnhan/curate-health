@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PortableText } from "@portabletext/react";
 import { ArrowRightIcon } from "lucide-react";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,10 @@ export default function ServiceContent({
           <div className="space-y-4 md:space-y-6 2xl:space-y-8">
             <h1 className="text-xl md:text-4xl 2xl:text-6xl">{title}</h1>
             <div className="max-w-[80ch] text-pretty font-light">
-              <PortableText value={content!} />
+              <PortableText
+                value={content!}
+                components={portableTextComponents}
+              />
             </div>
           </div>
           <div className="flex flex-col gap-4">

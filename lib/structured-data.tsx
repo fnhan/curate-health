@@ -743,6 +743,250 @@ export function buildBlogPostingJsonLd(post: GET_POST_BY_SLUG_QUERY_RESULT) {
   }) as JsonLdObject;
 }
 
+/** /classes. One place, so the page and the markup cannot disagree. */
+export const CLASS_SCHEDULE_PATH = "/classes";
+
+/** The anchor a class is linked and published under on the schedule page. */
+export function classAnchor(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/** 18:00 to 6:00 PM, for the page. Returns null for anything unparseable. */
+export function classTimeLabel(startTime: string | null | undefined) {
+  const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(startTime?.trim() ?? "");
+
+  if (!match) return null;
+
+  const hours = Number(match[1]);
+  const minutes = match[2];
+  const suffix = hours < 12 ? "AM" : "PM";
+  const twelve = hours % 12 === 0 ? 12 : hours % 12;
+
+  return `${twelve}:${minutes} ${suffix}`;
+}
+
+/** 18:00 plus 60 minutes is 19:00. Null when either input is unusable. */
+function endTime(
+  startTime: string | null | undefined,
+  durationMinutes: number | null | undefined
+) {
+  const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(startTime?.trim() ?? "");
+
+  if (!match || typeof durationMinutes !== "number" || durationMinutes <= 0) {
+    return null;
+  }
+
+  const total = Number(match[1]) * 60 + Number(match[2]) + durationMinutes;
+
+  // A class running past midnight would wrap to the following day, which
+  // `endTime` has no way to say. None does, and one would be a data error.
+  if (total >= 24 * 60) return null;
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+
+  return `${pad(Math.floor(total / 60))}:${pad(total % 60)}`;
+}
+
+type ScheduledClassLike = {
+  _key?: string | null;
+  name?: string | null;
+  summary?: string | null;
+  dayOfWeek?: string | null;
+  startTime?: string | null;
+  durationMinutes?: number | null;
+  capacity?: number | null;
+  price?: number | null;
+  note?: string | null;
+  treatmentSlug?: string | null;
+  serviceSlug?: string | null;
+  treatmentActive?: boolean | null;
+  bookingUrl?: string | null;
+  image?: { url?: string | null; alt?: string | null } | null;
+  instructor?: {
+    name?: string | null;
+    credentials?: string[] | null;
+    slug?: string | null;
+  } | null;
+};
+
+const DAYS = new Set([
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+]);
+
+/**
+ * The class schedule as Event nodes. CH-107.
+ *
+ * THE RECURRENCE IS PUBLISHED, NOT A LIST OF DATES
+ *
+ * `eventSchedule` with a `Schedule` is what schema.org provides for a class
+ * that runs every week at the same time, and it is what Google documents for
+ * a recurring event. A dated `startDate` would be wrong here twice over: Jane
+ * only holds the next fortnight open, so there is no reliable list of future
+ * dates to publish, and a date that has passed is worse than no date at all.
+ *
+ * `scheduleTimezone` is America/Toronto rather than an offset, so the hour
+ * stays correct across daylight saving. Jane returned these as -04:00 in
+ * October and -05:00 in November for the same 9:00 AM class, which is exactly
+ * the thing an offset gets wrong.
+ *
+ * WHAT IS NOT PUBLISHED, AND WHY
+ *
+ * `startDate` and `endDate`: nothing on the page states when a class started
+ * or will stop, and neither does Jane.
+ *
+ * A price with no `price` field set: pricing lives in Jane on this site, so a
+ * class only carries an `Offer` when somebody has typed the number into the
+ * Studio and the page is showing it. Markup describes what the page shows.
+ *
+ * A performer nobody can see: a practitioner switched off is already null by
+ * the time it reaches here, so the schedule cannot name somebody the rest of
+ * the site has taken down.
+ *
+ * The clinic is both `location` and `organizer` by reference. Its node is on
+ * every page through components/shared/layout.tsx, so the `@id` resolves
+ * within this document rather than pointing at nothing.
+ */
+export function buildClassScheduleJsonLd(schedule: {
+  title?: string | null;
+  classes?: ScheduledClassLike[] | null;
+} | null) {
+  const url = absoluteUrl(CLASS_SCHEDULE_PATH);
+
+  const events = (schedule?.classes ?? [])
+    .map((entry) => {
+      const name = entry.name?.trim();
+      const day = entry.dayOfWeek?.trim();
+      const start = entry.startTime?.trim();
+      const end = endTime(start, entry.durationMinutes);
+
+      // Everything below needs a name, a day and a usable time. A class
+      // missing any of them is left out rather than published half stated.
+      if (!name || !day || !DAYS.has(day) || !end) return undefined;
+
+      const anchor = classAnchor(name);
+      const page =
+        entry.treatmentActive && entry.serviceSlug && entry.treatmentSlug
+          ? absoluteUrl(treatmentPath(entry.serviceSlug, entry.treatmentSlug))
+          : undefined;
+
+      return {
+        "@type": "Event",
+        "@id": `${url}#${anchor}`,
+        name,
+        description: entry.summary?.trim() || undefined,
+        image: entry.image?.url || undefined,
+        // The schedule page's own anchor, because this is the page that
+        // states the day and the time. The class's treatment page, where
+        // there is one, is linked below as the thing being taught.
+        url: `${url}#${anchor}`,
+        eventSchedule: {
+          "@type": "Schedule",
+          byDay: `https://schema.org/${day}`,
+          repeatFrequency: "P1W",
+          startTime: start,
+          endTime: end,
+          duration: `PT${entry.durationMinutes}M`,
+          scheduleTimezone: "America/Toronto",
+        },
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode:
+          "https://schema.org/OfflineEventAttendanceMode",
+        location: { "@id": `${BASEURL}/#medicalclinic` },
+        organizer: { "@id": `${BASEURL}/#medicalclinic` },
+        performer: entry.instructor?.name
+          ? stripEmpty({
+              "@type": "Person",
+              // The same id their own page publishes, so the two are one
+              // person rather than two. The name and url go in as well,
+              // since a bare reference to a node on another page is not
+              // something a consumer here can resolve.
+              "@id": entry.instructor.slug
+                ? `${absoluteUrl(`/about/our-team/${entry.instructor.slug}`)}#person`
+                : undefined,
+              name: entry.instructor.name,
+              jobTitle: entry.instructor.credentials?.[0],
+              url: entry.instructor.slug
+                ? absoluteUrl(`/about/our-team/${entry.instructor.slug}`)
+                : undefined,
+            })
+          : undefined,
+        maximumAttendeeCapacity:
+          typeof entry.capacity === "number" ? entry.capacity : undefined,
+        // `subjectOf` would be wrong, since that wants a CreativeWork. The
+        // treatment page is linked as the booking and detail page instead.
+        offers:
+          typeof entry.price === "number" || entry.bookingUrl
+            ? stripEmpty({
+                "@type": "Offer",
+                price:
+                  typeof entry.price === "number"
+                    ? menuPrice(entry.price)
+                    : undefined,
+                priceCurrency:
+                  typeof entry.price === "number" ? "CAD" : undefined,
+                availability: "https://schema.org/InStock",
+                url: entry.bookingUrl || page,
+                category: "Drop-in place",
+              })
+            : undefined,
+      };
+    })
+    .filter(Boolean);
+
+  if (!events.length) return null;
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@graph": events as JsonLdValue[],
+  }) as JsonLdObject;
+}
+
+/**
+ * The schedule page as a list of the class pages below it.
+ *
+ * Same reasoning as the products index: the Event nodes above describe the
+ * classes, so declaring them again here would put one entity on two URLs.
+ * This states the page's own place in the structure and nothing more.
+ */
+export function buildClassScheduleListJsonLd(
+  schedule: {
+    title?: string | null;
+    classes?: ScheduledClassLike[] | null;
+  } | null
+) {
+  const items = (schedule?.classes ?? [])
+    .filter((entry) => entry.name?.trim())
+    .map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: entry.name!.trim(),
+      url:
+        entry.treatmentActive && entry.serviceSlug && entry.treatmentSlug
+          ? absoluteUrl(treatmentPath(entry.serviceSlug, entry.treatmentSlug))
+          : `${absoluteUrl(CLASS_SCHEDULE_PATH)}#${classAnchor(entry.name!.trim())}`,
+    }));
+
+  if (!items.length) return null;
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${absoluteUrl(CLASS_SCHEDULE_PATH)}#list`,
+    name: schedule?.title || "Class Schedule",
+    numberOfItems: items.length,
+    itemListElement: items,
+  }) as JsonLdObject;
+}
+
 export function JsonLdScript({
   data,
   id,

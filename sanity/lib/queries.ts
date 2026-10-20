@@ -155,6 +155,11 @@ export const SERVICE_BY_SLUG_QUERY = groq`
       "slug": treatmentSlug.current,
       "rawSlug": treatmentSlug
     },
+    // Whether /classes has anything on it, CH-107. The band into the schedule
+    // is only rendered when it does, which is the same gate the route 404s on
+    // and the sitemap and llms.txt use, so none of the four can disagree and
+    // this page can never link at a schedule that is not there.
+    "classScheduleActive": count(*[_type == "classSchedule" && count(classes) > 0]) > 0,
     ${SEO_QUERY}
   }
 `;
@@ -1122,6 +1127,77 @@ export const CAFE_MENU_QUERY = groq`*[_type == "cafeMenu"][0]{
   ${SEO_QUERY}
 }`;
 
+/**
+ * The class schedule, CH-107.
+ *
+ * Each class takes its name, photograph and description from the treatment
+ * page it points at, so nothing is written twice and the schedule cannot
+ * describe a class differently from the page about it.
+ *
+ * Three gates, all asking the dataset rather than being told:
+ *
+ * - `treatmentActive` is false when the class's page is switched off, or its
+ *   category is. The class still shows, as a name rather than a link, which
+ *   is the same reasoning as a practitioner with no Jane url getting the note
+ *   instead of a button: better than a link into a 404.
+ * - `instructor` is null when that practitioner is switched off, so the
+ *   schedule can never name somebody the rest of the site has taken down.
+ *   `select` returns null when the condition fails, which is what the page
+ *   and the markup both read as "nobody named".
+ * - `bookingUrl` falls back to the treatment's own Jane link, so the common
+ *   case needs nothing typed here.
+ */
+export const CLASS_SCHEDULE_QUERY = groq`*[_type == "classSchedule"][0]{
+  title,
+  intro,
+  note,
+  heroImage{
+    "url": asset->url,
+    // The image object itself, so a crop set in the Studio frames it.
+    "source": @{asset, crop, hotspot},
+    alt
+  },
+  classes[]{
+    _key,
+    dayOfWeek,
+    startTime,
+    durationMinutes,
+    capacity,
+    price,
+    note,
+    "name": coalesce(treatment->title, name),
+    "summary": coalesce(
+      treatment->seo.pageDescription,
+      treatment->intro.introParagraph,
+      summary
+    ),
+    "treatmentSlug": treatment->treatmentSlug.current,
+    "serviceSlug": treatment->service->slug.current,
+    "treatmentActive": treatment->isActive == true && treatment->service->isActive == true,
+    "image": treatment->heroImage{
+      "url": asset->url,
+      "source": @{asset, crop, hotspot},
+      "alt": heroAlt
+    },
+    "bookingUrl": coalesce(bookingUrl, treatment->janeBookingUrl),
+    "instructor": select(
+      instructor->isActive == true => instructor->{
+        name,
+        credentials,
+        "slug": slug.current
+      }
+    )
+  },
+  // The Recovery Sanctuary's own photograph, so this page always has a hero
+  // even before anybody picks one for it. Every class runs in that space.
+  "sanctuaryHeroImage": *[_type == "service" && slug.current == "recovery-sanctuary"][0].hero_image{
+    "url": asset->url,
+    "source": @{asset, crop, hotspot},
+    alt
+  },
+  ${SEO_QUERY}
+}`;
+
 export const SITEMAP_QUERY = groq`{
   "services": *[_type == "service" && isActive == true].slug.current,
   // A treatment is only a live page if its category is live too. Exercise
@@ -1148,6 +1224,9 @@ export const SITEMAP_QUERY = groq`{
   // menu is never listed: the route 404s in that state and a sitemap
   // entry would point at it.
   "cafeMenu": count(*[_type == "cafeMenu" && count(sections[defined(items) && count(items) > 0]) > 0]) > 0,
+  // /classes, CH-107. The same gate the route 404s on, so the sitemap never
+  // lists a schedule page with nothing on it.
+  "classSchedule": count(*[_type == "classSchedule" && count(classes) > 0]) > 0,
   // The two Curate Lifestyle pages have routes of their own rather than a
   // slug under /services, so the services list above never included them.
   // Both were live and missing from the sitemap until 2026-09-18.

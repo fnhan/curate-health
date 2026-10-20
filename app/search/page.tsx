@@ -43,6 +43,7 @@ const INDEX_DOCS_QUERY = groq`
     "pillarsOfHealth",
     "cafePage",
     "cafeMenu",
+    "classSchedule",
     "contactPage",
     "ourPrograms",
     "servicesHeroSection",
@@ -122,6 +123,8 @@ function buildHrefForDoc(doc: IndexDoc): string | null {
       return "/cafe";
     case "cafeMenu":
       return "/cafe/menu";
+    case "classSchedule":
+      return "/classes";
     case "contactPage":
       return "/contact";
     case "ourPrograms":

@@ -40,10 +40,17 @@ const APPLY = process.argv.includes("--apply");
  * throughout, so they are reconciled to the section rather than normalised,
  * per the dash sweep note.
  *
- * NOTE FOR THE PULL REQUEST: the last three sentences are word for word what
- * the call to action band further down the same page already says, which is
- * the duplication he had cut from this very section on 2026-10-20. His text
- * is applied as written and the clash is his to settle.
+ * THE CALL TO ACTION IS NOT IN THIS SECTION, AND THAT IS DELIBERATE.
+ *
+ * His text ended on three sentences that the call to action band further down
+ * the same page already says word for word. That is the duplication he had cut
+ * from this very section on 2026-10-20, and shown it again on 2026-10-24 he
+ * asked for it cut again: "revert the cafe text back so there's no
+ * duplications". So the section closes on its own last point, about seasonal
+ * sourcing, and the band carries the pitch.
+ *
+ * The second "our menu" link went with those sentences. The one in "Our menu
+ * changes seasonally" is the link he asked for and it stays.
  */
 const CAFE_BITE_SPANS = [
   {
@@ -53,17 +60,25 @@ const CAFE_BITE_SPANS = [
   { text: "Our menu", link: "/cafe/menu" },
   {
     text:
-      " changes seasonally, reflecting the freshest ingredients available and keeping your healthy eating experience exciting and varied. This approach not only supports local farmers and sustainability but also ensures that you receive the maximum nutritional support your body needs for the season it’s in. Ready to experience the benefits of nutritious, seasonal food? Visit Curate Cafe and discover how delicious healthy eating can be. Check out ",
-  },
-  { text: "our menu", link: "/cafe/menu" },
-  {
-    text:
-      " for the latest offerings and let us nourish your body and soul.",
+      " changes seasonally, reflecting the freshest ingredients available and keeping your healthy eating experience exciting and varied. This approach not only supports local farmers and sustainability but also ensures that you receive the maximum nutritional support your body needs for the season it’s in.",
   },
 ];
 
-const CAFE_BITE_EXPECT =
-  "Curate Cafe is more than a place to grab a drink or meal. It’s a space to savour, reflect, and realign with your well-being.";
+/**
+ * The openings this script is prepared to overwrite, rather than one.
+ *
+ * It has to be a list because the script has already run once: the first run
+ * wrote his text with the duplicated tail, and the second writes the same text
+ * without it. A guard matching only the original would refuse the second run,
+ * and widening it to the one sentence both share would stop it noticing a
+ * wholesale rewrite, which is the thing it exists to catch.
+ */
+const CAFE_BITE_EXPECT = [
+  // What was live before any of this, from the 2026-10-20 dedupe.
+  "Curate Cafe is more than a place to grab a drink or meal. It’s a space to savour, reflect, and realign with your well-being.",
+  // What the first run of this script wrote, on 2026-10-24.
+  "Curate Cafe is more than a place to grab a drink or meal. It’s a space to slow down, savour, reflect, and look after your well-being.",
+];
 
 /** s06, his wording on 2026-10-24, replacing "Not Sold Off a Shelf". */
 const PRODUCTS_SHARE_TITLE =
@@ -159,16 +174,16 @@ function buildBlock(spans) {
       .map((b) => (b.children ?? []).map((c) => c.text ?? "").join(""))
       .join("\n");
 
-    if (!now.startsWith(CAFE_BITE_EXPECT)) {
+    if (!CAFE_BITE_EXPECT.some((opening) => now.startsWith(opening))) {
       problems.push(
-        `c46: the section no longer opens on the text this was written against.\n       expected: ${CAFE_BITE_EXPECT}\n       found:    ${now.slice(0, 130)}`
+        `c46: the section no longer opens on any text this was written against.\n       found: ${now.slice(0, 130)}`
       );
     } else {
       changes.push({
         what: "c46  Cafe, Where Every Bite Matters",
         from: now,
         to: CAFE_BITE_SPANS.map((s) => s.text).join(""),
-        note: 'with "Our menu" and "our menu" linked to /cafe/menu',
+        note: 'with "Our menu" linked to /cafe/menu',
       });
     }
   }

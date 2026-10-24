@@ -790,6 +790,28 @@ function endTime(
   return `${pad(Math.floor(total / 60))}:${pad(total % 60)}`;
 }
 
+/**
+ * The picture for one class: its own if somebody set one, otherwise its
+ * treatment page's hero.
+ *
+ * Exported because the page and the Event markup both need it, and two
+ * copies of the rule would eventually disagree about which photograph a
+ * class has, the same reasoning as menuPrice above.
+ *
+ * It tests the url rather than the object, because an image field an editor
+ * opened and left empty still comes back as an object and would otherwise
+ * shadow the fallback.
+ */
+export function classPhoto<
+  A extends { url?: string | null },
+  B extends { url?: string | null },
+>(entry: {
+  image?: A | null;
+  treatmentImage?: B | null;
+}): A | B | null | undefined {
+  return entry.image?.url ? entry.image : entry.treatmentImage;
+}
+
 type ScheduledClassLike = {
   _key?: string | null;
   name?: string | null;
@@ -805,6 +827,7 @@ type ScheduledClassLike = {
   treatmentActive?: boolean | null;
   bookingUrl?: string | null;
   image?: { url?: string | null; alt?: string | null } | null;
+  treatmentImage?: { url?: string | null; alt?: string | null } | null;
   instructor?: {
     name?: string | null;
     credentials?: string[] | null;
@@ -883,7 +906,7 @@ export function buildClassScheduleJsonLd(schedule: {
         "@id": `${url}#${anchor}`,
         name,
         description: entry.summary?.trim() || undefined,
-        image: entry.image?.url || undefined,
+        image: classPhoto(entry)?.url || undefined,
         // The schedule page's own anchor, because this is the page that
         // states the day and the time. The class's treatment page, where
         // there is one, is linked below as the thing being taught.

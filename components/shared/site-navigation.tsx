@@ -45,7 +45,29 @@ export default function SiteNav({
 
   if (!siteSettings) return null;
 
-  const { brandName, navLinks, services, aboutPages, siteLogo } = siteSettings!;
+  const {
+    brandName,
+    navLinks: allNavLinks,
+    services,
+    aboutPages,
+    siteLogo,
+    classScheduleActive,
+  } = siteSettings!;
+
+  /*
+   * The Classes entry comes out of the menu while no class is switched on,
+   * CH-107. Same condition /classes itself 404s on, so the menu can never
+   * point at a page that is not there.
+   *
+   * Matched on href rather than on title, because the label is an editor's
+   * to reword and the address is not. It is decided here rather than in
+   * SITE_SETTINGS_QUERY because a GROQ filter holding a subquery is
+   * something `sanity typegen` cannot type: it drops the whole query and
+   * every import of SITE_SETTINGS_QUERY_RESULT stops compiling.
+   */
+  const navLinks = classScheduleActive
+    ? allNavLinks
+    : allNavLinks?.filter((link) => link.href !== "/classes");
 
   useEffect(() => {
     if (!sidebarSearchOpen) return;

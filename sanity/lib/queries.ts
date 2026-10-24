@@ -1,3 +1,19 @@
+/**
+ * Whether /classes has anything on it. CH-107.
+ *
+ * ONE STRING, READ BY FIVE PLACES, BECAUSE THEY MUST AGREE.
+ *
+ * The route 404s on it, the sitemap omits the URL, llms.txt omits the line,
+ * the band on /services/recovery-sanctuary is not rendered, and the Classes
+ * entry is dropped from the menu. Five copies of this condition would
+ * eventually disagree and leave something linking at a page that is not
+ * there, which is exactly what this is here to prevent.
+ *
+ * `isActive != false` rather than `== true`: an entry written before the
+ * switch existed has no such field, and should keep showing.
+ */
+const CLASSES_LIVE = groq`count(*[_type == "classSchedule" && count(classes[isActive != false]) > 0]) > 0`;
+
 import { groq } from "next-sanity";
 
 export const SEO_QUERY = groq`
@@ -159,7 +175,7 @@ export const SERVICE_BY_SLUG_QUERY = groq`
     // is only rendered when it does, which is the same gate the route 404s on
     // and the sitemap and llms.txt use, so none of the four can disagree and
     // this page can never link at a schedule that is not there.
-    "classScheduleActive": count(*[_type == "classSchedule" && count(classes) > 0]) > 0,
+    "classScheduleActive": ${CLASSES_LIVE},
     ${SEO_QUERY}
   }
 `;
@@ -728,6 +744,20 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     title,
     href
   },
+  // Whether /classes has anything on it, CH-107, so the menu can drop its
+  // Classes entry rather than pointing at a page that 404s. Same condition
+  // the route, the sitemap, llms.txt and the band on the Recovery Sanctuary
+  // all use.
+  //
+  // Reported here and applied in components/shared/site-navigation.tsx,
+  // rather than filtering navLinks in this projection. A filter holding a
+  // subquery is legal GROQ that sanity typegen cannot type: it drops this
+  // whole query and LAYOUT_QUERY with it, and every import of
+  // SITE_SETTINGS_QUERY_RESULT then fails to compile.
+  //
+  // GROQ takes // comments only. A /* */ block here silently breaks the
+  // whole query, which is how this was found.
+  "classScheduleActive": ${CLASSES_LIVE},
   footerNavLinks[]{
     _key,
     groupTitle,
@@ -1130,9 +1160,10 @@ export const CAFE_MENU_QUERY = groq`*[_type == "cafeMenu"][0]{
 /**
  * The class schedule, CH-107.
  *
- * Each class takes its name, photograph and description from the treatment
- * page it points at, so nothing is written twice and the schedule cannot
- * describe a class differently from the page about it.
+ * Each class takes its name from the treatment page it points at, so the
+ * schedule cannot call a class something other than its own page does. Its
+ * photograph and its summary fall through to that page as well, and either
+ * can be overridden on the entry here.
  *
  * Three gates, all asking the dataset rather than being told:
  *
@@ -1157,7 +1188,11 @@ export const CLASS_SCHEDULE_QUERY = groq`*[_type == "classSchedule"][0]{
     "source": @{asset, crop, hotspot},
     alt
   },
-  classes[]{
+  // A class switched off in the Studio is gone from here, so the page, the
+  // markup, the sitemap, llms.txt, site search and the menu all stop naming
+  // it at once. It tests != false rather than == true, so an entry written
+  // before the switch existed still shows rather than vanishing.
+  classes[isActive != false]{
     _key,
     dayOfWeek,
     startTime,
@@ -1166,15 +1201,34 @@ export const CLASS_SCHEDULE_QUERY = groq`*[_type == "classSchedule"][0]{
     price,
     note,
     "name": coalesce(treatment->title, name),
+    // The entry's own summary wins, so the line on this page can be edited
+    // without touching the treatment page's meta description. Empty, it
+    // falls through to that page's own words rather than to nothing.
     "summary": coalesce(
+      summary,
       treatment->seo.pageDescription,
-      treatment->intro.introParagraph,
-      summary
+      treatment->intro.introParagraph
     ),
     "treatmentSlug": treatment->treatmentSlug.current,
     "serviceSlug": treatment->service->slug.current,
     "treatmentActive": treatment->isActive == true && treatment->service->isActive == true,
-    "image": treatment->heroImage{
+    // Two photographs rather than one chosen here. The entry's own wins and
+    // the treatment page's is the fallback, which is also the only way a
+    // class without a page can have a picture at all.
+    //
+    // The choice is made in the page, not in this projection. A GROQ
+    // select() returning two different object shapes is legal and
+    // sanity typegen cannot type it: it drops the whole query, and every
+    // import of CLASS_SCHEDULE_QUERY_RESULT then fails to compile. A
+    // coalesce() is no good either, because an image field an editor opened
+    // and left empty is still a non-null object and would shadow the
+    // fallback.
+    "image": image{
+      "url": asset->url,
+      "source": @{asset, crop, hotspot},
+      alt
+    },
+    "treatmentImage": treatment->heroImage{
       "url": asset->url,
       "source": @{asset, crop, hotspot},
       "alt": heroAlt
@@ -1226,7 +1280,7 @@ export const SITEMAP_QUERY = groq`{
   "cafeMenu": count(*[_type == "cafeMenu" && count(sections[defined(items) && count(items) > 0]) > 0]) > 0,
   // /classes, CH-107. The same gate the route 404s on, so the sitemap never
   // lists a schedule page with nothing on it.
-  "classSchedule": count(*[_type == "classSchedule" && count(classes) > 0]) > 0,
+  "classSchedule": ${CLASSES_LIVE},
   // The two Curate Lifestyle pages have routes of their own rather than a
   // slug under /services, so the services list above never included them.
   // Both were live and missing from the sitemap until 2026-09-18.

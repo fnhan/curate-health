@@ -1428,10 +1428,76 @@ there is one.
 `/services/recovery-sanctuary` is not rendered. So the four cannot disagree and
 nothing can link at a page that is not there.
 
-**`/classes` is not in the main navigation**, and that is Frank's call rather
-than something to add unasked. It is reached from the Recovery Sanctuary, which
-is three clicks from the homepage, so `audit-orphans.js` passes. A nav entry
-would make it one click and is worth asking about.
+**`/classes` is in the main menu, from 2026-10-24.** Frank asked for it. It
+sits first in `navLinks`, which renders after Services, Programmes and About:
+a class is something Curate offers rather than a resource, so it belongs
+beside those rather than beside Blog and Contact. The band at the foot of
+`/services/recovery-sanctuary` stays, so there are two ways in.
+
+#### Each class has a switch, a photograph and editable details. 2026-10-24
+
+Frank asked for all three, the switch because instructors go on holiday.
+
+**`isActive` on each class, defaulting on.** Switched off, that class leaves
+the page, the markup, the sitemap, llms.txt and site search, and everything
+about it stays in the Studio, so switching it back on needs nothing else
+edited. With every class off the page itself 404s, the band goes and the
+Classes entry leaves the menu.
+
+**Site search needs the filter too**, which is the CH-104 lesson exactly: the
+index reads every string in a document, so without it searching a switched-off
+class's name still returned `/classes`. Both `INDEX_DOCS_QUERY` copies filter
+`classes` the same way `teamMembers` is filtered.
+
+**`isActive != false`, never `== true`.** An entry written before the field
+existed carries no value and must keep showing.
+
+**One condition, five readers, one string.** `CLASSES_LIVE` at the top of
+`sanity/lib/queries.ts`. The route, the sitemap, llms.txt, the band and the
+menu all read it. Five copies would eventually disagree and leave something
+pointing at a page that is not there, which is the whole point of the gate.
+
+**A per-class photograph**, overriding the treatment page's hero, and the only
+way the class with no page can have one. **An editable summary** the same way,
+so the line here can be changed without touching the treatment page's meta
+description.
+
+**The fallback is chosen in the page, not in GROQ**, through `classPhoto` in
+`lib/structured-data.tsx`, which the page and the Event markup both call so
+they cannot name different pictures. It tests the **url** rather than the
+object: an image field an editor opens and leaves empty is still a non-null
+object, so a `coalesce` would shadow the fallback.
+
+**Re-running `apply-class-schedule.js` no longer undoes a switch.** It writes
+the whole document with `createOrReplace`, so it reads what is live first and
+keeps each class's stored `isActive`. `--reset-switches` puts them all back on
+deliberately.
+
+**The meta description names all three classes**, so it goes slightly stale
+while one is switched off. Left as it is: naming them is worth real search
+traffic and a holiday is a week or two. It is `seo.pageDescription` on the
+schedule document if a class is ever off for a long stretch.
+
+##### Three GROQ traps, all of them already in this file, all hit again
+
+Worth reading before touching a query, because each one fails quietly and the
+symptom points somewhere else.
+
+- **A backtick inside a GROQ comment ends the template literal.** Writing
+  `sanity typegen` in backticks inside a `//` comment broke the file three
+  separate times, and `tsc` reports it as "',' expected" on a line that looks
+  fine.
+- **GROQ takes `//` comments only.** A `/* */` block inside
+  `SITE_SETTINGS_QUERY` silently broke that query and `LAYOUT_QUERY` with it,
+  and the only symptom was twenty files failing to find
+  `SITE_SETTINGS_QUERY_RESULT`.
+- **`sanity typegen` drops a whole query it cannot type, rather than failing.**
+  A `select()` returning two different object shapes, and a filter holding a
+  `*[...]` subquery, are both legal GROQ and both unprintable to it. The
+  generated file simply comes back missing that type. **Count the exported
+  type names before and after a regeneration**: the query count in its own
+  output is the thing to read, and it went 54, 51, 52, 53, 54 across this
+  change while the errors moved around.
 
 `components/shared/link-band.tsx` is the band, extracted out of
 `cafe-menu-band.tsx` the way `ServicesNavigation` wraps `SectionNavigation`.
@@ -1462,8 +1528,9 @@ than anything here.
 
 **Open, and all of it Frank's:**
 
-- **A photograph for Tai Chi**, and whether it should have a page of its own.
-  The copy would need Dr. Gabriele's sign-off.
+- **A photograph for Tai Chi**, which now has a field of its own on the
+  schedule entry, and whether it should have a page. The copy would need Dr.
+  Gabriele's sign-off.
 - **Whether the three $30 prices stay**, per the departure above.
 - **How many people the yoga and Tai Chi classes take.** Pilates says 12,
   which is his number from 2026-10-13. The other two are left empty rather
@@ -1472,7 +1539,9 @@ than anything here.
   and you are welcome to bring your own" and "Wear workout clothes and bring
   layers for the weather" are his Outdoor Pilates facts applied to the whole
   page.
-- **`/classes` in the main navigation**, as above.
+- Whether the Classes entry should also go in the footer Resources list,
+  beside Contact, Products, Cafe and Blog. The menu has it; the footer does
+  not, and that list carries no gate of its own, so it would need one.
 - The Outdoor Yoga Therapy description the page reuses is pre-rules 2024 copy,
   "Connect with nature, improve flexibility, and find inner peace": a
   rule-of-three and three claims. It is its treatment page's own meta

@@ -45,6 +45,9 @@ const { findBanned } = require("./lib/content-rules");
 
 const APPLY = process.argv.includes("--apply");
 
+/** Put every class back on, rather than keeping what the Studio holds. */
+const RESET_SWITCHES = process.argv.includes("--reset-switches");
+
 const DOC_ID = "classSchedule";
 
 /** A single newline, which the note field uses to separate its lines. */
@@ -64,6 +67,10 @@ const NOTE = [
   "Mats are provided, and you are welcome to bring your own.",
   "Wear workout clothes and bring layers for the weather.",
 ].join(LINE_BREAK);
+
+/** The entry in the main menu. "Classes", not "Class Schedule": a menu
+ *  label is the thing, not the page about it. */
+const NAV_LINK = { _type: "navLink", title: "Classes", href: "/classes" };
 
 const SEO_TITLE = "Class Schedule Toronto";
 const SEO_DESCRIPTION =
@@ -199,8 +206,29 @@ const key = (text) =>
   const treatments = await query(
     `*[_type == "treatments" && !(_id in path("drafts.**"))]{_id, title, isActive, janeBookingUrl, "slug": treatmentSlug.current, "serviceSlug": service->slug.current}`
   );
+  const settings = await query(
+    `*[_type == "siteSettings" && !(_id in path("drafts.**"))][0]{_id, _rev, navLinks}`
+  );
   const practitioners = await query(
     `*[_type == "practitioner" && !(_id in path("drafts.**"))]{_id, name, isActive, "slug": slug.current}`
+  );
+
+  /*
+   * What is live now, so a re-run does not undo an editor's switches.
+   *
+   * This writes the whole document with createOrReplace, so without this a
+   * second run would turn a class Frank had switched off for a holiday
+   * straight back on, and report success. Anything stored here wins over the
+   * `isActive: true` in CLASSES above, keyed by the same derived _key.
+   *
+   * `--reset-switches` puts every class back on deliberately.
+   */
+  const live = await query(
+    `*[_id == $id][0]{"switches": classes[]{_key, isActive}}`,
+    { id: DOC_ID }
+  );
+  const storedSwitch = new Map(
+    (live?.switches ?? []).map((c) => [c._key, c.isActive])
   );
 
   const problems = [];
@@ -234,6 +262,10 @@ const key = (text) =>
     return {
       _type: "scheduledClass",
       _key: key(name),
+      // On unless the Studio already says otherwise, per storedSwitch above.
+      isActive: RESET_SWITCHES
+        ? true
+        : (storedSwitch.get(key(name)) ?? true) !== false,
       ...(treatment
         ? {
             treatment: { _type: "reference", _ref: treatment._id },
@@ -347,6 +379,9 @@ const key = (text) =>
       `    booking   ${e.bookingUrl ?? e._inheritedBooking ?? "none"}${e.bookingUrl ? "  (set here)" : e._inheritedBooking ? "  (from the treatment)" : ""}`
     );
     if (e.note) console.log(`    note      ${e.note}`);
+    if (e.isActive === false) {
+      console.log("    showing   NO, switched off in the Studio and kept that way");
+    }
   }
 
   console.log();
@@ -376,6 +411,15 @@ const key = (text) =>
   };
 
   if (!APPLY) {
+    const inMenu = (settings?.navLinks ?? []).some(
+      (link) => link.href === NAV_LINK.href
+    );
+    console.log(
+      inMenu
+        ? "  The Classes entry is already in the menu."
+        : "  WOULD ADD \"Classes\" to the main menu, first in navLinks."
+    );
+    console.log();
     console.log("  Dry run. Nothing written. Re-run with --apply.");
     console.log();
     console.log("  The hero photograph is deliberately not set: the page falls");
@@ -388,7 +432,44 @@ const key = (text) =>
    * and the script is the source for all of it. A patch would leave an old
    * class behind if one were ever taken out of CLASSES above.
    */
-  const result = await mutate([{ createOrReplace: doc }]);
+  const mutations = [{ createOrReplace: doc }];
+
+  /*
+   * The Classes entry in the main menu, added at Frank's request on
+   * 2026-10-24. Before this the only way in was the band at the foot of
+   * /services/recovery-sanctuary, which put the page three clicks from the
+   * homepage; this makes it one.
+   *
+   * It goes first in navLinks, which renders after Services, Programmes and
+   * About: a class is something Curate offers rather than a resource, so it
+   * belongs beside those rather than beside Blog and Contact.
+   *
+   * SITE_SETTINGS_QUERY drops this entry while no class is switched on, by
+   * the same condition the route 404s on, so the menu can never point at a
+   * page that is not there.
+   *
+   * The whole array is written rather than an indexed append, per the CH-028
+   * note, and the patch carries ifRevisionID so a Studio edit in flight
+   * fails the mutation instead of being overwritten.
+   */
+  if (settings) {
+    const navLinks = settings.navLinks ?? [];
+    const already = navLinks.some((link) => link.href === NAV_LINK.href);
+
+    if (already) {
+      console.log("  The Classes entry is already in the menu, left alone.");
+    } else {
+      mutations.push({
+        patch: {
+          id: settings._id,
+          ifRevisionID: settings._rev,
+          set: { navLinks: [{ ...NAV_LINK, _key: "classes" }, ...navLinks] },
+        },
+      });
+    }
+  }
+
+  const result = await mutate(mutations);
 
   console.log(`  Applied. Transaction ${result.transactionId}.`);
 

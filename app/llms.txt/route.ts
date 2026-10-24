@@ -157,7 +157,9 @@ const LLMS_TXT_QUERY = groq`{
   "classSchedule": *[_type == "classSchedule"][0]{
     title,
     "description": coalesce(seo.pageDescription, intro),
-    "classes": count(classes)
+    // Switched-off classes are not counted, so a schedule with every class
+    // off drops out of this file the same way it drops out of the sitemap.
+    "classes": count(classes[isActive != false])
   },
   // Role is rich text in the Studio, one line per role. Read as plain text
   // here, it printed as "[object Object]" for every member until 2026-09-18.

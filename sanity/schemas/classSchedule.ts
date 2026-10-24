@@ -93,11 +93,19 @@ export default defineType({
                 "The page that describes this class. Its title, photograph and description are used here, so nothing is written twice. Leave empty for a class with no page yet: it still appears in the schedule, as a name rather than a link.",
             }),
             defineField({
+              name: "isActive",
+              title: "Show on website",
+              type: "boolean",
+              initialValue: true,
+              description:
+                "Switch off while a class is not running, for example when the instructor is away. The class leaves this page, the sitemap, llms.txt and site search, and no event is published for it. Everything about it is kept here, so switching it back on needs nothing else edited. With every class switched off the page itself goes, and so does the Classes link in the menu.",
+            }),
+            defineField({
               name: "name",
               title: "Name",
               type: "string",
               description:
-                "Only for a class with no treatment page. Ignored when one is set, so the two can never disagree.",
+                "Only for a class with no treatment page. Ignored when one is set, so a class cannot be called one thing here and another on its own page.",
               hidden: ({ parent }) => Boolean(parent?.treatment),
             }),
             defineField({
@@ -106,8 +114,24 @@ export default defineType({
               type: "text",
               rows: 3,
               description:
-                "One or two sentences, for a class with no treatment page to take a description from. Keep it to what the class is, not what it treats: anything clinical needs the practitioner's own sign-off.",
-              hidden: ({ parent }) => Boolean(parent?.treatment),
+                "One or two sentences shown under the class name. Left empty, a class with a treatment page uses that page's own description. Keep it to what the class is, not what it treats: anything clinical needs the practitioner's own sign-off.",
+            }),
+            defineField({
+              name: "image",
+              title: "Photograph",
+              type: "image",
+              options: { hotspot: true },
+              description:
+                "The picture beside this class. Left empty, a class with a treatment page uses that page's hero photograph, and a class without one shows no picture. Crop and hotspot are honoured here.",
+              fields: [
+                {
+                  name: "alt",
+                  type: "string",
+                  title: "Alternative text",
+                  description:
+                    "What the photograph shows. Describe the picture, not the class.",
+                },
+              ],
             }),
             defineField({
               name: "dayOfWeek",
@@ -193,12 +217,29 @@ export default defineType({
               day: "dayOfWeek",
               time: "startTime",
               who: "instructor.name",
+              isActive: "isActive",
+              media: "image",
+              treatmentMedia: "treatment.heroImage",
             },
-            prepare({ treatmentTitle, name, day, time, who }) {
+            prepare({
+              treatmentTitle,
+              name,
+              day,
+              time,
+              who,
+              isActive,
+              media,
+              treatmentMedia,
+            }) {
               const bits = [day, time, who].filter(Boolean);
               return {
-                title: treatmentTitle || name || "Untitled class",
+                // The switch has to be visible without opening the entry,
+                // or a class that is off looks exactly like one that is on.
+                title: `${treatmentTitle || name || "Untitled class"}${
+                  isActive === false ? "  (not showing)" : ""
+                }`,
                 subtitle: bits.length ? bits.join("  ") : undefined,
+                media: media || treatmentMedia,
               };
             },
           },

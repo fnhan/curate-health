@@ -14,6 +14,7 @@ import {
   buildClassScheduleJsonLd,
   buildClassScheduleListJsonLd,
   classAnchor,
+  classPhoto,
   classTimeLabel,
   menuPrice,
 } from "@/lib/structured-data";
@@ -87,6 +88,9 @@ function ClassBlock({ entry }: { entry: ScheduledClass }) {
   if (!name) return null;
 
   const time = classTimeLabel(entry.startTime);
+  // The entry own photograph, else its treatment page hero. Shared with the
+  // Event markup so the two cannot name different pictures.
+  const photo = classPhoto(entry);
   const length = lengthLabel(entry.durationMinutes);
 
   /*
@@ -155,11 +159,11 @@ function ClassBlock({ entry }: { entry: ScheduledClass }) {
         column to line up with.
       */}
       <div className="flex flex-col gap-8 md:grid md:grid-cols-[280px_1fr] md:gap-12">
-        {entry.image?.url ? (
+        {photo?.url ? (
           <SanityImage
-            source={entry.image.source}
-            src={entry.image.url}
-            alt={entry.image.alt ?? ""}
+            source={photo.source}
+            src={photo.url}
+            alt={photo.alt ?? ""}
             width={440}
             height={330}
             loading="lazy"

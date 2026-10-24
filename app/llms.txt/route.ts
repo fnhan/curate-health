@@ -402,9 +402,12 @@ function buildLlmsTxt(data: LlmsData) {
                 data.classSchedule.description
               )
             : "",
-          // The PDF, for printing. Not a page, so it is named rather than
-          // linked as one.
-          data.cafe.menuUrl ? `- Menu as a PDF: ${data.cafe.menuUrl}` : "",
+          // The PDF is deliberately not named here any more, Frank
+          // 2026-10-24: "No more menu download box". The download box left
+          // /cafe on 2026-10-18 and this line was the last reference to the
+          // file anywhere. A PDF beside a full HTML menu is a worse answer
+          // for a crawler, not a second one: it indexes poorly and cannot be
+          // excerpted. The file itself is untouched in Sanity.
         ]
           .filter(Boolean)
           .join("\n")

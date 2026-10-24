@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
+import { withoutDeadClassesLink } from "@/lib/class-schedule-link";
 import { cn } from "@/lib/utils";
 import {
   PRIMARY_CTA_BUTTON_QUERY_RESULT,
@@ -54,20 +55,14 @@ export default function SiteNav({
     classScheduleActive,
   } = siteSettings!;
 
-  /*
-   * The Classes entry comes out of the menu while no class is switched on,
-   * CH-107. Same condition /classes itself 404s on, so the menu can never
-   * point at a page that is not there.
-   *
-   * Matched on href rather than on title, because the label is an editor's
-   * to reword and the address is not. It is decided here rather than in
-   * SITE_SETTINGS_QUERY because a GROQ filter holding a subquery is
-   * something `sanity typegen` cannot type: it drops the whole query and
-   * every import of SITE_SETTINGS_QUERY_RESULT stops compiling.
-   */
-  const navLinks = classScheduleActive
-    ? allNavLinks
-    : allNavLinks?.filter((link) => link.href !== "/classes");
+  // The Classes entry comes out of the menu while no class is switched on,
+  // CH-107, by the same condition /classes itself 404s on. Shared with the
+  // footer and its mobile accordion, which show the same link.
+  const navLinks = withoutDeadClassesLink(
+    allNavLinks,
+    (link) => link.href,
+    classScheduleActive
+  );
 
   useEffect(() => {
     if (!sidebarSearchOpen) return;

@@ -10,6 +10,7 @@ import {
 import { SocialIcon } from "@/components/shared/social-icon";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
+import { withoutDeadClassesLink } from "@/lib/class-schedule-link";
 import { cn } from "@/lib/utils";
 import { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 
@@ -20,7 +21,8 @@ export function FooterMobileAccordion({
 }) {
   if (!siteSettings) return null;
 
-  const { services, footerNavLinks, socialMedia, aboutPages } = siteSettings;
+  const { services, footerNavLinks, socialMedia, aboutPages, classScheduleActive } =
+    siteSettings;
 
   return (
     <Accordion type="single" collapsible className="w-full lg:hidden">
@@ -96,7 +98,12 @@ export function FooterMobileAccordion({
           </AccordionTrigger>
           <AccordionContent>
             <div className="flex flex-col gap-1 text-base">
-              {section.links?.map((link, linkIndex) => (
+              {/* Same gate as the desktop footer and the menu, CH-107. */}
+              {withoutDeadClassesLink(
+                section.links,
+                (link) => link.slug?.current,
+                classScheduleActive
+              )?.map((link, linkIndex) => (
                 <Link
                   key={linkIndex}
                   className="w-fit hover:underline"

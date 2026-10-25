@@ -57,17 +57,43 @@ const HERO_ASSET = "image-3388975510b86abe3792c1deadaeea35da16a7ea-5575x3717-jpg
 const MARK_ASSET = "image-3d55827a4b315471a498ed55829394a1b8e01ddf-1600x1267-jpg";
 
 /*
- * Two people talking in the gym, one with a hand at his chin. Frank chose it
- * on 2026-10-25, off the Workers section of /about/sustainability, in place of
- * a stock yoga class.
+ * Two men seated in profile, the nearer one resting a hand against his chin.
+ * Frank sent it on 2026-10-25, the third photograph tried in this slot after a
+ * stock yoga class and the gym shot off /about/sustainability.
  *
- * It suits the section better than the yoga photograph did. That section is
- * about health being social, and a photograph of one person listening to
- * another is what that looks like, where a class of strangers on mats is a
- * picture of exercise.
+ * It is the right one for a section about health being social: attention
+ * pointed at the same thing, rather than two people photographed near each
+ * other.
+ *
+ * THE CROP IS NOT OPTIONAL HERE
+ *
+ * 2920x5184, a ratio of 0.563, in a slot that paints 704x556 at 1.266. Left to
+ * `object-cover` the browser takes a band from the middle, which is the hand
+ * and the lower half of a face: both heads sit in the top 45% of the frame.
+ *
+ * So the crop is anchored to the top and stored rather than baked into the
+ * file, which is what lets Frank move it in the Studio. It is carried here as
+ * well as in swap-bcorp-social-photo.js, because this script writes the whole
+ * document and would otherwise drop it on the next run.
  */
 const CONVERSATION_ASSET =
-  "image-23198e0a9a15d382a77f49a1745b15b7088cbd6d-3728x2920-jpg";
+  "image-4d3f4696881100e70769cc0074b0367196bef13a-2920x5184-jpg";
+
+const CONVERSATION_CROP = {
+  _type: "sanity.imageCrop",
+  top: 0,
+  bottom: 0.5552,
+  left: 0,
+  right: 0,
+};
+
+const CONVERSATION_HOTSPOT = {
+  _type: "sanity.imageHotspot",
+  x: 0.5,
+  y: 0.22,
+  width: 1,
+  height: 0.44,
+};
 
 /*
  * The waiting area, with the logo in cork lettering on the plaster wall. Found
@@ -151,7 +177,8 @@ const CONTENT = {
       key: "why-we-did-it",
       title: "Why we became one",
       asset: CONVERSATION_ASSET,
-      alt: "Two people in conversation in the gym, one with a hand resting at his chin, the other with their back to the camera.",
+      framing: { crop: CONVERSATION_CROP, hotspot: CONVERSATION_HOTSPOT },
+      alt: "Two men seated in profile in warm daylight, the nearer one in glasses resting a hand against his chin, both looking the same way.",
       paragraphs: [
         [
           {
@@ -187,7 +214,7 @@ const CONTENT = {
         ],
         [
           {
-            text: "Day to day it decides ordinary things. We buy from local vendors who work the way we do, and the people on the team have benefits rather than only a job description. We run talks and events in the neighbourhood instead of only opening the doors each morning.",
+            text: "Day to day it decides ordinary things. We buy from local vendors who work the way we do, the people on the team have benefits rather than only a job description, and we run talks and events in the neighbourhood instead of only opening the doors each morning.",
           },
         ],
         [
@@ -236,10 +263,15 @@ function block(spans) {
   return { _key: nextKey("b"), _type: "block", style: "normal", markDefs, children };
 }
 
-const imageObject = (assetId, alt) => ({
+const imageObject = (assetId, alt, framing) => ({
   image: {
     _type: "image",
     asset: { _type: "reference", _ref: assetId },
+    // Only where a photograph needs one. Most do not: stored without a crop,
+    // the bare url is served and the browser centre-crops, which is what every
+    // other section here wants.
+    ...(framing?.crop ? { crop: framing.crop } : {}),
+    ...(framing?.hotspot ? { hotspot: framing.hotspot } : {}),
   },
   alt,
 });
@@ -384,7 +416,7 @@ function buildDocument(id) {
       _key: section.key,
       sectionTitle: section.title,
       sectionParagraph: section.paragraphs.map(block),
-      sectionImage: imageObject(section.asset, section.alt),
+      sectionImage: imageObject(section.asset, section.alt, section.framing),
     })),
     ctaSection: {
       ctaSectionTitle: CONTENT.cta.title,

@@ -4511,12 +4511,27 @@ during the build and not only in daily operations. The wording stays close to
 what he said and claims nothing specific about materials or ratings, because
 nobody has confirmed any.
 
-**"Why we became one" shows two people talking in the gym**, one with a hand at
-his chin, off the Workers section of /about/sustainability. Frank chose it on
-2026-10-25 over the stock yoga class that sat there first, and it is the better
-picture: that section is about health being social, and one person listening to
-another is what that looks like, where a class of strangers on mats is a
-picture of exercise.
+**"Why we became one" went through three photographs.** A stock yoga class
+first, then the gym shot off the Workers section of /about/sustainability, then
+the one Frank sent on 2026-10-25: two men seated in profile, the nearer one
+resting a hand against his chin, both looking the same way. It is the right one
+for a section about health being social, where the yoga class was a picture of
+exercise.
+
+**Its crop is the whole job, and it is stored rather than baked in.**
+2920x5184, a ratio of 0.563, in a slot that paints 704x556 at 1.266. Left to
+`object-cover` the browser takes a band from the middle, which here is the hand
+and the lower half of a face: both heads sit in the top 45% of the frame. The
+crop is anchored to the top, `rect=0,0,2920,2306`, which keeps both heads whole
+and cuts through the wrist. Dropping far enough to keep the whole hand takes
+the top off the nearer man's head, which reads worse.
+
+**The crop is carried in two places on purpose.**
+`swap-bcorp-social-photo.js` sets it, and `apply-bcorp-page.js` carries it too,
+because that script writes the whole document with `createOrReplace` and would
+otherwise drop it on its next run. The same trap took the alt text once before
+it was noticed: the swap script wrote the new one and the apply script put the
+old one back.
 
 #### What the page actually claims, and where it came from
 
@@ -4536,9 +4551,17 @@ Governance as the weakest area and that is out.
 /about/sustainability already covers it. So the page says the footprint was
 weighed while the space was being built and links there for the rest.
 
-**Watch for the rule of three when writing this section.** The practices list
-naturally falls into threes and `audit-content-rules.js` cannot catch a
-tricolon, so it passed a draft that had one. It was split by hand.
+**The practices sentence is a rule of three, and Frank wants it that way.**
+2026-10-25: it was written with three clauses, split by hand against the
+content rule, and he asked for the three back. "Rule of three is still really
+good. Let's try to keep this."
+
+**That contradicts the content rules above, which ban tricolons outright**, and
+the contradiction is recorded here rather than resolved, because it is not
+clear whether he meant this sentence or the rule. Nothing enforces it either
+way: `audit-content-rules.js` has never checked for tricolons, because no regex
+can tell one from an ordinary list of three. **Ask before applying either
+reading more widely.**
 
 #### Markup
 

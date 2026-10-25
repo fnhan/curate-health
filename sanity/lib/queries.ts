@@ -189,8 +189,13 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   "serviceSlug": service->slug.current,
   heroImage {
     asset->{
-      url,      
+      url,
     },
+    // The image object beside its url, so a crop or hotspot set in the
+    // Studio reaches SanityImage. Until 2026-10-25 this slot was the one
+    // place on a treatment page where framing an image in the Studio did
+    // nothing at all, because the hero rendered through plain next/image.
+    "source": @{asset, crop, hotspot},
     heroAlt
   },
   intro {

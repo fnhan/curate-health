@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SanityImage } from "@/components/shared/sanity-image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -81,9 +81,17 @@ export default function ServicesSection({
                     transition={{ duration: 0.5 }}
                     className="absolute inset-0"
                   >
-                    <Image
+                    {/*
+                      SanityImage, so a crop or hotspot set in the Studio is
+                      honoured here too. HOME_PAGE_QUERY has carried
+                      hero_imageSource for weeks and this call site was still
+                      reading the flattened url, so framing a service hero
+                      changed the service page and not this preview of it.
+                    */}
+                    <SanityImage
                       fill
                       className="object-cover"
+                      source={hoveredService?.hero_imageSource}
                       src={hoveredService?.hero_image!}
                       alt={hoveredService?.title!}
                       sizes="(max-width: 768px) 100vw, (max-width: 1280px) 320px, 546px"

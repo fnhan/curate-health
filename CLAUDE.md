@@ -2497,6 +2497,55 @@ are no longer bold.
 hotspot, so Frank can frame them in the Studio himself. Until he does, the
 browser centre-crops as it always has.
 
+### The service and treatment heroes honour the Studio too. 2026-10-25
+
+The standing rule from 2026-10-18, that a crop or hotspot set in the Studio is
+never ignored on the page, had a hole in it covering **24 pages**: every
+service category hero, every treatment hero, and the hover preview of a
+service on the homepage. All three rendered through plain `next/image` with a
+declared width and height, so the bare asset url went to the optimiser and the
+browser centre-cropped whatever came back. Framing one of those photographs in
+the Studio did nothing, and the only sign was that nothing happened.
+
+**`SERVICE_BY_SLUG_QUERY` had been projecting `hero_imageSource`, with the crop
+and the hotspot in it, for weeks. Nothing read it.** A projection carrying the
+data is not the same as a page using it, and neither typecheck nor audit can
+tell the difference.
+
+**`fill` is the fix, not simply passing the image object.** `SanityImage`
+reads a hotspot only for a fill image, because a hotspot becomes
+`object-position` and that needs the element to take its size from a box
+rather than from a declared width and height. So the heights moved off the
+`<img>` and onto a wrapper: `h-[254px] md:h-[364px] lg:h-[608px]` on a
+treatment, `h-[400px] md:h-[550px]` on a category, with `object-cover` left
+where it was.
+
+**Nothing moved. Frank asked for that guarantee and it was measured.**
+`audit-render-baseline.js`, local against a production baseline taken the same
+day: 59 addresses, **zero non-image changes**, and on the 24 pages with an
+image difference the difference is the class and style attributes only. The
+file, the width, the quality, the srcset and the alt are byte for byte what
+production serves. In a browser the acupuncture hero is 1009x608 at
+`object-position: 50% 50%` on both, from the same url.
+
+**One hero had framing stored and ignored, and it is parked rather than
+honoured.** Acupuncture. Somebody dragged a frame at some point and the page
+never read it, so wiring the Studio up would have moved that one page, which
+is the thing Frank asked not to happen.
+`scripts/park-acupuncture-hero-framing.js` holds the values and `--restore
+--apply` puts them back in one command. The crop takes 12.3% off the top,
+which shifts the band down about 6% of the frame.
+
+**Both halves were proven end to end before parking it.** Restored, the hero
+served `rect=0,550,6720,3928`, the exact stored crop, with
+`object-position: 49.8% 59.2%`, the exact stored hotspot. Parked, it is back
+to the bare url at 50% 50%.
+
+**Read the hero out of a browser, not out of a grep.** Several pages carry
+more than one `sizes="100vw"` image, so `grep -o ... | head -1` reads whichever
+comes first in the markup and that is not the hero. A grep against the wrong
+element reported the hotspot missing when it was applied.
+
 ### One hover on every link, and the About menu on its children. 2026-10-18
 
 **The sweep from the /services menu is now every underlined link on the

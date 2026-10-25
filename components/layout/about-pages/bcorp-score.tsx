@@ -34,13 +34,21 @@ type Props = {
  * commitment, and it is checkable, which is the whole point of a certification
  * that most readers do not recognise.
  *
- * A BAR, NOT A CHART
+ * THE CEILING IS NOT ON THE PAGE
  *
- * The overall score gets one rule with two marks on it, the pass mark and the
- * median, because a number is only meaningful against those. The five areas
- * are a plain list: they are not comparable to each other (the areas carry
- * different maximums) so drawing them as five bars of one length would
- * invent a comparison nobody can make.
+ * The assessment runs to 200 and this block does not say so. Frank's call on
+ * 2026-10-25: a reader who is told the total reads 91.7 as a fraction of it
+ * and concludes we are halfway, which is the wrong comparison. The right ones
+ * are the score a company needs to certify and what an ordinary business
+ * scores, and those are both here.
+ *
+ * So there is no bar either. A rule drawn against an unstated maximum invites
+ * exactly the reading the number is meant to avoid, and a rule drawn against a
+ * shorter scale would flatter it. Three figures, plainly set out.
+ *
+ * The five areas are a plain list rather than bars: they carry different
+ * maximums, so drawing them to one length would invent a comparison nobody
+ * can make.
  *
  * It is a section of its own rather than a paragraph because these values live
  * in their own object in the Studio, per the note on the schema, and the
@@ -62,11 +70,6 @@ export function BcorpScore({
     (area) => area?.name && typeof area.value === "number"
   );
 
-  // The scale the bar is drawn against. 200 is the assessment's own ceiling,
-  // so the rule means the same thing on this page as it does on B Lab's.
-  const SCALE = 200;
-  const pct = (n: number) => `${(n / SCALE) * 100}%`;
-
   return (
     <section className="bg-platinum py-14 md:py-24">
       <div className="container font-light text-primary">
@@ -80,44 +83,38 @@ export function BcorpScore({
           </p>
         ) : null}
 
-        <div className="mt-10 md:mt-14">
-          <div className="flex items-baseline gap-4">
-            <span className="text-5xl md:text-7xl">{overall}</span>
-            <span className="text-sm md:text-base">
-              out of {SCALE}
-              {certifiedSince ? `, certified since ${certifiedSince}` : ""}
-            </span>
+        {/*
+          Three figures on one line: ours, the one a company needs, and the one
+          an ordinary business gets. Each is a value over its label, so the
+          numbers line up and read across.
+        */}
+        <dl className="mt-10 flex flex-wrap items-end gap-x-14 gap-y-8 md:mt-14">
+          <div>
+            <dd className="text-5xl leading-none md:text-7xl">{overall}</dd>
+            <dt className="mt-3 text-sm md:text-base">
+              Curate Health
+              {certifiedSince ? `, certified ${certifiedSince}` : ""}
+            </dt>
           </div>
 
-          {/*
-            The rule, with the two marks that give the number its meaning.
-            Decorative, so it is hidden from assistive technology: every value
-            on it is written out in the line underneath.
-          */}
-          <div aria-hidden className="relative mt-6 h-px w-full bg-primary/25">
-            <span
-              className="absolute top-0 h-3 -translate-y-1/2 border-l border-primary/40"
-              style={{ left: pct(median ?? 0) }}
-            />
-            <span
-              className="absolute top-0 h-3 -translate-y-1/2 border-l border-primary/40"
-              style={{ left: pct(threshold ?? 0) }}
-            />
-            <span
-              className="absolute top-0 h-1 -translate-y-1/2 bg-primary"
-              style={{ width: pct(overall) }}
-            />
-          </div>
+          {typeof threshold === "number" ? (
+            <div>
+              <dd className="text-3xl leading-none md:text-4xl">{threshold}</dd>
+              <dt className="mt-3 max-w-[22ch] text-sm leading-6">
+                The score a company needs to certify
+              </dt>
+            </div>
+          ) : null}
 
-          <p className="mt-4 text-sm leading-6">
-            {typeof threshold === "number"
-              ? `A business needs ${threshold} to be certified.`
-              : null}{" "}
-            {typeof median === "number"
-              ? `The median for businesses that complete the assessment is ${median}.`
-              : null}
-          </p>
-        </div>
+          {typeof median === "number" ? (
+            <div>
+              <dd className="text-3xl leading-none md:text-4xl">{median}</dd>
+              <dt className="mt-3 max-w-[22ch] text-sm leading-6">
+                The median for businesses that complete the assessment
+              </dt>
+            </div>
+          ) : null}
+        </dl>
 
         {live.length > 0 ? (
           <dl className="mt-10 grid gap-x-10 gap-y-5 border-t border-primary/15 pt-8 sm:grid-cols-2 lg:grid-cols-3 md:mt-14">

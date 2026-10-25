@@ -57,36 +57,50 @@ const HERO_ASSET = "image-3388975510b86abe3792c1deadaeea35da16a7ea-5575x3717-jpg
 const MARK_ASSET = "image-3d55827a4b315471a498ed55829394a1b8e01ddf-1600x1267-jpg";
 
 /*
- * Two photographs already live on /about/sustainability, with alt text already
- * written from the images themselves. Placeholders rather than choices: the
- * sections want pictures of this business and Frank has better ones.
+ * Already live on /about/sustainability, with alt text written from the image
+ * itself. A placeholder rather than a choice: people outdoors suits the
+ * paragraph about health being social, and a photograph of this community
+ * would suit it better.
  */
 const COMMUNITY_ASSET =
   "image-ef41075f6a819b062d8a2d58f5991d6969ed6c84-2268x4032-jpg";
-const WORKERS_ASSET =
-  "image-23198e0a9a15d382a77f49a1745b15b7088cbd6d-3728x2920-jpg";
+
+/*
+ * The waiting area, with the logo in cork lettering on the plaster wall. Found
+ * in the library on 2026-10-25, unreferenced, 8160x6144.
+ *
+ * It is the right photograph for the section about construction specifically:
+ * the paragraph says the footprint of this space was counted while it was
+ * being built, and this is that space, showing the materials it was built
+ * from. A stock photograph of a meeting, which is what sat here first, says
+ * nothing about either.
+ *
+ * At 1.33 against the slot's 1.266 it crops by almost nothing.
+ */
+const WAITING_AREA_ASSET =
+  "image-f782f669ac2524c369dd4919b730a8105fd5e55d-8160x6144-jpg";
 
 const CONTENT = {
   seo: {
     pageTitle: "Our B Corp Certification",
     pageDescription:
-      "Curate Health is a Certified B Corporation, scoring 91.7 where 80 is the pass mark. What B Lab measured, what we scored, and where to check it.",
+      "Curate Health is a Certified B Corporation. Why a health and wellness space measures its own footprint, and what the standard holds us to.",
     socialTitle: "Our B Corp Certification",
     socialDescription:
-      "An independent assessment of how this business is run, and the score it was given. Read it rather than take our word for it.",
+      "A healthy environment decides the health of the people who live in it. Why we hold an international standard for how this business is run.",
   },
 
   heroTitle: "Our B Corp Certification",
 
   heroParagraphs: [
-    "Curate Health is a Certified B Corporation. B Lab, the non-profit that runs the certification, assessed how this business is governed and how it treats the people and the place around it, then verified the answers rather than taking our word for them.",
-    "Most people who see the mark do not know what it stands for. This page says what was measured and what we scored, with a link to the record anybody can read.",
+    "A healthy environment decides the health of the people who live in it. To optimize health is to optimize both the person and the place they live in, so we cannot set out to make people well while leaving our own footprint out of the account.",
+    "That is why Curate Health is a Certified B Corporation. The B stands for benefit, and the standard measures whether a company is run for the benefit of everyone it touches rather than for its owners alone.",
   ],
 
   score: {
     heading: "Our score",
     intro:
-      "B Lab scores a business out of 200 across five areas. Curate Health was assessed in 2026 and the whole breakdown is published, so none of it has to be taken on trust.",
+      "Curate Health certified in October 2026. These are B Lab's figures, published in full on its own directory.",
     overall: 91.7,
     threshold: 80,
     median: 50.9,
@@ -114,63 +128,79 @@ const CONTENT = {
       paragraphs: [
         [
           {
-            text: "A Certified B Corporation is a business assessed by B Lab, an independent non-profit, against a standard covering governance, workers, community, environment and customers. A business needs at least 80 points out of 200 to certify, and it is assessed again every three years.",
+            text: "A Certified B Corporation is a company verified against a standard covering governance, workers, community, environment and customers, and legally committed to weighing all of them in its decisions rather than shareholder return alone.",
           },
         ],
         [
           {
-            text: "It is not a legal status and it is not a government scheme. It certifies the company rather than anything the company sells, so it describes Curate Health as a business and makes no claim about a particular treatment or anything on the cafe menu.",
+            text: "The standard is run by B Lab, a non-profit founded in 2006 by three people who had just sold their company and watched its commitments to its staff and its community disappear in the sale. They built the certification so that what a business stands for could be measured and defended rather than left to whoever owned it. Eighty-one companies certified in the first year. More than ten thousand hold it today, in over a hundred countries, which is what makes it a standard rather than a badge.",
           },
         ],
         [
-          { text: "Each of the five areas is covered on our " },
-          { text: "sustainability page", link: "/about/sustainability" },
-          { text: "." },
+          {
+            text: "It certifies the company rather than anything the company sells, so it describes how Curate Health is run and makes no claim about a particular treatment or anything on the cafe menu.",
+          },
         ],
       ],
     },
     {
-      key: "what-it-changes",
-      title: "What the certification changes",
+      key: "why-we-did-it",
+      title: "Why we became one",
       asset: COMMUNITY_ASSET,
       alt: "Photograph of a group of people doing yoga on mats with their arms crossed leaning back.",
       paragraphs: [
         [
           {
-            text: "Before it, you had our word. We could tell you the cafe cooks with whole ingredients and that the people who work here are looked after, and you would have had to decide whether to believe us.",
+            text: "Optimal health is not something a person reaches in isolation. It is shaped by the environment they live in and by the people around them, which is why Social sits alongside Physical, Mental, Emotional and Spiritual in our ",
+          },
+          { text: "five pillars of health", link: "/about/pillars-of-health" },
+          { text: "." },
+        ],
+        [
+          {
+            text: "Both of those lead to the same place. If the environment a person lives in dictates how healthy they can be, our own footprint is part of their care rather than separate from it. If health is social, then how we treat the people who work here and the neighbourhood we sit in is part of the same work. Helping people is our business, so social impact is not an adjacent commitment. It is the business.",
           },
         ],
         [
           {
-            text: "An independent body has now been through all of it, and what it found is published rather than summarised by us. That is the whole of what a certification is worth, and it is why the score sits on this page with a link to the record instead of being described in general terms.",
+            text: "The certification is where we put that on the record. It measures the parts of this place a patient never sees, and it is assessed again every three years.",
           },
         ],
       ],
     },
     {
-      key: "still-working",
-      title: "What we are still working on",
-      asset: WORKERS_ASSET,
-      alt: "Photograph of two people having a meeting, one man is faced away from the camera, and the other is looking at him.",
+      key: "what-it-holds-us-to",
+      title: "What it holds us to",
+      asset: WAITING_AREA_ASSET,
+      alt: "Two light wood armchairs below the Curate Health logo in cork lettering on a plaster wall, with plants on either side.",
       paragraphs: [
         [
           {
-            text: "Governance and Customers are our two lowest areas. Certification sets a floor rather than marking a finish, and the assessment comes round again in 2029, which is where that work has to show.",
+            text: "That thinking started before the doors opened. The carbon footprint of this space was considered while it was being built rather than totalled up afterwards, so the choices made during construction were weighed on the same terms as the daily running of the place is now.",
           },
         ],
         [
-          { text: "The standard itself is set out at " },
+          {
+            text: "Our strongest areas are how the people who work here are treated and how the space itself is run, which is where a health and wellness business ought to be strong. Governance is where we have the most ground to cover, and it is already written into what we are preparing for the next assessment in 2029.",
+          },
+        ],
+        [
+          {
+            text: "Each of the five areas is set out in detail on our ",
+          },
+          { text: "sustainability page", link: "/about/sustainability" },
+          { text: ", and the standard itself at " },
           { text: "bcorp.com", link: "https://bcorp.com" },
-          { text: ", which is also where the mark on this page points." },
+          { text: "." },
         ],
       ],
     },
   ],
 
   cta: {
-    title: "Come and see the space",
+    title: "Health, curated for the long term",
     paragraph:
-      "The certification describes how we run this place. The quickest way to judge whether it shows is to walk in.",
+      "The certification describes how this place is run. The rest of it is best understood by walking in.",
     buttonText: "Book an appointment",
     buttonLink: "https://curatehealth.janeapp.com",
     asset: HERO_ASSET,

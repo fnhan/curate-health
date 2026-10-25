@@ -4395,7 +4395,39 @@ crop reaches this hero from the first day. The other five are the same hole
 that was closed on the service and treatment heroes, and are worth the same fix
 in their own change.
 
-#### The score is data, and that is the main design decision
+#### The tone is confident, not careful. Frank, 2026-10-25
+
+The first draft read as a company trying hard not to be accused of
+greenwashing: it opened on most people not knowing what the mark means, had a
+section called "What the certification changes" that began "Before it, you had
+our word", and another called "What we are still working on". Frank's note:
+"really defensive, as if we're really trying hard not to greenwash", and he
+asked for something more professional, philosophical and confident, pointing
+at Keurig's corporate responsibility voice.
+
+**What that changed.** The page now opens on the conviction rather than on the
+certification: a healthy environment decides the health of the people living in
+it, so a business that sets out to make people well cannot leave its own
+footprint out of the account. The certification arrives as the consequence of
+that, not as a defence of it. "What the certification changes" became **"Why we
+became one"**, which is the section Frank dictated in his own words and the
+heart of the page. "What we are still working on" became **"What it holds us
+to"**, which leads with where we are strong.
+
+**The philosophy is his and should not be softened.** Optimal health is not
+reached in isolation; it is shaped by the environment and by the people around
+a person, which is why **Social sits alongside Physical, Mental, Emotional and
+Spiritual in the five pillars**. Helping people is the business, so social
+impact is not an adjacent commitment to it.
+
+**The page now defines the term.** The B stands for benefit. B Lab is named,
+founded 2006, by three people who had just sold their company and watched its
+commitments disappear in the sale. Eighty-one companies certified in the first
+year; more than ten thousand hold it today in over a hundred countries, which
+is what makes it an international standard rather than a badge. The 10,000
+figure was read off the directory, which showed 10,828 on 2026-10-25.
+
+#### The score is data, and the ceiling is deliberately absent
 
 `score` is its own object on the document: overall, the pass mark, the median,
 the date, the directory URL and the five areas. The page prints it and
@@ -4404,22 +4436,60 @@ number to disagree with the first, the same reasoning as the hours in CH-008.
 Recertification is every three years, so these change in the Studio and nothing
 in code moves.
 
+**The assessment runs to 200 and the page does not say so. Frank's call.** A
+reader told the total reads 91.7 against it and concludes we are halfway, which
+is the wrong comparison. The right ones are the score a company needs to
+certify and what an ordinary business scores, and both are on the page.
+
+**So there is no bar.** A rule drawn against an unstated maximum invites the
+exact reading the omission is meant to avoid, and a rule drawn against a
+shorter scale would flatter it. It is three figures set out plainly: 91.7, then
+80, then 50.9, each a value over its label, bottoms aligned. Measured at 1280
+they sit in one row at x 32, 382 and 628, with the five areas in three columns
+below.
+
+**`bestRating: 200` stays in the markup**, which is not a contradiction. A
+schema.org `Rating` with no scale defaults to 5 and would publish 91.7 out of
+5. The scale is the unit the number is expressed in rather than a claim, and
+the figure itself is on the page. If that ever has to go, `certificationRating`
+goes whole rather than being left ambiguous.
+
 **Why the number is on the page at all.** Reading fourteen B Corp pages across
 healthcare, coffee and fitness, the ones that read as credible publish the
 score and the ones that read as marketing publish adjectives. It is also the
-only part a reader can check, which matters more than usual here: independent
-research finds low recognition of the label and active confusion about who
-verifies it, so the page's first job is explaining, not celebrating.
-
-**A rule with two marks, not five bars.** The overall score gets one rule
-carrying the pass mark and the median, because a number means nothing without
-them. The five areas are a plain list: they carry different maximums, so five
-bars of one length would invent a comparison nobody can make. The rule is
-`aria-hidden` and every value on it is written out underneath.
+only part a reader can check.
 
 **Governance carries a note.** 15.4 of which 10 is Mission Locked, so the
 discretionary part is 5.4. A bare number there would misrepresent it in both
 directions, which is what the optional `note` field on an area is for.
+
+#### The photographs
+
+**The hero is not the mark.** The band is 400px tall over the full width and
+the composite is 1600x1267, so `object-cover` would crop the lockup, which B
+Lab does not permit. The hero is the dark green foliage the composite was built
+from, and the mark sits in the first section, whose slot is 704x556 and crops
+it by almost nothing.
+
+**"What it holds us to" shows the waiting area**, the logo in cork lettering on
+the plaster wall above two light wood chairs. Found unreferenced in the library
+on 2026-10-25 at 8160x6144, so it had never been on the site. It is the right
+photograph for that section specifically, because the paragraph says the
+footprint of this space was counted while it was being built and this is that
+space, showing what it was built from. A stock photograph of a meeting sat
+there first and said nothing about either.
+
+**The library was surveyed for this**, 437 unreferenced assets, 265 of them
+landscape. Worth knowing what is in there, since CH-117 keeps it as a library
+to draw on. Most of the rest is stock that does not fit: a lone figure on a
+mountain summit, a teacup on a manuscript, a mountain range. Curate's own
+unused photographs are mostly the gym and the cafe. `waitingarea_edit_4`,
+`_5` and `_6` are the same shot at different sizes.
+
+**The construction point is Frank's**, 2026-10-25: the footprint was considered
+during the build and not only in daily operations. The wording stays close to
+what he said and claims nothing specific about materials or ratings, because
+nobody has confirmed any.
 
 #### Markup
 

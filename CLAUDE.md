@@ -1550,6 +1550,61 @@ than anything here.
 - Its photograph is the 6500x3846 PNG that CH-029 names as the worst asset in
   the library.
 
+### CH-029, the heavy PNGs. Done 2026-10-24
+
+49 opaque PNGs became JPEGs. **307 MB to 25 MB**, and the referenced PNG
+weight on the whole site went from 489 MB to 190 MB.
+
+**The measurable win is the cold request, not the bytes a visitor gets.**
+`sizes` already meant a browser was served a resized copy, which is why this
+sat as low priority. What it did not fix is what the resizer has to fetch
+first: on a cold request Next pulled the whole 33 MB yoga hero from Sanity
+before it could make a 280px thumbnail. Measured on `/classes`, that image
+went from **4.4 seconds to 0.35**, and the slot no longer sits blank.
+
+**`metadata.isOpaque` is the test, never `hasAlpha`.** Nearly every PNG here
+carries an alpha channel and almost none of them use it, so `hasAlpha` would
+have excluded all 49. `isOpaque` is computed from the pixels.
+
+**A genuinely transparent PNG is never converted**, and 26 are not. JPEG has
+no transparency, so converting one fills it with a flat colour: that would
+put a white box behind the five product cutouts, the B Corp mark in the
+footer and the white logo on the blog byline. Checked in a browser after the
+run, all of them still render correctly.
+
+**Sanity did the conversion, not a canvas.** Every other image job here went
+through a canvas in the browser because there is no image library. This one
+did not need it: the asset CDN already renders `?w=2600&fm=jpg&q=90`, which
+is the same pipeline that serves every resized image on the site, so
+fetching that and uploading it adds no new renderer. 2600px because nothing
+paints wider than 1920.
+
+**References are rewritten by deep search.** An asset id turns up in a hero,
+a section image, an seo share image, a product banner and inside portable
+text. Every document referencing one is walked whole and every occurrence
+swapped, the same reasoning as `audit-booking-links.js`.
+
+```bash
+node scripts/convert-heavy-pngs.js              # dry run, lists both groups
+node scripts/convert-heavy-pngs.js --apply
+```
+
+**`--limit=0` means no limit, not none.** Worth knowing before re-running it:
+the flag is parsed with `|| 0`, so `--limit=0` falls through to the whole
+set.
+
+Verified with `audit-render-baseline.js`: of 59 addresses, only `images`,
+`ogImage` and `jsonLd` changed, which are the three places an asset URL
+appears. No title, description, canonical, heading, alt text, link or word
+on any page moved. All 9 checks pass, on a local build and against
+production.
+
+**The 151 MB PNG is still there**, `ambitious-studio-rick-barrett-...png` at
+5142x7709, because it genuinely uses transparency. It is the largest single
+asset in the library by a wide margin and wants looking at on its own terms:
+either it does not need to be that size, or its transparency is incidental
+and it can be flattened.
+
 ### The Tai Chi page, built 2026-10-24
 
 `/services/recovery-sanctuary/tai-chi`, from Frank's handoff. Built as it
@@ -2181,7 +2236,7 @@ Folded into the contact page instead. `contactPage.howToGetHere` was rewritten i
 | CH-113 | **Done 2026-09-13.** `book_now`, `call_click`, `email_click`, `directions_click` and `file_download`, from one delegated listener in `components/shared/analytics-events.tsx`. See below |
 | CH-114 | **Built 2026-09-18.** IndexNow submission on publish. Bing's index is what ChatGPT search runs on. See below                                                        |
 | CH-115 | **Done 2026-09-13.** No longer emitted. The Studio field stays, since editors filled it in and deleting their work is not this ticket's job |
-| CH-029 | Downsample oversized Sanity assets. 95 exceed 2,600px, worst is a 6500x3846 PNG appearing on 29 pages. CH-007 solves most of the delivery cost, so this is cleanup |
+| CH-029 | **Done 2026-10-24**, see below |
 | CH-030 | Add Claire to the team page and to CH-104                                                                                                                          |
 
 ### CH-113 Conversion events

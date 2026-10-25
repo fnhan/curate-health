@@ -50,10 +50,12 @@ export default async function ServiceLifestylePage() {
 }
 
 export async function generateMetadata() {
-  const servicePage = await sanityFetch<SERVICE_LIFESTYLE_BY_SLUG_QUERY_RESULT>({
-    query: SERVICE_LIFESTYLE_BY_SLUG_QUERY,
-    params: { slug: "curate-lifestyle" },
-  });
+  const servicePage = await sanityFetch<SERVICE_LIFESTYLE_BY_SLUG_QUERY_RESULT>(
+    {
+      query: SERVICE_LIFESTYLE_BY_SLUG_QUERY,
+      params: { slug: "curate-lifestyle" },
+    }
+  );
 
   const { seo } = servicePage!;
 

@@ -51,7 +51,7 @@ export default function PasswordPrompt() {
         description: "Please try again.",
       });
       form.reset();
-      return setIncorrectPassword(true), setLoading(false);
+      return (setIncorrectPassword(true), setLoading(false));
     } else {
       router.push("/");
     }

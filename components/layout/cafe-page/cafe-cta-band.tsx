@@ -41,8 +41,16 @@ export function CafeCtaBandSection({ data }: { data: CtaBand }) {
               {headline}
             </h2>
           ) : null}
+          {/*
+            `text-balance` below, not `text-pretty`. This block is centred and
+            three lines, and `pretty` only avoids a ONE-WORD last line: it left
+            "and soul." sitting alone on the third, which Frank reported on
+            2026-10-20. `balance` evens all three instead, which is what a
+            short centred paragraph wants. The browser caps balancing at six
+            lines, and this is three.
+          */}
           {body ? (
-            <p className="text-pretty text-[16px] font-light leading-relaxed opacity-95">
+            <p className="text-balance text-[16px] font-light leading-relaxed opacity-95">
               {body}
             </p>
           ) : null}

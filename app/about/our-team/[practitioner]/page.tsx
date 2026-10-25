@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { PortableText } from "next-sanity";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -74,11 +75,9 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default async function PractitionerPage(
-  props: {
-    params: Promise<{ practitioner: string }>;
-  }
-) {
+export default async function PractitionerPage(props: {
+  params: Promise<{ practitioner: string }>;
+}) {
   const params = await props.params;
   const person = await fetchPractitioner(params.practitioner);
 
@@ -189,7 +188,10 @@ export default async function PractitionerPage(
 
               {fullBio?.length ? (
                 <div className="prose max-w-none text-primary prose-p:font-light prose-p:leading-7">
-                  <PortableText value={fullBio} />
+                  <PortableText
+                    value={fullBio}
+                    components={portableTextComponents}
+                  />
                 </div>
               ) : null}
 
@@ -263,11 +265,9 @@ export default async function PractitionerPage(
   );
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ practitioner: string }>;
-  }
-) {
+export async function generateMetadata(props: {
+  params: Promise<{ practitioner: string }>;
+}) {
   const params = await props.params;
   const person = await fetchPractitioner(params.practitioner);
 

@@ -111,7 +111,21 @@ export const AlternatingSections = ({
               <h2 className="text-balance text-2xl font-light">
                 {section.sectionTitle}
               </h2>
-              <div className={cn("prose max-w-[80ch]", proseClassName)}>
+              {/*
+                `text-pretty` so a paragraph does not end on a single short
+                word. The cafe's "Where Every Bite Matters" ran to thirteen
+                lines with "soul." alone on the last one, which Frank spotted
+                on 2026-10-20.
+
+                A CSS rule rather than a reword, because the widow depends on
+                the width: the word left stranded is a different one on a
+                phone, and editing the sentence to fix one window makes
+                another worse. Browsers without `text-wrap: pretty` ignore it
+                and wrap as before.
+              */}
+              <div
+                className={cn("prose max-w-[80ch] text-pretty", proseClassName)}
+              >
                 <PortableText
                   value={section.sectionParagraph!}
                   components={portableTextComponents}

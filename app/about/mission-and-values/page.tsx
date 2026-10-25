@@ -36,8 +36,7 @@ type MissionAndValuesPageData = {
     }> | null;
   } | null;
   financialReportsSection?:
-    | MissionAndValuesPageData["annualReportsSection"]
-    | null;
+    MissionAndValuesPageData["annualReportsSection"] | null;
   feedbackSurvey?: {
     title?: string | null;
     description?: string | null;

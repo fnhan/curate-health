@@ -2,6 +2,7 @@ import { PortableText } from "@portabletext/react";
 import HoverLink from "components/shared/hover-link";
 import { CAFE_QUERY_RESULT } from "sanity.types";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 
 export default function CafeSection({
@@ -32,7 +33,10 @@ export default function CafeSection({
             {title!}
           </h2>
           <div className="mb-32 max-w-[200px] text-sm font-light text-black sm:max-w-[300px] sm:text-xl 2xl:max-w-[544px] 2xl:text-4xl">
-            <PortableText value={content!} />
+            <PortableText
+              value={content!}
+              components={portableTextComponents}
+            />
           </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 z-10">

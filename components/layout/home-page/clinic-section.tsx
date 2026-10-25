@@ -1,6 +1,7 @@
 import { PortableText } from "@portabletext/react";
 import { CLINIC_SECTION_QUERY_RESULT } from "sanity.types";
 
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 
 export default function ClinicSection({
@@ -29,7 +30,10 @@ export default function ClinicSection({
         <div className="absolute bottom-0 left-0 right-0">
           <div className="container">
             <div className="relative float-right max-w-xs bg-white p-8 text-xs text-black md:max-w-md md:p-20 md:text-base lg:max-w-lg">
-              <PortableText value={content!} />
+              <PortableText
+                value={content!}
+                components={portableTextComponents}
+              />
             </div>
           </div>
         </div>

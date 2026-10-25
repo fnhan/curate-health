@@ -6,6 +6,7 @@ import { PortableText } from "@portabletext/react";
 import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import CtaFooterSection from "@/components/shared/cta-footer-section";
+import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { SUSTAINABILITY_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
@@ -40,7 +41,10 @@ export default async function SustainabilityPage() {
             {heroSection?.heroTitle}
           </h1>
           <div className="max-w-[80ch]">
-            <PortableText value={heroSection?.heroParagraph!} />
+            <PortableText
+              value={heroSection?.heroParagraph!}
+              components={portableTextComponents}
+            />
           </div>
         </div>
       </div>

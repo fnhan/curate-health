@@ -264,11 +264,23 @@ export function buildPageMetadata(
     imageEntry(seo?.socialMeta?.twitterImage, socialTitle) ??
     (ownOgImages ? undefined : fallbackImages);
 
-  // `absolute` is what stops Next applying the layout's title template, so a
-  // share card ending in its own name does not also collect "| Curate Health".
+  /*
+   * `absolute` is what stops Next applying the layout's title template, so a
+   * share card ending in its own name does not also collect "| Curate
+   * Health".
+   *
+   * A share title that already NAMES the brand mid-sentence is left alone,
+   * which stripBrand cannot do for it: that only strips a trailing brand,
+   * and "Health Notes From the Curate Health Team" carries it in the middle.
+   * Appending anyway gave "... Curate Health Team | Curate Health", which is
+   * CH-006 happening somewhere new. The approved wording stands and the
+   * template gives way, because the brand is already said.
+   */
   const shareTitle = fallbacks.shareBrand
     ? { absolute: `${socialTitle} | ${fallbacks.shareBrand}` }
-    : socialTitle;
+    : socialTitle.toLowerCase().includes(BRAND.toLowerCase())
+      ? { absolute: socialTitle }
+      : socialTitle;
 
   /*
    * The site name and locale are repeated here because Next replaces the

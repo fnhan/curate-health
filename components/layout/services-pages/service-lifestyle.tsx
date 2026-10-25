@@ -438,9 +438,16 @@ export default function ServiceLifestyleContent({
                   encourage in-person
                 </li>
                 <li>
-                  Participate in small intimate group sessions (6-15 people) to
-                  learn, ask our doctors questions, and interact with program
-                  peers.
+                  {/*
+                    6 to 12, not 6 to 15. Frank capped the group on
+                    2026-10-24 and asked for every mention changed. The other
+                    two are in Sanity, on the Curate Lifestyle benefit and the
+                    Group Learning line of the How does the program work
+                    answer; this is the only one written into a component.
+                  */}
+                  Participate in small intimate group sessions (6 to 12 people)
+                  to learn, ask our doctors questions, and interact with
+                  program peers.
                 </li>
                 <li>
                   Canada's only interdisciplinary approach to Lifestyle

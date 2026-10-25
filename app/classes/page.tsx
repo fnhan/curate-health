@@ -160,16 +160,43 @@ function ClassBlock({ entry }: { entry: ScheduledClass }) {
       */}
       <div className="flex flex-col gap-8 md:grid md:grid-cols-[280px_1fr] md:gap-12">
         {photo?.url ? (
-          <SanityImage
-            source={photo.source}
-            src={photo.url}
-            alt={photo.alt ?? ""}
-            width={440}
-            height={330}
-            loading="lazy"
-            sizes="(min-width: 768px) 280px, 100vw"
-            className="h-[220px] w-full object-cover md:h-[210px]"
-          />
+          (() => {
+            const picture = (
+              <SanityImage
+                source={photo.source}
+                src={photo.url}
+                alt={photo.alt ?? ""}
+                width={440}
+                height={330}
+                loading="lazy"
+                sizes="(min-width: 768px) 280px, 100vw"
+                className="h-[220px] w-full object-cover md:h-[210px]"
+              />
+            );
+
+            if (!page) return picture;
+
+            /*
+             * The photograph opens the class's page, the same as its name
+             * above. Frank asked for it on 2026-10-24, and it is the rule
+             * already set for a blog card on 2026-10-12.
+             *
+             * It adds no keyboard stop and is hidden from a screen reader,
+             * because the heading beside it already reaches the same page
+             * and already names the class. Two tab stops to one destination
+             * rather than four.
+             */
+            return (
+              <Link
+                href={page}
+                tabIndex={-1}
+                aria-hidden
+                className="block overflow-hidden"
+              >
+                {picture}
+              </Link>
+            );
+          })()
         ) : (
           <div aria-hidden className="hidden md:block" />
         )}

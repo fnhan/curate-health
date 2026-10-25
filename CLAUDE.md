@@ -1550,6 +1550,80 @@ than anything here.
 - Its photograph is the 6500x3846 PNG that CH-029 names as the worst asset in
   the library.
 
+### The Tai Chi page, built 2026-10-24
+
+`/services/recovery-sanctuary/tai-chi`, from Frank's handoff. Built as it
+specifies, by duplicating Outdoor Yoga Therapy and swapping the content, so no
+component is new. Linked from the Recovery Sanctuary hub automatically and from
+`/classes`, whose Tai Chi row now points at it.
+
+**Two things the handoff asks for are not built, and both are his own later
+rules.** A "Last reviewed" date, CH-111. A breadcrumb trail, CH-009. Worth
+saying if that handoff is ever used as a template again: it predates both.
+
+**The alt text departs from the handoff on two of three**, because the handoff
+was written before the photographs existed and describes different pictures.
+Alt describes the photograph, CH-028.
+
+**The hero is baked, the section photograph is not, and the difference is the
+component.** `TREATMENT_BY_SLUG_QUERY` projects `imageSource` and
+`AlternatingSections` runs it through `SanityImage`, so a Studio crop on a
+section image works. `TreatmentHeroSection` is still plain `next/image` and
+ignores one. **That is the one slot on a treatment page where cropping in the
+Studio does nothing**, so a hero has to be cropped before upload. Worth fixing;
+it is a shared component on eighteen live pages.
+
+**Centring a subject: measure it, and not on a grid.** Frank asked for his face
+at the exact centre of the call to action. A percentage grid drawn over the
+full frame read 52.5% across and 28% down; a trial crop with crosshairs on it
+showed 47.65% and 33.6%. A grid is hard to read against a busy photograph, and
+a crosshair on the thing itself is not. Once the subject is centred in the file
+it stays centred at every viewport size, because `object-cover` crops
+symmetrically.
+
+```bash
+node scripts/apply-tai-chi-page.js      # dry run, prints every word
+node scripts/fix-tai-chi-photos.js      # the two photograph corrections
+```
+
+**Dr. Gabriele's credentials stay at two.** The handoff asks for "Tai Chi
+Instructor" on his card. It would change five pages to repeat what the Why
+section already says better, and would put a teaching role in `hasCredential`,
+which search engines read as a list of regulated designations. Put to Frank on
+2026-10-24 and he took the recommendation.
+
+### The copy backlog, cleared 2026-10-24
+
+23 of the September decisions applied, by `scripts/apply-decision-backlog.js`.
+**The largest single fix: four product banner photographs carried one
+description between them**, a sentence about a professional with a tablet that
+describes none of the four.
+
+**`scripts/locate-decisions.js` is how each one was found.** It walks every
+string in every published document and reports the field closest to the text he
+chose, rather than a list of field names written from memory. Its first
+similarity measure divided by the shorter string, so the province code "ON"
+scored 1.00 against a whole paragraph and won every time. It compares runs of
+five consecutive words now, and ignores any field shorter than a third of the
+text.
+
+**Five are held, each overtaken by something he decided later**, which is the
+point of the pass rather than an exception to it:
+
+| | |
+| --- | --- |
+| a01, a02 | the live alt text was written from the photographs on 2026-10-11 and is more accurate |
+| s01 | live is the wording he chose from three options on 2026-10-12 |
+| s02 | September says "RP (Qualifying)"; on 2026-10-12 he dropped "(Qualifying)" |
+| c19 | live is the wording **he** wrote on 2026-10-12, after this claim was raised as a clinical one |
+| c16 | one line inside a multi-part FAQ answer, so it needs a block-level edit |
+
+**A share title that names the brand no longer collects it twice.** "Health
+Notes From the Curate Health Team" became "... Team | Curate Health", which is
+CH-006 somewhere new. `stripBrand` cannot help: it strips a **trailing** brand
+and this one sits in the middle. `buildPageMetadata` now leaves a share title
+alone when it already names the brand.
+
 ### CH-108 Cafe menu as HTML. Built 2026-10-18
 
 `/cafe/menu`, 10 sections and 27 items, every name, size, price and ingredient

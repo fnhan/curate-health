@@ -1,9 +1,3 @@
-import Link from "next/link";
-
-import { HOVER_UNDERLINE } from "@/lib/hover-underline";
-import { externalLinkProps } from "@/lib/links";
-import { cn } from "@/lib/utils";
-
 type Area = {
   _key?: string | null;
   name?: string | null;
@@ -18,42 +12,59 @@ type Props = {
   threshold?: number | null;
   median?: number | null;
   certifiedSince?: string | null;
-  directoryUrl?: string | null;
   areas?: Area[] | null;
 };
 
 /**
  * The score block on /about/b-corp. CH-119.
  *
- * WHY THE NUMBER IS ON THE PAGE AT ALL
+ * WHY THE NUMBER IS ON THE PAGE
  *
  * Reading fourteen B Corp pages across healthcare, coffee and fitness, the
  * ones that read as credible publish the score and the ones that read as
- * marketing publish adjectives. The number also does work no adjective can:
- * 91.7 against a median of 50.9 says more in a line than a paragraph about
- * commitment, and it is checkable, which is the whole point of a certification
- * that most readers do not recognise.
+ * marketing publish adjectives. It is also the only part of the claim a reader
+ * can check for themselves.
  *
  * THE CEILING IS NOT ON THE PAGE
  *
- * The assessment runs to 200 and this block does not say so. Frank's call on
- * 2026-10-25: a reader who is told the total reads 91.7 as a fraction of it
- * and concludes we are halfway, which is the wrong comparison. The right ones
- * are the score a company needs to certify and what an ordinary business
- * scores, and those are both here.
+ * The assessment runs to 200 and nothing here says so. Frank's call on
+ * 2026-10-25: a reader told the total reads 91.7 against it and concludes we
+ * are halfway, which is the wrong comparison. The right ones are the score a
+ * company needs to certify and what an ordinary business scores, and both are
+ * here, under the total rather than beside it.
  *
- * So there is no bar either. A rule drawn against an unstated maximum invites
- * exactly the reading the number is meant to avoid, and a rule drawn against a
- * shorter scale would flatter it. Three figures, plainly set out.
+ * THE BAR IS THE COMPOSITION, NOT THE SCALE
  *
- * The five areas are a plain list rather than bars: they carry different
- * maximums, so drawing them to one length would invent a comparison nobody
- * can make.
+ * Frank asked on 2026-10-25 for a visual showing how the five areas add up to
+ * the total. So the bar IS 91.7, divided into the five parts that make it,
+ * each segment proportional to its own share. It carries no empty remainder,
+ * which is the point: a bar drawn against an unstated maximum would invite
+ * exactly the halfway reading the omission avoids, and one drawn against a
+ * shorter scale would flatter it.
  *
- * It is a section of its own rather than a paragraph because these values live
- * in their own object in the Studio, per the note on the schema, and the
- * Certification markup reads the same fields. One source, three readers.
+ * The five areas are not comparable to each other, since they carry different
+ * maximums, so nothing here invites that comparison either. The bar answers
+ * one question, which is what the total is made of.
+ *
+ * The ramp runs dark to light through the house greens. It is ordered by the
+ * array, which is stored largest first, so the widths fall left to right and
+ * the eye reads it without a key.
  */
+
+/**
+ * Five steps on the brand's own hue, primary through secondary and out to
+ * platinum. Written as hsl rather than Tailwind classes because the segment
+ * colours are data-driven: a class string built at runtime is one Tailwind
+ * never sees, which is the trap recorded under the hover sweep on 2026-10-18.
+ */
+const RAMP = [
+  "hsl(89 37% 15%)",
+  "hsl(88 26% 27%)",
+  "hsl(84 17% 41%)",
+  "hsl(77 10% 51%)",
+  "hsl(82 13% 67%)",
+];
+
 export function BcorpScore({
   heading,
   intro,
@@ -61,21 +72,25 @@ export function BcorpScore({
   threshold,
   median,
   certifiedSince,
-  directoryUrl,
   areas,
 }: Props) {
   if (typeof overall !== "number") return null;
 
   const live = (areas ?? []).filter(
-    (area) => area?.name && typeof area.value === "number"
+    (area): area is Area & { name: string; value: number } =>
+      Boolean(area?.name) && typeof area?.value === "number"
   );
+
+  // The segments are shares of the total the page shows, so they always fill
+  // the bar. Sanity rounds each area to one decimal, so they can sum a little
+  // either side of the overall; normalising on their own sum keeps the bar
+  // exact rather than leaving a sliver of background at the end.
+  const sum = live.reduce((n, a) => n + a.value, 0);
 
   return (
     <section className="bg-platinum py-14 md:py-24">
       <div className="container font-light text-primary">
-        {heading ? (
-          <h2 className="text-2xl md:text-4xl">{heading}</h2>
-        ) : null}
+        {heading ? <h2 className="text-2xl md:text-4xl">{heading}</h2> : null}
 
         {intro ? (
           <p className="mr-auto mt-4 max-w-[70ch] text-pretty leading-7 md:mt-6">
@@ -83,24 +98,21 @@ export function BcorpScore({
           </p>
         ) : null}
 
-        {/*
-          Three figures on one line: ours, the one a company needs, and the one
-          an ordinary business gets. Each is a value over its label, so the
-          numbers line up and read across.
-        */}
-        <dl className="mt-10 flex flex-wrap items-end gap-x-14 gap-y-8 md:mt-14">
-          <div>
-            <dd className="text-5xl leading-none md:text-7xl">{overall}</dd>
-            <dt className="mt-3 text-sm md:text-base">
-              Curate Health
-              {certifiedSince ? `, certified ${certifiedSince}` : ""}
-            </dt>
-          </div>
+        {/* The total, which is what somebody came to this block for. */}
+        <div className="mt-12 text-center md:mt-16">
+          <p className="text-7xl leading-none md:text-8xl">{overall}</p>
+          <p className="mt-4 text-sm md:text-base">
+            Our B Impact Score
+            {certifiedSince ? `, certified ${certifiedSince}` : ""}
+          </p>
+        </div>
 
+        {/* The two figures that give it meaning, under it rather than beside. */}
+        <dl className="mt-10 flex justify-center gap-12 text-center md:gap-20">
           {typeof threshold === "number" ? (
             <div>
               <dd className="text-3xl leading-none md:text-4xl">{threshold}</dd>
-              <dt className="mt-3 max-w-[22ch] text-sm leading-6">
+              <dt className="mx-auto mt-3 max-w-[18ch] text-sm leading-6">
                 The score a company needs to certify
               </dt>
             </div>
@@ -109,50 +121,65 @@ export function BcorpScore({
           {typeof median === "number" ? (
             <div>
               <dd className="text-3xl leading-none md:text-4xl">{median}</dd>
-              <dt className="mt-3 max-w-[22ch] text-sm leading-6">
+              <dt className="mx-auto mt-3 max-w-[18ch] text-sm leading-6">
                 The median for businesses that complete the assessment
               </dt>
             </div>
           ) : null}
         </dl>
 
-        {live.length > 0 ? (
-          <dl className="mt-10 grid gap-x-10 gap-y-5 border-t border-primary/15 pt-8 sm:grid-cols-2 lg:grid-cols-3 md:mt-14">
-            {live.map((area) => (
-              <div
-                key={area._key ?? area.name}
-                className="flex items-baseline justify-between gap-4 border-b border-primary/10 pb-3"
-              >
-                <dt className="text-pretty">
-                  {area.name}
-                  {area.note ? (
-                    <span className="block text-sm text-primary/70">
-                      {area.note}
-                    </span>
-                  ) : null}
-                </dt>
-                <dd className="shrink-0 text-xl tabular-nums md:text-2xl">
-                  {area.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        ) : null}
+        {live.length > 0 && sum > 0 ? (
+          <figure className="mt-14 md:mt-20">
+            <figcaption className="text-sm md:text-base">
+              What the {overall} is made of
+            </figcaption>
 
-        {/*
-          The directory profile, not bcorp.com. This is the link that lets a
-          reader check the number above, which is the only reason the number is
-          worth printing. The mark's own link stays on bcorp.com wherever it
-          appears, because B Lab's guidelines require that one.
-        */}
-        {directoryUrl ? (
-          <Link
-            href={directoryUrl}
-            {...externalLinkProps(directoryUrl)}
-            className={cn("mt-10 inline-block w-fit md:mt-12", HOVER_UNDERLINE)}
-          >
-            Read our full assessment on B Lab&rsquo;s directory
-          </Link>
+            {/*
+              Decorative: every name and value on it is written out in the list
+              underneath, so a screen reader is handed the list rather than a
+              row of unlabelled boxes.
+            */}
+            <div
+              aria-hidden
+              className="mt-4 flex h-11 w-full overflow-hidden rounded-sm md:h-14"
+            >
+              {live.map((area, i) => (
+                <div
+                  key={area._key ?? area.name}
+                  style={{
+                    width: `${(area.value / sum) * 100}%`,
+                    backgroundColor: RAMP[i % RAMP.length],
+                  }}
+                />
+              ))}
+            </div>
+
+            <dl className="mt-6 grid gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+              {live.map((area, i) => (
+                <div
+                  key={area._key ?? area.name}
+                  className="flex items-baseline gap-3 border-b border-primary/10 pb-3"
+                >
+                  <span
+                    aria-hidden
+                    className="size-3 shrink-0 translate-y-px rounded-[2px]"
+                    style={{ backgroundColor: RAMP[i % RAMP.length] }}
+                  />
+                  <dt className="text-pretty">
+                    {area.name}
+                    {area.note ? (
+                      <span className="block text-sm text-primary/70">
+                        {area.note}
+                      </span>
+                    ) : null}
+                  </dt>
+                  <dd className="ml-auto shrink-0 text-xl tabular-nums md:text-2xl">
+                    {area.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </figure>
         ) : null}
       </div>
     </section>

@@ -94,13 +94,13 @@ const CONTENT = {
 
   heroParagraphs: [
     "A healthy environment decides the health of the people who live in it. To optimize health is to optimize both the person and the place they live in, so we cannot set out to make people well while leaving our own footprint out of the account.",
-    "That is why Curate Health is a Certified B Corporation. The B stands for benefit, and the standard measures whether a company is run for the benefit of everyone it touches rather than for its owners alone.",
+    "That is why Curate Health is a Certified B Corporation: an international standard for whether a company is run for the benefit of everyone it touches rather than for its owners alone, measured by somebody other than us.",
   ],
 
   score: {
     heading: "Our score",
     intro:
-      "Curate Health certified in October 2026. These are B Lab's figures, published in full on its own directory.",
+      "Curate Health certified in October 2026. These are B Lab's own figures.",
     overall: 91.7,
     threshold: 80,
     median: 50.9,
@@ -133,12 +133,12 @@ const CONTENT = {
         ],
         [
           {
-            text: "The standard is run by B Lab, a non-profit founded in 2006 by three people who had just sold their company and watched its commitments to its staff and its community disappear in the sale. They built the certification so that what a business stands for could be measured and defended rather than left to whoever owned it. Eighty-one companies certified in the first year. More than ten thousand hold it today, in over a hundred countries, which is what makes it a standard rather than a badge.",
+            text: "The B stands for benefit. The standard is run by B Lab, an independent non-profit, and more than ten thousand companies hold it across over a hundred countries, which is what makes it an international standard rather than a badge. It is reassessed every three years.",
           },
         ],
         [
           {
-            text: "It certifies the company rather than anything the company sells, so it describes how Curate Health is run and makes no claim about a particular treatment or anything on the cafe menu.",
+            text: "The assessment is about the business rather than anything it sells. It looks at how we buy, how people here are paid and supported, what the space consumes and what happens to what it throws away. Those are the parts of a health and wellness space a patient never sees, and they are the ones it is interested in.",
           },
         ],
       ],
@@ -163,7 +163,7 @@ const CONTENT = {
         ],
         [
           {
-            text: "The certification is where we put that on the record. It measures the parts of this place a patient never sees, and it is assessed again every three years.",
+            text: "The certification is where we put that on the record, and where somebody outside this business checks whether we are living up to it.",
           },
         ],
       ],

@@ -6,6 +6,7 @@ import { AboutNavigation } from "@/components/layout/about-pages/about-navigatio
 import { BcorpScore } from "@/components/layout/about-pages/bcorp-score";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import CtaFooterSection from "@/components/shared/cta-footer-section";
+import HoverLinkVariation from "@/components/shared/hover-link-variation";
 import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -84,6 +85,18 @@ export default async function BcorpPage() {
       </div>
 
       <BcorpScore {...(score ?? {})} />
+
+      {/*
+        The directory profile, as the house band rather than a text link, which
+        is what Frank asked for on 2026-10-25. It is the one link that lets a
+        reader check the score above, so it earns the weight.
+
+        Not bcorp.com: the mark's own photograph below carries that link, which
+        is the one B Lab's guidelines require. Two links, two destinations.
+      */}
+      {score?.directoryUrl ? (
+        <HoverLinkVariation href={score.directoryUrl} text="Learn More" />
+      ) : null}
 
       {/*
         The B Corp mark is in this section's photograph, and B Lab requires a

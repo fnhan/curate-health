@@ -119,6 +119,7 @@ export default async function TreatmentPage(props: {
       <TreatmentHeroSection
         hero_image={{
           asset: { url: heroImage?.asset?.url! },
+          source: heroImage?.source,
           alt: heroImage?.heroAlt!,
         }}
       />

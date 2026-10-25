@@ -135,6 +135,7 @@ export default async function ServiceOrTreatmentPage(props: {
         <TreatmentHeroSection
           hero_image={{
             asset: { url: treatment.heroImage?.asset?.url! },
+            source: treatment.heroImage?.source,
             alt: treatment.heroImage?.heroAlt!,
           }}
         />
@@ -154,7 +155,11 @@ export default async function ServiceOrTreatmentPage(props: {
         id={`service-${params.slug}-json-ld`}
       />
       <ServiceHeroSection
-        hero_image={{ asset: { url: hero_image! }, alt: hero_alt! }}
+        hero_image={{
+          asset: { url: hero_image! },
+          source: service.hero_imageSource,
+          alt: hero_alt!,
+        }}
       />
       <ServicesNavigation services={services} />
       <ServiceContent service={service} />

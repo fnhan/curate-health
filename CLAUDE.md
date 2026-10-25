@@ -4441,12 +4441,32 @@ reader told the total reads 91.7 against it and concludes we are halfway, which
 is the wrong comparison. The right ones are the score a company needs to
 certify and what an ordinary business scores, and both are on the page.
 
-**So there is no bar.** A rule drawn against an unstated maximum invites the
-exact reading the omission is meant to avoid, and a rule drawn against a
-shorter scale would flatter it. It is three figures set out plainly: 91.7, then
-80, then 50.9, each a value over its label, bottoms aligned. Measured at 1280
-they sit in one row at x 32, 382 and 628, with the five areas in three columns
-below.
+**The bar is the composition, not the scale.** Frank asked on 2026-10-25 for a
+visual showing how the five areas add up to the total, so the bar IS 91.7,
+divided into the five parts that make it. It carries no empty remainder, which
+is the point: a bar drawn against an unstated maximum would invite exactly the
+halfway reading the omission avoids, and one drawn against a shorter scale
+would flatter it. The five areas carry different maximums and are not
+comparable to each other, so nothing here invites that comparison either.
+
+The total sits above it, large and centred, with the pass mark and the median
+below rather than beside. The segments are normalised on their own sum rather
+than on the overall, because Sanity rounds each area to one decimal and they
+can total a little either side of 91.7; normalising keeps the bar exact rather
+than leaving a sliver of background at the end.
+
+**The segment colours are inline `hsl`, not Tailwind classes.** They are
+data-driven, and a class string built at runtime is one Tailwind never sees,
+which is the trap recorded under the hover sweep on 2026-10-18. Five steps on
+the brand hue, primary through secondary out to platinum, ordered by the array,
+which is stored largest first, so the widths fall left to right.
+
+**The directory link is the house band**, `HoverLinkVariation`, the same one
+under the Program Timeline. Frank asked for it on 2026-10-25: it is the single
+link that lets a reader check the score, so it earns the weight a text link
+does not. That component takes an off-site address now, through
+`externalLinkProps`, which returns nothing for an internal href, so its two
+existing call sites are untouched.
 
 **`bestRating: 200` stays in the markup**, which is not a contradiction. A
 schema.org `Rating` with no scale defaults to 5 and would publish 91.7 out of

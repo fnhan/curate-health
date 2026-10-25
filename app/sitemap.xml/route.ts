@@ -50,6 +50,7 @@ export async function GET() {
     lifestyle,
     lifestyleProgram,
     cafeMenu,
+    classSchedule,
   } = sitemap!;
 
   const staticRoutes: Url[] = [
@@ -99,6 +100,19 @@ export async function GET() {
             lastModified: new Date().toISOString(),
             changeFrequency: "monthly" as const,
             priority: 0.6,
+          },
+        ]
+      : []),
+    // The class schedule, CH-107. Conditional on the document having classes
+    // on it, the same gate the route 404s on, so this never lists a page that
+    // is not there.
+    ...(classSchedule
+      ? [
+          {
+            url: `${BASEURL}/classes`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: "weekly" as const,
+            priority: 0.7,
           },
         ]
       : []),

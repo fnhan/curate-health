@@ -10,6 +10,7 @@ import { SocialIcon } from "@/components/shared/social-icon";
 import { addressLines } from "@/lib/address";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
+import { withoutDeadClassesLink } from "@/lib/class-schedule-link";
 import { cn } from "@/lib/utils";
 import { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
 
@@ -100,6 +101,7 @@ export default function SiteFooter({
     legalLinks,
     contactInfo,
     footerNavLinks,
+    classScheduleActive,
     services,
     aboutPages,
   } = siteSettings!;
@@ -297,7 +299,15 @@ export default function SiteFooter({
                     {group.groupTitle}
                   </h2>
                   <div className="hidden flex-col gap-1 pl-3 md:flex">
-                    {group.links?.map((link, linkIndex) => (
+                    {/*
+                      The Classes entry goes while no class is switched on,
+                      CH-107, so the footer closes with the page.
+                    */}
+                    {withoutDeadClassesLink(
+                      group.links,
+                      (link) => link.slug?.current,
+                      classScheduleActive
+                    )?.map((link, linkIndex) => (
                       <Link
                         key={linkIndex}
                         className="w-fit hover:underline"

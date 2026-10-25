@@ -57,6 +57,11 @@ type LlmsData = {
     description: string | null;
     items: number | null;
   } | null;
+  classSchedule: {
+    title: string | null;
+    description: string | null;
+    classes: number | null;
+  } | null;
   team: Array<{
     name: string | null;
     role: string | null;
@@ -146,6 +151,15 @@ const LLMS_TXT_QUERY = groq`{
     title,
     "description": coalesce(seo.pageDescription, intro),
     "items": count(sections[].items[])
+  },
+  // The class schedule, CH-107. Counted the same way: the file names the page
+  // and an answer engine that wants the day and time follows the link.
+  "classSchedule": *[_type == "classSchedule"][0]{
+    title,
+    "description": coalesce(seo.pageDescription, intro),
+    // Switched-off classes are not counted, so a schedule with every class
+    // off drops out of this file the same way it drops out of the sitemap.
+    "classes": count(classes[isActive != false])
   },
   // Role is rich text in the Studio, one line per role. Read as plain text
   // here, it printed as "[object Object]" for every member until 2026-09-18.
@@ -378,9 +392,22 @@ function buildLlmsTxt(data: LlmsData) {
                 data.cafeMenu.description
               )
             : "",
-          // The PDF, for printing. Not a page, so it is named rather than
-          // linked as one.
-          data.cafe.menuUrl ? `- Menu as a PDF: ${data.cafe.menuUrl}` : "",
+          // The class schedule, CH-107. It sits under this heading because
+          // every class runs in the Recovery Sanctuary, which is the other
+          // half of it. Same gate as the sitemap and the route.
+          data.classSchedule && (data.classSchedule.classes ?? 0) > 0
+            ? link(
+                data.classSchedule.title || "Class Schedule",
+                "/classes",
+                data.classSchedule.description
+              )
+            : "",
+          // The PDF is deliberately not named here any more, Frank
+          // 2026-10-24: "No more menu download box". The download box left
+          // /cafe on 2026-10-18 and this line was the last reference to the
+          // file anywhere. A PDF beside a full HTML menu is a worse answer
+          // for a crawler, not a second one: it indexes poorly and cannot be
+          // excerpted. The file itself is untouched in Sanity.
         ]
           .filter(Boolean)
           .join("\n")

@@ -43,6 +43,7 @@ const INDEX_DOCS_QUERY = groq`
     "pillarsOfHealth",
     "cafePage",
     "cafeMenu",
+    "classSchedule",
     "contactPage",
     "ourPrograms",
     "servicesHeroSection",
@@ -55,6 +56,10 @@ const INDEX_DOCS_QUERY = groq`
   // of the Our Team document here too, or searching their name still lands
   // on the team page. The same filter as OUR_TEAM_PAGE_QUERY.
   "teamMembers": teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)],
+  // Same reasoning for a class switched off on the schedule, CH-107.
+  // Without this, searching its name still returns /classes, which no
+  // longer lists it.
+  "classes": classes[isActive != false],
   "slugCurrent": slug.current,
   "treatmentSlugCurrent": treatmentSlug.current,
   "serviceSlugCurrent": service->slug.current
@@ -122,6 +127,8 @@ function buildHrefForDoc(doc: IndexDoc): string | null {
       return "/cafe";
     case "cafeMenu":
       return "/cafe/menu";
+    case "classSchedule":
+      return "/classes";
     case "contactPage":
       return "/contact";
     case "ourPrograms":

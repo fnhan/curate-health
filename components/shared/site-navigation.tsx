@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { treatmentPath } from "@/lib/service-urls";
+import { withoutDeadClassesLink } from "@/lib/class-schedule-link";
 import { cn } from "@/lib/utils";
 import {
   PRIMARY_CTA_BUTTON_QUERY_RESULT,
@@ -45,7 +46,23 @@ export default function SiteNav({
 
   if (!siteSettings) return null;
 
-  const { brandName, navLinks, services, aboutPages, siteLogo } = siteSettings!;
+  const {
+    brandName,
+    navLinks: allNavLinks,
+    services,
+    aboutPages,
+    siteLogo,
+    classScheduleActive,
+  } = siteSettings!;
+
+  // The Classes entry comes out of the menu while no class is switched on,
+  // CH-107, by the same condition /classes itself 404s on. Shared with the
+  // footer and its mobile accordion, which show the same link.
+  const navLinks = withoutDeadClassesLink(
+    allNavLinks,
+    (link) => link.href,
+    classScheduleActive
+  );
 
   useEffect(() => {
     if (!sidebarSearchOpen) return;

@@ -513,6 +513,21 @@ would otherwise put the old shape back on the next publish.
 open. `sanity.types.ts` and `schema.json` were regenerated, which is the reason
 this could not be split into a smaller change.
 
+**The committed generated files were older than the CLI, caught 2026-10-20.**
+Regenerating for CH-107 produced a 19,000 line diff with 14,862 deletions,
+which looks exactly like the trap below and is not it. Nothing was lost: the
+exported type names went 112 to 130 with **none missing**, and three things
+account for the shrink. 282 inline reference objects collapsed into 8 named
+`*Reference` types. Portable text, which used to be inlined into every query
+result, is now the named `BlockContent`. And `HOME_PAGE_QUERY_RESULT` gained
+`videoFile.asset: { playbackId }` where it had been typed `null`, which is a
+fix rather than a loss.
+
+**So the optional-marker count is not a sufficient check on its own.** It went
+3235 to 1827 here, in the direction the trap goes, because every inlined copy
+carried its own `?:`. Compare the **exported type names** before and after
+instead, and read what actually changed; the count only tells you to look.
+
 **Regenerate with plain `sanity schema extract`.** Adding
 `--enforce-required-fields`, which the committed file was not generated with,
 flips roughly 5,000 optional fields to required across `sanity.types.ts` and
@@ -1335,11 +1350,205 @@ Add `VideoObject` schema with `transcript` on every embed. The transcript is the
 
 The 13 scripted Tai Chi clips in the content plan are the first candidates.
 
-### CH-107 Class schedule
+### CH-107 Class schedule. Built 2026-10-20
 
-Tai Chi with Dr. Gabriele on Sunday mornings, yoga with Rooj, mat Pilates with Claire. Recurring scheduled events at a fixed location, which is exactly what `Event` schema is for.
+`/classes`, three classes, every day and time as text in the HTML with an
+`Event` node each. Nothing on the site said when any class ran: the two with a
+treatment page gave no day and no time, and Tai Chi had no page at all, so a
+search for "tai chi Toronto" reached nothing of ours.
 
-Build a class schedule page with per-class URLs, `Event` markup, and direct booking links. This gives the Recovery Sanctuary a discovery surface it currently lacks entirely.
+**The days and times were read off Jane, not taken from a note.** Its own
+openings API under discipline 22, on 2026-10-20:
+
+```
+/api/v2/openings/for_discipline?location_id=1&discipline_id=22
+  &num_days=7&treatment_id={id}&date=YYYY-MM-DD
+```
+
+| Class | Jane | Day | Time | Length | Drop-in |
+| --- | --- | --- | --- | --- | --- |
+| Outdoor Yoga Therapy | treatment 80 | Tuesday | 18:00 | 60 min | $30 |
+| Outdoor Pilates | treatment 78 | Wednesday | 09:00 | 50 min | $30 |
+| Tai Chi | treatment 112 | Sunday | 09:00 | 60 min | $30 |
+
+CLAUDE.md had only the Sunday, and it was right. The other two days were never
+written down anywhere.
+
+**`num_days` is capped at 7**, so this is read a week at a time, and asking for
+60 answers 422. Loop it rather than widening it. Reading too fast earns a 429
+that persists for a while, so space the requests.
+
+**Jane holds about a fortnight open, and that decides the whole design.**
+Sixteen weeks ahead returned one Pilates opening and two Yoga ones. So there is
+no reliable list of future dates to publish, and a page built off Jane would
+publish a schedule that runs out. What is published is the **recurrence**:
+`eventSchedule` with a `Schedule`, `byDay` and `repeatFrequency: P1W`, which is
+what schema.org provides for a weekly class and what Google documents for a
+recurring event. An `Event` with a date in the past is worse than no `Event`.
+
+**`scheduleTimezone` is America/Toronto, not an offset.** Jane returned the
+same 9:00 AM class as `-04:00` in October and `-05:00` in November, which is
+exactly what an offset gets wrong.
+
+**The classes are not re-described.** Each entry references its treatment
+document and takes the name, photograph and description from it, so there is no
+second copy of a class's description to drift, which is what CH-025 spent a
+whole ticket undoing for the address. The only new facts are a day, a time and
+a length.
+
+**WHEN A CLASS MOVES IN JANE IT HAS TO BE MOVED IN THE STUDIO.** Nothing
+notices on its own, and nothing can: Jane has no public feed for a recurring
+class.
+
+**Tai Chi is on the schedule and has no page, deliberately.** It appears as a
+name rather than a link. A page needs a page's worth of copy with Dr.
+Gabriele's sign-off, which is a separate job; "Sunday at 9:00 AM with Dr. David
+Gabriele, 60 minutes" is a fact, not a health claim, so there was no reason to
+withhold it in the meantime. **Its block has no photograph**, which is also why
+the row is a grid with a fixed first column rather than a flex row: with flex,
+its heading started at the container edge while the other two started 328px in,
+and three headings on two left edges reads as a mistake. The empty cell costs
+some white space and keeps the scan line. A photograph for it is Frank's.
+
+**The prices are on the page, which is a departure worth defending.** Pricing
+is out of scope on this project and the product pages carry `Product` with no
+`Offer` for that reason: their price lives in Jane and the site cannot show it.
+A class is the cafe menu case instead. The price is one fixed number for one
+drop-in place, the page shows it, and markup describes what the page shows. The
+field is optional and starts empty, so emptying the three numbers in the Studio
+takes them off the page and out of the markup together.
+
+**The `ItemList` is the page's own entity, and the `Event`s are the classes.**
+Same reasoning as `/products`: declaring a class as an entity twice would put
+one thing on two URLs. The list points each class at its treatment page where
+there is one.
+
+**Four gates on one condition**, the document having classes on it: the route
+404s, the sitemap omits the URL, llms.txt omits the line, and the band on
+`/services/recovery-sanctuary` is not rendered. So the four cannot disagree and
+nothing can link at a page that is not there.
+
+**`/classes` is in the main menu, from 2026-10-24.** Frank asked for it. It
+sits first in `navLinks`, which renders after Services, Programmes and About:
+a class is something Curate offers rather than a resource, so it belongs
+beside those rather than beside Blog and Contact. The band at the foot of
+`/services/recovery-sanctuary` stays, so there are two ways in.
+
+#### Each class has a switch, a photograph and editable details. 2026-10-24
+
+Frank asked for all three, the switch because instructors go on holiday.
+
+**`isActive` on each class, defaulting on.** Switched off, that class leaves
+the page, the markup, the sitemap, llms.txt and site search, and everything
+about it stays in the Studio, so switching it back on needs nothing else
+edited. With every class off the page itself 404s, the band goes and the
+Classes entry leaves the menu.
+
+**Site search needs the filter too**, which is the CH-104 lesson exactly: the
+index reads every string in a document, so without it searching a switched-off
+class's name still returned `/classes`. Both `INDEX_DOCS_QUERY` copies filter
+`classes` the same way `teamMembers` is filtered.
+
+**`isActive != false`, never `== true`.** An entry written before the field
+existed carries no value and must keep showing.
+
+**One condition, five readers, one string.** `CLASSES_LIVE` at the top of
+`sanity/lib/queries.ts`. The route, the sitemap, llms.txt, the band and the
+menu all read it. Five copies would eventually disagree and leave something
+pointing at a page that is not there, which is the whole point of the gate.
+
+**A per-class photograph**, overriding the treatment page's hero, and the only
+way the class with no page can have one. **An editable summary** the same way,
+so the line here can be changed without touching the treatment page's meta
+description.
+
+**The fallback is chosen in the page, not in GROQ**, through `classPhoto` in
+`lib/structured-data.tsx`, which the page and the Event markup both call so
+they cannot name different pictures. It tests the **url** rather than the
+object: an image field an editor opens and leaves empty is still a non-null
+object, so a `coalesce` would shadow the fallback.
+
+**Re-running `apply-class-schedule.js` no longer undoes a switch.** It writes
+the whole document with `createOrReplace`, so it reads what is live first and
+keeps each class's stored `isActive`. `--reset-switches` puts them all back on
+deliberately.
+
+**The meta description names all three classes**, so it goes slightly stale
+while one is switched off. Left as it is: naming them is worth real search
+traffic and a holiday is a week or two. It is `seo.pageDescription` on the
+schedule document if a class is ever off for a long stretch.
+
+##### Three GROQ traps, all of them already in this file, all hit again
+
+Worth reading before touching a query, because each one fails quietly and the
+symptom points somewhere else.
+
+- **A backtick inside a GROQ comment ends the template literal.** Writing
+  `sanity typegen` in backticks inside a `//` comment broke the file three
+  separate times, and `tsc` reports it as "',' expected" on a line that looks
+  fine.
+- **GROQ takes `//` comments only.** A `/* */` block inside
+  `SITE_SETTINGS_QUERY` silently broke that query and `LAYOUT_QUERY` with it,
+  and the only symptom was twenty files failing to find
+  `SITE_SETTINGS_QUERY_RESULT`.
+- **`sanity typegen` drops a whole query it cannot type, rather than failing.**
+  A `select()` returning two different object shapes, and a filter holding a
+  `*[...]` subquery, are both legal GROQ and both unprintable to it. The
+  generated file simply comes back missing that type. **Count the exported
+  type names before and after a regeneration**: the query count in its own
+  output is the thing to read, and it went 54, 51, 52, 53, 54 across this
+  change while the errors moved around.
+
+`components/shared/link-band.tsx` is the band, extracted out of
+`cafe-menu-band.tsx` the way `ServicesNavigation` wraps `SectionNavigation`.
+The cafe's rendered markup is byte for byte what it was: same classes, same
+order, same two strings Frank chose on 2026-10-18.
+
+```bash
+node scripts/apply-class-schedule.js           # dry run, prints every word
+node scripts/apply-class-schedule.js --apply
+```
+
+The script looks treatments and practitioners up **by title and name** rather
+than carrying ids, so a wrong title fails the run instead of writing a
+reference to the wrong document, and it checks the copy against the content
+rules and the audits' own title and description limits before it will write. It
+caught its own first description at 161 of 155.
+
+Applied in transaction `0Lj1VPYD57uv9UHluRZ98Y`, after
+`sanity-backup-2026-10-20-before-class-schedule-documents.tar.gz`.
+
+**All 9 checks in `audit-seo-complete.js` pass with the page in**, along with
+the security headers on 8 paths, the conversion events on 54 pages, and
+`audit-booking-links.js` at 28 Jane and 0 Embodia. `audit-render-baseline.js`
+reports `/classes` new and four changed: `/services/recovery-sanctuary` gains
+the band, llms.txt and the sitemap gain their line, and `/cafe` is 224
+characters shorter, which is the CTA dedupe from earlier the same day rather
+than anything here.
+
+**Open, and all of it Frank's:**
+
+- **A photograph for Tai Chi**, which now has a field of its own on the
+  schedule entry, and whether it should have a page. The copy would need Dr.
+  Gabriele's sign-off.
+- **Whether the three $30 prices stay**, per the departure above.
+- **How many people the yoga and Tai Chi classes take.** Pilates says 12,
+  which is his number from 2026-10-13. The other two are left empty rather
+  than guessed from it.
+- **Whether the standing note is right for all three.** "Mats are provided,
+  and you are welcome to bring your own" and "Wear workout clothes and bring
+  layers for the weather" are his Outdoor Pilates facts applied to the whole
+  page.
+- Whether the Classes entry should also go in the footer Resources list,
+  beside Contact, Products, Cafe and Blog. The menu has it; the footer does
+  not, and that list carries no gate of its own, so it would need one.
+- The Outdoor Yoga Therapy description the page reuses is pre-rules 2024 copy,
+  "Connect with nature, improve flexibility, and find inner peace": a
+  rule-of-three and three claims. It is its treatment page's own meta
+  description, so it belongs with the 42 outstanding copy-review items rather
+  than being quietly rewritten here.
+- Its photograph is the 6500x3846 PNG that CH-029 names as the worst asset in
+  the library.
 
 ### CH-108 Cafe menu as HTML. Built 2026-10-18
 

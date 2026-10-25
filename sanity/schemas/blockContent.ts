@@ -51,6 +51,22 @@ export default defineType({
                 title: "URL",
                 name: "href",
                 type: "url",
+                description:
+                  "A full address, or a path on this site such as /cafe/menu.",
+                /*
+                 * `url` validates to http, https, mailto and tel by default,
+                 * so a path on this site was flagged in the Studio although it
+                 * renders correctly: isExternalHref in lib/links.ts already
+                 * treats a leading / as internal and gives it no new tab.
+                 *
+                 * allowRelative lets an editor link one page of the site to
+                 * another, which is what the cafe section does for the menu.
+                 */
+                validation: (Rule) =>
+                  Rule.uri({
+                    allowRelative: true,
+                    scheme: ["http", "https", "mailto", "tel"],
+                  }),
               },
             ],
           },

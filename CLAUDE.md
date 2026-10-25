@@ -4511,6 +4511,35 @@ during the build and not only in daily operations. The wording stays close to
 what he said and claims nothing specific about materials or ratings, because
 nobody has confirmed any.
 
+**"Why we became one" shows two people talking in the gym**, one with a hand at
+his chin, off the Workers section of /about/sustainability. Frank chose it on
+2026-10-25 over the stock yoga class that sat there first, and it is the better
+picture: that section is about health being social, and one person listening to
+another is what that looks like, where a class of strangers on mats is a
+picture of exercise.
+
+#### What the page actually claims, and where it came from
+
+Everything concrete under "What it holds us to" is Frank's, dictated
+2026-10-25: local vendors who work the same way, internal benefits for the
+team, talks and events in the neighbourhood, waste measured, protocols for
+using less energy and producing less waste, a zero to low waste kitchen, the
+bring your own vessel discount, and attention to microplastics.
+
+**Nothing names a specific thing being worked on**, which is also his call. The
+section closes on the broad version instead: the assessment comes round every
+three years and the aim is to score higher each time. An earlier draft named
+Governance as the weakest area and that is out.
+
+**The construction point is one sentence, not a section.** He asked for it on
+2026-10-25 and then, the same day, said not to go deep because
+/about/sustainability already covers it. So the page says the footprint was
+weighed while the space was being built and links there for the rest.
+
+**Watch for the rule of three when writing this section.** The practices list
+naturally falls into threes and `audit-content-rules.js` cannot catch a
+tricolon, so it passed a draft that had one. It was split by hand.
+
 #### Markup
 
 `Certification` with `hasCertification`, which schema.org added for exactly

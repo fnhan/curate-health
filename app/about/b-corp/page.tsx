@@ -95,7 +95,10 @@ export default async function BcorpPage() {
         is the one B Lab's guidelines require. Two links, two destinations.
       */}
       {score?.directoryUrl ? (
-        <HoverLinkVariation href={score.directoryUrl} text="Learn More" />
+        <HoverLinkVariation
+          href={score.directoryUrl}
+          text="Read our full assessment on B Lab’s directory"
+        />
       ) : null}
 
       {/*

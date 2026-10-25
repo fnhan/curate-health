@@ -57,13 +57,17 @@ const HERO_ASSET = "image-3388975510b86abe3792c1deadaeea35da16a7ea-5575x3717-jpg
 const MARK_ASSET = "image-3d55827a4b315471a498ed55829394a1b8e01ddf-1600x1267-jpg";
 
 /*
- * Already live on /about/sustainability, with alt text written from the image
- * itself. A placeholder rather than a choice: people outdoors suits the
- * paragraph about health being social, and a photograph of this community
- * would suit it better.
+ * Two people talking in the gym, one with a hand at his chin. Frank chose it
+ * on 2026-10-25, off the Workers section of /about/sustainability, in place of
+ * a stock yoga class.
+ *
+ * It suits the section better than the yoga photograph did. That section is
+ * about health being social, and a photograph of one person listening to
+ * another is what that looks like, where a class of strangers on mats is a
+ * picture of exercise.
  */
-const COMMUNITY_ASSET =
-  "image-ef41075f6a819b062d8a2d58f5991d6969ed6c84-2268x4032-jpg";
+const CONVERSATION_ASSET =
+  "image-23198e0a9a15d382a77f49a1745b15b7088cbd6d-3728x2920-jpg";
 
 /*
  * The waiting area, with the logo in cork lettering on the plaster wall. Found
@@ -146,8 +150,8 @@ const CONTENT = {
     {
       key: "why-we-did-it",
       title: "Why we became one",
-      asset: COMMUNITY_ASSET,
-      alt: "Photograph of a group of people doing yoga on mats with their arms crossed leaning back.",
+      asset: CONVERSATION_ASSET,
+      alt: "Two people in conversation in the gym, one with a hand resting at his chin, the other with their back to the camera.",
       paragraphs: [
         [
           {
@@ -176,20 +180,25 @@ const CONTENT = {
       paragraphs: [
         [
           {
-            text: "That thinking started before the doors opened. The carbon footprint of this space was considered while it was being built rather than totalled up afterwards, so the choices made during construction were weighed on the same terms as the daily running of the place is now.",
-          },
-        ],
-        [
-          {
-            text: "Our strongest areas are how the people who work here are treated and how the space itself is run, which is where a health and wellness business ought to be strong. Governance is where we have the most ground to cover, and it is already written into what we are preparing for the next assessment in 2029.",
-          },
-        ],
-        [
-          {
-            text: "Each of the five areas is set out in detail on our ",
+            text: "It started before the doors opened, with the footprint of this space weighed while it was being built. Our ",
           },
           { text: "sustainability page", link: "/about/sustainability" },
-          { text: ", and the standard itself at " },
+          { text: " sets that out, area by area." },
+        ],
+        [
+          {
+            text: "Day to day it decides ordinary things. We buy from local vendors who work the way we do, and the people on the team have benefits rather than only a job description. We run talks and events in the neighbourhood instead of only opening the doors each morning.",
+          },
+        ],
+        [
+          {
+            text: "We measure what this place throws away, and there are protocols here for using less energy and producing less waste. The kitchen runs zero to low waste. Bring your own vessel and the cafe takes something off the price, and we pay attention to microplastics in what we serve and in what leaves the building.",
+          },
+        ],
+        [
+          {
+            text: "The assessment comes round every three years and the aim is to score higher each time. That is what keeps a certification a standard rather than a plaque. The standard itself is set out at ",
+          },
           { text: "bcorp.com", link: "https://bcorp.com" },
           { text: "." },
         ],

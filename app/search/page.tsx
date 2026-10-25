@@ -40,6 +40,7 @@ const INDEX_DOCS_QUERY = groq`
     "ourTeam",
     "missionAndValues",
     "sustainability",
+    "bcorpPage",
     "pillarsOfHealth",
     "cafePage",
     "cafeMenu",
@@ -121,6 +122,8 @@ function buildHrefForDoc(doc: IndexDoc): string | null {
       return "/about/mission-and-values";
     case "sustainability":
       return "/about/sustainability";
+    case "bcorpPage":
+      return "/about/b-corp";
     case "pillarsOfHealth":
       return "/about/pillars-of-health";
     case "cafePage":
@@ -163,6 +166,8 @@ function buildTitleForDoc(doc: IndexDoc): string {
       return "Mission and Values";
     case "sustainability":
       return "Sustainability";
+    case "bcorpPage":
+      return "B Corp Certification";
     case "pillarsOfHealth":
       return "Pillars of Health";
     case "cafePage":

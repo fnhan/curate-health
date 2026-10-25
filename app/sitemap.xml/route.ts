@@ -46,6 +46,7 @@ export async function GET() {
     missionValues,
     practitioners,
     sustainability,
+    bcorp,
     pillarsHealth,
     lifestyle,
     lifestyleProgram,
@@ -161,6 +162,12 @@ export async function GET() {
     },
     sustainability.length > 0 && {
       url: `${BASEURL}/about/sustainability`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    bcorp.length > 0 && {
+      url: `${BASEURL}/about/b-corp`,
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly",
       priority: 0.7,

@@ -223,6 +223,11 @@ const LLMS_TXT_QUERY = groq`{
       "title": "Sustainability",
       "path": "/about/sustainability",
       "description": seo.pageDescription
+    },
+    *[_type == "bcorpPage" && pageActive == true][0]{
+      "title": "B Corp Certification",
+      "path": "/about/b-corp",
+      "description": seo.pageDescription
     }
   ],
   "products": *[_type == "product" && isActive == true && defined(slug.current)] | order(title asc){

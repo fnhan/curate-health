@@ -369,6 +369,16 @@ export const ABOUT_INDEX_QUERY = groq`{
       // the Studio reach SanityImage. Dormant until one is set.
       "imageSource": heroSection.heroImage.image{asset, crop, hotspot},
       "imageAlt": heroSection.heroImage.alt
+    },
+    *[_type == "bcorpPage" && pageActive == true][0]{
+      "title": "B Corp Certification",
+      "slug": "b-corp",
+      "description": seo.pageDescription,
+      "image": heroSection.heroImage.image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},
+      "imageAlt": heroSection.heroImage.alt
     }
   ]
 }`;
@@ -588,6 +598,70 @@ export const MISSION_AND_VALUES_QUERY = groq`*[_type == "missionAndValues" && pa
   ${SEO_QUERY}
 }`;
 
+/**
+ * About | Our B Corp Certification. CH-119.
+ *
+ * Gated on pageActive like every other page under /about, so the route, the
+ * sitemap, llms.txt and the About menu all read the one switch and cannot
+ * disagree with each other.
+ */
+export const BCORP_PAGE_QUERY = groq`*[_type == "bcorpPage" && pageActive == true][0] {
+  heroSection {
+    heroTitle,
+    heroParagraph,
+    heroImage {
+      "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
+      alt
+    }
+  },
+  score {
+    heading,
+    intro,
+    overall,
+    threshold,
+    median,
+    certifiedSince,
+    directoryUrl,
+    areas[] {
+      _key,
+      name,
+      value,
+      note
+    }
+  },
+  additionalSections[] {
+    _key,
+    sectionTitle,
+    sectionParagraph,
+    sectionImage {
+      "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
+      alt
+    }
+  },
+  ctaSection {
+    ctaSectionImage {
+      "image": image.asset->url,
+      // The image object beside its url, so the crop and hotspot set in
+      // the Studio reach SanityImage. Dormant until one is set.
+      "imageSource": image{asset, crop, hotspot},
+      alt
+    },
+    ctaSectionTitle,
+    ctaSectionParagraph,
+    ctaButton {
+      buttonText,
+      buttonLink
+    }
+  },
+  ${SEO_QUERY}
+}`;
+
 export const SUSTAINABILITY_QUERY = groq`*[_type == "sustainability" && pageActive == true][0] {
   heroSection {
     heroTitle,
@@ -738,6 +812,10 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
     *[_type == "sustainability" && pageActive == true][0]{
       "title": "Sustainability",
       "slug": "sustainability"
+    },
+    *[_type == "bcorpPage" && pageActive == true][0]{
+      "title": "B Corp Certification",
+      "slug": "b-corp"
     },
     *[_type == "pillarsOfHealth" && pageActive == true][0]{
       "title": "Pillars of Health",
@@ -1277,6 +1355,7 @@ export const SITEMAP_QUERY = groq`{
   "story": *[_type == "ourStory" && pageActive == true]{_id},
   "missionValues": *[_type == "missionAndValues" && pageActive == true]{_id},
   "sustainability": *[_type == "sustainability" && pageActive == true]{_id},
+  "bcorp": *[_type == "bcorpPage" && pageActive == true]{_id},
   "pillarsHealth": *[_type == "pillarsOfHealth" && pageActive == true]{_id},
   "cafe": *[_type == "cafePage" && pageActive == true]{_id},
   // /cafe/menu, CH-108. Gated on the document having items, so an empty

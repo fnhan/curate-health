@@ -4371,24 +4371,117 @@ in this ticket writes to Sanity.
 should now clear, so recount after merge; `middleware` to `proxy` is deferred
 above; and the three pinned image defaults are worth revisiting deliberately.
 
-### CH-119 Our B Corp Certification page
+### CH-119 Our B Corp Certification page. Drafted 2026-10-25
 
-Asked for by Frank on 2026-10-11, to be built later. A page under About Us about
-the certification, which the footer's Learn More should point at once it exists.
+`/about/b-corp`, built and wired, **with its copy drafted rather than
+approved**. The document is in Sanity and `pageActive` decides whether any of
+it is served.
 
-Until then Learn More points at the directory profile,
-`https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`.
-**Repointing it is part of this ticket, and the mark's own link stays on
-bcorp.com** whatever happens here, because B Lab requires that one.
+**It does not walk the five impact areas, on purpose.**
+`/about/sustainability` already has a section for each of Governance, Workers,
+Customers, Community and Environment. Explaining them again here would put two
+descriptions of one thing on two pages and let them drift, which is what CH-025
+spent a whole ticket undoing for the address. This page links there instead and
+answers what that page does not: what the certification is, who checks it, what
+Curate scored, and what any of it changes for a reader.
 
-The copy is Frank's to supply or approve. What the certification covers, what
-B Lab assessed, and the date certified are claims about the business, so they
-are not for drafting from the directory listing.
+**Built from its five siblings, not from the section components.** The rule
+from 2026-09-20 says build a new SECTION from `SectionHero` and
+`SectionNavigation`. /about is the section; this is a page inside it, and all
+five pages inside it lay out the same way: photograph full width, the About
+menu, the heading on white, alternating sections, the CTA. It uses
+`SanityImage` where the siblings still use a bare `next/image`, so a Studio
+crop reaches this hero from the first day. The other five are the same hole
+that was closed on the service and treatment heroes, and are worth the same fix
+in their own change.
 
-It is a new route, so the every-page rule applies in full: its own title and
-description in the Studio, a share card, a breadcrumb under /about, a line in
-the sitemap and in llms.txt, a link from the About hub so it is not orphaned,
-and the content rules. `node scripts/audit-seo-complete.js` is the gate.
+#### The score is data, and that is the main design decision
+
+`score` is its own object on the document: overall, the pass mark, the median,
+the date, the directory URL and the five areas. The page prints it and
+`buildBcorpJsonLd` publishes the same fields, so there is no second copy of a
+number to disagree with the first, the same reasoning as the hours in CH-008.
+Recertification is every three years, so these change in the Studio and nothing
+in code moves.
+
+**Why the number is on the page at all.** Reading fourteen B Corp pages across
+healthcare, coffee and fitness, the ones that read as credible publish the
+score and the ones that read as marketing publish adjectives. It is also the
+only part a reader can check, which matters more than usual here: independent
+research finds low recognition of the label and active confusion about who
+verifies it, so the page's first job is explaining, not celebrating.
+
+**A rule with two marks, not five bars.** The overall score gets one rule
+carrying the pass mark and the median, because a number means nothing without
+them. The five areas are a plain list: they carry different maximums, so five
+bars of one length would invent a comparison nobody can make. The rule is
+`aria-hidden` and every value on it is written out underneath.
+
+**Governance carries a note.** 15.4 of which 10 is Mission Locked, so the
+discretionary part is 5.4. A bare number there would misrepresent it in both
+directions, which is what the optional `note` field on an area is for.
+
+#### Markup
+
+`Certification` with `hasCertification`, which schema.org added for exactly
+this, rather than marking the page up as a generic `WebPage`. `issuedBy` names
+B Lab, `about` points at the organization node, `certificationRating` carries
+91.7 against 0 to 200, and `sameAs` is the directory profile.
+`worstRating` is 0 rather than the 80 pass mark: 80 is the threshold for
+certifying at all, not the bottom of the scale. **Every value in it is printed
+on the page**, which is the rule this project works to.
+
+#### Two links, two destinations, still
+
+The mark's photograph links to **bcorp.com**, which B Lab requires, matched on
+`_key === "bcorp-mark"` so renaming the section cannot drop it. The score block
+links to the **directory profile**, because that is what lets a reader check
+the number. Three bcorp.com links render on the page: the footer mark, the
+section photograph and the inline text link.
+
+**The hero is not the mark.** The band is 400px tall over the full width and
+the composite is 1600x1267, so `object-cover` would crop the lockup, which B
+Lab does not permit. The hero is the greenery that composite was built from,
+and the mark sits in the first section, whose slot is 704x556 and crops it by
+almost nothing.
+
+#### Wired in nine places, all on the one switch
+
+Route, sitemap, llms.txt, the About hub grid, the About menu, the header and
+footer About lists, `pathsForDocument` in `lib/indexnow.ts`, and both
+`INDEX_DOCS_QUERY` copies. Every one reads `pageActive`, so they cannot
+disagree and nothing can link at a page that is not there.
+
+```bash
+node scripts/apply-bcorp-page.js                    # dry run, prints every word
+node scripts/apply-bcorp-page.js --draft            # the Sanity draft only
+node scripts/apply-bcorp-page.js --apply --active   # publish and switch on
+```
+
+The script checks the copy against the content rules, the audits' own title and
+description limits, and `titleMatchesHeading` before it will write, so a break
+shows up before a build rather than after one. It also checks the five areas
+add to the overall within rounding.
+
+**`audit-seo-complete.js` passes 9 of 9 with the page in**, on a local build.
+
+#### Open, all of it Frank's
+
+- **Every word of the copy.** What the certification covers and what B Lab
+  assessed are claims about the business.
+- **Whether the five category scores stay.** Publishing them invites the
+  question about the two low ones, which is why the page answers it; it is
+  still a choice.
+- **"What we are still working on" names Governance and Customers.** Every
+  well-regarded B Corp page admits something, and an admission cannot be
+  greenwashing, but naming our own weak areas is his call.
+- **Two of the three section photographs are placeholders**, both already live
+  on /about/sustainability with alt text written from the images. The sections
+  want photographs of this space.
+- **Whether the B Corp section stays on /about/sustainability** now that it has
+  a page of its own, or becomes a link to it.
+- **Repointing the footer's Learn More** at this page, which is part of this
+  ticket and waits on the page going live.
 
 ### CH-118 Upgrade to Next.js 16
 

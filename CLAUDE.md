@@ -1647,6 +1647,41 @@ section already says better, and would put a teaching role in `hasCredential`,
 which search engines read as a list of regulated designations. Put to Frank on
 2026-10-24 and he took the recommendation.
 
+### Every route segment needs its own layout. 2026-10-26
+
+**`/classes` shipped with no header and no footer**, so no sidebar trigger, no
+home link and no Book Now, on a page that had been live since CH-107. Frank
+found it. Production confirmed it before the fix: `/classes` had zero of
+either and `/cafe` had both.
+
+**The root layout deliberately does not wrap the site in `Layout`**, because
+/studio, /coming-soon and /login must not carry the marketing header. Each
+section opts in with its own `layout.tsx` instead, which makes forgetting one
+silent: the page renders, every audit passes, and the only thing missing is
+the thing every other page has.
+
+**No audit catches it**, which is why it survived. `audit-orphans.js` crawls
+links and the page still had links; the metadata, alt text and content rule
+checks never look at the chrome. Worth knowing when the next route is built:
+the layout is part of the every-page rule even though nothing enforces it.
+
+### The sidebar and the About menu list the same six pages in the same order
+
+They had drifted: `SITE_SETTINGS_QUERY`, which the sidebar and footer read,
+had Pillars of Health last, while `ABOUT_INDEX_QUERY`, which the About band
+and the hub read, had it fourth. Frank asked on 2026-10-26 for the sidebar to
+match. **Two hand-built arrays describe one menu, so check both when a page is
+added under /about**; adding the B Corp page a day earlier had put it in
+different positions in each.
+
+### SectionIntro runs to the container edge. 2026-10-26
+
+The band was `mr-auto max-w-[70ch]`. Frank took the measure off for **every**
+section after seeing it stop short of the right padding on /classes, so
+/about, /services, /products and /classes all changed together. A full-width
+line here runs to about 165 characters, which is the argument against and
+which he has heard; narrow it in the one component if it ever comes back.
+
 ### A treatment subtitle is not held to the paragraph's measure. 2026-10-26
 
 `treatment-content.tsx` wrapped the subtitle and the intro paragraph in one

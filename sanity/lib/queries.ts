@@ -809,6 +809,10 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
       "title": "Mission and Values",
       "slug": "mission-and-values"
     },
+    *[_type == "pillarsOfHealth" && pageActive == true][0]{
+      "title": "Pillars of Health",
+      "slug": "pillars-of-health"
+    },
     *[_type == "sustainability" && pageActive == true][0]{
       "title": "Sustainability",
       "slug": "sustainability"
@@ -817,10 +821,7 @@ export const SITE_SETTINGS_QUERY = groq`*[_type == "siteSettings"]{
       "title": "B Corp Certification",
       "slug": "b-corp"
     },
-    *[_type == "pillarsOfHealth" && pageActive == true][0]{
-      "title": "Pillars of Health",
-      "slug": "pillars-of-health"
-    },
+
   ],
   navLinks[]{
     _key,

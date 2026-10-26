@@ -330,11 +330,16 @@ export function BcorpScore({
         {/*
           The two comparison figures, boxed and below everything the 91.7 is
           made of, so they read as reference rather than as part of the sum.
-          Side by side from the small breakpoint up, where there is room for
-          each description to sit on one line beside its number.
+
+          Flexed apart rather than gridded in two. On a two column grid the
+          padding is symmetric and does not look it: the second description is
+          shorter than its column, so the text stopped about 200px before the
+          right edge while the first sat flush against the left. Frank saw it
+          as uneven padding on 2026-10-26. `justify-between` puts each block
+          against its own side, so both now clear the border by the same 32px.
         */}
         {typeof threshold === "number" || typeof median === "number" ? (
-          <dl className="mt-10 grid gap-x-10 gap-y-4 border border-primary/25 px-6 py-5 sm:grid-cols-2 md:mt-14 md:px-8 md:py-6">
+          <dl className="mt-10 flex flex-col gap-6 border border-primary/25 px-6 py-5 sm:flex-row sm:justify-between sm:gap-10 md:mt-14 md:px-8 md:py-6">
             {typeof threshold === "number" ? (
               <div className="flex flex-col gap-1">
                 <dd className="text-2xl leading-none tabular-nums">

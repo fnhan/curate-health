@@ -102,7 +102,7 @@ export default async function BcorpPage() {
       {score?.directoryUrl ? (
         <HoverLinkVariation
           href={score.directoryUrl}
-          text="Read our full assessment on B Lab’s directory"
+          text="View our full assessment"
         />
       ) : null}
 

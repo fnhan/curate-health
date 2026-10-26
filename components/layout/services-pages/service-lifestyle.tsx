@@ -15,7 +15,7 @@ import {
   ScrollIcon,
 } from "lucide-react";
 
-import HoverLinkVariation from "@/components/shared/hover-link-variation";
+import HoverLink from "@/components/shared/hover-link";
 import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 import {
@@ -399,9 +399,10 @@ export default function ServiceLifestyleContent({
         in, it would be the single route to a 404.
       */}
       {service?.programActive ? (
-        <HoverLinkVariation
+        <HoverLink
           href="/our-programs/curate-lifestyle-program"
           text="View Full Program Breakdown"
+          tone="light"
         />
       ) : null}
 

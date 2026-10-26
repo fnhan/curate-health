@@ -52,17 +52,31 @@ type Props = {
  */
 
 /**
- * Five steps on the brand's own hue, primary through secondary and out to
- * platinum. Written as hsl rather than Tailwind classes because the segment
+ * Five steps on the brand's own hue, running dark to light but stopping well
+ * short of platinum: the section background is 86% lightness, and a final step
+ * at 67% left the smallest segment of the ring barely visible on it. 58% is
+ * the lightest that still reads. Written as hsl rather than Tailwind classes because the segment
  * colours are data-driven: a class string built at runtime is one Tailwind
  * never sees, which is the trap recorded under the hover sweep on 2026-10-18.
  */
+/**
+ * The ring. 240 square viewBox, so the numbers read as the drawing does.
+ *
+ * `strokeDasharray` on one circle per segment, offset by what came before,
+ * is what makes five arcs out of five circles. Butt caps, the default, so
+ * neighbours meet cleanly instead of overlapping at a rounded end, and the
+ * whole thing is rotated -90 degrees so it starts at twelve o'clock.
+ */
+const RADIUS = 92;
+const STROKE = 16;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
 const RAMP = [
   "hsl(89 37% 15%)",
-  "hsl(88 26% 27%)",
-  "hsl(84 17% 41%)",
-  "hsl(77 10% 51%)",
-  "hsl(82 13% 67%)",
+  "hsl(88 28% 26%)",
+  "hsl(85 20% 36%)",
+  "hsl(80 14% 47%)",
+  "hsl(77 11% 58%)",
 ];
 
 export function BcorpScore({
@@ -98,14 +112,57 @@ export function BcorpScore({
           </p>
         ) : null}
 
-        {/* The total, which is what somebody came to this block for. */}
-        <div className="mt-12 text-center md:mt-16">
-          <p className="text-7xl leading-none md:text-8xl">{overall}</p>
-          <p className="mt-4 text-sm md:text-base">
-            Our B Impact Score
-            {certifiedSince ? `, certified ${certifiedSince}` : ""}
-          </p>
-        </div>
+        {/*
+          The total, with the five areas drawn as a ring around it. Frank's
+          design on 2026-10-25, replacing a stacked bar: the ring puts the
+          number and what it is made of in one object rather than two, and the
+          segments close the circle, which says they add to the total more
+          plainly than a bar sitting under it did.
+        */}
+        <figure className="relative mx-auto mt-12 w-full max-w-[260px] md:mt-16 md:max-w-[320px]">
+          {live.length > 0 && sum > 0 ? (
+            <svg
+              viewBox="0 0 240 240"
+              className="w-full -rotate-90"
+              aria-hidden
+            >
+              {
+                live.reduce<{ at: number; nodes: React.ReactNode[] }>(
+                  (acc, area, i) => {
+                    const length = (area.value / sum) * CIRCUMFERENCE;
+                    acc.nodes.push(
+                      <circle
+                        key={area._key ?? area.name}
+                        cx="120"
+                        cy="120"
+                        r={RADIUS}
+                        fill="none"
+                        stroke={RAMP[i % RAMP.length]}
+                        strokeWidth={STROKE}
+                        // butt caps, so neighbouring segments meet cleanly
+                        // rather than overlapping at a rounded end.
+                        strokeDasharray={`${length} ${CIRCUMFERENCE - length}`}
+                        strokeDashoffset={-acc.at}
+                      />
+                    );
+                    acc.at += length;
+                    return acc;
+                  },
+                  { at: 0, nodes: [] }
+                ).nodes
+              }
+            </svg>
+          ) : null}
+
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-5xl leading-none md:text-6xl">{overall}</span>
+          </div>
+        </figure>
+
+        <p className="mt-6 text-center text-sm md:text-base">
+          Our B Impact Score
+          {certifiedSince ? `, certified ${certifiedSince}` : ""}
+        </p>
 
         {/* The two figures that give it meaning, under it rather than beside. */}
         <dl className="mt-10 flex justify-center gap-6 text-center sm:gap-12 md:gap-20">
@@ -119,8 +176,8 @@ export function BcorpScore({
           {typeof threshold === "number" ? (
             <div>
               <dd className="text-3xl leading-none md:text-4xl">{threshold}</dd>
-              <dt className="mx-auto mt-3 max-w-[20ch] text-sm leading-6">
-                Score needed to certify
+              <dt className="mx-auto mt-3 max-w-[24ch] text-sm leading-6">
+                Needed to certify
               </dt>
             </div>
           ) : null}
@@ -128,38 +185,18 @@ export function BcorpScore({
           {typeof median === "number" ? (
             <div>
               <dd className="text-3xl leading-none md:text-4xl">{median}</dd>
-              <dt className="mx-auto mt-3 max-w-[20ch] text-sm leading-6">
-                Median for businesses assessed
+              <dt className="mx-auto mt-3 max-w-[24ch] text-sm leading-6">
+                Median business score
               </dt>
             </div>
           ) : null}
         </dl>
 
         {live.length > 0 && sum > 0 ? (
-          <figure className="mt-14 md:mt-20">
-            <figcaption className="text-sm md:text-base">
+          <div className="mt-14 md:mt-20">
+            <p className="text-sm md:text-base">
               What the {overall} is made of
-            </figcaption>
-
-            {/*
-              Decorative: every name and value on it is written out in the list
-              underneath, so a screen reader is handed the list rather than a
-              row of unlabelled boxes.
-            */}
-            <div
-              aria-hidden
-              className="mt-4 flex h-11 w-full overflow-hidden rounded-sm md:h-14"
-            >
-              {live.map((area, i) => (
-                <div
-                  key={area._key ?? area.name}
-                  style={{
-                    width: `${(area.value / sum) * 100}%`,
-                    backgroundColor: RAMP[i % RAMP.length],
-                  }}
-                />
-              ))}
-            </div>
+            </p>
 
             <dl className="mt-6 grid gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
               {live.map((area, i) => (
@@ -186,7 +223,7 @@ export function BcorpScore({
                 </div>
               ))}
             </dl>
-          </figure>
+          </div>
         ) : null}
       </div>
     </section>

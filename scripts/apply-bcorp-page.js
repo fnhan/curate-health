@@ -122,7 +122,7 @@ const CONTENT = {
   score: {
     heading: "Our score",
     intro:
-      "Curate Health certified in October 2026. These are B Lab's own figures.",
+      "Curate Health certified in October 2026. These are B Lab's own figures, set against every business that completes the assessment.",
     overall: 91.7,
     threshold: 80,
     median: 50.9,
@@ -211,7 +211,7 @@ const CONTENT = {
         ],
         [
           {
-            text: "We make the everyday decisions on the same terms. We buy from local vendors who work the way we do, the people on the team have incentives beyond their pay, and we run talks and events in the neighbourhood instead of only opening the doors each morning.",
+            text: "We make the everyday decisions on the same terms. We buy from local vendors who work the way we do, and we run talks and events in the neighbourhood instead of only opening the doors each morning.",
           },
         ],
         [

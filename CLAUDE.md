@@ -4441,32 +4441,41 @@ reader told the total reads 91.7 against it and concludes we are halfway, which
 is the wrong comparison. The right ones are the score a company needs to
 certify and what an ordinary business scores, and both are on the page.
 
-**The bar is the composition, not the scale.** Frank asked on 2026-10-25 for a
-visual showing how the five areas add up to the total, so the bar IS 91.7,
-divided into the five parts that make it. It carries no empty remainder, which
-is the point: a bar drawn against an unstated maximum would invite exactly the
-halfway reading the omission avoids, and one drawn against a shorter scale
-would flatter it. The five areas carry different maximums and are not
-comparable to each other, so nothing here invites that comparison either.
+**The five areas are a ring around the total.** Frank's design on 2026-10-25,
+replacing a stacked bar under it. The ring puts the number and what it is made
+of in one object rather than two, and segments that close a circle say they add
+up more plainly than a bar sitting underneath did.
 
-The total sits above it, large and centred, with the pass mark and the median
-below rather than beside. The segments are normalised on their own sum rather
-than on the overall, because Sanity rounds each area to one decimal and they
-can total a little either side of 91.7; normalising keeps the bar exact rather
-than leaving a sliver of background at the end.
+It is five `<circle>` elements sharing a centre, each with a `strokeDasharray`
+sized to its share and a `strokeDashoffset` of everything before it, in a 240
+square viewBox rotated -90 degrees so it starts at twelve o'clock. Butt caps,
+the default, so neighbours meet cleanly rather than overlapping at a rounded
+end.
 
-**The two reference labels hold two lines, and it took the wording and the
-gap together.** Frank, 2026-10-25: the first ran to two lines and the second to
-four, which left the pair lopsided and spent more height than two reference
-numbers are worth. Widening the measure alone would have put the first on one
-line and kept the imbalance, so both were cut: "Score needed to certify" and
-"Median for businesses assessed", at `max-w-[20ch]`, with the mobile gap down
-from `gap-12` to `gap-6` so the columns are wide enough to break in two.
-Measured at 409 both are two lines; at 1280 the first is one.
+**There is no empty remainder in it, and that is the point.** A ring drawn
+against an unstated maximum would invite exactly the halfway reading that
+leaving the ceiling off is meant to avoid. The segments are normalised on their
+own sum rather than on the overall, because Sanity rounds each area to one
+decimal and they can total a little either side of 91.7.
 
-**"Median for businesses assessed" keeps the qualifier for a reason.** 50.9 is
-the median of businesses that complete the assessment, not of businesses in
-general, and the shorter "median business score" would overstate it.
+**The ramp stops at 58% lightness, not 67%.** The section background is
+platinum at 86%, and the first version's lightest step left the smallest
+segment barely visible on it. Checked by eye on the rendered ring rather than
+by contrast arithmetic, since the question is whether a 16px arc reads.
+
+**The two reference labels hold one line each**, "Needed to certify" and
+"Median business score". Frank, 2026-10-25, across three passes: four lines
+and two at first, then two and two, then one and one. The mobile gap came down
+from `gap-12` to `gap-6` on the way, so the columns are wide enough for a short
+label to stay on one line.
+
+**The qualifier moved into the intro rather than being dropped.** 50.9 is the
+median of businesses that complete the assessment, not of businesses in
+general, so "Median business score" on its own would overstate it. The sentence
+above the ring carries it: "These are B Lab's own figures, set against every
+business that completes the assessment." Frank asked about "average businesses"
+or "most businesses"; neither is right, since most businesses have never taken
+the assessment.
 
 **The segment colours are inline `hsl`, not Tailwind classes.** They are
 data-driven, and a class string built at runtime is one Tailwind never sees,
@@ -4559,14 +4568,17 @@ otherwise drop it on its next run. The same trap took the alt text once before
 it was noticed: the swap script wrote the new one and the apply script put the
 old one back.
 
-**"incentives" is Frank's word and it carries a risk worth knowing.**
-2026-10-25, replacing "perks", which replaced "benefits". "benefits" had to go
-because there is no extended health plan and the word implies one in Canada.
-"incentives" is accurate about there being something beyond pay, and on a
-health business page it can be read as practitioners being incentivised, which
-is the thing patients are warned to watch for. Raised with him; it stands
-unless he says otherwise. **Naming one real thing would retire the whole
-question**, and he has not yet said what the incentives are.
+**Nothing on this page describes how the team is paid or looked after, and
+that is deliberate.** The clause went through "benefits", then "perks", then
+"incentives", and Frank took it out altogether on 2026-10-25. Each word claimed
+something slightly wrong: "benefits" implies an extended health plan, which
+there is not, and "incentives" can be read on a health business page as
+practitioners being incentivised, which is the thing patients are warned to
+watch for.
+
+**Put it back only with a real fact**, such as what the team eats or where they
+train, rather than a category word. Workers is the highest of the five scores
+at 20.4, so there is something true to say once somebody says what it is.
 
 #### What the page actually claims, and where it came from
 
@@ -4586,17 +4598,16 @@ Governance as the weakest area and that is out.
 /about/sustainability already covers it. So the page says the footprint was
 weighed while the space was being built and links there for the rest.
 
-**The practices sentence is a rule of three, and Frank wants it that way.**
-2026-10-25: it was written with three clauses, split by hand against the
-content rule, and he asked for the three back. "Rule of three is still really
-good. Let's try to keep this."
+**The practices sentence was a rule of three and is now two clauses**, because
+the staff clause came out. Frank liked the three on 2026-10-25 and asked for it
+back after it was split against the content rule, so **restore the third clause
+if a real staff fact ever lands**, rather than inventing one to fill it.
 
-**That contradicts the content rules above, which ban tricolons outright**, and
-the contradiction is recorded here rather than resolved, because it is not
-clear whether he meant this sentence or the rule. Nothing enforces it either
-way: `audit-content-rules.js` has never checked for tricolons, because no regex
-can tell one from an ordinary list of three. **Ask before applying either
-reading more widely.**
+**That exchange left a standing contradiction, recorded rather than resolved.**
+The content rules ban tricolons outright and he asked for one. Nothing enforces
+it either way: `audit-content-rules.js` has never checked for tricolons,
+because no regex can tell one from an ordinary list of three. Ask before
+applying either reading more widely.
 
 #### Markup
 

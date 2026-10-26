@@ -23,6 +23,13 @@ type HoverLinkProps = {
  * the rest of the page for the text and for the line above it. Hovering is
  * unchanged, filling the bar sage and turning the text white.
  *
+ * **The text is the page's base size, not `text-lg`.** Frank asked on
+ * 2026-10-26 whether this bar matched "More About Us" on the home page. It did
+ * not: that one is `hover-link.tsx`, which sets no size class and so inherits
+ * 16px, and this carried `text-lg` at 18px. Everything else already agreed,
+ * down to the Poppins italic, the `py-5` and the chevron, so the size class
+ * was the whole difference and it is gone.
+ *
  * It takes an address off the site too, since 2026-10-25, when Frank asked for
  * the B Corp directory link to be this bar rather than a text link.
  * `externalLinkProps` returns nothing for an internal href, so the two
@@ -41,7 +48,7 @@ export default function HoverLinkVariation({
     >
       <span className="group block border-t border-primary py-5 text-right italic transition-all duration-300 hover:bg-secondary">
         <span className="container flex items-center justify-end gap-2 transition-all duration-300 hover:gap-20">
-          <span className={`${textColor} text-lg group-hover:text-white`}>
+          <span className={`${textColor} group-hover:text-white`}>
             {text}
           </span>
           <ChevronRight className={`w-5 ${textColor} group-hover:text-white`} />

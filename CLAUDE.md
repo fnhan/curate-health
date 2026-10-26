@@ -1647,6 +1647,28 @@ section already says better, and would put a teaching role in `hasCredential`,
 which search engines read as a list of regulated designations. Put to Frank on
 2026-10-24 and he took the recommendation.
 
+### The two link bars are one design in two components. 2026-10-26
+
+`hover-link.tsx` draws "More About Us" and the blog bar on the home page.
+`hover-link-variation.tsx` draws the bar under the Program Timeline and the
+one on /about/b-corp. They are the same design: Poppins italic, right
+aligned, `py-5`, a `w-5` chevron, and a hover that fills the bar and spreads
+the gap to 20.
+
+**They disagreed on one thing and Frank caught it by asking.** The variation
+carried `text-lg`, 18px, where the original sets no size class and inherits
+16px. Measured on all three bars before and after; all three are 16px now.
+
+**What still differs is deliberate.** The variation is a block anchor with
+`bg-platinum` and `border-primary`, because it sits on a light section; the
+original is an inline anchor with no background, on the dark green. The CH-107
+note explains why the block matters: `w-full` and a background do nothing on
+an inline `<a>`, which is how that bar once painted nothing at all.
+
+**Two components for one design is the underlying problem.** Neither can be
+changed without checking the other, which is exactly what went wrong here. Fold
+them together the next time one needs work.
+
 ### Every route segment needs its own layout. 2026-10-26
 
 **`/classes` shipped with no header and no footer**, so no sidebar trigger, no

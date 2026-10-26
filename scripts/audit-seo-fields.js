@@ -21,6 +21,8 @@
  *
  *   pageTitle                 What Google shows as the clickable line.
  *   pageDescription           The snippet underneath it.
+ *   socialMeta.title          og:title and twitter:title.
+ *   socialMeta.description    og:description and twitter:description.
  *   socialMeta.ogImage        The picture on a Facebook, LinkedIn or Slack
  *                             share. Without it the platform picks something
  *                             or shows nothing.
@@ -29,11 +31,24 @@
  *   socialMeta.twitterImage   The same for X.
  *   socialMeta.twitterImage alt
  *
- * socialMeta.title and socialMeta.description are reported but not required.
- * SEO_QUERY does not select them, so nothing renders them today: og:title and
- * twitter:title both come from pageTitle. They are worth knowing about because
- * a future query change would suddenly start publishing whatever is in them,
- * which is how the "Flowpesso" typo survived in one of them for months.
+ * ALL EIGHT ARE REQUIRED, AND THE REASON CHANGED ON 2026-10-26
+ *
+ * The first six were required because an empty one costs the page something a
+ * visitor sees. socialMeta.title and socialMeta.description used to be
+ * reported and not required, on the reasoning that SEO_QUERY did not select
+ * them so nothing rendered them. Both halves of that are now out of date:
+ * SEO_QUERY selects them and buildPageMetadata publishes them.
+ *
+ * The harder reason is the Studio. Every field on sanity/schemas/socialMeta.ts
+ * is `Rule.required().error()`, and Sanity refuses Publish on an error, so one
+ * empty share field locks an editor out of the whole document: not just out of
+ * that field, out of fixing a typo three fields away. Frank hit it on
+ * 2026-10-26 and ruled that these are filled whenever a page is produced.
+ *
+ * So a gap here is not a missed optimisation, it is an editor who cannot
+ * publish. `scripts/audit-metadata.js` cannot see it, because the rendered
+ * page looks right: buildPageMetadata substitutes a photo the page already
+ * shows. This is the only check that looks.
  */
 
 const { query } = require("./lib/sanity-cli");
@@ -63,6 +78,8 @@ const QUERY = `*[
 const REQUIRED = [
   ["pageTitle", "page title"],
   ["pageDescription", "meta description"],
+  ["socialTitle", "share title"],
+  ["socialDescription", "share description"],
   ["ogImage", "share image"],
   ["ogAltAny", "share image alt text"],
   ["twitterImage", "X image"],
@@ -141,19 +158,17 @@ async function main() {
     console.log(`  ${String(list.length).padStart(3)} missing ${human}`);
   }
 
-  const socialSet = documents.filter(
-    (d) => !blank(d.socialTitle) || !blank(d.socialDescription)
-  );
-  if (socialSet.length) {
+  if (total) {
     console.log(
-      `\n  ${socialSet.length} document(s) have socialMeta title or description filled in.`
+      `\n  A gap here is an editor locked out of that document: every socialMeta`
     );
     console.log(
-      `  Those are read: buildPageMetadata takes og:title and twitter:title`
+      `  field is Rule.required().error(), so Sanity refuses Publish until it is`
     );
     console.log(
-      `  from socialMeta.title, falling back to pageTitle when it is empty.`
+      `  filled. The rendered page still looks right, because buildPageMetadata`
     );
+    console.log(`  substitutes a photo the page already shows.`);
   }
 
   process.exit(total ? 1 : 0);

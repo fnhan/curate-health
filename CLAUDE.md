@@ -27,6 +27,7 @@ Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with
 
 - A unique title, 60 characters or fewer including "| Curate Health", that agrees with the page's one H1, and a unique meta description of 155 characters or fewer. Both editable in the Studio through an `seo` field, with fallbacks in code, and set through `buildPageMetadata` with the page's own canonical path.
 - A share card: an `og:image` at 1200x630 that loads, with the title, description, `og:type` and site name. Default the image to a photo the page already shows, so nobody has to remember to pick one.
+- **Every `socialMeta` field filled in the Studio, not left to the code fallback. Frank's rule, 2026-10-26.** The share title, the share description, the Open Graph image with its alt text, and the X image with its alt text. All four are `Rule.required().error()` on `sanity/schemas/socialMeta.ts`, and Sanity refuses Publish on an error, so one empty field locks an editor out of the whole document: not out of that field, out of fixing a typo three fields away. His words: "I can't publish the page if I need to modify it otherwise." Write the same values the code fallback is already producing, so nothing a visitor sees moves. `node scripts/audit-seo-fields.js` is the check, and it reads the dataset because a rendered page with an empty field looks perfectly correct.
 - Structured data for what the page is, such as Person, BlogPosting, Product or Service, agreeing with what the page shows. Below a hub, a breadcrumb trail with its markup.
 - Listed in the sitemap, and in llms.txt with a one-line description. Taken out of both when the page is switched off.
 - Linked from a hub or the navigation, within three clicks of the homepage.
@@ -4887,6 +4888,108 @@ add to the overall within rounding.
 - `next lint` is removed. ESLint was never set up here, so nothing is lost
 
 Take a fresh Sanity export first, work on one branch, verify every page, the Studio, preview mode, booking links and the forms on a local build, and push once.
+
+### Every class runs 50 minutes, and the share fields are filled. 2026-10-26
+
+Two unrelated things Frank asked for in one pass, both dataset only. No
+application code changed, so `audit-render-baseline.js` was not the tool for
+either: the pages that moved moved because their content did.
+
+#### 50 minutes, not an hour
+
+CH-107 read the lengths off Jane and got Outdoor Yoga Therapy and Tai Chi at
+60 minutes and Outdoor Pilates at 50. Frank has settled all three at 50.
+`scripts/set-class-duration.js`, transaction `oYIqK8aBt7dLGaaLNsdk2B`, after
+`sanity-backup-2026-10-26-before-social-meta-fields-documents.tar.gz`.
+
+**A duration is not only a field, and two lines of copy went with it.** The Tai
+Chi page said "an hour" twice, in its opening paragraph and in its call to
+action heading, two screens above a schedule that would then have said 50. Both
+are rewritten: "worth an hour of your week" to "worth fifty minutes of your
+week", and "Begin With a Single Hour" to "Begin With a Single Class". Checked on
+the rendered page, both are live and the word "hour" appears nowhere on it.
+
+**The Curate Lifestyle Program's "8 weekly group education sessions (60
+minutes)" is deliberately untouched.** A dataset-wide sweep for hour claims
+found exactly three; that is the third, and it is a programme session rather
+than a Recovery Sanctuary class, so nothing Frank said reaches it. The two hits
+left in the source are a comment in `section-intro.tsx` and the 18:00-plus-60
+worked example in `lib/structured-data.tsx`.
+
+**JANE STILL SELLS YOGA AND TAI CHI AS 60 MINUTES.** Jane is not in this
+repository, so that is a change somebody makes in the Jane settings, and until
+it happens a visitor reads 50 here and books 60 there. Same class of problem as
+the Jane address and the acupuncture provider list under CH-104.
+
+Capacity went in alongside, 12 on all three, per his "the capacity is 12 for the
+outdoor classes": every one of them runs in the Recovery Sanctuary.
+`scripts/set-class-capacities.js`. The `Event` markup now publishes
+`duration: PT50M`, `endTime` 50 minutes past the start, and
+`maximumAttendeeCapacity: 12`.
+
+#### The six documents an editor could not publish
+
+**This was a Studio defect that no audit reading rendered HTML could ever have
+caught, and it is worth understanding before trusting a passing check again.**
+
+Six documents carried an empty share image: `/about`, `/blog`, `/classes`, both
+blog posts and `/products`, plus an empty share description on `/products`.
+Every one of them was sharing correctly, because `buildPageMetadata` substitutes
+a photo the page already shows, which is the every-page rule working as
+written. So `audit-metadata.js` passed, the cards looked right, and nothing
+suggested a problem.
+
+What it cost was the Studio. Every field on `sanity/schemas/socialMeta.ts` is
+`Rule.required().error()`, and Sanity refuses Publish on an error, so Frank
+could not publish any of those six documents at all. Not to change the share
+image. Not to fix a word elsewhere on the page.
+
+`scripts/fill-social-meta-fields.js`, transaction `QnTUkLMvmt3ECzV0Iw4FYq`.
+`audit-seo-fields.js` now reports 59 of 59 documents complete on all eight
+fields, from 53 of 59 on six.
+
+**It writes what was already rendering, and that was verified rather than
+assumed.** Each asset was read off the live `og:image` and each alt off the live
+`og:image:alt`. All six fallbacks produce a plain centred 1200x630 band, checked
+against the `rect` in each URL, so a bare asset reference with no crop and no
+hotspot reproduces the same URL byte for byte. `imageEntry` is one function
+serving both the stored field and the fallback, so there is no second code path
+to disagree. Read twice off the production build before and after: every
+`og:image`, `twitter:image`, alt, share title and share description identical.
+
+**One real behaviour change, on /blog.** Its fallback was "the newest post's
+photo", so its card moved whenever a post was published. The field now holds
+the chard photograph that was there today. Arguably better, since a blog index
+whose card changes under it is not something anybody chose, but it is a change
+and the field is Frank's to redirect.
+
+**`audit-seo-fields.js` now requires `socialMeta.title` and
+`socialMeta.description` too.** They had been reported and not required, on the
+reasoning that `SEO_QUERY` did not select them so nothing rendered them. Both
+halves of that are out of date: it selects them and `buildPageMetadata`
+publishes them. The Studio reason is the stronger one, and it applies to all
+four share fields equally.
+
+#### Reading a stale dev server as evidence, twice
+
+**A dev server's data cache lives in the process, so clearing
+`.next/cache/fetch-cache` on disk does not touch it.** The first "after"
+reading of all six share cards came off `next dev`, matched the "before"
+perfectly, and proved nothing: that server had started before the write and was
+serving a cached GROQ response. The tell was `/classes` rendering its page
+title where the fresh copy rendered its share title, which looked at first like
+the patch having wiped a field it had not touched.
+
+Two habits out of it. **Read before and after off the same server**, which the
+first attempt did not. And **prove the server refreshed using something that is
+meant to change**: the share cards were expected to be identical, so they could
+not themselves show whether the cache had turned over. The Tai Chi copy could,
+and did.
+
+**`PAGE_REVALIDATE_SECONDS` is 3600 since #303, so the CH-104 note about
+requesting a page twice is now an hour, not a minute.** A production build from
+before that change still carries the 60 second window, which is why the older
+`next start` on port 3000 was the fresh one and the dev server was not.
 
 ---
 

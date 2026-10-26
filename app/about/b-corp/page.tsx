@@ -80,7 +80,14 @@ export default async function BcorpPage() {
             container edge like the heading above it, rather than stopping
             short of the right padding.
           */}
-          <div>
+          {/*
+            `space-y-6` on the prose itself, not on its wrapper. The two hero
+            paragraphs are separate blocks inside one PortableText, and
+            @portabletext/react renders a bare <p> per block with no margin,
+            so they ran together as one wall of text. Frank asked for the
+            space on 2026-10-26.
+          */}
+          <div className="space-y-6">
             <PortableText
               value={heroSection?.heroParagraph!}
               components={portableTextComponents}

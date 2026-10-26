@@ -370,7 +370,7 @@ function checkRules() {
 
 /* --------------------------------------------------------------- the doc */
 
-function buildDocument(id) {
+function buildDocument(id, existingShareImages) {
   return {
     _id: id,
     _type: "bcorpPage",
@@ -426,6 +426,17 @@ function buildDocument(id) {
       socialMeta: {
         title: CONTENT.seo.socialTitle,
         description: CONTENT.seo.socialDescription,
+        /*
+         * Whatever share images the Studio holds, carried through untouched.
+         *
+         * This script writes the whole document with createOrReplace, so a
+         * field it does not spell is a field it deletes. Frank chose the two
+         * share images in the Studio on 2026-10-26 and a re-run would have
+         * taken them straight back out, with nothing to say it had. The alt
+         * text on the listening photograph was lost to exactly this a day
+         * earlier, and only noticed because it was read back.
+         */
+        ...(existingShareImages ?? {}),
       },
     },
   };
@@ -482,7 +493,23 @@ function buildDocument(id) {
   const id = APPLY ? DOC_ID : `drafts.${DOC_ID}`;
   const existing = await query(`*[_id == $id][0]{_id}`, { id });
 
-  const result = await mutate([{ createOrReplace: buildDocument(id) }]);
+  /*
+   * Read the share images off whichever document is about to be replaced, so
+   * an editor's choice survives a re-run. Undefined when there is none, which
+   * spreads to nothing.
+   */
+  const live = await query(
+    `*[_id == $id][0].seo.socialMeta{ogImage, twitterImage}`,
+    { id }
+  );
+  const existingShareImages = live?.ogImage || live?.twitterImage ? live : null;
+  if (existingShareImages) {
+    console.log("  Keeping the share images already in the Studio.");
+  }
+
+  const result = await mutate([
+    { createOrReplace: buildDocument(id, existingShareImages) },
+  ]);
   console.log();
   console.log(
     `  ${existing ? "Replaced" : "Created"} ${id}. Transaction ${result.transactionId}.`

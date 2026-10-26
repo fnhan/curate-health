@@ -337,9 +337,15 @@ export function BcorpScore({
           right edge while the first sat flush against the left. Frank saw it
           as uneven padding on 2026-10-26. `justify-between` puts each block
           against its own side, so both now clear the border by the same 32px.
+
+          **Capped and centred rather than the full container.** Frank, the
+          same day: at the container width the two figures sat a long way
+          apart, and further apart the wider the screen, which made a
+          reference box read as a layout. The cap holds them at a readable
+          distance whatever the window does.
         */}
         {typeof threshold === "number" || typeof median === "number" ? (
-          <dl className="mt-10 flex flex-col gap-6 border border-primary/25 px-6 py-5 sm:flex-row sm:justify-between sm:gap-10 md:mt-14 md:px-8 md:py-6">
+          <dl className="mx-auto mt-10 flex max-w-2xl flex-col gap-6 border border-primary/25 px-6 py-5 sm:flex-row sm:justify-between sm:gap-10 md:mt-14 md:px-8 md:py-6">
             {typeof threshold === "number" ? (
               <div className="flex flex-col gap-1">
                 <dd className="text-2xl leading-none tabular-nums">

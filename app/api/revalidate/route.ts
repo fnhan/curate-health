@@ -10,6 +10,7 @@ import {
 import {
   DOCUMENT_PATHS_QUERY,
   type DocumentForPaths,
+  SITE_WIDE_TYPES,
   pathsForDocument,
   submitToIndexNow,
 } from "@/lib/indexnow";
@@ -123,6 +124,27 @@ export async function POST(request: Request) {
   console.log(
     `${LOG} ok, purged=${TAGS.join(",")} doc=${document} ms=${Date.now() - startedAt}`
   );
+
+  /*
+   * A site-wide document changes all 56 pages, so it has no list of paths to
+   * refresh and gets the whole site instead.
+   *
+   * **The 60 second window used to do this by accident** and nothing did it
+   * on purpose: `pathsForDocument` returns nothing for siteSettings, so
+   * `revalidatePath` was never called for it, and the navigation and footer
+   * stayed fresh only because every page rebuilt within a minute anyway.
+   * Raising that window to an hour on 2026-10-26, to stop burning Vercel ISR
+   * Writes, removed the accident. This replaces it.
+   *
+   * "layout" purges every page under the root layout rather than the one
+   * path, which is what a footer edit actually affects. It is a lot of writes
+   * in one go, and that is correct: it happens on a publish, not on a timer.
+   */
+  const documentType = document.split("/")[0];
+  if (SITE_WIDE_TYPES.has(documentType)) {
+    revalidatePath("/", "layout");
+    console.log(`${LOG} purged every page, reason=site-wide doc=${document}`);
+  }
 
   const pages = await refreshPages(documentId, document);
 

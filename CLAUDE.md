@@ -4455,6 +4455,19 @@ than on the overall, because Sanity rounds each area to one decimal and they
 can total a little either side of 91.7; normalising keeps the bar exact rather
 than leaving a sliver of background at the end.
 
+**The two reference labels hold two lines, and it took the wording and the
+gap together.** Frank, 2026-10-25: the first ran to two lines and the second to
+four, which left the pair lopsided and spent more height than two reference
+numbers are worth. Widening the measure alone would have put the first on one
+line and kept the imbalance, so both were cut: "Score needed to certify" and
+"Median for businesses assessed", at `max-w-[20ch]`, with the mobile gap down
+from `gap-12` to `gap-6` so the columns are wide enough to break in two.
+Measured at 409 both are two lines; at 1280 the first is one.
+
+**"Median for businesses assessed" keeps the qualifier for a reason.** 50.9 is
+the median of businesses that complete the assessment, not of businesses in
+general, and the shorter "median business score" would overstate it.
+
 **The segment colours are inline `hsl`, not Tailwind classes.** They are
 data-driven, and a class string built at runtime is one Tailwind never sees,
 which is the trap recorded under the hover sweep on 2026-10-18. Five steps on
@@ -4545,6 +4558,15 @@ because that script writes the whole document with `createOrReplace` and would
 otherwise drop it on its next run. The same trap took the alt text once before
 it was noticed: the swap script wrote the new one and the apply script put the
 old one back.
+
+**"incentives" is Frank's word and it carries a risk worth knowing.**
+2026-10-25, replacing "perks", which replaced "benefits". "benefits" had to go
+because there is no extended health plan and the word implies one in Canada.
+"incentives" is accurate about there being something beyond pay, and on a
+health business page it can be read as practitioners being incentivised, which
+is the thing patients are warned to watch for. Raised with him; it stands
+unless he says otherwise. **Naming one real thing would retire the whole
+question**, and he has not yet said what the incentives are.
 
 #### What the page actually claims, and where it came from
 

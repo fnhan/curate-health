@@ -108,12 +108,19 @@ export function BcorpScore({
         </div>
 
         {/* The two figures that give it meaning, under it rather than beside. */}
-        <dl className="mt-10 flex justify-center gap-12 text-center md:gap-20">
+        <dl className="mt-10 flex justify-center gap-6 text-center sm:gap-12 md:gap-20">
+          {/*
+            Both labels hold two lines. Frank, 2026-10-25: the first ran to
+            two and the second to four, which left the pair lopsided and took
+            more vertical space than two reference numbers are worth. The
+            measure and the wording were cut together, since widening alone
+            would have put the first on one line and kept the imbalance.
+          */}
           {typeof threshold === "number" ? (
             <div>
               <dd className="text-3xl leading-none md:text-4xl">{threshold}</dd>
-              <dt className="mx-auto mt-3 max-w-[18ch] text-sm leading-6">
-                The score a company needs to certify
+              <dt className="mx-auto mt-3 max-w-[20ch] text-sm leading-6">
+                Score needed to certify
               </dt>
             </div>
           ) : null}
@@ -121,8 +128,8 @@ export function BcorpScore({
           {typeof median === "number" ? (
             <div>
               <dd className="text-3xl leading-none md:text-4xl">{median}</dd>
-              <dt className="mx-auto mt-3 max-w-[18ch] text-sm leading-6">
-                The median for businesses that complete the assessment
+              <dt className="mx-auto mt-3 max-w-[20ch] text-sm leading-6">
+                Median for businesses assessed
               </dt>
             </div>
           ) : null}

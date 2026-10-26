@@ -211,7 +211,7 @@ const CONTENT = {
         ],
         [
           {
-            text: "We make the everyday decisions on the same terms. We buy from local vendors who work the way we do, the people on the team have perks beyond their pay, and we run talks and events in the neighbourhood instead of only opening the doors each morning.",
+            text: "We make the everyday decisions on the same terms. We buy from local vendors who work the way we do, the people on the team have incentives beyond their pay, and we run talks and events in the neighbourhood instead of only opening the doors each morning.",
           },
         ],
         [

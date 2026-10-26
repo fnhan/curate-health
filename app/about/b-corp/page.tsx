@@ -75,7 +75,12 @@ export default async function BcorpPage() {
           <h1 className="text-2xl md:text-4xl 2xl:text-6xl">
             {heroSection?.heroTitle}
           </h1>
-          <div className="max-w-[80ch]">
+          {/*
+            No measure on the hero prose. Frank, 2026-10-26: it runs to the
+            container edge like the heading above it, rather than stopping
+            short of the right padding.
+          */}
+          <div>
             <PortableText
               value={heroSection?.heroParagraph!}
               components={portableTextComponents}

@@ -133,11 +133,7 @@ const CONTENT = {
       { name: "Environment", value: 20 },
       { name: "Community", value: 19.9 },
       { name: "Customers", value: 15.8 },
-      {
-        name: "Governance",
-        value: 15.4,
-        note: "10 of these are for writing our mission into the governing documents.",
-      },
+      { name: "Governance", value: 15.4 },
     ],
   },
 

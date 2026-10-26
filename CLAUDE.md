@@ -4504,6 +4504,27 @@ rows are not links and take no keyboard focus: every name and value is already
 written out, so nothing is lost by the highlight being mouse-only, and making
 five non-interactive rows focusable would be worse.
 
+**THE ARCS ARE PATHS, NOT DASHED CIRCLES, AND THAT IS WHY THE HOVER WORKS.**
+The first version drew five full circles and showed one slice of each with
+`stroke-dasharray`. It looked right and could not be hovered. Two reasons, and
+both are worth knowing:
+
+- **A browser hit-tests a dashed stroke along the whole path, gaps included**,
+  so all five circles answered the pointer everywhere on the ring and the last
+  one in the document won every time.
+- **The div holding the number is `absolute inset-0`**, so it covered the whole
+  figure and swallowed every pointer event before the svg saw one. It carries
+  `pointer-events-none` now.
+
+A path that is only its own arc has no gaps to hit-test. `pathLength` is
+normalised to 1, which also simplifies the draw, since the dash runs 0 to 1
+whatever the arc's real length, and the angles start at -90 degrees so the svg
+needs no rotation.
+
+**The symptom to recognise: the legend hover worked and the ring's did not.**
+That pattern means the pointer is not reaching the svg, or is reaching the
+wrong element in it, rather than the handler being wrong.
+
 **The component is a client component because of those two**, which is the
 only reason; it still takes plain props.
 

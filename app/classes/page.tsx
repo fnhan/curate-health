@@ -213,7 +213,7 @@ function ClassBlock({ entry }: { entry: ScheduledClass }) {
           </h2>
 
           {entry.summary?.trim() ? (
-            <p className="max-w-[70ch] text-pretty font-light leading-7">
+            <p className="text-pretty font-light leading-7">
               {entry.summary.trim()}
             </p>
           ) : null}
@@ -249,7 +249,7 @@ function ClassBlock({ entry }: { entry: ScheduledClass }) {
           </dl>
 
           {entry.note?.trim() ? (
-            <p className="max-w-[70ch] font-light italic text-muted-foreground">
+            <p className="font-light italic text-muted-foreground">
               {entry.note.trim()}
             </p>
           ) : null}

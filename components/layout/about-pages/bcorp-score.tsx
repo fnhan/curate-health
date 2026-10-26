@@ -94,6 +94,41 @@ const STROKE = 16;
 const STROKE_HOVER = 26;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
+/**
+ * One arc of the ring, as an SVG path.
+ *
+ * WHY PATHS AND NOT DASHED CIRCLES
+ *
+ * The first version drew five full circles and used `stroke-dasharray` to show
+ * only each one's slice. It looked right and could not be hovered: a browser
+ * hit-tests a dashed stroke along the whole path, gaps included, so all five
+ * circles answered the pointer everywhere on the ring and the last one in the
+ * document won every time. Hovering the legend worked, which is what made the
+ * ring look broken rather than the hover.
+ *
+ * A path that is only the arc has no gaps to hit-test, so the pointer lands on
+ * the segment under it. `pathLength` is normalised to 1, which also simplifies
+ * the draw: the dash runs 0 to 1 whatever the arc's real length.
+ *
+ * Angles start at -90 degrees, twelve o'clock, and run clockwise, so no
+ * rotation is needed on the svg.
+ */
+function arcPath(from: number, to: number) {
+  const point = (fraction: number) => {
+    const angle = (fraction * 360 - 90) * (Math.PI / 180);
+    return [
+      120 + RADIUS * Math.cos(angle),
+      120 + RADIUS * Math.sin(angle),
+    ] as const;
+  };
+
+  const [x0, y0] = point(from);
+  const [x1, y1] = point(to);
+  const largeArc = to - from > 0.5 ? 1 : 0;
+
+  return `M ${x0.toFixed(3)} ${y0.toFixed(3)} A ${RADIUS} ${RADIUS} 0 ${largeArc} 1 ${x1.toFixed(3)} ${y1.toFixed(3)}`;
+}
+
 /** How long the whole sweep takes. Each arc gets the share it occupies. */
 const DRAW_MS = 900;
 
@@ -169,15 +204,9 @@ export function BcorpScore({
   // drawing, so the five read as one sweep rather than five animations.
   let at = 0;
   const segments = live.map((area, i) => {
-    const length = (area.value / sum) * CIRCUMFERENCE;
-    const seg = {
-      area,
-      i,
-      length,
-      offset: at,
-      delay: (at / CIRCUMFERENCE) * DRAW_MS,
-    };
-    at += length;
+    const fraction = area.value / sum;
+    const seg = { area, i, d: arcPath(at, at + fraction), delay: at * DRAW_MS };
+    at += fraction;
     return seg;
   });
 
@@ -187,7 +216,7 @@ export function BcorpScore({
         {heading ? <h2 className="text-2xl md:text-4xl">{heading}</h2> : null}
 
         {intro ? (
-          <p className="mr-auto mt-4 max-w-[70ch] text-pretty leading-7 md:mt-6">
+          <p className="mt-4 text-pretty leading-7 md:mt-6">
             {intro}
           </p>
         ) : null}
@@ -197,32 +226,32 @@ export function BcorpScore({
           className="relative mx-auto mt-12 w-full max-w-[260px] md:mt-16 md:max-w-[320px]"
         >
           {hasRing ? (
-            <svg viewBox="0 0 240 240" className="w-full -rotate-90" aria-hidden>
-              {segments.map(({ area, i, length, offset, delay }) => (
-                <circle
+            <svg viewBox="0 0 240 240" className="w-full" aria-hidden>
+              {segments.map(({ area, i, d, delay }) => (
+                <path
                   key={area._key ?? area.name}
-                  cx="120"
-                  cy="120"
-                  r={RADIUS}
+                  d={d}
+                  pathLength={1}
                   fill="none"
                   stroke={RAMP[i % RAMP.length]}
                   strokeWidth={active === i ? STROKE_HOVER : STROKE}
-                  strokeDashoffset={-offset}
                   onMouseEnter={() => setActive(i)}
                   onMouseLeave={() => setActive(null)}
                   className={cn(
                     "transition-[stroke-width,opacity] duration-200",
                     // Before it draws the dash is nothing, so the ring starts
                     // empty rather than flashing whole and then animating.
-                    drawn ? "animate-draw-arc" : "[stroke-dasharray:0_9999]",
+                    drawn ? "animate-draw-arc" : "[stroke-dasharray:0_1]",
                     active !== null && active !== i
                       ? "opacity-40"
                       : "opacity-100"
                   )}
                   style={
                     {
-                      "--len": length,
-                      "--circumference": CIRCUMFERENCE,
+                      // pathLength is 1, so the dash runs in those units and
+                      // one keyframe serves arcs of any real length.
+                      "--len": 1,
+                      "--circumference": 1,
                       animationDelay: `${delay}ms`,
                     } as React.CSSProperties
                   }
@@ -231,7 +260,12 @@ export function BcorpScore({
             </svg>
           ) : null}
 
-          <div className="absolute inset-0 flex items-center justify-center">
+          {/*
+            pointer-events-none, or this covers the whole figure and the ring
+            never sees the pointer. That is what made the arcs unhoverable while
+            the legend worked.
+          */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <span className="text-5xl leading-none md:text-6xl">{overall}</span>
           </div>
         </figure>
@@ -300,20 +334,20 @@ export function BcorpScore({
           each description to sit on one line beside its number.
         */}
         {typeof threshold === "number" || typeof median === "number" ? (
-          <dl className="mt-10 grid gap-x-10 gap-y-4 rounded-sm border border-primary/25 px-6 py-5 sm:grid-cols-2 md:mt-14 md:px-8 md:py-6">
+          <dl className="mt-10 grid gap-x-10 gap-y-4 border border-primary/25 px-6 py-5 sm:grid-cols-2 md:mt-14 md:px-8 md:py-6">
             {typeof threshold === "number" ? (
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
+              <div className="flex flex-col gap-1">
                 <dd className="text-2xl leading-none tabular-nums">
                   {threshold}
                 </dd>
                 <dt className="text-sm leading-6">
-                  The score a company needs to certify
+                  The minimum score a company needs to certify
                 </dt>
               </div>
             ) : null}
 
             {typeof median === "number" ? (
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
+              <div className="flex flex-col gap-1">
                 <dd className="text-2xl leading-none tabular-nums">{median}</dd>
                 <dt className="text-sm leading-6">
                   The median for businesses that complete the assessment

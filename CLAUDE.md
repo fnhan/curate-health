@@ -1647,27 +1647,35 @@ section already says better, and would put a teaching role in `hasCredential`,
 which search engines read as a list of regulated designations. Put to Frank on
 2026-10-24 and he took the recommendation.
 
-### The two link bars are one design in two components. 2026-10-26
+### Every link bar on the site is one component. 2026-10-26
 
-`hover-link.tsx` draws "More About Us" and the blog bar on the home page.
-`hover-link-variation.tsx` draws the bar under the Program Timeline and the
-one on /about/b-corp. They are the same design: Poppins italic, right
-aligned, `py-5`, a `w-5` chevron, and a hover that fills the bar and spreads
-the gap to 20.
+`components/shared/hover-link.tsx` draws all nine: the five on the home page,
+the two that cross-link /services and /our-programs, the one under the Program
+Timeline, and the one on /about/b-corp. `hover-link-variation.tsx` is deleted.
 
-**They disagreed on one thing and Frank caught it by asking.** The variation
-carried `text-lg`, 18px, where the original sets no size class and inherits
-16px. Measured on all three bars before and after; all three are 16px now.
+**It was two components for one design, and they had drifted.** The variation
+carried `text-lg` at 18px where the original inherits 16px. Frank caught it by
+asking whether the bars matched "More About Us", then asked for every bar on
+the site to match. Measured across all nine afterwards: 16px, weight 400,
+italic, Poppins, `py-5`, right aligned, `w-5` chevron.
 
-**What still differs is deliberate.** The variation is a block anchor with
-`bg-platinum` and `border-primary`, because it sits on a light section; the
-original is an inline anchor with no background, on the dark green. The CH-107
-note explains why the block matters: `w-full` and a background do nothing on
-an inline `<a>`, which is how that bar once painted nothing at all.
+**`tone` is the only difference left and it is a real one.** `dark`, the
+default, has no background and white text, for a bar on the dark green.
+`light` has platinum behind it with dark green text and hairline, for a bar on
+a white or platinum section, where white text would vanish. Both fill sage on
+hover and turn their text white, so the hover is one behaviour either way.
+`textColor` still overrides the tone's colour, which is what the cafe section
+on the home page uses to go black.
 
-**Two components for one design is the underlying problem.** Neither can be
-changed without checking the other, which is exactly what went wrong here. Fold
-them together the next time one needs work.
+**The anchor is a block in both tones now**, which fixed a latent version of
+the CH-107 bug: `next/link` renders an inline `<a>`, and neither `w-full` nor a
+background applies to an inline box. The Program Timeline bar painted nothing
+at all for that reason until 2026-09-20. The home page bars survived only
+because they had no background to lose.
+
+**Nothing moved.** `audit-render-baseline.js` across 60 addresses reports no
+change, and the bars were measured directly before and after, since the
+baseline records content rather than the classes on a link.
 
 ### Every route segment needs its own layout. 2026-10-26
 

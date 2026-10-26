@@ -6,7 +6,7 @@ import { AboutNavigation } from "@/components/layout/about-pages/about-navigatio
 import { BcorpScore } from "@/components/layout/about-pages/bcorp-score";
 import { AlternatingSections } from "@/components/shared/alternating-sections";
 import CtaFooterSection from "@/components/shared/cta-footer-section";
-import HoverLinkVariation from "@/components/shared/hover-link-variation";
+import HoverLink from "@/components/shared/hover-link";
 import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SanityImage } from "@/components/shared/sanity-image";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -100,9 +100,10 @@ export default async function BcorpPage() {
         is the one B Lab's guidelines require. Two links, two destinations.
       */}
       {score?.directoryUrl ? (
-        <HoverLinkVariation
+        <HoverLink
           href={score.directoryUrl}
           text="View our full assessment"
+          tone="light"
         />
       ) : null}
 

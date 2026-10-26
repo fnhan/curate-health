@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+import { cn } from "@/lib/utils";
+
 type Area = {
   _key?: string | null;
   name?: string | null;
@@ -29,48 +35,43 @@ type Props = {
  *
  * The assessment runs to 200 and nothing here says so. Frank's call on
  * 2026-10-25: a reader told the total reads 91.7 against it and concludes we
- * are halfway, which is the wrong comparison. The right ones are the score a
- * company needs to certify and what an ordinary business scores, and both are
- * here, under the total rather than beside it.
+ * are halfway, which is the wrong comparison.
  *
- * THE BAR IS THE COMPOSITION, NOT THE SCALE
+ * THE RING IS THE COMPOSITION, NOT THE SCALE
  *
- * Frank asked on 2026-10-25 for a visual showing how the five areas add up to
- * the total. So the bar IS 91.7, divided into the five parts that make it,
- * each segment proportional to its own share. It carries no empty remainder,
- * which is the point: a bar drawn against an unstated maximum would invite
- * exactly the halfway reading the omission avoids, and one drawn against a
- * shorter scale would flatter it.
+ * The five areas draw a ring around the total rather than a bar under it, so
+ * the number and what it is made of are one object. The segments close the
+ * circle, which says they add up. There is no empty remainder in it, because a
+ * ring drawn against an unstated maximum would invite exactly the halfway
+ * reading that leaving the ceiling off avoids.
  *
- * The five areas are not comparable to each other, since they carry different
- * maximums, so nothing here invites that comparison either. The bar answers
- * one question, which is what the total is made of.
+ * The five areas carry different maximums and are not comparable to each
+ * other, so nothing here invites that comparison either. The ring answers one
+ * question: what the total is made of.
  *
- * The ramp runs dark to light through the house greens. It is ordered by the
- * array, which is stored largest first, so the widths fall left to right and
- * the eye reads it without a key.
+ * THE COMPARISON FIGURES ARE REFERENCE, NOT HEADLINE
+ *
+ * 80 and 50.9 sit in a bordered box below the legend rather than under the
+ * total. Frank, 2026-10-26: centred and large beneath the ring they drew
+ * attention they do not deserve, and read as though they were part of the
+ * arithmetic. They are the opposite: they are what the 91.7 is measured
+ * against, which is why the box separates them from it.
+ *
+ * Below the legend is also the order the questions come in. What did we score,
+ * what is it made of, how does that compare. The border and the smaller type
+ * do the rest.
  */
 
 /**
  * Five steps on the brand's own hue, running dark to light but stopping well
  * short of platinum: the section background is 86% lightness, and a final step
  * at 67% left the smallest segment of the ring barely visible on it. 58% is
- * the lightest that still reads. Written as hsl rather than Tailwind classes because the segment
- * colours are data-driven: a class string built at runtime is one Tailwind
- * never sees, which is the trap recorded under the hover sweep on 2026-10-18.
- */
-/**
- * The ring. 240 square viewBox, so the numbers read as the drawing does.
+ * the lightest that still reads.
  *
- * `strokeDasharray` on one circle per segment, offset by what came before,
- * is what makes five arcs out of five circles. Butt caps, the default, so
- * neighbours meet cleanly instead of overlapping at a rounded end, and the
- * whole thing is rotated -90 degrees so it starts at twelve o'clock.
+ * Inline `hsl` rather than Tailwind classes, because the segment colours are
+ * data-driven: a class string built at runtime is one Tailwind never sees,
+ * which is the trap recorded under the hover sweep on 2026-10-18.
  */
-const RADIUS = 92;
-const STROKE = 16;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-
 const RAMP = [
   "hsl(89 37% 15%)",
   "hsl(88 28% 26%)",
@@ -78,6 +79,23 @@ const RAMP = [
   "hsl(80 14% 47%)",
   "hsl(77 11% 58%)",
 ];
+
+/**
+ * The ring. 240 square viewBox, so the numbers read as the drawing does.
+ *
+ * `strokeDasharray` on one circle per segment, offset by what came before, is
+ * what makes five arcs out of five circles. Butt caps, the default, so
+ * neighbours meet cleanly instead of overlapping at a rounded end, and the
+ * whole thing is rotated -90 degrees so it starts at twelve o'clock.
+ */
+const RADIUS = 92;
+const STROKE = 16;
+/** How much a hovered segment thickens. It grows both ways from the path. */
+const STROKE_HOVER = 26;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+/** How long the whole sweep takes. Each arc gets the share it occupies. */
+const DRAW_MS = 900;
 
 export function BcorpScore({
   heading,
@@ -88,6 +106,51 @@ export function BcorpScore({
   certifiedSince,
   areas,
 }: Props) {
+  const figureRef = useRef<HTMLElement | null>(null);
+  const [drawn, setDrawn] = useState(false);
+  const [active, setActive] = useState<number | null>(null);
+
+  /**
+   * The ring draws when it comes into view, and after load when it is already
+   * there, which is the case on a phone where this section can open above the
+   * fold. Frank asked for both on 2026-10-26.
+   *
+   * One code path covers them: IntersectionObserver fires immediately for an
+   * element that is already intersecting when it starts observing, and this
+   * effect only runs after hydration, so "already visible" and "scrolled to"
+   * arrive the same way. The short delay is so the sweep is something a reader
+   * watches rather than something already finished by the time they look.
+   *
+   * It runs once. A ring that redraws every time it scrolls past is a
+   * distraction rather than a flourish.
+   */
+  useEffect(() => {
+    const el = figureRef.current;
+    if (!el) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDrawn(true);
+      return;
+    }
+
+    let timer: ReturnType<typeof setTimeout>;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        timer = setTimeout(() => setDrawn(true), 180);
+      },
+      // A third of it showing is enough to be worth starting.
+      { threshold: 0.33 }
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
+  }, []);
+
   if (typeof overall !== "number") return null;
 
   const live = (areas ?? []).filter(
@@ -95,11 +158,28 @@ export function BcorpScore({
       Boolean(area?.name) && typeof area?.value === "number"
   );
 
-  // The segments are shares of the total the page shows, so they always fill
-  // the bar. Sanity rounds each area to one decimal, so they can sum a little
-  // either side of the overall; normalising on their own sum keeps the bar
-  // exact rather than leaving a sliver of background at the end.
+  // The segments are shares of the total the page shows, so they always close
+  // the ring. Sanity rounds each area to one decimal, so they can sum a little
+  // either side of the overall; normalising on their own sum keeps the ring
+  // exact rather than leaving a gap at twelve o'clock.
   const sum = live.reduce((n, a) => n + a.value, 0);
+  const hasRing = live.length > 0 && sum > 0;
+
+  // Each arc starts where the last one ended and waits that long before
+  // drawing, so the five read as one sweep rather than five animations.
+  let at = 0;
+  const segments = live.map((area, i) => {
+    const length = (area.value / sum) * CIRCUMFERENCE;
+    const seg = {
+      area,
+      i,
+      length,
+      offset: at,
+      delay: (at / CIRCUMFERENCE) * DRAW_MS,
+    };
+    at += length;
+    return seg;
+  });
 
   return (
     <section className="bg-platinum py-14 md:py-24">
@@ -112,45 +192,42 @@ export function BcorpScore({
           </p>
         ) : null}
 
-        {/*
-          The total, with the five areas drawn as a ring around it. Frank's
-          design on 2026-10-25, replacing a stacked bar: the ring puts the
-          number and what it is made of in one object rather than two, and the
-          segments close the circle, which says they add to the total more
-          plainly than a bar sitting under it did.
-        */}
-        <figure className="relative mx-auto mt-12 w-full max-w-[260px] md:mt-16 md:max-w-[320px]">
-          {live.length > 0 && sum > 0 ? (
-            <svg
-              viewBox="0 0 240 240"
-              className="w-full -rotate-90"
-              aria-hidden
-            >
-              {
-                live.reduce<{ at: number; nodes: React.ReactNode[] }>(
-                  (acc, area, i) => {
-                    const length = (area.value / sum) * CIRCUMFERENCE;
-                    acc.nodes.push(
-                      <circle
-                        key={area._key ?? area.name}
-                        cx="120"
-                        cy="120"
-                        r={RADIUS}
-                        fill="none"
-                        stroke={RAMP[i % RAMP.length]}
-                        strokeWidth={STROKE}
-                        // butt caps, so neighbouring segments meet cleanly
-                        // rather than overlapping at a rounded end.
-                        strokeDasharray={`${length} ${CIRCUMFERENCE - length}`}
-                        strokeDashoffset={-acc.at}
-                      />
-                    );
-                    acc.at += length;
-                    return acc;
-                  },
-                  { at: 0, nodes: [] }
-                ).nodes
-              }
+        <figure
+          ref={figureRef}
+          className="relative mx-auto mt-12 w-full max-w-[260px] md:mt-16 md:max-w-[320px]"
+        >
+          {hasRing ? (
+            <svg viewBox="0 0 240 240" className="w-full -rotate-90" aria-hidden>
+              {segments.map(({ area, i, length, offset, delay }) => (
+                <circle
+                  key={area._key ?? area.name}
+                  cx="120"
+                  cy="120"
+                  r={RADIUS}
+                  fill="none"
+                  stroke={RAMP[i % RAMP.length]}
+                  strokeWidth={active === i ? STROKE_HOVER : STROKE}
+                  strokeDashoffset={-offset}
+                  onMouseEnter={() => setActive(i)}
+                  onMouseLeave={() => setActive(null)}
+                  className={cn(
+                    "transition-[stroke-width,opacity] duration-200",
+                    // Before it draws the dash is nothing, so the ring starts
+                    // empty rather than flashing whole and then animating.
+                    drawn ? "animate-draw-arc" : "[stroke-dasharray:0_9999]",
+                    active !== null && active !== i
+                      ? "opacity-40"
+                      : "opacity-100"
+                  )}
+                  style={
+                    {
+                      "--len": length,
+                      "--circumference": CIRCUMFERENCE,
+                      animationDelay: `${delay}ms`,
+                    } as React.CSSProperties
+                  }
+                />
+              ))}
             </svg>
           ) : null}
 
@@ -164,55 +241,45 @@ export function BcorpScore({
           {certifiedSince ? `, certified ${certifiedSince}` : ""}
         </p>
 
-        {/* The two figures that give it meaning, under it rather than beside. */}
-        <dl className="mt-10 flex justify-center gap-6 text-center sm:gap-12 md:gap-20">
-          {/*
-            Both labels hold two lines. Frank, 2026-10-25: the first ran to
-            two and the second to four, which left the pair lopsided and took
-            more vertical space than two reference numbers are worth. The
-            measure and the wording were cut together, since widening alone
-            would have put the first on one line and kept the imbalance.
-          */}
-          {typeof threshold === "number" ? (
-            <div>
-              <dd className="text-3xl leading-none md:text-4xl">{threshold}</dd>
-              <dt className="mx-auto mt-3 max-w-[24ch] text-sm leading-6">
-                Needed to certify
-              </dt>
-            </div>
-          ) : null}
-
-          {typeof median === "number" ? (
-            <div>
-              <dd className="text-3xl leading-none md:text-4xl">{median}</dd>
-              <dt className="mx-auto mt-3 max-w-[24ch] text-sm leading-6">
-                Median business score
-              </dt>
-            </div>
-          ) : null}
-        </dl>
-
-        {live.length > 0 && sum > 0 ? (
+        {hasRing ? (
           <div className="mt-14 md:mt-20">
-            <p className="text-sm md:text-base">
-              What the {overall} is made of
-            </p>
+            <p className="text-sm md:text-base">What the {overall} is made of</p>
 
+            {/*
+              Hovering either an arc or its row lights both, so a reader can
+              tell which part of the ring is which without a key drawn on it.
+              The rows are not links and take no keyboard focus: every name and
+              value is written out here already, so nothing is lost by the
+              highlight being mouse-only.
+            */}
             <dl className="mt-6 grid gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
               {live.map((area, i) => (
                 <div
                   key={area._key ?? area.name}
-                  className="flex items-baseline gap-3 border-b border-primary/10 pb-3"
+                  onMouseEnter={() => setActive(i)}
+                  onMouseLeave={() => setActive(null)}
+                  className={cn(
+                    "flex items-baseline gap-3 border-b pb-3 transition-all duration-200",
+                    active === i
+                      ? "border-primary/40 font-normal"
+                      : "border-primary/10",
+                    active !== null && active !== i
+                      ? "opacity-50"
+                      : "opacity-100"
+                  )}
                 >
                   <span
                     aria-hidden
-                    className="size-3 shrink-0 translate-y-px rounded-[2px]"
+                    className={cn(
+                      "shrink-0 translate-y-px rounded-[2px] transition-all duration-200",
+                      active === i ? "size-4" : "size-3"
+                    )}
                     style={{ backgroundColor: RAMP[i % RAMP.length] }}
                   />
                   <dt className="text-pretty">
                     {area.name}
                     {area.note ? (
-                      <span className="block text-sm text-primary/70">
+                      <span className="block text-sm font-light text-primary/70">
                         {area.note}
                       </span>
                     ) : null}
@@ -224,6 +291,36 @@ export function BcorpScore({
               ))}
             </dl>
           </div>
+        ) : null}
+
+        {/*
+          The two comparison figures, boxed and below everything the 91.7 is
+          made of, so they read as reference rather than as part of the sum.
+          Side by side from the small breakpoint up, where there is room for
+          each description to sit on one line beside its number.
+        */}
+        {typeof threshold === "number" || typeof median === "number" ? (
+          <dl className="mt-10 grid gap-x-10 gap-y-4 rounded-sm border border-primary/25 px-6 py-5 sm:grid-cols-2 md:mt-14 md:px-8 md:py-6">
+            {typeof threshold === "number" ? (
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
+                <dd className="text-2xl leading-none tabular-nums">
+                  {threshold}
+                </dd>
+                <dt className="text-sm leading-6">
+                  The score a company needs to certify
+                </dt>
+              </div>
+            ) : null}
+
+            {typeof median === "number" ? (
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
+                <dd className="text-2xl leading-none tabular-nums">{median}</dd>
+                <dt className="text-sm leading-6">
+                  The median for businesses that complete the assessment
+                </dt>
+              </div>
+            ) : null}
+          </dl>
         ) : null}
       </div>
     </section>

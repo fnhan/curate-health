@@ -95,11 +95,26 @@ module.exports = {
           from: { opacity: 0 },
           to: { opacity: 100 },
         },
+        /*
+          The B Corp score ring drawing itself, CH-119. Each segment is one
+          circle whose dash grows from nothing to its own share, so the five
+          together sweep clockwise from twelve o'clock.
+
+          --len and --circumference are set inline per segment, because the
+          lengths are data. A keyframe can read a custom property the element
+          carries, which is what makes one shared animation serve five arcs of
+          different sizes.
+        */
+        "draw-arc": {
+          from: { strokeDasharray: "0 var(--circumference)" },
+          to: { strokeDasharray: "var(--len) var(--circumference)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         appear: "appear 0.5s ease-in-out",
+        "draw-arc": "draw-arc 0.9s cubic-bezier(0.33, 1, 0.68, 1) both",
       },
     },
   },

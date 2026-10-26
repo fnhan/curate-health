@@ -4483,19 +4483,47 @@ platinum at 86%, and the first version's lightest step left the smallest
 segment barely visible on it. Checked by eye on the rendered ring rather than
 by contrast arithmetic, since the question is whether a 16px arc reads.
 
-**The two reference labels hold one line each**, "Needed to certify" and
-"Median business score". Frank, 2026-10-25, across three passes: four lines
-and two at first, then two and two, then one and one. The mobile gap came down
-from `gap-12` to `gap-6` on the way, so the columns are wide enough for a short
-label to stay on one line.
+**The ring draws itself, once, when it is looked at.** Frank, 2026-10-26.
+Each arc animates its `stroke-dasharray` from nothing to its own share, with a
+delay equal to the distance around the circle it starts at, so the five read as
+one clockwise sweep from twelve o'clock rather than five animations. The
+keyframe is `draw-arc` in `tailwind.config.js`; it reads `--len` and
+`--circumference` off each circle, which is what lets one animation serve five
+arcs of different sizes.
 
-**The qualifier moved into the intro rather than being dropped.** 50.9 is the
-median of businesses that complete the assessment, not of businesses in
-general, so "Median business score" on its own would overstate it. The sentence
-above the ring carries it: "These are B Lab's own figures, set against every
-business that completes the assessment." Frank asked about "average businesses"
-or "most businesses"; neither is right, since most businesses have never taken
-the assessment.
+**One `IntersectionObserver` covers both cases he asked for.** It fires
+immediately for an element already intersecting when observing starts, and the
+effect only runs after hydration, so "already on screen" and "scrolled to"
+arrive by the same path. It disconnects on the first hit: a ring that redraws
+every time it scrolls past is a distraction rather than a flourish.
+`prefers-reduced-motion` skips straight to drawn.
+
+**Hovering an arc or its legend row lights both.** The arc goes from 16 to 26
+stroke, its row bolds, and everything else drops to 40% and 50% opacity. The
+rows are not links and take no keyboard focus: every name and value is already
+written out, so nothing is lost by the highlight being mouse-only, and making
+five non-interactive rows focusable would be worse.
+
+**The component is a client component because of those two**, which is the
+only reason; it still takes plain props.
+
+#### The comparison figures are reference, and the box says so
+
+80 and 50.9 sit in a bordered box **below the legend**, not under the total.
+Frank, 2026-10-26: centred and large beneath the ring they drew attention they
+do not deserve and read as though they were part of the arithmetic. They are
+the opposite, which is what the border separates.
+
+Below the legend is also the order the questions come in: what did we score,
+what is it made of, how does that compare. He offered "below the B Corp
+sections or to the right of the 91.7" and asked for a recommendation; to the
+right keeps them visually parallel with the total, which is the problem rather
+than the fix.
+
+**Each description is back to its full wording, on one line.** There is room:
+the box is the container, so each half is about 580px and a 54 character line
+needs 380. **The number stacks above its label below `sm`**, because inline it
+squeezed the description into a column five words wide.
 
 **The segment colours are inline `hsl`, not Tailwind classes.** They are
 data-driven, and a class string built at runtime is one Tailwind never sees,

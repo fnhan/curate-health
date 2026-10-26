@@ -1647,6 +1647,83 @@ section already says better, and would put a teaching role in `hasCredential`,
 which search engines read as a list of regulated designations. Put to Frank on
 2026-10-24 and he took the recommendation.
 
+### The two link bars are one design in two components. 2026-10-26
+
+`hover-link.tsx` draws "More About Us" and the blog bar on the home page.
+`hover-link-variation.tsx` draws the bar under the Program Timeline and the
+one on /about/b-corp. They are the same design: Poppins italic, right
+aligned, `py-5`, a `w-5` chevron, and a hover that fills the bar and spreads
+the gap to 20.
+
+**They disagreed on one thing and Frank caught it by asking.** The variation
+carried `text-lg`, 18px, where the original sets no size class and inherits
+16px. Measured on all three bars before and after; all three are 16px now.
+
+**What still differs is deliberate.** The variation is a block anchor with
+`bg-platinum` and `border-primary`, because it sits on a light section; the
+original is an inline anchor with no background, on the dark green. The CH-107
+note explains why the block matters: `w-full` and a background do nothing on
+an inline `<a>`, which is how that bar once painted nothing at all.
+
+**Two components for one design is the underlying problem.** Neither can be
+changed without checking the other, which is exactly what went wrong here. Fold
+them together the next time one needs work.
+
+### Every route segment needs its own layout. 2026-10-26
+
+**`/classes` shipped with no header and no footer**, so no sidebar trigger, no
+home link and no Book Now, on a page that had been live since CH-107. Frank
+found it. Production confirmed it before the fix: `/classes` had zero of
+either and `/cafe` had both.
+
+**The root layout deliberately does not wrap the site in `Layout`**, because
+/studio, /coming-soon and /login must not carry the marketing header. Each
+section opts in with its own `layout.tsx` instead, which makes forgetting one
+silent: the page renders, every audit passes, and the only thing missing is
+the thing every other page has.
+
+**No audit catches it**, which is why it survived. `audit-orphans.js` crawls
+links and the page still had links; the metadata, alt text and content rule
+checks never look at the chrome. Worth knowing when the next route is built:
+the layout is part of the every-page rule even though nothing enforces it.
+
+### The sidebar and the About menu list the same six pages in the same order
+
+They had drifted: `SITE_SETTINGS_QUERY`, which the sidebar and footer read,
+had Pillars of Health last, while `ABOUT_INDEX_QUERY`, which the About band
+and the hub read, had it fourth. Frank asked on 2026-10-26 for the sidebar to
+match. **Two hand-built arrays describe one menu, so check both when a page is
+added under /about**; adding the B Corp page a day earlier had put it in
+different positions in each.
+
+### SectionIntro runs to the container edge. 2026-10-26
+
+The band was `mr-auto max-w-[70ch]`. Frank took the measure off for **every**
+section after seeing it stop short of the right padding on /classes, so
+/about, /services, /products and /classes all changed together. A full-width
+line here runs to about 165 characters, which is the argument against and
+which he has heard; narrow it in the one component if it ever comes back.
+
+### A treatment subtitle is not held to the paragraph's measure. 2026-10-26
+
+`treatment-content.tsx` wrapped the subtitle and the intro paragraph in one
+`max-w-[80ch]` box, so the heading inherited a measure chosen for body prose.
+80ch exists so a line of prose does not run too long to track; a centred
+display heading has no such problem and reads worse broken in two.
+
+Frank asked for the Tai Chi subtitle on one line. Measured at 1280: it needs
+959px at its 30px size, the prose box was 804, and the container is 1265, so
+it wrapped with 460px going spare either side. The `max-w-[80ch]` moved onto
+the paragraph alone.
+
+**Two pages change, and only two.** Tai Chi and Flowpresso are the only
+treatment subtitles long enough to have overflowed 80ch; both are one line now,
+measured. Every other subtitle already fitted and is untouched.
+
+**Nothing changes on a phone.** The container there is 311px, far inside 80ch,
+so that cap never bound. Tai Chi is three lines at 375px before and after, with
+no horizontal overflow.
+
 ### The copy backlog, cleared 2026-10-24
 
 23 of the September decisions applied, by `scripts/apply-decision-backlog.js`.
@@ -3732,12 +3809,16 @@ link. `_key` was added to the GROQ projection for the same reason. Every other
 section photograph on that page and on /cafe stays unlinked, which is why the
 prop returns null by default rather than taking a single href.
 
-**Learn More goes to the directory profile, the mark still goes to bcorp.com.**
-`https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`
-exists now; it did not on 2026-10-10. It is the link that verifies the claim, so
-it is the better destination for a text link, but it cannot replace the mark's
-own link because the brand guidelines name bcorp.com. Two links, two
-destinations, on purpose. Repoint Learn More at CH-119 when that page is built.
+**Learn More goes to /about/b-corp since 2026-10-26, the mark still goes to
+bcorp.com.** It used to point at the directory profile, because that verified
+the claim and there was no page of our own. CH-119 always said it would move
+once the page existed, and it has: the page explains the certification,
+publishes the score and links to the profile itself.
+
+`BCORP_PROFILE_URL` went with it, since nothing read it any more. **The mark's
+own link does not move** and is a separate constant: B Lab's guidelines require
+a certified company using the mark to direct visitors to bcorp.com, which is
+why the two were never the same link.
 
 **The mark is offset left by 14px and that is not a nudge.** The asset carries
 its own transparent margin, measured at 14.6% of the canvas on the left, so the
@@ -4371,24 +4452,354 @@ in this ticket writes to Sanity.
 should now clear, so recount after merge; `middleware` to `proxy` is deferred
 above; and the three pinned image defaults are worth revisiting deliberately.
 
-### CH-119 Our B Corp Certification page
+### CH-119 Our B Corp Certification page. Drafted 2026-10-25
 
-Asked for by Frank on 2026-10-11, to be built later. A page under About Us about
-the certification, which the footer's Learn More should point at once it exists.
+`/about/b-corp`, built and wired, **with its copy drafted rather than
+approved**. The document is in Sanity and `pageActive` decides whether any of
+it is served.
 
-Until then Learn More points at the directory profile,
-`https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`.
-**Repointing it is part of this ticket, and the mark's own link stays on
-bcorp.com** whatever happens here, because B Lab requires that one.
+**It does not walk the five impact areas, on purpose.**
+`/about/sustainability` already has a section for each of Governance, Workers,
+Customers, Community and Environment. Explaining them again here would put two
+descriptions of one thing on two pages and let them drift, which is what CH-025
+spent a whole ticket undoing for the address. This page links there instead and
+answers what that page does not: what the certification is, who checks it, what
+Curate scored, and what any of it changes for a reader.
 
-The copy is Frank's to supply or approve. What the certification covers, what
-B Lab assessed, and the date certified are claims about the business, so they
-are not for drafting from the directory listing.
+**Built from its five siblings, not from the section components.** The rule
+from 2026-09-20 says build a new SECTION from `SectionHero` and
+`SectionNavigation`. /about is the section; this is a page inside it, and all
+five pages inside it lay out the same way: photograph full width, the About
+menu, the heading on white, alternating sections, the CTA. It uses
+`SanityImage` where the siblings still use a bare `next/image`, so a Studio
+crop reaches this hero from the first day. The other five are the same hole
+that was closed on the service and treatment heroes, and are worth the same fix
+in their own change.
 
-It is a new route, so the every-page rule applies in full: its own title and
-description in the Studio, a share card, a breadcrumb under /about, a line in
-the sitemap and in llms.txt, a link from the About hub so it is not orphaned,
-and the content rules. `node scripts/audit-seo-complete.js` is the gate.
+#### The tone is confident, not careful. Frank, 2026-10-25
+
+The first draft read as a company trying hard not to be accused of
+greenwashing: it opened on most people not knowing what the mark means, had a
+section called "What the certification changes" that began "Before it, you had
+our word", and another called "What we are still working on". Frank's note:
+"really defensive, as if we're really trying hard not to greenwash", and he
+asked for something more professional, philosophical and confident, pointing
+at Keurig's corporate responsibility voice.
+
+**What that changed.** The page now opens on the conviction rather than on the
+certification: a healthy environment decides the health of the people living in
+it, so a business that sets out to make people well cannot leave its own
+footprint out of the account. The certification arrives as the consequence of
+that, not as a defence of it. "What the certification changes" became **"Why we
+became one"**, which is the section Frank dictated in his own words and the
+heart of the page. "What we are still working on" became **"What it holds us
+to"**, which leads with where we are strong.
+
+**The philosophy is his and should not be softened.** Optimal health is not
+reached in isolation; it is shaped by the environment and by the people around
+a person, which is why **Social sits alongside Physical, Mental, Emotional and
+Spiritual in the five pillars**. Helping people is the business, so social
+impact is not an adjacent commitment to it.
+
+**The page now defines the term.** The B stands for benefit. B Lab is named,
+founded 2006, by three people who had just sold their company and watched its
+commitments disappear in the sale. Eighty-one companies certified in the first
+year; more than ten thousand hold it today in over a hundred countries, which
+is what makes it an international standard rather than a badge. The 10,000
+figure was read off the directory, which showed 10,828 on 2026-10-25.
+
+#### The score is data, and the ceiling is deliberately absent
+
+`score` is its own object on the document: overall, the pass mark, the median,
+the date, the directory URL and the five areas. The page prints it and
+`buildBcorpJsonLd` publishes the same fields, so there is no second copy of a
+number to disagree with the first, the same reasoning as the hours in CH-008.
+Recertification is every three years, so these change in the Studio and nothing
+in code moves.
+
+**The assessment runs to 200 and the page does not say so. Frank's call.** A
+reader told the total reads 91.7 against it and concludes we are halfway, which
+is the wrong comparison. The right ones are the score a company needs to
+certify and what an ordinary business scores, and both are on the page.
+
+**The five areas are a ring around the total.** Frank's design on 2026-10-25,
+replacing a stacked bar under it. The ring puts the number and what it is made
+of in one object rather than two, and segments that close a circle say they add
+up more plainly than a bar sitting underneath did.
+
+It is five `<circle>` elements sharing a centre, each with a `strokeDasharray`
+sized to its share and a `strokeDashoffset` of everything before it, in a 240
+square viewBox rotated -90 degrees so it starts at twelve o'clock. Butt caps,
+the default, so neighbours meet cleanly rather than overlapping at a rounded
+end.
+
+**There is no empty remainder in it, and that is the point.** A ring drawn
+against an unstated maximum would invite exactly the halfway reading that
+leaving the ceiling off is meant to avoid. The segments are normalised on their
+own sum rather than on the overall, because Sanity rounds each area to one
+decimal and they can total a little either side of 91.7.
+
+**The ramp stops at 58% lightness, not 67%.** The section background is
+platinum at 86%, and the first version's lightest step left the smallest
+segment barely visible on it. Checked by eye on the rendered ring rather than
+by contrast arithmetic, since the question is whether a 16px arc reads.
+
+**The ring draws itself, once, when it is looked at.** Frank, 2026-10-26.
+Each arc animates its `stroke-dasharray` from nothing to its own share, with a
+delay equal to the distance around the circle it starts at, so the five read as
+one clockwise sweep from twelve o'clock rather than five animations. The
+keyframe is `draw-arc` in `tailwind.config.js`; it reads `--len` and
+`--circumference` off each circle, which is what lets one animation serve five
+arcs of different sizes.
+
+**One `IntersectionObserver` covers both cases he asked for.** It fires
+immediately for an element already intersecting when observing starts, and the
+effect only runs after hydration, so "already on screen" and "scrolled to"
+arrive by the same path. It disconnects on the first hit: a ring that redraws
+every time it scrolls past is a distraction rather than a flourish.
+`prefers-reduced-motion` skips straight to drawn.
+
+**Hovering an arc or its legend row lights both.** The arc goes from 16 to 26
+stroke, its row bolds, and everything else drops to 40% and 50% opacity. The
+rows are not links and take no keyboard focus: every name and value is already
+written out, so nothing is lost by the highlight being mouse-only, and making
+five non-interactive rows focusable would be worse.
+
+**THE ARCS ARE PATHS, NOT DASHED CIRCLES, AND THAT IS WHY THE HOVER WORKS.**
+The first version drew five full circles and showed one slice of each with
+`stroke-dasharray`. It looked right and could not be hovered. Two reasons, and
+both are worth knowing:
+
+- **A browser hit-tests a dashed stroke along the whole path, gaps included**,
+  so all five circles answered the pointer everywhere on the ring and the last
+  one in the document won every time.
+- **The div holding the number is `absolute inset-0`**, so it covered the whole
+  figure and swallowed every pointer event before the svg saw one. It carries
+  `pointer-events-none` now.
+
+A path that is only its own arc has no gaps to hit-test. `pathLength` is
+normalised to 1, which also simplifies the draw, since the dash runs 0 to 1
+whatever the arc's real length, and the angles start at -90 degrees so the svg
+needs no rotation.
+
+**The symptom to recognise: the legend hover worked and the ring's did not.**
+That pattern means the pointer is not reaching the svg, or is reaching the
+wrong element in it, rather than the handler being wrong.
+
+**The component is a client component because of those two**, which is the
+only reason; it still takes plain props.
+
+#### The comparison figures are reference, and the box says so
+
+80 and 50.9 sit in a bordered box **below the legend**, not under the total.
+Frank, 2026-10-26: centred and large beneath the ring they drew attention they
+do not deserve and read as though they were part of the arithmetic. They are
+the opposite, which is what the border separates.
+
+Below the legend is also the order the questions come in: what did we score,
+what is it made of, how does that compare. He offered "below the B Corp
+sections or to the right of the 91.7" and asked for a recommendation; to the
+right keeps them visually parallel with the total, which is the problem rather
+than the fix.
+
+**Each description is back to its full wording, on one line.** There is room:
+the box is the container, so each half is about 580px and a 54 character line
+needs 380. **The number stacks above its label below `sm`**, because inline it
+squeezed the description into a column five words wide.
+
+**The segment colours are inline `hsl`, not Tailwind classes.** They are
+data-driven, and a class string built at runtime is one Tailwind never sees,
+which is the trap recorded under the hover sweep on 2026-10-18. Five steps on
+the brand hue, primary through secondary out to platinum, ordered by the array,
+which is stored largest first, so the widths fall left to right.
+
+**The directory link is the house band**, `HoverLinkVariation`, the same one
+under the Program Timeline. Frank asked for it on 2026-10-25: it is the single
+link that lets a reader check the score, so it earns the weight a text link
+does not. That component takes an off-site address now, through
+`externalLinkProps`, which returns nothing for an internal href, so its two
+existing call sites are untouched.
+
+**`bestRating: 200` stays in the markup**, which is not a contradiction. A
+schema.org `Rating` with no scale defaults to 5 and would publish 91.7 out of
+5. The scale is the unit the number is expressed in rather than a claim, and
+the figure itself is on the page. If that ever has to go, `certificationRating`
+goes whole rather than being left ambiguous.
+
+**Why the number is on the page at all.** Reading fourteen B Corp pages across
+healthcare, coffee and fitness, the ones that read as credible publish the
+score and the ones that read as marketing publish adjectives. It is also the
+only part a reader can check.
+
+**Governance carries a note.** 15.4 of which 10 is Mission Locked, so the
+discretionary part is 5.4. A bare number there would misrepresent it in both
+directions, which is what the optional `note` field on an area is for.
+
+#### The photographs
+
+**The hero is not the mark.** The band is 400px tall over the full width and
+the composite is 1600x1267, so `object-cover` would crop the lockup, which B
+Lab does not permit. The hero is the dark green foliage the composite was built
+from, and the mark sits in the first section, whose slot is 704x556 and crops
+it by almost nothing.
+
+**"What it holds us to" shows the waiting area**, the logo in cork lettering on
+the plaster wall above two light wood chairs. Found unreferenced in the library
+on 2026-10-25 at 8160x6144, so it had never been on the site. It is the right
+photograph for that section specifically, because the paragraph says the
+footprint of this space was counted while it was being built and this is that
+space, showing what it was built from. A stock photograph of a meeting sat
+there first and said nothing about either.
+
+**The library was surveyed for this**, 437 unreferenced assets, 265 of them
+landscape. Worth knowing what is in there, since CH-117 keeps it as a library
+to draw on. Most of the rest is stock that does not fit: a lone figure on a
+mountain summit, a teacup on a manuscript, a mountain range. Curate's own
+unused photographs are mostly the gym and the cafe. `waitingarea_edit_4`,
+`_5` and `_6` are the same shot at different sizes.
+
+**The construction point is Frank's**, 2026-10-25: the footprint was considered
+during the build and not only in daily operations. The wording stays close to
+what he said and claims nothing specific about materials or ratings, because
+nobody has confirmed any.
+
+**"Why we became one" went through three photographs.** A stock yoga class
+first, then the gym shot off the Workers section of /about/sustainability, then
+the one Frank sent on 2026-10-25: two men seated in profile, the nearer one
+resting a hand against his chin, both looking the same way. It is the right one
+for a section about health being social, where the yoga class was a picture of
+exercise.
+
+**It carries a hotspot and no crop, and that changes nothing about what is
+served.** Frank asked on 2026-10-25 for the crop off, reading the stored crop
+as the reason the photograph is tight on a phone. It is not.
+`AlternatingSections` passes `width={704} height={556}`, so `framedImageUrl`
+always builds a 1.266 file, and at 2920 wide that is 2306 of height whether the
+rect comes from a stored crop or from the hotspot. Measured before and after:
+`rect=0,0,2920,2306` both times.
+
+**The tightness is the photograph.** It is a close-up, two heads and a hand
+filling a 0.563 frame with a sliver of window behind. 2306 rows anchored at the
+top is the largest and highest band the slot's ratio allows, so every other
+framing shows less of the faces rather than more of the room. On a phone the
+box is 394x360 at 1.09, which crops a further 14% off the sides, so mobile is
+only slightly tighter than desktop.
+
+**What would actually widen it is a wider photograph.** Worth saying plainly
+rather than adjusting the hotspot and implying it helped.
+
+**The crop being absent is still worth having**, because a crop dragged in the
+Studio now takes effect on this image rather than competing with a stored one.
+
+**The crop is carried in two places on purpose.**
+`swap-bcorp-social-photo.js` sets it, and `apply-bcorp-page.js` carries it too,
+because that script writes the whole document with `createOrReplace` and would
+otherwise drop it on its next run. The same trap took the alt text once before
+it was noticed: the swap script wrote the new one and the apply script put the
+old one back.
+
+**Nothing on this page describes how the team is paid or looked after, and
+that is deliberate.** The clause went through "benefits", then "perks", then
+"incentives", and Frank took it out altogether on 2026-10-25. Each word claimed
+something slightly wrong: "benefits" implies an extended health plan, which
+there is not, and "incentives" can be read on a health business page as
+practitioners being incentivised, which is the thing patients are warned to
+watch for.
+
+**Put it back only with a real fact**, such as what the team eats or where they
+train, rather than a category word. Workers is the highest of the five scores
+at 20.4, so there is something true to say once somebody says what it is.
+
+#### What the page actually claims, and where it came from
+
+Everything concrete under "What it holds us to" is Frank's, dictated
+2026-10-25: local vendors who work the same way, internal benefits for the
+team, talks and events in the neighbourhood, waste measured, protocols for
+using less energy and producing less waste, a zero to low waste kitchen, the
+bring your own vessel discount, and attention to microplastics.
+
+**Nothing names a specific thing being worked on**, which is also his call. The
+section closes on the broad version instead: the assessment comes round every
+three years and the aim is to score higher each time. An earlier draft named
+Governance as the weakest area and that is out.
+
+**The construction point is one sentence, not a section.** He asked for it on
+2026-10-25 and then, the same day, said not to go deep because
+/about/sustainability already covers it. So the page says the footprint was
+weighed while the space was being built and links there for the rest.
+
+**The practices sentence was a rule of three and is now two clauses**, because
+the staff clause came out. Frank liked the three on 2026-10-25 and asked for it
+back after it was split against the content rule, so **restore the third clause
+if a real staff fact ever lands**, rather than inventing one to fill it.
+
+**That exchange left a standing contradiction, recorded rather than resolved.**
+The content rules ban tricolons outright and he asked for one. Nothing enforces
+it either way: `audit-content-rules.js` has never checked for tricolons,
+because no regex can tell one from an ordinary list of three. Ask before
+applying either reading more widely.
+
+#### Markup
+
+`Certification` with `hasCertification`, which schema.org added for exactly
+this, rather than marking the page up as a generic `WebPage`. `issuedBy` names
+B Lab, `about` points at the organization node, `certificationRating` carries
+91.7 against 0 to 200, and `sameAs` is the directory profile.
+`worstRating` is 0 rather than the 80 pass mark: 80 is the threshold for
+certifying at all, not the bottom of the scale. **Every value in it is printed
+on the page**, which is the rule this project works to.
+
+#### Two links, two destinations, still
+
+The mark's photograph links to **bcorp.com**, which B Lab requires, matched on
+`_key === "bcorp-mark"` so renaming the section cannot drop it. The score block
+links to the **directory profile**, because that is what lets a reader check
+the number. Three bcorp.com links render on the page: the footer mark, the
+section photograph and the inline text link.
+
+**The hero is not the mark.** The band is 400px tall over the full width and
+the composite is 1600x1267, so `object-cover` would crop the lockup, which B
+Lab does not permit. The hero is the greenery that composite was built from,
+and the mark sits in the first section, whose slot is 704x556 and crops it by
+almost nothing.
+
+#### Wired in nine places, all on the one switch
+
+Route, sitemap, llms.txt, the About hub grid, the About menu, the header and
+footer About lists, `pathsForDocument` in `lib/indexnow.ts`, and both
+`INDEX_DOCS_QUERY` copies. Every one reads `pageActive`, so they cannot
+disagree and nothing can link at a page that is not there.
+
+```bash
+node scripts/apply-bcorp-page.js                    # dry run, prints every word
+node scripts/apply-bcorp-page.js --draft            # the Sanity draft only
+node scripts/apply-bcorp-page.js --apply --active   # publish and switch on
+```
+
+The script checks the copy against the content rules, the audits' own title and
+description limits, and `titleMatchesHeading` before it will write, so a break
+shows up before a build rather than after one. It also checks the five areas
+add to the overall within rounding.
+
+**`audit-seo-complete.js` passes 9 of 9 with the page in**, on a local build.
+
+#### Open, all of it Frank's
+
+- **Every word of the copy.** What the certification covers and what B Lab
+  assessed are claims about the business.
+- **Whether the five category scores stay.** Publishing them invites the
+  question about the two low ones, which is why the page answers it; it is
+  still a choice.
+- **"What we are still working on" names Governance and Customers.** Every
+  well-regarded B Corp page admits something, and an admission cannot be
+  greenwashing, but naming our own weak areas is his call.
+- **Two of the three section photographs are placeholders**, both already live
+  on /about/sustainability with alt text written from the images. The sections
+  want photographs of this space.
+- **Whether the B Corp section stays on /about/sustainability** now that it has
+  a page of its own, or becomes a link to it.
+- **Repointing the footer's Learn More** at this page, which is part of this
+  ticket and waits on the page going live.
 
 ### CH-118 Upgrade to Next.js 16
 

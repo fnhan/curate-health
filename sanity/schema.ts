@@ -38,6 +38,7 @@ import siteMeta from "./schemas/siteMeta";
 import siteSettings from "./schemas/siteSettings";
 import socialMeta from "./schemas/socialMeta";
 import surveySection from "./schemas/surveySection";
+import bcorpPage from "./schemas/bcorpPage";
 import sustainability from "./schemas/sustainability";
 import sustainabilitySection from "./schemas/sustainabilitySection";
 import treatment from "./schemas/treatment";
@@ -66,6 +67,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     ourTeam /* Uses SEO Type */,
     missionAndValues /* Uses SEO Type */,
     sustainability /* Uses SEO Type */,
+    bcorpPage /* Uses SEO Type */,
     pillarsOfHealth /* Uses SEO Type */,
     contactPage /* Uses SEO Type */,
     surveySection,

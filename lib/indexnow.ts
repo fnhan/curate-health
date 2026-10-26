@@ -97,6 +97,8 @@ export function pathsForDocument(doc: DocumentForPaths): string[] {
       return ["/about/pillars-of-health"];
     case "sustainability":
       return ["/about/sustainability"];
+    case "bcorpPage":
+      return ["/about/b-corp"];
     case "practitioner":
       return slug
         ? [`/about/our-team/${slug}`, "/about/our-team"]

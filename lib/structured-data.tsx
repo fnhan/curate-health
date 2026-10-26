@@ -674,6 +674,78 @@ export function buildCafeMenuJsonLd(menu: CAFE_MENU_QUERY_RESULT) {
   }) as JsonLdObject;
 }
 
+/** The address of the B Corp page, in one place. CH-119. */
+export const BCORP_PATH = "/about/b-corp";
+
+/**
+ * Certification for the B Corp page. CH-119.
+ *
+ * schema.org has a type for exactly this, Certification, with hasCertification
+ * on Organization to attach it. So the page describes what it actually is
+ * rather than being marked up as a generic WebPage, and the certification
+ * becomes a node a search engine can read off the organization.
+ *
+ * EVERY VALUE HERE IS ON THE PAGE
+ *
+ * The score, the date and the issuer are all printed in the score block, which
+ * reads the same fields. That is the rule this project works to: markup
+ * describes what the page shows. Nothing is published here that a reader
+ * cannot see, which is also why there is no claim about the five areas beyond
+ * the numbers themselves.
+ *
+ * certificationRating carries the score with its own floor and ceiling, so
+ * 91.7 is read against 0 to 200 rather than as a bare number. worstRating is
+ * 0 and not the 80 pass mark: 80 is the threshold for being certified at all,
+ * not the bottom of the scale.
+ */
+export function buildBcorpJsonLd(page: {
+  seo?: { pageDescription?: string | null } | null;
+  heroSection?: {
+    heroTitle?: string | null;
+    heroImage?: { image?: string | null } | null;
+  } | null;
+  score?: {
+    overall?: number | null;
+    threshold?: number | null;
+    certifiedSince?: string | null;
+    directoryUrl?: string | null;
+  } | null;
+}) {
+  if (!page?.score?.overall) return null;
+
+  const url = `${BASEURL}${BCORP_PATH}`;
+
+  return stripEmpty({
+    "@context": "https://schema.org",
+    "@type": "Certification",
+    "@id": `${url}#certification`,
+    name: "Certified B Corporation",
+    url,
+    description: page.seo?.pageDescription || undefined,
+    image: page.heroSection?.heroImage?.image || undefined,
+    // The body that runs the standard and verifies the answers. Naming it is
+    // most of what makes the claim checkable, and the research on how people
+    // read this label says not knowing who certifies it is the main doubt.
+    issuedBy: {
+      "@type": "Organization",
+      name: "B Lab",
+      url: "https://bcorp.com",
+    },
+    // Who holds it. The clinic entity is the one with the address on it, so
+    // the certification attaches to the organization rather than to that.
+    about: { "@id": `${BASEURL}/#organization` },
+    certificationRating: {
+      "@type": "Rating",
+      ratingValue: page.score.overall,
+      worstRating: 0,
+      bestRating: 200,
+    },
+    // The directory profile, which is where the score can be verified.
+    sameAs: page.score.directoryUrl || undefined,
+    datePublished: page.score.certifiedSince || undefined,
+  }) as JsonLdObject;
+}
+
 /** The lead paragraph of an intro field, for a description with none written. */
 function firstParagraph(intro: string | null | undefined) {
   return (intro ?? "").split(/\n{2,}/)[0]?.trim() || undefined;

@@ -96,6 +96,7 @@ const INDEX_DOCS_QUERY = groq`
     "ourTeam",
     "missionAndValues",
     "sustainability",
+    "bcorpPage",
     "pillarsOfHealth",
     "cafePage",
     "cafeMenu",
@@ -457,6 +458,22 @@ const SEARCH_QUERY = groq`
         select(pt::text(ctaSection.ctaSectionParagraph) match $q => 1, 0)
       )
     },
+    *[_type == "bcorpPage" && pageActive == true][0]{
+      "type": "page",
+      "title": "B Corp Certification",
+      "excerpt": null,
+      "href": "/about/b-corp",
+      "score": (
+        select("b corp" match $q => 6, 0) +
+        select("certification" match $q => 4, 0) +
+        select(pt::text(heroSection.heroTitle) match $q => 2, 0) +
+        select(pt::text(heroSection.heroParagraph) match $q => 2, 0) +
+        select(pt::text(score.heading) match $q => 2, 0) +
+        select(pt::text(score.intro) match $q => 1, 0) +
+        select(pt::text(additionalSections[].sectionTitle) match $q => 2, 0) +
+        select(pt::text(additionalSections[].sectionParagraph) match $q => 1, 0)
+      )
+    },
     *[_type == "pillarsOfHealth" && pageActive == true][0]{
       "type": "page",
       "title": "Pillars of Health",
@@ -551,6 +568,8 @@ function buildHrefForDoc(doc: IndexDoc): string | null {
       return "/about/mission-and-values";
     case "sustainability":
       return "/about/sustainability";
+    case "bcorpPage":
+      return "/about/b-corp";
     case "pillarsOfHealth":
       return "/about/pillars-of-health";
     // Other pages
@@ -594,6 +613,8 @@ function buildTitleForDoc(doc: IndexDoc): string {
       return "Mission and Values";
     case "sustainability":
       return "Sustainability";
+    case "bcorpPage":
+      return "B Corp Certification";
     case "pillarsOfHealth":
       return "Pillars of Health";
     case "cafePage":

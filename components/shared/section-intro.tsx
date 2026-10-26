@@ -31,12 +31,14 @@ import { cn } from "@/lib/utils";
  * The original was `container max-w-[70ch]` and it floated in the middle of the
  * page with the photographs sticking out either side. That was not the measure,
  * it was `container`, which is configured `center: true`, so its `mx-auto`
- * centred the narrow box in the viewport.
+ * centred the narrow box in the viewport. `mr-auto` pinned it left instead.
  *
- * So the measure stays and the centring goes: `mr-auto` pins the block to the
- * container's left edge, which is where the first photograph in the grid below
- * starts. One column the full width of the container would be a 165 character
- * line, about twice what anybody reads comfortably.
+ * **Frank took the measure off too, on 2026-10-26, for every section.** The
+ * band now runs to the container edge, which is where the card grid below it
+ * starts and ends. The argument against was readability, since a full-width
+ * line here is about 165 characters; he asked for it anyway after seeing the
+ * band stop short of the right padding on /classes. If it ever needs to be
+ * narrowed again, narrow it here and it narrows on all four sections at once.
  */
 export default function SectionIntro({
   paragraphs,
@@ -50,7 +52,7 @@ export default function SectionIntro({
   return (
     <section className={cn("bg-white py-16 md:py-24", className)}>
       <div className="container">
-        <div className="mr-auto flex max-w-[70ch] flex-col gap-6">
+        <div className="flex flex-col gap-6">
           {paragraphs.map((text) => (
             <p key={text} className="font-light leading-7 text-primary">
               {text}

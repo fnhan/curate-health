@@ -149,9 +149,11 @@ async function main() {
       `\n  ${socialSet.length} document(s) have socialMeta title or description filled in.`
     );
     console.log(
-      `  Nothing renders those: SEO_QUERY does not select them, and og:title`
+      `  Those are read: buildPageMetadata takes og:title and twitter:title`
     );
-    console.log(`  and twitter:title both come from pageTitle instead.`);
+    console.log(
+      `  from socialMeta.title, falling back to pageTitle when it is empty.`
+    );
   }
 
   process.exit(total ? 1 : 0);

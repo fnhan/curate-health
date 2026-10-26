@@ -8,6 +8,7 @@ import { AlternatingSections } from "@/components/shared/alternating-sections";
 import CtaFooterSection from "@/components/shared/cta-footer-section";
 import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { buildPageMetadata } from "@/lib/page-metadata";
+import { BCORP_PATH } from "@/lib/structured-data";
 import { SUSTAINABILITY_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { SUSTAINABILITY_QUERY } from "@/sanity/lib/queries";
@@ -49,12 +50,22 @@ export default async function SustainabilityPage() {
         </div>
       </div>
       {/*
-        The B Corp section's photograph carries the certification mark, and
-        B Lab's brand guidelines require a certified company using the mark to
-        direct visitors to bcorp.com. So the mark is a link here as well as in
-        the footer, and for the same reason it points at bcorp.com rather than
-        at Curate's own directory profile, which the section's body text links
-        to instead.
+        The B Corp section's photograph goes to /about/b-corp, since
+        2026-10-26. Frank asked for it: the section stays on this page and
+        sends a reader to our own page rather than straight out to B Lab.
+
+        THIS DOES NOT BREACH THE BRAND GUIDELINES, AND THE REASON IS NARROW
+
+        B Lab requires a certified company using the mark to direct visitors to
+        bcorp.com "by hyperlink OR by a line of text such as 'Learn more at
+        bcorp.com'". This section's body copy ends on exactly that sentence,
+        with its own link, so the requirement is already met by the text and
+        the photograph is free to point somewhere more useful.
+
+        **So do not remove "Learn more at bcorp.com" from the section copy in
+        the Studio.** It is the only thing satisfying the guideline here now.
+        The footer's mark still links to bcorp.com directly, and so does the
+        mark on /about/b-corp, which is where this photograph now leads.
 
         Matched on _key, not on the title, so renaming the section in the
         Studio does not quietly drop the link.
@@ -62,7 +73,7 @@ export default async function SustainabilityPage() {
       <AlternatingSections
         sections={additionalSections!}
         imageHref={(section) =>
-          section._key === "bcorp-certification" ? "https://bcorp.com" : null
+          section._key === "bcorp-certification" ? BCORP_PATH : null
         }
       />
       <CtaFooterSection ctaSection={ctaSection!} />

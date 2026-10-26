@@ -58,6 +58,26 @@ const HOMEPAGE_SECTIONS = new Set([
 ]);
 
 /**
+ * Documents that change every page at once rather than one of them.
+ *
+ * Site settings hold the navigation, the footer, the address, the hours and
+ * the social profiles; site metadata holds the title template and the
+ * favicon. Editing any of it changes all 56 pages, so there is no list of
+ * paths to announce and `pathsForDocument` returns nothing for them.
+ *
+ * **They still have to be purged, and until 2026-10-26 nothing purged them.**
+ * The 60 second revalidate window was doing it by accident: every page was
+ * rebuilt within a minute whatever changed. Raising that window to an hour to
+ * cut Vercel ISR Writes took the accident away, so the webhook now purges the
+ * whole site for these types deliberately.
+ *
+ * Still not announced to IndexNow. That is unchanged and correct: IndexNow
+ * asks sites not to resubmit everything, and Bing finds a footer change on
+ * its own crawl.
+ */
+export const SITE_WIDE_TYPES = new Set(["siteSettings", "siteMetadata"]);
+
+/**
  * The pages a published document appears on, as site paths.
  *
  * Its own page first, then the hub that lists it, since a hub changes when the
@@ -66,8 +86,8 @@ const HOMEPAGE_SECTIONS = new Set([
  * A type with no page of its own returns nothing. The site settings are the
  * main case: they change every page at once, and telling Bing that the whole
  * site changed each time the phone number is edited is the kind of submission
- * IndexNow asks sites not to make. Those pages refresh on the usual 60 second
- * cycle, and Bing finds them on its own crawl.
+ * IndexNow asks sites not to make. The webhook purges the whole site for them
+ * through SITE_WIDE_TYPES above instead, and Bing finds them on its own crawl.
  *
  * A new page type needs a line here, or its publishes go unannounced. Nothing
  * breaks if one is missed, which is why the webhook logs the type it skipped.

@@ -1677,6 +1677,69 @@ because they had no background to lose.
 change, and the bars were measured directly before and after, since the
 baseline records content rather than the classes on a link.
 
+### ISR Writes hit 100% of the free tier. Fixed 2026-10-26
+
+Vercel warned that the team had used all 200,000 included ISR Writes. The
+cause was `sanityFetch`, whose default was `revalidate: 60`: every page
+re-rendered at most once a minute whenever anybody asked for it, and **every
+re-render is a write**. At 56 pages that is up to 80,000 a day. Crawlers and
+the audit scripts in this repo are enough to hold it near that ceiling on
+their own, so prefer `http://localhost:3001` for routine audit runs and keep
+production runs for before a merge.
+
+**The minute never bought freshness.** The webhook at `app/api/revalidate`
+purges a document's pages on publish, so a page is already correct within
+seconds. The window only bounds how stale things get **if that webhook
+silently stops firing**, which is the question `SEARCH_REVALIDATE_SECONDS`
+answers, so `PAGE_REVALIDATE_SECONDS` gets the same answer: 3600.
+
+**Raising it needed the webhook to cover site-wide documents, which it did
+not.** `pathsForDocument` returns nothing for `siteSettings`, deliberately,
+because those change every page at once and IndexNow asks sites not to
+resubmit everything. Nothing called `revalidatePath` for them either, so the
+navigation, the footer, the address and the hours were kept fresh purely by
+the 60 second window. `SITE_WIDE_TYPES` in `lib/indexnow.ts` now names them
+and the route calls `revalidatePath("/", "layout")`, which purges every page
+under the root layout. **Do not shorten the window back without checking that
+is still in place.**
+
+### The Studio's SEO fields, and the audit that already existed
+
+`node scripts/audit-seo-fields.js` reads the dataset and reports any page
+whose SEO fields an editor would find blank. **It has existed since #216.** It
+was nearly destroyed on 2026-10-26 by being rewritten from scratch under the
+same name, which `git status` caught only because the file showed as modified
+rather than added. The original is better: it checks alt text on both share
+images too, and takes `--all`. **Check whether a script exists before writing
+one.**
+
+**It answers a question `audit-metadata.js` cannot.** That one reads rendered
+pages, so it sees what `buildPageMetadata` produced, and that fills in for an
+empty record: a page with nothing typed into it still serves a title, a
+description and usually a share image. The output is fine and the Studio is
+blank. Frank found exactly this across pages built over several weeks on
+2026-10-26: "You should have been taking care of this when you created the
+pages."
+
+**Six documents report a missing share image and all six are deliberate**, so
+read that line as a list rather than a fault. /about, /products, /blog, both
+posts and /classes default the card to a photograph the page already shows,
+which is what the every-page rule asks for: nobody has to remember to pick one
+and it cannot drift from the page. /about's field was *cleared* on 2026-10-12
+for precisely that. /classes falls back to the Recovery Sanctuary's hero,
+where every class runs.
+
+**Its closing note was stale and is corrected.** It said nothing rendered
+`socialMeta`, which stopped being true when `SEO_QUERY` grew those fields:
+`buildPageMetadata` reads `socialMeta.title` for `og:title` and
+`twitter:title`, falling back to `pageTitle`. Filling them is worth doing.
+
+**A script that writes a whole document deletes any field it does not spell.**
+`apply-bcorp-page.js` uses `createOrReplace`, so it would have wiped the two
+share images Frank chose in the Studio, with nothing to say it had. It reads
+them back and carries them through now, proven by a re-run. The same trap took
+the alt text on the listening photograph a day earlier.
+
 ### Every route segment needs its own layout. 2026-10-26
 
 **`/classes` shipped with no header and no footer**, so no sidebar trigger, no

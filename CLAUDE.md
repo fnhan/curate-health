@@ -3809,12 +3809,16 @@ link. `_key` was added to the GROQ projection for the same reason. Every other
 section photograph on that page and on /cafe stays unlinked, which is why the
 prop returns null by default rather than taking a single href.
 
-**Learn More goes to the directory profile, the mark still goes to bcorp.com.**
-`https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/`
-exists now; it did not on 2026-10-10. It is the link that verifies the claim, so
-it is the better destination for a text link, but it cannot replace the mark's
-own link because the brand guidelines name bcorp.com. Two links, two
-destinations, on purpose. Repoint Learn More at CH-119 when that page is built.
+**Learn More goes to /about/b-corp since 2026-10-26, the mark still goes to
+bcorp.com.** It used to point at the directory profile, because that verified
+the claim and there was no page of our own. CH-119 always said it would move
+once the page existed, and it has: the page explains the certification,
+publishes the score and links to the profile itself.
+
+`BCORP_PROFILE_URL` went with it, since nothing read it any more. **The mark's
+own link does not move** and is a separate constant: B Lab's guidelines require
+a certified company using the mark to direct visitors to bcorp.com, which is
+why the two were never the same link.
 
 **The mark is offset left by 14px and that is not a nudge.** The asset carries
 its own transparent margin, measured at 14.6% of the canvas on the left, so the

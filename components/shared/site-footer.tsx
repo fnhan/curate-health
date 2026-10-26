@@ -9,6 +9,7 @@ import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
 import { SocialIcon } from "@/components/shared/social-icon";
 import { addressLines } from "@/lib/address";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
+import { BCORP_PATH } from "@/lib/structured-data";
 import { externalLinkProps } from "@/lib/links";
 import { withoutDeadClassesLink } from "@/lib/class-schedule-link";
 import { cn } from "@/lib/utils";
@@ -30,13 +31,19 @@ import { FooterMobileAccordion } from "./footer-mobile-accordion";
 const BCORP_URL = "https://bcorp.com";
 
 /**
- * Curate's own entry in the B Corp directory, which is the link that verifies
- * the claim rather than describing the scheme. It did not exist when the mark
- * went into the footer on 2026-10-10; B Lab published it since.
+ * Learn More goes to /about/b-corp, since 2026-10-26.
  *
- * It does not replace BCORP_URL above. The mark itself still has to point at
- * bcorp.com to satisfy the brand guidelines, so the mark and the Learn More
- * link deliberately go to different places.
+ * It used to point straight at Curate's entry in the B Corp directory,
+ * because that was the link that verified the claim and there was no page of
+ * our own to send anybody to. CH-119 always said this would change once that
+ * page existed, and it has: the page explains the certification, publishes
+ * the score, and links to the directory profile itself for anybody who wants
+ * to check the number.
+ *
+ * **The mark's own link is a separate question and does not move.** It still
+ * points at BCORP_URL above, because B Lab's brand guidelines require a
+ * certified company using the mark to direct visitors to bcorp.com. The two
+ * were never the same link and still are not.
  */
 /**
  * The rendered height of the mark.
@@ -78,9 +85,6 @@ const MARK_H = 140;
 const HEADING_TOP = "14px";
 const PARAGRAPH_TOP = "38.13px";
 const LEARN_MORE_TOP = "106px";
-
-const BCORP_PROFILE_URL =
-  "https://www.bcorporation.net/en-us/find-a-b-corp/company/curate-health-corp/";
 
 export default function SiteFooter({
   siteSettings,
@@ -203,14 +207,13 @@ export default function SiteFooter({
                   The same care we take with patients is applied to our team and
                   our footprint.
                 </p>
-                <a
-                  href={BCORP_PROFILE_URL}
-                  {...externalLinkProps(BCORP_PROFILE_URL)}
+                <Link
+                  href={BCORP_PATH}
                   className="absolute left-0 w-fit leading-none underline underline-offset-4 hover:no-underline"
                   style={{ top: LEARN_MORE_TOP }}
                 >
                   Learn More
-                </a>
+                </Link>
               </div>
             </div>
           </div>

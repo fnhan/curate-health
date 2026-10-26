@@ -1647,6 +1647,26 @@ section already says better, and would put a teaching role in `hasCredential`,
 which search engines read as a list of regulated designations. Put to Frank on
 2026-10-24 and he took the recommendation.
 
+### A treatment subtitle is not held to the paragraph's measure. 2026-10-26
+
+`treatment-content.tsx` wrapped the subtitle and the intro paragraph in one
+`max-w-[80ch]` box, so the heading inherited a measure chosen for body prose.
+80ch exists so a line of prose does not run too long to track; a centred
+display heading has no such problem and reads worse broken in two.
+
+Frank asked for the Tai Chi subtitle on one line. Measured at 1280: it needs
+959px at its 30px size, the prose box was 804, and the container is 1265, so
+it wrapped with 460px going spare either side. The `max-w-[80ch]` moved onto
+the paragraph alone.
+
+**Two pages change, and only two.** Tai Chi and Flowpresso are the only
+treatment subtitles long enough to have overflowed 80ch; both are one line now,
+measured. Every other subtitle already fitted and is untouched.
+
+**Nothing changes on a phone.** The container there is 311px, far inside 80ch,
+so that cap never bound. Tai Chi is three lines at 375px before and after, with
+no horizontal overflow.
+
 ### The copy backlog, cleared 2026-10-24
 
 23 of the September decisions applied, by `scripts/apply-decision-backlog.js`.

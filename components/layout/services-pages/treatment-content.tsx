@@ -53,11 +53,27 @@ export default function TreatmentContent({
             </h1>
             <div className="h-16 w-px bg-primary md:h-24 2xl:h-32" />
           </div>
-          <div className="mx-auto max-w-[80ch] space-y-4 text-pretty text-center">
+          {/*
+            The heading is not held to the paragraph's measure. 80ch is a
+            reading width, chosen so a line of body prose does not run too long
+            to track; a centred display heading has no such problem and reads
+            worse broken in two.
+
+            Frank asked for the Tai Chi subtitle on one line on 2026-10-26. It
+            needs 959px at its 30px size and the prose box is 804, so it wrapped
+            with 460px of container going spare either side.
+
+            Only headings that overflow 80ch move, so this changes two pages:
+            Tai Chi and Flowpresso. Every other treatment subtitle is already
+            short enough to sit on one line inside the old measure.
+          */}
+          <div className="space-y-4 text-pretty text-center">
             <h2 className="text-xl capitalize md:text-3xl">
               {intro?.subtitle}
             </h2>
-            <p className="font-light">{intro?.introParagraph}</p>
+            <p className="mx-auto max-w-[80ch] font-light">
+              {intro?.introParagraph}
+            </p>
           </div>
         </div>
       </section>

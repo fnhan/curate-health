@@ -4518,13 +4518,26 @@ resting a hand against his chin, both looking the same way. It is the right one
 for a section about health being social, where the yoga class was a picture of
 exercise.
 
-**Its crop is the whole job, and it is stored rather than baked in.**
-2920x5184, a ratio of 0.563, in a slot that paints 704x556 at 1.266. Left to
-`object-cover` the browser takes a band from the middle, which here is the hand
-and the lower half of a face: both heads sit in the top 45% of the frame. The
-crop is anchored to the top, `rect=0,0,2920,2306`, which keeps both heads whole
-and cuts through the wrist. Dropping far enough to keep the whole hand takes
-the top off the nearer man's head, which reads worse.
+**It carries a hotspot and no crop, and that changes nothing about what is
+served.** Frank asked on 2026-10-25 for the crop off, reading the stored crop
+as the reason the photograph is tight on a phone. It is not.
+`AlternatingSections` passes `width={704} height={556}`, so `framedImageUrl`
+always builds a 1.266 file, and at 2920 wide that is 2306 of height whether the
+rect comes from a stored crop or from the hotspot. Measured before and after:
+`rect=0,0,2920,2306` both times.
+
+**The tightness is the photograph.** It is a close-up, two heads and a hand
+filling a 0.563 frame with a sliver of window behind. 2306 rows anchored at the
+top is the largest and highest band the slot's ratio allows, so every other
+framing shows less of the faces rather than more of the room. On a phone the
+box is 394x360 at 1.09, which crops a further 14% off the sides, so mobile is
+only slightly tighter than desktop.
+
+**What would actually widen it is a wider photograph.** Worth saying plainly
+rather than adjusting the hotspot and implying it helped.
+
+**The crop being absent is still worth having**, because a crop dragged in the
+Studio now takes effect on this image rather than competing with a stored one.
 
 **The crop is carried in two places on purpose.**
 `swap-bcorp-social-photo.js` sets it, and `apply-bcorp-page.js` carries it too,

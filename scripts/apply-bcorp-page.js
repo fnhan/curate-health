@@ -79,14 +79,6 @@ const MARK_ASSET = "image-3d55827a4b315471a498ed55829394a1b8e01ddf-1600x1267-jpg
 const CONVERSATION_ASSET =
   "image-4d3f4696881100e70769cc0074b0367196bef13a-2920x5184-jpg";
 
-const CONVERSATION_CROP = {
-  _type: "sanity.imageCrop",
-  top: 0,
-  bottom: 0.5552,
-  left: 0,
-  right: 0,
-};
-
 const CONVERSATION_HOTSPOT = {
   _type: "sanity.imageHotspot",
   x: 0.5,
@@ -177,7 +169,7 @@ const CONTENT = {
       key: "why-we-did-it",
       title: "Why we became one",
       asset: CONVERSATION_ASSET,
-      framing: { crop: CONVERSATION_CROP, hotspot: CONVERSATION_HOTSPOT },
+      framing: { hotspot: CONVERSATION_HOTSPOT },
       alt: "Two men seated in profile in warm daylight, the nearer one in glasses resting a hand against his chin, both looking the same way.",
       paragraphs: [
         [
@@ -190,6 +182,11 @@ const CONTENT = {
         [
           {
             text: "Both of those lead to the same place. If the environment a person lives in dictates how healthy they can be, our own footprint is part of their care rather than separate from it. If health is social, then how we treat the people who work here and the neighbourhood we sit in is part of the same work. Helping people is our business, so social impact is not an adjacent commitment. It is the business.",
+          },
+        ],
+        [
+          {
+            text: "That is what we mean by full circle care. A patient's environment is part of their health rather than the background to it, so we would rather help lift it than treat somebody and send them back into it unchanged.",
           },
         ],
         [
@@ -207,24 +204,24 @@ const CONTENT = {
       paragraphs: [
         [
           {
-            text: "It started before the doors opened, with the footprint of this space weighed while it was being built. Our ",
+            text: "It started before the doors opened, with the footprint of this space weighed while it was being built. You can learn more on our ",
           },
           { text: "sustainability page", link: "/about/sustainability" },
-          { text: " sets that out, area by area." },
+          { text: "." },
         ],
         [
           {
-            text: "Day to day it decides ordinary things. We buy from local vendors who work the way we do, the people on the team have benefits rather than only a job description, and we run talks and events in the neighbourhood instead of only opening the doors each morning.",
+            text: "We make the everyday decisions on the same terms. We buy from local vendors who work the way we do, the people on the team have perks beyond their pay, and we run talks and events in the neighbourhood instead of only opening the doors each morning.",
           },
         ],
         [
           {
-            text: "We measure what this place throws away, and there are protocols here for using less energy and producing less waste. The kitchen runs zero to low waste. Bring your own vessel and the cafe takes something off the price, and we pay attention to microplastics in what we serve and in what leaves the building.",
+            text: "We measure our waste production, and we have protocols for using less energy and generating less of it. The kitchen runs zero to low waste. Bring your own vessel and the cafe takes something off the price, and we pay attention to microplastics in what we serve and in what leaves the building.",
           },
         ],
         [
           {
-            text: "The assessment comes round every three years and the aim is to score higher each time. That is what keeps a certification a standard rather than a plaque. The standard itself is set out at ",
+            text: "The assessment comes round every three years and the aim is to score higher each time. That is what keeps a certification a standard rather than a label. The standard itself is set out at ",
           },
           { text: "bcorp.com", link: "https://bcorp.com" },
           { text: "." },

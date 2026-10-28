@@ -5164,12 +5164,11 @@ original defect with extra steps and looks correct in the source.
 names the file rather than describing the mark. It is better than nothing and
 it is editable in the Studio. Worth a sentence when somebody is next in there.
 
-#### Eight pages were sharing pictures too small for the card
+#### A picture too small for the card is reported, not failed
 
-Found by giving the audit the source dimensions, which Sanity writes into the
-filename. Every one passed every check that existed: the tag was there, the
-file loaded, and an editor had chosen it. Sanity scales anything up to fill
-1200x630, so the Studio looked fine and the card was a blurred icon.
+The audit reads the source dimensions out of the filename, which Sanity writes
+there, because Sanity scales anything up to fill 1200x630: the Studio looks
+fine and the card is a blurred icon.
 
 **Two thresholds, because this covers two different problems:**
 
@@ -5178,25 +5177,55 @@ file loaded, and an editor had chosen it. Sanity scales anything up to fill
 | under 200x200 | Facebook and LinkedIn refuse it, so the link shows no picture. **A failure.** |
 | under 1200x630 | it renders soft, and usually as the small thumbnail rather than the wide card. **Reported**, because fixing it needs a bigger photograph that may not exist, and a gate nobody can turn green is a gate people stop reading. |
 
-**The three legal pages were sharing the 180x180 favicon**, below what the
-platforms accept, so those links have been rendering with no picture at all.
-/our-programs was sharing a 352x344 logo while its own hero is 4096x2733.
+**How it is measured depends on how the picture is fitted**, which is not
+obvious and got this wrong once. A cropped image has to COVER the card, so the
+larger ratio decides; a fitted one only has to fit INSIDE it, so the smaller
+does. A 600x600 cutout fitted is scaled 1.05 where the same file cropped is
+scaled 2.0, and measuring the wrong one reported four product pages as badly
+upscaled after they had been fixed.
 
-`scripts/clear-undersized-share-images.js` clears those four so the fallback
-takes over, which is the whole fix now that the fallback is better than what
-it shadowed. **Dry run verified, not applied**: the write was refused by the
-permission guard on the shared dataset, so it waits on Frank.
+Two pages are reported today and both need better source art: the compression
+stockings and foot orthotics cutouts, at 1.3x and 1.6x.
+
+#### EIGHT PAGES "SHARING A FAVICON" WERE A STALE CACHE, NOT A DEFECT
+
+Worth the heading, because it cost a script, a backup and a round trip to
+Frank, and because the same trap is already recorded twice in this file.
+
+The audit reported three legal pages sharing the 180x180 `logo-black.png`,
+below what the platforms accept, and /our-programs sharing a 352x344 logo.
+`scripts/clear-undersized-share-images.js`, since deleted, was written to clear those four so
+the fallback would take over, and the permission guard refused the write, so
+it went to Frank. **He ran it and it refused: "nothing to clear, already
+done?"**
+
+It was right. Those four documents hold no share image and have not for some
+time. **The dev server was replaying GROQ responses cached on disk from an
+older state of the dataset.** The tell, which should have been read sooner:
+`siteMetadata`'s own logo is 1280x1280, so a 180x180 appearing anywhere could
+not have come from the layout, and `references()` reported **nothing in the
+dataset pointing at that asset at all**.
+
+**`.next/cache/fetch-cache` survives a dev server restart.** Stopping and
+starting the server does not clear it; only deleting it does. The earlier note
+says the data cache "lives in the process", which is true of the in-memory
+half and wrong about this one. Delete the directory when a reading has to be
+trusted:
 
 ```bash
-node scripts/clear-undersized-share-images.js            # dry run
-node scripts/clear-undersized-share-images.js --apply
+rm -rf .next/cache/fetch-cache
 ```
 
-**Five are left alone deliberately** and will keep being reported. Ariel
-Zohar's portrait at 1001x685 is the photograph CH-104 already wants replaced,
-and three product cutouts are 418x400 to 600x600 with nothing larger behind
-them, so clearing those would swap a small picture of the product for a large
-picture of the logo, which is worse. They need better source art.
+**Check a surprising reading against production before building anything on
+it.** Production has none of this project's caches, and it answered the
+question in one request: those four pages were serving **no `og:image` at
+all**, which is exactly what an empty field plus a route with no fallback
+produces. That is the defect this branch fixes, and the undersized images were
+never real.
+
+On a cleared cache: **56 of 56 pages serve a complete share card**, 47 from a
+Studio picture, 6 from a photograph the page shows, and the three legal pages
+from the house card.
 
 ---
 

@@ -134,6 +134,28 @@ export default function SiteFooter({
                   ))}
                 </div>
               </a>
+              {/*
+                NO CATCHMENT LINE HERE, AND THAT IS A DECISION RATHER THAN AN
+                OVERSIGHT. Frank, 2026-10-28.
+
+                One shipped here for part of a day, listing Forest Hill,
+                Cedarvale, Oakwood Village and the Eglinton West corridor. He
+                asked for it and then asked what it was actually worth, which
+                was the right question and the honest answer is: very little.
+
+                A footer renders on every page, so Google treats it as
+                boilerplate and discounts it; the sentence on /contact is main
+                content on the page that answers "where are you", which is
+                where the weight is. The answer engines might pick a footer up,
+                since retrieval works on chunks, but extraction pipelines
+                commonly strip nav and footer precisely because they repeat.
+
+                So it bought an uncertain little, and a neighbourhood list
+                repeated across 56 pages is the shape of keyword stuffing even
+                when the names are honest. `areaServed` in the schema graph
+                carries all eleven, and /contact carries the sentence. Do not
+                add one back here on the assumption it was forgotten.
+              */}
               <div className="space-y-2">
                 <a
                   className="flex w-fit items-center gap-2 hover:underline"

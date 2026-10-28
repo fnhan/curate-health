@@ -1342,15 +1342,35 @@ node scripts/audit-blog.js http://localhost:3000
 node scripts/audit-blog.js https://www.curatehealth.ca
 ```
 
-### CH-106 Video
+### CH-106 Video. CLOSED 2026-10-28, not built and not to be reopened
 
-The site hosts Mux video with zero `VideoObject` markup.
+**There is one video on the site and it is a silent decorative background.**
+A 38.5 second muted, autoplaying, looping clip behind the homepage hero. Two
+other Mux assets are uploaded and referenced by nothing.
 
-YouTube accounts for roughly 18.8% of Google AI Overview citations, second only to Reddit. Video is one of the two dominant citation sources and Curate is invisible in both.
+**So it gets neither a transcript nor `VideoObject` markup.** There is nothing
+to transcribe, and marking it up would tell Google there is a video worth
+showing in results which, when clicked, is wallpaper behind a headline. That
+is markup describing something that is not there, which is the same mistake
+CH-101 was closed over.
 
-Add `VideoObject` schema with `transcript` on every embed. The transcript is the part that gets extracted. Build the component so transcripts can be added from Sanity.
+The original brief is left below for the record, and **every line of it is
+either stale or unactionable**:
 
-The 13 scripted Tai Chi clips in the content plan are the first candidates.
+> The site hosts Mux video with zero `VideoObject` markup. YouTube accounts
+> for roughly 18.8% of Google AI Overview citations, second only to Reddit.
+> Add `VideoObject` schema with `transcript` on every embed. The 13 scripted
+> Tai Chi clips in the content plan are the first candidates.
+
+The 18.8% figure is about YouTube, which is a different surface from video
+embedded on your own site, and the 13 Tai Chi clips do not exist. **If Curate
+ever produces narrated video, this becomes a real ticket again** and the
+markup is worth building then. Until a video with words exists, there is
+nothing here.
+
+**DO NOT RAISE THIS AS OPEN WORK.** It was recommended for closure on
+2026-10-26, raised again twice after that, and Frank closed it on 2026-10-28
+asking why it kept coming back. See the note on settled decisions below.
 
 ### CH-107 Class schedule. Built 2026-10-20
 
@@ -3252,9 +3272,17 @@ The photograph is a placeholder chosen from the library on 2026-09-20: a practit
 What is in it: the two decisions below, the search and share details still missing (`/about`, `/products`, `/blog`, Safa, the cafe description), photo descriptions, 79 page copy fixes, and five lines written into the code.
 
 **The review page stays, and so does the breakdown page. Frank, 2026-10-19.**
-He will go through the outstanding items himself, one at a time, choosing
-between his earlier approval and what is live now, and he asked for that to
-wait until the pages are revamped. **Do not propose retiring either page.**
+**Do not propose retiring either page.**
+
+**THE 42 ARE SETTLED. Frank, 2026-10-28. Do not re-raise them, do not offer to
+re-check them, and do not list them as outstanding work.** He went through
+them one at a time, in his words: "We've already gone through the 42 decisions
+days ago, so really, no need to revisit this. You can check in our previous
+conversations because we didn't just go with what I decided previously. We
+went one by one and decided what to do and what to keep."
+
+So the figures below are a record of what was found in October, not a backlog.
+The pile they describe no longer exists.
 
 **Of his 48 decisions, only 6 are live word for word**, checked against the
 dataset on 2026-10-19: c11, c12, c17, c47, c53 and c54. Fifteen more were

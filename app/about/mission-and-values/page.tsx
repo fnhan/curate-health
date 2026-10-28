@@ -196,7 +196,15 @@ export async function generateMetadata() {
     query: MISSION_AND_VALUES_QUERY,
   });
 
-  const { seo } = missionAndValues!;
+  const { seo, heroSection } = missionAndValues!;
 
-  return buildPageMetadata(seo, { path: "/about/mission-and-values" });
+  return buildPageMetadata(seo, {
+    path: "/about/mission-and-values",
+    image: heroSection?.heroImage?.image?.asset?.url
+      ? {
+          asset: { url: heroSection.heroImage.image.asset.url },
+          alt: heroSection.heroImage.alt ?? undefined,
+        }
+      : undefined,
+  });
 }

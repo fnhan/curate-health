@@ -25,6 +25,22 @@ const CHECKS = [
   ["audit-practitioners.js", "practitioner pages and their markup"],
   ["audit-blog.js", "blog markup and the feed"],
   ["audit-content-rules.js", "the content rules, in the words on every page"],
+  ["audit-share-cards.js", "every page serves a complete share card"],
+  /*
+   * The only check here that does not fetch anything. It calls
+   * buildPageMetadata directly, because the fallback chain can only be
+   * exercised on a live page whose Studio field happens to be empty, which
+   * is six pages of fifty-six, and the other fifty are exactly the state that
+   * hid fifteen routes with no fallback at all until 2026-10-28.
+   */
+  [
+    "test-share-fallback.ts",
+    "the share card fallback chain, as a unit",
+    {
+      nodeArgs: ["--env-file=.env.local", "--import", "./scripts/lib/alias-loader.mjs"],
+      noBase: true,
+    },
+  ],
 ];
 
 const base = (process.argv[2] || "https://www.curatehealth.ca").replace(/\/$/, "");
@@ -32,11 +48,18 @@ let failed = 0;
 
 console.log(`Checking ${base}\n`);
 
-for (const [script, covers] of CHECKS) {
+for (const [script, covers, options = {}] of CHECKS) {
   const started = Date.now();
-  const run = spawnSync(process.execPath, [path.join(__dirname, script), base], {
+  const args = [
+    ...(options.nodeArgs ?? []),
+    path.join(__dirname, script),
+    ...(options.noBase ? [] : [base]),
+  ];
+  const run = spawnSync(process.execPath, args, {
     encoding: "utf8",
     maxBuffer: 32 * 1024 * 1024,
+    // The .ts check resolves --import and --env-file relative to the cwd.
+    cwd: path.join(__dirname, ".."),
   });
   const seconds = ((Date.now() - started) / 1000).toFixed(0);
   const ok = run.status === 0;

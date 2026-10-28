@@ -16,6 +16,7 @@ import { FloatingCallButton } from "@/components/shared/floating-call-button";
 import { GoogleAnalytics } from "@/components/shared/google-analytics";
 import SanityDisablePreviewButton from "@/components/shared/sanity-disable-preview-button";
 import { Toaster } from "@/components/ui/toaster";
+import { SITE_SHARE_IMAGE, imageEntry } from "@/lib/page-metadata";
 
 import { sanityFetch } from "../sanity/lib/client";
 import {
@@ -74,10 +75,18 @@ export async function generateMetadata(): Promise<Metadata> {
         default: homePageTitle!,
       },
       description: defaultDescription!,
-      images: {
-        url: ogImage?.asset?.url!,
-        alt: ogImage?.asset?.alt!,
-      },
+      /*
+       * Through the same builder every other page uses, since 2026-10-28.
+       * Hand-assembled here before that, which cost the homepage two things
+       * nobody could see from the source: it read the alt off the asset
+       * document rather than the one written against the picture, so it
+       * published none, and it served the file at its upload size instead of
+       * cropped to 1200x630. The house card is the last resort, so the
+       * homepage can never share a bare link either.
+       */
+      images:
+        imageEntry(ogImage, homePageTitle!, { mark: true }) ??
+        imageEntry(SITE_SHARE_IMAGE, homePageTitle!),
       type: "website",
       locale: "en_CA",
     },
@@ -89,10 +98,12 @@ export async function generateMetadata(): Promise<Metadata> {
         default: homePageTitle!,
       },
       description: defaultDescription!,
-      images: {
-        url: twitterImage?.asset?.url!,
-        alt: twitterImage?.asset?.alt!,
-      },
+      // X falls back to the Open Graph image when it has none of its own,
+      // which is the same order buildPageMetadata uses.
+      images:
+        imageEntry(twitterImage, homePageTitle!, { mark: true }) ??
+        imageEntry(ogImage, homePageTitle!, { mark: true }) ??
+        imageEntry(SITE_SHARE_IMAGE, homePageTitle!),
     },
   };
 }

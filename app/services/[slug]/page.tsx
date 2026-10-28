@@ -219,9 +219,25 @@ export async function generateMetadata(props: {
       ? treatmentPath(resolved.treatment.serviceSlug, params.slug)
       : servicePath(params.slug);
 
+  /*
+   * This route serves two kinds of page, a service category and a treatment
+   * that resolve() has decided belongs here, so the hero comes from whichever
+   * one it is. They store it under different names.
+   */
+  const hero =
+    resolved.kind === "treatment"
+      ? {
+          url: resolved.treatment.heroImage?.asset?.url,
+          alt: resolved.treatment.heroImage?.heroAlt,
+        }
+      : { url: resolved.service.hero_image, alt: resolved.service.hero_alt };
+
   return buildPageMetadata(seo, {
     path,
     title: fallbackTitle,
     description: fallbackDescription,
+    image: hero.url
+      ? { asset: { url: hero.url }, alt: hero.alt ?? undefined }
+      : undefined,
   });
 }

@@ -12,6 +12,11 @@
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    // scripts/test-share-fallback.ts imports lib/page-metadata.ts by its real
+    // filename, because Node runs it directly with type stripping and its ESM
+    // resolver needs the extension. Safe here only because noEmit is on: tsc
+    // never writes the import out, so nothing ships a .ts specifier.
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     // "bundler", not "node". Sanity 6 and next-sanity 13 declare their

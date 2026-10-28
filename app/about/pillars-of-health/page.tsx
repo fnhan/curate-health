@@ -48,7 +48,15 @@ export async function generateMetadata() {
     query: PILLARS_OF_HEALTH_QUERY,
   });
 
-  const { seo } = pillarsOfHealth!;
+  const { seo, heroSection } = pillarsOfHealth!;
 
-  return buildPageMetadata(seo, { path: "/about/pillars-of-health" });
+  return buildPageMetadata(seo, {
+    path: "/about/pillars-of-health",
+    image: heroSection?.heroImage?.image
+      ? {
+          asset: { url: heroSection.heroImage.image },
+          alt: heroSection.heroImage.alt ?? undefined,
+        }
+      : undefined,
+  });
 }

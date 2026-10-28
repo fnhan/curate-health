@@ -360,7 +360,15 @@ export async function generateMetadata() {
     query: CONTACT_PAGE_QUERY,
   });
 
-  const { seo } = contactPage.page!;
+  const { seo, heroSection } = contactPage.page!;
 
-  return buildPageMetadata(seo, { path: "/contact" });
+  return buildPageMetadata(seo, {
+    path: "/contact",
+    image: heroSection?.heroImage?.image
+      ? {
+          asset: { url: heroSection.heroImage.image },
+          alt: heroSection.heroImage.alt ?? undefined,
+        }
+      : undefined,
+  });
 }

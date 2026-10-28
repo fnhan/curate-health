@@ -86,7 +86,15 @@ export async function generateMetadata() {
     query: SUSTAINABILITY_QUERY,
   });
 
-  const { seo } = sustainability!;
+  const { seo, heroSection } = sustainability!;
 
-  return buildPageMetadata(seo, { path: "/about/sustainability" });
+  return buildPageMetadata(seo, {
+    path: "/about/sustainability",
+    image: heroSection?.heroImage?.image
+      ? {
+          asset: { url: heroSection.heroImage.image },
+          alt: heroSection.heroImage.alt ?? undefined,
+        }
+      : undefined,
+  });
 }

@@ -145,11 +145,19 @@ export async function generateMetadata(props: {
     notFound();
   }
 
-  const { seo } = resolved.treatment;
+  const { seo, heroImage } = resolved.treatment;
 
   // Derived the same way resolve() decided this was the canonical address,
   // which is also why any other spelling of it has already been redirected.
   return buildPageMetadata(seo, {
     path: treatmentPath(resolved.treatment.serviceSlug, params.treatment),
+    // The treatment's own hero, which is what this page opens on. Eighteen
+    // live pages take this one line.
+    image: heroImage?.asset?.url
+      ? {
+          asset: { url: heroImage.asset.url },
+          alt: heroImage.heroAlt ?? undefined,
+        }
+      : undefined,
   });
 }

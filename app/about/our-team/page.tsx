@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import TeamMembersSection from "@/app/about/our-team/team-members-section";
 import { AboutNavigation } from "@/components/layout/about-pages/about-navigation";
-import { buildPageMetadata } from "@/lib/page-metadata";
+import { SITE_SHARE_IMAGE, buildPageMetadata } from "@/lib/page-metadata";
 import { OUR_TEAM_PAGE_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { OUR_TEAM_PAGE_QUERY } from "@/sanity/lib/queries";
@@ -43,5 +43,15 @@ export async function generateMetadata() {
 
   const { seo } = ourStory!;
 
-  return buildPageMetadata(seo, { path: "/about/our-team" });
+  return buildPageMetadata(seo, {
+    path: "/about/our-team",
+    /*
+     * The house card, because this page has no hero photograph: the About
+     * menu sits directly above its heading. The portraits on it belong to
+     * individual people, and singling one out to stand for the team is a
+     * choice nobody made. `audit-share-cards.js` names this page so a group
+     * photograph can replace it when there is one.
+     */
+    image: SITE_SHARE_IMAGE,
+  });
 }

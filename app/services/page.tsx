@@ -88,11 +88,19 @@ export async function generateMetadata() {
     query: SERVICES_PAGE_QUERY,
   });
 
-  const { seo } = servicesPage!;
+  const { seo, heroSection } = servicesPage!;
 
   const fallbackTitle = "Services";
   const fallbackDescription =
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
 
-  return buildPageMetadata(seo, { path: "/services" });
+  return buildPageMetadata(seo, {
+    path: "/services",
+    image: heroSection?.image
+      ? {
+          asset: { url: heroSection.image },
+          alt: heroSection.alt ?? undefined,
+        }
+      : undefined,
+  });
 }

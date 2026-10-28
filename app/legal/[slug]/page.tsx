@@ -5,7 +5,7 @@ import { PortableText } from "next-sanity";
 import Layout from "@/components/shared/layout";
 import { portableTextComponents } from "@/components/shared/portable-text-components";
 import { SectionNavigation } from "@/components/shared/section-navigation";
-import { buildPageMetadata } from "@/lib/page-metadata";
+import { SITE_SHARE_IMAGE, buildPageMetadata } from "@/lib/page-metadata";
 import {
   LAYOUT_QUERY_RESULT,
   LEGAL_PAGES_NAV_QUERY_RESULT,
@@ -85,5 +85,13 @@ export async function generateMetadata(props: {
 
   const { seo } = legalPage!;
 
-  return buildPageMetadata(seo, { path: `/legal/${params.slug}` });
+  return buildPageMetadata(seo, {
+    path: `/legal/${params.slug}`,
+    /*
+     * The house card. A legal page is text on white with no photograph, and
+     * nothing on it would illustrate it. This is the honest case for the
+     * site-wide default rather than a gap waiting to be filled.
+     */
+    image: SITE_SHARE_IMAGE,
+  });
 }

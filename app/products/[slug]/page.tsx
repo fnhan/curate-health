@@ -200,12 +200,17 @@ export async function generateMetadata(props: {
     notFound();
   }
 
-  const { seo, slug } = resolved.product;
+  const { seo, slug, image } = resolved.product;
 
   // The product's own slug, not the one in the URL. They only differ during a
   // rename, and resolve() redirects in that case, so this is belt and braces:
   // a canonical must never point at the old supplements address.
   return buildPageMetadata(seo, {
     path: productPath(slug?.current ?? params.slug),
+    // The cutout the page itself shows, so a cleared share image still
+    // shares the product rather than nothing.
+    image: image?.asset?.url
+      ? { asset: { url: image.asset.url }, alt: image.alt ?? undefined }
+      : undefined,
   });
 }

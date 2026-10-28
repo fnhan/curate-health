@@ -43,6 +43,31 @@ export const urlForShareImage = (source: Image) => {
 };
 
 /**
+ * A logo letterboxed into the share card rather than cropped to it.
+ *
+ * EVERYTHING ABOVE IS ABOUT PHOTOGRAPHS. A LOGO IS NOT A SCENE.
+ *
+ * Cropping a photograph to 1.91:1 throws away the edges and the picture still
+ * reads. The homepage's share image is the Curate mark at 1280x1280, and
+ * cropping that slices the top and bottom off the circle, so the card shows a
+ * broken ring. That is worse than the uncropped square it replaced, and it is
+ * the kind of thing nobody notices until a link is pasted somewhere public.
+ *
+ * `fit=fill` with a white ground sizes the whole mark to fit inside 1200x630
+ * and pads the rest. White because the mark is dark green on transparency.
+ *
+ * **It takes the asset URL rather than going through the builder, and that is
+ * the point.** `imageBuilder` works out a crop `rect` from the requested
+ * aspect ratio before anything else, so asking it for `fit=fill` produced
+ * `rect=0,304,1280,672&fit=fill`: sliced first, then padded, which is the
+ * original defect with extra steps. There is no rect to remove, so the URL is
+ * assembled here.
+ */
+export const markShareImageUrl = (assetUrl: string) =>
+  `${assetUrl.split("?")[0]}?w=${SHARE_IMAGE_WIDTH}&h=${SHARE_IMAGE_HEIGHT}` +
+  `&fit=fill&bg=ffffff&auto=format`;
+
+/**
  * The one size every practitioner photo is shown at. CH-104.
  *
  * 4:5, because the seven source images range from 0.65 to 1.50 in ratio, from

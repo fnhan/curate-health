@@ -63,5 +63,13 @@ export async function generateMetadata() {
   const fallbackDescription =
     "Explore our comprehensive healthcare services at Curate Health, offering personalized chiropractic care, rehabilitation, and holistic wellness solutions.";
 
-  return buildPageMetadata(seo, { path: "/our-programs/curate-lifestyle" });
+  return buildPageMetadata(seo, {
+    path: "/our-programs/curate-lifestyle",
+    image: servicePage!.hero_image
+      ? {
+          asset: { url: servicePage!.hero_image },
+          alt: servicePage!.hero_alt ?? undefined,
+        }
+      : undefined,
+  });
 }

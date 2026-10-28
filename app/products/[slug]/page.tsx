@@ -200,12 +200,30 @@ export async function generateMetadata(props: {
     notFound();
   }
 
-  const { seo, slug } = resolved.product;
+  const { seo, slug, image } = resolved.product;
 
   // The product's own slug, not the one in the URL. They only differ during a
   // rename, and resolve() redirects in that case, so this is belt and braces:
   // a canonical must never point at the old supplements address.
   return buildPageMetadata(seo, {
     path: productPath(slug?.current ?? params.slug),
+    // The cutout the page itself shows, so a cleared share image still
+    // shares the product rather than nothing.
+    image: image?.asset?.url
+      ? { asset: { url: image.asset.url }, alt: image.alt ?? undefined }
+      : undefined,
+    /*
+     * Fitted whole into the card, not cropped to it. A product shot is one
+     * object on a plain ground, so a 1.91:1 crop cuts the product rather than
+     * the background: the knee brace card showed the middle slice of the
+     * brace with both ends gone.
+     *
+     * This looked like a resolution problem, because three of these cutouts
+     * are 418x400 to 600x600 and the audit flagged them as upscaled. They are
+     * barely soft; a clean cutout has little fine detail to lose. The framing
+     * was the fault, and only rendering the URL and looking at it told the
+     * two apart.
+     */
+    wholeImage: true,
   });
 }

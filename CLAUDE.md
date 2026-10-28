@@ -28,6 +28,7 @@ Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with
 - A unique title, 60 characters or fewer including "| Curate Health", that agrees with the page's one H1, and a unique meta description of 155 characters or fewer. Both editable in the Studio through an `seo` field, with fallbacks in code, and set through `buildPageMetadata` with the page's own canonical path.
 - A share card: an `og:image` at 1200x630 that loads, with the title, description, `og:type` and site name. Default the image to a photo the page already shows, so nobody has to remember to pick one.
 - **The share title and the share description filled in the Studio, not left to the code fallback. Frank, 2026-10-26.** Both are `Rule.required().error()` on `sanity/schemas/socialMeta.ts` and neither has anything better than a generic fallback, so write them when the page is built. **The two share IMAGES are deliberately optional**, amended by Frank on 2026-10-28: left empty, the page shares a photograph it already shows, which is how a derived card keeps following what it derives from. Do not fill one in just to tidy the Studio. `node scripts/audit-seo-fields.js` is the check, and it reads the dataset because a rendered page with an empty field looks perfectly correct.
+- **A fallback share image on the route, passed to `buildPageMetadata`. Frank's rule, 2026-10-28, and TypeScript enforces it.** `image` is required on any page that is indexed, so a new page cannot be added without stating what it shares when the Studio field is empty. Pass a photograph the page itself shows; `SITE_SHARE_IMAGE` only where the page genuinely has none. `node scripts/audit-share-cards.js` proves the rendered result and `scripts/test-share-fallback.ts` proves the chain.
 - Structured data for what the page is, such as Person, BlogPosting, Product or Service, agreeing with what the page shows. Below a hub, a breadcrumb trail with its markup.
 - Listed in the sitemap, and in llms.txt with a one-line description. Taken out of both when the page is switched off.
 - Linked from a hub or the navigation, within three clicks of the homepage.
@@ -5070,6 +5071,161 @@ The four required fields are 59 of 59. Twelve image slots are empty and on
 their fallback, which the audit now prints as a statement rather than a gap.
 All 9 checks in `audit-seo-complete.js` pass, and the six share cards render
 byte for byte what they rendered before any of this started.
+
+### An empty Studio field never costs a page its share card. 2026-10-28
+
+Frank, on making both share images optional earlier the same day: "can you
+make sure that if those fields are not filled, that it will still be
+represented through default settings of that page. I want to make sure that we
+still optimize SEO and llm searches. This should be a rule throughout the whole
+website. And every new page we make moving forward."
+
+**Fifteen routes passed no fallback at all**, and every one of them had a card
+only because an editor could not publish without filling the field. Making the
+field a warning without this would have let anybody strip a page's card by
+clearing a box: every treatment page, every service category, the five About
+children, /contact, /cafe, /legal, /products/[slug], /our-programs and both
+Curate Lifestyle pages.
+
+**`image` is required on any indexed page**, so this cannot happen again:
+TypeScript refuses a new page that skips it, exactly as it refuses one with no
+`path`. It is typed `SeoImage | undefined` rather than `image?:`, which is the
+whole trick: the property must be PRESENT, and the value may still be empty.
+So a route cannot forget it, and a route whose hero is missing from the data is
+not forced to lie about having one.
+
+**The chain is three deep and the last step cannot fail.**
+
+| | |
+| --- | --- |
+| 1 | the picture chosen in the Studio |
+| 2 | a photograph the page already shows, which every route now passes |
+| 3 | `SITE_SHARE_IMAGE`, the house card |
+
+Step 3 is reached only when that photograph is itself missing from the data.
+Before it existed, a page in that state published no card at all, which is
+worse than a generic one: the link renders as a bare rectangle in every feed
+and chat window it is pasted into.
+
+**Nothing a visitor sees moved.** All fifty pages whose Studio image is set
+render byte for byte what production renders, measured across twenty pages
+covering every one of the fifteen routes: 18 of 20 identical, and the two
+differences are the homepage, below, and a 404 on both sides from a wrong
+slug in the comparison list.
+
+#### Two checks, because a type and a page answer different questions
+
+`audit-share-cards.js` fetches every page in the sitemap and fails one missing
+any of eleven tags, or whose picture does not load. `test-share-fallback.ts`
+calls `buildPageMetadata` directly.
+
+**The unit test exists because the live site cannot exercise the fallback.**
+Only six pages of fifty-six have an empty field, and the other fifty are
+exactly the state that hid the fifteen routes. Clearing a field to test it
+would mean writing to the shared production dataset for the sake of a check.
+`buildPageMetadata` is pure, so it can simply be called with an empty `seo`.
+
+**Node 24 runs a .ts file directly**, so the test needs no build step, but two
+flags: `--env-file=.env.local`, because the import graph reaches
+`sanity/env.ts` which throws on a missing project id, and `--import
+./scripts/lib/alias-loader.mjs`, because Node reads neither the `@/` alias out
+of tsconfig.json nor an extensionless relative import. That loader does
+resolution only, so what the test imports is the file Next compiles.
+`allowImportingTsExtensions` is on in tsconfig for the same reason, safe only
+because `noEmit` is.
+
+#### The homepage was building its card by hand
+
+It never went through `buildPageMetadata`, so it missed two fixes the rest of
+the site already had. `og:image:alt` read the alt off the **asset document**
+rather than the one written against the picture, which is the CH-013 trap in
+the one query nobody fixed, and the homepage published **no alt at all**. And
+the file went out at its upload size rather than cropped to the card.
+
+`LAYOUT_QUERY`'s `socialMeta` now has the same shape as `SEO_QUERY`, and the
+layout calls `imageEntry` like everything else. Regenerating the types changed
+20 lines and **133 exported type names before and after, none missing**.
+
+**A LOGO IS LETTERBOXED, NOT CROPPED, AND THAT IS NOT A STYLE PREFERENCE.**
+The homepage's share image is the Curate mark at 1280x1280. Cropping a square
+mark to 1.91:1 slices the top and bottom off the circle, so the card showed a
+broken ring, which is worse than the uncropped square it replaced. It was
+caught by rendering the URL and looking at it, not by reading the code.
+`markShareImageUrl` fills instead: the whole mark sized into 1200x630 on
+white.
+
+**It takes the asset URL rather than going through the image builder, and
+that is the point.** `imageBuilder` works out a crop `rect` from the requested
+aspect ratio before anything else, so asking it for `fit=fill` produced
+`rect=0,304,1280,672&fit=fill`: sliced first, then padded, which is the
+original defect with extra steps and looks correct in the source.
+
+**Its alt now reads "Curate Health Logo"**, off the asset document, which
+names the file rather than describing the mark. It is better than nothing and
+it is editable in the Studio. Worth a sentence when somebody is next in there.
+
+#### A picture too small for the card is reported, not failed
+
+The audit reads the source dimensions out of the filename, which Sanity writes
+there, because Sanity scales anything up to fill 1200x630: the Studio looks
+fine and the card is a blurred icon.
+
+**Two thresholds, because this covers two different problems:**
+
+| | |
+| --- | --- |
+| under 200x200 | Facebook and LinkedIn refuse it, so the link shows no picture. **A failure.** |
+| under 1200x630 | it renders soft, and usually as the small thumbnail rather than the wide card. **Reported**, because fixing it needs a bigger photograph that may not exist, and a gate nobody can turn green is a gate people stop reading. |
+
+**How it is measured depends on how the picture is fitted**, which is not
+obvious and got this wrong once. A cropped image has to COVER the card, so the
+larger ratio decides; a fitted one only has to fit INSIDE it, so the smaller
+does. A 600x600 cutout fitted is scaled 1.05 where the same file cropped is
+scaled 2.0, and measuring the wrong one reported four product pages as badly
+upscaled after they had been fixed.
+
+Two pages are reported today and both need better source art: the compression
+stockings and foot orthotics cutouts, at 1.3x and 1.6x.
+
+#### EIGHT PAGES "SHARING A FAVICON" WERE A STALE CACHE, NOT A DEFECT
+
+Worth the heading, because it cost a script, a backup and a round trip to
+Frank, and because the same trap is already recorded twice in this file.
+
+The audit reported three legal pages sharing the 180x180 `logo-black.png`,
+below what the platforms accept, and /our-programs sharing a 352x344 logo.
+`scripts/clear-undersized-share-images.js`, since deleted, was written to clear those four so
+the fallback would take over, and the permission guard refused the write, so
+it went to Frank. **He ran it and it refused: "nothing to clear, already
+done?"**
+
+It was right. Those four documents hold no share image and have not for some
+time. **The dev server was replaying GROQ responses cached on disk from an
+older state of the dataset.** The tell, which should have been read sooner:
+`siteMetadata`'s own logo is 1280x1280, so a 180x180 appearing anywhere could
+not have come from the layout, and `references()` reported **nothing in the
+dataset pointing at that asset at all**.
+
+**`.next/cache/fetch-cache` survives a dev server restart.** Stopping and
+starting the server does not clear it; only deleting it does. The earlier note
+says the data cache "lives in the process", which is true of the in-memory
+half and wrong about this one. Delete the directory when a reading has to be
+trusted:
+
+```bash
+rm -rf .next/cache/fetch-cache
+```
+
+**Check a surprising reading against production before building anything on
+it.** Production has none of this project's caches, and it answered the
+question in one request: those four pages were serving **no `og:image` at
+all**, which is exactly what an empty field plus a route with no fallback
+produces. That is the defect this branch fixes, and the undersized images were
+never real.
+
+On a cleared cache: **56 of 56 pages serve a complete share card**, 47 from a
+Studio picture, 6 from a photograph the page shows, and the three legal pages
+from the house card.
 
 ---
 

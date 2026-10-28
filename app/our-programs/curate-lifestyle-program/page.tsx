@@ -82,5 +82,11 @@ export async function generateMetadata() {
 
   return buildPageMetadata(seo, {
     path: "/our-programs/curate-lifestyle-program",
+    image: servicePage!.heroImage?.asset?.url
+      ? {
+          asset: { url: servicePage!.heroImage.asset.url },
+          alt: servicePage!.heroImage.heroAlt ?? undefined,
+        }
+      : undefined,
   });
 }

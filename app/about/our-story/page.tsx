@@ -104,7 +104,17 @@ export async function generateMetadata() {
     query: OUR_STORY_PAGE_QUERY,
   });
 
-  const { seo } = ourStory!;
+  const { seo, heroSection } = ourStory!;
 
-  return buildPageMetadata(seo, { path: "/about/our-story" });
+  return buildPageMetadata(seo, {
+    path: "/about/our-story",
+    // The photograph at the top of the page, so clearing the share image in
+    // the Studio leaves the card showing what the page shows.
+    image: heroSection?.heroImage?.image
+      ? {
+          asset: { url: heroSection.heroImage.image },
+          alt: heroSection.heroImage.alt ?? undefined,
+        }
+      : undefined,
+  });
 }

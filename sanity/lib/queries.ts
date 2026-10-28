@@ -745,17 +745,32 @@ export const SITE_METADATA_QUERY = groq`
       }
     },
     keywords,
+    // The same shape SEO_QUERY uses, so the homepage's card is built from the
+    // same fields as every other page's. It selected the asset alone until
+    // 2026-10-28, which meant the homepage read the alt off the ASSET
+    // DOCUMENT rather than the one written against this picture, so it
+    // published no og:image:alt at all, and it dropped the crop and hotspot
+    // with it. That is the CH-013 trap in the one query that was not fixed
+    // when the rest were.
     socialMeta {
       title,
       description,
       ogImage {
+        crop,
+        hotspot,
+        alt,
         asset -> {
+          _id,
           url,
           alt
         }
       },
       twitterImage {
+        crop,
+        hotspot,
+        alt,
         asset -> {
+          _id,
           url,
           alt
         }

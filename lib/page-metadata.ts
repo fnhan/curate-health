@@ -4,6 +4,7 @@ import type { SanityImageCrop, SanityImageHotspot } from "@/sanity.types";
 import {
   SHARE_IMAGE_HEIGHT,
   SHARE_IMAGE_WIDTH,
+  wholeShareImageUrl,
   urlForShareImage,
 } from "@/sanity/lib/image";
 
@@ -80,7 +81,28 @@ type SeoObject = {
   } | null;
 } | null;
 
-type Fallbacks = {
+/**
+ * The site's own share card, for a page with no photograph of its own.
+ *
+ * The Curate Health mark embossed into cork yoga mats, which /about also
+ * shows. It is held here rather than in the Studio for the same reason the
+ * Google Business Profile URL is: it is an identity choice rather than
+ * editorial copy, and a page reaching it has already run out of its own
+ * pictures, so there is nothing for an editor to tune.
+ *
+ * **Reaching for this is a signal, not a solution.** A page sharing the house
+ * card is a page whose own photograph nobody chose. `audit-share-cards.js`
+ * names every page in that state so the list stays visible.
+ */
+export const SITE_SHARE_IMAGE: SeoImage = {
+  alt: "The Curate Health logo embossed into cork yoga mats, lit from the side.",
+  asset: {
+    _id: "image-6dfb6e8c7b46336c007db415d1a447f197213e83-2920x3073-jpg",
+    url: "https://cdn.sanity.io/images/rwc5kyvy/production/6dfb6e8c7b46336c007db415d1a447f197213e83-2920x3073.jpg",
+  },
+};
+
+type BaseFallbacks = {
   /**
    * This page's own address, relative, e.g. "/services/physiotherapy". CH-003.
    *
@@ -124,18 +146,46 @@ type Fallbacks = {
    * Do not reach for this to hide a thin page. Thin pages get fixed or
    * removed; noindex on one leaves it live for visitors and invisible to the
    * audits, which is how a page rots unnoticed.
+   *
+   * It is also the one thing that excuses a page from declaring a share
+   * image, below, since a page nobody should find does not need a card.
    */
   noindex?: boolean;
   /**
    * A photo the page already shows, used as its share image when nobody has
    * chosen one in the Studio.
    *
-   * Nine pages shipped with no share image at all on 2026-09-18, so a shared
-   * link showed a bare card. A practitioner page passes that person's photo,
-   * and the blog passes its newest post's photo. A share image set in the
-   * Studio always wins over this.
+   * **REQUIRED on any page that is indexed, since 2026-10-28.** Frank's rule:
+   * "if those fields are not filled, that it will still be represented through
+   * default settings of that page ... This should be a rule throughout the
+   * whole website. And every new page we make moving forward."
+   *
+   * It matters now in a way it did not before. Both share images in the Studio
+   * were `Rule.required().error()` until 2026-10-28, so in practice a page
+   * always had one, and eleven routes passing no fallback went unnoticed: they
+   * had a card only because an editor could not publish without filling the
+   * field. The moment those became warnings, clearing one on /contact or a
+   * treatment page would have stripped that page's card with nothing to say
+   * so. Making this required is what closes that, and TypeScript refuses a new
+   * page that skips it, exactly as it refuses one with no `path`.
+   *
+   * Pass a photograph the page itself shows. `SITE_SHARE_IMAGE` is the answer
+   * only where the page genuinely has no photograph of its own.
+   *
+   * A share image set in the Studio still wins over this.
    */
-  image?: SeoImage;
+  image: SeoImage;
+  /**
+   * This page's picture is a single object on a plain ground, a product shot
+   * or a logo, so it is fitted whole into the 1200x630 card rather than
+   * cropped to it.
+   *
+   * A scene has edges to spare and crops well. An object does not: crop it
+   * and you cut the object. Applies to whichever picture ends up being used,
+   * the Studio's or the fallback, because on these pages both are the same
+   * kind of picture.
+   */
+  wholeImage?: boolean;
   /**
    * Marks the page as an article for share cards, with its dates. Blog posts
    * only. Every other page is a website, which is what share cards assume
@@ -146,6 +196,30 @@ type Fallbacks = {
     modifiedTime?: string | null;
   };
 };
+
+/**
+ * An indexed page must declare a share image; a noindex page need not.
+ *
+ * Written as a union rather than an optional field so the compiler states the
+ * rule rather than a comment asking nicely. `app/not-found.tsx` is the only
+ * caller taking the second branch, and its noindex arm emits no card at all.
+ */
+type Fallbacks =
+  | (Omit<BaseFallbacks, "image" | "noindex"> & {
+      noindex?: false;
+      /**
+       * `SeoImage | undefined` rather than `image?:`, which is the whole
+       * trick: the property must be PRESENT, and the value it resolves to may
+       * still be empty. So a route cannot forget this, and a route whose hero
+       * is missing from the data is not forced to lie about having one. The
+       * house card covers that case at render time.
+       */
+      image: SeoImage | undefined;
+    })
+  | (Omit<BaseFallbacks, "image" | "noindex"> & {
+      noindex: true;
+      image?: SeoImage;
+    });
 
 /**
  * Used only when a page has no title or description of its own.
@@ -182,7 +256,17 @@ function assetIdFromUrl(url: string) {
  * which publishes an og:image tag pointing at nothing. A platform that follows
  * it shows a broken card, which is worse than showing none.
  */
-function imageEntry(image: SeoImage | undefined, alt: string) {
+export function imageEntry(
+  image: SeoImage | undefined,
+  alt: string,
+  /**
+   * The picture is a logo rather than a photograph, so it is letterboxed into
+   * 1200x630 instead of cropped to it. Only the homepage passes this: its
+   * share image is the Curate mark on transparency, and a 1.91:1 crop of a
+   * square mark cuts the circle open at the top and bottom.
+   */
+  { whole = false } = {}
+) {
   const url = image?.asset?.url?.trim();
   if (!url) return undefined;
 
@@ -191,14 +275,38 @@ function imageEntry(image: SeoImage | undefined, alt: string) {
   // so an unexpected URL degrades to the old behaviour rather than dropping
   // the tag.
   const assetId = image?.asset?._id || assetIdFromUrl(url);
-  const shareUrl = assetId
-    ? urlForShareImage({
+  /*
+   * A PORTRAIT SOURCE IS CROPPED EVEN WHEN THE PAGE ASKED FOR WHOLE.
+   *
+   * Fitting works by making the picture small enough that all of it fits, so
+   * a source taller than it is wide ends up a narrow strip in the middle of a
+   * wide card with white either side. The supplements photograph is 5142x7709
+   * and fitting it left the hand stranded in empty space, noticeably worse
+   * than the crop it replaced, while the four square-ish cutouts beside it
+   * were all improved. Cropping a portrait at least fills the card.
+   *
+   * Measured off the source dimensions Sanity writes into the filename, so
+   * this needs nothing stored and cannot drift from the file.
+   */
+  const dimensions = url.match(/-(\d+)x(\d+)\.\w+(?:\?|$)/);
+  const portrait = dimensions
+    ? Number(dimensions[1]) < Number(dimensions[2])
+    : false;
+
+  let shareUrl: string;
+  if (whole && !portrait) {
+    shareUrl = wholeShareImageUrl(url);
+  } else if (assetId) {
+    shareUrl =
+      urlForShareImage({
         _type: "image",
         asset: { _type: "reference", _ref: assetId },
         ...(image?.crop ? { crop: image.crop } : {}),
         ...(image?.hotspot ? { hotspot: image.hotspot } : {}),
-      } as never) || url
-    : url;
+      } as never) || url;
+  } else {
+    shareUrl = url;
+  }
 
   return [
     {
@@ -252,8 +360,33 @@ export function buildPageMetadata(
   const socialTitle = stripBrand(seo?.socialMeta?.title) || title;
   const socialDescription = seo?.socialMeta?.description?.trim() || description;
 
-  const ownOgImages = imageEntry(seo?.socialMeta?.ogImage, socialTitle);
-  const fallbackImages = imageEntry(fallbacks.image, socialTitle);
+  // Fitted whole rather than cropped, on a page whose picture is one object
+  // on a plain ground. The house card is a photograph, so it never takes it.
+  const framing = { whole: fallbacks.wholeImage === true };
+
+  const ownOgImages = imageEntry(
+    seo?.socialMeta?.ogImage,
+    socialTitle,
+    framing
+  );
+
+  /*
+   * Three deep, and the last one cannot fail.
+   *
+   *   1  the picture chosen in the Studio
+   *   2  a photograph the page already shows, which every route now passes
+   *   3  the house card
+   *
+   * Two is required of every indexed page by the type above, so three is
+   * reached only when that photograph is itself missing from the data: a hero
+   * nobody uploaded, a practitioner with no portrait. That used to publish a
+   * page with no card at all, which is worse than a generic one, because a
+   * link to it renders as a bare grey rectangle in every feed and chat window
+   * it is pasted into.
+   */
+  const fallbackImages =
+    imageEntry(fallbacks.image, socialTitle, framing) ??
+    (fallbacks.noindex ? undefined : imageEntry(SITE_SHARE_IMAGE, socialTitle));
   const ogImages = ownOgImages ?? fallbackImages;
 
   // X reads og:image when a page has no X image of its own, so a page with a
@@ -261,7 +394,7 @@ export function buildPageMetadata(
   // Only a page with neither takes the fallback photo on X as well, or X
   // would show the fallback in place of the image somebody chose.
   const twitterImages =
-    imageEntry(seo?.socialMeta?.twitterImage, socialTitle) ??
+    imageEntry(seo?.socialMeta?.twitterImage, socialTitle, framing) ??
     (ownOgImages ? undefined : fallbackImages);
 
   /*

@@ -77,5 +77,11 @@ export async function generateMetadata() {
     title: "Health Programs Toronto",
     description:
       "Three structured health programs at Curate Health in Midtown Toronto, from self-directed access to physician-led care.",
+    image: program?.heroImage?.asset?.url
+      ? {
+          asset: { url: program.heroImage.asset.url },
+          alt: program.heroImage.heroAlt ?? undefined,
+        }
+      : undefined,
   });
 }

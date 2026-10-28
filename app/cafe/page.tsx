@@ -111,7 +111,7 @@ export async function generateMetadata() {
     query: CAFE_PAGE_QUERY,
   });
 
-  const { seo } = cafePage!;
+  const { seo, heroSection } = cafePage!;
 
   // The cafe's share card ends with its own name rather than the site's, per
   // Frank on 2026-09-10. Its page title keeps the usual ending. It is the only
@@ -119,5 +119,11 @@ export async function generateMetadata() {
   return buildPageMetadata(seo, {
     path: "/cafe",
     shareBrand: "Curate Cafe",
+    image: heroSection?.heroImage?.image?.asset?.url
+      ? {
+          asset: { url: heroSection.heroImage.image.asset.url },
+          alt: heroSection.heroImage.alt ?? undefined,
+        }
+      : undefined,
   });
 }

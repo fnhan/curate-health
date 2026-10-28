@@ -212,5 +212,18 @@ export async function generateMetadata(props: {
     image: image?.asset?.url
       ? { asset: { url: image.asset.url }, alt: image.alt ?? undefined }
       : undefined,
+    /*
+     * Fitted whole into the card, not cropped to it. A product shot is one
+     * object on a plain ground, so a 1.91:1 crop cuts the product rather than
+     * the background: the knee brace card showed the middle slice of the
+     * brace with both ends gone.
+     *
+     * This looked like a resolution problem, because three of these cutouts
+     * are 418x400 to 600x600 and the audit flagged them as upscaled. They are
+     * barely soft; a clean cutout has little fine detail to lose. The framing
+     * was the fault, and only rendering the URL and looking at it told the
+     * two apart.
+     */
+    wholeImage: true,
   });
 }

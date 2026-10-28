@@ -85,7 +85,7 @@ export async function generateMetadata(): Promise<Metadata> {
        * homepage can never share a bare link either.
        */
       images:
-        imageEntry(ogImage, homePageTitle!, { mark: true }) ??
+        imageEntry(ogImage, homePageTitle!, { whole: true }) ??
         imageEntry(SITE_SHARE_IMAGE, homePageTitle!),
       type: "website",
       locale: "en_CA",
@@ -101,8 +101,8 @@ export async function generateMetadata(): Promise<Metadata> {
       // X falls back to the Open Graph image when it has none of its own,
       // which is the same order buildPageMetadata uses.
       images:
-        imageEntry(twitterImage, homePageTitle!, { mark: true }) ??
-        imageEntry(ogImage, homePageTitle!, { mark: true }) ??
+        imageEntry(twitterImage, homePageTitle!, { whole: true }) ??
+        imageEntry(ogImage, homePageTitle!, { whole: true }) ??
         imageEntry(SITE_SHARE_IMAGE, homePageTitle!),
     },
   };

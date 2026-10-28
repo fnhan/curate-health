@@ -134,11 +134,28 @@ async function sitemapPaths() {
  * only part of the URL that survives cropping to 1200x630.
  */
 async function studioImages() {
+  /*
+   * Two shapes, because siteMetadata holds its share image at
+   * `socialMeta.ogImage` while every page document holds it at
+   * `seo.socialMeta.ogImage`. Reading only the second labelled the homepage
+   * as being on a fallback when an editor had in fact chosen its picture.
+   */
   const rows = await query(`*[
-    defined(seo.socialMeta.ogImage.asset) &&
     !(_id in path("drafts.**")) && !(_id in path("sanity.**"))
-  ]{ "url": seo.socialMeta.ogImage.asset->url }`);
-  return new Set(rows.map((r) => assetHash(r.url)).filter(Boolean));
+  ]{
+    "a": seo.socialMeta.ogImage.asset->url,
+    "b": socialMeta.ogImage.asset->url,
+    "c": seo.socialMeta.twitterImage.asset->url,
+    "d": socialMeta.twitterImage.asset->url
+  }`);
+  const hashes = new Set();
+  for (const row of rows) {
+    for (const url of [row.a, row.b, row.c, row.d]) {
+      const hash = assetHash(url);
+      if (hash) hashes.add(hash);
+    }
+  }
+  return hashes;
 }
 
 async function main() {
@@ -210,8 +227,29 @@ async function main() {
       gaps.push(
         `og:image source is ${size.width}x${size.height}, below the 200x200 platforms accept`
       );
-    } else if (size && (size.width < 1200 || size.height < 630)) {
-      undersized.push(`${path}  ${size.width}x${size.height}`);
+    } else if (size) {
+      /*
+       * How far the file is actually scaled up, which depends on how it is
+       * fitted into the card and not only on its size.
+       *
+       * A cropped image has to COVER 1200x630, so the larger ratio decides.
+       * A fitted one only has to fit INSIDE it, so the smaller does, and a
+       * 600x600 cutout fitted is scaled 1.05 where the same file cropped
+       * would be scaled 2.0. Measuring the wrong one reported four product
+       * pages as badly upscaled after they had been fixed.
+       */
+      const fitted = /fit=fill/.test(image);
+      const byWidth = 1200 / size.width;
+      const byHeight = 630 / size.height;
+      const scale = fitted
+        ? Math.min(byWidth, byHeight)
+        : Math.max(byWidth, byHeight);
+
+      if (scale > 1.25) {
+        undersized.push(
+          `${path}  ${size.width}x${size.height}, scaled up ${scale.toFixed(1)}x`
+        );
+      }
     }
 
     let source;

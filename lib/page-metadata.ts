@@ -4,7 +4,7 @@ import type { SanityImageCrop, SanityImageHotspot } from "@/sanity.types";
 import {
   SHARE_IMAGE_HEIGHT,
   SHARE_IMAGE_WIDTH,
-  markShareImageUrl,
+  wholeShareImageUrl,
   urlForShareImage,
 } from "@/sanity/lib/image";
 
@@ -176,6 +176,17 @@ type BaseFallbacks = {
    */
   image: SeoImage;
   /**
+   * This page's picture is a single object on a plain ground, a product shot
+   * or a logo, so it is fitted whole into the 1200x630 card rather than
+   * cropped to it.
+   *
+   * A scene has edges to spare and crops well. An object does not: crop it
+   * and you cut the object. Applies to whichever picture ends up being used,
+   * the Studio's or the fallback, because on these pages both are the same
+   * kind of picture.
+   */
+  wholeImage?: boolean;
+  /**
    * Marks the page as an article for share cards, with its dates. Blog posts
    * only. Every other page is a website, which is what share cards assume
    * when told nothing.
@@ -254,7 +265,7 @@ export function imageEntry(
    * share image is the Curate mark on transparency, and a 1.91:1 crop of a
    * square mark cuts the circle open at the top and bottom.
    */
-  { mark = false } = {}
+  { whole = false } = {}
 ) {
   const url = image?.asset?.url?.trim();
   if (!url) return undefined;
@@ -264,9 +275,27 @@ export function imageEntry(
   // so an unexpected URL degrades to the old behaviour rather than dropping
   // the tag.
   const assetId = image?.asset?._id || assetIdFromUrl(url);
+  /*
+   * A PORTRAIT SOURCE IS CROPPED EVEN WHEN THE PAGE ASKED FOR WHOLE.
+   *
+   * Fitting works by making the picture small enough that all of it fits, so
+   * a source taller than it is wide ends up a narrow strip in the middle of a
+   * wide card with white either side. The supplements photograph is 5142x7709
+   * and fitting it left the hand stranded in empty space, noticeably worse
+   * than the crop it replaced, while the four square-ish cutouts beside it
+   * were all improved. Cropping a portrait at least fills the card.
+   *
+   * Measured off the source dimensions Sanity writes into the filename, so
+   * this needs nothing stored and cannot drift from the file.
+   */
+  const dimensions = url.match(/-(\d+)x(\d+)\.\w+(?:\?|$)/);
+  const portrait = dimensions
+    ? Number(dimensions[1]) < Number(dimensions[2])
+    : false;
+
   let shareUrl: string;
-  if (mark) {
-    shareUrl = markShareImageUrl(url);
+  if (whole && !portrait) {
+    shareUrl = wholeShareImageUrl(url);
   } else if (assetId) {
     shareUrl =
       urlForShareImage({
@@ -331,7 +360,15 @@ export function buildPageMetadata(
   const socialTitle = stripBrand(seo?.socialMeta?.title) || title;
   const socialDescription = seo?.socialMeta?.description?.trim() || description;
 
-  const ownOgImages = imageEntry(seo?.socialMeta?.ogImage, socialTitle);
+  // Fitted whole rather than cropped, on a page whose picture is one object
+  // on a plain ground. The house card is a photograph, so it never takes it.
+  const framing = { whole: fallbacks.wholeImage === true };
+
+  const ownOgImages = imageEntry(
+    seo?.socialMeta?.ogImage,
+    socialTitle,
+    framing
+  );
 
   /*
    * Three deep, and the last one cannot fail.
@@ -348,7 +385,7 @@ export function buildPageMetadata(
    * it is pasted into.
    */
   const fallbackImages =
-    imageEntry(fallbacks.image, socialTitle) ??
+    imageEntry(fallbacks.image, socialTitle, framing) ??
     (fallbacks.noindex ? undefined : imageEntry(SITE_SHARE_IMAGE, socialTitle));
   const ogImages = ownOgImages ?? fallbackImages;
 
@@ -357,7 +394,7 @@ export function buildPageMetadata(
   // Only a page with neither takes the fallback photo on X as well, or X
   // would show the fallback in place of the image somebody chose.
   const twitterImages =
-    imageEntry(seo?.socialMeta?.twitterImage, socialTitle) ??
+    imageEntry(seo?.socialMeta?.twitterImage, socialTitle, framing) ??
     (ownOgImages ? undefined : fallbackImages);
 
   /*

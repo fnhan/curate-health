@@ -43,15 +43,27 @@ export const urlForShareImage = (source: Image) => {
 };
 
 /**
- * A logo letterboxed into the share card rather than cropped to it.
+ * An object letterboxed into the share card rather than cropped to it.
  *
- * EVERYTHING ABOVE IS ABOUT PHOTOGRAPHS. A LOGO IS NOT A SCENE.
+ * EVERYTHING ABOVE IS ABOUT PHOTOGRAPHS. AN OBJECT ON WHITE IS NOT A SCENE.
  *
  * Cropping a photograph to 1.91:1 throws away the edges and the picture still
- * reads. The homepage's share image is the Curate mark at 1280x1280, and
- * cropping that slices the top and bottom off the circle, so the card shows a
- * broken ring. That is worse than the uncropped square it replaced, and it is
- * the kind of thing nobody notices until a link is pasted somewhere public.
+ * reads, because a scene has edges to spare. A single object on a plain ground
+ * does not: crop it and you cut the object itself.
+ *
+ * Two kinds of picture here need this, and the second was missed at first.
+ *
+ *   the homepage logo    the Curate mark at 1280x1280. Cropping a square mark
+ *                        slices the top and bottom off the circle, so the card
+ *                        showed a broken ring.
+ *   product cutouts      all five product pages. The knee brace is 600x600 on
+ *                        white, and the cropped card showed the middle slice
+ *                        of the brace with both ends cut away.
+ *
+ * The products looked like a resolution problem and were not. 600x600 scaled
+ * to 1200x630 is barely soft, because a clean cutout has little fine detail to
+ * lose; what was wrong was the framing. Rendering the URL and looking at it is
+ * what told the two apart, and nothing in the source would have.
  *
  * `fit=fill` with a white ground sizes the whole mark to fit inside 1200x630
  * and pads the rest. White because the mark is dark green on transparency.
@@ -63,7 +75,7 @@ export const urlForShareImage = (source: Image) => {
  * original defect with extra steps. There is no rect to remove, so the URL is
  * assembled here.
  */
-export const markShareImageUrl = (assetUrl: string) =>
+export const wholeShareImageUrl = (assetUrl: string) =>
   `${assetUrl.split("?")[0]}?w=${SHARE_IMAGE_WIDTH}&h=${SHARE_IMAGE_HEIGHT}` +
   `&fit=fill&bg=ffffff&auto=format`;
 

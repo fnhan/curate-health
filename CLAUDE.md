@@ -27,7 +27,7 @@ Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with
 
 - A unique title, 60 characters or fewer including "| Curate Health", that agrees with the page's one H1, and a unique meta description of 155 characters or fewer. Both editable in the Studio through an `seo` field, with fallbacks in code, and set through `buildPageMetadata` with the page's own canonical path.
 - A share card: an `og:image` at 1200x630 that loads, with the title, description, `og:type` and site name. Default the image to a photo the page already shows, so nobody has to remember to pick one.
-- **Every `socialMeta` field filled in the Studio, not left to the code fallback. Frank's rule, 2026-10-26.** The share title, the share description, the Open Graph image with its alt text, and the X image with its alt text. All four are `Rule.required().error()` on `sanity/schemas/socialMeta.ts`, and Sanity refuses Publish on an error, so one empty field locks an editor out of the whole document: not out of that field, out of fixing a typo three fields away. His words: "I can't publish the page if I need to modify it otherwise." Write the same values the code fallback is already producing, so nothing a visitor sees moves. `node scripts/audit-seo-fields.js` is the check, and it reads the dataset because a rendered page with an empty field looks perfectly correct.
+- **The share title and the share description filled in the Studio, not left to the code fallback. Frank, 2026-10-26.** Both are `Rule.required().error()` on `sanity/schemas/socialMeta.ts` and neither has anything better than a generic fallback, so write them when the page is built. **The two share IMAGES are deliberately optional**, amended by Frank on 2026-10-28: left empty, the page shares a photograph it already shows, which is how a derived card keeps following what it derives from. Do not fill one in just to tidy the Studio. `node scripts/audit-seo-fields.js` is the check, and it reads the dataset because a rendered page with an empty field looks perfectly correct.
 - Structured data for what the page is, such as Person, BlogPosting, Product or Service, agreeing with what the page shows. Below a hub, a breadcrumb trail with its markup.
 - Listed in the sitemap, and in llms.txt with a one-line description. Taken out of both when the page is switched off.
 - Linked from a hub or the navigation, within three clicks of the homepage.
@@ -4990,6 +4990,86 @@ and did.
 requesting a page twice is now an hour, not a minute.** A production build from
 before that change still carries the 60 second window, which is why the older
 `next start` on port 3000 was the fresh one and the dev server was not.
+
+### The share images are optional again. 2026-10-28
+
+**Two days after they were made required, and the two days are the lesson.**
+`sanity/schemas/socialMeta.ts` had every field as `Rule.required().error()`,
+Sanity refuses Publish on an error, and so six documents could not be published
+at all: not to change the share image, not to fix a word three fields away.
+
+The fix on 2026-10-26 was to fill all six with whatever each page was already
+rendering. It unblocked the Studio, it changed nothing a visitor saw, and it
+was still wrong, which Frank caught: "use the newest post and not have it fixed
+on the chard photo. Just simply make it so that studio doesn't require the
+field to be a requirement to publish."
+
+**The pages that reach the fallback are exactly the ones whose card is
+DERIVED.** That is not a coincidence, it is the every-page rule working:
+default the image to a photograph the page already shows, so nobody has to
+remember to pick one and it cannot drift from the page. Writing today's value
+into the field freezes it and the card stops following the thing it was meant
+to follow.
+
+| page | its card follows |
+| --- | --- |
+| /blog | the newest post's photograph |
+| a blog post | its own photograph |
+| /about | its own hero, deliberately CLEARED on 2026-10-12 for this reason |
+| /products | its own hero |
+| /classes | the schedule's hero, or the Recovery Sanctuary's |
+
+**All six were reverted, not only the one he named**, because the same
+reasoning covers all six and this file already said so about /about.
+`scripts/unfreeze-share-images.js`, transaction `kELH2ZLDdOeUbDvZ2brV5F`. It
+refuses to unset an image that is not the one the fill script wrote, so a
+picture an editor has since chosen is never thrown away. `/products`'s
+`socialMeta.description` is kept: it is text with a static fallback, nothing
+about it can drift, and the title and description are still required.
+
+**The alt text is still an error, but only once an image is chosen.** A
+required alt on an empty image would reinstate the block sideways, so it is a
+`Rule.custom` that passes when there is no asset and fails when there is one
+with no alt. An image somebody chose and left undescribed is still refused.
+
+#### Sanity validates from the command line, and that is how this was proven
+
+The Studio needs Frank's own login, so the rule could not be exercised by
+clicking Publish. `npx sanity documents validate --dataset production` runs the
+same schema against the real dataset and reports errors and warnings without
+one. Measured on the same data:
+
+| schema | result |
+| --- | --- |
+| before | **6 documents, 12 errors** |
+| after | **0 errors**, 85 documents |
+
+Errors are what block Publish; warnings do not, and both images now warn. Reach
+for this command whenever a validation rule changes, rather than reasoning
+about what the Studio will do.
+
+**It also prints every schema drift in the dataset**, fields stored on
+documents that no schema defines any more: `mux.track` internals, `fax` on
+`siteSettings`, `promo` on `serviceLifestyle`, `seo` on `ourPrograms`. None is
+a defect and none blocks anything, so do not sweep them on sight.
+
+#### audit-seo-fields.js crashed Node and returned 127
+
+Pre-existing, and worth knowing because it made the check useless from a shell:
+it called `process.exit()` with a handle still open, Node aborted with
+"Assertion failed: !(handle->flags & UV_HANDLE_CLOSING)", and a **passing** run
+exited **127**, which every caller reads as failure. It sets `process.exitCode`
+and lets Node drain now. A clean run exits 0.
+
+**So an exit code measured through a pipe is not the script's.**
+`node script.js | tail -16; echo $?` reports `tail`'s status, which is how this
+went unnoticed: the run looked like it exited 0 for as long as anybody checked
+it that way.
+
+The four required fields are 59 of 59. Twelve image slots are empty and on
+their fallback, which the audit now prints as a statement rather than a gap.
+All 9 checks in `audit-seo-complete.js` pass, and the six share cards render
+byte for byte what they rendered before any of this started.
 
 ---
 

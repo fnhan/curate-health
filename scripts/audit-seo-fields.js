@@ -19,36 +19,46 @@
  *
  * WHAT IT CHECKS
  *
+ * REQUIRED, because nothing else supplies them:
+ *
  *   pageTitle                 What Google shows as the clickable line.
  *   pageDescription           The snippet underneath it.
  *   socialMeta.title          og:title and twitter:title.
  *   socialMeta.description    og:description and twitter:description.
+ *
+ * REPORTED, NOT REQUIRED, because an empty one is a working default:
+ *
  *   socialMeta.ogImage        The picture on a Facebook, LinkedIn or Slack
- *                             share. Without it the platform picks something
- *                             or shows nothing.
- *   socialMeta.ogImage alt    Read out by screen readers, and it is the only
- *                             text description of that image anywhere.
- *   socialMeta.twitterImage   The same for X.
- *   socialMeta.twitterImage alt
+ *   socialMeta.twitterImage   share, and on X.
  *
- * ALL EIGHT ARE REQUIRED, AND THE REASON CHANGED ON 2026-10-26
+ * WHY THE IMAGES ARE NOT REQUIRED. FRANK, 2026-10-28
  *
- * The first six were required because an empty one costs the page something a
- * visitor sees. socialMeta.title and socialMeta.description used to be
- * reported and not required, on the reasoning that SEO_QUERY did not select
- * them so nothing rendered them. Both halves of that are now out of date:
- * SEO_QUERY selects them and buildPageMetadata publishes them.
+ * They were, for two days, and the two days are worth recording because the
+ * obvious fix was the wrong one.
  *
- * The harder reason is the Studio. Every field on sanity/schemas/socialMeta.ts
- * is `Rule.required().error()`, and Sanity refuses Publish on an error, so one
- * empty share field locks an editor out of the whole document: not just out of
- * that field, out of fixing a typo three fields away. Frank hit it on
- * 2026-10-26 and ruled that these are filled whenever a page is produced.
+ * Every field on sanity/schemas/socialMeta.ts was `Rule.required().error()`,
+ * and Sanity refuses Publish on an error, so one empty share image locked an
+ * editor out of the whole document: not out of that field, out of fixing a
+ * typo three fields away. Frank hit it on six documents. The first answer was
+ * to fill all six with whatever the page was already rendering, and this file
+ * was changed to require all eight fields.
  *
- * So a gap here is not a missed optimisation, it is an editor who cannot
- * publish. `scripts/audit-metadata.js` cannot see it, because the rendered
- * page looks right: buildPageMetadata substitutes a photo the page already
- * shows. This is the only check that looks.
+ * That froze six cards that were meant to move. The pages reaching the
+ * fallback are precisely the ones whose card is DERIVED: /blog follows the
+ * newest post, /about and /products follow their own hero, a post follows its
+ * own photograph. His ruling: "use the newest post and not have it fixed on
+ * the chard photo. Just simply make it so that studio doesn't require the
+ * field to be a requirement to publish."
+ *
+ * So both images are warnings in the Studio now, all six documents are back on
+ * their fallback, and an empty share image is a documented state rather than a
+ * gap. The alt text is still an error, but only once an image is chosen, since
+ * a required alt on an empty image would reinstate the block sideways.
+ *
+ * The four that remain required have only a static fallback, so an empty one
+ * publishes something generic rather than something derived. `audit-metadata.js`
+ * cannot see those either: it reads rendered pages, where the fallback has
+ * already filled in. This is the only check that looks at the record.
  */
 
 const { query } = require("./lib/sanity-cli");
@@ -80,10 +90,16 @@ const REQUIRED = [
   ["pageDescription", "meta description"],
   ["socialTitle", "share title"],
   ["socialDescription", "share description"],
-  ["ogImage", "share image"],
-  ["ogAltAny", "share image alt text"],
-  ["twitterImage", "X image"],
-  ["twitterAltAny", "X image alt text"],
+];
+
+/**
+ * Reported so the list is visible, never failed. An empty one means the page
+ * shares a photograph it already shows, which is the every-page rule working.
+ * An image CHOSEN and left without alt is a real fault and is failed below.
+ */
+const OPTIONAL_IMAGES = [
+  ["ogImage", "ogAltAny", "share image"],
+  ["twitterImage", "twitterAltAny", "X image"],
 ];
 
 function blank(value) {
@@ -100,6 +116,8 @@ async function main() {
   console.log(`${documents.length} documents carry an seo object\n`);
 
   const missing = new Map(REQUIRED.map(([key]) => [key, []]));
+  const altGaps = [];
+  const onFallback = [];
   let clean = 0;
 
   for (const doc of documents) {
@@ -108,6 +126,16 @@ async function main() {
     doc.twitterAltAny = doc.twitterAlt || doc.twitterAltField;
 
     const gaps = REQUIRED.filter(([key]) => blank(doc[key]));
+
+    // A chosen image with no alt text is a fault; an empty image is not.
+    for (const [imageKey, altKey, human] of OPTIONAL_IMAGES) {
+      if (blank(doc[imageKey])) {
+        onFallback.push(`${doc.name} (${human})`);
+      } else if (blank(doc[altKey])) {
+        gaps.push([altKey, `${human} alt text, on a chosen image`]);
+        altGaps.push(doc.name);
+      }
+    }
 
     if (!gaps.length) {
       clean++;
@@ -119,7 +147,7 @@ async function main() {
 
     for (const [key, human] of gaps) {
       console.log(`  MISSING   ${human}`);
-      missing.get(key).push(doc.name);
+      if (missing.has(key)) missing.get(key).push(doc.name);
     }
 
     if (verbose) {
@@ -131,15 +159,16 @@ async function main() {
           );
         }
       }
-      if (!blank(doc.socialTitle)) {
-        console.log(
-          `  note      socialMeta.title is set but nothing renders it: ${JSON.stringify(doc.socialTitle)}`
-        );
-      }
-      if (!blank(doc.socialDescription)) {
-        console.log(
-          `  note      socialMeta.description is set but nothing renders it`
-        );
+      for (const [imageKey, altKey, human] of OPTIONAL_IMAGES) {
+        if (blank(doc[imageKey])) {
+          console.log(
+            `  fallback  ${human}: none chosen, so the page shares a photograph it already shows`
+          );
+        } else if (!blank(doc[altKey])) {
+          console.log(
+            `  ok        ${human}: chosen, alt ${JSON.stringify(String(doc[altKey]).slice(0, 60))}`
+          );
+        }
       }
     }
 
@@ -157,24 +186,41 @@ async function main() {
     total += list.length;
     console.log(`  ${String(list.length).padStart(3)} missing ${human}`);
   }
+  console.log(`  ${String(altGaps.length).padStart(3)} chosen image with no alt text`);
+  total += altGaps.length;
+
+  console.log(
+    `\n  ${onFallback.length} share image slot(s) are empty and share a photograph the page`
+  );
+  console.log(
+    `  already shows. That is the every-page rule, not a gap, and it is how a`
+  );
+  console.log(
+    `  derived card keeps following what it derives from: /blog the newest post,`
+  );
+  console.log(`  /about and /products their own hero, a post its own photograph.`);
 
   if (total) {
     console.log(
-      `\n  A gap here is an editor locked out of that document: every socialMeta`
+      `\n  The four required fields have only a static fallback, so an empty one`
     );
     console.log(
-      `  field is Rule.required().error(), so Sanity refuses Publish until it is`
+      `  publishes something generic. audit-metadata.js cannot see them: it reads`
     );
-    console.log(
-      `  filled. The rendered page still looks right, because buildPageMetadata`
-    );
-    console.log(`  substitutes a photo the page already shows.`);
+    console.log(`  rendered pages, where the fallback has already filled in.`);
   }
 
-  process.exit(total ? 1 : 0);
+  /*
+   * `process.exitCode`, never `process.exit()`. This script crashed Node on
+   * the way out with "Assertion failed: !(handle->flags & UV_HANDLE_CLOSING)"
+   * and returned **127**, which every caller reads as failure, so a clean run
+   * and a broken run were indistinguishable from a shell. Setting the code and
+   * letting Node drain its handles exits properly.
+   */
+  process.exitCode = total ? 1 : 0;
 }
 
 main().catch((error) => {
   console.error(error.message);
-  process.exit(1);
+  process.exitCode = 1;
 });

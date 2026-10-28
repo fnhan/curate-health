@@ -5255,6 +5255,132 @@ On a cleared cache: **56 of 56 pages serve a complete share card**, 47 from a
 Studio picture, 6 from a photograph the page shows, and the three legal pages
 from the house card.
 
+### Geo-targeting, 20 titles and the catchment. 2026-10-28
+
+Frank: "I want to also make sure we cover the people that are looking for
+these products and services in 'midtown' and when using the the word 'York'
+as well."
+
+**Ten service pages already named Toronto and twelve did not**, and among the
+twelve were the three highest-volume searches Curate competes for:
+physiotherapy, chiropractic care and massage therapy. Those carried
+"Treatment & Services", a 2024 template that matches nothing anybody types
+and spends characters Google counts. **Not one of the five product pages
+named a city at all**, and "custom orthotics Toronto" is about as
+local-intent as a search gets.
+
+`scripts/propose-service-titles.js`, transaction `1OQZWvc2m4BxwK17p5s9mU`,
+after `sanity-backup-2026-10-28-before-geo-targeting-documents.tar.gz`. Twenty
+documents: twelve services and treatments, five products, the products index,
+Our Team and Curate Lifestyle.
+
+**The noun people search is not the one on the page.** They look for the
+practitioner rather than the discipline: "chiropractor" over "chiropractic",
+"naturopathic doctor" over "naturopathy". The title cannot carry both, because
+`titleMatchesHeading` requires every significant word of the h1 and the h1 is
+the discipline. So the noun goes in the meta description, which has room and
+which Google reads. Chiropractic now opens "See a chiropractor at Curate
+Health in Midtown Toronto"; massage therapy says "Registered massage therapy",
+which is accurate since Andrew is an RMT and is also what people type.
+
+**Seven descriptions rewritten, six left exactly as they were.** The ones
+touched either failed to name Toronto or opened on filler: "Experience expert
+physiotherapy", "Discover premium compression stockings", "Perfect for your
+unique needs". Rewriting a good sentence to look busy is how Frank's September
+decisions got overwritten by the dash sweep, so a description that already
+named Midtown Toronto was left alone.
+
+**`/cafe` is deliberately excluded.** Its h1 is "Introducing Curate Cafe", so
+the audit would force "Introducing" into the title, and "Introducing Curate
+Cafe in Midtown Toronto" reads as badly as it sounds. Fixing it means changing
+the heading, which is visible copy and Frank's call rather than a side effect
+of a geo pass. It also loses least by waiting: its description already names
+Midtown Toronto and the cafe has its own Google listing.
+
+#### "York" goes in `areaServed` and in one sentence, never in a title
+
+**The bare word means at least four places in the GTA**: York Region thirty
+kilometres north, York University at Keele and Finch, Fort York downtown, and
+the old City of York, which is the one 989 Eglinton Ave W sits in. A title
+saying "York" advertises to three audiences who cannot reach the door.
+
+It would also break two things already decided. The content rules fix the
+neighbourhood descriptor as "Midtown Toronto", and CH-021 spent a whole ticket
+taking "York" out of the address because `addressLocality` was `"York, "` and
+nothing on the site said Toronto. Titles are 60 characters; Toronto plus
+Midtown plus York does not fit without wrecking them.
+
+**`SERVICE_AREA` in `lib/structured-data.tsx` is the answer**, and it is what
+schema.org provides for exactly this question. Eleven entries, Toronto as a
+`City` and the rest as `Place`, since a neighbourhood is not a municipality
+and the old City of York has not been one since 1998:
+
+> Toronto, Midtown Toronto, York, Forest Hill, Cedarvale, Humewood, Oakwood
+> Village, Wychwood, Hillcrest, St Clair West, Eglinton West
+
+The neighbourhoods are Frank's own, confirmed 2026-10-28. **Do not widen this
+to areas nobody comes from**: `areaServed` is a statement about the business,
+and a list reaching across the GTA reads as spam to a search engine and as a
+lie to a reader.
+
+**Six places had `{ "@type": "City", name: "Toronto" }` written out by hand.**
+They read one constant now. `areaServed: "CA"` on the ContactPoint is a
+different statement, about where the phone line reaches, and is untouched.
+
+#### The catchment is visible text as well as markup
+
+**Markup alone would be invisible to half of what Frank asked to be found
+in.** CH-101 recorded that ChatGPT and Perplexity pulled planted data out of
+deliberately invalid JSON-LD, which means they read visible text and largely
+ignore the markup. So the catchment is written out too, in two places and in
+two registers:
+
+| where | |
+| --- | --- |
+| the footer, under the address | "Serving Midtown Toronto, including Forest Hill, Cedarvale, Oakwood Village and the Eglinton West corridor." |
+| `/contact`, after the opening paragraph | "We are in Midtown Toronto on Eglinton West, close to Forest Hill, Cedarvale, Humewood and Oakwood Village, in the former City of York." |
+
+**Four names in the footer, not eleven.** The schema graph is the place for
+the full list; a footer reciting every neighbourhood within three kilometres
+reads as what it would be.
+
+**"the former City of York", not "York".** It is accurate, and it is the one
+phrasing that tells somebody in the old municipality that this is their
+neighbourhood while telling somebody in York Region that it is not.
+
+**Neither is a link, and there are no neighbourhood pages.** A page per area
+that exists to catch one phrase is the doorway pattern CH-109 was closed over
+and the "hundreds of pages" problem Frank ruled out on 2026-10-13.
+
+`scripts/add-catchment-line.js` inserts the `/contact` sentence after the
+opening paragraph rather than appending it, because appending would put it
+after the driving directions where nobody orienting themselves would read it.
+It refuses the run if that paragraph is not found byte for byte, and it is a
+no-op once the sentence is there. Transaction `Ze86kZBiqZJr02hZQwd9ZE`.
+
+#### `rm -rf .next` is the only thing that reliably clears a stale read
+
+Three attempts at verifying these titles read the old ones, and two of them
+looked like the fetch cache and were not:
+
+- **Clearing `.next/cache/fetch-cache` while the dev server is running does
+  nothing**, because the running server rewrites entries straight back. Stop
+  the server first.
+- **Clearing it with the server stopped was still not enough.** The titles
+  were correct in the dataset, correct from Sanity's own CDN, and the client
+  has `useCdn: false`, so nothing between the two could explain it. Next was
+  still holding them somewhere else under `.next`.
+- **`rm -rf .next`, with the server stopped, worked first time.** That is what
+  the CH-104 note already says about builds, and it applies to `next dev` just
+  as much.
+
+**Check the dataset before chasing a cache.** Two of those three rounds would
+have been one query: the stored value was right the whole time, which rules
+out the write and points at the reader.
+
+All 11 checks pass, `audit-unicode.js` reports 0 Cf characters, and
+`audit-drafts.js` reports no draft that would delete published content.
+
 ---
 
 ## Full verification script

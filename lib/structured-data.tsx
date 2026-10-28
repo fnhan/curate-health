@@ -245,6 +245,56 @@ function buildOpeningHours(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
   return specs.length ? (specs as JsonLdObject[]) : undefined;
 }
 
+/**
+ * Where Curate actually draws people from, for `areaServed`.
+ *
+ * ONE COPY, SIX READERS. It was `{ "@type": "City", name: "Toronto" }`
+ * written out six times, which is six places to forget when this changes.
+ *
+ * WHY THIS LIST AND NOT THE TITLES
+ *
+ * Frank asked on 2026-10-28 to be found by people searching "midtown" and
+ * "York" as well as Toronto. Titles are the wrong place for that and were
+ * considered and rejected: there are 60 characters, the content rules fix the
+ * neighbourhood descriptor as "Midtown Toronto", and CH-021 spent a whole
+ * ticket taking "York" out of the address because `addressLocality` was
+ * `"York, "` and nothing on the site said Toronto.
+ *
+ * `areaServed` is what schema.org provides for exactly this question. It is
+ * read by search engines and by the answer engines, it costs no title
+ * characters, and it contradicts nothing the pages say.
+ *
+ * **"York" is here and nowhere else, and that is deliberate.** In the GTA the
+ * name means at least four places: York Region, thirty kilometres north; York
+ * University at Keele and Finch; Fort York downtown; and the old City of York,
+ * which is the one 989 Eglinton Ave W sits in. Naming it in a title would
+ * advertise to three audiences who cannot reach the door. Naming it here
+ * answers the one that can.
+ *
+ * Toronto is a `City` and the rest are `Place`, because a neighbourhood is
+ * not a municipality and the old City of York has not been one since the 1998
+ * amalgamation.
+ *
+ * The neighbourhoods are Frank's own, confirmed 2026-10-28. Every one is
+ * within a short walk, drive or Line 5 ride of the door. **Do not widen this
+ * to areas nobody comes from**: `areaServed` is a statement about the
+ * business, and a list reaching across the GTA is the kind of claim that
+ * reads as spam to a search engine and as a lie to a reader.
+ */
+const SERVICE_AREA = [
+  { "@type": "City", name: "Toronto" },
+  { "@type": "Place", name: "Midtown Toronto" },
+  { "@type": "Place", name: "York" },
+  { "@type": "Place", name: "Forest Hill" },
+  { "@type": "Place", name: "Cedarvale" },
+  { "@type": "Place", name: "Humewood" },
+  { "@type": "Place", name: "Oakwood Village" },
+  { "@type": "Place", name: "Wychwood" },
+  { "@type": "Place", name: "Hillcrest" },
+  { "@type": "Place", name: "St Clair West" },
+  { "@type": "Place", name: "Eglinton West" },
+];
+
 function getActiveServiceNodes(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
   return (
     siteSettings?.services
@@ -256,10 +306,7 @@ function getActiveServiceNodes(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
           name: service.title,
           url: absoluteUrl(`/services/${service.slug}`),
           provider: { "@id": `${BASEURL}/#medicalclinic` },
-          areaServed: {
-            "@type": "City",
-            name: "Toronto",
-          },
+          areaServed: SERVICE_AREA,
           hasOfferCatalog: service.treatments?.length
             ? {
                 "@type": "OfferCatalog",
@@ -348,10 +395,7 @@ export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
           GOOGLE_BUSINESS_PROFILE,
         ],
         parentOrganization: { "@id": `${BASEURL}/#organization` },
-        areaServed: {
-          "@type": "City",
-          name: "Toronto",
-        },
+        areaServed: SERVICE_AREA,
         medicalSpecialty: [
           "Chiropractic",
           "Rehabilitation",
@@ -387,10 +431,7 @@ export function buildServiceJsonLd(service: SERVICE_BY_SLUG_QUERY_RESULT) {
     image: service.hero_image,
     url: absoluteUrl(`/services/${service.slug}`),
     provider: { "@id": `${BASEURL}/#medicalclinic` },
-    areaServed: {
-      "@type": "City",
-      name: "Toronto",
-    },
+    areaServed: SERVICE_AREA,
     hasOfferCatalog: service.treatments?.length
       ? {
           "@type": "OfferCatalog",
@@ -432,10 +473,7 @@ export function buildLifestyleJsonLd(page: {
     image: page.image,
     url: absoluteUrl(page.path),
     provider: { "@id": `${BASEURL}/#medicalclinic` },
-    areaServed: {
-      "@type": "City",
-      name: "Toronto",
-    },
+    areaServed: SERVICE_AREA,
   }) as JsonLdObject;
 }
 
@@ -467,10 +505,7 @@ export function buildTreatmentJsonLd(treatment: TREATMENT_BY_SLUG_QUERY_RESULT) 
     url: absoluteUrl(path),
     provider: { "@id": `${BASEURL}/#medicalclinic` },
     serviceType: treatment.serviceName,
-    areaServed: {
-      "@type": "City",
-      name: "Toronto",
-    },
+    areaServed: SERVICE_AREA,
   }) as JsonLdObject;
 }
 
@@ -576,10 +611,7 @@ export function buildCafeJsonLd(
         ]
       : [CAFE_GOOGLE_BUSINESS_PROFILE],
     servesCuisine: "Functional nutrition",
-    areaServed: {
-      "@type": "City",
-      name: "Toronto",
-    },
+    areaServed: SERVICE_AREA,
   }) as JsonLdObject;
 }
 

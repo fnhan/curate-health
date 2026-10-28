@@ -134,6 +134,28 @@ export default function SiteFooter({
                   ))}
                 </div>
               </a>
+              {/*
+                The catchment, for the people searching a neighbourhood rather
+                than a city. Frank, 2026-10-28.
+
+                It sits here because this is where the address already is, and
+                because it is text rather than markup. `areaServed` in the
+                schema graph carries the full list of eleven, which search
+                engines read; per CH-101 the answer engines mostly do not read
+                markup at all, so a catchment that exists only in a script tag
+                is invisible to half of what he asked to be found in.
+
+                Four names, not eleven. The schema graph is the place for the
+                full list; a footer reciting every neighbourhood within three
+                kilometres reads as what it would be.
+
+                It is NOT a link and NOT a list of links. Neighbourhood pages
+                are the doorway-page pattern CH-109 was closed over.
+              */}
+              <p className="max-w-xs text-sm">
+                Serving Midtown Toronto, including Forest Hill, Cedarvale,
+                Oakwood Village and the Eglinton West corridor.
+              </p>
               <div className="space-y-2">
                 <a
                   className="flex w-fit items-center gap-2 hover:underline"

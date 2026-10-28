@@ -5290,12 +5290,34 @@ unique needs". Rewriting a good sentence to look busy is how Frank's September
 decisions got overwritten by the dash sweep, so a description that already
 named Midtown Toronto was left alone.
 
-**`/cafe` is deliberately excluded.** Its h1 is "Introducing Curate Cafe", so
-the audit would force "Introducing" into the title, and "Introducing Curate
-Cafe in Midtown Toronto" reads as badly as it sounds. Fixing it means changing
-the heading, which is visible copy and Frank's call rather than a side effect
-of a geo pass. It also loses least by waiting: its description already names
-Midtown Toronto and the cafe has its own Google listing.
+**`/cafe` was held back a round and is done now.** It was excluded on the
+grounds that "Introducing Curate Cafe in Midtown Toronto" "reads as badly as
+it sounds", which was simply wrong, and Frank said so: it is ordinary English
+and it fits at 58 of 60.
+
+**The real objection was different and worth separating**, because conflating
+the two cost a round. "Introducing" earns nothing. Nobody searches it, it
+spends twelve of the sixty characters Google shows, and it dates a page that
+now carries a full menu and its own Google listing. A stranger reading that
+result cannot tell whether this is a coffee shop or a restaurant.
+
+So the heading moved with the title, since `titleMatchesHeading` would
+otherwise drag "Introducing" back in:
+
+| | |
+| --- | --- |
+| h1 | "An Organic Cafe in Midtown Toronto" |
+| title | "Organic Cafe in Midtown Toronto", 47 of 60 |
+
+"Organic cafe" is Frank's own language rather than a new claim: the share card
+has read "An Organic Cafe Where Food Is Medicine" since 2026-09-10 and the
+meta description already said "an organic, whole-food menu". **The share card
+is untouched**, so that approved wording still goes out on a share.
+
+**The brand is not lost by dropping "Curate Cafe" from the heading.** The page
+is at /cafe, the navigation says Cafe, the share card still ends in "Curate
+Cafe" through `shareBrand`, and the page title still ends in "| Curate
+Health". `scripts/retitle-cafe-page.js`, transaction `3yDMSLjXUJh2wIb23wIyz6`.
 
 #### "York" goes in `areaServed` and in one sentence, never in a title
 
@@ -5335,14 +5357,24 @@ deliberately invalid JSON-LD, which means they read visible text and largely
 ignore the markup. So the catchment is written out too, in two places and in
 two registers:
 
-| where | |
-| --- | --- |
-| the footer, under the address | "Serving Midtown Toronto, including Forest Hill, Cedarvale, Oakwood Village and the Eglinton West corridor." |
-| `/contact`, after the opening paragraph | "We are in Midtown Toronto on Eglinton West, close to Forest Hill, Cedarvale, Humewood and Oakwood Village, in the former City of York." |
+It is on **`/contact` only**, after the opening paragraph:
 
-**Four names in the footer, not eleven.** The schema graph is the place for
-the full list; a footer reciting every neighbourhood within three kilometres
-reads as what it would be.
+> We are in Midtown Toronto on Eglinton West, close to Forest Hill,
+> Cedarvale, Humewood and Oakwood Village, in the former City of York.
+
+**A second copy shipped in the footer for part of a day and was removed the
+same day.** Frank asked for it and then asked what it was actually worth,
+which was the right question, and the honest answer is: very little. A footer
+renders on every page, so Google treats it as boilerplate and discounts it,
+while the /contact sentence is main content on the page that answers "where
+are you". The answer engines might pick a footer up, since retrieval works on
+chunks, but extraction pipelines commonly strip nav and footer precisely
+because they repeat.
+
+So it bought an uncertain little, and a neighbourhood list repeated across 56
+pages is the shape of keyword stuffing even when every name is honest. **Do
+not add one back to the footer** on the assumption it was forgotten; the
+comment there says so too.
 
 **"the former City of York", not "York".** It is accurate, and it is the one
 phrasing that tells somebody in the old municipality that this is their

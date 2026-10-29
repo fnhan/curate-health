@@ -452,6 +452,10 @@ Two ids is not automatically two listings, a place pin and a business entity can
 
 The duplicate place id survives in the backup and in Google, not in the dataset. It is still a Google Business Profile question, and the table above is still the record of it.
 
+**Re-checked 2026-10-29, because the table above reads as a live defect and is not one.** Every place reference in the dataset points at the business entity, `0x882b33a0bc00ca61:...`: `contactPage.mapURL`, `siteSettings.contactInfo.mapLink` (the short `maps.app.goo.gl` link) and `directionsLink` (the `daddr` with its `geocode`). The address-pin id appears **nowhere**, and nothing anywhere in the dataset or the source says "York" as a locality. So **there is nothing left to fix in this repository**, and the two-id table is a record of what was found in August rather than a task.
+
+**What remains is outside the repo and unverified.** Whether a second Google listing still exists for 989 Eglinton is a question about Google Business Profile, not about the site, and it cannot be answered by fetching a Maps URL: Maps renders in the browser, so a 200 from `curl` proves only that Google served a page. The agency owns that surface. **Do not report this as a site defect, and do not claim the duplicate is resolved either**, because nobody has looked.
+
 **The two copies were not interchangeable, found 2026-09-12.** Every address
 field matched byte for byte, as did email and phone. `mapLink` did not:
 
@@ -1403,10 +1407,18 @@ that persists for a while, so space the requests.
 **Jane holds about a fortnight open, and that decides the whole design.**
 Sixteen weeks ahead returned one Pilates opening and two Yoga ones. So there is
 no reliable list of future dates to publish, and a page built off Jane would
-publish a schedule that runs out. What is published is the **recurrence**:
+publish a schedule that runs out. An `Event` with a date in the past is worse
+than no `Event`. The **recurrence** is published for that reason:
 `eventSchedule` with a `Schedule`, `byDay` and `repeatFrequency: P1W`, which is
-what schema.org provides for a weekly class and what Google documents for a
-recurring event. An `Event` with a date in the past is worse than no `Event`.
+what schema.org provides for a weekly class.
+
+**This paragraph used to end "and what Google documents for a recurring
+event". That was false, and it cost a Search Console error.** Google requires
+`startDate` on an `Event` and documents no recurrence field at all. The
+schedule shipped without one on 2026-10-20 and Google reported it on
+2026-10-29. Each class now also states when it next runs, computed rather than
+stored, which answers the real objection above because a computed date cannot
+be in the past. See below.
 
 **`scheduleTimezone` is America/Toronto, not an offset.** Jane returned the
 same 9:00 AM class as `-04:00` in October and `-05:00` in November, which is
@@ -1571,6 +1583,78 @@ than anything here.
   than being quietly rewritten here.
 - Its photograph is the 6500x3846 PNG that CH-029 names as the worst asset in
   the library.
+
+#### The Events needed a startDate after all. Fixed 2026-10-29
+
+Google emailed Search Console: `startDate` missing, critical, on three items,
+plus `endDate` and `offers.validFrom` as suggestions. **The critical one was a
+straight mistake in CH-107**, not a judgement that turned out badly. Google
+requires `startDate` on an `Event` and its documentation never mentions
+`eventSchedule` or `Schedule` at all, so publishing the recurrence alone bought
+nothing from the one reader it was aimed at.
+
+**The reasoning against a date was still right, and the fix keeps it.** Jane
+holds about a fortnight open, so there was never a list of future dates to
+publish, and a stored date would eventually be in the past. So the date is
+**computed**, not stored: `nextOccurrence` in `lib/class-dates.ts` returns the
+next time each weekly class runs. It is right by construction rather than by
+being maintained, and it cannot be stale in the only direction that matters.
+
+**`PAGE_REVALIDATE_SECONDS` is an hour, which cannot carry a date past its
+class**: the soonest any of these starts after a rebuild is the following
+morning.
+
+**It is its own file because `lib/structured-data.tsx` carries JSX**, and Node
+24 runs a `.ts` file directly but not a `.tsx` one. That is what makes
+`scripts/test-class-dates.ts` possible, and the test is the point: this is the
+only arithmetic on the site that can be wrong in a way nobody notices for
+months.
+
+**The offset is read off the zone, never assumed.** `2026-11-01` is the day
+the clocks go back, Tai Chi runs that morning, and it is correctly `-05:00`
+while the Tuesday before it is also `-05:00` and a Sunday in July is `-04:00`.
+The offset is read for the **target** date rather than today's, so a class the
+far side of a clock change is still stated correctly. Checked at 26,352 hourly
+instants across a year: no date in the past, none more than a week ahead.
+
+**`eventSchedule` stays.** It is the honest description of a class that runs
+every week, schema.org provides it for exactly that, and anything reading the
+page learns the pattern rather than one date.
+
+**`offers.validFrom` is deliberately not set, and that suggestion will
+persist.** Google's own documentation makes it conditional: it is for an offer
+that is date-restricted, such as tickets going on sale later. A drop-in place
+is bookable now, which is what `availability: InStock` already says, so a date
+there would invent a restriction that does not exist. **Do not add one to
+silence the warning.**
+
+```bash
+node scripts/audit-class-schedule.js http://localhost:3000
+node scripts/audit-class-schedule.js https://www.curatehealth.ca
+```
+
+**That check did not exist, which is why this lasted nine days.** Every other
+kind of markup on this site has one. It holds the Events to Google's required
+fields, reports its recommended ones without failing, and then does the thing
+no source review can: it reads the date against the clock, fails a date in the
+past or more than a week out, and fails a day or time the markup and the page
+disagree about. Run against production before the fix it reported all three
+missing `startDate`, which is exactly what Google said.
+
+**The render baseline normalises these two dates out.** They move every week,
+so left in, `/classes` would report a change on every comparison for ever.
+Only on an `Event`: `datePublished` and `dateModified` on a `BlogPosting` are
+stored values and are still compared.
+
+**Google's Rich Results Test is behind a reCAPTCHA**, so it is not something
+to drive from here. It wants a public URL anyway, so it is worth running on
+`/classes` once this deploys, which is also when Search Console will recrawl.
+
+**A dev server renders `/about/our-team` with every card twice.** Worth knowing
+before reading a baseline comparison: 28 team links against production's 14,
+which looks exactly like a regression and is a `next dev` artifact. A
+production build serves 14, same as production. **Compare a build, not `next
+dev`**, which the CH-118 note already says for a different reason.
 
 ### CH-029, the heavy PNGs. Done 2026-10-24
 
@@ -3346,7 +3430,7 @@ Every link was repointed in the same change: the navigation's Programs list, the
 
 ### The every-page rule, first run 2026-09-18
 
-`node scripts/audit-seo-complete.js` runs nine checks: metadata, llms.txt, breadcrumbs, reachability, alt text, image sizes, practitioner pages, the blog, and the content rules in the words on each page. The last is new, `scripts/audit-content-rules.js`, because no other check read the body of a page.
+`node scripts/audit-seo-complete.js` runs thirteen checks: metadata, llms.txt, breadcrumbs, reachability, alt text, image sizes, practitioner pages, the blog, the content rules in the words on each page, share cards, the class schedule's Event markup, and two unit checks that fetch nothing, the share card fallback chain and the next class date. **It was nine on 2026-09-18, so a passing "9 of 9" anywhere above is a count from then, not a target.** `scripts/audit-content-rules.js` was the ninth, because no other check read the body of a page.
 
 **Brought up to the rule on the first run:** the two Curate Lifestyle pages, which joined the sitemap that day and so had never been checked. Both gained a breadcrumb trail, the program's through Curate Lifestyle, and a `Service` node from `buildLifestyleJsonLd`. The program page had two h1s; "Group Sessions" is an h2 now, with the same look. Its eight session pictures and the line drawing behind the pillars quote were looked at and listed as decorative in `audit-alt-text.js`. Images without alt text now render `alt=""` rather than no attribute.
 

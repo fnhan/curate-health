@@ -1,0 +1,210 @@
+/**
+ * `nextOccurrence` against the clock changes and the week boundary.
+ *
+ *   node --env-file=.env.local --import ./scripts/lib/alias-loader.mjs \
+ *     scripts/test-class-dates.ts
+ *
+ * WHY THIS IS A UNIT TEST AND NOT AN AUDIT OF THE PAGE
+ *
+ * A rendered page can only ever show today's answer. The interesting cases
+ * are the two Sundays a year when Toronto changes offset, the moment a class
+ * stops being today's and becomes next week's, and the end of a month. None
+ * of them can be exercised by fetching /classes, and waiting until March to
+ * find out is not a test.
+ *
+ * `nextOccurrence` takes `now` as an argument for exactly this reason.
+ *
+ * The expected values below were worked out from the IANA rules for
+ * America/Toronto: EDT is UTC-4 and runs from the second Sunday in March to
+ * the first Sunday in November, EST is UTC-5 and covers the rest.
+ */
+import { isDayName, nextOccurrence } from "@/lib/class-dates";
+
+type Case = {
+  what: string;
+  day: string;
+  start: string;
+  end: string;
+  now: string;
+  startDate: string;
+  endDate: string;
+};
+
+/** The three live classes, as CH-107 and the 50 minute change left them. */
+const YOGA = { day: "Tuesday", start: "18:00", end: "18:50" };
+const PILATES = { day: "Wednesday", start: "09:00", end: "09:50" };
+const TAI_CHI = { day: "Sunday", start: "09:00", end: "09:50" };
+
+const cases: Case[] = [
+  {
+    what: "Tai Chi lands on the day the clocks go back, so it is EST",
+    ...TAI_CHI,
+    now: "2026-10-29T13:00:00Z",
+    startDate: "2026-11-01T09:00:00-05:00",
+    endDate: "2026-11-01T09:50:00-05:00",
+  },
+  {
+    what: "the Tuesday before that is still EDT",
+    ...YOGA,
+    now: "2026-10-29T13:00:00Z",
+    startDate: "2026-11-03T18:00:00-05:00",
+    endDate: "2026-11-03T18:50:00-05:00",
+  },
+  {
+    what: "a Sunday in July is EDT",
+    ...TAI_CHI,
+    now: "2026-07-01T13:00:00Z",
+    startDate: "2026-07-05T09:00:00-04:00",
+    endDate: "2026-07-05T09:50:00-04:00",
+  },
+  {
+    what: "a Sunday in January is EST",
+    ...TAI_CHI,
+    now: "2027-01-06T13:00:00Z",
+    startDate: "2027-01-10T09:00:00-05:00",
+    endDate: "2027-01-10T09:50:00-05:00",
+  },
+  {
+    what: "the Sunday the clocks go forward is EDT",
+    ...TAI_CHI,
+    now: "2027-03-09T13:00:00Z",
+    startDate: "2027-03-14T09:00:00-04:00",
+    endDate: "2027-03-14T09:50:00-04:00",
+  },
+  {
+    what: "today's class still counts an hour before it starts",
+    ...YOGA,
+    // 16:00 EST on Tuesday 2026-12-01, two hours before the 18:00 class.
+    now: "2026-12-01T21:00:00Z",
+    startDate: "2026-12-01T18:00:00-05:00",
+    endDate: "2026-12-01T18:50:00-05:00",
+  },
+  {
+    what: "a minute after it starts, the answer is next week",
+    ...YOGA,
+    // 18:01 EST on the same Tuesday.
+    now: "2026-12-01T23:01:00Z",
+    startDate: "2026-12-08T18:00:00-05:00",
+    endDate: "2026-12-08T18:50:00-05:00",
+  },
+  {
+    what: "exactly on the hour it has started, so next week",
+    ...YOGA,
+    now: "2026-12-01T23:00:00Z",
+    startDate: "2026-12-08T18:00:00-05:00",
+    endDate: "2026-12-08T18:50:00-05:00",
+  },
+  {
+    what: "the next occurrence rolls into the following month",
+    ...PILATES,
+    // Thursday 2026-12-31, so the next Wednesday is in January.
+    now: "2026-12-31T15:00:00Z",
+    startDate: "2027-01-06T09:00:00-05:00",
+    endDate: "2027-01-06T09:50:00-05:00",
+  },
+  {
+    what: "late UTC evening is still the same Toronto day",
+    ...PILATES,
+    // 2026-11-05T02:00Z is 2026-11-04 21:00 EST, a Wednesday, class over.
+    now: "2026-11-05T02:00:00Z",
+    startDate: "2026-11-11T09:00:00-05:00",
+    endDate: "2026-11-11T09:50:00-05:00",
+  },
+  {
+    what: "early UTC morning is still the previous Toronto day",
+    ...PILATES,
+    // 2026-11-04T03:00Z is 2026-11-03 22:00 EST, a Tuesday.
+    now: "2026-11-04T03:00:00Z",
+    startDate: "2026-11-04T09:00:00-05:00",
+    endDate: "2026-11-04T09:50:00-05:00",
+  },
+];
+
+let failed = 0;
+console.log();
+
+for (const c of cases) {
+  const got = nextOccurrence(c.day, c.start, c.end, new Date(c.now));
+  const ok = got.startDate === c.startDate && got.endDate === c.endDate;
+
+  if (!ok) failed += 1;
+  console.log(`  ${ok ? "ok  " : "FAIL"}  ${c.what}`);
+  if (!ok) {
+    console.log(`          want ${c.startDate} / ${c.endDate}`);
+    console.log(`          got  ${got.startDate} / ${got.endDate}`);
+  }
+}
+
+/*
+ * The whole reason the computed date is defensible: it cannot be in the past.
+ * Checked across a year of hourly instants rather than argued.
+ */
+const classes = [YOGA, PILATES, TAI_CHI];
+let stale = 0;
+let checked = 0;
+
+for (let hour = 0; hour < 24 * 366; hour += 1) {
+  const now = new Date(Date.UTC(2026, 0, 1) + hour * 3600_000);
+  for (const k of classes) {
+    const { startDate } = nextOccurrence(k.day, k.start, k.end, now);
+    checked += 1;
+    if (new Date(startDate).getTime() < now.getTime()) stale += 1;
+  }
+}
+
+console.log();
+console.log(
+  `  ${stale === 0 ? "ok  " : "FAIL"}  no date in the past, across ${checked} instants`
+);
+if (stale) failed += 1;
+
+/* Nor more than a week out, which would mean a class had been skipped. */
+let far = 0;
+for (let hour = 0; hour < 24 * 366; hour += 1) {
+  const now = new Date(Date.UTC(2026, 0, 1) + hour * 3600_000);
+  for (const k of classes) {
+    const { startDate } = nextOccurrence(k.day, k.start, k.end, now);
+    const days = (new Date(startDate).getTime() - now.getTime()) / 86_400_000;
+    if (days > 7.05) far += 1;
+  }
+}
+console.log(
+  `  ${far === 0 ? "ok  " : "FAIL"}  never more than a week ahead`
+);
+if (far) failed += 1;
+
+
+/*
+ * `isDayName` is the only list of the seven days now, so it is worth proving
+ * it accepts exactly those seven. `buildClassScheduleJsonLd` gates on it, and
+ * a day it wrongly rejected would silently drop a class off the schedule.
+ */
+const days = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+const rejects = ["", "monday", "Mon", "Tues", "Caturday", "constructor", "toString"];
+
+const accepted = days.filter((d) => isDayName(d));
+const leaked = rejects.filter((d) => isDayName(d));
+
+console.log(
+  `  ${accepted.length === 7 ? "ok  " : "FAIL"}  isDayName accepts all seven days`
+);
+console.log(
+  `  ${leaked.length === 0 ? "ok  " : "FAIL"}  and nothing else${leaked.length ? ": " + leaked.join(", ") : ""}`
+);
+if (accepted.length !== 7 || leaked.length) failed += 1;
+
+console.log();
+if (failed) {
+  console.error(`  ${failed} FAILED`);
+  process.exitCode = 1;
+} else {
+  console.log("  All checks pass.");
+}

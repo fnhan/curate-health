@@ -4,6 +4,7 @@ import {
   getBlogAuthorDisplayName,
 } from "@/lib/author-team-link";
 import type { Crumb } from "@/lib/breadcrumbs";
+import { isDayName, nextOccurrence } from "@/lib/class-dates";
 import { treatmentPath } from "@/lib/service-urls";
 import { getPractitionerSlugFromName } from "@/lib/utils";
 import {
@@ -939,36 +940,42 @@ type ScheduledClassLike = {
   } | null;
 };
 
-const DAYS = new Set([
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-]);
-
 /**
  * The class schedule as Event nodes. CH-107.
  *
- * THE RECURRENCE IS PUBLISHED, NOT A LIST OF DATES
+ * THE NEXT OCCURRENCE IS DATED, AND THE RECURRENCE IS PUBLISHED BESIDE IT
  *
- * `eventSchedule` with a `Schedule` is what schema.org provides for a class
- * that runs every week at the same time, and it is what Google documents for
- * a recurring event. A dated `startDate` would be wrong here twice over: Jane
- * only holds the next fortnight open, so there is no reliable list of future
- * dates to publish, and a date that has passed is worse than no date at all.
+ * **Google requires `startDate` on an Event and documents no recurrence
+ * field at all**, so `eventSchedule` on its own bought nothing from it.
+ * Search Console reported exactly that on 2026-10-29, as critical. An earlier
+ * version of this comment claimed Google documented the recurrence. It did
+ * not, and it does not.
  *
- * `scheduleTimezone` is America/Toronto rather than an offset, so the hour
- * stays correct across daylight saving. Jane returned these as -04:00 in
- * October and -05:00 in November for the same 9:00 AM class, which is exactly
- * the thing an offset gets wrong.
+ * So each class states when it next runs, computed by `nextOccurrence`
+ * rather than stored. **That answers the original objection, which was
+ * real**: Jane only holds the next fortnight open, so there was never a list
+ * of future dates to publish, and a date that has passed is worse than no
+ * date. A computed next occurrence cannot be in the past.
+ *
+ * It is at most `PAGE_REVALIDATE_SECONDS` stale, an hour, which cannot carry
+ * it past a class: the soonest any of these starts after a rebuild is the
+ * following morning.
+ *
+ * `eventSchedule` stays. It is the honest description of a class that runs
+ * every week, it is what schema.org provides for one, and anything reading
+ * the page learns the pattern rather than a single date.
+ * `scheduleTimezone` is America/Toronto rather than an offset for the
+ * daylight saving reason under `torontoOffset`.
  *
  * WHAT IS NOT PUBLISHED, AND WHY
  *
- * `startDate` and `endDate`: nothing on the page states when a class started
- * or will stop, and neither does Jane.
+ * `offers.validFrom`, which Search Console reported in the same notice as a
+ * suggestion rather than an error. Google's own documentation makes it
+ * conditional: it is for an offer that is date-restricted, such as tickets
+ * going on sale later. A drop-in place is bookable now, which is what
+ * `availability` already says, so a date here would invent a restriction
+ * that does not exist. **That suggestion is expected to persist, and it is
+ * correct to leave it.**
  *
  * A price with no `price` field set: pricing lives in Jane on this site, so a
  * class only carries an `Offer` when somebody has typed the number into the
@@ -988,6 +995,12 @@ export function buildClassScheduleJsonLd(schedule: {
 } | null) {
   const url = absoluteUrl(CLASS_SCHEDULE_PATH);
 
+  /*
+   * One instant for every class, so two of them cannot land on different
+   * sides of midnight within a single render.
+   */
+  const now = new Date();
+
   const events = (schedule?.classes ?? [])
     .map((entry) => {
       const name = entry.name?.trim();
@@ -997,7 +1010,9 @@ export function buildClassScheduleJsonLd(schedule: {
 
       // Everything below needs a name, a day and a usable time. A class
       // missing any of them is left out rather than published half stated.
-      if (!name || !day || !DAYS.has(day) || !end) return undefined;
+      if (!name || !day || !isDayName(day) || !start || !end) {
+        return undefined;
+      }
 
       const anchor = classAnchor(name);
       const page =
@@ -1005,9 +1020,13 @@ export function buildClassScheduleJsonLd(schedule: {
           ? absoluteUrl(treatmentPath(entry.serviceSlug, entry.treatmentSlug))
           : undefined;
 
+      const occurrence = nextOccurrence(day, start, end, now);
+
       return {
         "@type": "Event",
         "@id": `${url}#${anchor}`,
+        startDate: occurrence.startDate,
+        endDate: occurrence.endDate,
         name,
         description: entry.summary?.trim() || undefined,
         image: classPhoto(entry)?.url || undefined,

@@ -1299,6 +1299,10 @@ export const CLASS_SCHEDULE_QUERY = groq`*[_type == "classSchedule"][0]{
     capacity,
     price,
     note,
+    // Empty while a class runs normally. Set, it is the date the class comes
+    // back, and both the page and the Event markup read it rather than
+    // working out the next weekly slot.
+    resumesOn,
     "name": coalesce(treatment->title, name),
     // The entry's own summary wins, so the line on this page can be edited
     // without touching the treatment page's meta description. Empty, it

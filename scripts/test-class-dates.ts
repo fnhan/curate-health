@@ -18,7 +18,7 @@
  * America/Toronto: EDT is UTC-4 and runs from the second Sunday in March to
  * the first Sunday in November, EST is UTC-5 and covers the rest.
  */
-import { isDayName, nextOccurrence } from "@/lib/class-dates";
+import { isDayName, isPaused, nextOccurrence } from "@/lib/class-dates";
 
 type Case = {
   what: string;
@@ -26,6 +26,7 @@ type Case = {
   start: string;
   end: string;
   now: string;
+  resumesOn?: string | null;
   startDate: string;
   endDate: string;
 };
@@ -120,11 +121,87 @@ const cases: Case[] = [
   },
 ];
 
+/*
+ * A class on a break. These are the cases that caused the whole correction:
+ * Pilates was published as running on 4 November when it does not run again
+ * until December, because the first version assumed a weekly rhythm.
+ */
+const paused: Case[] = [
+  {
+    what: "a Pilates break until December gives the first Wednesday after it",
+    ...PILATES,
+    now: "2026-10-30T13:00:00Z",
+    resumesOn: "2026-12-01",
+    startDate: "2026-12-02T09:00:00-05:00",
+    endDate: "2026-12-02T09:50:00-05:00",
+  },
+  {
+    what: "a resume date landing on the class's own weekday is that very day",
+    ...PILATES,
+    now: "2026-10-30T13:00:00Z",
+    resumesOn: "2026-12-02",
+    startDate: "2026-12-02T09:00:00-05:00",
+    endDate: "2026-12-02T09:50:00-05:00",
+  },
+  {
+    /*
+     * Once the resume day has arrived the break is over, so the ordinary rule
+     * takes back over and a class that has already run today points at next
+     * week. The first version of this case expected the 2nd and was simply
+     * wrong: it would have had the page advertising a class that finished
+     * fourteen hours earlier.
+     */
+    what: "the evening of the resume day points at the week after",
+    ...PILATES,
+    // 2026-12-02 at 23:00 EST, long after a 9:00 AM class would have run.
+    now: "2026-12-03T04:00:00Z",
+    resumesOn: "2026-12-02",
+    startDate: "2026-12-09T09:00:00-05:00",
+    endDate: "2026-12-09T09:50:00-05:00",
+  },
+  {
+    what: "a resume date already past is ignored, so the class runs normally",
+    ...PILATES,
+    now: "2027-02-04T13:00:00Z",
+    resumesOn: "2026-12-01",
+    startDate: "2027-02-10T09:00:00-05:00",
+    endDate: "2027-02-10T09:50:00-05:00",
+  },
+  {
+    what: "a resume date on the far side of a clock change takes that offset",
+    ...TAI_CHI,
+    now: "2027-02-04T13:00:00Z",
+    resumesOn: "2027-04-01",
+    startDate: "2027-04-04T09:00:00-04:00",
+    endDate: "2027-04-04T09:50:00-04:00",
+  },
+];
+
+/*
+ * The date a reader is shown and the date Google is given come from this one
+ * pair of functions, so a class cannot say one thing on the page and another
+ * in the markup.
+ */
+const pausedNow = new Date("2026-10-30T13:00:00Z");
+const pauseStates: [string, string | null | undefined, boolean][] = [
+  ["a future date is a break", "2026-12-01", true],
+  ["a past date is not", "2026-01-01", false],
+  ["empty is not", null, false],
+  ["undefined is not", undefined, false],
+  ["nonsense is not", "December", false],
+];
+
 let failed = 0;
 console.log();
 
-for (const c of cases) {
-  const got = nextOccurrence(c.day, c.start, c.end, new Date(c.now));
+for (const c of [...cases, ...paused]) {
+  const got = nextOccurrence(
+    c.day,
+    c.start,
+    c.end,
+    new Date(c.now),
+    c.resumesOn
+  );
   const ok = got.startDate === c.startDate && got.endDate === c.endDate;
 
   if (!ok) failed += 1;
@@ -200,6 +277,13 @@ console.log(
   `  ${leaked.length === 0 ? "ok  " : "FAIL"}  and nothing else${leaked.length ? ": " + leaked.join(", ") : ""}`
 );
 if (accepted.length !== 7 || leaked.length) failed += 1;
+
+console.log();
+for (const [what, value, want] of pauseStates) {
+  const got = isPaused(pausedNow, value);
+  if (got !== want) failed += 1;
+  console.log(`  ${got === want ? "ok  " : "FAIL"}  isPaused: ${what}`);
+}
 
 console.log();
 if (failed) {

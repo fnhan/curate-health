@@ -28,6 +28,33 @@ const DAY_INDEX: Record<string, number> = {
 };
 
 /**
+ * The instant to search forward from: the resume date when one is set and
+ * still ahead, otherwise now.
+ *
+ * A date with no time is read as noon in Toronto rather than midnight UTC.
+ * `new Date("2026-12-01")` is midnight UTC, which is 7:00 PM on 30 November
+ * in Toronto, so a class resuming on a Tuesday would have been searched from
+ * the Monday evening and could land a day early. Noon cannot.
+ */
+function resumeFloor(now: Date, resumesOn?: string | null) {
+  if (!resumesOn || !/^\d{4}-\d{2}-\d{2}$/.test(resumesOn)) return now;
+
+  const at = new Date(`${resumesOn}T12:00:00${torontoOffset(new Date(`${resumesOn}T12:00:00Z`))}`);
+  if (Number.isNaN(at.getTime())) return now;
+
+  return at.getTime() > now.getTime() ? at : now;
+}
+
+/**
+ * Whether a class is on a break today, so the page can say so. Reads the same
+ * date by the same rule as `resumeFloor`, which is what stops the sentence on
+ * the page and the date in the markup disagreeing.
+ */
+export function isPaused(now: Date, resumesOn?: string | null) {
+  return resumeFloor(now, resumesOn) !== now;
+}
+
+/**
  * Whether a stored value is a day `nextOccurrence` can work from.
  *
  * `Object.hasOwn`, not `in`. `"constructor" in DAY_INDEX` is true, because
@@ -99,6 +126,13 @@ function torontoParts(at: Date) {
  * kept up to date: today's class counts until its start time passes, and
  * after that the answer is next week's. It can never be in the past.
  *
+ * **`resumesOn` is why this takes a floor at all, and it is the correction to
+ * a real mistake.** The first version assumed every class runs every week, so
+ * it published a Pilates date in November for a class that does not run again
+ * until December. Instructors take holidays. A class on a break carries the
+ * date it comes back, and the search from there gives its first class back
+ * rather than a date nobody can book.
+ *
  * The offset is the one in force on the target date, not today's, so a class
  * the far side of a clock change is still stated correctly. Noon UTC on that
  * date is used to read it, which is morning in Toronto and so safely past the
@@ -108,19 +142,33 @@ export function nextOccurrence(
   day: string,
   startTime: string,
   endTime: string,
-  now: Date
+  now: Date,
+  resumesOn?: string | null
 ) {
   const target = DAY_INDEX[day];
   const [hour, minute] = startTime.split(":").map(Number);
 
-  const here = torontoParts(now);
+  /*
+   * The later of today and the resume date. A resume date already past is
+   * ignored, so a break nobody cleared in the Studio stops holding the class
+   * on a date behind us rather than freezing it there.
+   */
+  const from = resumeFloor(now, resumesOn);
+  const here = torontoParts(from);
   const today = new Date(
     Date.UTC(here.year, here.month - 1, here.day)
   ).getUTCDay();
 
   let ahead = (target - today + 7) % 7;
+
+  /*
+   * Today's class counts until its start time passes. Not applied on a resume
+   * date: that date is a statement about the day, not the minute, so a class
+   * resuming on its own weekday runs that day whatever the clock says now.
+   */
   if (
     ahead === 0 &&
+    from === now &&
     (here.hour > hour || (here.hour === hour && here.minute >= minute))
   ) {
     ahead = 7;

@@ -924,6 +924,7 @@ type ScheduledClassLike = {
   dayOfWeek?: string | null;
   startTime?: string | null;
   durationMinutes?: number | null;
+  resumesOn?: string | null;
   capacity?: number | null;
   price?: number | null;
   note?: string | null;
@@ -1020,7 +1021,7 @@ export function buildClassScheduleJsonLd(schedule: {
           ? absoluteUrl(treatmentPath(entry.serviceSlug, entry.treatmentSlug))
           : undefined;
 
-      const occurrence = nextOccurrence(day, start, end, now);
+      const occurrence = nextOccurrence(day, start, end, now, entry.resumesOn);
 
       return {
         "@type": "Event",

@@ -182,14 +182,35 @@ function report() {
     if (ahead < 0) failures.push(`${label} startDate is in the past`);
 
     /*
-     * These are weekly, so the next one is always inside seven days. Further
-     * out means a week has been skipped, which is the same class of silent
-     * arithmetic error as a date in the past and just as invisible.
+     * These are weekly, so the next one is normally inside seven days, and
+     * further out used to be read as a skipped week outright.
+     *
+     * **A class on a break is the legitimate case, and it is why this is not
+     * simply a failure.** Instructors take holidays: Pilates is away until
+     * December, so its next date is a month out and correct. What is not
+     * acceptable is the markup quietly carrying a far-off date while the page
+     * still reads as though the class runs this week, which is exactly the
+     * shape of the defect that started all this.
+     *
+     * So the far date has to be ON THE PAGE. The page prints the day and the
+     * date it is back, and that string is what is looked for here, which also
+     * means the two cannot drift apart without this noticing.
      */
     if (ahead > 7.05) {
-      failures.push(
-        `${label} startDate is ${ahead.toFixed(1)} days out, so a week has been skipped`
-      );
+      const printed = start.toLocaleDateString("en-CA", {
+        timeZone: "America/Toronto",
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      });
+
+      if (!text.includes(printed)) {
+        failures.push(
+          `${label} startDate is ${ahead.toFixed(1)} days out and the page never says "${printed}", so either a week has been skipped or a break is not shown`
+        );
+      } else {
+        notes.push(`${label} is on a break and the page says it is back ${printed}`);
+      }
     }
 
     if (event.endDate) {

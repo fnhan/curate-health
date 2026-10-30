@@ -204,6 +204,13 @@ export default defineType({
                 "The Jane link for this class. Left empty, the treatment page's own booking link is used. Open it in Jane rather than pasting an id: one pasted id turned out to be Cold Plunge.",
             }),
             defineField({
+              name: "resumesOn",
+              title: "Paused until",
+              type: "date",
+              description:
+                "The date this class starts running again, when it is on a break. The page says it is paused and names the first class back, and that date is what is published to Google rather than the usual weekly one. Leave it empty while the class is running normally. Use this rather than the switch above for a known break: the class keeps its place on the page, in search and in the sitemap, so somebody looking for it still finds it and learns when it returns.",
+            }),
+            defineField({
               name: "note",
               title: "Note",
               type: "string",

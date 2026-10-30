@@ -1656,6 +1656,81 @@ which looks exactly like a regression and is a `next dev` artifact. A
 production build serves 14, same as production. **Compare a build, not `next
 dev`**, which the CH-118 note already says for a different reason.
 
+#### A CLASS DOES NOT RUN EVERY WEEK. Corrected 2026-10-30
+
+**The computed date above assumed a weekly rhythm, and two of the three
+classes were not keeping one.** Frank caught it the day after it was written:
+"some of the instructors take vacation and holidays. So what's true would be
+what's on Jane's bookable site." Checked in a browser the same day:
+
+| Class | The page said | Jane |
+| --- | --- | --- |
+| Outdoor Yoga Therapy | Tuesdays 6:00 PM | Tue 3 Nov, correct |
+| Outdoor Pilates | Wednesdays 9:00 AM | nothing before **Wed 2 Dec** |
+| Tai Chi | Sundays 9:00 AM | moved to Dr. Gabriele's profile |
+
+So `/classes` was telling a visitor Pilates ran four weeks before it did. That
+is worse than the markup fault it came with, because it is on the page a
+reader sees.
+
+**`resumesOn` on each class is the fix**, a date meaning "not before this".
+`nextOccurrence` searches forward from it rather than from today, so the class
+keeps its own weekday and simply cannot land inside the break. The page prints
+"Back on Wednesday, December 2" where it would print "Wednesday", and the
+markup publishes that same date.
+
+**It is not `isActive`, and the difference is the point.** Switching a class
+off takes it out of the page, the sitemap, llms.txt and search, so somebody
+looking for Pilates in November finds nothing and learns nothing.
+A break keeps the class findable and answers the question they actually have.
+Use the switch for "not running, no date"; use this for a known return.
+
+**A resume date already past is ignored**, so a break nobody cleared stops
+holding the class on a date behind us. And the "today's class counts until it
+starts" rule is not applied on a resume date itself, because that date is a
+statement about a day rather than a minute.
+
+**The floor date is read at noon Toronto, never midnight.**
+`new Date("2026-12-01")` is midnight UTC, which is 7:00 PM on 30 November in
+Toronto, so a class resuming on a Tuesday would have been searched from the
+Monday evening and could land a day early.
+
+**The stored date is 2026-12-01, not the 2nd**, because December is what Frank
+said. The Wednesday is derived, so it stays right if the day ever changes.
+
+**`audit-class-schedule.js` no longer fails a date more than a week out.** It
+requires the page to print that date instead, which is a stronger check than
+the one it replaces: the far date and the line a reader sees are now compared
+rather than one of them being suppressed.
+
+```bash
+node scripts/apply-class-corrections.js          # dry run
+node scripts/apply-class-corrections.js --apply
+```
+
+Applied in transaction `1OGjlpH01s2XPeiMEWWpV5`, after
+`sanity-backup-2026-10-30-before-class-corrections-documents.tar.gz`.
+
+**TAI CHI MOVED IN JANE and the old link was dead.** It was
+`#/discipline/22/treatment/112`, which now bounces to Jane's front page, so
+anybody clicking Book from this page landed nowhere useful. Frank gave the new
+one: `#/staff_member/7/treatment/112`, on Dr. Gabriele's own profile. Read
+back in a browser on 2026-10-30, it is "Tai Chi with Dr. Gabriele", 50
+minutes, $30.00, under Recovery Sanctuary, which agrees with the site.
+
+**That also closes half of the CH-107 note about Jane selling 60 minutes.**
+Tai Chi is 50 in Jane now. Yoga was not re-checked.
+
+**Jane's availability feed cannot be read from the server.** It answers 403 to
+a plain request and only serves a real browser, so a page that pulls the real
+dates needs official API access from Jane rather than a workaround. **Do not
+spoof a browser to get round it.** Until then, `resumesOn` is a fact somebody
+types in, with the same standing warning as the rest of this section: nothing
+notices on its own when a class moves in Jane.
+
+**Still unverified: whether Tai Chi runs every Sunday.** Its date is computed
+weekly like Yoga's. Nobody has confirmed that rhythm since October.
+
 ### CH-029, the heavy PNGs. Done 2026-10-24
 
 49 opaque PNGs became JPEGs. **307 MB to 25 MB**, and the referenced PNG

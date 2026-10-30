@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import SectionHero from "@/components/shared/section-hero";
 import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
 import { SanityImage } from "@/components/shared/sanity-image";
+import { isPaused, nextOccurrence } from "@/lib/class-dates";
 import { externalLinkProps } from "@/lib/links";
 import { HOVER_UNDERLINE_INLINE } from "@/lib/hover-underline";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -66,6 +67,22 @@ type ScheduledClass = NonNullable<
   NonNullable<CLASS_SCHEDULE_QUERY_RESULT>["classes"]
 >[number];
 
+/**
+ * "2026-12-02" to "Wednesday 2 December".
+ *
+ * Toronto, not the server's zone. A plain date read in UTC and formatted
+ * anywhere west of it comes back a day early, which on this page would name
+ * the wrong weekday beside a time.
+ */
+function longDate(ymd: string) {
+  return new Date(`${ymd}T12:00:00Z`).toLocaleDateString("en-CA", {
+    timeZone: "America/Toronto",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+}
+
 /** 50 to "50 minutes", 60 to "1 hour", 90 to "1 hour 30 minutes". */
 function lengthLabel(minutes: number | null | undefined) {
   if (typeof minutes !== "number" || minutes <= 0) return null;
@@ -104,8 +121,44 @@ function ClassBlock({ entry }: { entry: ScheduledClass }) {
       ? treatmentPath(entry.serviceSlug, entry.treatmentSlug)
       : null;
 
+  /*
+   * A class on a break says so, and names the first class back rather than a
+   * weekday it is not running on. The same `resumesOn` decides the date in
+   * the Event markup, through the same two functions, so the line a reader
+   * sees and the date Google reads cannot disagree.
+   *
+   * The whole reason this exists: the first version of the computed date
+   * assumed every class runs every week and published a Pilates date four
+   * weeks before the class was back.
+   */
+  const paused = isPaused(new Date(), entry.resumesOn);
+
+  /*
+   * `nextOccurrence` returns null for anything it cannot date, so a class
+   * with an unusable day or time falls back to its weekday line rather than
+   * taking the page down. That is not hypothetical: an earlier version threw
+   * here and failed the prerender of the whole page on Vercel.
+   */
+  const back =
+    paused && entry.dayOfWeek && entry.startTime
+      ? (nextOccurrence(
+          entry.dayOfWeek,
+          entry.startTime,
+          entry.startTime,
+          new Date(),
+          entry.resumesOn
+        )?.startDate.slice(0, 10) ?? null)
+      : null;
+
   const facts = [
-    time ? { label: "When", value: `${entry.dayOfWeek}, ${time}` } : null,
+    time
+      ? {
+          label: back ? "Back on" : "When",
+          value: back
+            ? `${longDate(back)}, ${time}`
+            : `${entry.dayOfWeek}, ${time}`,
+        }
+      : null,
     length ? { label: "Length", value: length } : null,
     entry.instructor?.name
       ? {

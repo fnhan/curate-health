@@ -202,13 +202,13 @@ for (const c of [...cases, ...paused]) {
     new Date(c.now),
     c.resumesOn
   );
-  const ok = got.startDate === c.startDate && got.endDate === c.endDate;
+  const ok = got?.startDate === c.startDate && got?.endDate === c.endDate;
 
   if (!ok) failed += 1;
   console.log(`  ${ok ? "ok  " : "FAIL"}  ${c.what}`);
   if (!ok) {
     console.log(`          want ${c.startDate} / ${c.endDate}`);
-    console.log(`          got  ${got.startDate} / ${got.endDate}`);
+    console.log(`          got  ${got?.startDate} / ${got?.endDate}`);
   }
 }
 
@@ -223,9 +223,9 @@ let checked = 0;
 for (let hour = 0; hour < 24 * 366; hour += 1) {
   const now = new Date(Date.UTC(2026, 0, 1) + hour * 3600_000);
   for (const k of classes) {
-    const { startDate } = nextOccurrence(k.day, k.start, k.end, now);
+    const got = nextOccurrence(k.day, k.start, k.end, now);
     checked += 1;
-    if (new Date(startDate).getTime() < now.getTime()) stale += 1;
+    if (!got || new Date(got.startDate).getTime() < now.getTime()) stale += 1;
   }
 }
 
@@ -240,8 +240,9 @@ let far = 0;
 for (let hour = 0; hour < 24 * 366; hour += 1) {
   const now = new Date(Date.UTC(2026, 0, 1) + hour * 3600_000);
   for (const k of classes) {
-    const { startDate } = nextOccurrence(k.day, k.start, k.end, now);
-    const days = (new Date(startDate).getTime() - now.getTime()) / 86_400_000;
+    const got = nextOccurrence(k.day, k.start, k.end, now);
+    if (!got) { far += 1; continue; }
+    const days = (new Date(got.startDate).getTime() - now.getTime()) / 86_400_000;
     if (days > 7.05) far += 1;
   }
 }
@@ -277,6 +278,56 @@ console.log(
   `  ${leaked.length === 0 ? "ok  " : "FAIL"}  and nothing else${leaked.length ? ": " + leaked.join(", ") : ""}`
 );
 if (accepted.length !== 7 || leaked.length) failed += 1;
+
+/*
+ * **Nothing here may throw.** An earlier version did, on exactly these kinds
+ * of input, and it failed the prerender of the whole /classes page on Vercel
+ * while a local build and all thirteen checks passed. A date helper is not
+ * worth a page, so an input it cannot work from comes back null and the
+ * callers fall back.
+ */
+/** A dated local time carrying an offset, which is what Google needs. */
+const SHAPE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/;
+
+const unusable: [string, () => unknown][] = [
+  ["an unknown day", () => nextOccurrence("Caturday", "09:00", "09:50", new Date())],
+  ["a lowercase day", () => nextOccurrence("monday", "09:00", "09:50", new Date())],
+  ["an empty day", () => nextOccurrence("", "09:00", "09:50", new Date())],
+  ["a prototype key as a day", () => nextOccurrence("constructor", "09:00", "09:50", new Date())],
+  ["a nonsense time", () => nextOccurrence("Monday", "nine", "09:50", new Date())],
+  ["an empty time", () => nextOccurrence("Monday", "", "09:50", new Date())],
+  ["an invalid now", () => nextOccurrence("Monday", "09:00", "09:50", new Date("rhubarb"))],
+  ["a nonsense resume date", () => nextOccurrence("Monday", "09:00", "09:50", new Date(), "soon")],
+  ["an impossible resume date", () => nextOccurrence("Monday", "09:00", "09:50", new Date(), "2026-13-45")],
+  ["an invalid date for isPaused", () => isPaused(new Date("rhubarb"), "2027-12-01")],
+];
+
+console.log();
+for (const [what, run] of unusable) {
+  let outcome: string;
+  try {
+    const got = run();
+    /*
+     * The contract is that it never throws, not that it always refuses. An
+     * unusable DAY or TIME has no answer, so it comes back null. An unusable
+     * RESUME DATE does have one: the break is ignored and the class runs
+     * normally, which is what happens to a break nobody cleared. Both are
+     * correct, so both pass, and a throw is the only failure.
+     */
+    const shaped =
+      got === null ||
+      typeof got === "boolean" ||
+      (typeof got === "object" &&
+        SHAPE.test((got as { startDate: string }).startDate));
+    outcome = shaped ? "ok  " : "FAIL";
+    if (!shaped) console.log("          returned: " + JSON.stringify(got));
+  } catch (e) {
+    outcome = "FAIL";
+    console.log(`          threw: ${(e as Error).message}`);
+  }
+  if (outcome === "FAIL") failed += 1;
+  console.log(`  ${outcome}  refuses rather than throws: ${what}`);
+}
 
 console.log();
 for (const [what, value, want] of pauseStates) {

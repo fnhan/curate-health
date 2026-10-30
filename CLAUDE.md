@@ -1731,6 +1731,50 @@ notices on its own when a class moves in Jane.
 **Still unverified: whether Tai Chi runs every Sunday.** Its date is computed
 weekly like Yoga's. Nobody has confirmed that rhythm since October.
 
+##### `nextOccurrence` took /classes down on Vercel, and now it cannot
+
+**The first version could throw, and a local build could not show it.** An
+unusable value reached `Date.UTC`, `toISOString` raised "Invalid time value",
+and **the prerender of the whole page failed with it**:
+
+```
+Error occurred prerendering page "/classes"
+RangeError: Invalid time value
+```
+
+`npm run build` passed on this machine, the page rendered correctly in a
+browser, and all 13 checks passed. The only thing that showed it was the
+deployment.
+
+**The local build looked clean partly because the output was filtered.**
+`npm run build 2>&1 | grep -iE 'Compiled successfully|error'` prints the
+success line from the compile step and hides a failure in the prerender step
+after it, and the exit code read through that pipe is grep's. **Redirect the
+build to a file and read `$?`**, which is the same lesson the
+`audit-seo-fields.js` note already records.
+
+**The environment difference was never reproduced.** Same Node 24, same full
+ICU, same result under `TZ=UTC`, and the stored day and time are clean. That
+is worth stating plainly rather than implying a diagnosis: what is fixed is
+the fragility, not an identified trigger.
+
+**So it refuses instead.** `nextOccurrence` returns **null** for an unknown
+day, an unusable time, an invalid `now` or any part that comes back NaN, and
+`torontoOffset` and `torontoParts` guard an invalid Date before calling
+`formatToParts`, which throws the same RangeError and is hard to tell from
+`toISOString` in a minified stack. Both callers already had somewhere sensible
+to go: the markup leaves the class out, and the page prints its weekday.
+
+**The page was also missing the gate the markup had.** The Event builder
+checked `isDayName` before computing; the page checked only that `dayOfWeek`
+was truthy. The same asymmetry is the reason the markup could render while the
+page died.
+
+**Ten cases in `test-class-dates.ts` now assert it never throws**, and the
+contract is "never throws", not "always refuses": an unusable day or time has
+no answer and returns null, while an unusable resume date simply means the
+break is ignored and the class runs normally. Both are correct, so both pass.
+
 ### CH-029, the heavy PNGs. Done 2026-10-24
 
 49 opaque PNGs became JPEGs. **307 MB to 25 MB**, and the referenced PNG

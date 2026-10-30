@@ -132,25 +132,31 @@ function ClassBlock({ entry }: { entry: ScheduledClass }) {
    * weeks before the class was back.
    */
   const paused = isPaused(new Date(), entry.resumesOn);
+
+  /*
+   * `nextOccurrence` returns null for anything it cannot date, so a class
+   * with an unusable day or time falls back to its weekday line rather than
+   * taking the page down. That is not hypothetical: an earlier version threw
+   * here and failed the prerender of the whole page on Vercel.
+   */
   const back =
-    paused && entry.dayOfWeek && entry.startTime && entry.durationMinutes
-      ? nextOccurrence(
+    paused && entry.dayOfWeek && entry.startTime
+      ? (nextOccurrence(
           entry.dayOfWeek,
           entry.startTime,
           entry.startTime,
           new Date(),
           entry.resumesOn
-        ).startDate.slice(0, 10)
+        )?.startDate.slice(0, 10) ?? null)
       : null;
 
   const facts = [
     time
       ? {
-          label: paused ? "Back on" : "When",
-          value:
-            back && time
-              ? `${longDate(back)}, ${time}`
-              : `${entry.dayOfWeek}, ${time}`,
+          label: back ? "Back on" : "When",
+          value: back
+            ? `${longDate(back)}, ${time}`
+            : `${entry.dayOfWeek}, ${time}`,
         }
       : null,
     length ? { label: "Length", value: length } : null,

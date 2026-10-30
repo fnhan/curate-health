@@ -1021,7 +1021,14 @@ export function buildClassScheduleJsonLd(schedule: {
           ? absoluteUrl(treatmentPath(entry.serviceSlug, entry.treatmentSlug))
           : undefined;
 
+      /*
+       * Null when the day or time cannot be used. A class that cannot be
+       * dated is left out rather than published without a startDate, which
+       * is the field Google requires, and rather than throwing, which took
+       * the page down once already.
+       */
       const occurrence = nextOccurrence(day, start, end, now, entry.resumesOn);
+      if (!occurrence) return undefined;
 
       return {
         "@type": "Event",

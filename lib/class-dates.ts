@@ -39,7 +39,10 @@ const DAY_INDEX: Record<string, number> = {
 function resumeFloor(now: Date, resumesOn?: string | null) {
   if (!resumesOn || !/^\d{4}-\d{2}-\d{2}$/.test(resumesOn)) return now;
 
-  const at = new Date(`${resumesOn}T12:00:00${torontoOffset(new Date(`${resumesOn}T12:00:00Z`))}`);
+  const noonUtc = new Date(`${resumesOn}T12:00:00Z`);
+  if (Number.isNaN(noonUtc.getTime())) return now;
+
+  const at = new Date(`${resumesOn}T12:00:00${torontoOffset(noonUtc)}`);
   if (Number.isNaN(at.getTime())) return now;
 
   return at.getTime() > now.getTime() ? at : now;
@@ -76,6 +79,11 @@ export function isDayName(value: string) {
  * -05:00 in November, which is exactly what a hardcoded offset gets wrong.
  */
 function torontoOffset(at: Date) {
+  // formatToParts throws RangeError on an invalid Date, exactly as
+  // toISOString does, and the two are hard to tell apart in a minified
+  // stack. Nothing in here is worth taking a page down for.
+  if (Number.isNaN(at.getTime())) return "-05:00";
+
   const named = new Intl.DateTimeFormat("en-US", {
     timeZone: TORONTO,
     timeZoneName: "longOffset",
@@ -89,8 +97,10 @@ function torontoOffset(at: Date) {
   return /^[+-][0-9]{2}:[0-9]{2}$/.test(offset) ? offset : "-05:00";
 }
 
-/** Toronto's own calendar date and clock at a given instant. */
+/** Toronto's own calendar date and clock at a given instant, or null. */
 function torontoParts(at: Date) {
+  if (Number.isNaN(at.getTime())) return null;
+
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: TORONTO,
     year: "numeric",
@@ -145,8 +155,24 @@ export function nextOccurrence(
   now: Date,
   resumesOn?: string | null
 ) {
+  /*
+   * NOTHING BELOW MAY THROW, and that is not defensiveness for its own sake.
+   *
+   * The first version could, and it took `/classes` down on Vercel: an
+   * unusable value reached `Date.UTC`, `toISOString` raised "Invalid time
+   * value", and the prerender of the whole page failed with it. The build is
+   * the only place that shows, since a local build passed and so did every
+   * check. A date helper is not worth a page.
+   *
+   * So an input this cannot work from returns null, and both callers already
+   * have a sensible thing to do with that: the markup leaves the class out,
+   * and the page prints its weekday as it did before any of this.
+   */
+  if (!isDayName(day)) return null;
+
   const target = DAY_INDEX[day];
   const [hour, minute] = startTime.split(":").map(Number);
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
 
   /*
    * The later of today and the resume date. A resume date already past is
@@ -155,6 +181,8 @@ export function nextOccurrence(
    */
   const from = resumeFloor(now, resumesOn);
   const here = torontoParts(from);
+  if (!here || !Number.isFinite(here.year)) return null;
+
   const today = new Date(
     Date.UTC(here.year, here.month - 1, here.day)
   ).getUTCDay();
@@ -175,9 +203,10 @@ export function nextOccurrence(
   }
 
   // Date.UTC rolls a day past the end of the month over for us.
-  const date = new Date(Date.UTC(here.year, here.month - 1, here.day + ahead))
-    .toISOString()
-    .slice(0, 10);
+  const at = new Date(Date.UTC(here.year, here.month - 1, here.day + ahead));
+  if (Number.isNaN(at.getTime())) return null;
+
+  const date = at.toISOString().slice(0, 10);
   const offset = torontoOffset(new Date(`${date}T12:00:00Z`));
 
   return {

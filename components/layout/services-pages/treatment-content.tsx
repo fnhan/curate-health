@@ -158,14 +158,39 @@ export default function TreatmentContent({
                 {ctaText}
               </p>
             </div>
-            <Button
-              asChild
-              className="w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
-            >
-              <a href={bookingHref!} {...externalLinkProps(bookingHref!)}>
-                {ctaButtonText}
-              </a>
-            </Button>
+            {/*
+              A second button for one-on-one sessions, on a treatment that is
+              a class with a private option: Yoga, Pilates and Tai Chi. It is
+              the primary's inverse, outlined where that one is filled, so the
+              class stays the obvious first choice.
+
+              Colours are spelled out rather than taken from the `outline`
+              variant, which paints dark green on dark green in this theme.
+              Both are janeapp.com links, so CH-113's book_now counts either.
+            */}
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-center">
+              <Button
+                asChild
+                className="w-fit rounded-none border border-white bg-white text-primary hover:bg-transparent hover:text-white"
+              >
+                <a href={bookingHref!} {...externalLinkProps(bookingHref!)}>
+                  {ctaButtonText}
+                </a>
+              </Button>
+              {treatment.privateSessionUrl ? (
+                <Button
+                  asChild
+                  className="w-fit rounded-none border border-white bg-transparent text-white hover:bg-white hover:text-primary"
+                >
+                  <a
+                    href={treatment.privateSessionUrl}
+                    {...externalLinkProps(treatment.privateSessionUrl)}
+                  >
+                    Book a Private Session
+                  </a>
+                </Button>
+              ) : null}
+            </div>
           </div>
         </div>
       </section>

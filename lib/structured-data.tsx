@@ -1208,26 +1208,38 @@ export function JsonLdScript({
 }
 
 /**
- * Product schema, CH-010.
+ * The product pages, marked up as a Service. CH-010, corrected 2026-11-01.
  *
- * NO OFFER, NO PRICE, DELIBERATELY
+ * THESE WERE `Product` NODES, AND GOOGLE REPORTED EVERY ONE AS BROKEN
  *
- * schema.org lets a Product carry an Offer with a price and availability, and
- * Google's product rich results want one. These do not get one, for two
- * reasons that both matter here.
+ * Search Console, 2026-11-01: "Either offers, review, or aggregateRating
+ * should be specified", critical, under Product snippets. Google will not
+ * show a product result without one of the three, and this site can honestly
+ * give none of them:
  *
- * Pricing is out of scope on this project by decision: it lives in Jane behind
- * the Book Now button and there is no pricing page. Publishing a price in
- * markup would put a number on the site that nothing on the site can show, and
- * a stale price in structured data is worse than no price.
+ * - **No `offers`**: pricing is out of scope by decision and lives in Jane, so
+ *   a price here would be a number the page itself never shows, and markup
+ *   describes what the page shows.
+ * - **No `aggregateRating`**: banned under CH-008. Google withdrew it for
+ *   self-serving reviews, and the colleges restrict testimonials.
+ * - **No `review`**: there are none, and none will be invented.
  *
- * These are also not things somebody adds to a basket. An orthotic is cast to a
- * foot and a brace is fitted, so the honest markup is a product that exists and
- * is described, not one that is for sale at a number.
+ * So a `Product` here could never become a product result, and its only
+ * effect was a critical error in Search Console.
  *
- * They still earn their place: this is what feeds Google Business Profile's
- * products field, which the agency manages, and it gives each page an entity
- * rather than leaving it as unlabelled prose.
+ * WHY A SERVICE IS THE TRUE DESCRIPTION, NOT A WORKAROUND
+ *
+ * Nobody adds these to a basket. An orthotic is cast to a foot, a brace and a
+ * stocking are fitted, and a TENS unit or a supplement is supplied after a
+ * practitioner has seen you. Every one of these pages ends on the same thing,
+ * a button to book a consultation with Dr. Nhan. What Curate offers on each is
+ * the assessment and the fitting, which is a Service, the same shape as every
+ * treatment page: the clinic as provider, and the areas it serves.
+ *
+ * **The old comment said this markup feeds Google Business Profile's products
+ * field. It does not**, and nothing on the page ever did: those are entered in
+ * the Business Profile by hand, which the agency does. It also said
+ * `category: "Medical device"`, which was wrong on the supplements page.
  */
 type ProductLike = {
   title?: string | null;
@@ -1243,20 +1255,18 @@ function buildProductNode(product: ProductLike) {
   const url = absoluteUrl(`/products/${product.slug}`);
 
   return stripEmpty({
-    "@type": "Product",
-    "@id": `${url}#product`,
+    "@type": "Service",
+    "@id": `${url}#service`,
     name: product.title,
     description: product.description,
     image: product.image,
     url,
-    // The clinic is the brand here rather than a manufacturer. These are
-    // supplied and fitted by Curate, which is what a visitor is choosing.
-    brand: { "@id": `${BASEURL}/#organization` },
-    category: "Medical device",
+    provider: { "@id": `${BASEURL}/#medicalclinic` },
+    areaServed: SERVICE_AREA,
   }) as JsonLdObject | undefined;
 }
 
-/** One Product, for a single product page. */
+/** The Service node for a single product page. */
 export function buildProductJsonLd(product: ProductLike | null | undefined) {
   if (!product) return null;
 

@@ -1811,15 +1811,123 @@ transaction:
 **Declined, so unchanged:** the homepage description and the Our Story
 description both stay as they were. **Do not re-propose either.**
 
-**Held: the cafe card.** His line reads "Local, seasonal ingredients without
-refined sugars, no industrial seed oils, and plastic takeout containers", which
-can be read as saying the cafe uses plastic takeout containers, and the page
-never mentions takeout containers. What it says is that plastic is kept out of
-preparation and storage "wherever there is a workable alternative". Put to him.
+**The cafe card went through a round.** His first line could be read as the
+cafe using plastic takeout containers, and the page never mentions takeout
+containers, so it was held. His second, 2026-11-01: "Local, seasonal
+ingredients, with no refined sugars or industrial seed oils, and a
+microplastic-conscious kitchen." The "a" is added; he wrote "and
+microplastic-conscious kitchen". It stands on the page's own line about keeping
+plastic out of preparation and storage, and on his B Corp facts.
 
-**Not yet answered:** the chiropractic card he spotted, the Curate Lifestyle
-Program placeholder description, /about at 76 characters, the fitness training
-capitals, and the bare Tai Chi and Outdoor Yoga share titles.
+**Every proposal he did not answer is accepted**, his words on 2026-11-01, and
+applied in transaction `bPVZl1wMwlnlOqhL5xwB9G`:
+
+| Page | Share title now |
+| --- | --- |
+| Chiropractic | Chiropractic That Treats More Than the Sore Spot |
+| /about | A Health and Wellness Destination in Midtown Toronto |
+| Fitness Training | Training With a Clinician as Your Coach |
+| Tai Chi | Tai Chi, Taught Slowly and Properly |
+| Outdoor Yoga | Yoga Therapy in the Open Air |
+| Mission and Values | What We Will Not Compromise On |
+| /classes | Classes in the Recovery Sanctuary |
+
+**One proposal went in narrower than proposed, and it was my error.** The Curate
+Lifestyle Program description I drafted said the program was "for reversing the
+drivers of chronic disease", an outcome claim about a medical program. A
+blanket approval of copy is not the practitioner sign-off the content rules
+require for one, so it went in as what the program is and who runs it: "A
+physician-led lifestyle medicine program with Dr. Eric Leong at Curate Health
+in Midtown Toronto." It replaced the 24 character placeholder in the search
+description too, since both held it and the house shape is that they match.
+**Dr. Leong can widen it.**
+
+**The sweep is closed.** Nothing from it is outstanding.
+
+#### Private session buttons. 2026-11-01
+
+Yoga, Pilates and Tai Chi each have a one-on-one session in Jane as well as a
+class, and their pages had one button, for the class. Frank asked for a second.
+
+`privateSessionUrl` on the treatment, "Private session booking URL" in the
+Studio. Filled in, a button reading **"Book a Private Session"** appears beside
+the main one at the foot of the page; empty, there is one button, as before.
+Every other treatment has it empty.
+
+**It is the primary's inverse, outlined where that one is filled**, so the
+class stays the obvious first choice. Colours are spelled out at the call site:
+the `outline` variant in `components/ui/button.tsx` is dark green on dark green
+in this theme, see the note under CH-108. Side by side from `md`, stacked on a
+phone, no horizontal overflow at 375.
+
+**The label is in code, not the Studio**, like every navigation label on the
+site, since it reads the same on all three.
+
+| Page | Jane |
+| --- | --- |
+| Outdoor Yoga Therapy | 115, Private Yoga Session with Rooj, $95 |
+| Outdoor Pilates | 118, Private Pilates Session with Claire, $175 |
+| Tai Chi | 113, Private Tai Chi Session with Dr. Dave Gabriele |
+
+Each was opened in Jane and read back as that session before it was written.
+Both buttons are janeapp.com links, so CH-113's `book_now` counts either.
+
+**Private Pilates has openings while the class is paused**, read the same day.
+Worth knowing: through December the second button is the only bookable Pilates
+on that page.
+
+**Until the code deploys, the Studio shows "Unknown field" on those three
+treatments. Do not press Remove field**: it deletes the link.
+
+#### The product pages are a Service, not a Product. 2026-11-01
+
+Search Console reported "Either offers, review, or aggregateRating should be
+specified", critical, under Product snippets, on all five product pages.
+
+**Google will not show a product result without one of the three, and this site
+can honestly give none of them.** No `offers`: pricing is out of scope and lives
+in Jane, so a price would be a number the page never shows. No
+`aggregateRating`: banned under CH-008. No `review`: there are none. So the
+`Product` nodes could never become product results; their only effect was the
+error.
+
+**A Service is the true description rather than a workaround.** Nobody adds
+these to a basket: an orthotic is cast, a brace and a stocking are fitted, and a
+TENS unit or a supplement is supplied after a practitioner has seen you. Every
+product page ends on a button to book a consultation with Dr. Nhan. That is a
+Service, in the same shape as every treatment page: the clinic as provider, and
+the service area.
+
+**Two things the old comment claimed were wrong.** It said the markup fed
+Google Business Profile's products field; those are entered in the Business
+Profile by hand, by the agency, and markup never fed them. It also published
+`category: "Medical device"` on the supplements page.
+
+`buildProductJsonLd` keeps its name, since it builds the markup for a page in
+the products section. The /products `ItemList` is unchanged: it points at the
+pages rather than restating them.
+
+#### "Duplicate without user-selected canonical". 2026-11-01
+
+Search Console's new reason for not indexing some pages. **The label means the
+pages it names carry no canonical tag**, and every sitemap page has one, so the
+candidates are the pages outside it. Checked on production:
+
+| Address | Was |
+| --- | --- |
+| `/search`, every `?q=` | 200, no canonical, no robots directive, the homepage's title |
+| `/coming-soon` | 200, no canonical, no robots directive, the homepage's title |
+| `/login`, `/studio` | blocked in robots.txt, `/studio` also noindex |
+| the 404 | noindex |
+
+**Every `/search?q=` a crawler found was another page under the homepage's
+title**, and internal search results are the case Google's own guidelines name
+for keeping out of the index. Both routes are `noindex, follow` now through the
+same arm of `buildPageMetadata` the 404 uses, with titles of their own.
+
+**This is the likely cause, not a confirmed one.** The report lists the actual
+addresses under Indexing, Pages, then the reason, and nobody has read it here.
+If anything in it is not `/search` or `/coming-soon`, it is a different cause.
 
 ##### `nextOccurrence` took /classes down on Vercel, and now it cannot
 

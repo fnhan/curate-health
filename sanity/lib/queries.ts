@@ -204,6 +204,9 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   },
   quoteContent,
   janeBookingUrl,
+  // One-on-one sessions of a class, a second button beside the main one.
+  // Empty on anything without a private option, which then shows one button.
+  privateSessionUrl,
   // Who provides this, for the block at the foot of the page. Dereferenced
   // rather than stored on the page, so a practitioner switched off in the
   // Studio drops out of every service that lists them.

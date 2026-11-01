@@ -3,6 +3,7 @@ import Link from "next/link";
 import { groq } from "next-sanity";
 
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
+import { buildPageMetadata } from "@/lib/page-metadata";
 import { treatmentPath } from "@/lib/service-urls";
 import { cn } from "@/lib/utils";
 import { SEARCH_REVALIDATE_SECONDS, sanityFetch } from "@/sanity/lib/client";
@@ -217,6 +218,29 @@ function highlightExact(text: string, needle: string) {
     </>
   );
 }
+
+/**
+ * Search results are noindex, and that is Google's own rule, not a way of
+ * hiding a thin page.
+ *
+ * Search Console reported "Duplicate without user-selected canonical" on
+ * 2026-11-01. This route answered 200 with no canonical and no robots
+ * directive, and it carried the homepage's title, so every `?q=` a crawler
+ * found was another page claiming to be the homepage. Internal search
+ * results are the case Google's guidelines name for keeping out of the
+ * index: they are endless, they are thin, and the pages they list are
+ * already in the sitemap.
+ *
+ * It is noindex, follow: the results drop out, and the links on them are
+ * still followed. No canonical, by the same reasoning as the 404, which
+ * this mirrors: one address answering for every query is not any one page.
+ */
+export const metadata = buildPageMetadata(null, {
+  path: "/search",
+  title: "Search",
+  description: "Search the services, practitioners, classes and articles at Curate Health.",
+  noindex: true,
+});
 
 export default async function SearchPage(props: {
   searchParams: Promise<{ q?: string }>;

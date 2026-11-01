@@ -236,6 +236,17 @@ export default defineType({
         ),
     }),
     defineField({
+      name: "privateSessionUrl",
+      title: "Private session booking URL",
+      type: "url",
+      description:
+        "The Jane booking page for one-on-one sessions of this treatment, when it has them as well as a class. Filled in, a second button reading \"Book a Private Session\" appears beside the main one at the foot of the page. Leave empty for a treatment with no private option and no second button is shown. Open the session in Jane and copy its address rather than typing an id.",
+      validation: (Rule) =>
+        Rule.uri({ scheme: ["https"] }).error(
+          "Must be a full https URL, or empty"
+        ),
+    }),
+    defineField({
       name: "displayOrder",
       title: "Display Order",
       type: "number",

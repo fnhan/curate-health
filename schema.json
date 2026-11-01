@@ -5743,6 +5743,13 @@
         },
         "optional": true
       },
+      "privateSessionUrl": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "displayOrder": {
         "type": "objectAttribute",
         "value": {

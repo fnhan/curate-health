@@ -1295,6 +1295,9 @@ export const CLASS_SCHEDULE_QUERY = groq`*[_type == "classSchedule"][0]{
     _key,
     dayOfWeek,
     startTime,
+    // Any other day the same class meets. Tai Chi runs Fridays as well as
+    // Sundays. The page lists them all and the markup dates whichever is next.
+    moreSessions[]{ dayOfWeek, startTime },
     durationMinutes,
     capacity,
     price,

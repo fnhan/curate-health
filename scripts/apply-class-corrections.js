@@ -39,20 +39,18 @@ const { mutate, query } = require("./lib/sanity-cli");
 
 const APPLY = process.argv.includes("--apply");
 
-/** Read off Dr. Gabriele's profile in a browser on 2026-10-30. */
-const TAI_CHI_BOOKING =
-  "https://curatehealth.janeapp.com/#/staff_member/7/treatment/112";
+/*
+ * The Tai Chi link this script wrote on 2026-10-30, staff_member/7 treatment
+ * 112, is DEAD as of 2026-10-31: Frank rebuilt the class as treatment 119 and
+ * 112 now bounces to Jane's front page. Its entry is removed from CHANGES
+ * below so that re-running this script cannot put the dead link back.
+ * apply-tai-chi-and-share-copy.js is what holds Tai Chi's link now.
+ */
 
 /** Frank: "Pilates paused until dec". */
 const PILATES_RESUMES = "2026-12-01";
 
 const CHANGES = [
-  {
-    match: /tai chi/i,
-    field: "bookingUrl",
-    value: TAI_CHI_BOOKING,
-    why: "its Jane link, now on Dr. Gabriele's profile rather than the discipline",
-  },
   {
     match: /pilates/i,
     field: "resumesOn",

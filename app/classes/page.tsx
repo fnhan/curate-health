@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import SectionHero from "@/components/shared/section-hero";
 import SectionIntro, { toParagraphs } from "@/components/shared/section-intro";
 import { SanityImage } from "@/components/shared/sanity-image";
-import { isPaused, nextOccurrence } from "@/lib/class-dates";
+import { isPaused, soonestOccurrence, sortSessions } from "@/lib/class-dates";
 import { externalLinkProps } from "@/lib/links";
 import { HOVER_UNDERLINE_INLINE } from "@/lib/hover-underline";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -16,6 +16,7 @@ import {
   buildClassScheduleListJsonLd,
   classAnchor,
   classPhoto,
+  classSessions,
   classTimeLabel,
   menuPrice,
 } from "@/lib/structured-data";
@@ -83,6 +84,12 @@ function longDate(ymd: string) {
   });
 }
 
+/** ["a"] to "a", ["a", "b"] to "a and b", ["a", "b", "c"] to "a, b and c". */
+function joinWithAnd(items: string[]) {
+  if (items.length < 2) return items[0] ?? "";
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+}
+
 /** 50 to "50 minutes", 60 to "1 hour", 90 to "1 hour 30 minutes". */
 function lengthLabel(minutes: number | null | undefined) {
   if (typeof minutes !== "number" || minutes <= 0) return null;
@@ -131,32 +138,35 @@ function ClassBlock({ entry }: { entry: ScheduledClass }) {
    * assumed every class runs every week and published a Pilates date four
    * weeks before the class was back.
    */
-  const paused = isPaused(new Date(), entry.resumesOn);
+  /*
+   * Every weekly slot, in week order: "Friday, 12:00 PM and Sunday, 9:00 AM"
+   * for a class that meets twice. The same list the markup publishes as its
+   * eventSchedule, from the same function, so the page and Google cannot
+   * describe different weeks.
+   */
+  const sessions = sortSessions(classSessions(entry));
+  const when = sessions.length
+    ? joinWithAnd(sessions.map((s) => `${s.day}, ${classTimeLabel(s.start)}`))
+    : null;
 
   /*
-   * `nextOccurrence` returns null for anything it cannot date, so a class
+   * `soonestOccurrence` returns null for anything it cannot date, so a class
    * with an unusable day or time falls back to its weekday line rather than
    * taking the page down. That is not hypothetical: an earlier version threw
    * here and failed the prerender of the whole page on Vercel.
    */
-  const back =
-    paused && entry.dayOfWeek && entry.startTime
-      ? (nextOccurrence(
-          entry.dayOfWeek,
-          entry.startTime,
-          entry.startTime,
-          new Date(),
-          entry.resumesOn
-        )?.startDate.slice(0, 10) ?? null)
-      : null;
+  const paused = isPaused(new Date(), entry.resumesOn);
+  const back = paused
+    ? soonestOccurrence(sessions, new Date(), entry.resumesOn)
+    : null;
 
   const facts = [
-    time
+    time && when
       ? {
           label: back ? "Back on" : "When",
           value: back
-            ? `${longDate(back)}, ${time}`
-            : `${entry.dayOfWeek}, ${time}`,
+            ? `${longDate(back.startDate.slice(0, 10))}, ${classTimeLabel(back.start)}`
+            : when,
         }
       : null,
     length ? { label: "Length", value: length } : null,

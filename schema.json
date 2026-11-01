@@ -4234,6 +4234,80 @@
                 },
                 "optional": true
               },
+              "moreSessions": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "array",
+                  "of": {
+                    "type": "object",
+                    "attributes": {
+                      "dayOfWeek": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "union",
+                          "of": [
+                            {
+                              "type": "string",
+                              "value": "Monday"
+                            },
+                            {
+                              "type": "string",
+                              "value": "Tuesday"
+                            },
+                            {
+                              "type": "string",
+                              "value": "Wednesday"
+                            },
+                            {
+                              "type": "string",
+                              "value": "Thursday"
+                            },
+                            {
+                              "type": "string",
+                              "value": "Friday"
+                            },
+                            {
+                              "type": "string",
+                              "value": "Saturday"
+                            },
+                            {
+                              "type": "string",
+                              "value": "Sunday"
+                            }
+                          ]
+                        },
+                        "optional": true
+                      },
+                      "startTime": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "_type": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "string",
+                          "value": "session"
+                        }
+                      }
+                    },
+                    "rest": {
+                      "type": "object",
+                      "attributes": {
+                        "_key": {
+                          "type": "objectAttribute",
+                          "value": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "optional": true
+              },
               "durationMinutes": {
                 "type": "objectAttribute",
                 "value": {

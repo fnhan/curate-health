@@ -18,7 +18,13 @@
  * America/Toronto: EDT is UTC-4 and runs from the second Sunday in March to
  * the first Sunday in November, EST is UTC-5 and covers the rest.
  */
-import { isDayName, isPaused, nextOccurrence } from "@/lib/class-dates";
+import {
+  isDayName,
+  isPaused,
+  nextOccurrence,
+  soonestOccurrence,
+  sortSessions,
+} from "@/lib/class-dates";
 
 type Case = {
   what: string;
@@ -327,6 +333,58 @@ for (const [what, run] of unusable) {
   }
   if (outcome === "FAIL") failed += 1;
   console.log(`  ${outcome}  refuses rather than throws: ${what}`);
+}
+
+/*
+ * A class that meets more than once a week. Tai Chi runs Fridays at noon and
+ * Sundays at nine, read off Jane's own booking labels on 2026-10-31. One class
+ * is one Event, so the date published is whichever session comes next.
+ */
+const TAI_CHI_WEEK = [
+  { day: "Sunday", start: "09:00", end: "09:50" },
+  { day: "Friday", start: "12:00", end: "12:50" },
+];
+
+const twice: [string, string, string | null, string | null][] = [
+  // [what, now, resumesOn, want startDate]
+  ["Saturday morning, so Sunday's class is next", "2026-10-31T13:00:00Z", null, "2026-11-01T09:00:00-05:00"],
+  ["Sunday after class, so Friday's is next", "2026-11-01T15:00:00Z", null, "2026-11-06T12:00:00-05:00"],
+  ["Friday after the noon class, so Sunday's is next", "2026-11-06T18:00:00Z", null, "2026-11-08T09:00:00-05:00"],
+  ["Friday just before noon, so today's class still counts", "2026-11-06T16:30:00Z", null, "2026-11-06T12:00:00-05:00"],
+  ["a break until a Tuesday gives the Friday that follows", "2026-10-31T13:00:00Z", "2026-12-01", "2026-12-04T12:00:00-05:00"],
+];
+
+console.log();
+for (const [what, now, resumesOn, want] of twice) {
+  const got = soonestOccurrence(TAI_CHI_WEEK, new Date(now), resumesOn);
+  const ok = got?.startDate === want;
+  if (!ok) failed += 1;
+  console.log(`  ${ok ? "ok  " : "FAIL"}  two sessions: ${what}`);
+  if (!ok) console.log(`          want ${want}, got ${got?.startDate}`);
+}
+
+/* A bad session is skipped and the good one still dated; none good is null. */
+const halfBad = soonestOccurrence(
+  [
+    { day: "Caturday", start: "09:00", end: "09:50" },
+    { day: "Friday", start: "12:00", end: "12:50" },
+  ],
+  new Date("2026-10-31T13:00:00Z")
+);
+const allBad = soonestOccurrence(
+  [{ day: "Caturday", start: "09:00", end: "09:50" }],
+  new Date("2026-10-31T13:00:00Z")
+);
+const sorted = sortSessions(TAI_CHI_WEEK).map((s) => s.day).join(" ");
+
+const extras: [string, boolean][] = [
+  ["a bad session is skipped, the good one dated", halfBad?.startDate === "2026-11-06T12:00:00-05:00"],
+  ["no datable session gives null, not a throw", allBad === null],
+  ["sessions read Monday first, so Friday before Sunday", sorted === "Friday Sunday"],
+];
+for (const [what, ok] of extras) {
+  if (!ok) failed += 1;
+  console.log(`  ${ok ? "ok  " : "FAIL"}  ${what}`);
 }
 
 console.log();

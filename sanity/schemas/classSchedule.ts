@@ -163,6 +163,58 @@ export default defineType({
                   .error("Use 24 hour time, for example 09:00 or 18:00"),
             }),
             defineField({
+              name: "moreSessions",
+              title: "Also runs on",
+              type: "array",
+              description:
+                "Any other day this same class runs, for a class that meets more than once a week. Tai Chi runs on Fridays as well as Sundays, for example. Same length, same teacher and same booking link as above; only the day and the time differ. The page lists every session, and the date published to Google is whichever comes next.",
+              of: [
+                {
+                  type: "object",
+                  name: "session",
+                  fields: [
+                    defineField({
+                      name: "dayOfWeek",
+                      title: "Day",
+                      type: "string",
+                      options: {
+                        list: [
+                          { title: "Monday", value: "Monday" },
+                          { title: "Tuesday", value: "Tuesday" },
+                          { title: "Wednesday", value: "Wednesday" },
+                          { title: "Thursday", value: "Thursday" },
+                          { title: "Friday", value: "Friday" },
+                          { title: "Saturday", value: "Saturday" },
+                          { title: "Sunday", value: "Sunday" },
+                        ],
+                        layout: "dropdown",
+                      },
+                      validation: (Rule) =>
+                        Rule.required().error("A day is required"),
+                    }),
+                    defineField({
+                      name: "startTime",
+                      title: "Start time",
+                      type: "string",
+                      description: "24 hour, as 09:00 or 18:00.",
+                      validation: (Rule) =>
+                        Rule.required()
+                          .regex(/^([01]\d|2[0-3]):[0-5]\d$/, {
+                            name: "24 hour time",
+                          })
+                          .error("Use 24 hour time, for example 09:00 or 18:00"),
+                    }),
+                  ],
+                  preview: {
+                    select: { day: "dayOfWeek", time: "startTime" },
+                    prepare: ({ day, time }) => ({
+                      title: [day, time].filter(Boolean).join(", ") || "Session",
+                    }),
+                  },
+                },
+              ],
+            }),
+            defineField({
               name: "durationMinutes",
               title: "Length in minutes",
               type: "number",

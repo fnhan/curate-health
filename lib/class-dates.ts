@@ -27,6 +27,60 @@ const DAY_INDEX: Record<string, number> = {
   Saturday: 6,
 };
 
+/** One weekly slot a class meets in. */
+export type Session = { day: string; start: string; end: string };
+
+/**
+ * The soonest of several weekly sessions, for a class that meets more than
+ * once a week. Tai Chi runs Fridays at noon and Sundays at nine.
+ *
+ * **One date, not one per session**, because one class is one Event: two
+ * Event nodes for the same class would put one thing on the page twice and
+ * hand Google two entities to reconcile. The full pattern is published beside
+ * it as `eventSchedule`, so nothing about the second session is lost.
+ *
+ * Sessions it cannot date are skipped, by the same never-throw rule as
+ * `nextOccurrence`, and null comes back only when none can be dated at all.
+ * A break, `resumesOn`, applies to the whole class: the answer is the first
+ * session of any kind on or after the day it comes back.
+ */
+export function soonestOccurrence(
+  sessions: Session[],
+  now: Date,
+  resumesOn?: string | null
+) {
+  let best: { startDate: string; endDate: string; day: string; start: string } | null =
+    null;
+
+  for (const session of sessions) {
+    const next = nextOccurrence(
+      session.day,
+      session.start,
+      session.end,
+      now,
+      resumesOn
+    );
+    if (!next) continue;
+
+    if (!best || new Date(next.startDate) < new Date(best.startDate)) {
+      best = { ...next, day: session.day, start: session.start };
+    }
+  }
+
+  return best;
+}
+
+/**
+ * Sessions in week order, Monday first, which is how a person says them:
+ * "Fridays and Sundays", not "Sundays and Fridays".
+ */
+export function sortSessions<T extends { day: string }>(sessions: T[]) {
+  const order = (day: string) => (DAY_INDEX[day] + 6) % 7;
+  return [...sessions]
+    .filter((s) => isDayName(s.day))
+    .sort((a, b) => order(a.day) - order(b.day));
+}
+
 /**
  * The instant to search forward from: the resume date when one is set and
  * still ahead, otherwise now.

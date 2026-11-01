@@ -223,38 +223,70 @@ function report() {
       }
     }
 
-    /* The markup, the computed date and the page all have to name one day. */
-    const byDay = String(event.eventSchedule?.byDay || "").split("/").pop();
-    if (byDay) {
+    /*
+     * One Schedule or several. A class that meets once a week carries a
+     * single object and one that meets more often carries an array, Tai Chi
+     * on Fridays and Sundays for one. Read the first way only, an array has
+     * no `byDay` of its own, so every check below would have skipped itself
+     * and reported a pass: a check silently covering less than it claims.
+     */
+    const schedules = [].concat(event.eventSchedule || []);
+    if (!schedules.length) {
+      failures.push(`${label} has no eventSchedule`);
+    }
+
+    const dated = start.toLocaleDateString("en-CA", {
+      weekday: "long",
+      timeZone: "America/Toronto",
+    });
+    const startClock = event.startDate.slice(11, 16);
+
+    /* The computed date has to be one of the sessions the markup lists. */
+    const matches = schedules.some(
+      (s) =>
+        String(s.byDay || "").split("/").pop() === dated &&
+        s.startTime === startClock
+    );
+    if (schedules.length && !matches) {
+      failures.push(
+        `${label} startDate is a ${dated} at ${startClock}, which none of its sessions is`
+      );
+    }
+
+    for (const schedule of schedules) {
+      const byDay = String(schedule.byDay || "").split("/").pop();
+
       if (!DAYS.has(byDay)) {
         failures.push(`${label} byDay is ${JSON.stringify(byDay)}`);
-      }
-      const dated = start.toLocaleDateString("en-CA", {
-        weekday: "long",
-        timeZone: "America/Toronto",
-      });
-      if (dated !== byDay) {
-        failures.push(
-          `${label} recurs on ${byDay} and its startDate is a ${dated}`
-        );
+        continue;
       }
       if (!text.includes(byDay)) {
         failures.push(`${label} recurs on ${byDay}, which the page never says`);
       }
+
+      /*
+       * The page prints its times in 12 hour form, so the markup's 24 hour
+       * startTime is converted before looking for it.
+       */
+      const hhmm = schedule.startTime;
+      if (hhmm && /^\d{2}:\d{2}$/.test(hhmm)) {
+        const [h, m] = hhmm.split(":").map(Number);
+        const suffix = h < 12 ? "AM" : "PM";
+        const twelve = `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${suffix}`;
+        if (!text.includes(twelve)) {
+          failures.push(
+            `${label} meets ${byDay} at ${twelve}, which the page never says`
+          );
+        }
+      }
     }
 
-    /*
-     * The page prints its times in 12 hour form, so the markup's 24 hour
-     * startTime is converted before looking for it.
-     */
-    const hhmm = event.eventSchedule?.startTime;
-    if (hhmm && /^\d{2}:\d{2}$/.test(hhmm)) {
-      const [h, m] = hhmm.split(":").map(Number);
-      const suffix = h < 12 ? "AM" : "PM";
-      const twelve = `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${suffix}`;
-      if (!text.includes(twelve)) {
-        failures.push(`${label} starts at ${twelve}, which the page never says`);
-      }
+    if (schedules.length > 1) {
+      console.log(
+        `    sessions   ${schedules
+          .map((s) => `${String(s.byDay).split("/").pop()} ${s.startTime}`)
+          .join(", ")}`
+      );
     }
   }
 

@@ -1728,8 +1728,98 @@ spoof a browser to get round it.** Until then, `resumesOn` is a fact somebody
 types in, with the same standing warning as the rest of this section: nothing
 notices on its own when a class moves in Jane.
 
-**Still unverified: whether Tai Chi runs every Sunday.** Its date is computed
-weekly like Yoga's. Nobody has confirmed that rhythm since October.
+**Tai Chi runs twice a week, Fridays at noon and Sundays at nine.** Frank,
+2026-10-31, and read off Jane's own booking labels the same day: the
+aria-label on each opening says "9:00 AM EST on Sunday November 1" and "12:00
+PM EST on Friday November 6". The schedule had only ever said Sunday.
+
+**`moreSessions`, "Also runs on" in the Studio, is how a class meets more than
+once.** Each extra session is a day and a start time; the length, teacher and
+booking link are the class's own, so a second session cannot claim different
+ones. The page lists every session in week order, Monday first, which is how a
+person says it: "Friday, 12:00 PM and Sunday, 9:00 AM".
+
+**One class is one Event, not one per session.** Two Event nodes for one class
+would put one thing on the page twice and hand Google two entities to
+reconcile. So `startDate` is whichever session comes next, from
+`soonestOccurrence`, and the whole week goes in `eventSchedule` as an array of
+Schedules. **A class with one session keeps a single Schedule object**, not an
+array of one, so Yoga's and Pilates' markup is byte for byte what it was.
+
+**`audit-class-schedule.js` reads the array.** Read as one object, an array has
+no `byDay` of its own and every check below it would have skipped itself and
+passed. It now requires the computed date to be one of the listed sessions, and
+every session's day and time to be on the page.
+
+#### Jane's Recovery Sanctuary, as rebuilt by Frank. Read 2026-10-31
+
+Every "Show more Sessions" opened, from `#/recovery-sanctuary`:
+
+| Jane | Treatment |
+| --- | --- |
+| 42 | Flowpresso |
+| 80 | Yoga Class with Rooj |
+| 115 | Private Yoga Session with Rooj |
+| 78 | Mat Pilates Class with Claire |
+| 118 | Private Pilates Session with Claire |
+| 119 | Tai Chi Class with Dr. David Gabriele |
+| 113 | Private Tai Chi Session |
+| 81, 120, 121, 122 | Cold Plunge & Sauna, individual and groups of 2, 3 and 4 |
+
+**Every treatment page already pointed at a live entry except Tai Chi**, whose
+link was 112. **112 is dead**: it bounces to Jane's front page, so both the Tai
+Chi page and `/classes` were sending Book to nowhere. Both go to 119 now, live
+since the data change, without waiting for any merge.
+
+**The `/classes` Tai Chi override is gone, so the link lives in one place.** Yoga
+and Pilates already fell back to their treatment page's link; Tai Chi kept its
+own only because it had no treatment page when CH-107 was built. Two copies is
+how the two came to disagree.
+
+**The private sessions, 115, 118 and 113, have no page on this site** and are
+not linked from one. The Outdoor Pilates page mentions one-on-one sessions in
+its copy but has one Book button, for the class. Frank's call whether that
+changes.
+
+**Both classes Jane used to sell at 60 minutes are 50 now**, Yoga at 80 and Tai
+Chi at 119, which closes the note under the 50-minute change above.
+
+**`apply-class-corrections.js` would have put the dead link back.** It wrote
+staff_member 7 treatment 112 on 2026-10-30, and a re-run after today would have
+restored it over the fallback. That entry is removed from the script.
+
+```bash
+node scripts/apply-tai-chi-and-share-copy.js          # dry run
+node scripts/apply-tai-chi-and-share-copy.js --apply
+```
+
+Transaction `s2fj2CZdVJzjA5WLfJKUk9`, after
+`sanity-backup-2026-10-31-before-tai-chi-and-share-copy-documents.tar.gz`.
+
+#### The share card sweep, Frank's decisions. 2026-10-31
+
+From the sweep of all 56 cards. **Applied in his words exactly**, in the same
+transaction:
+
+| Page | Field | Now |
+| --- | --- | --- |
+| Homepage | `homePageTitle`, which is the search title, share title and Twitter title at once | Health, Curated for You \| Curate Health |
+| /products | share title | Fitted by a Practitioner, Custom and Curated Just For You. |
+| /about/mission-and-values | share description | Evidence-based, interdisciplinary care. The thinking behind how Curate Health works. |
+| /classes | share description | Yoga, Pilates and Tai Chi outdoors in Midtown Toronto. Small groups with no term to commit to. |
+
+**Declined, so unchanged:** the homepage description and the Our Story
+description both stay as they were. **Do not re-propose either.**
+
+**Held: the cafe card.** His line reads "Local, seasonal ingredients without
+refined sugars, no industrial seed oils, and plastic takeout containers", which
+can be read as saying the cafe uses plastic takeout containers, and the page
+never mentions takeout containers. What it says is that plastic is kept out of
+preparation and storage "wherever there is a workable alternative". Put to him.
+
+**Not yet answered:** the chiropractic card he spotted, the Curate Lifestyle
+Program placeholder description, /about at 76 characters, the fitness training
+capitals, and the bare Tai Chi and Outdoor Yoga share titles.
 
 ##### `nextOccurrence` took /classes down on Vercel, and now it cannot
 

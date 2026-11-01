@@ -4,7 +4,12 @@ import {
   getBlogAuthorDisplayName,
 } from "@/lib/author-team-link";
 import type { Crumb } from "@/lib/breadcrumbs";
-import { isDayName, nextOccurrence } from "@/lib/class-dates";
+import {
+  isDayName,
+  soonestOccurrence,
+  sortSessions,
+  type Session,
+} from "@/lib/class-dates";
 import { treatmentPath } from "@/lib/service-urls";
 import { getPractitionerSlugFromName } from "@/lib/utils";
 import {
@@ -923,6 +928,9 @@ type ScheduledClassLike = {
   summary?: string | null;
   dayOfWeek?: string | null;
   startTime?: string | null;
+  moreSessions?:
+    | { dayOfWeek?: string | null; startTime?: string | null }[]
+    | null;
   durationMinutes?: number | null;
   resumesOn?: string | null;
   capacity?: number | null;
@@ -940,6 +948,34 @@ type ScheduledClassLike = {
     slug?: string | null;
   } | null;
 };
+
+/**
+ * Every weekly slot a class meets in: its main day and time, then any it
+ * also runs on. Each carries its own end time, worked out from the class's
+ * one length, so a second session cannot claim a different duration.
+ *
+ * A session with an unusable day or time is dropped here rather than
+ * published half stated, the same rule the main session has always had.
+ */
+export function classSessions(entry: ScheduledClassLike): Session[] {
+  const raw = [
+    { dayOfWeek: entry.dayOfWeek, startTime: entry.startTime },
+    ...(entry.moreSessions ?? []),
+  ];
+
+  const sessions: Session[] = [];
+  for (const item of raw) {
+    const day = item?.dayOfWeek?.trim();
+    const start = item?.startTime?.trim();
+    const end = endTime(start, entry.durationMinutes);
+    if (!day || !isDayName(day) || !start || !end) continue;
+
+    // The same slot entered twice is one session, not two.
+    if (sessions.some((s) => s.day === day && s.start === start)) continue;
+    sessions.push({ day, start, end });
+  }
+  return sessions;
+}
 
 /**
  * The class schedule as Event nodes. CH-107.
@@ -1021,14 +1057,32 @@ export function buildClassScheduleJsonLd(schedule: {
           ? absoluteUrl(treatmentPath(entry.serviceSlug, entry.treatmentSlug))
           : undefined;
 
+      const sessions = classSessions(entry);
+
       /*
-       * Null when the day or time cannot be used. A class that cannot be
-       * dated is left out rather than published without a startDate, which
-       * is the field Google requires, and rather than throwing, which took
-       * the page down once already.
+       * Null when no session can be dated. A class that cannot be dated is
+       * left out rather than published without a startDate, which is the
+       * field Google requires, and rather than throwing, which took the page
+       * down once already. With more than one session, this is whichever
+       * comes next.
        */
-      const occurrence = nextOccurrence(day, start, end, now, entry.resumesOn);
+      const occurrence = soonestOccurrence(sessions, now, entry.resumesOn);
       if (!occurrence) return undefined;
+
+      /*
+       * One Schedule per session. A single session stays a single object
+       * rather than an array of one, so the markup for a class that meets
+       * once a week is byte for byte what it was before this existed.
+       */
+      const schedules = sortSessions(sessions).map((session) => ({
+        "@type": "Schedule",
+        byDay: `https://schema.org/${session.day}`,
+        repeatFrequency: "P1W",
+        startTime: session.start,
+        endTime: session.end,
+        duration: `PT${entry.durationMinutes}M`,
+        scheduleTimezone: "America/Toronto",
+      }));
 
       return {
         "@type": "Event",
@@ -1042,15 +1096,7 @@ export function buildClassScheduleJsonLd(schedule: {
         // states the day and the time. The class's treatment page, where
         // there is one, is linked below as the thing being taught.
         url: `${url}#${anchor}`,
-        eventSchedule: {
-          "@type": "Schedule",
-          byDay: `https://schema.org/${day}`,
-          repeatFrequency: "P1W",
-          startTime: start,
-          endTime: end,
-          duration: `PT${entry.durationMinutes}M`,
-          scheduleTimezone: "America/Toronto",
-        },
+        eventSchedule: schedules.length === 1 ? schedules[0] : schedules,
         eventStatus: "https://schema.org/EventScheduled",
         eventAttendanceMode:
           "https://schema.org/OfflineEventAttendanceMode",

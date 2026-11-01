@@ -1932,9 +1932,31 @@ title**, and internal search results are the case Google's own guidelines name
 for keeping out of the index. Both routes are `noindex, follow` now through the
 same arm of `buildPageMetadata` the 404 uses, with titles of their own.
 
-**This is the likely cause, not a confirmed one.** The report lists the actual
-addresses under Indexing, Pages, then the reason, and nobody has read it here.
-If anything in it is not `/search` or `/coming-soon`, it is a different cause.
+**THAT GUESS WAS WRONG.** Frank read the report on 2026-11-01: the one address
+in it is **`/services/mental-health`**, last crawled **2026-06-20**. That old
+category page has 301'd to `/services` since the restructure; in June it was a
+live page, and every page on the site lacked a canonical until CH-003 on
+2026-09-11. **Nothing to fix in the site**: the report reflects a June crawl, and
+the URL leaves the category on Google's next visit. The noindex on `/search` and
+`/coming-soon` stays, because Google's guidelines say internal search results
+should be noindex. It just was not the cause. **Read the report's own addresses
+before naming a cause**, which this paragraph used to say and then did not do.
+
+**The other two reasons in that report are not faults either**, read the same
+day:
+
+- **Page with redirect, 7.** `http://` and apex variants forwarding to
+  `https://www.`, and old addresses forwarding to new ones. That list is
+  supposed to exist. **Do not validate it and do not report it as a defect.**
+- **Crawled, currently not indexed, 12.** Seven are old addresses that now
+  forward correctly, and two are not pages at all, `/icon` and a font file.
+  **Four are real pages**: `/services/physiotherapy` (last crawled 2026-09-17),
+  `/products/custom-foot-orthotics` (07-27),
+  `/services/recovery-sanctuary/outdoor-yoga-therapy` (06-15) and `/blog`
+  (02-20). Each answers 200 with its own canonical and its current title.
+  Google read them before most of this project's work and has not been back.
+  **The lever is URL Inspection, Request indexing**, page by page, which needs
+  Frank's login.
 
 ##### `nextOccurrence` took /classes down on Vercel, and now it cannot
 

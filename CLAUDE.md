@@ -1221,17 +1221,14 @@ site-wide link when not.
 - **Ariel Zohar's photograph is 1001x685**, below the 800x1000 the crop needs,
   so it is upscaled and looks soft. A photograph to replace, not a value to
   lower. `scripts/audit-practitioners.js` names anyone in this state.
-- **Jane's own address still says "York".** It read "989 Eglinton Avenue
-  West - Suite 2, Suite 2, York", with the doubled suite and the "York" that
-  CH-021 spent a ticket removing from the site. Frank fixed the doubled suite
-  on 2026-09-17; checked that day, it reads "989 Eglinton Avenue West, Suite
-  2, York", so "York" still disagrees with the site's "Toronto". Local search
-  reads the two as one business, so the mismatch costs something. Jane is not
-  in this repository: it is a change somebody makes in the Jane settings.
-- **Jane offers acupuncture with Dr. Frank Nhan only.** The site lists Dr.
-  Gabriele, Dr. Nhan and Ariel Zohar as providers, per Frank's chart. Someone
-  who reads that Ariel does acupuncture and clicks Book finds only Frank. One of
-  the two needs to change, and which is Frank's call.
+- ~~**Jane's own address still says "York".**~~ **Fixed, checked 2026-11-01**:
+  Jane reads "989 Eglinton Avenue West, Suite 2, Toronto", agreeing with the
+  site. It had read "...Suite 2, Suite 2, York" until September. **Do not
+  raise it again.**
+- ~~**Jane offers acupuncture with Dr. Frank Nhan only.**~~ **Fixed, checked
+  2026-11-01**: Jane's acupuncture section lists Dr. David Gabriele, Dr. Frank
+  Nhan and Ariel Zohar, the same three the site names. **Do not raise it
+  again.**
 
 **The team hub is the backup, not a rebuild.** Frank asked twice for the hub to
 look exactly as it did before #238, and two attempts to reproduce it by hand

@@ -26,8 +26,11 @@ const CHECKS = [
   ["audit-blog.js", "blog markup and the feed"],
   ["audit-content-rules.js", "the content rules, in the words on every page"],
   ["audit-share-cards.js", "every page serves a complete share card"],
+  ["audit-class-schedule.js", "the class schedule's Event markup, and its dates"],
   /*
-   * The only check here that does not fetch anything. It calls
+   * Two checks here do not fetch anything.
+   *
+   * The share card fallback chain calls
    * buildPageMetadata directly, because the fallback chain can only be
    * exercised on a live page whose Studio field happens to be empty, which
    * is six pages of fifty-six, and the other fifty are exactly the state that
@@ -36,6 +39,20 @@ const CHECKS = [
   [
     "test-share-fallback.ts",
     "the share card fallback chain, as a unit",
+    {
+      nodeArgs: ["--env-file=.env.local", "--import", "./scripts/lib/alias-loader.mjs"],
+      noBase: true,
+    },
+  ],
+  /*
+   * And the class dates, for the same kind of reason. A rendered page can
+   * only ever show today's answer, and the cases that matter are the two
+   * Sundays a year when Toronto changes offset and the minute a class stops
+   * being today's. Waiting until March to find out is not a test.
+   */
+  [
+    "test-class-dates.ts",
+    "the next class date, across both clock changes",
     {
       nodeArgs: ["--env-file=.env.local", "--import", "./scripts/lib/alias-loader.mjs"],
       noBase: true,

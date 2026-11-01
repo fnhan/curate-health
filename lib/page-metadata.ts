@@ -137,7 +137,13 @@ type BaseFallbacks = {
   /**
    * Keeps the page out of the index, and drops its canonical with it.
    *
-   * Only the 404 uses this, and it needs both halves. A 404 that is
+   * Three routes use this: the 404, /search and /coming-soon. The last two
+   * since 2026-11-01, when Search Console reported "Duplicate without
+   * user-selected canonical": both answered 200 with no canonical and the
+   * homepage's title, so every `/search?q=` was another copy of the
+   * homepage. Internal search results are the case Google names for noindex.
+   *
+   * The 404 needs both halves. A 404 that is
    * indexable competes with the pages that should rank for the same words,
    * and a canonical on it would be worse: this page answers for every dead
    * address on the site, so naming one address as its own tells a crawler

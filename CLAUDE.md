@@ -452,6 +452,10 @@ Two ids is not automatically two listings, a place pin and a business entity can
 
 The duplicate place id survives in the backup and in Google, not in the dataset. It is still a Google Business Profile question, and the table above is still the record of it.
 
+**Re-checked 2026-10-29, because the table above reads as a live defect and is not one.** Every place reference in the dataset points at the business entity, `0x882b33a0bc00ca61:...`: `contactPage.mapURL`, `siteSettings.contactInfo.mapLink` (the short `maps.app.goo.gl` link) and `directionsLink` (the `daddr` with its `geocode`). The address-pin id appears **nowhere**, and nothing anywhere in the dataset or the source says "York" as a locality. So **there is nothing left to fix in this repository**, and the two-id table is a record of what was found in August rather than a task.
+
+**What remains is outside the repo and unverified.** Whether a second Google listing still exists for 989 Eglinton is a question about Google Business Profile, not about the site, and it cannot be answered by fetching a Maps URL: Maps renders in the browser, so a 200 from `curl` proves only that Google served a page. The agency owns that surface. **Do not report this as a site defect, and do not claim the duplicate is resolved either**, because nobody has looked.
+
 **The two copies were not interchangeable, found 2026-09-12.** Every address
 field matched byte for byte, as did email and phone. `mapLink` did not:
 
@@ -1403,10 +1407,18 @@ that persists for a while, so space the requests.
 **Jane holds about a fortnight open, and that decides the whole design.**
 Sixteen weeks ahead returned one Pilates opening and two Yoga ones. So there is
 no reliable list of future dates to publish, and a page built off Jane would
-publish a schedule that runs out. What is published is the **recurrence**:
+publish a schedule that runs out. An `Event` with a date in the past is worse
+than no `Event`. The **recurrence** is published for that reason:
 `eventSchedule` with a `Schedule`, `byDay` and `repeatFrequency: P1W`, which is
-what schema.org provides for a weekly class and what Google documents for a
-recurring event. An `Event` with a date in the past is worse than no `Event`.
+what schema.org provides for a weekly class.
+
+**This paragraph used to end "and what Google documents for a recurring
+event". That was false, and it cost a Search Console error.** Google requires
+`startDate` on an `Event` and documents no recurrence field at all. The
+schedule shipped without one on 2026-10-20 and Google reported it on
+2026-10-29. Each class now also states when it next runs, computed rather than
+stored, which answers the real objection above because a computed date cannot
+be in the past. See below.
 
 **`scheduleTimezone` is America/Toronto, not an offset.** Jane returned the
 same 9:00 AM class as `-04:00` in October and `-05:00` in November, which is
@@ -1571,6 +1583,402 @@ than anything here.
   than being quietly rewritten here.
 - Its photograph is the 6500x3846 PNG that CH-029 names as the worst asset in
   the library.
+
+#### The Events needed a startDate after all. Fixed 2026-10-29
+
+Google emailed Search Console: `startDate` missing, critical, on three items,
+plus `endDate` and `offers.validFrom` as suggestions. **The critical one was a
+straight mistake in CH-107**, not a judgement that turned out badly. Google
+requires `startDate` on an `Event` and its documentation never mentions
+`eventSchedule` or `Schedule` at all, so publishing the recurrence alone bought
+nothing from the one reader it was aimed at.
+
+**The reasoning against a date was still right, and the fix keeps it.** Jane
+holds about a fortnight open, so there was never a list of future dates to
+publish, and a stored date would eventually be in the past. So the date is
+**computed**, not stored: `nextOccurrence` in `lib/class-dates.ts` returns the
+next time each weekly class runs. It is right by construction rather than by
+being maintained, and it cannot be stale in the only direction that matters.
+
+**`PAGE_REVALIDATE_SECONDS` is an hour, which cannot carry a date past its
+class**: the soonest any of these starts after a rebuild is the following
+morning.
+
+**It is its own file because `lib/structured-data.tsx` carries JSX**, and Node
+24 runs a `.ts` file directly but not a `.tsx` one. That is what makes
+`scripts/test-class-dates.ts` possible, and the test is the point: this is the
+only arithmetic on the site that can be wrong in a way nobody notices for
+months.
+
+**The offset is read off the zone, never assumed.** `2026-11-01` is the day
+the clocks go back, Tai Chi runs that morning, and it is correctly `-05:00`
+while the Tuesday before it is also `-05:00` and a Sunday in July is `-04:00`.
+The offset is read for the **target** date rather than today's, so a class the
+far side of a clock change is still stated correctly. Checked at 26,352 hourly
+instants across a year: no date in the past, none more than a week ahead.
+
+**`eventSchedule` stays.** It is the honest description of a class that runs
+every week, schema.org provides it for exactly that, and anything reading the
+page learns the pattern rather than one date.
+
+**`offers.validFrom` is deliberately not set, and that suggestion will
+persist.** Google's own documentation makes it conditional: it is for an offer
+that is date-restricted, such as tickets going on sale later. A drop-in place
+is bookable now, which is what `availability: InStock` already says, so a date
+there would invent a restriction that does not exist. **Do not add one to
+silence the warning.**
+
+```bash
+node scripts/audit-class-schedule.js http://localhost:3000
+node scripts/audit-class-schedule.js https://www.curatehealth.ca
+```
+
+**That check did not exist, which is why this lasted nine days.** Every other
+kind of markup on this site has one. It holds the Events to Google's required
+fields, reports its recommended ones without failing, and then does the thing
+no source review can: it reads the date against the clock, fails a date in the
+past or more than a week out, and fails a day or time the markup and the page
+disagree about. Run against production before the fix it reported all three
+missing `startDate`, which is exactly what Google said.
+
+**The render baseline normalises these two dates out.** They move every week,
+so left in, `/classes` would report a change on every comparison for ever.
+Only on an `Event`: `datePublished` and `dateModified` on a `BlogPosting` are
+stored values and are still compared.
+
+**Google's Rich Results Test is behind a reCAPTCHA**, so it is not something
+to drive from here. It wants a public URL anyway, so it is worth running on
+`/classes` once this deploys, which is also when Search Console will recrawl.
+
+**A dev server renders `/about/our-team` with every card twice.** Worth knowing
+before reading a baseline comparison: 28 team links against production's 14,
+which looks exactly like a regression and is a `next dev` artifact. A
+production build serves 14, same as production. **Compare a build, not `next
+dev`**, which the CH-118 note already says for a different reason.
+
+#### A CLASS DOES NOT RUN EVERY WEEK. Corrected 2026-10-30
+
+**The computed date above assumed a weekly rhythm, and two of the three
+classes were not keeping one.** Frank caught it the day after it was written:
+"some of the instructors take vacation and holidays. So what's true would be
+what's on Jane's bookable site." Checked in a browser the same day:
+
+| Class | The page said | Jane |
+| --- | --- | --- |
+| Outdoor Yoga Therapy | Tuesdays 6:00 PM | Tue 3 Nov, correct |
+| Outdoor Pilates | Wednesdays 9:00 AM | nothing before **Wed 2 Dec** |
+| Tai Chi | Sundays 9:00 AM | moved to Dr. Gabriele's profile |
+
+So `/classes` was telling a visitor Pilates ran four weeks before it did. That
+is worse than the markup fault it came with, because it is on the page a
+reader sees.
+
+**`resumesOn` on each class is the fix**, a date meaning "not before this".
+`nextOccurrence` searches forward from it rather than from today, so the class
+keeps its own weekday and simply cannot land inside the break. The page prints
+"Back on Wednesday, December 2" where it would print "Wednesday", and the
+markup publishes that same date.
+
+**It is not `isActive`, and the difference is the point.** Switching a class
+off takes it out of the page, the sitemap, llms.txt and search, so somebody
+looking for Pilates in November finds nothing and learns nothing.
+A break keeps the class findable and answers the question they actually have.
+Use the switch for "not running, no date"; use this for a known return.
+
+**A resume date already past is ignored**, so a break nobody cleared stops
+holding the class on a date behind us. And the "today's class counts until it
+starts" rule is not applied on a resume date itself, because that date is a
+statement about a day rather than a minute.
+
+**The floor date is read at noon Toronto, never midnight.**
+`new Date("2026-12-01")` is midnight UTC, which is 7:00 PM on 30 November in
+Toronto, so a class resuming on a Tuesday would have been searched from the
+Monday evening and could land a day early.
+
+**The stored date is 2026-12-01, not the 2nd**, because December is what Frank
+said. The Wednesday is derived, so it stays right if the day ever changes.
+
+**`audit-class-schedule.js` no longer fails a date more than a week out.** It
+requires the page to print that date instead, which is a stronger check than
+the one it replaces: the far date and the line a reader sees are now compared
+rather than one of them being suppressed.
+
+```bash
+node scripts/apply-class-corrections.js          # dry run
+node scripts/apply-class-corrections.js --apply
+```
+
+Applied in transaction `1OGjlpH01s2XPeiMEWWpV5`, after
+`sanity-backup-2026-10-30-before-class-corrections-documents.tar.gz`.
+
+**TAI CHI MOVED IN JANE and the old link was dead.** It was
+`#/discipline/22/treatment/112`, which now bounces to Jane's front page, so
+anybody clicking Book from this page landed nowhere useful. Frank gave the new
+one: `#/staff_member/7/treatment/112`, on Dr. Gabriele's own profile. Read
+back in a browser on 2026-10-30, it is "Tai Chi with Dr. Gabriele", 50
+minutes, $30.00, under Recovery Sanctuary, which agrees with the site.
+
+**That also closes half of the CH-107 note about Jane selling 60 minutes.**
+Tai Chi is 50 in Jane now. Yoga was not re-checked.
+
+**Jane's availability feed cannot be read from the server.** It answers 403 to
+a plain request and only serves a real browser, so a page that pulls the real
+dates needs official API access from Jane rather than a workaround. **Do not
+spoof a browser to get round it.** Until then, `resumesOn` is a fact somebody
+types in, with the same standing warning as the rest of this section: nothing
+notices on its own when a class moves in Jane.
+
+**Tai Chi runs twice a week, Fridays at noon and Sundays at nine.** Frank,
+2026-10-31, and read off Jane's own booking labels the same day: the
+aria-label on each opening says "9:00 AM EST on Sunday November 1" and "12:00
+PM EST on Friday November 6". The schedule had only ever said Sunday.
+
+**`moreSessions`, "Also runs on" in the Studio, is how a class meets more than
+once.** Each extra session is a day and a start time; the length, teacher and
+booking link are the class's own, so a second session cannot claim different
+ones. The page lists every session in week order, Monday first, which is how a
+person says it: "Friday, 12:00 PM and Sunday, 9:00 AM".
+
+**One class is one Event, not one per session.** Two Event nodes for one class
+would put one thing on the page twice and hand Google two entities to
+reconcile. So `startDate` is whichever session comes next, from
+`soonestOccurrence`, and the whole week goes in `eventSchedule` as an array of
+Schedules. **A class with one session keeps a single Schedule object**, not an
+array of one, so Yoga's and Pilates' markup is byte for byte what it was.
+
+**`audit-class-schedule.js` reads the array.** Read as one object, an array has
+no `byDay` of its own and every check below it would have skipped itself and
+passed. It now requires the computed date to be one of the listed sessions, and
+every session's day and time to be on the page.
+
+#### Jane's Recovery Sanctuary, as rebuilt by Frank. Read 2026-10-31
+
+Every "Show more Sessions" opened, from `#/recovery-sanctuary`:
+
+| Jane | Treatment |
+| --- | --- |
+| 42 | Flowpresso |
+| 80 | Yoga Class with Rooj |
+| 115 | Private Yoga Session with Rooj |
+| 78 | Mat Pilates Class with Claire |
+| 118 | Private Pilates Session with Claire |
+| 119 | Tai Chi Class with Dr. David Gabriele |
+| 113 | Private Tai Chi Session |
+| 81, 120, 121, 122 | Cold Plunge & Sauna, individual and groups of 2, 3 and 4 |
+
+**Every treatment page already pointed at a live entry except Tai Chi**, whose
+link was 112. **112 is dead**: it bounces to Jane's front page, so both the Tai
+Chi page and `/classes` were sending Book to nowhere. Both go to 119 now, live
+since the data change, without waiting for any merge.
+
+**The `/classes` Tai Chi override is gone, so the link lives in one place.** Yoga
+and Pilates already fell back to their treatment page's link; Tai Chi kept its
+own only because it had no treatment page when CH-107 was built. Two copies is
+how the two came to disagree.
+
+**The private sessions, 115, 118 and 113, have no page on this site** and are
+not linked from one. The Outdoor Pilates page mentions one-on-one sessions in
+its copy but has one Book button, for the class. Frank's call whether that
+changes.
+
+**Both classes Jane used to sell at 60 minutes are 50 now**, Yoga at 80 and Tai
+Chi at 119, which closes the note under the 50-minute change above.
+
+**`apply-class-corrections.js` would have put the dead link back.** It wrote
+staff_member 7 treatment 112 on 2026-10-30, and a re-run after today would have
+restored it over the fallback. That entry is removed from the script.
+
+```bash
+node scripts/apply-tai-chi-and-share-copy.js          # dry run
+node scripts/apply-tai-chi-and-share-copy.js --apply
+```
+
+Transaction `s2fj2CZdVJzjA5WLfJKUk9`, after
+`sanity-backup-2026-10-31-before-tai-chi-and-share-copy-documents.tar.gz`.
+
+#### The share card sweep, Frank's decisions. 2026-10-31
+
+From the sweep of all 56 cards. **Applied in his words exactly**, in the same
+transaction:
+
+| Page | Field | Now |
+| --- | --- | --- |
+| Homepage | `homePageTitle`, which is the search title, share title and Twitter title at once | Health, Curated for You \| Curate Health |
+| /products | share title | Fitted by a Practitioner, Custom and Curated Just For You. |
+| /about/mission-and-values | share description | Evidence-based, interdisciplinary care. The thinking behind how Curate Health works. |
+| /classes | share description | Yoga, Pilates and Tai Chi outdoors in Midtown Toronto. Small groups with no term to commit to. |
+
+**Declined, so unchanged:** the homepage description and the Our Story
+description both stay as they were. **Do not re-propose either.**
+
+**The cafe card went through a round.** His first line could be read as the
+cafe using plastic takeout containers, and the page never mentions takeout
+containers, so it was held. His second, 2026-11-01: "Local, seasonal
+ingredients, with no refined sugars or industrial seed oils, and a
+microplastic-conscious kitchen." The "a" is added; he wrote "and
+microplastic-conscious kitchen". It stands on the page's own line about keeping
+plastic out of preparation and storage, and on his B Corp facts.
+
+**Every proposal he did not answer is accepted**, his words on 2026-11-01, and
+applied in transaction `bPVZl1wMwlnlOqhL5xwB9G`:
+
+| Page | Share title now |
+| --- | --- |
+| Chiropractic | Chiropractic That Treats More Than the Sore Spot |
+| /about | A Health and Wellness Destination in Midtown Toronto |
+| Fitness Training | Training With a Clinician as Your Coach |
+| Tai Chi | Tai Chi, Taught Slowly and Properly |
+| Outdoor Yoga | Yoga Therapy in the Open Air |
+| Mission and Values | What We Will Not Compromise On |
+| /classes | Classes in the Recovery Sanctuary |
+
+**One proposal went in narrower than proposed, and it was my error.** The Curate
+Lifestyle Program description I drafted said the program was "for reversing the
+drivers of chronic disease", an outcome claim about a medical program. A
+blanket approval of copy is not the practitioner sign-off the content rules
+require for one, so it went in as what the program is and who runs it: "A
+physician-led lifestyle medicine program with Dr. Eric Leong at Curate Health
+in Midtown Toronto." It replaced the 24 character placeholder in the search
+description too, since both held it and the house shape is that they match.
+**Dr. Leong can widen it.**
+
+**The sweep is closed.** Nothing from it is outstanding.
+
+#### Private session buttons. 2026-11-01
+
+Yoga, Pilates and Tai Chi each have a one-on-one session in Jane as well as a
+class, and their pages had one button, for the class. Frank asked for a second.
+
+`privateSessionUrl` on the treatment, "Private session booking URL" in the
+Studio. Filled in, a button reading **"Book a Private Session"** appears beside
+the main one at the foot of the page; empty, there is one button, as before.
+Every other treatment has it empty.
+
+**It is the primary's inverse, outlined where that one is filled**, so the
+class stays the obvious first choice. Colours are spelled out at the call site:
+the `outline` variant in `components/ui/button.tsx` is dark green on dark green
+in this theme, see the note under CH-108. Side by side from `md`, stacked on a
+phone, no horizontal overflow at 375.
+
+**The label is in code, not the Studio**, like every navigation label on the
+site, since it reads the same on all three.
+
+| Page | Jane |
+| --- | --- |
+| Outdoor Yoga Therapy | 115, Private Yoga Session with Rooj, $95 |
+| Outdoor Pilates | 118, Private Pilates Session with Claire, $175 |
+| Tai Chi | 113, Private Tai Chi Session with Dr. Dave Gabriele |
+
+Each was opened in Jane and read back as that session before it was written.
+Both buttons are janeapp.com links, so CH-113's `book_now` counts either.
+
+**Private Pilates has openings while the class is paused**, read the same day.
+Worth knowing: through December the second button is the only bookable Pilates
+on that page.
+
+**Until the code deploys, the Studio shows "Unknown field" on those three
+treatments. Do not press Remove field**: it deletes the link.
+
+#### The product pages stay Products. Settled 2026-11-01
+
+Search Console reported "Either offers, review, or aggregateRating should be
+specified", critical, under Product snippets, on all five product pages.
+
+**They were switched to Service for a day and Frank put them back, on the
+facts.** The reasoning for Service was that every product page ends on booking
+a consultation. His correction: "Not every product needs a consult. For
+instance, some people might walk in to buy certain supplements or compression
+stockings." Something bought over the counter is a Product. **Do not propose
+Service again.**
+
+**THE SEARCH CONSOLE ERROR STAYS, AND THAT IS ACCEPTED.** Google will not show a
+product result without a price, a review or a rating, and this site can
+honestly give none: pricing lives in Jane and the pages show none, ratings are
+banned under CH-008, and there are no reviews. **It costs no ranking and no AI
+visibility**: an incomplete label only makes a page ineligible for the one
+special result, it does not demote it, and the answer engines read the page's
+words rather than its labels. That was put to Frank before he chose. **Do not
+press Validate fix on that notice, and do not report it as open work.** The one
+way to clear it as a Product would be printing a price on the page, which is a
+scope decision, not a markup one.
+
+**The neighbourhoods are on each product as well as on the clinic.** Frank asked
+that the areas served stay listed. The clinic node on every page already carries
+all eleven; each Product now states them too. schema.org gives a Product no
+`areaServed`, and an Offer would need a price, so it is `audience` with
+`geographicArea`, reading the one `SERVICE_AREA` list every other node reads.
+
+**Two things the original comment claimed were wrong, and both are gone.** It
+said the markup fed Google Business Profile's products field; those are entered
+in the Business Profile by hand, by the agency. And it published
+`category: "Medical device"` on all five, wrong for the supplements, so there is
+no category now.
+
+#### "Duplicate without user-selected canonical". 2026-11-01
+
+Search Console's new reason for not indexing some pages. **The label means the
+pages it names carry no canonical tag**, and every sitemap page has one, so the
+candidates are the pages outside it. Checked on production:
+
+| Address | Was |
+| --- | --- |
+| `/search`, every `?q=` | 200, no canonical, no robots directive, the homepage's title |
+| `/coming-soon` | 200, no canonical, no robots directive, the homepage's title |
+| `/login`, `/studio` | blocked in robots.txt, `/studio` also noindex |
+| the 404 | noindex |
+
+**Every `/search?q=` a crawler found was another page under the homepage's
+title**, and internal search results are the case Google's own guidelines name
+for keeping out of the index. Both routes are `noindex, follow` now through the
+same arm of `buildPageMetadata` the 404 uses, with titles of their own.
+
+**This is the likely cause, not a confirmed one.** The report lists the actual
+addresses under Indexing, Pages, then the reason, and nobody has read it here.
+If anything in it is not `/search` or `/coming-soon`, it is a different cause.
+
+##### `nextOccurrence` took /classes down on Vercel, and now it cannot
+
+**The first version could throw, and a local build could not show it.** An
+unusable value reached `Date.UTC`, `toISOString` raised "Invalid time value",
+and **the prerender of the whole page failed with it**:
+
+```
+Error occurred prerendering page "/classes"
+RangeError: Invalid time value
+```
+
+`npm run build` passed on this machine, the page rendered correctly in a
+browser, and all 13 checks passed. The only thing that showed it was the
+deployment.
+
+**The local build looked clean partly because the output was filtered.**
+`npm run build 2>&1 | grep -iE 'Compiled successfully|error'` prints the
+success line from the compile step and hides a failure in the prerender step
+after it, and the exit code read through that pipe is grep's. **Redirect the
+build to a file and read `$?`**, which is the same lesson the
+`audit-seo-fields.js` note already records.
+
+**The environment difference was never reproduced.** Same Node 24, same full
+ICU, same result under `TZ=UTC`, and the stored day and time are clean. That
+is worth stating plainly rather than implying a diagnosis: what is fixed is
+the fragility, not an identified trigger.
+
+**So it refuses instead.** `nextOccurrence` returns **null** for an unknown
+day, an unusable time, an invalid `now` or any part that comes back NaN, and
+`torontoOffset` and `torontoParts` guard an invalid Date before calling
+`formatToParts`, which throws the same RangeError and is hard to tell from
+`toISOString` in a minified stack. Both callers already had somewhere sensible
+to go: the markup leaves the class out, and the page prints its weekday.
+
+**The page was also missing the gate the markup had.** The Event builder
+checked `isDayName` before computing; the page checked only that `dayOfWeek`
+was truthy. The same asymmetry is the reason the markup could render while the
+page died.
+
+**Ten cases in `test-class-dates.ts` now assert it never throws**, and the
+contract is "never throws", not "always refuses": an unusable day or time has
+no answer and returns null, while an unusable resume date simply means the
+break is ignored and the class runs normally. Both are correct, so both pass.
 
 ### CH-029, the heavy PNGs. Done 2026-10-24
 
@@ -3346,7 +3754,7 @@ Every link was repointed in the same change: the navigation's Programs list, the
 
 ### The every-page rule, first run 2026-09-18
 
-`node scripts/audit-seo-complete.js` runs nine checks: metadata, llms.txt, breadcrumbs, reachability, alt text, image sizes, practitioner pages, the blog, and the content rules in the words on each page. The last is new, `scripts/audit-content-rules.js`, because no other check read the body of a page.
+`node scripts/audit-seo-complete.js` runs thirteen checks: metadata, llms.txt, breadcrumbs, reachability, alt text, image sizes, practitioner pages, the blog, the content rules in the words on each page, share cards, the class schedule's Event markup, and two unit checks that fetch nothing, the share card fallback chain and the next class date. **It was nine on 2026-09-18, so a passing "9 of 9" anywhere above is a count from then, not a target.** `scripts/audit-content-rules.js` was the ninth, because no other check read the body of a page.
 
 **Brought up to the rule on the first run:** the two Curate Lifestyle pages, which joined the sitemap that day and so had never been checked. Both gained a breadcrumb trail, the program's through Curate Lifestyle, and a `Service` node from `buildLifestyleJsonLd`. The program page had two h1s; "Group Sessions" is an h2 now, with the same look. Its eight session pictures and the line drawing behind the pillars quote were looked at and listed as decorative in `audit-alt-text.js`. Images without alt text now render `alt=""` rather than no attribute.
 

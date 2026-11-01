@@ -204,6 +204,9 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   },
   quoteContent,
   janeBookingUrl,
+  // One-on-one sessions of a class, a second button beside the main one.
+  // Empty on anything without a private option, which then shows one button.
+  privateSessionUrl,
   // Who provides this, for the block at the foot of the page. Dereferenced
   // rather than stored on the page, so a practitioner switched off in the
   // Studio drops out of every service that lists them.
@@ -1295,10 +1298,17 @@ export const CLASS_SCHEDULE_QUERY = groq`*[_type == "classSchedule"][0]{
     _key,
     dayOfWeek,
     startTime,
+    // Any other day the same class meets. Tai Chi runs Fridays as well as
+    // Sundays. The page lists them all and the markup dates whichever is next.
+    moreSessions[]{ dayOfWeek, startTime },
     durationMinutes,
     capacity,
     price,
     note,
+    // Empty while a class runs normally. Set, it is the date the class comes
+    // back, and both the page and the Event markup read it rather than
+    // working out the next weekly slot.
+    resumesOn,
     "name": coalesce(treatment->title, name),
     // The entry's own summary wins, so the line on this page can be edited
     // without touching the treatment page's meta description. Empty, it

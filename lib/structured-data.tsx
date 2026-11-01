@@ -4,6 +4,12 @@ import {
   getBlogAuthorDisplayName,
 } from "@/lib/author-team-link";
 import type { Crumb } from "@/lib/breadcrumbs";
+import {
+  isDayName,
+  soonestOccurrence,
+  sortSessions,
+  type Session,
+} from "@/lib/class-dates";
 import { treatmentPath } from "@/lib/service-urls";
 import { getPractitionerSlugFromName } from "@/lib/utils";
 import {
@@ -922,7 +928,11 @@ type ScheduledClassLike = {
   summary?: string | null;
   dayOfWeek?: string | null;
   startTime?: string | null;
+  moreSessions?:
+    | { dayOfWeek?: string | null; startTime?: string | null }[]
+    | null;
   durationMinutes?: number | null;
+  resumesOn?: string | null;
   capacity?: number | null;
   price?: number | null;
   note?: string | null;
@@ -939,36 +949,70 @@ type ScheduledClassLike = {
   } | null;
 };
 
-const DAYS = new Set([
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-]);
+/**
+ * Every weekly slot a class meets in: its main day and time, then any it
+ * also runs on. Each carries its own end time, worked out from the class's
+ * one length, so a second session cannot claim a different duration.
+ *
+ * A session with an unusable day or time is dropped here rather than
+ * published half stated, the same rule the main session has always had.
+ */
+export function classSessions(entry: ScheduledClassLike): Session[] {
+  const raw = [
+    { dayOfWeek: entry.dayOfWeek, startTime: entry.startTime },
+    ...(entry.moreSessions ?? []),
+  ];
+
+  const sessions: Session[] = [];
+  for (const item of raw) {
+    const day = item?.dayOfWeek?.trim();
+    const start = item?.startTime?.trim();
+    const end = endTime(start, entry.durationMinutes);
+    if (!day || !isDayName(day) || !start || !end) continue;
+
+    // The same slot entered twice is one session, not two.
+    if (sessions.some((s) => s.day === day && s.start === start)) continue;
+    sessions.push({ day, start, end });
+  }
+  return sessions;
+}
 
 /**
  * The class schedule as Event nodes. CH-107.
  *
- * THE RECURRENCE IS PUBLISHED, NOT A LIST OF DATES
+ * THE NEXT OCCURRENCE IS DATED, AND THE RECURRENCE IS PUBLISHED BESIDE IT
  *
- * `eventSchedule` with a `Schedule` is what schema.org provides for a class
- * that runs every week at the same time, and it is what Google documents for
- * a recurring event. A dated `startDate` would be wrong here twice over: Jane
- * only holds the next fortnight open, so there is no reliable list of future
- * dates to publish, and a date that has passed is worse than no date at all.
+ * **Google requires `startDate` on an Event and documents no recurrence
+ * field at all**, so `eventSchedule` on its own bought nothing from it.
+ * Search Console reported exactly that on 2026-10-29, as critical. An earlier
+ * version of this comment claimed Google documented the recurrence. It did
+ * not, and it does not.
  *
- * `scheduleTimezone` is America/Toronto rather than an offset, so the hour
- * stays correct across daylight saving. Jane returned these as -04:00 in
- * October and -05:00 in November for the same 9:00 AM class, which is exactly
- * the thing an offset gets wrong.
+ * So each class states when it next runs, computed by `nextOccurrence`
+ * rather than stored. **That answers the original objection, which was
+ * real**: Jane only holds the next fortnight open, so there was never a list
+ * of future dates to publish, and a date that has passed is worse than no
+ * date. A computed next occurrence cannot be in the past.
+ *
+ * It is at most `PAGE_REVALIDATE_SECONDS` stale, an hour, which cannot carry
+ * it past a class: the soonest any of these starts after a rebuild is the
+ * following morning.
+ *
+ * `eventSchedule` stays. It is the honest description of a class that runs
+ * every week, it is what schema.org provides for one, and anything reading
+ * the page learns the pattern rather than a single date.
+ * `scheduleTimezone` is America/Toronto rather than an offset for the
+ * daylight saving reason under `torontoOffset`.
  *
  * WHAT IS NOT PUBLISHED, AND WHY
  *
- * `startDate` and `endDate`: nothing on the page states when a class started
- * or will stop, and neither does Jane.
+ * `offers.validFrom`, which Search Console reported in the same notice as a
+ * suggestion rather than an error. Google's own documentation makes it
+ * conditional: it is for an offer that is date-restricted, such as tickets
+ * going on sale later. A drop-in place is bookable now, which is what
+ * `availability` already says, so a date here would invent a restriction
+ * that does not exist. **That suggestion is expected to persist, and it is
+ * correct to leave it.**
  *
  * A price with no `price` field set: pricing lives in Jane on this site, so a
  * class only carries an `Offer` when somebody has typed the number into the
@@ -988,6 +1032,12 @@ export function buildClassScheduleJsonLd(schedule: {
 } | null) {
   const url = absoluteUrl(CLASS_SCHEDULE_PATH);
 
+  /*
+   * One instant for every class, so two of them cannot land on different
+   * sides of midnight within a single render.
+   */
+  const now = new Date();
+
   const events = (schedule?.classes ?? [])
     .map((entry) => {
       const name = entry.name?.trim();
@@ -997,7 +1047,9 @@ export function buildClassScheduleJsonLd(schedule: {
 
       // Everything below needs a name, a day and a usable time. A class
       // missing any of them is left out rather than published half stated.
-      if (!name || !day || !DAYS.has(day) || !end) return undefined;
+      if (!name || !day || !isDayName(day) || !start || !end) {
+        return undefined;
+      }
 
       const anchor = classAnchor(name);
       const page =
@@ -1005,9 +1057,38 @@ export function buildClassScheduleJsonLd(schedule: {
           ? absoluteUrl(treatmentPath(entry.serviceSlug, entry.treatmentSlug))
           : undefined;
 
+      const sessions = classSessions(entry);
+
+      /*
+       * Null when no session can be dated. A class that cannot be dated is
+       * left out rather than published without a startDate, which is the
+       * field Google requires, and rather than throwing, which took the page
+       * down once already. With more than one session, this is whichever
+       * comes next.
+       */
+      const occurrence = soonestOccurrence(sessions, now, entry.resumesOn);
+      if (!occurrence) return undefined;
+
+      /*
+       * One Schedule per session. A single session stays a single object
+       * rather than an array of one, so the markup for a class that meets
+       * once a week is byte for byte what it was before this existed.
+       */
+      const schedules = sortSessions(sessions).map((session) => ({
+        "@type": "Schedule",
+        byDay: `https://schema.org/${session.day}`,
+        repeatFrequency: "P1W",
+        startTime: session.start,
+        endTime: session.end,
+        duration: `PT${entry.durationMinutes}M`,
+        scheduleTimezone: "America/Toronto",
+      }));
+
       return {
         "@type": "Event",
         "@id": `${url}#${anchor}`,
+        startDate: occurrence.startDate,
+        endDate: occurrence.endDate,
         name,
         description: entry.summary?.trim() || undefined,
         image: classPhoto(entry)?.url || undefined,
@@ -1015,15 +1096,7 @@ export function buildClassScheduleJsonLd(schedule: {
         // states the day and the time. The class's treatment page, where
         // there is one, is linked below as the thing being taught.
         url: `${url}#${anchor}`,
-        eventSchedule: {
-          "@type": "Schedule",
-          byDay: `https://schema.org/${day}`,
-          repeatFrequency: "P1W",
-          startTime: start,
-          endTime: end,
-          duration: `PT${entry.durationMinutes}M`,
-          scheduleTimezone: "America/Toronto",
-        },
+        eventSchedule: schedules.length === 1 ? schedules[0] : schedules,
         eventStatus: "https://schema.org/EventScheduled",
         eventAttendanceMode:
           "https://schema.org/OfflineEventAttendanceMode",
@@ -1135,26 +1208,44 @@ export function JsonLdScript({
 }
 
 /**
- * Product schema, CH-010.
+ * Product schema, CH-010, revisited 2026-11-01.
  *
- * NO OFFER, NO PRICE, DELIBERATELY
+ * THEY ARE PRODUCTS, AND THAT IS FRANK'S CALL ON THE FACTS
  *
- * schema.org lets a Product carry an Offer with a price and availability, and
- * Google's product rich results want one. These do not get one, for two
- * reasons that both matter here.
+ * For one day these were marked up as a Service, on the reasoning that every
+ * page ends on booking a consultation. Frank corrected it: "Not every product
+ * needs a consult. For instance, some people might walk in to buy certain
+ * supplements or compression stockings." Something bought over the counter is
+ * a Product. **Do not switch these to Service again.**
  *
- * Pricing is out of scope on this project by decision: it lives in Jane behind
- * the Book Now button and there is no pricing page. Publishing a price in
- * markup would put a number on the site that nothing on the site can show, and
- * a stale price in structured data is worse than no price.
+ * NO OFFER, NO PRICE, DELIBERATELY, AND THE COST OF THAT IS KNOWN
  *
- * These are also not things somebody adds to a basket. An orthotic is cast to a
- * foot and a brace is fitted, so the honest markup is a product that exists and
- * is described, not one that is for sale at a number.
+ * Pricing is out of scope by decision and lives in Jane, so a price here
+ * would be a number the page itself never shows. Without one of offers,
+ * review or aggregateRating, Google will not show a product result, and
+ * Search Console reports "Product snippets" as critical on all five pages.
+ * **That report is expected and accepted.** It costs no ranking: an
+ * incomplete label makes a page ineligible for one special result, it does
+ * not demote it. Do not press Validate fix on it, which would only fail, and
+ * do not add a review or a rating to silence it: there are none, and ratings
+ * are banned under CH-008.
  *
- * They still earn their place: this is what feeds Google Business Profile's
- * products field, which the agency manages, and it gives each page an entity
- * rather than leaving it as unlabelled prose.
+ * THE NEIGHBOURHOODS, ON THE PRODUCT ITSELF
+ *
+ * Frank asked that the areas Curate serves stay listed with the products.
+ * They already are, on the clinic node every page carries. They are also
+ * stated here, so each product says it directly. schema.org gives a Product
+ * no `areaServed`, which belongs to Service, Organization and Offer, and an
+ * Offer would need a price. `audience` with `geographicArea` is the property
+ * a Product does have for this. It takes the one SERVICE_AREA list every
+ * other node reads, so the products cannot name a different set of places.
+ *
+ * TWO THINGS THE ORIGINAL COMMENT GOT WRONG, NOW GONE
+ *
+ * It said this markup fed Google Business Profile's products field. It never
+ * did: those are entered in the Business Profile by hand, by the agency. And
+ * it published `category: "Medical device"` on all five, which was wrong for
+ * the supplements, so there is no category now.
  */
 type ProductLike = {
   title?: string | null;
@@ -1176,10 +1267,12 @@ function buildProductNode(product: ProductLike) {
     description: product.description,
     image: product.image,
     url,
-    // The clinic is the brand here rather than a manufacturer. These are
-    // supplied and fitted by Curate, which is what a visitor is choosing.
+    // Supplied and fitted by Curate, which is what a visitor is choosing.
     brand: { "@id": `${BASEURL}/#organization` },
-    category: "Medical device",
+    audience: {
+      "@type": "Audience",
+      geographicArea: SERVICE_AREA,
+    },
   }) as JsonLdObject | undefined;
 }
 

@@ -152,12 +152,30 @@ function capture(html, status) {
     strip(visibleText(m[1]))
   );
 
-  // structured data, with keys sorted so a reordering is not reported as a change
+  /*
+   * structured data, with keys sorted so a reordering is not reported as a
+   * change.
+   *
+   * A class Event's `startDate` and `endDate` are normalised out. They are
+   * the next occurrence of a weekly class, computed at render time, so they
+   * move every week and differ between any two runs a week apart. Left in,
+   * /classes would report a change on every comparison for ever, and a check
+   * that cries wolf gets ignored. Same reasoning as `lastmod` below.
+   *
+   * Only on an Event. `datePublished` and `dateModified` on a BlogPosting
+   * are stored values that should be compared, and are untouched.
+   */
   const sortKeys = (v) => {
     if (Array.isArray(v)) return v.map(sortKeys);
     if (v && typeof v === "object") {
       const o = {};
-      for (const k of Object.keys(v).sort()) o[k] = sortKeys(v[k]);
+      const recurring = v["@type"] === "Event";
+      for (const k of Object.keys(v).sort()) {
+        o[k] =
+          recurring && (k === "startDate" || k === "endDate")
+            ? `<${k}/>`
+            : sortKeys(v[k]);
+      }
       return o;
     }
     return v;

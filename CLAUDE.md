@@ -1879,33 +1879,40 @@ on that page.
 **Until the code deploys, the Studio shows "Unknown field" on those three
 treatments. Do not press Remove field**: it deletes the link.
 
-#### The product pages are a Service, not a Product. 2026-11-01
+#### The product pages stay Products. Settled 2026-11-01
 
 Search Console reported "Either offers, review, or aggregateRating should be
 specified", critical, under Product snippets, on all five product pages.
 
-**Google will not show a product result without one of the three, and this site
-can honestly give none of them.** No `offers`: pricing is out of scope and lives
-in Jane, so a price would be a number the page never shows. No
-`aggregateRating`: banned under CH-008. No `review`: there are none. So the
-`Product` nodes could never become product results; their only effect was the
-error.
+**They were switched to Service for a day and Frank put them back, on the
+facts.** The reasoning for Service was that every product page ends on booking
+a consultation. His correction: "Not every product needs a consult. For
+instance, some people might walk in to buy certain supplements or compression
+stockings." Something bought over the counter is a Product. **Do not propose
+Service again.**
 
-**A Service is the true description rather than a workaround.** Nobody adds
-these to a basket: an orthotic is cast, a brace and a stocking are fitted, and a
-TENS unit or a supplement is supplied after a practitioner has seen you. Every
-product page ends on a button to book a consultation with Dr. Nhan. That is a
-Service, in the same shape as every treatment page: the clinic as provider, and
-the service area.
+**THE SEARCH CONSOLE ERROR STAYS, AND THAT IS ACCEPTED.** Google will not show a
+product result without a price, a review or a rating, and this site can
+honestly give none: pricing lives in Jane and the pages show none, ratings are
+banned under CH-008, and there are no reviews. **It costs no ranking and no AI
+visibility**: an incomplete label only makes a page ineligible for the one
+special result, it does not demote it, and the answer engines read the page's
+words rather than its labels. That was put to Frank before he chose. **Do not
+press Validate fix on that notice, and do not report it as open work.** The one
+way to clear it as a Product would be printing a price on the page, which is a
+scope decision, not a markup one.
 
-**Two things the old comment claimed were wrong.** It said the markup fed
-Google Business Profile's products field; those are entered in the Business
-Profile by hand, by the agency, and markup never fed them. It also published
-`category: "Medical device"` on the supplements page.
+**The neighbourhoods are on each product as well as on the clinic.** Frank asked
+that the areas served stay listed. The clinic node on every page already carries
+all eleven; each Product now states them too. schema.org gives a Product no
+`areaServed`, and an Offer would need a price, so it is `audience` with
+`geographicArea`, reading the one `SERVICE_AREA` list every other node reads.
 
-`buildProductJsonLd` keeps its name, since it builds the markup for a page in
-the products section. The /products `ItemList` is unchanged: it points at the
-pages rather than restating them.
+**Two things the original comment claimed were wrong, and both are gone.** It
+said the markup fed Google Business Profile's products field; those are entered
+in the Business Profile by hand, by the agency. And it published
+`category: "Medical device"` on all five, wrong for the supplements, so there is
+no category now.
 
 #### "Duplicate without user-selected canonical". 2026-11-01
 

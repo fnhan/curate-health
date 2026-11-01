@@ -1208,38 +1208,44 @@ export function JsonLdScript({
 }
 
 /**
- * The product pages, marked up as a Service. CH-010, corrected 2026-11-01.
+ * Product schema, CH-010, revisited 2026-11-01.
  *
- * THESE WERE `Product` NODES, AND GOOGLE REPORTED EVERY ONE AS BROKEN
+ * THEY ARE PRODUCTS, AND THAT IS FRANK'S CALL ON THE FACTS
  *
- * Search Console, 2026-11-01: "Either offers, review, or aggregateRating
- * should be specified", critical, under Product snippets. Google will not
- * show a product result without one of the three, and this site can honestly
- * give none of them:
+ * For one day these were marked up as a Service, on the reasoning that every
+ * page ends on booking a consultation. Frank corrected it: "Not every product
+ * needs a consult. For instance, some people might walk in to buy certain
+ * supplements or compression stockings." Something bought over the counter is
+ * a Product. **Do not switch these to Service again.**
  *
- * - **No `offers`**: pricing is out of scope by decision and lives in Jane, so
- *   a price here would be a number the page itself never shows, and markup
- *   describes what the page shows.
- * - **No `aggregateRating`**: banned under CH-008. Google withdrew it for
- *   self-serving reviews, and the colleges restrict testimonials.
- * - **No `review`**: there are none, and none will be invented.
+ * NO OFFER, NO PRICE, DELIBERATELY, AND THE COST OF THAT IS KNOWN
  *
- * So a `Product` here could never become a product result, and its only
- * effect was a critical error in Search Console.
+ * Pricing is out of scope by decision and lives in Jane, so a price here
+ * would be a number the page itself never shows. Without one of offers,
+ * review or aggregateRating, Google will not show a product result, and
+ * Search Console reports "Product snippets" as critical on all five pages.
+ * **That report is expected and accepted.** It costs no ranking: an
+ * incomplete label makes a page ineligible for one special result, it does
+ * not demote it. Do not press Validate fix on it, which would only fail, and
+ * do not add a review or a rating to silence it: there are none, and ratings
+ * are banned under CH-008.
  *
- * WHY A SERVICE IS THE TRUE DESCRIPTION, NOT A WORKAROUND
+ * THE NEIGHBOURHOODS, ON THE PRODUCT ITSELF
  *
- * Nobody adds these to a basket. An orthotic is cast to a foot, a brace and a
- * stocking are fitted, and a TENS unit or a supplement is supplied after a
- * practitioner has seen you. Every one of these pages ends on the same thing,
- * a button to book a consultation with Dr. Nhan. What Curate offers on each is
- * the assessment and the fitting, which is a Service, the same shape as every
- * treatment page: the clinic as provider, and the areas it serves.
+ * Frank asked that the areas Curate serves stay listed with the products.
+ * They already are, on the clinic node every page carries. They are also
+ * stated here, so each product says it directly. schema.org gives a Product
+ * no `areaServed`, which belongs to Service, Organization and Offer, and an
+ * Offer would need a price. `audience` with `geographicArea` is the property
+ * a Product does have for this. It takes the one SERVICE_AREA list every
+ * other node reads, so the products cannot name a different set of places.
  *
- * **The old comment said this markup feeds Google Business Profile's products
- * field. It does not**, and nothing on the page ever did: those are entered in
- * the Business Profile by hand, which the agency does. It also said
- * `category: "Medical device"`, which was wrong on the supplements page.
+ * TWO THINGS THE ORIGINAL COMMENT GOT WRONG, NOW GONE
+ *
+ * It said this markup fed Google Business Profile's products field. It never
+ * did: those are entered in the Business Profile by hand, by the agency. And
+ * it published `category: "Medical device"` on all five, which was wrong for
+ * the supplements, so there is no category now.
  */
 type ProductLike = {
   title?: string | null;
@@ -1255,18 +1261,22 @@ function buildProductNode(product: ProductLike) {
   const url = absoluteUrl(`/products/${product.slug}`);
 
   return stripEmpty({
-    "@type": "Service",
-    "@id": `${url}#service`,
+    "@type": "Product",
+    "@id": `${url}#product`,
     name: product.title,
     description: product.description,
     image: product.image,
     url,
-    provider: { "@id": `${BASEURL}/#medicalclinic` },
-    areaServed: SERVICE_AREA,
+    // Supplied and fitted by Curate, which is what a visitor is choosing.
+    brand: { "@id": `${BASEURL}/#organization` },
+    audience: {
+      "@type": "Audience",
+      geographicArea: SERVICE_AREA,
+    },
   }) as JsonLdObject | undefined;
 }
 
-/** The Service node for a single product page. */
+/** One Product, for a single product page. */
 export function buildProductJsonLd(product: ProductLike | null | undefined) {
   if (!product) return null;
 

@@ -19,6 +19,73 @@ Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with
 
 ---
 
+## Outstanding work, as of 2026-11-02
+
+**This is the list.** Frank asked on 2026-11-02 for outstanding work to be kept
+in one place. Update it in the same change that finishes or adds an item, and
+take an item off when it is done, so the rest of this file stays the record and
+this stays short. Anything settled (see "Settled, do not re-raise" in the memory
+index) never appears here.
+
+| # | Item | Whose | State |
+| --- | --- | --- | --- |
+| 1 | **Search Console**: Request indexing for `/services/physiotherapy`, `/products/custom-foot-orthotics`, `/services/recovery-sanctuary/outdoor-yoga-therapy` and `/blog`; Validate fix on the `/services/mental-health` duplicate and on Events "Missing field startDate" | Frank | to do |
+| 2 | **Complimentary consult CTA**, see below | Claude Code, after Frank's go | planned |
+| 3 | **Product booking buttons** to Jane's own appointments: compression stockings to Assessment & Fitting (36), with Reorder (37) as a second button; custom orthotics to Customized Orthotics Fitting (68), with Recasting (35). TENS, supplements and knee braces keep Dr. Nhan's consult | Claude Code, after Frank's go | proposed 2026-11-01, unanswered |
+| 4 | **Blog**: a topic plan from what Toronto actually searches, then one substantial post per practitioner. Each needs that practitioner's sign-off | Claude Code drafts, practitioners sign off | not started |
+| 5 | **Photos**: Ariel Zohar's (1001x685, renders soft), Claire Kim's (a placeholder), and the compression stockings and foot orthotics cutouts (too small for a crisp share card) | Frank | to do |
+| 6 | **Newsletter safety net**: create a Formspree form and set `NEWSLETTER_FALLBACK_ENDPOINT` in Vercel. Until then a refused signup reaches only the Vercel log | Frank | to do |
+| 7 | **Vercel plan**: Hobby bars commercial use; Pro is his decision | Frank | open |
+| 8 | **Google Business Profile**: whether a second listing exists for 989 Eglinton, per the CH-025 place id note | the agency | unverified |
+| 9 | **Housekeeping**: the five About children's heroes ignore a Studio crop; rich text links render in `AlternatingSections` only; 6 Dependabot alerts, none in anything the live site runs | Claude Code | low priority |
+
+### The complimentary consult CTA. Planned 2026-11-02
+
+Frank: "I want to add a cta of booking a complimentary consult with one of our
+practitioners. Everyone offers this, except for RMT and MD."
+
+**What Jane actually has**, read off each practitioner's Jane profile on
+2026-11-02:
+
+| Practitioner | Jane |
+| --- | --- |
+| Dr. Frank Nhan | Complimentary 15-Minute Chiropractic Consultation, `#/staff_member/1/treatment/50` |
+| Dr. David Gabriele | Complimentary 15-Minute Discovery Call, `#/staff_member/7/treatment/45` |
+| Safa Karoumi | Complimentary 15-Minute Discovery Call, `#/staff_member/3/treatment/18` |
+| Ariel Zohar | **none in Jane** |
+| Andrew Huynh, Dr. Eric Leong | none, as Frank said |
+
+**Ariel needs one set up in Jane before physiotherapy can carry the button.**
+Rooj and Claire teach classes and have none; "everyone" is read as the clinical
+practitioners. Safa is switched off on the site, so hers stays hidden until she
+is back, which happens on its own if the link lives on her record.
+
+**Where it goes, in order of value:**
+
+1. **The service pages, beside the main Book button**: Chiropractic Care with
+   Dr. Nhan's, Naturopathy with Dr. Gabriele's, Psychotherapy with Safa's,
+   Physiotherapy with Ariel's once it exists. Someone who has read about a
+   service is the person deciding, and fifteen free minutes is the easiest yes.
+   The same outlined second button as "Book a Private Session", so the paid
+   booking stays the first choice.
+2. **Each practitioner's own page**, beside their Book button, for somebody who
+   looked them up by name.
+3. **Optional: a "Not sure where to start?" band on /services and the team
+   page**, listing who offers one, for a visitor who does not yet know which
+   service they need.
+
+**Not the header.** It keeps one Book Now; a free consult needs a practitioner
+chosen first, and two booking buttons in the header compete.
+
+**Data, when built:** the link belongs on the practitioner record, since it is
+that person's offering, so switching them off takes it off every page at once.
+A consult is discipline-specific, Dr. Nhan's is a chiropractic one, so a
+service page shows it only where the consult fits the service; acupuncture,
+with three providers and no acupuncture consult, gets none. Label: "Book a
+Complimentary Consult", Frank's word, which the content rules allow.
+
+---
+
 ## Working rules
 
 **Branch and preview, never push to production directly.** One branch per ticket group. Vercel preview deploy for every branch. Frank reviews the preview before merge.

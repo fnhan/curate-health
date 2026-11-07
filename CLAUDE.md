@@ -19,7 +19,7 @@ Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with
 
 ---
 
-## Outstanding work, as of 2026-11-02
+## Outstanding work, as of 2026-11-07
 
 **This is the list.** Frank asked on 2026-11-02 for outstanding work to be kept
 in one place. Update it in the same change that finishes or adds an item, and
@@ -36,8 +36,20 @@ index) never appears here.
 | 5 | **Photos**: Ariel Zohar's (1001x685, renders soft), Claire Kim's (a placeholder), and the compression stockings and foot orthotics cutouts (too small for a crisp share card) | Frank | to do |
 | 6 | **Newsletter safety net**: create a Formspree form and set `NEWSLETTER_FALLBACK_ENDPOINT` in Vercel. Until then a refused signup reaches only the Vercel log | Frank | to do |
 | 7 | **Vercel plan**: Hobby bars commercial use; Pro is his decision | Frank | open |
-| 8 | **Google Business Profile**: whether a second listing exists for 989 Eglinton, per the CH-025 place id note | the agency | unverified |
+| 8 | **Google Business Profile**: the primary category; whether a second listing exists for 989 Eglinton, per the CH-025 place id note; whether the old Downtown listing at 777 Bay still shows as open; the cafe as its own listing; the name reading "Curate Health" | the agency, or Frank | unverified |
 | 9 | **Housekeeping**: the five About children's heroes ignore a Studio crop; rich text links render in `AlternatingSections` only; 6 Dependabot alerts, none in anything the live site runs | Claude Code | low priority |
+| 10 | **Speed and markup**, on `perf/cache-detail-pages-and-schema`: the 38 detail pages cached instead of rendered on every visit, the B Corp certification on the organization, its date as `2026-10`, the phone with `+1`, the cafe named on `/cafe/menu`. See "The 2026-11-07 audit" below | Claude Code, then Frank's go | built, not yet verified: the disk is full |
+| 11 | **One business name**: `siteSettings.brandName` and `contactPage.branchName` read "Curate Health - Midtown", a leftover from the Downtown location; Google and Jane say "Curate Health" | Frank's yes, then Claude Code | proposed 2026-11-07 |
+| 12 | **llms.txt opening line**, "Curate Health provides Toronto-based healthcare...", calls the business a clinic, as does the code fallback "a Toronto health and wellness clinic" | Frank's yes on the wording | proposed 2026-11-07 |
+| 13 | **Service page openings**: who provides it, what a first visit involves and how long it takes, how to book, on chiropractic, physiotherapy, massage, naturopathy, acupuncture and psychotherapy, plus the steps of an orthotics fitting. **The OHIP line is the Curate Lifestyle program's only**; these pages need a benefits line Frank confirms | Claude Code drafts, each practitioner signs off | not started |
+| 14 | **Unsigned health claims** on those pages and in older meta descriptions, listed in the audit's content finding 4, for example "reducing the need for medication or surgery" and the cold plunge's "Reduce inflammation, boost recovery" | Claude Code drafts, practitioners sign off | not started |
+| 15 | **Psychotherapy**: the page is live and names nobody while Safa is switched off, yet Jane still sells her sessions and her free discovery call, and the page's Book button goes there. Switch her back on (cancel the Google removal first), or pause the page and the Jane bookings | Frank | decision |
+| 16 | **Small page facts**: the Fax line on `/contact` is hardcoded as the phone number, keep only if faxes arrive on it; Saturday is not shown; no address in the body of `/classes`; no hours or address on `/cafe/menu`; Dr. Leong's canonical line is not on his page | Frank's yes, then Claude Code | proposed 2026-11-07 |
+| 17 | **Listings**: Bing Webmaster Tools, Bing Places, Apple Business Connect, Yelp, Yellow Pages (none found), college and association finders, the B Corp directory profile, supplier locators such as Flowpresso's, all with the exact name, address and phone | Frank or the agency | to do |
+| 18 | **Google API access for Claude Code**: Search Console with Full access and a free PageSpeed key, saved to `C:\Users\Chiro1\.config\claude-seo\`, so real queries and loading scores can be read | Frank | to do |
+| 19 | **AI answer baseline**: ask ChatGPT, Perplexity and Google "best chiropractor in Midtown Toronto" and similar, and record whether Curate appears | Frank | to do |
+| 20 | **Disk space**: C: had 0 GB free on 2026-11-07, which stops local builds and full Sanity exports. Six full exports, about 9 GB, are in Documents; the two restore points named in this file must stay | Frank | urgent |
+| 21 | **Low**: `http://curatehealth.ca` takes two redirects (a Vercel domain setting); the "Take The Survey" button may go nowhere, unchecked | Frank; Claude Code | low priority |
 
 ### The complimentary consult CTA. Planned 2026-11-02
 
@@ -83,6 +95,36 @@ A consult is discipline-specific, Dr. Nhan's is a chiropractic one, so a
 service page shows it only where the consult fits the service; acupuncture,
 with three providers and no acupuncture consult, gets none. Label: "Book a
 Complimentary Consult", Frank's word, which the content rules allow.
+
+### The 2026-11-07 audit
+
+Frank asked for the process in an SEO guide to be followed "unless we already
+did it". The claude-seo audit ran with seven of its eight specialists; the
+speed one returned nothing, so speed was measured by hand. Three of its
+recommendations were wrong and are recorded so they are not acted on later:
+
+- **"Add the OHIP line to every service page."** The line "partially covered
+  by OHIP and most benefit programs" appears in the dataset only on the Curate
+  Lifestyle program, which is physician-led. Chiropractic, physiotherapy,
+  massage, naturopathy and psychotherapy are not OHIP services for most
+  people, so on those pages it would be false.
+- **"Remove the fax line, it repeats the phone number."** It is deliberate
+  code in `app/contact/page.tsx`, "(Same as Phone)", not stale data. Whether
+  faxes actually arrive on that number is Frank's to say.
+- **"Add a team section to llms.txt."** It has had one since CH-032.
+
+The guide's "free AI readiness score" from Rankscale no longer exists without
+a paid plan, and its "FAQ block" is CH-101, settled.
+
+**The speed finding was real, and the cause was not draftMode().** Every
+dynamic route answered `Cache-Control: private, no-cache, no-store` and MISSed
+on every request, 170 to 250 ms, while the hubs answered from the cache in
+about 70 ms. The hubs call `sanityFetch`, which reads `draftMode()`, and are
+cached anyway, so that is not what stops caching. The cause, per Next's own
+documentation, is that a dynamic segment with no `generateStaticParams` is
+rendered at request time; an empty list should fix it without fetching
+anything at build, which is the trap the CH-104 note describes. Six routes
+carry it on the branch. **Not yet confirmed on a build**: the disk was full.
 
 ---
 

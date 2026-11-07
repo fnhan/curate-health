@@ -101,6 +101,31 @@ async function resolve(slug: string) {
   return { kind: "none" as const };
 }
 
+/**
+ * AN EMPTY LIST, AND IT IS WHAT KEEPS THESE PAGES CACHED.
+ *
+ * Without generateStaticParams, Next renders a dynamic segment fresh on every
+ * request and sends `Cache-Control: private, no-cache, no-store`, so Vercel
+ * never kept a copy. Measured on 2026-11-07: every service, treatment,
+ * product, practitioner, post and legal page answered in 170 to 250 ms and
+ * MISSed on every request, while the hubs, which have no dynamic segment,
+ * answered from the cache in about 70 ms. Every visit, Googlebot's included,
+ * cost a render and a round of Sanity queries.
+ *
+ * Empty rather than a list of slugs, because a list is fetched at build time,
+ * and sanityFetch reads draftMode(), which throws outside a request (the
+ * CH-104 note). Empty means nothing is built in advance: each page renders
+ * on its first visit and is then served from the cache under the same hour
+ * long window as every other page, with the publish webhook purging it.
+ * Draft mode still renders fresh on every request, as it must.
+ *
+ * The same four lines are on each dynamic route. Removing them puts that
+ * route back to rendering on every visit, and nothing fails to say so.
+ */
+export async function generateStaticParams() {
+  return [];
+}
+
 export default async function ServiceOrTreatmentPage(props: {
   params: Promise<{ slug: string }>;
 }) {

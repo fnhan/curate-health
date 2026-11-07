@@ -336,10 +336,27 @@ function getActiveServiceNodes(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
   );
 }
 
+/**
+ * A phone number with its country code, which Google asks for on a local
+ * business: include "the country code and area code". The site prints
+ * 416-900-3311 and the markup says +1-416-900-3311, which is the same number.
+ * Anything that is not a ten digit North American number is left as written
+ * rather than guessed at.
+ */
+export function withCountryCode(phone: string | null | undefined) {
+  if (!phone) return undefined;
+  const digits = phone.replace(/\D/g, "");
+  const local =
+    digits.length === 11 && digits.startsWith("1") ? digits.slice(1) : digits;
+  if (local.length !== 10) return phone;
+  return `+1-${local.slice(0, 3)}-${local.slice(3, 6)}-${local.slice(6)}`;
+}
+
 export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
   const brandName = siteSettings?.brandName || BRAND_NAME;
   const contact = siteSettings?.contactInfo;
   const services = getActiveServiceNodes(siteSettings);
+  const telephone = withCountryCode(contact?.phone);
 
   return stripEmpty({
     "@context": "https://schema.org",
@@ -362,9 +379,29 @@ export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
           ...getActiveSocialUrls(siteSettings, "clinic"),
           GOOGLE_BUSINESS_PROFILE,
         ],
+        /**
+         * The B Corp certification, on the organization it certifies, on every
+         * page. buildBcorpJsonLd always said this is how it attaches and
+         * nothing did: /about/b-corp pointed at the organization with `about`
+         * and the organization never pointed back. Found by the audit of
+         * 2026-11-07. Same @id as that page's node, so the two are one.
+         *
+         * No url, deliberately. The page has a switch and the certification
+         * does not depend on it, so a link here could outlive the page.
+         */
+        hasCertification: {
+          "@type": "Certification",
+          "@id": `${BASEURL}${BCORP_PATH}#certification`,
+          name: "Certified B Corporation",
+          issuedBy: {
+            "@type": "Organization",
+            name: "B Lab",
+            url: "https://bcorp.com",
+          },
+        },
         contactPoint: {
           "@type": "ContactPoint",
-          telephone: contact?.phone,
+          telephone,
           email: contact?.email,
           contactType: "customer service",
           areaServed: "CA",
@@ -377,7 +414,7 @@ export function buildSiteJsonLd(siteSettings: SITE_SETTINGS_QUERY_RESULT) {
         name: brandName,
         url: BASEURL,
         image: siteSettings?.siteLogo?.asset?.url,
-        telephone: contact?.phone,
+        telephone,
         email: contact?.email,
         address: buildPostalAddress(siteSettings),
         hasMap: contact?.mapLink,
@@ -607,7 +644,7 @@ export function buildCafeJsonLd(
      * than one with. Read from the same place the footer and the clinic entity
      * read it, so there is one phone number in the dataset.
      */
-    telephone: siteSettings?.contactInfo?.phone,
+    telephone: withCountryCode(siteSettings?.contactInfo?.phone),
     // The cafe's own profiles, not the clinic's. Attaching the clinic's here
     // would tell Google the two businesses are one account.
     sameAs: siteSettings
@@ -680,7 +717,17 @@ export function buildCafeMenuJsonLd(menu: CAFE_MENU_QUERY_RESULT) {
     description: menu.seo?.pageDescription || firstParagraph(menu.intro),
     // The cafe entity, not the clinic. The menu belongs to one of the
     // businesses in the building rather than to all of them.
-    provider: { "@id": `${BASEURL}/cafe#cafe` },
+    //
+    // Named here as well as referenced. A parser resolves an @id within one
+    // page, and the full cafe node lives on /cafe, so a bare reference left
+    // this page pointing at nothing it carried. Same @id, so it merges with
+    // the full node wherever both are read. Found by the audit of 2026-11-07.
+    provider: {
+      "@type": ["CafeOrCoffeeShop", "LocalBusiness"],
+      "@id": `${BASEURL}/cafe#cafe`,
+      name: "Curate Cafe",
+      url: `${BASEURL}/cafe`,
+    },
     hasMenuSection: sections.map((section) => ({
       "@type": "MenuSection",
       name: section.title,
@@ -780,8 +827,43 @@ export function buildBcorpJsonLd(page: {
     },
     // The directory profile, which is where the score can be verified.
     sameAs: page.score.directoryUrl || undefined,
-    datePublished: page.score.certifiedSince || undefined,
+    // The page prints "October 2026" and the markup says 2026-10: the same
+    // month, in the date format schema.org expects. It published the printed
+    // words until the audit of 2026-11-07 caught it.
+    datePublished: isoMonth(page.score.certifiedSince),
   }) as JsonLdObject;
+}
+
+const MONTH_NAMES = [
+  "january",
+  "february",
+  "march",
+  "april",
+  "may",
+  "june",
+  "july",
+  "august",
+  "september",
+  "october",
+  "november",
+  "december",
+];
+
+/**
+ * A date as stored for a person to read, "October 2026", as an ISO 8601
+ * month, "2026-10". A value already in ISO shape passes through. Anything
+ * else is left out rather than published in a form a parser cannot read, and
+ * a day is never invented to make it a full date.
+ */
+export function isoMonth(text: string | null | undefined) {
+  const value = text?.trim();
+  if (!value) return undefined;
+  if (/^\d{4}(-\d{2}(-\d{2})?)?$/.test(value)) return value;
+  const match = value.match(/^([A-Za-z]+)\s+(\d{4})$/);
+  const month = match ? MONTH_NAMES.indexOf(match[1].toLowerCase()) : -1;
+  return match && month >= 0
+    ? `${match[2]}-${String(month + 1).padStart(2, "0")}`
+    : undefined;
 }
 
 /** The lead paragraph of an intro field, for a description with none written. */

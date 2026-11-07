@@ -75,6 +75,12 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Empty on purpose: it is what lets this route be cached rather than
+// rendered on every visit. See app/services/[slug]/page.tsx.
+export async function generateStaticParams() {
+  return [];
+}
+
 export default async function PractitionerPage(props: {
   params: Promise<{ practitioner: string }>;
 }) {

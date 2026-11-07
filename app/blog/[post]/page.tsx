@@ -15,6 +15,12 @@ import { GET_POST_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 import { sanityFetch } from "@/sanity/lib/client";
 import { GET_POST_BY_SLUG_QUERY } from "@/sanity/lib/queries";
 
+// Empty on purpose: it is what lets this route be cached rather than
+// rendered on every visit. See app/services/[slug]/page.tsx.
+export async function generateStaticParams() {
+  return [];
+}
+
 export default async function BlogPostPage(props: {
   params: Promise<{ post: string }>;
 }) {

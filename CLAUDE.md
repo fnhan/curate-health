@@ -48,7 +48,7 @@ index) never appears here.
 | 18 | **Google API access for Claude Code**: Search Console with Full access and a free PageSpeed key, saved to `C:\Users\Chiro1\.config\claude-seo\`, so real queries and loading scores can be read | Frank | to do |
 | 19 | **AI answer baseline**: ask ChatGPT, Perplexity and Google "best chiropractor in Midtown Toronto" and similar, and record whether Curate appears | Frank | to do |
 | 20 | **Low**: `http://curatehealth.ca` takes two redirects (a Vercel domain setting); the "Take The Survey" button may go nowhere, unchecked | Frank; Claude Code | low priority |
-| 21 | **Curate Cafe**, from Owner.com's grader. **In Google, Frank's:** more reviews, and the listing's service options, menu link and description. **On the site:** the cafe titles, the neighbourhood sentence and the newsletter contrast are built on `feat/cafe-listing-fixes`; the `/cafe` search description waits on Frank's pick of two drafts. See "Curate Cafe and the Owner.com grade" below | Frank; Claude Code | in progress 2026-11-12 |
+| 21 | **Curate Cafe**, from Owner.com's grader. **In Google, Frank's:** more reviews, and checking the listing's menu link points at `/cafe/menu`; its description and its dine-in and takeout options are already set. **On the site:** the cafe titles, the neighbourhood sentence and the newsletter contrast are built on `feat/cafe-listing-fixes`; the `/cafe` search description waits on Frank's pick of two drafts. See "Curate Cafe and the Owner.com grade" below | Frank; Claude Code | in progress 2026-11-12 |
 
 ### The complimentary consult CTA. Planned 2026-11-02
 
@@ -164,8 +164,7 @@ hours, address and phone. **The homepage stays as it is**; its title and
 description are Frank's decisions from 2026-10-31.
 
 **What was real:** 32 Google reviews at 5.0, fewer than the listings that
-outrank it, which only asking regulars changes; the listing's service options
-and description, both set in the Business Profile; no "Curate Cafe", the
+outrank it, which only asking regulars changes; no "Curate Cafe", the
 listing's own name, in the cafe pages' titles; no neighbourhood but Midtown
 Toronto named on `/cafe`; and the newsletter band on every page, white on sage
 at 3.4 to 1 where normal text needs 4.5.
@@ -177,6 +176,12 @@ The Facebook and MapQuest "no listing" items are minor: the cafe has no
 Facebook page of its own, and MapQuest takes its listings from data
 aggregators. **The listing shows "York, ON"**, Google's own label for the old
 City of York; not a site defect.
+
+**Two of its Google items were wrong, and were passed on unchecked.** The
+listing already has a description, which the grader itself ticked, and Frank
+confirmed on 2026-11-12 that dine-in and takeout are set; the grader marked
+service options missing, most likely because the public view it reads does
+not show them. Check a grader's claim against the listing before repeating it.
 
 **Frank's decisions, 2026-11-12.** Yes to "Curate Cafe" in the cafe titles, so
 `/cafe` and `/cafe/menu` end "| Curate Cafe" through the new `titleBrand`

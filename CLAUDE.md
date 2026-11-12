@@ -38,7 +38,6 @@ index) never appears here.
 | 7 | **Vercel plan**: Hobby bars commercial use; Pro is his decision | Frank | open |
 | 8 | **Google Business Profile**: the primary category; whether a second listing exists for 989 Eglinton, per the CH-025 place id note; whether the old Downtown listing at 777 Bay still shows as open; the cafe as its own listing; the name reading "Curate Health" | the agency, or Frank | unverified |
 | 9 | **Housekeeping**: the five About children's heroes ignore a Studio crop; rich text links render in `AlternatingSections` only; 6 Dependabot alerts, none in anything the live site runs | Claude Code | low priority |
-| 10 | **Speed and markup**, on `perf/cache-detail-pages-and-schema`: the 38 detail pages cached instead of rendered on every visit, the B Corp certification on the organization, its date as `2026-10`, the phone with `+1`, the cafe named on `/cafe/menu`. See "The 2026-11-07 audit" below | Frank's go, then Claude Code | verified 2026-11-12, pull request open |
 | 11 | **One business name**: `siteSettings.brandName` and `contactPage.branchName` read "Curate Health - Midtown", a leftover from the Downtown location; Google and Jane say "Curate Health" | Frank's yes, then Claude Code | proposed 2026-11-07 |
 | 12 | **llms.txt opening line**, "Curate Health provides Toronto-based healthcare...", calls the business a clinic, as does the code fallback "a Toronto health and wellness clinic" | Frank's yes on the wording | proposed 2026-11-07 |
 | 13 | **Service page openings**: who provides it, what a first visit involves and how long it takes, how to book, on chiropractic, physiotherapy, massage, naturopathy, acupuncture and psychotherapy, plus the steps of an orthotics fitting. **The OHIP line is the Curate Lifestyle program's only**; these pages need a benefits line Frank confirms | Claude Code drafts, each practitioner signs off | not started |
@@ -49,7 +48,7 @@ index) never appears here.
 | 18 | **Google API access for Claude Code**: Search Console with Full access and a free PageSpeed key, saved to `C:\Users\Chiro1\.config\claude-seo\`, so real queries and loading scores can be read | Frank | to do |
 | 19 | **AI answer baseline**: ask ChatGPT, Perplexity and Google "best chiropractor in Midtown Toronto" and similar, and record whether Curate appears | Frank | to do |
 | 20 | **Low**: `http://curatehealth.ca` takes two redirects (a Vercel domain setting); the "Take The Survey" button may go nowhere, unchecked | Frank; Claude Code | low priority |
-| 21 | **Curate Cafe**, from Owner.com's grader: more Google reviews, and the cafe listing's service options and description, in Google; then on the site, "Curate Cafe" in the cafe pages' titles, one neighbourhood sentence on `/cafe`, and the newsletter band's contrast. See "Curate Cafe and the Owner.com grade" below | Frank in Google; Claude Code after his yes on each | proposed 2026-11-12 |
+| 21 | **Curate Cafe**, from Owner.com's grader. **In Google, Frank's:** more reviews, and the listing's service options, menu link and description. **On the site:** the cafe titles, the neighbourhood sentence and the newsletter contrast are built on `feat/cafe-listing-fixes`; the `/cafe` search description waits on Frank's pick of two drafts. See "Curate Cafe and the Owner.com grade" below | Frank; Claude Code | in progress 2026-11-12 |
 
 ### The complimentary consult CTA. Planned 2026-11-02
 
@@ -140,7 +139,12 @@ cheap at this size. And a page now stays as published until the webhook
 purges it or the hour passes, the same as the hubs always have, so a publish
 that does not show is the webhook to look at, not the page. The signed purge
 was not re-tested locally because `SANITY_REVALIDATE_SECRET` is not in
-`.env.local`; confirm it on production after the merge.
+`.env.local`; confirm it on production with the next publish.
+
+**Live since #311, 2026-11-12**: production answers `/services/physiotherapy`
+with `public, max-age=0, must-revalidate`, `MISS` and then `HIT`, where it
+answered `private, no-store` on every request. All 56 sitemap pages went to
+IndexNow the same day, answered 200.
 
 ### Curate Cafe and the Owner.com grade. 2026-11-12
 
@@ -173,6 +177,17 @@ The Facebook and MapQuest "no listing" items are minor: the cafe has no
 Facebook page of its own, and MapQuest takes its listings from data
 aggregators. **The listing shows "York, ON"**, Google's own label for the old
 City of York; not a site defect.
+
+**Frank's decisions, 2026-11-12.** Yes to "Curate Cafe" in the cafe titles, so
+`/cafe` and `/cafe/menu` end "| Curate Cafe" through the new `titleBrand`
+option on `buildPageMetadata`. Yes to the neighbourhood sentence on `/cafe`,
+which is the `/contact` catchment line word for word, in the Visit the cafe
+block. The newsletter contrast is fixed **on the brand palette only**, his
+condition: the band keeps its sage, the heading is 24px at every width so
+white on sage passes as large text, and the field and button take white and
+the dark green. The search description should be "more elaborated and maxed
+out on the letter count"; two drafts at 152 and 154 characters went to him,
+both naming only drinks the menu prints.
 
 ---
 

@@ -18,6 +18,12 @@ import {
   LEGAL_PAGE_BY_SLUG_QUERY,
 } from "@/sanity/lib/queries";
 
+// Empty on purpose: it is what lets this route be cached rather than
+// rendered on every visit. See app/services/[slug]/page.tsx.
+export async function generateStaticParams() {
+  return [];
+}
+
 export default async function LegalPage(props: {
   params: Promise<{ slug: string }>;
 }) {

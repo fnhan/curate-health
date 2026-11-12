@@ -19,7 +19,7 @@ Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with
 
 ---
 
-## Outstanding work, as of 2026-11-02
+## Outstanding work, as of 2026-11-07
 
 **This is the list.** Frank asked on 2026-11-02 for outstanding work to be kept
 in one place. Update it in the same change that finishes or adds an item, and
@@ -36,8 +36,20 @@ index) never appears here.
 | 5 | **Photos**: Ariel Zohar's (1001x685, renders soft), Claire Kim's (a placeholder), and the compression stockings and foot orthotics cutouts (too small for a crisp share card) | Frank | to do |
 | 6 | **Newsletter safety net**: create a Formspree form and set `NEWSLETTER_FALLBACK_ENDPOINT` in Vercel. Until then a refused signup reaches only the Vercel log | Frank | to do |
 | 7 | **Vercel plan**: Hobby bars commercial use; Pro is his decision | Frank | open |
-| 8 | **Google Business Profile**: whether a second listing exists for 989 Eglinton, per the CH-025 place id note | the agency | unverified |
+| 8 | **Google Business Profile**: the primary category; whether a second listing exists for 989 Eglinton, per the CH-025 place id note; whether the old Downtown listing at 777 Bay still shows as open; the cafe as its own listing; the name reading "Curate Health" | the agency, or Frank | unverified |
 | 9 | **Housekeeping**: the five About children's heroes ignore a Studio crop; rich text links render in `AlternatingSections` only; 6 Dependabot alerts, none in anything the live site runs | Claude Code | low priority |
+| 10 | **Speed and markup**, on `perf/cache-detail-pages-and-schema`: the 38 detail pages cached instead of rendered on every visit, the B Corp certification on the organization, its date as `2026-10`, the phone with `+1`, the cafe named on `/cafe/menu`. See "The 2026-11-07 audit" below | Frank's go, then Claude Code | verified 2026-11-12, pull request open |
+| 11 | **One business name**: `siteSettings.brandName` and `contactPage.branchName` read "Curate Health - Midtown", a leftover from the Downtown location; Google and Jane say "Curate Health" | Frank's yes, then Claude Code | proposed 2026-11-07 |
+| 12 | **llms.txt opening line**, "Curate Health provides Toronto-based healthcare...", calls the business a clinic, as does the code fallback "a Toronto health and wellness clinic" | Frank's yes on the wording | proposed 2026-11-07 |
+| 13 | **Service page openings**: who provides it, what a first visit involves and how long it takes, how to book, on chiropractic, physiotherapy, massage, naturopathy, acupuncture and psychotherapy, plus the steps of an orthotics fitting. **The OHIP line is the Curate Lifestyle program's only**; these pages need a benefits line Frank confirms | Claude Code drafts, each practitioner signs off | not started |
+| 14 | **Unsigned health claims** on those pages and in older meta descriptions, listed in the audit's content finding 4, for example "reducing the need for medication or surgery" and the cold plunge's "Reduce inflammation, boost recovery" | Claude Code drafts, practitioners sign off | not started |
+| 15 | **Psychotherapy**: the page is live and names nobody while Safa is switched off, yet Jane still sells her sessions and her free discovery call, and the page's Book button goes there. Switch her back on (cancel the Google removal first), or pause the page and the Jane bookings | Frank | decision |
+| 16 | **Small page facts**: the Fax line on `/contact` is hardcoded as the phone number, keep only if faxes arrive on it; Saturday is not shown; no address in the body of `/classes`; no hours or address on `/cafe/menu`; Dr. Leong's canonical line is not on his page | Frank's yes, then Claude Code | proposed 2026-11-07 |
+| 17 | **Listings**: Bing Webmaster Tools, Bing Places, Apple Business Connect, Yelp, Yellow Pages (none found), college and association finders, the B Corp directory profile, supplier locators such as Flowpresso's, all with the exact name, address and phone | Frank or the agency | to do |
+| 18 | **Google API access for Claude Code**: Search Console with Full access and a free PageSpeed key, saved to `C:\Users\Chiro1\.config\claude-seo\`, so real queries and loading scores can be read | Frank | to do |
+| 19 | **AI answer baseline**: ask ChatGPT, Perplexity and Google "best chiropractor in Midtown Toronto" and similar, and record whether Curate appears | Frank | to do |
+| 20 | **Low**: `http://curatehealth.ca` takes two redirects (a Vercel domain setting); the "Take The Survey" button may go nowhere, unchecked | Frank; Claude Code | low priority |
+| 21 | **Curate Cafe**, from Owner.com's grader: more Google reviews, and the cafe listing's service options and description, in Google; then on the site, "Curate Cafe" in the cafe pages' titles, one neighbourhood sentence on `/cafe`, and the newsletter band's contrast. See "Curate Cafe and the Owner.com grade" below | Frank in Google; Claude Code after his yes on each | proposed 2026-11-12 |
 
 ### The complimentary consult CTA. Planned 2026-11-02
 
@@ -83,6 +95,84 @@ A consult is discipline-specific, Dr. Nhan's is a chiropractic one, so a
 service page shows it only where the consult fits the service; acupuncture,
 with three providers and no acupuncture consult, gets none. Label: "Book a
 Complimentary Consult", Frank's word, which the content rules allow.
+
+### The 2026-11-07 audit
+
+Frank asked for the process in an SEO guide to be followed "unless we already
+did it". The claude-seo audit ran with seven of its eight specialists; the
+speed one returned nothing, so speed was measured by hand. Three of its
+recommendations were wrong and are recorded so they are not acted on later:
+
+- **"Add the OHIP line to every service page."** The line "partially covered
+  by OHIP and most benefit programs" appears in the dataset only on the Curate
+  Lifestyle program, which is physician-led. Chiropractic, physiotherapy,
+  massage, naturopathy and psychotherapy are not OHIP services for most
+  people, so on those pages it would be false.
+- **"Remove the fax line, it repeats the phone number."** It is deliberate
+  code in `app/contact/page.tsx`, "(Same as Phone)", not stale data. Whether
+  faxes actually arrive on that number is Frank's to say.
+- **"Add a team section to llms.txt."** It has had one since CH-032.
+
+The guide's "free AI readiness score" from Rankscale no longer exists without
+a paid plan, and its "FAQ block" is CH-101, settled.
+
+**The speed finding was real, and the cause was not draftMode().** Every
+dynamic route answered `Cache-Control: private, no-cache, no-store` and MISSed
+on every request, 170 to 250 ms, while the hubs answered from the cache in
+about 70 ms. The hubs call `sanityFetch`, which reads `draftMode()`, and are
+cached anyway, so that is not what stops caching. A dynamic segment with no
+`generateStaticParams` is rendered at request time; an empty list fixes it
+without fetching anything at build, which is the trap the CH-104 note
+describes. Six routes carry it, each with a comment.
+
+**Verified on a local build, 2026-11-12.** The six routes build as `●` where
+they were `ƒ`. Each page renders once, `MISS`, then answers `HIT` in 6 to 20
+ms where it took 170 to 650, with `s-maxage=3600`. Unknown slugs still 404,
+Safa's switched-off page still 404s, and the legacy redirects still 301. All
+13 checks and the security headers pass, and against a production baseline
+the 56 changed pages differ in their structured data only: no title,
+description, heading, word, image or link moved.
+
+**Two consequences worth knowing.** A 404 is cached for the hour like any
+other page, so every distinct junk address a scanner tries under these
+segments now costs one ISR write rather than one function call; bounded, and
+cheap at this size. And a page now stays as published until the webhook
+purges it or the hour passes, the same as the hubs always have, so a publish
+that does not show is the webhook to look at, not the page. The signed purge
+was not re-tested locally because `SANITY_REVALIDATE_SECRET` is not in
+`.env.local`; confirm it on production after the merge.
+
+### Curate Cafe and the Owner.com grade. 2026-11-12
+
+Frank ran Owner.com's restaurant grader on the cafe: 52 of 100, "11th"
+locally, "$240 in lost sales every month". **Owner sells restaurant websites
+and online ordering, and the grader is its sales funnel**: the dollar figure
+is its own estimate rather than a measurement, and several checks assume the
+cafe takes orders online.
+
+**It graded the wrong page.** The cafe's Google listing links to
+`https://www.curatehealth.ca/cafe`, read off the listing on 2026-11-12, but
+the grader cut that back to the domain and read the homepage: every title,
+headline and description it quotes is the homepage's. `/cafe` already has what
+its four "critical" items ask for: an h1 and a title naming the cafe and
+Midtown Toronto, a 147 character description naming Curate Cafe, and the
+hours, address and phone. **The homepage stays as it is**; its title and
+description are Frank's decisions from 2026-10-31.
+
+**What was real:** 32 Google reviews at 5.0, fewer than the listings that
+outrank it, which only asking regulars changes; the listing's service options
+and description, both set in the Business Profile; no "Curate Cafe", the
+listing's own name, in the cafe pages' titles; no neighbourhood but Midtown
+Toronto named on `/cafe`; and the newsletter band on every page, white on sage
+at 3.4 to 1 where normal text needs 4.5.
+
+**What does not apply:** the online ordering checks, unless Frank wants online
+ordering; an FAQ section, which is CH-101; and quoting customer reviews on the
+site, which is his call given the college testimonial question under CH-008.
+The Facebook and MapQuest "no listing" items are minor: the cafe has no
+Facebook page of its own, and MapQuest takes its listings from data
+aggregators. **The listing shows "York, ON"**, Google's own label for the old
+City of York; not a site defect.
 
 ---
 
@@ -1237,11 +1327,14 @@ the note and the CTA the record carries, which is Dr. Leong: not publicly
 bookable, reached through the Curate Lifestyle Program. Neither gives no block
 at all rather than a button pointing somewhere generic, which is Rooj.
 
-**`generateStaticParams` cannot be used on this route.** It needs the slugs at
-build time, and `sanityFetch` reads `draftMode()`, which throws outside a
-request scope and fails the whole route build. Every other dynamic route here
-renders on demand with ISR, which also means adding a practitioner in the
-Studio publishes their page without a deploy.
+**`generateStaticParams` cannot list the slugs on this route.** It would need
+them at build time, and `sanityFetch` reads `draftMode()`, which throws outside
+a request scope and fails the whole route build. **It returns an empty list
+instead, since 2026-11-12**, which fetches nothing at build. This note used to
+say every dynamic route here rendered on demand with ISR; without the empty
+list they rendered on every request and were never cached, see "The
+2026-11-07 audit". Adding a practitioner in the Studio still publishes their
+page without a deploy.
 
 **The fallback title drops the credential when it will not fit.** `| Curate
 Health` costs 15 of the 60 characters Google shows, so the page title has 45.

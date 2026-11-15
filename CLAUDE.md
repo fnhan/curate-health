@@ -19,7 +19,7 @@ Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with
 
 ---
 
-## Outstanding work, as of 2026-11-07
+## Outstanding work, as of 2026-11-15
 
 **This is the list.** Frank asked on 2026-11-02 for outstanding work to be kept
 in one place. Update it in the same change that finishes or adds an item, and
@@ -30,8 +30,8 @@ index) never appears here.
 | # | Item | Whose | State |
 | --- | --- | --- | --- |
 | 1 | **Search Console**: Request indexing for `/services/physiotherapy`, `/products/custom-foot-orthotics`, `/services/recovery-sanctuary/outdoor-yoga-therapy` and `/blog`; Validate fix on the `/services/mental-health` duplicate and on Events "Missing field startDate" | Frank | to do |
-| 2 | **Complimentary consult CTA**, see below | Claude Code, after Frank's go | planned |
-| 3 | **Product booking buttons** to Jane's own appointments: compression stockings to Assessment & Fitting (36), with Reorder (37) as a second button; custom orthotics to Customized Orthotics Fitting (68), with Recasting (35). TENS, supplements and knee braces keep Dr. Nhan's consult | Claude Code, after Frank's go | proposed 2026-11-01, unanswered |
+| 2 | **Complimentary consult CTA**, see below. All four consults now exist in Jane, Ariel's included | Claude Code, after Frank's go | ready to build |
+| 3 | **Product booking buttons** to Jane's own appointments: compression stockings to Assessment & Fitting (36), with Reorder (37) as a second button. **Custom orthotics corrected 2026-11-15**: Jane 68 is the free 15 minute pick-up for orthotics already made, and 35 Recasting is for existing patients, so neither suits a newcomer and Jane has no new-patient orthotics appointment; the main button keeps Dr. Nhan's consult, with Recasting (35) as a second. TENS, supplements and knee braces keep the consult | Claude Code, after Frank's go | proposed, corrected 2026-11-15 |
 | 4 | **Blog**: a topic plan from what Toronto actually searches, then one substantial post per practitioner. Each needs that practitioner's sign-off | Claude Code drafts, practitioners sign off | not started |
 | 5 | **Photos**: Ariel Zohar's (1001x685, renders soft), Claire Kim's (a placeholder), and the compression stockings and foot orthotics cutouts (too small for a crisp share card) | Frank | to do |
 | 6 | **Newsletter safety net**: create a Formspree form and set `NEWSLETTER_FALLBACK_ENDPOINT` in Vercel. Until then a refused signup reaches only the Vercel log | Frank | to do |
@@ -48,7 +48,7 @@ index) never appears here.
 | 18 | **Google API access for Claude Code**: Search Console with Full access and a free PageSpeed key, saved to `C:\Users\Chiro1\.config\claude-seo\`, so real queries and loading scores can be read | Frank | to do |
 | 19 | **AI answer baseline**: ask ChatGPT, Perplexity and Google "best chiropractor in Midtown Toronto" and similar, and record whether Curate appears | Frank | to do |
 | 20 | **Low**: `http://curatehealth.ca` takes two redirects (a Vercel domain setting); the "Take The Survey" button may go nowhere, unchecked | Frank; Claude Code | low priority |
-| 21 | **Curate Cafe**, from Owner.com's grader. **In Google, Frank's:** more reviews, and checking the listing's menu link points at `/cafe/menu`; its description and its dine-in and takeout options are already set. **On the site:** the cafe titles, the neighbourhood sentence and the newsletter contrast are built on `feat/cafe-listing-fixes`; the `/cafe` search description waits on Frank's pick of two drafts. See "Curate Cafe and the Owner.com grade" below | Frank; Claude Code | in progress 2026-11-12 |
+| 21 | **Curate Cafe**, from Owner.com's grader. **In Google, Frank's:** more reviews, and checking the listing's menu link points at `/cafe/menu`; its description and its dine-in and takeout options are already set. **On the site:** the cafe titles, the neighbourhood sentence and the newsletter contrast are live since #312, 2026-11-15; the `/cafe` search description waits on Frank's pick of two drafts, and a revised Google description with matcha and coffee is with him to paste. See "Curate Cafe and the Owner.com grade" below | Frank; Claude Code | in progress |
 
 ### The complimentary consult CTA. Planned 2026-11-02
 
@@ -63,10 +63,10 @@ practitioners. Everyone offers this, except for RMT and MD."
 | Dr. Frank Nhan | Complimentary 15-Minute Chiropractic Consultation, `#/staff_member/1/treatment/50` |
 | Dr. David Gabriele | Complimentary 15-Minute Discovery Call, `#/staff_member/7/treatment/45` |
 | Safa Karoumi | Complimentary 15-Minute Discovery Call, `#/staff_member/3/treatment/18` |
-| Ariel Zohar | **none in Jane** |
+| Ariel Zohar | Complimentary 15-Minute Physiotherapy Consultation, `#/staff_member/17/treatment/123`, added after 2026-11-02 and read 2026-11-15 |
 | Andrew Huynh, Dr. Eric Leong | none, as Frank said |
 
-**Ariel needs one set up in Jane before physiotherapy can carry the button.**
+**All four now exist in Jane**, so physiotherapy can carry the button too.
 Rooj and Claire teach classes and have none; "everyone" is read as the clinical
 practitioners. Safa is switched off on the site, so hers stays hidden until she
 is back, which happens on its own if the link lives on her record.

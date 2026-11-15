@@ -135,6 +135,20 @@ type BaseFallbacks = {
    */
   shareBrand?: string;
   /**
+   * A different name to end the PAGE title with, instead of "Curate Health".
+   *
+   * The cafe pages, since 2026-11-12. The cafe's Google listing is "Curate
+   * Cafe", and a page title that names the listing is how Google matches the
+   * two; Frank approved it after a restaurant grader flagged the mismatch.
+   *
+   * The doubling that kept this off the page title in September cannot happen
+   * now, and is guarded anyway. Then the title was "Introducing Curate Cafe",
+   * which would have read "Introducing Curate Cafe | Curate Cafe"; it is
+   * "Organic Cafe in Midtown Toronto" today. A stored title ending in the
+   * brand has it stripped first, and one naming it mid-sentence is left alone.
+   */
+  titleBrand?: string;
+  /**
    * Keeps the page out of the index, and drops its canonical with it.
    *
    * Three routes use this: the 404, /search and /coming-soon. The last two
@@ -334,11 +348,30 @@ export function imageEntry(
   ];
 }
 
+/**
+ * The page title, with a brand other than the site's when the page has one.
+ *
+ * `absolute` is what stops the layout's "%s | Curate Health" template applying
+ * on top. Without a titleBrand the title is returned as it was, so every other
+ * page is untouched.
+ */
+function pageTitleWithBrand(title: string, brand: string | undefined) {
+  if (!brand) return title;
+  const escaped = brand.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const trailing = new RegExp(`\\s*[|\\-–—:]\\s*${escaped}\\s*$`, "i");
+  const bare = title.replace(trailing, "").trim();
+  return bare.toLowerCase().includes(brand.toLowerCase())
+    ? { absolute: bare }
+    : { absolute: `${bare} | ${brand}` };
+}
+
 export function buildPageMetadata(
   seo: SeoObject,
   fallbacks: Fallbacks
 ): Metadata {
-  const title = stripBrand(seo?.pageTitle) || fallbacks.title || DEFAULT_TITLE;
+  const bareTitle =
+    stripBrand(seo?.pageTitle) || fallbacks.title || DEFAULT_TITLE;
+  const title = pageTitleWithBrand(bareTitle, fallbacks.titleBrand);
   const description =
     seo?.pageDescription?.trim() ||
     fallbacks.description ||
@@ -363,7 +396,7 @@ export function buildPageMetadata(
    * Empty falls back to the page's own title and description, so a page with
    * nothing written for it still shares correctly rather than sharing blank.
    */
-  const socialTitle = stripBrand(seo?.socialMeta?.title) || title;
+  const socialTitle = stripBrand(seo?.socialMeta?.title) || bareTitle;
   const socialDescription = seo?.socialMeta?.description?.trim() || description;
 
   // Fitted whole rather than cropped, on a page whose picture is one object

@@ -336,8 +336,10 @@ export async function generateMetadata() {
     title: FALLBACK.title,
     description: FALLBACK.description,
     // The cafe's share card ends with its own name rather than the site's, per
-    // Frank on 2026-09-10. Its menu is the cafe's page too, so it matches.
+    // Frank on 2026-09-10. Its menu is the cafe's page too, so it matches. The
+    // page title has followed since 2026-11-12, matching the Google listing.
     shareBrand: "Curate Cafe",
+    titleBrand: "Curate Cafe",
     /*
      * The hero doubles as the share card, so this page never shows a bare one
      * and nobody has to remember to choose a picture. The query selects the url

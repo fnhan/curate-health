@@ -92,9 +92,19 @@ export function CafeHours({
       <div className="container grid gap-10 md:grid-cols-2 md:gap-16">
         <div className="space-y-4">
           <h2 className="text-2xl font-light md:text-3xl">Visit the cafe</h2>
+          {/*
+            The second sentence is the catchment line Frank approved for
+            /contact on 2026-10-28, word for word, and approved here on
+            2026-11-12. This is the page the cafe's Google listing opens, so
+            it is the one that has to say where the cafe is for people
+            searching by neighbourhood. Main content on one page, never the
+            footer, per the note in CLAUDE.md.
+          */}
           <p className="max-w-prose font-light leading-7">
             The cafe is inside Curate Health and keeps the same hours as the
-            clinic.
+            clinic. We are in Midtown Toronto on Eglinton West, close to Forest
+            Hill, Cedarvale, Humewood and Oakwood Village, in the former City of
+            York.
           </p>
           <address className="space-y-3 text-sm not-italic md:text-base">
             <a

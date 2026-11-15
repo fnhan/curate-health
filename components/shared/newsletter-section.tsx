@@ -89,11 +89,18 @@ export default function NewsletterSection({
         title="Check your inbox"
         description="We have sent you an email with a link to confirm your subscription. You will not be subscribed until you click it."
       />
+      {/*
+        CONTRAST, 2026-11-12. White on the sage is 3.4 to 1, which passes only
+        for large text (24px and up needs 3 to 1) and fails everything smaller,
+        where 4.5 to 1 is the bar. A restaurant grader flagged it and the
+        measurement agreed. Frank asked that the fix stay on the brand palette,
+        so no colour is new: the band keeps its sage, the heading is 24px at
+        every width so white on sage passes, and the field and the button take
+        white and the dark green, which pass at about 14 to 1.
+      */}
       <section className={`${!isComingSoon ? "bg-secondary" : ""}`}>
         <div className="container flex flex-col items-center gap-3 py-4 md:flex-row md:gap-16 md:py-8 2xl:justify-between 2xl:py-9">
-          <h2 className="italic md:text-lg 2xl:text-2xl">
-            Sign up to our newsletter
-          </h2>
+          <h2 className="text-2xl italic">Sign up to our newsletter</h2>
           <form
             className="mx-auto flex max-w-sm flex-grow items-center justify-center md:mx-0 md:max-w-none 2xl:max-w-lg"
             onSubmit={handleSubmit}
@@ -105,12 +112,12 @@ export default function NewsletterSection({
               aria-label="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="rounded-none bg-transparent text-white placeholder:text-white"
+              className="rounded-none border-white bg-white text-primary placeholder:text-primary/70"
               required
             />
             <Button
               type="submit"
-              className="rounded-none border bg-transparent font-normal"
+              className="rounded-none border border-primary bg-primary font-normal text-white hover:bg-primary/90"
               disabled={isLoading}
             >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

@@ -119,6 +119,9 @@ export async function generateMetadata() {
   return buildPageMetadata(seo, {
     path: "/cafe",
     shareBrand: "Curate Cafe",
+    // The page title ends with the cafe's own name too, since 2026-11-12, so
+    // it matches the cafe's Google listing, "Curate Cafe".
+    titleBrand: "Curate Cafe",
     image: heroSection?.heroImage?.image?.asset?.url
       ? {
           asset: { url: heroSection.heroImage.image.asset.url },

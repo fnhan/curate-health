@@ -695,35 +695,6 @@ export type ClassSchedule = {
   seo?: Seo;
 };
 
-export type Practitioner = {
-  _id: string;
-  _type: "practitioner";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  isActive?: boolean;
-  credentials?: Array<string>;
-  photo?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  fullBio?: BlockContent;
-  languages?: Array<string>;
-  commonlyTreatsLabel?: string;
-  commonlyTreats?: Array<string>;
-  janeBookingUrl?: string;
-  bookingNote?: string;
-  bookingCtaLabel?: string;
-  bookingCtaTarget?: "curateLifestyleReferralForm" | "curateLifestyleProgram";
-  seo?: Seo;
-};
-
 export type CafeMenu = {
   _id: string;
   _type: "cafeMenu";
@@ -908,6 +879,7 @@ export type Treatments = {
   };
   janeBookingUrl?: string;
   privateSessionUrl?: string;
+  consultPractitioner?: PractitionerReference;
   displayOrder?: number;
   practitioners?: Array<
     {
@@ -986,6 +958,37 @@ export type Product = {
     ctaSectionTitle?: string;
     ctaSectionDescription?: string;
   };
+  consultPractitioner?: PractitionerReference;
+  seo?: Seo;
+};
+
+export type Practitioner = {
+  _id: string;
+  _type: "practitioner";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  isActive?: boolean;
+  credentials?: Array<string>;
+  photo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  fullBio?: BlockContent;
+  languages?: Array<string>;
+  commonlyTreatsLabel?: string;
+  commonlyTreats?: Array<string>;
+  janeBookingUrl?: string;
+  consultUrl?: string;
+  bookingNote?: string;
+  bookingCtaLabel?: string;
+  bookingCtaTarget?: "curateLifestyleReferralForm" | "curateLifestyleProgram";
   seo?: Seo;
 };
 
@@ -1993,13 +1996,13 @@ export type AllSanitySchemaTypes =
   | Author
   | TreatmentsReference
   | ClassSchedule
-  | Practitioner
   | CafeMenu
   | CafePage
   | ServiceReference
   | Treatments
   | Service
   | Product
+  | Practitioner
   | PrimaryCTAButton
   | SurveySection
   | ContactPage
@@ -2973,6 +2976,7 @@ export type INDEX_DOCS_QUERY_RESULT = Array<
         ctaSectionTitle?: string;
         ctaSectionDescription?: string;
       };
+      consultPractitioner?: PractitionerReference;
       seo?: Seo;
       teamMembers: null;
       classes: null;
@@ -3436,6 +3440,7 @@ export type INDEX_DOCS_QUERY_RESULT = Array<
       };
       janeBookingUrl?: string;
       privateSessionUrl?: string;
+      consultPractitioner?: PractitionerReference;
       displayOrder?: number;
       practitioners?: Array<
         {
@@ -4041,7 +4046,7 @@ export type SERVICE_BY_SLUG_QUERY_RESULT = {
 
 // Source: sanity/lib/queries.ts
 // Variable: TREATMENT_BY_SLUG_QUERY
-// Query: *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {  _updatedAt,  title,  treatmentSlug,  "serviceName": service->title,  "serviceSlug": service->slug.current,  heroImage {    asset->{      url,    },    // The image object beside its url, so a crop or hotspot set in the    // Studio reaches SanityImage. Until 2026-10-25 this slot was the one    // place on a treatment page where framing an image in the Studio did    // nothing at all, because the hero rendered through plain next/image.    "source": @{asset, crop, hotspot},    heroAlt  },  intro {    subtitle,    introParagraph  },  quoteContent,  janeBookingUrl,  // One-on-one sessions of a class, a second button beside the main one.  // Empty on anything without a private option, which then shows one button.  privateSessionUrl,  // Who provides this, for the block at the foot of the page. Dereferenced  // rather than stored on the page, so a practitioner switched off in the  // Studio drops out of every service that lists them.  practitioners[]->{    name,    "slug": slug.current,    credentials,    // The whole image object, not just a URL, so urlForPractitionerPhoto can    // read the hotspot and crop an editor set in the Studio.    photo{      ...,      "url": asset->url,      alt    },    isActive  },  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      // The image object beside its url, so the crop and hotspot set in      // the Studio reach SanityImage. Dormant until one is set.      "imageSource": image{asset, crop, hotspot},      alt    }  },    benefits {    title,    benefitsList[] {      title,      subtitle    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      }    }  }}
+// Query: *[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {  _updatedAt,  title,  treatmentSlug,  "serviceName": service->title,  "serviceSlug": service->slug.current,  heroImage {    asset->{      url,    },    // The image object beside its url, so a crop or hotspot set in the    // Studio reaches SanityImage. Until 2026-10-25 this slot was the one    // place on a treatment page where framing an image in the Studio did    // nothing at all, because the hero rendered through plain next/image.    "source": @{asset, crop, hotspot},    heroAlt  },  intro {    subtitle,    introParagraph  },  quoteContent,  janeBookingUrl,  // One-on-one sessions of a class, a second button beside the main one.  // Empty on anything without a private option, which then shows one button.  privateSessionUrl,  // Whose complimentary consult this page offers, beside the main button.  // The link lives on the practitioner's record, so switching them off takes  // it off every page at once. Empty where no consult fits the service.  "consult": consultPractitioner->{ consultUrl, isActive },  // Who provides this, for the block at the foot of the page. Dereferenced  // rather than stored on the page, so a practitioner switched off in the  // Studio drops out of every service that lists them.  practitioners[]->{    name,    "slug": slug.current,    credentials,    // The whole image object, not just a URL, so urlForPractitionerPhoto can    // read the hotspot and crop an editor set in the Studio.    photo{      ...,      "url": asset->url,      alt    },    isActive  },  additionalSections[] {    sectionTitle,    sectionParagraph,    sectionImage {      "image": image.asset->url,      // The image object beside its url, so the crop and hotspot set in      // the Studio reach SanityImage. Dormant until one is set.      "imageSource": image{asset, crop, hotspot},      alt    }  },    benefits {    title,    benefitsList[] {      title,      subtitle    }  },  cta {    ctaBg {      asset->{        url,        metadata {          dimensions        }      }    },    ctaBgAlt,    ctaTitle,    ctaText,    ctaButtonText  },    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      }    }  }}
 export type TREATMENT_BY_SLUG_QUERY_RESULT = {
   _updatedAt: string;
   title: string | null;
@@ -4066,6 +4071,10 @@ export type TREATMENT_BY_SLUG_QUERY_RESULT = {
   quoteContent: string | null;
   janeBookingUrl: string | null;
   privateSessionUrl: string | null;
+  consult: {
+    consultUrl: string | null;
+    isActive: boolean | null;
+  } | null;
   practitioners: Array<{
     name: string | null;
     slug: string | null;
@@ -4374,7 +4383,7 @@ export type PRODUCTS_NAVIGATION_QUERY_RESULT = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: PRODUCT_BY_SLUG_QUERY
-// Query: *[_type == "product" && slug.current == $slug && isActive == true][0] {  title,  slug,  description,  image {    asset->,    crop,    hotspot,    alt  },  banner {    asset->,    crop,    hotspot,    alt  },  accordioninfo[] {    title,    description  },  callToAction,    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      }    }  }}
+// Query: *[_type == "product" && slug.current == $slug && isActive == true][0] {  title,  slug,  description,  image {    asset->,    crop,    hotspot,    alt  },  banner {    asset->,    crop,    hotspot,    alt  },  accordioninfo[] {    title,    description  },  callToAction,  // The free consult of whoever assesses and dispenses this product, as a  // second button beside the call to action. Read off the practitioner's  // record, so switching them off hides it.  "consult": consultPractitioner->{ consultUrl, isActive },    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      }    }  }}
 export type PRODUCT_BY_SLUG_QUERY_RESULT = {
   title: string | null;
   slug: Slug | null;
@@ -4442,6 +4451,10 @@ export type PRODUCT_BY_SLUG_QUERY_RESULT = {
     ctaLink?: string;
     ctaSectionTitle?: string;
     ctaSectionDescription?: string;
+  } | null;
+  consult: {
+    consultUrl: string | null;
+    isActive: boolean | null;
   } | null;
   seo: {
     pageTitle: string | null;
@@ -4564,7 +4577,7 @@ export type OUR_STORY_PAGE_QUERY_RESULT = {
 
 // Source: sanity/lib/queries.ts
 // Variable: PRACTITIONER_BY_SLUG_QUERY
-// Query: *[_type == "practitioner" && isActive == true && slug.current == $slug][0]{  name,  "slug": slug.current,  credentials,  languages,  commonlyTreats,  commonlyTreatsLabel,  fullBio,  // The whole image object, not just a URL, so urlForPractitionerPhoto can  // read the hotspot and crop an editor set in the Studio.  photo{    ...,    "url": asset->url,    alt  },  janeBookingUrl,  bookingNote,  bookingCtaLabel,  bookingCtaTarget,  "provides": *[_type == "treatments" && isActive == true && references(^._id)]    | order(title asc){      title,      "slug": treatmentSlug.current,      "serviceSlug": service->slug.current,      "serviceName": service->title    },    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      }    }  }}
+// Query: *[_type == "practitioner" && isActive == true && slug.current == $slug][0]{  name,  "slug": slug.current,  credentials,  languages,  commonlyTreats,  commonlyTreatsLabel,  fullBio,  // The whole image object, not just a URL, so urlForPractitionerPhoto can  // read the hotspot and crop an editor set in the Studio.  photo{    ...,    "url": asset->url,    alt  },  janeBookingUrl,  // Their free 15 minute consult, a second button under Book with them.  consultUrl,  bookingNote,  bookingCtaLabel,  bookingCtaTarget,  "provides": *[_type == "treatments" && isActive == true && references(^._id)]    | order(title asc){      title,      "slug": treatmentSlug.current,      "serviceSlug": service->slug.current,      "serviceName": service->title    },    seo{    pageTitle,    pageDescription,    socialMeta{      title,      description,      ogImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      },      twitterImage{        crop,        hotspot,        alt,        asset-> {          _id,          url,          alt        }      }    }  }}
 export type PRACTITIONER_BY_SLUG_QUERY_RESULT = {
   name: string | null;
   slug: string | null;
@@ -4583,6 +4596,7 @@ export type PRACTITIONER_BY_SLUG_QUERY_RESULT = {
     url: string | null;
   } | null;
   janeBookingUrl: string | null;
+  consultUrl: string | null;
   bookingNote: string | null;
   bookingCtaLabel: string | null;
   bookingCtaTarget:
@@ -6587,16 +6601,16 @@ declare global {
     '*[_type == "servicesHeroSection"][0]{\n  "heroSection": {\n    title,\n    "image": image.asset->url,\n    // The image object beside its url, so the crop and hotspot set in\n    // the Studio reach SanityImage. Dormant until one is set.\n    "imageSource": image{asset, crop, hotspot},\n    "alt": image.alt,\n    subtitle\n  },\n  intro,\n  "seo": \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    // The image object beside its url, so the crop and hotspot set in\n    // the Studio reach SanityImage. Dormant until one is set.\n    "hero_imageSource": hero_image{asset, crop, hotspot},\n    "hero_alt": hero_image.alt,\n    },\n  }': SERVICES_PAGE_QUERY_RESULT;
     '*[_type == "servicesSection"][0]{\n  sectionTitle,\n  hoverLinkText,\n  hoverLinkHref,\n  "services": *[_type == "service" && isActive == true]{\n    title,\n    barColor,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    // The image object beside its url, so the crop and hotspot set in\n    // the Studio reach SanityImage. Dormant until one is set.\n    "hero_imageSource": hero_image{asset, crop, hotspot},\n    "hero_alt": hero_image.alt\n  }\n}': SERVICES_SECTION_QUERY_RESULT;
     '\n  *[_type == "service" && slug.current == $slug][0]{\n    title,\n    "slug": slug.current,\n    "hero_image": hero_image.asset->url,\n    // The image object beside its url, so the crop and hotspot set in\n    // the Studio reach SanityImage. Dormant until one is set.\n    "hero_imageSource": hero_image{asset, crop, hotspot},\n    "hero_alt": hero_image.alt,\n    "content_image": content_image.asset->url,\n    // The image object beside its url, so the crop and hotspot set in\n    // the Studio reach SanityImage. Dormant until one is set.\n    "content_imageSource": content_image{asset, crop, hotspot},\n    "content_alt": content_image.alt,\n    content,\n    "treatments": *[_type == "treatments" && service._ref == ^._id && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){\n      _id,\n      title,\n      "slug": treatmentSlug.current,\n      "rawSlug": treatmentSlug\n    },\n    // Whether /classes has anything on it, CH-107. The band into the schedule\n    // is only rendered when it does, which is the same gate the route 404s on\n    // and the sitemap and llms.txt use, so none of the four can disagree and\n    // this page can never link at a schedule that is not there.\n    "classScheduleActive": count(*[_type == "classSchedule" && count(classes[isActive != false]) > 0]) > 0,\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  }\n': SERVICE_BY_SLUG_QUERY_RESULT;
-    '\n*[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {\n  _updatedAt,\n  title,\n  treatmentSlug,\n  "serviceName": service->title,\n  "serviceSlug": service->slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    // The image object beside its url, so a crop or hotspot set in the\n    // Studio reaches SanityImage. Until 2026-10-25 this slot was the one\n    // place on a treatment page where framing an image in the Studio did\n    // nothing at all, because the hero rendered through plain next/image.\n    "source": @{asset, crop, hotspot},\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  quoteContent,\n  janeBookingUrl,\n  // One-on-one sessions of a class, a second button beside the main one.\n  // Empty on anything without a private option, which then shows one button.\n  privateSessionUrl,\n  // Who provides this, for the block at the foot of the page. Dereferenced\n  // rather than stored on the page, so a practitioner switched off in the\n  // Studio drops out of every service that lists them.\n  practitioners[]->{\n    name,\n    "slug": slug.current,\n    credentials,\n    // The whole image object, not just a URL, so urlForPractitionerPhoto can\n    // read the hotspot and crop an editor set in the Studio.\n    photo{\n      ...,\n      "url": asset->url,\n      alt\n    },\n    isActive\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": image{asset, crop, hotspot},\n      alt\n    }\n  },  \n  benefits {\n    title,\n    benefitsList[] {\n      title,\n      subtitle\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': TREATMENT_BY_SLUG_QUERY_RESULT;
+    '\n*[_type == "treatments" && isActive == true && treatmentSlug.current == $slug][0] {\n  _updatedAt,\n  title,\n  treatmentSlug,\n  "serviceName": service->title,\n  "serviceSlug": service->slug.current,\n  heroImage {\n    asset->{\n      url,\n    },\n    // The image object beside its url, so a crop or hotspot set in the\n    // Studio reaches SanityImage. Until 2026-10-25 this slot was the one\n    // place on a treatment page where framing an image in the Studio did\n    // nothing at all, because the hero rendered through plain next/image.\n    "source": @{asset, crop, hotspot},\n    heroAlt\n  },\n  intro {\n    subtitle,\n    introParagraph\n  },\n  quoteContent,\n  janeBookingUrl,\n  // One-on-one sessions of a class, a second button beside the main one.\n  // Empty on anything without a private option, which then shows one button.\n  privateSessionUrl,\n  // Whose complimentary consult this page offers, beside the main button.\n  // The link lives on the practitioner\'s record, so switching them off takes\n  // it off every page at once. Empty where no consult fits the service.\n  "consult": consultPractitioner->{ consultUrl, isActive },\n  // Who provides this, for the block at the foot of the page. Dereferenced\n  // rather than stored on the page, so a practitioner switched off in the\n  // Studio drops out of every service that lists them.\n  practitioners[]->{\n    name,\n    "slug": slug.current,\n    credentials,\n    // The whole image object, not just a URL, so urlForPractitionerPhoto can\n    // read the hotspot and crop an editor set in the Studio.\n    photo{\n      ...,\n      "url": asset->url,\n      alt\n    },\n    isActive\n  },\n  additionalSections[] {\n    sectionTitle,\n    sectionParagraph,\n    sectionImage {\n      "image": image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": image{asset, crop, hotspot},\n      alt\n    }\n  },  \n  benefits {\n    title,\n    benefitsList[] {\n      title,\n      subtitle\n    }\n  },\n  cta {\n    ctaBg {\n      asset->{\n        url,\n        metadata {\n          dimensions\n        }\n      }\n    },\n    ctaBgAlt,\n    ctaTitle,\n    ctaText,\n    ctaButtonText\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': TREATMENT_BY_SLUG_QUERY_RESULT;
     '*[_type == "productsSection"][0]{\n  sectionTitle,\n  // Ordered by Display Order, which Frank set on 2026-10-19. Anything left\n  // unset falls to the end alphabetically, so a new product appears last\n  // rather than in the middle of a deliberate order.\n  "products": *[_type == "product" && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc){\n    title,\n    description,\n    "slug": slug.current,\n    "image": image.asset->url,\n    // The image object beside its url, so the crop and hotspot set in\n    // the Studio reach SanityImage. Dormant until one is set.\n    "imageSource": image{asset, crop, hotspot},\n    "altText": image.alt\n  }\n}': PRODUCTS_SECTION_QUERY_RESULT;
     '*[_type == "product" && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc) {\n  title,\n  indepthblockinfo,\n  description,\n  "slug" : slug.current,\n  "banner": banner.asset->url,\n  // The image object beside its url, so the crop and hotspot set in\n  // the Studio reach SanityImage. Dormant until one is set.\n  "bannerSource": banner{asset, crop, hotspot},\n  "image": image.asset->url,\n  // The image object beside its url, so the crop and hotspot set in\n  // the Studio reach SanityImage. Dormant until one is set.\n  "imageSource": image{asset, crop, hotspot},\n  "altText": image.alt,\n  meta {\n    title,\n    description\n  }\n}': PRODUCTS_QUERY_RESULT;
     '{\n  "page": *[_type == "aboutIndexPage"][0]{\n    title,\n    intro,\n    heroImage{\n      "url": asset->url,\n      // The image object itself, so a crop set in the Studio frames it.\n      "source": @{asset, crop, hotspot},\n      alt\n    },\n    \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n  },\n  "children": [\n    *[_type == "ourStory" && pageActive == true][0]{\n      "title": "Our Story",\n      "slug": "our-story",\n      "description": seo.pageDescription,\n      "image": heroSection.heroImage.image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},\n      "imageAlt": heroSection.heroImage.alt\n    },\n    *[_type == "ourTeam" && pageActive == true][0]{\n      "title": "Our Team",\n      "slug": "our-team",\n      "description": seo.pageDescription,\n      "image": heroSection.heroImage.image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},\n      "imageAlt": heroSection.heroImage.alt\n    },\n    *[_type == "missionAndValues" && pageActive == true][0]{\n      "title": "Mission and Values",\n      "slug": "mission-and-values",\n      "description": seo.pageDescription,\n      "image": heroSection.heroImage.image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},\n      "imageAlt": heroSection.heroImage.alt\n    },\n    *[_type == "pillarsOfHealth" && pageActive == true][0]{\n      "title": "Pillars of Health",\n      "slug": "pillars-of-health",\n      "description": seo.pageDescription,\n      "image": heroSection.heroImage.image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},\n      "imageAlt": heroSection.heroImage.alt\n    },\n    *[_type == "sustainability" && pageActive == true][0]{\n      "title": "Sustainability",\n      "slug": "sustainability",\n      "description": seo.pageDescription,\n      "image": heroSection.heroImage.image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},\n      "imageAlt": heroSection.heroImage.alt\n    },\n    *[_type == "bcorpPage" && pageActive == true][0]{\n      "title": "B Corp Certification",\n      "slug": "b-corp",\n      "description": seo.pageDescription,\n      "image": heroSection.heroImage.image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": heroSection.heroImage.image{asset, crop, hotspot},\n      "imageAlt": heroSection.heroImage.alt\n    }\n  ]\n}': ABOUT_INDEX_QUERY_RESULT;
     '*[_type == "productsPage"][0]{\n  title,\n  intro,\n  heroImage{\n    "url": asset->url,\n    // The image object itself, so a crop set in the Studio frames it.\n    "source": @{asset, crop, hotspot},\n    alt\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRODUCTS_PAGE_QUERY_RESULT;
     '*[_type == "legalPage" && defined(slug.current)] | order(title asc){\n  title,\n  "slug": slug.current\n}': LEGAL_PAGES_NAV_QUERY_RESULT;
     '*[_type == "product" && isActive == true] | order(coalesce(displayOrder, 9999) asc, title asc) {\n  title,\n  "slug": slug.current,\n}': PRODUCTS_NAVIGATION_QUERY_RESULT;
-    '*[_type == "product" && slug.current == $slug && isActive == true][0] {\n  title,\n  slug,\n  description,\n  image {\n    asset->,\n    crop,\n    hotspot,\n    alt\n  },\n  banner {\n    asset->,\n    crop,\n    hotspot,\n    alt\n  },\n  accordioninfo[] {\n    title,\n    description\n  },\n  callToAction,\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRODUCT_BY_SLUG_QUERY_RESULT;
+    '*[_type == "product" && slug.current == $slug && isActive == true][0] {\n  title,\n  slug,\n  description,\n  image {\n    asset->,\n    crop,\n    hotspot,\n    alt\n  },\n  banner {\n    asset->,\n    crop,\n    hotspot,\n    alt\n  },\n  accordioninfo[] {\n    title,\n    description\n  },\n  callToAction,\n  // The free consult of whoever assesses and dispenses this product, as a\n  // second button beside the call to action. Read off the practitioner\'s\n  // record, so switching them off hides it.\n  "consult": consultPractitioner->{ consultUrl, isActive },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRODUCT_BY_SLUG_QUERY_RESULT;
     '*[_type == "ourStory" && pageActive == true][0]{\n  heroSection{\n    heroImage{\n      "image": image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": image{asset, crop, hotspot},\n      alt\n    },\n    heroTitle,\n    heroSubtitle\n  },\n  quoteSection{\n    quoteImage{\n      "image": image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": image{asset, crop, hotspot},\n      alt\n    },\n    quoteText\n  },\n  additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": image{asset, crop, hotspot},\n      alt\n    }\n  },\n  ctaSection{\n    ctaSectionImage{\n      "image": image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": image{asset, crop, hotspot},\n      alt\n    },\n    ctaSectionTitle,\n    ctaSectionParagraph,\n    ctaButton{\n      buttonText,\n      buttonLink\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': OUR_STORY_PAGE_QUERY_RESULT;
-    '\n*[_type == "practitioner" && isActive == true && slug.current == $slug][0]{\n  name,\n  "slug": slug.current,\n  credentials,\n  languages,\n  commonlyTreats,\n  commonlyTreatsLabel,\n  fullBio,\n  // The whole image object, not just a URL, so urlForPractitionerPhoto can\n  // read the hotspot and crop an editor set in the Studio.\n  photo{\n    ...,\n    "url": asset->url,\n    alt\n  },\n  janeBookingUrl,\n  bookingNote,\n  bookingCtaLabel,\n  bookingCtaTarget,\n  "provides": *[_type == "treatments" && isActive == true && references(^._id)]\n    | order(title asc){\n      title,\n      "slug": treatmentSlug.current,\n      "serviceSlug": service->slug.current,\n      "serviceName": service->title\n    },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRACTITIONER_BY_SLUG_QUERY_RESULT;
+    '\n*[_type == "practitioner" && isActive == true && slug.current == $slug][0]{\n  name,\n  "slug": slug.current,\n  credentials,\n  languages,\n  commonlyTreats,\n  commonlyTreatsLabel,\n  fullBio,\n  // The whole image object, not just a URL, so urlForPractitionerPhoto can\n  // read the hotspot and crop an editor set in the Studio.\n  photo{\n    ...,\n    "url": asset->url,\n    alt\n  },\n  janeBookingUrl,\n  // Their free 15 minute consult, a second button under Book with them.\n  consultUrl,\n  bookingNote,\n  bookingCtaLabel,\n  bookingCtaTarget,\n  "provides": *[_type == "treatments" && isActive == true && references(^._id)]\n    | order(title asc){\n      title,\n      "slug": treatmentSlug.current,\n      "serviceSlug": service->slug.current,\n      "serviceName": service->title\n    },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': PRACTITIONER_BY_SLUG_QUERY_RESULT;
     '\n*[_type == "practitioner" && isActive == true && defined(slug.current)].slug.current': PRACTITIONER_SLUGS_QUERY_RESULT;
     '*[_type == "ourTeam" && pageActive == true][0]{\n  heroSection{\n    heroTitle,\n    heroParagraph\n  },\n  teamMembers[!(name in *[_type == "practitioner" && isActive == false].name)] {\n    name,\n    role,\n    bio,\n    image {\n      asset-> {\n        url\n      }\n    }\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': OUR_TEAM_PAGE_QUERY_RESULT;
     '*[_type == "missionAndValues" && pageActive == true][0]{\n heroSection{\n   heroImage{\n     image{\n       asset->,\n       crop,\n       hotspot,\n     },\n     alt\n   }\n },\n additionalSections[]{\n    sectionTitle,\n    sectionParagraph,\n    sectionImage{\n      "image": image.asset->url,\n      // The image object beside its url, so the crop and hotspot set in\n      // the Studio reach SanityImage. Dormant until one is set.\n      "imageSource": image{asset, crop, hotspot},\n      alt\n    }\n  },\n  "annualReportsSection": coalesce(annualReportsSection, financialReportsSection){\n    title,\n    description,\n    reports[]{\n      year,\n      label,\n      "file": file.asset->{\n        url,\n        originalFilename,\n        mimeType\n      }\n    }\n  },\n  feedbackSurvey{\n    title,\n    description,\n    buttonText,\n    url\n  },\n  \n  seo{\n    pageTitle,\n    pageDescription,\n    socialMeta{\n      title,\n      description,\n      ogImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      },\n      twitterImage{\n        crop,\n        hotspot,\n        alt,\n        asset-> {\n          _id,\n          url,\n          alt\n        }\n      }\n    }\n  }\n\n}': MISSION_AND_VALUES_QUERY_RESULT;

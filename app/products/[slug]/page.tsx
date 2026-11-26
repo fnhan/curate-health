@@ -12,6 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { CONSULT_LABEL, consultHref } from "@/lib/consult";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
 import { productAliasTargets, productPath } from "@/lib/service-urls";
@@ -90,6 +91,10 @@ export default async function ProductPage(props: {
 
   const { ctaText, ctaLink, ctaSectionTitle, ctaSectionDescription } =
     callToAction!;
+
+  // The free consult of whoever assesses and dispenses this product, beside
+  // the main button, which books the assessment itself. See lib/consult.ts.
+  const consultUrl = consultHref(product.consult);
 
   return (
     <>
@@ -171,14 +176,35 @@ export default async function ProductPage(props: {
               <h2 className="text-xl">{ctaSectionTitle}</h2>
               <p className="text-pretty">{ctaSectionDescription}</p>
             </div>
-            <Button
-              asChild
-              className="rounded-none border border-primary bg-primary text-white hover:bg-transparent hover:text-primary"
-            >
-              <a href={ctaLink} {...externalLinkProps(ctaLink)}>
-                {ctaText}
-              </a>
-            </Button>
+            {/*
+              The assessment is the filled button and the consult the
+              outlined one, so the booking that fits the product stays the
+              first choice. Frank, 2026-11-26: compression stockings book
+              Jane's own Assessment and Fitting; orthotics, knee braces and
+              TENS book Dr. Nhan's initial assessment, since Jane has no
+              appointment of their own and he assesses and dispenses them;
+              supplements book Dr. Gabriele's.
+            */}
+            <div className="flex flex-col items-center gap-4 md:flex-row md:justify-center">
+              <Button
+                asChild
+                className="rounded-none border border-primary bg-primary text-white hover:bg-transparent hover:text-primary"
+              >
+                <a href={ctaLink} {...externalLinkProps(ctaLink)}>
+                  {ctaText}
+                </a>
+              </Button>
+              {consultUrl ? (
+                <Button
+                  asChild
+                  className="rounded-none border border-primary bg-transparent text-primary hover:bg-primary hover:text-white"
+                >
+                  <a href={consultUrl} {...externalLinkProps(consultUrl)}>
+                    {CONSULT_LABEL}
+                  </a>
+                </Button>
+              ) : null}
+            </div>
           </div>
         </div>
       </section>

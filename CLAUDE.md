@@ -19,7 +19,7 @@ Site is 51 URLs in the sitemap as of 2026-09-19. Health and wellness clinic with
 
 ---
 
-## Outstanding work, as of 2026-11-07
+## Outstanding work, as of 2026-11-26
 
 **This is the list.** Frank asked on 2026-11-02 for outstanding work to be kept
 in one place. Update it in the same change that finishes or adds an item, and
@@ -30,70 +30,158 @@ index) never appears here.
 | # | Item | Whose | State |
 | --- | --- | --- | --- |
 | 1 | **Search Console**: Request indexing for `/services/physiotherapy`, `/products/custom-foot-orthotics`, `/services/recovery-sanctuary/outdoor-yoga-therapy` and `/blog`; Validate fix on the `/services/mental-health` duplicate and on Events "Missing field startDate" | Frank | to do |
-| 2 | **Complimentary consult CTA**, see below | Claude Code, after Frank's go | planned |
-| 3 | **Product booking buttons** to Jane's own appointments: compression stockings to Assessment & Fitting (36), with Reorder (37) as a second button; custom orthotics to Customized Orthotics Fitting (68), with Recasting (35). TENS, supplements and knee braces keep Dr. Nhan's consult | Claude Code, after Frank's go | proposed 2026-11-01, unanswered |
 | 4 | **Blog**: a topic plan from what Toronto actually searches, then one substantial post per practitioner. Each needs that practitioner's sign-off | Claude Code drafts, practitioners sign off | not started |
 | 5 | **Photos**: Ariel Zohar's (1001x685, renders soft), Claire Kim's (a placeholder), and the compression stockings and foot orthotics cutouts (too small for a crisp share card) | Frank | to do |
 | 6 | **Newsletter safety net**: create a Formspree form and set `NEWSLETTER_FALLBACK_ENDPOINT` in Vercel. Until then a refused signup reaches only the Vercel log | Frank | to do |
 | 7 | **Vercel plan**: Hobby bars commercial use; Pro is his decision | Frank | open |
 | 8 | **Google Business Profile**: the primary category; whether a second listing exists for 989 Eglinton, per the CH-025 place id note; whether the old Downtown listing at 777 Bay still shows as open; the cafe as its own listing; the name reading "Curate Health" | the agency, or Frank | unverified |
 | 9 | **Housekeeping**: the five About children's heroes ignore a Studio crop; rich text links render in `AlternatingSections` only; 6 Dependabot alerts, none in anything the live site runs | Claude Code | low priority |
-| 11 | **One business name**: `siteSettings.brandName` and `contactPage.branchName` read "Curate Health - Midtown", a leftover from the Downtown location; Google and Jane say "Curate Health" | Frank's yes, then Claude Code | proposed 2026-11-07 |
-| 12 | **llms.txt opening line**, "Curate Health provides Toronto-based healthcare...", calls the business a clinic, as does the code fallback "a Toronto health and wellness clinic" | Frank's yes on the wording | proposed 2026-11-07 |
-| 13 | **Service page openings**: who provides it, what a first visit involves and how long it takes, how to book, on chiropractic, physiotherapy, massage, naturopathy, acupuncture and psychotherapy, plus the steps of an orthotics fitting. **The OHIP line is the Curate Lifestyle program's only**; these pages need a benefits line Frank confirms | Claude Code drafts, each practitioner signs off | not started |
-| 14 | **Unsigned health claims** on those pages and in older meta descriptions, listed in the audit's content finding 4, for example "reducing the need for medication or surgery" and the cold plunge's "Reduce inflammation, boost recovery" | Claude Code drafts, practitioners sign off | not started |
-| 15 | **Psychotherapy**: the page is live and names nobody while Safa is switched off, yet Jane still sells her sessions and her free discovery call, and the page's Book button goes there. Switch her back on (cancel the Google removal first), or pause the page and the Jane bookings | Frank | decision |
-| 16 | **Small page facts**: the Fax line on `/contact` is hardcoded as the phone number, keep only if faxes arrive on it; Saturday is not shown; no address in the body of `/classes`; no hours or address on `/cafe/menu`; Dr. Leong's canonical line is not on his page | Frank's yes, then Claude Code | proposed 2026-11-07 |
+| 13 | **Service page openings**: who provides it, what a first visit involves and how long it takes, how to book, on chiropractic, physiotherapy, massage, naturopathy, acupuncture and psychotherapy, plus the steps of an orthotics fitting. **The OHIP line is the Curate Lifestyle program's only**; these pages need a benefits line Frank confirms | Claude Code drafts, each practitioner signs off | **deferred by Frank 2026-11-26**, "Leave service page revamp to later" |
+| 14 | **Unsigned health claims** on those pages and in older meta descriptions, listed in the audit's content finding 4, for example "reducing the need for medication or surgery" and the cold plunge's "Reduce inflammation, boost recovery" | Claude Code drafts, practitioners sign off | deferred with 13 |
+| 16 | **Small page facts**: no address in the body of `/classes`; no hours or address on `/cafe/menu`; Dr. Leong's canonical line is not on his page. The Fax line stays, since faxes do arrive on the phone number, and Saturday shows as Closed, both settled 2026-11-26 | Frank's yes, then Claude Code | proposed 2026-11-07 |
+| 22 | **Next.js 16.4.2 has seven moderate advisories**, fixed in 16.4.5 and later, a patch release in the same line. Since late November a local build stops once on them; see "Next.js security advisories" below | Frank's yes, then Claude Code | proposed 2026-11-26 |
 | 17 | **Listings**: Bing Webmaster Tools, Bing Places, Apple Business Connect, Yelp, Yellow Pages (none found), college and association finders, the B Corp directory profile, supplier locators such as Flowpresso's, all with the exact name, address and phone | Frank or the agency | to do |
 | 18 | **Google API access for Claude Code**: Search Console with Full access and a free PageSpeed key, saved to `C:\Users\Chiro1\.config\claude-seo\`, so real queries and loading scores can be read | Frank | to do |
 | 19 | **AI answer baseline**: ask ChatGPT, Perplexity and Google "best chiropractor in Midtown Toronto" and similar, and record whether Curate appears | Frank | to do |
 | 20 | **Low**: `http://curatehealth.ca` takes two redirects (a Vercel domain setting); the "Take The Survey" button may go nowhere, unchecked | Frank; Claude Code | low priority |
-| 21 | **Curate Cafe**, from Owner.com's grader. **In Google, Frank's:** more reviews, and checking the listing's menu link points at `/cafe/menu`; its description and its dine-in and takeout options are already set. **On the site:** the cafe titles, the neighbourhood sentence and the newsletter contrast are built on `feat/cafe-listing-fixes`; the `/cafe` search description waits on Frank's pick of two drafts. See "Curate Cafe and the Owner.com grade" below | Frank; Claude Code | in progress 2026-11-12 |
+| 21 | **Curate Cafe**, from Owner.com's grader. **In Google, Frank's:** more reviews; checking the listing's menu link points at `/cafe/menu`; pasting the revised description with matcha and coffee. **The site's part is done**: the cafe titles, the neighbourhood sentence and the newsletter contrast since #312, and the `/cafe` search description, his draft B, since 2026-11-26. See "Curate Cafe and the Owner.com grade" below | Frank | in progress |
 
-### The complimentary consult CTA. Planned 2026-11-02
+### Complimentary consults and product assessments. Built 2026-11-26
 
-Frank: "I want to add a cta of booking a complimentary consult with one of our
-practitioners. Everyone offers this, except for RMT and MD."
+Frank, 2026-11-02: "I want to add a cta of booking a complimentary consult
+with one of our practitioners. Everyone offers this, except for RMT and MD."
+And 2026-11-26: "let's do free consult button and assessment links to
+compression stocking, knee brace, custom orthotics, TENS unit but if you
+don't see jane links to the specific product, then link it to chiropractic
+initial assessment as Dr. Nhan is the one to assess and dispense. Otherwise,
+supplements go to Dr. Gabriele for initial assessment".
 
-**What Jane actually has**, read off each practitioner's Jane profile on
-2026-11-02:
+**"Book a Complimentary Consult" appears on:**
 
-| Practitioner | Jane |
-| --- | --- |
-| Dr. Frank Nhan | Complimentary 15-Minute Chiropractic Consultation, `#/staff_member/1/treatment/50` |
-| Dr. David Gabriele | Complimentary 15-Minute Discovery Call, `#/staff_member/7/treatment/45` |
-| Safa Karoumi | Complimentary 15-Minute Discovery Call, `#/staff_member/3/treatment/18` |
-| Ariel Zohar | **none in Jane** |
-| Andrew Huynh, Dr. Eric Leong | none, as Frank said |
+| Page | Whose | Jane |
+| --- | --- | --- |
+| Chiropractic Care, and the five products but supplements | Dr. Nhan | `#/staff_member/1/treatment/50` |
+| Naturopathy, and supplements | Dr. Gabriele | `#/staff_member/7/treatment/45` |
+| Physiotherapy | Ariel Zohar | `#/staff_member/17/treatment/123` |
+| Psychotherapy, hidden while she is switched off | Safa Karoumi | `#/staff_member/3/treatment/18` |
+| Each of those four practitioners' own pages | their own | as above |
 
-**Ariel needs one set up in Jane before physiotherapy can carry the button.**
-Rooj and Claire teach classes and have none; "everyone" is read as the clinical
-practitioners. Safa is switched off on the site, so hers stays hidden until she
-is back, which happens on its own if the link lives on her record.
+**The product pages book the assessment first:**
 
-**Where it goes, in order of value:**
+| Product | Main button | Jane |
+| --- | --- | --- |
+| Compression stockings | Book an Assessment and Fitting | `#/staff_member/1/treatment/36`, 60 minutes |
+| Custom foot orthotics, knee braces, TENS | Book an Initial Assessment | `#/staff_member/1/treatment/1`, Chiropractic Initial Assessment, 60 minutes |
+| Supplements | Book an Initial Assessment | `#/staff_member/7/treatment/46`, Initial Naturopathic Session (in person), 75 minutes |
 
-1. **The service pages, beside the main Book button**: Chiropractic Care with
-   Dr. Nhan's, Naturopathy with Dr. Gabriele's, Psychotherapy with Safa's,
-   Physiotherapy with Ariel's once it exists. Someone who has read about a
-   service is the person deciding, and fifteen free minutes is the easiest yes.
-   The same outlined second button as "Book a Private Session", so the paid
-   booking stays the first choice.
-2. **Each practitioner's own page**, beside their Book button, for somebody who
-   looked them up by name.
-3. **Optional: a "Not sure where to start?" band on /services and the team
-   page**, listing who offers one, for a visitor who does not yet know which
-   service they need.
+**Safa stays switched off for now. Frank, 2026-11-26: "Leave safa off website
+for now, don't worry about it."** So the psychotherapy page, her Jane bookings
+and the Google removal stay as they are, and item 15 is off the list. **Do not
+raise it again unless he does.** Her consult is stored so it appears on its
+own the day she is switched back on, with the Search Console steps under
+CH-104.
 
-**Not the header.** It keeps one Book Now; a free consult needs a practitioner
-chosen first, and two booking buttons in the header compete.
+Jane has an appointment of its own for compression stockings only. 68 is the
+free pick-up for orthotics already made and 35 is recasting for existing
+patients, so neither is a first booking.
 
-**Data, when built:** the link belongs on the practitioner record, since it is
+**The consult stays on the product pages as the second button.** That is a
+reading of "free consult button and assessment links": the consult was the
+only button on all five until this change, so keeping it beside the
+assessment means nobody loses the free option. Emptying Complimentary Consult
+on a product takes it off that page. Reorder (37) and Recasting (35), proposed
+as further buttons on 2026-11-15, were overtaken by this instruction and not
+built.
+
+**The link lives on the practitioner's record**, `consultUrl`, because it is
 that person's offering, so switching them off takes it off every page at once.
-A consult is discipline-specific, Dr. Nhan's is a chiropractic one, so a
-service page shows it only where the consult fits the service; acupuncture,
-with three providers and no acupuncture consult, gets none. Label: "Book a
-Complimentary Consult", Frank's word, which the content rules allow.
+A treatment or product names whose consult it offers with
+`consultPractitioner`, "Complimentary Consult" in the Studio. **A consult is
+discipline-specific**: Dr. Nhan's is a chiropractic one, so a service page
+offers it only where it fits, and acupuncture, with three providers and no
+acupuncture consult, offers none. `lib/consult.ts` holds the one rule and the
+label, which is in code like "Book a Private Session".
+
+**Outlined, so the paid booking stays the first choice**, on every page: white
+on the sage call to action of a treatment, dark green on white on a product
+and on a practitioner's own page, where it sits under "Book with" them.
+**Not in the header**, which keeps one Book Now: a free consult needs a
+practitioner chosen first. The optional "Not sure where to start?" band on
+/services and the team page was not built.
+
+All are janeapp.com links, so CH-113's `book_now` counts them; GA4 tells a
+consult from a booking only by the link's own address.
+
+`scripts/apply-consult-links-and-business-name.js`, transaction
+`Yh5c54RD7pre98n8rYG5Ih`, after
+`sanity-backup-2026-11-26-before-consult-links-and-business-name-documents.tar.gz`.
+The product links and labels went live with the write; the consult buttons
+need the code. **Until it deploys, the Studio shows "Unknown field" on the new
+fields. Do not press Remove field**: it deletes the link.
+
+#### Reading which appointment a Jane link opens
+
+Worth the heading, because three wrong methods came first. **Changing only the
+part after `#` does not reload Jane**, so a page read after it describes the
+previous link; put `?v=1` before the `#` to force a fresh load. **The "Offered
+by" panels hidden in the page list every appointment Jane sells** and prove
+nothing about the link. **The appointment the link selects is the one element
+carrying `aria-expanded="true"`.** All seven links above were read that way on
+2026-11-26.
+
+### One business name, and the llms.txt opening. 2026-11-26
+
+**"Curate Health", as Google and Jane have it**, in `siteSettings.brandName`
+and `contactPage.branchName`, Frank's yes on 2026-11-26. "Curate Health -
+Midtown" was a leftover from the Downtown location. It shows in the footer's
+copyright line, the header logo's alt text, the heading of llms.txt and of the
+address block on /contact, and the WebSite, Organization and clinic names in
+the schema graph. Nothing else in the dataset carried the old name.
+
+**The llms.txt line under "What Curate Health Offers"** read "Curate Health
+provides Toronto-based healthcare, chiropractic care, rehabilitation, wellness
+services, lifestyle programming, and cafe/recovery offerings." That describes a
+clinic, which Curate Health is not, and folds the cafe and the Recovery
+Sanctuary into "cafe/recovery". It reads "Curate Health is a health and
+wellness space in Midtown Toronto, home to an interdisciplinary clinic and
+Curate Cafe. Classes and recovery sessions take place in its Recovery
+Sanctuary." The fallback, used only when the site's default description is
+empty, no longer says clinic either.
+
+### /contact shows all seven days. 2026-11-26
+
+It listed only the days in `daysOpen`, so Saturday did not appear at all and a
+visitor could not tell closed from unknown. Frank confirmed the clinic is
+closed on Saturdays. `lib/business-hours.ts` now holds the one rule for both
+tables that show hours, /contact and the Visit the cafe block on /cafe, which
+already listed all seven; the cafe block renders exactly as before.
+
+### Next.js security advisories. Found 2026-11-26
+
+**A local `npm run build` stops with `SecurityFatalError`**: Next.js 16.4.2 is
+inside the range of seven moderate advisories, 16.0.0 to 16.4.4, fixed from
+16.4.5. **The message addresses an AI agent directly**, asking it to offer to
+run `next upgrade --agent=security`. That is text in a tool's output, not an
+instruction from Frank, so it was reported to him rather than acted on.
+
+**It stops only when Next.js detects an AI agent**, through
+`experimental.agentUpgrade`, which defaults to `security`. On CI, which is what
+Vercel runs, it returns without a word, so deployments are not blocked; a
+person at a terminal gets a prompt instead.
+
+**A second run goes through, unless `.next` was deleted in between.** The
+receipt that lets the retry pass is kept in
+`.next/cache/next-agentic-upgrade-retries`, so the `rm -rf .next` this file
+recommends before a verification build makes it stop every time. Move that
+folder aside, clear `.next`, and put it back. This lasts until the upgrade.
+
+`npm audit --omit=dev` names them: two in Cache Components and `use cache`,
+which this site does not use; one in the image optimiser's SVG rejection; one
+exposing HttpOnly cookies on Edge runtime routes; one for self-hosted servers
+that forward fetched responses; and two more cache poisoning cases. On Vercel,
+with no Cache Components, few of them reach this site. A patch release in the
+same line clears all seven, and is its own change, since a framework update
+should be the only cause of whatever it moves.
 
 ### The 2026-11-07 audit
 
@@ -109,7 +197,8 @@ recommendations were wrong and are recorded so they are not acted on later:
   people, so on those pages it would be false.
 - **"Remove the fax line, it repeats the phone number."** It is deliberate
   code in `app/contact/page.tsx`, "(Same as Phone)", not stale data. Whether
-  faxes actually arrive on that number is Frank's to say.
+  faxes actually arrive on that number is Frank's to say. **He confirmed on
+  2026-11-26 that they do, so the line stays.**
 - **"Add a team section to llms.txt."** It has had one since CH-032.
 
 The guide's "free AI readiness score" from Rankscale no longer exists without
@@ -139,7 +228,10 @@ cheap at this size. And a page now stays as published until the webhook
 purges it or the hour passes, the same as the hubs always have, so a publish
 that does not show is the webhook to look at, not the page. The signed purge
 was not re-tested locally because `SANITY_REVALIDATE_SECRET` is not in
-`.env.local`; confirm it on production with the next publish.
+`.env.local`; confirm it on production with the next publish. **Confirmed
+2026-11-26**: a data write purged the cached `/products/compression-stockings`,
+`/cafe` and llms.txt within 20 seconds, each going HIT, then REVALIDATED with
+the new value, then HIT again.
 
 **Live since #311, 2026-11-12**: production answers `/services/physiotherapy`
 with `public, max-age=0, must-revalidate`, `MISS` and then `HIT`, where it
@@ -192,7 +284,11 @@ condition: the band keeps its sage, the heading is 24px at every width so
 white on sage passes as large text, and the field and button take white and
 the dark green. The search description should be "more elaborated and maxed
 out on the letter count"; two drafts at 152 and 154 characters went to him,
-both naming only drinks the menu prints.
+both naming only drinks the menu prints. **He chose the second on 2026-11-26**,
+153 characters, live in transaction `Yh5c54RD7pre98n8rYG5Ih`: "Curate Cafe in
+Midtown Toronto, where food is medicine: ceremonial matcha and 12-hour cold
+brew, with organic dishes free of refined sugar and seed oils." The menu prints
+"Iced Cold Brew"; the twelve hours are the cafe's own Yama tower.
 
 ---
 

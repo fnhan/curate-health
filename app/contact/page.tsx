@@ -6,6 +6,7 @@ import { MailIcon, MapPinIcon, PhoneIcon, PrinterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { addressLines, addressOneLine } from "@/lib/address";
+import { weekRows } from "@/lib/business-hours";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -186,31 +187,23 @@ export default async function ContactPage() {
             </div>
             <div className="flex flex-col gap-4">
               {/* Hours */}
+              {/*
+                All seven days, Monday first, closed ones included, by the
+                rule /cafe uses. It listed only the open days until
+                2026-11-26, so Saturday did not appear at all; Frank
+                confirmed the clinic is closed on Saturdays.
+              */}
               <div className="space-y-2">
-                {businessHours?.daysOpen?.map((day) => {
-                  // Check if day has an exception
-                  const exception = businessHours.exceptions?.find(
-                    (exc) => exc.day === day
-                  );
-
-                  // Use exception hours if they exist, otherwise use standard hours
-                  const hours =
-                    exception?.hours ??
-                    (businessHours.standardHours === "custom"
-                      ? businessHours.customStandardHours
-                      : businessHours.standardHours);
-
-                  return (
-                    <div
-                      key={day}
-                      className="grid grid-cols-2 text-sm sm:text-base"
-                    >
-                      <span className="font-medium capitalize">{day}</span>
-                      <span className="text-right">{hours || "Closed"}</span>
-                      {exception?.message && <p>{exception.message}</p>}
-                    </div>
-                  );
-                })}
+                {weekRows(businessHours).map((row) => (
+                  <div
+                    key={row.day}
+                    className="grid grid-cols-2 text-sm sm:text-base"
+                  >
+                    <span className="font-medium">{row.day}</span>
+                    <span className="text-right">{row.hours}</span>
+                    {row.message && <p>{row.message}</p>}
+                  </div>
+                ))}
               </div>
             </div>
             <Button

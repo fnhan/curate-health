@@ -247,6 +247,14 @@ export default defineType({
         ),
     }),
     defineField({
+      name: "consultPractitioner",
+      title: "Complimentary Consult",
+      type: "reference",
+      to: [{ type: "practitioner" }],
+      description:
+        "Whose free consult this page offers, as a button reading \"Book a Complimentary Consult\" beside the main one at the foot of the page. The link itself is on the practitioner's record, so switching them off hides it here too. Leave empty where no consult fits the service: a consult is specific to one discipline, so acupuncture, offered by three practitioners and with no acupuncture consult, has none.",
+    }),
+    defineField({
       name: "displayOrder",
       title: "Display Order",
       type: "number",

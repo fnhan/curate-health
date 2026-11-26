@@ -164,6 +164,14 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "consultPractitioner",
+      title: "Complimentary Consult",
+      type: "reference",
+      to: [{ type: "practitioner" }],
+      description:
+        "Whose free consult this page offers, as a button reading \"Book a Complimentary Consult\" beside the Call to Action button. Choose the practitioner who assesses and dispenses this product. The link itself is on the practitioner's record, so switching them off hides it here too. Leave empty for one button only.",
+    }),
+    defineField({
       name: "seo",
       title: "SEO",
       type: "seo",

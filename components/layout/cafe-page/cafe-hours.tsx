@@ -1,6 +1,7 @@
 import { MapPinIcon, PhoneIcon } from "lucide-react";
 
 import { addressOneLine } from "@/lib/address";
+import { weekRows } from "@/lib/business-hours";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { cn } from "@/lib/utils";
@@ -30,26 +31,6 @@ import { SITE_SETTINGS_QUERY_RESULT } from "@/sanity.types";
  * spent a whole ticket undoing for the address.
  */
 
-const DAY_ORDER = [
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-  "sunday",
-] as const;
-
-const TITLE_CASE: Record<string, string> = {
-  monday: "Monday",
-  tuesday: "Tuesday",
-  wednesday: "Wednesday",
-  thursday: "Thursday",
-  friday: "Friday",
-  saturday: "Saturday",
-  sunday: "Sunday",
-};
-
 export function CafeHours({
   siteSettings,
 }: {
@@ -60,32 +41,11 @@ export function CafeHours({
 
   if (!hours) return null;
 
-  const standard =
-    hours.standardHours === "custom"
-      ? hours.customStandardHours
-      : hours.standardHours;
-
-  const exceptions = new Map(
-    (hours.exceptions ?? [])
-      .filter((e) => e.day)
-      .map((e) => [e.day!.toLowerCase(), e.hours])
-  );
-
-  const open = new Set([
-    ...(hours.daysOpen ?? []).map((d) => d.toLowerCase()),
-    ...exceptions.keys(),
-  ]);
-
   // Every day is listed, closed ones included, in week order rather than the
   // order Sanity happens to store them in. A visitor scanning for today should
   // not have to work out whether a missing day means closed or unknown, which
-  // is the same reasoning the schema uses.
-  const rows = DAY_ORDER.map((day) => ({
-    day: TITLE_CASE[day],
-    hours: open.has(day)
-      ? (exceptions.has(day) ? exceptions.get(day) : standard) || "Closed"
-      : "Closed",
-  }));
+  // is the same reasoning the schema uses. The rule is shared with /contact.
+  const rows = weekRows(hours);
 
   return (
     <section className="bg-white py-14 text-primary md:py-24">

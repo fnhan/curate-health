@@ -183,6 +183,17 @@ export default defineType({
         ),
     }),
     defineField({
+      name: "consultUrl",
+      title: "Complimentary Consult URL",
+      type: "url",
+      description:
+        "This practitioner's free 15 minute consult or discovery call in Jane, for example https://curatehealth.janeapp.com/#/staff_member/1/treatment/50. Filled in, a \"Book a Complimentary Consult\" button appears under the booking button on their page, and on any service or product page that names them under Complimentary Consult. Switching this practitioner off hides it everywhere. Leave empty for anyone who does not offer one. Open the appointment in Jane and copy its address rather than typing an id.",
+      validation: (Rule) =>
+        Rule.uri({ scheme: ["https"] }).error(
+          "Must be a full https URL, or empty"
+        ),
+    }),
+    defineField({
       name: "bookingNote",
       title: "Booking Note",
       type: "text",

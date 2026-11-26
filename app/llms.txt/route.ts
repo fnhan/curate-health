@@ -326,7 +326,9 @@ function buildLlmsTxt(data: LlmsData) {
   const pages = data.pages;
   const description =
     compact(data.siteMetadata?.defaultDescription) ||
-    "Curate Health is a Toronto health and wellness clinic.";
+    // A space that is home to a clinic, never a clinic: the rule in
+    // CLAUDE.md, restated by Frank on 2026-10-12.
+    "Curate Health is a health and wellness space in Midtown Toronto.";
   const address = formatAddress(data);
   const contact = data.siteSettings?.contactInfo;
   const socialLinks =
@@ -345,7 +347,11 @@ function buildLlmsTxt(data: LlmsData) {
     bullet(`Map: ${contact?.mapLink ?? ""}`),
     link("Contact and directions", "/contact", pages?.contact),
     "## What Curate Health Offers",
-    "Curate Health provides Toronto-based healthcare, chiropractic care, rehabilitation, wellness services, lifestyle programming, and cafe/recovery offerings.",
+    // Proposed 2026-11-26, item 12, for Frank's yes. The line it replaces
+    // said Curate Health "provides Toronto-based healthcare", which describes
+    // a clinic, and folded the cafe and the Recovery Sanctuary into
+    // "cafe/recovery offerings". This is what an answer engine quotes first.
+    "Curate Health is a health and wellness space in Midtown Toronto, home to an interdisciplinary clinic and Curate Cafe. Classes and recovery sessions take place in its Recovery Sanctuary.",
     "## Services",
     [
       link("All services", "/services", pages?.services),

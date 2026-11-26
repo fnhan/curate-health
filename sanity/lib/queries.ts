@@ -207,6 +207,10 @@ export const TREATMENT_BY_SLUG_QUERY = groq`
   // One-on-one sessions of a class, a second button beside the main one.
   // Empty on anything without a private option, which then shows one button.
   privateSessionUrl,
+  // Whose complimentary consult this page offers, beside the main button.
+  // The link lives on the practitioner's record, so switching them off takes
+  // it off every page at once. Empty where no consult fits the service.
+  "consult": consultPractitioner->{ consultUrl, isActive },
   // Who provides this, for the block at the foot of the page. Dereferenced
   // rather than stored on the page, so a practitioner switched off in the
   // Studio drops out of every service that lists them.
@@ -430,6 +434,10 @@ export const PRODUCT_BY_SLUG_QUERY = groq`*[_type == "product" && slug.current =
     description
   },
   callToAction,
+  // The free consult of whoever assesses and dispenses this product, as a
+  // second button beside the call to action. Read off the practitioner's
+  // record, so switching them off hides it.
+  "consult": consultPractitioner->{ consultUrl, isActive },
   ${SEO_QUERY}
 }`;
 
@@ -514,6 +522,8 @@ export const PRACTITIONER_BY_SLUG_QUERY = groq`
     alt
   },
   janeBookingUrl,
+  // Their free 15 minute consult, a second button under Book with them.
+  consultUrl,
   bookingNote,
   bookingCtaLabel,
   bookingCtaTarget,

@@ -2,6 +2,7 @@ import { AlternatingSections } from "@/components/shared/alternating-sections";
 import { PractitionerGrid } from "@/components/shared/practitioner-card";
 import { SanityImage } from "@/components/shared/sanity-image";
 import { Button } from "@/components/ui/button";
+import { CONSULT_LABEL, consultHref } from "@/lib/consult";
 import { externalLinkProps } from "@/lib/links";
 import {
   PRIMARY_CTA_BUTTON_QUERY_RESULT,
@@ -36,6 +37,10 @@ export default function TreatmentContent({
    * someone to the front page instead is a step where people leave.
    */
   const bookingHref = treatment.janeBookingUrl || ctaButton?.ctaLink;
+
+  // The free consult of whoever this page names, nothing when they are
+  // switched off or the page names nobody. See lib/consult.ts.
+  const consultUrl = consultHref(treatment.consult);
 
   // isActive is checked here rather than in the query, so a switched-off
   // practitioner drops out of every service page at once.
@@ -159,14 +164,17 @@ export default function TreatmentContent({
               </p>
             </div>
             {/*
-              A second button for one-on-one sessions, on a treatment that is
-              a class with a private option: Yoga, Pilates and Tai Chi. It is
-              the primary's inverse, outlined where that one is filled, so the
-              class stays the obvious first choice.
+              Second buttons, outlined where the main one is filled, so the
+              paid booking stays the obvious first choice. One is for
+              one-on-one sessions of a class with a private option: Yoga,
+              Pilates and Tai Chi. The other is the complimentary consult,
+              on the services whose practitioner offers one that fits:
+              Chiropractic Care, Physiotherapy, Naturopathy and, once Safa is
+              switched back on, Psychotherapy. No page has both today.
 
               Colours are spelled out rather than taken from the `outline`
               variant, which paints dark green on dark green in this theme.
-              Both are janeapp.com links, so CH-113's book_now counts either.
+              All are janeapp.com links, so CH-113's book_now counts each.
             */}
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-center">
               <Button
@@ -187,6 +195,16 @@ export default function TreatmentContent({
                     {...externalLinkProps(treatment.privateSessionUrl)}
                   >
                     Book a Private Session
+                  </a>
+                </Button>
+              ) : null}
+              {consultUrl ? (
+                <Button
+                  asChild
+                  className="w-fit rounded-none border border-white bg-transparent text-white hover:bg-white hover:text-primary"
+                >
+                  <a href={consultUrl} {...externalLinkProps(consultUrl)}>
+                    {CONSULT_LABEL}
                   </a>
                 </Button>
               ) : null}

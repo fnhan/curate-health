@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { PortableText } from "next-sanity";
 
 import { portableTextComponents } from "@/components/shared/portable-text-components";
+import { CONSULT_LABEL, consultHref } from "@/lib/consult";
 import { HOVER_UNDERLINE } from "@/lib/hover-underline";
 import { externalLinkProps } from "@/lib/links";
 import { buildPageMetadata } from "@/lib/page-metadata";
@@ -107,6 +108,10 @@ export default async function PractitionerPage(props: {
     provides,
   } = person;
 
+  // This page only renders for someone switched on, so the record is active;
+  // consultHref still applies the one rule every page shares.
+  const consultUrl = consultHref({ consultUrl: person.consultUrl });
+
   const ctaHref = bookingCtaTarget ? CTA_TARGETS[bookingCtaTarget] : undefined;
   const services = (provides ?? []).filter((t) => t.title && t.slug);
   const given = firstName(name!);
@@ -137,20 +142,35 @@ export default async function PractitionerPage(props: {
 
               {/*
                 Three booking states. A Jane URL gives a button straight to
-                that person. No Jane URL gives the note and whatever the
-                record's CTA points at, which is Dr. Leong: he has no bookable
-                session in Jane and is reached through the Curate Lifestyle
-                Program. Neither gives nothing at all, rather than a button
-                pointing somewhere generic.
+                that person, with their complimentary consult under it when
+                they offer one, outlined so the booking stays the first
+                choice. No Jane URL gives the note and whatever the record's
+                CTA points at, which is Dr. Leong: he has no bookable session
+                in Jane and is reached through the Curate Lifestyle Program.
+                Neither gives nothing at all, rather than a button pointing
+                somewhere generic.
               */}
-              {janeBookingUrl ? (
-                <a
-                  href={janeBookingUrl}
-                  {...externalLinkProps(janeBookingUrl)}
-                  className="block w-full border border-primary bg-primary px-6 py-4 text-center text-base font-medium text-white transition-colors hover:bg-transparent hover:text-primary"
-                >
-                  Book with {given}
-                </a>
+              {janeBookingUrl || consultUrl ? (
+                <div className="flex flex-col gap-3">
+                  {janeBookingUrl ? (
+                    <a
+                      href={janeBookingUrl}
+                      {...externalLinkProps(janeBookingUrl)}
+                      className="block w-full border border-primary bg-primary px-6 py-4 text-center text-base font-medium text-white transition-colors hover:bg-transparent hover:text-primary"
+                    >
+                      Book with {given}
+                    </a>
+                  ) : null}
+                  {consultUrl ? (
+                    <a
+                      href={consultUrl}
+                      {...externalLinkProps(consultUrl)}
+                      className="block w-full border border-primary px-6 py-4 text-center text-base font-medium transition-colors hover:bg-primary hover:text-white"
+                    >
+                      {CONSULT_LABEL}
+                    </a>
+                  ) : null}
+                </div>
               ) : bookingNote || (ctaHref && bookingCtaLabel) ? (
                 <div className="flex flex-col gap-4">
                   {bookingNote ? (
